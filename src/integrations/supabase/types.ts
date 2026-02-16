@@ -7167,6 +7167,56 @@ export type Database = {
           },
         ]
       }
+      class_conditions: {
+        Row: {
+          category: string | null
+          condition_number: string | null
+          created_at: string | null
+          description: string | null
+          due_date: string | null
+          id: string
+          imposed_date: string | null
+          priority: string | null
+          status: string | null
+          updated_at: string | null
+          vessel_id: string | null
+        }
+        Insert: {
+          category?: string | null
+          condition_number?: string | null
+          created_at?: string | null
+          description?: string | null
+          due_date?: string | null
+          id?: string
+          imposed_date?: string | null
+          priority?: string | null
+          status?: string | null
+          updated_at?: string | null
+          vessel_id?: string | null
+        }
+        Update: {
+          category?: string | null
+          condition_number?: string | null
+          created_at?: string | null
+          description?: string | null
+          due_date?: string | null
+          id?: string
+          imposed_date?: string | null
+          priority?: string | null
+          status?: string | null
+          updated_at?: string | null
+          vessel_id?: string | null
+        }
+        Relationships: [
+          {
+            foreignKeyName: "class_conditions_vessel_id_fkey"
+            columns: ["vessel_id"]
+            isOneToOne: false
+            referencedRelation: "vessels"
+            referencedColumns: ["id"]
+          },
+        ]
+      }
       class_surveys: {
         Row: {
           certificates_issued: string[] | null
@@ -22050,6 +22100,116 @@ export type Database = {
           user_id?: string | null
         }
         Relationships: []
+      }
+      insurance_claims: {
+        Row: {
+          amount_claimed: number | null
+          amount_recovered: number | null
+          created_at: string | null
+          description: string | null
+          id: string
+          incident_date: string | null
+          policy_id: string | null
+          status: string | null
+          updated_at: string | null
+          vessel_id: string | null
+        }
+        Insert: {
+          amount_claimed?: number | null
+          amount_recovered?: number | null
+          created_at?: string | null
+          description?: string | null
+          id?: string
+          incident_date?: string | null
+          policy_id?: string | null
+          status?: string | null
+          updated_at?: string | null
+          vessel_id?: string | null
+        }
+        Update: {
+          amount_claimed?: number | null
+          amount_recovered?: number | null
+          created_at?: string | null
+          description?: string | null
+          id?: string
+          incident_date?: string | null
+          policy_id?: string | null
+          status?: string | null
+          updated_at?: string | null
+          vessel_id?: string | null
+        }
+        Relationships: [
+          {
+            foreignKeyName: "insurance_claims_policy_id_fkey"
+            columns: ["policy_id"]
+            isOneToOne: false
+            referencedRelation: "insurance_policies"
+            referencedColumns: ["id"]
+          },
+          {
+            foreignKeyName: "insurance_claims_vessel_id_fkey"
+            columns: ["vessel_id"]
+            isOneToOne: false
+            referencedRelation: "vessels"
+            referencedColumns: ["id"]
+          },
+        ]
+      }
+      insurance_policies: {
+        Row: {
+          coverage: number | null
+          created_at: string | null
+          deductible: number | null
+          end_date: string | null
+          id: string
+          insurer: string
+          notes: string | null
+          premium: number | null
+          start_date: string | null
+          status: string | null
+          type: string
+          updated_at: string | null
+          vessel_id: string | null
+        }
+        Insert: {
+          coverage?: number | null
+          created_at?: string | null
+          deductible?: number | null
+          end_date?: string | null
+          id?: string
+          insurer: string
+          notes?: string | null
+          premium?: number | null
+          start_date?: string | null
+          status?: string | null
+          type: string
+          updated_at?: string | null
+          vessel_id?: string | null
+        }
+        Update: {
+          coverage?: number | null
+          created_at?: string | null
+          deductible?: number | null
+          end_date?: string | null
+          id?: string
+          insurer?: string
+          notes?: string | null
+          premium?: number | null
+          start_date?: string | null
+          status?: string | null
+          type?: string
+          updated_at?: string | null
+          vessel_id?: string | null
+        }
+        Relationships: [
+          {
+            foreignKeyName: "insurance_policies_vessel_id_fkey"
+            columns: ["vessel_id"]
+            isOneToOne: false
+            referencedRelation: "vessels"
+            referencedColumns: ["id"]
+          },
+        ]
       }
       integration_credentials: {
         Row: {
@@ -49041,6 +49201,68 @@ export type Database = {
           },
           {
             foreignKeyName: "voyages_vessel_id_fkey"
+            columns: ["vessel_id"]
+            isOneToOne: false
+            referencedRelation: "vessels"
+            referencedColumns: ["id"]
+          },
+        ]
+      }
+      warranty_claims: {
+        Row: {
+          claim_amount: number | null
+          claim_date: string | null
+          claim_number: string | null
+          created_at: string | null
+          equipment: string
+          failure_date: string | null
+          failure_description: string | null
+          id: string
+          manufacturer: string | null
+          notes: string | null
+          recovered_amount: number | null
+          status: string | null
+          updated_at: string | null
+          vessel_id: string | null
+          warranty_expiry: string | null
+        }
+        Insert: {
+          claim_amount?: number | null
+          claim_date?: string | null
+          claim_number?: string | null
+          created_at?: string | null
+          equipment: string
+          failure_date?: string | null
+          failure_description?: string | null
+          id?: string
+          manufacturer?: string | null
+          notes?: string | null
+          recovered_amount?: number | null
+          status?: string | null
+          updated_at?: string | null
+          vessel_id?: string | null
+          warranty_expiry?: string | null
+        }
+        Update: {
+          claim_amount?: number | null
+          claim_date?: string | null
+          claim_number?: string | null
+          created_at?: string | null
+          equipment?: string
+          failure_date?: string | null
+          failure_description?: string | null
+          id?: string
+          manufacturer?: string | null
+          notes?: string | null
+          recovered_amount?: number | null
+          status?: string | null
+          updated_at?: string | null
+          vessel_id?: string | null
+          warranty_expiry?: string | null
+        }
+        Relationships: [
+          {
+            foreignKeyName: "warranty_claims_vessel_id_fkey"
             columns: ["vessel_id"]
             isOneToOne: false
             referencedRelation: "vessels"
