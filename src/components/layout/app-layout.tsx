@@ -1,4 +1,4 @@
-import { useState, Suspense, lazy } from "react";
+import { useState, Suspense, lazy, useEffect } from "react";
 import type { FC } from "react";
 import { Outlet } from "react-router-dom";
 import { SidebarProvider } from "@/components/ui/sidebar";
@@ -13,6 +13,9 @@ import { SEOWrapper } from "@/components/layout/seo-wrapper";
 import GlobalSearch from "@/components/ui/global-search";
 
 import EnhancedNotifications from "@/components/ui/enhanced-notifications";
+import { useSessionSecurity } from "@/hooks/useSessionSecurity";
+import { useCrossModuleAutomation } from "@/hooks/useCrossModuleAutomation";
+import { useRealtimeAlerts } from "@/hooks/useRealtimeAlerts";
 
 // Lazy load offline components
 const OfflineStatusBar = lazy(() => 
@@ -22,6 +25,11 @@ const OfflineStatusBar = lazy(() =>
 export const AppLayout: FC = () => {
   const { isSearchOpen, setIsSearchOpen } = useSystemActions();
   const [isNotificationsOpen, setIsNotificationsOpen] = useState(false);
+
+  // Global security & automation hooks
+  useSessionSecurity({ idleTimeoutMs: 30 * 60 * 1000 });
+  const { criticalCount } = useCrossModuleAutomation();
+  useRealtimeAlerts();
 
   return (
     <ThemeProvider defaultTheme="dark" storageKey="nautilus-ui-theme">
@@ -45,7 +53,7 @@ export const AppLayout: FC = () => {
             </div>
             
             {/* Mobile Bottom Navigation - only shows on mobile */}
-            <MobileBottomNav />
+            <MobileBottomNav criticalAlerts={criticalCount} />
             
             {/* Global Features */}
             <GlobalSearch 

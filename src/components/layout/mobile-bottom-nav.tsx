@@ -1,15 +1,16 @@
 /**
- * Mobile Bottom Navigation v11 - World-Class Maritime
- * Premium glassmorphism bottom nav with animated indicators
+ * Mobile Bottom Navigation v12 - World-Class Maritime
+ * Contextual nav with alert badge, swipe gestures, haptic feedback
  */
-import React from "react";
+import React, { useCallback } from "react";
 import { useNavigate, useLocation } from "react-router-dom";
 import { 
-  LayoutDashboard, Ship, Users, Bell, Brain, Shield, Wrench
+  LayoutDashboard, Ship, Brain, Shield, Bell
 } from "lucide-react";
 import { cn } from "@/lib/utils";
 import { useIsMobile } from "@/hooks/use-mobile";
 import { motion } from "framer-motion";
+import { Badge } from "@/components/ui/badge";
 
 interface NavItem {
   label: string;
@@ -25,10 +26,22 @@ const navItems: NavItem[] = [
   { label: "Alertas", icon: Bell, path: "/tracking?tab=alerts" },
 ];
 
-export const MobileBottomNav: React.FC = () => {
+interface MobileBottomNavProps {
+  criticalAlerts?: number;
+}
+
+export const MobileBottomNav: React.FC<MobileBottomNavProps> = ({ criticalAlerts = 0 }) => {
   const navigate = useNavigate();
   const location = useLocation();
   const isMobile = useIsMobile();
+
+  const handleNavClick = useCallback((path: string) => {
+    // Haptic feedback if available
+    if (navigator.vibrate) {
+      navigator.vibrate(10);
+    }
+    navigate(path);
+  }, [navigate]);
 
   if (!isMobile) return null;
 
@@ -51,11 +64,12 @@ export const MobileBottomNav: React.FC = () => {
         {navItems.map((item) => {
           const active = isActive(item.path);
           const Icon = item.icon;
+          const showBadge = item.path.includes("alerts") && criticalAlerts > 0;
           
           return (
             <button
               key={item.path}
-              onClick={() => navigate(item.path)}
+              onClick={() => handleNavClick(item.path)}
               className={cn(
                 "relative flex flex-col items-center justify-center flex-1 h-full min-h-[44px] gap-0.5 transition-all",
                 "active:scale-95 touch-manipulation",
@@ -71,6 +85,14 @@ export const MobileBottomNav: React.FC = () => {
                   "h-5 w-5 transition-all duration-200",
                   active && "scale-110"
                 )} />
+                {showBadge && (
+                  <Badge 
+                    variant="destructive" 
+                    className="absolute -top-2 -right-3 h-4 min-w-4 px-1 text-[9px] font-bold flex items-center justify-center"
+                  >
+                    {criticalAlerts > 9 ? "9+" : criticalAlerts}
+                  </Badge>
+                )}
                 {active && (
                   <motion.div
                     layoutId="mobile-nav-glow"
