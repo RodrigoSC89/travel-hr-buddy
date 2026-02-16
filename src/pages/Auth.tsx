@@ -506,14 +506,14 @@ const Auth: React.FC = () => {
           {/* Logo & Title */}
           <div className="flex items-center space-x-4">
             <motion.div 
-              className="w-16 h-16 rounded-2xl bg-card flex items-center justify-center shadow-premium-lg p-2.5 border border-border/50 ring-1 ring-primary/20 animate-pulse-glow"
+              className="w-20 h-20 rounded-2xl bg-card flex items-center justify-center shadow-premium-lg p-3 border border-border/50 ring-1 ring-primary/20 animate-pulse-glow"
               whileHover={{ scale: 1.12, rotate: 5 }}
               whileTap={{ scale: 0.95 }}
               initial={{ scale: 0, rotate: -15 }}
               animate={{ scale: 1, rotate: 0 }}
               transition={{ type: "spring", stiffness: 260, damping: 15, delay: 0.3 }}
             >
-              <img src={nautiLogo} alt="Nauti One Logo" className="w-full h-full object-contain" width={44} height={44} />
+              <img src={nautiLogo} alt="Nauti One Logo" className="w-full h-full object-contain" width={56} height={56} />
             </motion.div>
             <div>
               <h1 className="text-4xl font-bold tracking-tight">
@@ -613,8 +613,8 @@ const Auth: React.FC = () => {
             <CardHeader className="space-y-1.5 text-center pb-4">
               {/* Mobile logo */}
               <div className="lg:hidden flex justify-center mb-5">
-                <div className="w-14 h-14 rounded-2xl bg-card flex items-center justify-center shadow-premium-lg p-2 ring-1 ring-primary/10">
-                  <img src={nautiLogo} alt="Nauti One" className="w-full h-full object-contain" width={40} height={40} />
+                <div className="w-20 h-20 rounded-2xl bg-card flex items-center justify-center shadow-premium-lg p-3 ring-1 ring-primary/10">
+                  <img src={nautiLogo} alt="Nauti One" className="w-full h-full object-contain" width={56} height={56} />
                 </div>
               </div>
               <CardTitle className="text-2xl font-bold text-card-foreground">
