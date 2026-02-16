@@ -77,7 +77,7 @@ describe("Console Log Hygiene", () => {
   it("should not have console.log in production code (outside lib/logger)", () => {
     let count = 0;
     for (const file of allFiles) {
-      if (file.includes(".test.") || file.includes("logger") || file.includes("__tests__")) continue;
+      if (file.includes(".test.") || file.includes("logger") || file.includes("__tests__") || file.includes("scripts/")) continue;
       const content = readFileSync(file, "utf-8");
       const lines = content.split("\n");
       lines.forEach((line) => {

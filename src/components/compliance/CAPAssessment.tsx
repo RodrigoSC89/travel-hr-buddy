@@ -227,7 +227,7 @@ export function CAPAssessment() {
             <CardHeader><CardTitle className="text-sm">Surveyor Recommendations</CardTitle></CardHeader>
             <CardContent className="space-y-3">
               {inspection.recommendations.map((rec, i) => (
-                <div key={i} className="flex items-start gap-3 p-3 rounded-lg bg-muted/50 border">
+                <div key={`rec-${rec.slice(0, 20)}-${i}`} className="flex items-start gap-3 p-3 rounded-lg bg-muted/50 border">
                   <AlertTriangle className="h-5 w-5 text-orange-500 mt-0.5 flex-shrink-0" />
                   <div className="flex-1">
                     <p className="text-sm">{rec}</p>
@@ -255,8 +255,8 @@ export function CAPAssessment() {
                 { date: "2025-01-15", rating: 2, society: "DNV GL", findings: 5 },
                 { date: "2024-01-10", rating: 3, society: "DNV GL", findings: 8 },
                 { date: "2023-01-08", rating: 3, society: "DNV GL", findings: 6 },
-              ].map((h, i) => (
-                <div key={i} className="flex items-center justify-between p-3 rounded-lg bg-muted/50">
+              ].map((h) => (
+                <div key={h.date} className="flex items-center justify-between p-3 rounded-lg bg-muted/50">
                   <div><p className="font-medium text-sm">{h.date}</p><p className="text-xs text-muted-foreground">{h.society} • {h.findings} findings</p></div>
                   {getRatingBadge(h.rating)}
                 </div>
