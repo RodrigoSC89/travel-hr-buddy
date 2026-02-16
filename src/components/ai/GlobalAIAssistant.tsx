@@ -39,6 +39,9 @@ Posso ajudar com:
 - 🔧 Manutenção preditiva
 - 👥 Gestão de tripulação
 - 📊 Análises e relatórios
+- 💰 Voyage P&L e TCE Benchmark
+- 🌱 CII Rating e ESG
+- 🎯 Simulação de auditoria
 
 Como posso ajudar?`,
       timestamp: new Date(),

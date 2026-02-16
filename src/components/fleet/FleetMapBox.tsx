@@ -156,12 +156,30 @@ export function FleetMapBox({
     }
   }, [externalVessels]);
 
-  // Initial fetch
+  // Initial fetch + auto-refresh
   useEffect(() => {
     if (mapboxToken) {
       fetchVessels();
+      // Auto-refresh every 30 seconds
+      const interval = setInterval(fetchVessels, 30000);
+      return () => clearInterval(interval);
     }
   }, [mapboxToken, fetchVessels]);
+
+  // Realtime Supabase subscription for vessel position updates
+  useEffect(() => {
+    const channel = supabase
+      .channel('fleet-positions-realtime')
+      .on('postgres_changes', { event: 'INSERT', schema: 'public', table: 'vessel_positions' }, () => {
+        fetchVessels();
+      })
+      .on('postgres_changes', { event: 'UPDATE', schema: 'public', table: 'vessels' }, () => {
+        fetchVessels();
+      })
+      .subscribe();
+
+    return () => { supabase.removeChannel(channel); };
+  }, [fetchVessels]);
 
   // Initialize map
   useEffect(() => {
