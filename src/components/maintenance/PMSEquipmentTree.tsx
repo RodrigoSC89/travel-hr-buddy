@@ -190,8 +190,8 @@ export default function PMSEquipmentTree() {
           { icon: <Zap className="h-4 w-4" />, label: 'Críticos', value: metrics.critical, color: 'text-destructive' },
           { icon: <Cpu className="h-4 w-4" />, label: 'Equipamentos', value: metrics.equipmentCount, color: 'text-foreground' },
           { icon: <BarChart3 className="h-4 w-4" />, label: 'Conclusão', value: `${metrics.completionRate}%`, color: 'text-success' },
-        ].map((kpi, i) => (
-          <Card key={i}><CardContent className="p-3 flex items-center gap-2">
+        ].map((kpi) => (
+          <Card key={kpi.label}><CardContent className="p-3 flex items-center gap-2">
             <span className={cn("opacity-70", kpi.color)}>{kpi.icon}</span>
             <div><p className="text-[10px] text-muted-foreground uppercase">{kpi.label}</p><p className={cn("text-lg font-bold", kpi.color)}>{kpi.value}</p></div>
           </CardContent></Card>

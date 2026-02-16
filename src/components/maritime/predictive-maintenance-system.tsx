@@ -263,8 +263,8 @@ export const PredictiveMaintenanceSystem = () => {
                     </div>
                     {prediction.riskFactors.length > 0 && (
                       <div className="flex flex-wrap gap-1">
-                        {prediction.riskFactors.map((factor, i) => (
-                          <Badge key={i} variant="outline" className="text-xs">{factor}</Badge>
+                        {prediction.riskFactors.map((factor) => (
+                          <Badge key={factor} variant="outline" className="text-xs">{factor}</Badge>
                         ))}
                       </div>
                     )}
@@ -277,10 +277,10 @@ export const PredictiveMaintenanceSystem = () => {
 
         <TabsContent value="metrics" className="space-y-4">
           <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-4">
-            {metrics.map((metric, index) => {
+            {metrics.map((metric) => {
               const isGood = getMetricStatus(metric.current, metric.target, metric.metric);
               return (
-                <Card key={index}>
+                <Card key={metric.metric}>
                   <CardContent className="p-6">
                     <div className="flex justify-between items-start mb-2">
                       <p className="text-sm font-medium text-muted-foreground">{metric.metric}</p>

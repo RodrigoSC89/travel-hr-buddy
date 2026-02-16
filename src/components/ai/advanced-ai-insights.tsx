@@ -186,8 +186,8 @@ const AdvancedAIInsights = () => {
                         <span className="text-xs font-medium">{insight.confidence}%</span>
                       </div>
                       <div className="flex flex-wrap gap-2">
-                        {insight.recommendations.slice(0, 3).map((rec: string, i: number) => (
-                          <Badge key={i} variant="outline" className="text-xs">💡 {rec}</Badge>
+                        {insight.recommendations.slice(0, 3).map((rec: string) => (
+                          <Badge key={rec} variant="outline" className="text-xs">💡 {rec}</Badge>
                         ))}
                       </div>
                       <div className="flex items-center justify-between">

@@ -225,8 +225,8 @@ export function CrossFrameworkAuditDashboard() {
                 <span className="text-muted-foreground">— Ação imediata necessária</span>
               </div>
             )}
-            {criticalGaps.map((g, i) => (
-              <div key={i} className="flex items-center gap-2 text-sm">
+            {criticalGaps.map((g) => (
+              <div key={`${g.framework}-${g.area}`} className="flex items-center gap-2 text-sm">
                 <AlertTriangle className="h-3.5 w-3.5 text-destructive shrink-0" />
                 <Badge variant="destructive" className="text-[10px]">{g.framework}</Badge>
                 <span>{g.area}: {g.description}</span>
@@ -380,8 +380,8 @@ export function CrossFrameworkAuditDashboard() {
                   </CardTitle>
                 </CardHeader>
                 <CardContent className="space-y-2">
-                  {gaps.map((g, i) => (
-                    <div key={i} className="flex items-center gap-3 p-2 rounded border text-sm">
+                  {gaps.map((g) => (
+                    <div key={`${g.framework}-${g.area}`} className="flex items-center gap-3 p-2 rounded border text-sm">
                       <Badge variant="outline" className="text-xs shrink-0">{g.framework}</Badge>
                       <div className="flex-1 min-w-0">
                         <span className="font-medium">{g.area}</span>
