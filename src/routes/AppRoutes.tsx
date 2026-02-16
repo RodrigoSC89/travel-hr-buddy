@@ -280,6 +280,12 @@ export const AppRoutes = () => (
       <Route path="/bunker-optimization-engine" element={<Pages.BunkerOptimizationEnginePage />} />
       <Route path="/crew-document-vault" element={<Pages.CrewDocumentVaultPage />} />
       <Route path="/advanced-cargo" element={<Pages.AdvancedCargoPage />} />
+      <Route path="/crew-change" element={<Pages.CrewChangePage />} />
+      <Route path="/permit-to-work" element={<Pages.PermitToWorkPage />} />
+      <Route path="/ship-vetting" element={<Pages.ShipVettingPage />} />
+      <Route path="/noon-report-analytics" element={<Pages.NoonReportAnalyticsPage />} />
+      <Route path="/psc-history" element={<Pages.PSCHistoryPage />} />
+      <Route path="/stowage-plan" element={<Pages.StowagePlanPage />} />
       
       {/* ======== ESG & SUSTENTABILIDADE ======== */}
       <Route path="/esg-emissions" element={<Pages.ESGEmissionsPage />} />

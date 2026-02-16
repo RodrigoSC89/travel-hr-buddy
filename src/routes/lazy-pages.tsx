@@ -339,6 +339,16 @@ export const BunkerOptimizationEnginePage = lazy(() => import("@/pages/BunkerOpt
 export const CrewDocumentVaultPage = lazy(() => import("@/pages/CrewDocumentVaultPage"));
 export const AdvancedCargoPage = lazy(() => import("@/pages/AdvancedCargoPage"));
 
+// ============================================
+// WORLD-CLASS FINAL INTEGRATION (vs Compas, INX, RightShip, NAPA, Equasis)
+// ============================================
+export const CrewChangePage = lazy(() => import("@/pages/CrewChangePage"));
+export const PermitToWorkPage = lazy(() => import("@/pages/PermitToWorkPage"));
+export const ShipVettingPage = lazy(() => import("@/pages/ShipVettingPage"));
+export const NoonReportAnalyticsPage = lazy(() => import("@/pages/NoonReportAnalyticsPage"));
+export const PSCHistoryPage = lazy(() => import("@/pages/PSCHistoryPage"));
+export const StowagePlanPage = lazy(() => import("@/pages/StowagePlanPage"));
+
 // AdminRoute (lazy-loaded RoleGuard)
 export const AdminRoute = lazy(() => import('@/components/auth/RoleGuard').then(mod => ({
   default: ({ children }: { children: React.ReactNode }) => (
