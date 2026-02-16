@@ -172,7 +172,7 @@ export function MLCHealthSafetyTracker() {
                     <p className="text-xs text-muted-foreground mb-2">Perigo: {ra.hazard}</p>
                     <div className="flex flex-wrap gap-1">
                       {ra.controls.map((c, i) => (
-                        <Badge key={i} variant="outline" className="text-[10px] px-1.5 py-0">{c}</Badge>
+                        <Badge key={`${ra.hazard}-ctrl-${c.slice(0, 10)}-${i}`} variant="outline" className="text-[10px] px-1.5 py-0">{c}</Badge>
                       ))}
                     </div>
                     <div className="flex items-center gap-4 mt-2 text-xs text-muted-foreground">

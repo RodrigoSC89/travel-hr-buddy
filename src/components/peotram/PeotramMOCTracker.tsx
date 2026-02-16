@@ -233,7 +233,7 @@ export const PeotramMOCTracker: React.FC = () => {
                 {approvals.length > 0 && (
                   <div className="flex flex-wrap gap-2">
                     {approvals.map((ap: any, i: number) => (
-                      <div key={i} className={`flex items-center gap-1 px-2 py-1 rounded-lg border text-xs ${
+                      <div key={`${moc.id}-ap-${ap.role}-${i}`} className={`flex items-center gap-1 px-2 py-1 rounded-lg border text-xs ${
                         ap.status === "approved" ? "bg-success/5 border-success/20 text-success" :
                         ap.status === "rejected" ? "bg-destructive/5 border-destructive/20 text-destructive" :
                         "bg-muted/50 border-border text-muted-foreground"

@@ -326,7 +326,7 @@ export default function RevolutionaryCEODashboard() {
             <ResponsiveContainer width="100%" height={240}>
               <PieChart>
                 <Pie data={fleetStatus} dataKey="value" nameKey="name" cx="50%" cy="50%" outerRadius={80} innerRadius={50} paddingAngle={4} strokeWidth={0}>
-                  {fleetStatus.map((_, i) => <Cell key={i} fill={CHART_COLORS[i % CHART_COLORS.length]} />)}
+                  {fleetStatus.map((entry, i) => <Cell key={`fleet-${entry.name}-${i}`} fill={CHART_COLORS[i % CHART_COLORS.length]} />)}
                 </Pie>
                 <Tooltip />
                 <Legend iconSize={8} wrapperStyle={{ fontSize: "11px" }} />
@@ -353,7 +353,7 @@ export default function RevolutionaryCEODashboard() {
                 <YAxis dataKey="name" type="category" tick={{ fontSize: 10 }} width={55} />
                 <Tooltip />
                 <Bar dataKey="value" radius={[0, 6, 6, 0]}>
-                  {maintPriority.map((entry, i) => <Cell key={i} fill={entry.fill} />)}
+                  {maintPriority.map((entry, i) => <Cell key={`maint-${entry.name}-${i}`} fill={entry.fill} />)}
                 </Bar>
               </BarChart>
             </ResponsiveContainer>

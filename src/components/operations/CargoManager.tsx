@@ -255,7 +255,7 @@ export function CargoManager() {
                 <ResponsiveContainer width="100%" height={220}>
                   <PieChart>
                     <Pie data={typeDistribution} cx="50%" cy="50%" outerRadius={70} dataKey="value" label={({ name, value }) => `${name}: ${value}`}>
-                      {typeDistribution.map((_, i) => <Cell key={i} fill={COLORS[i % COLORS.length]} />)}
+                      {typeDistribution.map((entry, i) => <Cell key={`cargo-type-${entry.name}-${i}`} fill={COLORS[i % COLORS.length]} />)}
                     </Pie>
                     <Tooltip />
                   </PieChart>

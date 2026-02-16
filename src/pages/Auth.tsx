@@ -450,7 +450,7 @@ const Auth: React.FC = () => {
         {/* Floating particles - larger and more visible */}
         {[...Array(12)].map((_, i) => (
           <motion.div
-            key={i}
+            key={`particle-${i}`}
             className="absolute rounded-full"
             style={{
               left: `${8 + i * 8}%`,

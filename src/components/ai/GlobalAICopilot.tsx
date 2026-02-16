@@ -340,12 +340,12 @@ export function GlobalAICopilot() {
                       <div className="bg-muted/70 rounded-2xl rounded-bl-md px-3.5 py-2.5">
                         <div className="flex items-center gap-2">
                           <div className="flex gap-1">
-                            {[0, 1, 2].map(i => (
+                            {[0, 1, 2].map(dotIdx => (
                               <motion.div
-                                key={i}
+                                key={`typing-dot-${dotIdx}`}
                                 className="w-1.5 h-1.5 rounded-full bg-primary"
                                 animate={{ y: [0, -4, 0] }}
-                                transition={{ duration: 0.6, repeat: Infinity, delay: i * 0.15 }}
+                                transition={{ duration: 0.6, repeat: Infinity, delay: dotIdx * 0.15 }}
                               />
                             ))}
                           </div>
