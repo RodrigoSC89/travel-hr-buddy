@@ -34,7 +34,7 @@ import {
   DollarSign, Leaf, ClipboardList, Cloud,
   Calendar, Server, Radio, Globe, Plane,
   Lock, GraduationCap, Trash2, Fuel, Stethoscope, Terminal,
-  Briefcase, Gamepad2, Waves, Search, Trophy, Lightbulb, Handshake
+  Briefcase, Gamepad2, Waves, Search, Trophy, Lightbulb, Handshake, Calculator
 } from "lucide-react";
 import type { LucideIcon } from "lucide-react";
 
@@ -109,6 +109,9 @@ export const SIDEBAR_ROUTES: SidebarGroup[] = [
       { label: "Contracts", path: "/ops?tab=contracts", icon: FileText, emoji: "📝" },
       { label: "Charter Party", path: "/charter-party", icon: Briefcase, emoji: "📋", badge: "CP", status: "new" as const },
       { label: "Laytime & Demurrage", path: "/laytime-demurrage", icon: DollarSign, emoji: "⏱️", badge: "BIMCO", status: "new" as const },
+      { label: "Freight Invoicing", path: "/freight-invoicing", icon: FileText, emoji: "💰", badge: "IMOS", status: "new" as const },
+      { label: "Voyage Estimate", path: "/voyage-estimate", icon: Calculator, emoji: "🧮", badge: "TCE", status: "new" as const },
+      { label: "Budget vs OPEX", path: "/budget-opex", icon: TrendingUp, emoji: "📊", badge: "CFM", status: "new" as const },
       { label: "Submarine Ops", path: "/ocean-sonar", icon: Waves, emoji: "🌊", badge: "DEMO", status: "beta" as const },
       { label: "Operational Calendar", path: "/operational-calendar", icon: Calendar, emoji: "📅" },
       { label: "Task Management", path: "/task-management", icon: ClipboardList, emoji: "✅" },
@@ -125,6 +128,7 @@ export const SIDEBAR_ROUTES: SidebarGroup[] = [
       { label: "Maintenance Hub", path: "/maintenance", icon: Wrench, emoji: "🔧", badge: "HUB" },
       { label: "Running Hours", path: "/running-hours", icon: Activity, emoji: "⏱️", badge: "PMS", status: "new" as const },
       { label: "Class Surveys", path: "/class-surveys", icon: Shield, emoji: "🛡️", badge: "DNV", status: "new" as const },
+      { label: "Warranty Claims", path: "/warranty-claims", icon: FileText, emoji: "📋", badge: "AMOS", status: "new" as const },
       { label: "Predictive", path: "/maintenance?tab=predictive", icon: Brain, emoji: "🧠", badge: "ML" },
       { label: "Drydock", path: "/maintenance?tab=drydock", icon: Anchor, emoji: "🔩" },
       { label: "Fuel & ROB", path: "/maintenance?tab=fuel", icon: Fuel, emoji: "⛽" },
@@ -186,6 +190,7 @@ export const SIDEBAR_ROUTES: SidebarGroup[] = [
       { label: "Risk Matrix", path: "/risk-matrix", icon: Target, emoji: "🎯" },
       { label: "NCs & CAPAs", path: "/compliance?tab=ncs-capas", icon: AlertTriangle, emoji: "⚠️" },
       { label: "QHSE Incidents", path: "/qhse-incidents", icon: AlertTriangle, emoji: "🚨", badge: "QHSE", status: "new" as const },
+      { label: "Regulatory Radar", path: "/regulatory-radar", icon: Globe, emoji: "📡", badge: "DNV", status: "new" as const },
       // === 12 AUDITORIAS MARÍTIMAS COMPLETAS ===
       { label: "1. PEO-DP", path: "/peo-dp", icon: Anchor, emoji: "⚓", badge: "IMCA" },
       { label: "2. PEOTRAM", path: "/peotram", icon: Shield, emoji: "🚢", badge: "13E" },
@@ -214,6 +219,7 @@ export const SIDEBAR_ROUTES: SidebarGroup[] = [
       { label: "Crew Appraisal", path: "/crew-appraisal", icon: Award, emoji: "⭐", badge: "360°", status: "new" as const },
       { label: "Crew Travel", path: "/crew-travel", icon: Plane, emoji: "✈️", badge: "NEW", status: "new" as const },
       { label: "Crew Rotation", path: "/crew-rotation", icon: Users, emoji: "🔄", badge: "NEW", status: "new" as const },
+      { label: "Crew Payroll", path: "/crew-payroll", icon: DollarSign, emoji: "💰", badge: "ITF", status: "new" as const },
       { label: "💰 Finance", path: "/workbench?section=finance", icon: DollarSign, emoji: "💰" },
       { label: "✈️ Travel", path: "/workbench?section=travel", icon: Plane, emoji: "✈️" },
       { label: "⚙️ System", path: "/workbench?section=system", icon: Settings, emoji: "⚙️" },
