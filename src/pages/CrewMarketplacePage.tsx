@@ -241,7 +241,7 @@ Forneça: pontos fortes, riscos, recomendação de embarque e compatibilidade co
                         </div>
                         <div className="text-right space-y-1">
                           <div className="flex items-center gap-1">
-                            <Star className="h-3 w-3 text-yellow-500 fill-yellow-500" />
+                            <Star className="h-3 w-3 text-warning fill-warning" />
                             <span className="text-sm font-medium">{c.rating.toFixed(1)}</span>
                           </div>
                           <Badge variant={c.match_score >= 85 ? "default" : c.match_score >= 70 ? "secondary" : "outline"}>
@@ -279,7 +279,7 @@ Forneça: pontos fortes, riscos, recomendação de embarque e compatibilidade co
                   <p className="text-muted-foreground">{selectedCandidate.rank}</p>
                   <div className="flex items-center justify-center gap-1 mt-2">
                     {Array.from({ length: 5 }).map((_, i) => (
-                      <Star key={`star-${i}`} className={`h-4 w-4 ${i < Math.floor(selectedCandidate.rating) ? "text-yellow-500 fill-yellow-500" : "text-muted-foreground/30"}`} />
+                      <Star key={`star-${i}`} className={`h-4 w-4 ${i < Math.floor(selectedCandidate.rating) ? "text-warning fill-warning" : "text-muted-foreground/30"}`} />
                     ))}
                     <span className="ml-1 text-sm">{selectedCandidate.rating.toFixed(1)}</span>
                   </div>

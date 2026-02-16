@@ -89,11 +89,11 @@ export default function SystemWatchdog() {
   const getStatusIcon = (status: string) => {
     switch (status) {
     case "online":
-      return <CheckCircle className="h-5 w-5 text-green-500" />;
+      return <CheckCircle className="h-5 w-5 text-success" />;
     case "degraded":
-      return <AlertCircle className="h-5 w-5 text-yellow-500" />;
+      return <AlertCircle className="h-5 w-5 text-warning" />;
     case "offline":
-      return <XCircle className="h-5 w-5 text-red-500" />;
+      return <XCircle className="h-5 w-5 text-destructive" />;
     default:
       return <Clock className="h-5 w-5 text-muted-foreground" />;
     }

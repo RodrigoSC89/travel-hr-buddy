@@ -324,7 +324,7 @@ export function BathymetricVisualization() {
       <Card className="bg-card/50 border-border/50 overflow-hidden">
         <CardHeader className="pb-2">
           <CardTitle className="flex items-center gap-2 text-sm">
-            <Map className="h-4 w-4 text-cyan-400" />
+            <Map className="h-4 w-4 text-primary" />
             Mapa Batimétrico Interativo
             <Badge variant="outline" className="ml-auto text-xs">
               {gridSize.cols * 50}m × {gridSize.rows * 50}m
@@ -356,10 +356,10 @@ export function BathymetricVisualization() {
           {/* Asset Legend */}
           {showAssets && (
             <div className="flex items-center gap-4 mt-2 px-2 text-xs text-muted-foreground">
-              <span className="flex items-center gap-1"><span className="w-2 h-2 rounded-full bg-green-500 inline-block" /> ROV</span>
-              <span className="flex items-center gap-1"><span className="w-2 h-2 rounded-full bg-blue-500 inline-block" /> AUV</span>
-              <span className="flex items-center gap-1"><span className="w-2 h-2 rounded-full bg-yellow-500 inline-block" /> Sensor</span>
-              <span className="flex items-center gap-1"><span className="w-2 h-2 rounded-full bg-red-500 inline-block" /> Estrutura</span>
+              <span className="flex items-center gap-1"><span className="w-2 h-2 rounded-full bg-success inline-block" /> ROV</span>
+              <span className="flex items-center gap-1"><span className="w-2 h-2 rounded-full bg-info inline-block" /> AUV</span>
+              <span className="flex items-center gap-1"><span className="w-2 h-2 rounded-full bg-warning inline-block" /> Sensor</span>
+              <span className="flex items-center gap-1"><span className="w-2 h-2 rounded-full bg-destructive inline-block" /> Estrutura</span>
             </div>
           )}
         </CardContent>
@@ -370,7 +370,7 @@ export function BathymetricVisualization() {
         <CardHeader className="pb-2">
           <div className="flex items-center justify-between">
             <CardTitle className="flex items-center gap-2 text-sm">
-              <Ruler className="h-4 w-4 text-cyan-400" />
+              <Ruler className="h-4 w-4 text-primary" />
               Perfil Batimétrico
             </CardTitle>
             <div className="flex items-center gap-2">

@@ -65,9 +65,9 @@ export default function SimilarExamples({ input, onSelect }: { input: string, on
   };
 
   const getSimilarityColor = (similarity: number): string => {
-    if (similarity >= 0.85) return "bg-green-500";
-    if (similarity >= 0.75) return "bg-blue-500";
-    return "bg-orange-500";
+    if (similarity >= 0.85) return "bg-success";
+    if (similarity >= 0.75) return "bg-info";
+    return "bg-warning";
   };
 
   return (
