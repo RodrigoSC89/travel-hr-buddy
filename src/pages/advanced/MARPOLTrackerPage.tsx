@@ -1155,7 +1155,7 @@ const MARPOLTrackerPage = () => {
             </div>
             <div className="flex justify-end gap-2 pt-2">
               <Button variant="outline" onClick={() => setShowNewEntry(false)}>Cancelar</Button>
-              <Button onClick={() => { setShowNewEntry(false); toast.success("Entrada registrada com sucesso"); }}>
+              <Button onClick={async () => { try { const { error } = await supabase.from('action_items').insert({ title: 'Registro MARPOL - Descarte', description: 'Novo registro de descarte ambiental conforme MARPOL', status: 'pending', priority: 'medium', source_module: 'marpol' }); if (error) throw error; setShowNewEntry(false); toast.success("Entrada registrada com sucesso no banco de dados"); } catch { toast.error("Erro ao registrar entrada"); } }}>
                 <Plus className="h-4 w-4 mr-2" />Registrar
               </Button>
             </div>

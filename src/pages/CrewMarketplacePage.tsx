@@ -263,7 +263,7 @@ Forneça: pontos fortes, riscos, recomendação de embarque e compatibilidade co
                   <p className="text-muted-foreground">{selectedCandidate.rank}</p>
                   <div className="flex items-center justify-center gap-1 mt-2">
                     {Array.from({ length: 5 }).map((_, i) => (
-                      <Star key={i} className={`h-4 w-4 ${i < Math.floor(selectedCandidate.rating) ? "text-yellow-500 fill-yellow-500" : "text-muted-foreground/30"}`} />
+                      <Star key={`star-${i}`} className={`h-4 w-4 ${i < Math.floor(selectedCandidate.rating) ? "text-yellow-500 fill-yellow-500" : "text-muted-foreground/30"}`} />
                     ))}
                     <span className="ml-1 text-sm">{selectedCandidate.rating.toFixed(1)}</span>
                   </div>

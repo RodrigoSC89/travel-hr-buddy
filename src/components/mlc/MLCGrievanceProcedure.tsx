@@ -271,7 +271,7 @@ export const MLCGrievanceProcedure: React.FC = () => {
               "Procedimento de escalonamento em 4 níveis implementado",
               "Treinamento sobre procedimento de reclamação realizado",
             ].map((item, i) => (
-              <div key={i} className="flex items-center gap-2 p-2 rounded-lg border bg-card/50">
+              <div key={`checklist-${i}-${item.slice(0,20)}`} className="flex items-center gap-2 p-2 rounded-lg border bg-card/50">
                 <CheckCircle className="h-4 w-4 text-success shrink-0" />
                 <span className="text-sm">{item}</span>
               </div>

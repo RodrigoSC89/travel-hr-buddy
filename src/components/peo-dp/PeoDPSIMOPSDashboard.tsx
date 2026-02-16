@@ -124,7 +124,7 @@ export const PeoDPSIMOPSDashboard: React.FC = () => {
           <CardHeader className="pb-3"><CardTitle className="text-lg flex items-center gap-2 text-warning"><AlertTriangle className="h-5 w-5" />Conflitos Detectados</CardTitle></CardHeader>
           <CardContent className="space-y-2">
             {conflicts.map((c, i) => (
-              <div key={i} className="flex items-center gap-3 p-3 rounded-lg border border-warning/20 bg-warning/5">
+              <div key={`conflict-${c.op1}-${c.op2}-${i}`} className="flex items-center gap-3 p-3 rounded-lg border border-warning/20 bg-warning/5">
                 <AlertTriangle className="h-4 w-4 text-warning shrink-0" />
                 <div className="flex-1"><p className="text-sm font-medium">{c.op1} ↔ {c.op2}</p><p className="text-xs text-muted-foreground">{c.reason}</p></div>
                 <Badge variant="outline" className="bg-warning/10 text-warning border-warning/30">Ação Requerida</Badge>

@@ -241,17 +241,9 @@ export const SmartOptimization: React.FC = () => {
     const suggestion = suggestions.find(s => s.id === suggestionId);
     
     toast({
-      title: "Implementando Otimização",
-      description: `Aplicando: ${suggestion?.title}`,
+      title: "Otimização Aplicada",
+      description: `${suggestion?.title} — implementado com sucesso.`,
     });
-    
-    // Simular implementação
-    setTimeout(() => {
-      toast({
-        title: "Otimização Aplicada",
-        description: "A melhoria foi implementada com sucesso.",
-      });
-    }, 2000);
   };
 
   return (
