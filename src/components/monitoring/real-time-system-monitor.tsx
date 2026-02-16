@@ -3,7 +3,7 @@
  * Live health checks, access logs, and real-time metrics
  */
 import React, { useState, useEffect } from "react";
-import { useQuery } from "@tanstack/react-query";
+import { useQuery, useQueryClient } from "@tanstack/react-query";
 import { supabase } from "@/integrations/supabase/client";
 import { Card, CardHeader, CardTitle, CardContent } from "@/components/ui/card";
 import { Button } from "@/components/ui/button";
@@ -23,6 +23,7 @@ interface HealthCheck {
 }
 
 export const RealTimeSystemMonitor: React.FC = () => {
+  const queryClient = useQueryClient();
   const [healthChecks, setHealthChecks] = useState<HealthCheck[]>([]);
   const [isChecking, setIsChecking] = useState(false);
 
@@ -315,7 +316,7 @@ export const RealTimeSystemMonitor: React.FC = () => {
               <Zap className="w-4 h-4 mr-2" />
               Re-check Health
             </Button>
-            <Button variant="outline" size="sm" onClick={() => { toast.info('Invalidando cache...'); setTimeout(() => toast.success('Cache invalidado com sucesso'), 500); }}>
+            <Button variant="outline" size="sm" onClick={() => { toast.info('Invalidando cache...'); queryClient.invalidateQueries(); setTimeout(() => toast.success('Cache invalidado com sucesso'), 500); }}>
               <HardDrive className="w-4 h-4 mr-2" />
               Limpar Cache
             </Button>
