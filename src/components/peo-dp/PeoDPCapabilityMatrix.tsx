@@ -92,6 +92,7 @@ export function PeoDPCapabilityMatrix() {
         .select('id, equipment_name, equipment_type, status, specifications')
         .order('equipment_type');
       if (error) throw error;
+      // eslint-disable-next-line @typescript-eslint/no-explicit-any -- Supabase dynamic table response
       return data as any[];
     },
     staleTime: 30000,
@@ -100,10 +101,11 @@ export function PeoDPCapabilityMatrix() {
   // Map DB data or use defaults
   const equipment: EquipmentItem[] = useMemo(() => {
     if (!dbEquipment || dbEquipment.length === 0) return DEFAULT_EQUIPMENT;
+    // eslint-disable-next-line @typescript-eslint/no-explicit-any -- Supabase dynamic response mapping
     return dbEquipment.map((eq: any) => ({
       id: eq.id.substring(0, 6),
       name: eq.equipment_name,
-      status: (eq.status || 'online') as any,
+      status: (eq.status || 'online') as EquipmentItem['status'],
       power: eq.specifications?.power || 100,
       maxPower: eq.specifications?.max_power || 100,
       group: eq.equipment_type || 'Outros',

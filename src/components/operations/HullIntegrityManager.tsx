@@ -179,7 +179,8 @@ export default function HullIntegrityManager() {
                         </div>
                       </div>
                       <div className="flex items-center gap-2">
-                        <Badge variant={(conditionColor[insp.overall_condition] || 'secondary') as any}>{insp.overall_condition}</Badge>
+                        {/* eslint-disable-next-line @typescript-eslint/no-explicit-any -- Badge variant from dynamic mapping */}
+                        <Badge variant={(conditionColor[insp.overall_condition] || 'secondary') as "default" | "secondary" | "destructive" | "outline"}>{insp.overall_condition}</Badge>
                         <Badge variant="outline">{inspFindings.length} achados</Badge>
                         <Button variant="ghost" size="sm" onClick={() => setFindingOpen(insp.id)}>
                           <Plus className="w-4 h-4" />

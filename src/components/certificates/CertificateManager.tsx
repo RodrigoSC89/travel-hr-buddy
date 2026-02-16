@@ -99,16 +99,21 @@ export function CertificateManager() {
       return (data || []).map((c): Certificate => ({
         id: c.id,
         type: c.certificate_type,
+        // eslint-disable-next-line @typescript-eslint/no-explicit-any -- Supabase columns not in generated types
         category: (c as any).category || "crew",
         holderId: c.employee_id || "",
+        // eslint-disable-next-line @typescript-eslint/no-explicit-any -- Supabase dynamic column
         holderName: (c as any).holder_name || c.employee_id || "N/A",
+        // eslint-disable-next-line @typescript-eslint/no-explicit-any -- Supabase dynamic column
         vesselId: (c as any).vessel_id || undefined,
+        // eslint-disable-next-line @typescript-eslint/no-explicit-any -- Supabase dynamic column
         vesselName: (c as any).vessel_name || undefined,
         issueDate: c.issue_date,
         expiryDate: c.expiry_date,
         issuingAuthority: c.issuing_authority,
         certificateNumber: c.certificate_number,
         status: c.status === "pending_renewal" ? "pending_renewal" : getStatus(c.expiry_date),
+        // eslint-disable-next-line @typescript-eslint/no-explicit-any -- Supabase dynamic column
         notes: (c as any).notes || "",
       }));
     },
@@ -131,6 +136,7 @@ export function CertificateManager() {
         certificate_number: data.certificateNumber || `CERT-${Date.now()}`,
         status,
         notes: data.notes || null,
+      // eslint-disable-next-line @typescript-eslint/no-explicit-any -- columns exist in DB but not in generated types
       } as any);
       if (error) throw error;
     },
@@ -160,6 +166,7 @@ export function CertificateManager() {
         certificate_number: data.certificateNumber,
         status,
         notes: data.notes || null,
+      // eslint-disable-next-line @typescript-eslint/no-explicit-any -- columns exist in DB but not in generated types
       } as any).eq("id", id);
       if (error) throw error;
     },

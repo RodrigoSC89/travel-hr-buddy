@@ -51,6 +51,7 @@ export const SafetyDashboardComplete: React.FC = () => {
         .order("created_at", { ascending: false })
         .limit(50);
       if (error || !data) return [];
+      // eslint-disable-next-line @typescript-eslint/no-explicit-any -- Supabase dynamic table response mapping
       return (data as any[]).map((r: any): DDSRecord => ({
         id: r.id,
         date: r.drill_date || r.created_at,
@@ -78,6 +79,7 @@ export const SafetyDashboardComplete: React.FC = () => {
         .order("created_at", { ascending: false })
         .limit(50);
       if (error || !data) return [];
+      // eslint-disable-next-line @typescript-eslint/no-explicit-any -- Supabase response mapping to SafetyTraining
       return (data as any[]).map((t: any): SafetyTraining => ({
         id: t.id,
         crew_member_id: t.user_id || "",
@@ -105,6 +107,7 @@ export const SafetyDashboardComplete: React.FC = () => {
         .eq("status", "active")
         .limit(20);
       if (error || !data) return [];
+      // eslint-disable-next-line @typescript-eslint/no-explicit-any -- Supabase response mapping to CrewTrainingDashboard
       return (data as any[]).map((cm: any): CrewTrainingDashboard => ({
         crewMemberId: cm.id,
         crewMemberName: cm.full_name || "Tripulante",

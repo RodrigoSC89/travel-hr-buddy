@@ -150,7 +150,21 @@ export function MLCWorkRestEntry() {
           </h3>
           <p className="text-sm text-muted-foreground">MLC Reg. 2.3 & STCW A-VIII/1 • Clique nas horas para alternar Trabalho/Descanso/OT</p>
         </div>
-        <Button size="sm" variant="outline" className="gap-1 h-9" onClick={() => toast.success("Work/Rest records exportados")}>
+        <Button size="sm" variant="outline" className="gap-1 h-9" onClick={() => {
+          const csvData = crewList.map((c: CrewEntry) => {
+            const totalWork = c.days.reduce((sum: number, d: DayEntry) => sum + d.hours.filter((h: HourStatus) => h === 'work' || h === 'overtime').length, 0);
+            const totalRest = c.days.reduce((sum: number, d: DayEntry) => sum + d.hours.filter((h: HourStatus) => h === 'rest').length, 0);
+            return `${c.name},${c.rank},${totalWork},${totalRest},${c.days.length}`;
+          }).join('\n');
+          const blob = new Blob([`Nome,Rank,Horas Trabalho,Horas Descanso,Dias\n${csvData}`], { type: 'text/csv' });
+          const url = URL.createObjectURL(blob);
+          const a = document.createElement('a');
+          a.href = url;
+          a.download = `work-rest-records-${new Date().toISOString().split('T')[0]}.csv`;
+          a.click();
+          URL.revokeObjectURL(url);
+          toast.success("Work/Rest records exportados com sucesso");
+        }}>
           <Download className="h-3 w-3" /> Exportar
         </Button>
       </div>

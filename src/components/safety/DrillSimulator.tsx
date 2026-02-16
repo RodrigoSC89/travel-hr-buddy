@@ -225,7 +225,7 @@ export function DrillSimulator() {
                       </div>
                       <div className="flex gap-2">
                         <Button className="flex-1" onClick={() => startMutation.mutate(drill.id)} disabled={!!activeDrillId}><Play className="h-4 w-4 mr-2" />Iniciar</Button>
-                        <Button size="icon" variant="ghost" className="text-destructive" onClick={() => deleteMutation.mutate(drill.id)}><Trash2 className="h-4 w-4" /></Button>
+                        <Button size="icon" variant="ghost" className="text-destructive" onClick={() => deleteMutation.mutate(drill.id)} aria-label="Excluir simulação" title="Excluir"><Trash2 className="h-4 w-4" /></Button>
                       </div>
                     </div>
                   </CardContent>

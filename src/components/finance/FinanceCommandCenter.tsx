@@ -400,7 +400,7 @@ export function FinanceCommandCenter() {
                         </div>
                         <div className="flex items-center gap-4">
                           <span className="text-lg font-bold">{formatCurrency(inv.amount, inv.currency)}</span>
-                          <DropdownMenu><DropdownMenuTrigger asChild><Button variant="ghost" size="icon"><MoreHorizontal className="h-4 w-4" /></Button></DropdownMenuTrigger><DropdownMenuContent align="end">
+                          <DropdownMenu><DropdownMenuTrigger asChild><Button variant="ghost" size="icon" aria-label="Opções da fatura" title="Opções"><MoreHorizontal className="h-4 w-4" /></Button></DropdownMenuTrigger><DropdownMenuContent align="end">
                             <DropdownMenuItem onClick={() => { setEditingInvoice(inv); setInvoiceForm({ type: inv.type, description: inv.description, vendor: inv.vendor, vesselName: inv.vesselName || "", amount: String(inv.amount), currency: inv.currency, issueDate: inv.issueDate, dueDate: inv.dueDate, category: inv.category, notes: inv.notes }); setIsInvoiceFormOpen(true); }}><Edit className="h-4 w-4 mr-2" />Editar</DropdownMenuItem>
                             <DropdownMenuItem onClick={() => updateInvoiceStatusMutation.mutate({ id: inv.id, status: "sent" })}><Send className="h-4 w-4 mr-2" />Marcar Enviada</DropdownMenuItem>
                             <DropdownMenuItem onClick={() => updateInvoiceStatusMutation.mutate({ id: inv.id, status: "paid" })}><CheckCircle className="h-4 w-4 mr-2" />Marcar Paga</DropdownMenuItem>
@@ -436,7 +436,7 @@ export function FinanceCommandCenter() {
                         </div>
                         <div className="flex items-center gap-4">
                           <span className="text-lg font-bold">{formatCurrency(exp.amount, exp.currency)}</span>
-                          <DropdownMenu><DropdownMenuTrigger asChild><Button variant="ghost" size="icon"><MoreHorizontal className="h-4 w-4" /></Button></DropdownMenuTrigger><DropdownMenuContent align="end">
+                          <DropdownMenu><DropdownMenuTrigger asChild><Button variant="ghost" size="icon" aria-label="Opções da despesa" title="Opções"><MoreHorizontal className="h-4 w-4" /></Button></DropdownMenuTrigger><DropdownMenuContent align="end">
                             <DropdownMenuItem onClick={() => { setEditingExpense(exp); setExpenseForm({ description: exp.description, category: exp.category, vesselName: exp.vesselName || "", amount: String(exp.amount), currency: exp.currency, date: exp.date, paymentMethod: exp.paymentMethod, notes: exp.notes }); setIsExpenseFormOpen(true); }}><Edit className="h-4 w-4 mr-2" />Editar</DropdownMenuItem>
                             <DropdownMenuItem onClick={() => updateExpenseStatusMutation.mutate({ id: exp.id, status: "approved" })}><CheckCircle className="h-4 w-4 mr-2" />Aprovar</DropdownMenuItem>
                             <DropdownMenuItem onClick={() => updateExpenseStatusMutation.mutate({ id: exp.id, status: "rejected" })}><Ban className="h-4 w-4 mr-2" />Rejeitar</DropdownMenuItem>

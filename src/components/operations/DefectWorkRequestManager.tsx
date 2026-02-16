@@ -208,6 +208,7 @@ export default function DefectWorkRequestManager() {
                     </div>
                   </div>
                   <div className="flex items-center gap-2">
+                    {/* eslint-disable-next-line @typescript-eslint/no-explicit-any -- Badge variant from dynamic mapping */}
                     <Badge variant={(priorityColor[d.priority] || 'secondary') as any}>{d.priority}</Badge>
                     <Badge variant="outline">{d.status}</Badge>
                     {d.capa_status !== 'pending' && <Badge variant="secondary">CAPA: {d.capa_status}</Badge>}

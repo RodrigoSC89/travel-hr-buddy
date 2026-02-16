@@ -510,7 +510,7 @@ Respond as the inspector. Ask ONE specific follow-up question.`,
             }}
             disabled={isLoading}
           />
-          <Button onClick={sendResponse} disabled={isLoading || !userResponse.trim()} size="icon" className="h-auto">
+          <Button onClick={sendResponse} disabled={isLoading || !userResponse.trim()} size="icon" className="h-auto" aria-label="Enviar resposta" title="Enviar">
             {isLoading ? <Loader2 className="h-4 w-4 animate-spin" /> : <Send className="h-4 w-4" />}
           </Button>
         </div>

@@ -112,6 +112,7 @@ export default function VoiceCopilotPage() {
   };
 
   const startListening = useCallback(() => {
+    // eslint-disable-next-line @typescript-eslint/no-explicit-any -- Web Speech API not in standard TypeScript types
     const SpeechRecognitionAPI = (window as any).SpeechRecognition || (window as any).webkitSpeechRecognition;
     if (!SpeechRecognitionAPI) {
       toast.error("Reconhecimento de voz não suportado neste navegador");
@@ -304,7 +305,7 @@ export default function VoiceCopilotPage() {
                     disabled={isProcessing}
                     className="flex-1"
                   />
-                  <Button type="submit" size="icon" disabled={!textInput.trim() || isProcessing}>
+                  <Button type="submit" size="icon" disabled={!textInput.trim() || isProcessing} aria-label="Enviar comando" title="Enviar">
                     <Send className="h-4 w-4" />
                   </Button>
                 </form>

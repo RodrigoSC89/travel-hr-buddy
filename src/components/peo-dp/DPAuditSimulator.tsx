@@ -139,7 +139,7 @@ export function DPAuditSimulator() {
             <CardContent>
               <ul className="space-y-2">
                 {result.deficiencies.map((d, i) => (
-                  <li key={i} className="text-sm flex items-start gap-2">
+                  <li key={`def-${d.substring(0, 20)}-${i}`} className="text-sm flex items-start gap-2">
                     <span className="text-destructive mt-0.5">●</span>{d}
                   </li>
                 ))}

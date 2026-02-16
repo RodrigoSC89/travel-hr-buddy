@@ -68,6 +68,8 @@ export function ProactiveAlertsBanner({ alerts, onDismiss, maxVisible = 3 }: Pro
                     size="icon"
                     className="h-7 w-7"
                     onClick={() => navigate(alert.actionUrl!)}
+                    aria-label="Ver detalhes do alerta"
+                    title="Ver detalhes"
                   >
                     <ChevronRight className="h-3.5 w-3.5" />
                   </Button>
@@ -77,6 +79,8 @@ export function ProactiveAlertsBanner({ alerts, onDismiss, maxVisible = 3 }: Pro
                   size="icon"
                   className="h-7 w-7 opacity-50 hover:opacity-100"
                   onClick={() => onDismiss(alert.id)}
+                  aria-label="Dispensar alerta"
+                  title="Dispensar"
                 >
                   <X className="h-3.5 w-3.5" />
                 </Button>

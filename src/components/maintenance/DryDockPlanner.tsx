@@ -251,7 +251,7 @@ export function DryDockPlanner() {
                         <h4 className="text-sm font-semibold mb-2">Work Scope</h4>
                         <div className="grid grid-cols-2 md:grid-cols-3 gap-2">
                           {project.work_items.map((w: { category: string; count: number; completed: number }, i: number) => (
-                            <div key={i} className="p-2 rounded border text-xs">
+                            <div key={`${project.id}-work-${w.category}-${i}`} className="p-2 rounded border text-xs">
                               <div className="flex justify-between mb-1"><span className="font-medium">{w.category}</span><span>{w.completed}/{w.count}</span></div>
                               <Progress value={w.count > 0 ? (w.completed / w.count) * 100 : 0} className="h-1.5" />
                             </div>
@@ -270,7 +270,7 @@ export function DryDockPlanner() {
                           <h4 className="text-sm font-semibold mb-2">Caminho Crítico</h4>
                           <div className="space-y-1">
                             {project.critical_path.map((item: string, i: number) => (
-                              <div key={i} className="flex items-center gap-2 text-xs p-1.5 rounded bg-muted/50">
+                              <div key={`${project.id}-cp-${i}`} className="flex items-center gap-2 text-xs p-1.5 rounded bg-muted/50">
                                 <span className="w-5 h-5 rounded-full bg-primary/10 flex items-center justify-center text-[10px] font-bold text-primary">{i + 1}</span>
                                 {String(item)}
                               </div>
