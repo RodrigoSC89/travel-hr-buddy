@@ -41,7 +41,7 @@ export const QuickLoadCard: FC<QuickLoadCardProps> = ({
       </CardHeader>
       <CardContent>
         <div className="flex items-center justify-between">
-          <span className="text-sm font-medium text-green-600">{status}</span>
+          <span className="text-sm font-medium text-success">{status}</span>
           <Button 
             onClick={onClick}
             disabled={isLoading}

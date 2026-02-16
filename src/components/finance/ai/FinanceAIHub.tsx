@@ -29,12 +29,12 @@ export const ContractAnalysisAI: React.FC = () => {
   };
 
   return (
-    <Card className="border-blue-500/20">
+    <Card className="border-info/20">
       <CardHeader>
         <CardTitle className="flex items-center gap-2">
-          <Scale className="h-5 w-5 text-blue-500" />
+          <Scale className="h-5 w-5 text-info" />
           Análise de Contratos IA
-          <Badge className="ml-auto bg-blue-500/10 text-blue-500">Legal AI</Badge>
+          <Badge className="ml-auto bg-info/10 text-info">Legal AI</Badge>
         </CardTitle>
       </CardHeader>
       <CardContent className="space-y-4">

@@ -247,7 +247,7 @@ export function AgentChatPanel({ agentId, agentName, agentRole, onClose }: Agent
               </div>
             </div>
             <div className="flex items-center gap-2">
-              <Badge variant="outline" className="bg-green-500/20 text-green-500">
+              <Badge variant="outline" className="bg-success/20 text-success">
                 <Zap className="h-3 w-3 mr-1" />
                 Online
               </Badge>
@@ -272,9 +272,9 @@ export function AgentChatPanel({ agentId, agentName, agentRole, onClose }: Agent
                       className={`flex gap-3 ${message.role === "user" ? "flex-row-reverse" : ""}`}
                     >
                       <Avatar className="h-8 w-8 flex-shrink-0">
-                        <AvatarFallback className={message.role === "user" ? "bg-blue-500/20" : "bg-primary/20"}>
+                      <AvatarFallback className={message.role === "user" ? "bg-info/20" : "bg-primary/20"}>
                           {message.role === "user" ? (
-                            <User className="h-4 w-4 text-blue-500" />
+                            <User className="h-4 w-4 text-info" />
                           ) : (
                             <Bot className="h-4 w-4 text-primary" />
                           )}

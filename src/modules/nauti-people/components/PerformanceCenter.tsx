@@ -116,9 +116,9 @@ const PerformanceCenter: React.FC = () => {
   const getStatusBadge = (status: string) => {
     switch (status) {
       case 'concluida':
-        return <Badge className="bg-green-500">Concluída</Badge>;
+        return <Badge className="bg-success">Concluída</Badge>;
       case 'em_andamento':
-        return <Badge className="bg-blue-500">Em Andamento</Badge>;
+        return <Badge className="bg-info">Em Andamento</Badge>;
       case 'pendente':
         return <Badge variant="secondary">Pendente</Badge>;
       default:
@@ -127,10 +127,10 @@ const PerformanceCenter: React.FC = () => {
   };
 
   const getNotaColor = (nota: number) => {
-    if (nota >= 4.5) return 'text-green-500';
-    if (nota >= 3.5) return 'text-blue-500';
-    if (nota >= 2.5) return 'text-yellow-500';
-    return 'text-red-500';
+    if (nota >= 4.5) return 'text-success';
+    if (nota >= 3.5) return 'text-info';
+    if (nota >= 2.5) return 'text-warning';
+    return 'text-destructive';
   };
 
   const handleStartAvaliacao = async (avaliacao: Avaliacao) => {

@@ -334,7 +334,7 @@ export function CompanyFinancialDashboard() {
                     </div>
                     <div className="p-3 bg-accent/10 rounded-lg">
                       <p className="text-sm text-muted-foreground">Utilização</p>
-                      <p className="text-xl font-bold text-purple-500">{vessel.utilization}%</p>
+                      <p className="text-xl font-bold text-accent-foreground">{vessel.utilization}%</p>
                     </div>
                   </div>
                 </CardContent>

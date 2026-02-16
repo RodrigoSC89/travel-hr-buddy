@@ -221,9 +221,9 @@ const AdvancedReportsSystem = () => {
                     <div className="flex items-center justify-between">
                       <div>
                         <p className="text-sm text-muted-foreground">Receita Total</p>
-                        <p className="text-2xl font-bold text-green-600">R$ 328.000</p>
+                        <p className="text-2xl font-bold text-success">R$ 328.000</p>
                       </div>
-                      <TrendingUp className="w-8 h-8 text-green-600" />
+                      <TrendingUp className="w-8 h-8 text-success" />
                     </div>
                     <p className="text-xs text-muted-foreground mt-2">+12% vs mês anterior</p>
                   </CardContent>
@@ -234,9 +234,9 @@ const AdvancedReportsSystem = () => {
                     <div className="flex items-center justify-between">
                       <div>
                         <p className="text-sm text-muted-foreground">Despesas</p>
-                        <p className="text-2xl font-bold text-red-600">R$ 220.000</p>
+                        <p className="text-2xl font-bold text-destructive">R$ 220.000</p>
                       </div>
-                      <AlertCircle className="w-8 h-8 text-red-600" />
+                      <AlertCircle className="w-8 h-8 text-destructive" />
                     </div>
                     <p className="text-xs text-muted-foreground mt-2">+5% vs mês anterior</p>
                   </CardContent>
@@ -247,9 +247,9 @@ const AdvancedReportsSystem = () => {
                     <div className="flex items-center justify-between">
                       <div>
                         <p className="text-sm text-muted-foreground">Lucro Líquido</p>
-                        <p className="text-2xl font-bold text-blue-600">R$ 108.000</p>
+                        <p className="text-2xl font-bold text-info">R$ 108.000</p>
                       </div>
-                      <DollarSign className="w-8 h-8 text-blue-600" />
+                      <DollarSign className="w-8 h-8 text-info" />
                     </div>
                     <p className="text-xs text-muted-foreground mt-2">+18% vs mês anterior</p>
                   </CardContent>
@@ -365,7 +365,7 @@ const AdvancedReportsSystem = () => {
                   <CardContent className="p-6">
                     <div className="text-center">
                       <p className="text-sm text-muted-foreground">Eficiência Operacional</p>
-                      <p className="text-3xl font-bold text-green-600">94%</p>
+                      <p className="text-3xl font-bold text-success">94%</p>
                       <Badge variant="default" className="mt-2">+3% vs anterior</Badge>
                     </div>
                   </CardContent>
@@ -375,7 +375,7 @@ const AdvancedReportsSystem = () => {
                   <CardContent className="p-6">
                     <div className="text-center">
                       <p className="text-sm text-muted-foreground">Tempo Médio Processo</p>
-                      <p className="text-3xl font-bold text-blue-600">2.3h</p>
+                      <p className="text-3xl font-bold text-info">2.3h</p>
                       <Badge variant="secondary" className="mt-2">-0.2h vs anterior</Badge>
                     </div>
                   </CardContent>
@@ -385,7 +385,7 @@ const AdvancedReportsSystem = () => {
                   <CardContent className="p-6">
                     <div className="text-center">
                       <p className="text-sm text-muted-foreground">Taxa de Erro</p>
-                      <p className="text-3xl font-bold text-red-600">1.2%</p>
+                      <p className="text-3xl font-bold text-destructive">1.2%</p>
                       <Badge variant="destructive" className="mt-2">+0.1% vs anterior</Badge>
                     </div>
                   </CardContent>
@@ -395,7 +395,7 @@ const AdvancedReportsSystem = () => {
                   <CardContent className="p-6">
                     <div className="text-center">
                       <p className="text-sm text-muted-foreground">Satisfação Cliente</p>
-                      <p className="text-3xl font-bold text-purple-600">4.8</p>
+                      <p className="text-3xl font-bold text-accent-foreground">4.8</p>
                       <Badge variant="default" className="mt-2">+0.1 vs anterior</Badge>
                     </div>
                   </CardContent>

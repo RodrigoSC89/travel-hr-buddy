@@ -60,7 +60,7 @@ export function MaritimeTabs({ stats, crewMembers, vessels, userId, onTabChange,
           <Card>
             <CardHeader>
               <CardTitle className="flex items-center gap-2">
-                <Users className="h-5 w-5 text-blue-500" />
+                <Users className="h-5 w-5 text-info" />
                 Resumo da Tripulação
               </CardTitle>
               <CardDescription>Status atual dos tripulantes</CardDescription>
@@ -168,15 +168,15 @@ export function MaritimeTabs({ stats, crewMembers, vessels, userId, onTabChange,
           <Card>
             <CardHeader>
               <CardTitle className="flex items-center gap-2">
-                <Bell className="h-5 w-5 text-red-500" />
+                <Bell className="h-5 w-5 text-destructive" />
                 Alertas Críticos
               </CardTitle>
               <CardDescription>Itens que requerem atenção imediata</CardDescription>
             </CardHeader>
             <CardContent className="space-y-3">
               {stats.certExpiring > 0 && (
-                <div className="p-3 bg-yellow-500/10 rounded-lg border border-yellow-500/30 flex items-center gap-3">
-                  <Clock className="h-5 w-5 text-yellow-500" />
+                <div className="p-3 bg-warning/10 rounded-lg border border-warning/30 flex items-center gap-3">
+                  <Clock className="h-5 w-5 text-warning" />
                   <div className="flex-1">
                     <p className="font-medium text-sm">{stats.certExpiring} Certificações Vencendo</p>
                     <p className="text-xs text-muted-foreground">Próximos 30 dias</p>
@@ -185,8 +185,8 @@ export function MaritimeTabs({ stats, crewMembers, vessels, userId, onTabChange,
                 </div>
               )}
               {stats.criticalIssues > 0 && (
-                <div className="p-3 bg-red-500/10 rounded-lg border border-red-500/30 flex items-center gap-3">
-                  <AlertTriangle className="h-5 w-5 text-red-500" />
+                <div className="p-3 bg-destructive/10 rounded-lg border border-destructive/30 flex items-center gap-3">
+                  <AlertTriangle className="h-5 w-5 text-destructive" />
                   <div className="flex-1">
                     <p className="font-medium text-sm">{stats.criticalIssues} Issues Críticos</p>
                     <p className="text-xs text-muted-foreground">Ação imediata necessária</p>
@@ -198,8 +198,8 @@ export function MaritimeTabs({ stats, crewMembers, vessels, userId, onTabChange,
                 </div>
               )}
               {stats.pendingChecklists > 0 && (
-                <div className="p-3 bg-orange-500/10 rounded-lg border border-orange-500/30 flex items-center gap-3">
-                  <FileText className="h-5 w-5 text-orange-500" />
+                <div className="p-3 bg-warning/10 rounded-lg border border-warning/30 flex items-center gap-3">
+                  <FileText className="h-5 w-5 text-warning" />
                   <div className="flex-1">
                     <p className="font-medium text-sm">{stats.pendingChecklists} Checklists Pendentes</p>
                     <p className="text-xs text-muted-foreground">Aguardando conclusão</p>
