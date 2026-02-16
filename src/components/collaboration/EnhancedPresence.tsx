@@ -75,7 +75,7 @@ export const EnhancedPresence: React.FC = () => {
                             </AvatarFallback>
                           </Avatar>
                           <span className={`absolute -bottom-0.5 -right-0.5 h-2.5 w-2.5 rounded-full border-2 border-background ${
-                            user.status === "online" ? "bg-green-500" : "bg-yellow-500"
+                            user.status === "online" ? "bg-success" : "bg-warning"
                           }`} />
                         </div>
                         <div className="flex-1 min-w-0">

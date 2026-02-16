@@ -30,10 +30,10 @@ interface PredictionCard {
 }
 
 const CATEGORY_CONFIG = {
-  maintenance: { icon: <Wrench className="h-4 w-4" />, label: "Manutenção Preditiva", color: "text-blue-500" },
-  compliance: { icon: <Shield className="h-4 w-4" />, label: "Risco de Compliance", color: "text-purple-500" },
-  crew: { icon: <Users className="h-4 w-4" />, label: "Gestão de Tripulação", color: "text-green-500" },
-  financial: { icon: <TrendingUp className="h-4 w-4" />, label: "Otimização Financeira", color: "text-amber-500" },
+  maintenance: { icon: <Wrench className="h-4 w-4" />, label: "Manutenção Preditiva", color: "text-info" },
+  compliance: { icon: <Shield className="h-4 w-4" />, label: "Risco de Compliance", color: "text-accent" },
+  crew: { icon: <Users className="h-4 w-4" />, label: "Gestão de Tripulação", color: "text-success" },
+  financial: { icon: <TrendingUp className="h-4 w-4" />, label: "Otimização Financeira", color: "text-warning" },
 };
 
 export default function AIPredictiveInsights() {
@@ -179,12 +179,12 @@ export default function AIPredictiveInsights() {
       </div>
 
       {totalSavings > 0 && (
-        <Card className="border-green-500/30 bg-green-500/5">
+        <Card className="border-success/30 bg-success/5">
           <CardContent className="p-3 flex items-center gap-3">
-            <Target className="h-5 w-5 text-green-500" />
+            <Target className="h-5 w-5 text-success" />
             <div>
               <p className="text-sm font-medium">Economia Potencial Identificada</p>
-              <p className="text-lg font-bold text-green-500">${totalSavings.toLocaleString()}</p>
+              <p className="text-lg font-bold text-success">${totalSavings.toLocaleString()}</p>
             </div>
           </CardContent>
         </Card>
@@ -249,7 +249,7 @@ export default function AIPredictiveInsights() {
                               </div>
                             )}
                             {pred.estimatedSavings && pred.estimatedSavings > 0 && (
-                              <p className="text-xs text-green-500 font-medium">
+                              <p className="text-xs text-success font-medium">
                                 💰 Economia estimada: ${pred.estimatedSavings.toLocaleString()}
                               </p>
                             )}

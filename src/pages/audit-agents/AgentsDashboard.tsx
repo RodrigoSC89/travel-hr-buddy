@@ -45,9 +45,9 @@ const AUDIT_AGENTS: AuditAgent[] = [
     name: "Agente PEOTRAM",
     shortName: "PEOTRAM",
     icon: Shield,
-    color: "text-orange-500",
-    bgColor: "from-orange-500/20 to-yellow-500/20",
-    borderColor: "border-orange-500/30",
+    color: "text-warning",
+    bgColor: "from-warning/20 to-warning/10",
+    borderColor: "border-warning/30",
     description: "Programa de Excelência Operacional Petrobras - 13 Elementos",
     capabilities: ["Auditoria dos 13 elementos", "Geração de evidências", "Análise de não conformidades", "Planos de ação corretiva", "Relatórios para ANP"],
     compliance: ["PEOTRAM", "ANP", "NORMAM"],
@@ -61,9 +61,9 @@ const AUDIT_AGENTS: AuditAgent[] = [
     name: "Agente PEO-DP",
     shortName: "PEO-DP",
     icon: Navigation,
-    color: "text-blue-500",
-    bgColor: "from-blue-500/20 to-cyan-500/20",
-    borderColor: "border-blue-500/30",
+    color: "text-primary",
+    bgColor: "from-primary/20 to-info/20",
+    borderColor: "border-primary/30",
     description: "Posicionamento Dinâmico - NORMAM-101 & IMCA M 117",
     capabilities: ["Verificação DP Classe 2/3", "Checklist IMCA M 117", "Análise FMEA/FMECA", "Requisitos NORMAM-101", "Relatórios de conformidade DP"],
     compliance: ["NORMAM-101", "IMCA M 117", "IMO MSC"],
@@ -77,9 +77,9 @@ const AUDIT_AGENTS: AuditAgent[] = [
     name: "Agente SGSO",
     shortName: "SGSO",
     icon: FileCheck,
-    color: "text-green-500",
-    bgColor: "from-green-500/20 to-emerald-500/20",
-    borderColor: "border-green-500/30",
+    color: "text-success",
+    bgColor: "from-success/20 to-success/10",
+    borderColor: "border-success/30",
     description: "Sistema de Gestão de Segurança Operacional - ANP",
     capabilities: ["17 Práticas obrigatórias", "Dossiê ANP", "Tratamento de NCs", "CAPAs automáticas", "Indicadores SGSO"],
     compliance: ["Resolução ANP 43/2007", "API RP 75"],
@@ -93,9 +93,9 @@ const AUDIT_AGENTS: AuditAgent[] = [
     name: "Agente MLC 2006",
     shortName: "MLC",
     icon: Scale,
-    color: "text-purple-500",
-    bgColor: "from-purple-500/20 to-pink-500/20",
-    borderColor: "border-purple-500/30",
+    color: "text-accent",
+    bgColor: "from-accent/20 to-accent/10",
+    borderColor: "border-accent/30",
     description: "Maritime Labour Convention - Direitos dos Marítimos",
     capabilities: ["5 Títulos MLC", "Inspeção de conformidade", "Contratos SEA", "Horas de descanso", "Condições de trabalho"],
     compliance: ["MLC 2006", "ILO", "Flag State"],
@@ -109,9 +109,9 @@ const AUDIT_AGENTS: AuditAgent[] = [
     name: "Agente ISM Code",
     shortName: "ISM",
     icon: ClipboardCheck,
-    color: "text-red-500",
-    bgColor: "from-red-500/20 to-orange-500/20",
-    borderColor: "border-red-500/30",
+    color: "text-destructive",
+    bgColor: "from-destructive/20 to-warning/20",
+    borderColor: "border-destructive/30",
     description: "International Safety Management Code",
     capabilities: ["SMS - Safety Management System", "Auditoria DOC/SMC", "Gestão de emergências", "Controle operacional", "Melhoria contínua"],
     compliance: ["ISM Code", "SOLAS Cap IX", "IMO"],
@@ -125,9 +125,9 @@ const AUDIT_AGENTS: AuditAgent[] = [
     name: "Agente ISPS Code",
     shortName: "ISPS",
     icon: AlertTriangle,
-    color: "text-amber-500",
-    bgColor: "from-amber-500/20 to-red-500/20",
-    borderColor: "border-amber-500/30",
+    color: "text-warning",
+    bgColor: "from-warning/20 to-destructive/20",
+    borderColor: "border-warning/30",
     description: "International Ship and Port Facility Security Code",
     capabilities: ["SSP - Ship Security Plan", "Níveis de segurança 1/2/3", "Drills de segurança", "Avaliação de ameaças", "Certificado ISSC"],
     compliance: ["ISPS Code", "SOLAS Cap XI-2", "MARSEC"],
@@ -141,9 +141,9 @@ const AUDIT_AGENTS: AuditAgent[] = [
     name: "Agente MARPOL",
     shortName: "MARPOL",
     icon: Droplet,
-    color: "text-cyan-500",
-    bgColor: "from-cyan-500/20 to-blue-500/20",
-    borderColor: "border-cyan-500/30",
+    color: "text-info",
+    bgColor: "from-info/20 to-primary/20",
+    borderColor: "border-info/30",
     description: "Marine Pollution Prevention - Anexos I-VI",
     capabilities: ["IOPP Certificate", "ORB - Oil Record Book", "Gestão de resíduos", "Emissões SOx/NOx", "Ballast Water"],
     compliance: ["MARPOL 73/78", "BWM Convention"],
@@ -157,9 +157,9 @@ const AUDIT_AGENTS: AuditAgent[] = [
     name: "Agente SOLAS",
     shortName: "SOLAS",
     icon: Ship,
-    color: "text-indigo-500",
-    bgColor: "from-indigo-500/20 to-purple-500/20",
-    borderColor: "border-indigo-500/30",
+    color: "text-primary",
+    bgColor: "from-primary/20 to-accent/20",
+    borderColor: "border-primary/30",
     description: "Safety of Life at Sea - Segurança da Vida Humana",
     capabilities: ["LSA - Life Saving Appliances", "FFE - Fire Fighting", "Navegação segura", "Estabilidade", "Certificados estatutários"],
     compliance: ["SOLAS 1974", "IMO Resolutions"],
@@ -173,9 +173,9 @@ const AUDIT_AGENTS: AuditAgent[] = [
     name: "Agente STCW",
     shortName: "STCW",
     icon: Users,
-    color: "text-teal-500",
-    bgColor: "from-teal-500/20 to-green-500/20",
-    borderColor: "border-teal-500/30",
+    color: "text-info",
+    bgColor: "from-info/20 to-success/20",
+    borderColor: "border-info/30",
     description: "Standards of Training, Certification and Watchkeeping",
     capabilities: ["Certificação de tripulantes", "Competência mínima", "Horas de descanso", "Treinamentos obrigatórios", "Qualificação DP"],
     compliance: ["STCW 1978/2010", "Manila Amendments"],
@@ -189,9 +189,9 @@ const AUDIT_AGENTS: AuditAgent[] = [
     name: "Agente ESG Marítimo",
     shortName: "ESG",
     icon: Leaf,
-    color: "text-lime-500",
-    bgColor: "from-green-600/20 to-lime-500/20",
-    borderColor: "border-lime-500/30",
+    color: "text-success",
+    bgColor: "from-success/20 to-success/10",
+    borderColor: "border-success/30",
     description: "Environmental, Social and Governance para operações marítimas",
     capabilities: ["Carbon footprint", "CII Rating", "EEXI compliance", "Diversidade tripulação", "Relatórios GRI"],
     compliance: ["IMO 2050", "EU MRV", "GHG Strategy"],
@@ -204,10 +204,10 @@ const AUDIT_AGENTS: AuditAgent[] = [
 
 const agentTypes = [
   { value: "all", label: "Todos", color: "bg-primary/20" },
-  { value: "compliance", label: "Compliance", color: "bg-blue-500/20" },
-  { value: "safety", label: "Segurança", color: "bg-red-500/20" },
-  { value: "quality", label: "Qualidade", color: "bg-green-500/20" },
-  { value: "operational", label: "Operacional", color: "bg-orange-500/20" },
+  { value: "compliance", label: "Compliance", color: "bg-primary/20" },
+  { value: "safety", label: "Segurança", color: "bg-destructive/20" },
+  { value: "quality", label: "Qualidade", color: "bg-success/20" },
+  { value: "operational", label: "Operacional", color: "bg-warning/20" },
 ];
 
 export default function AgentsDashboard() {
@@ -260,7 +260,7 @@ export default function AgentsDashboard() {
             <div className="flex-1">
               <div className="flex items-baseline gap-2">
                 <p className="text-2xl font-bold">{value}</p>
-                {trend && <span className="text-xs text-green-500">{trend}</span>}
+                {trend && <span className="text-xs text-success">{trend}</span>}
               </div>
               <p className="text-xs text-muted-foreground">{label}</p>
             </div>
@@ -311,7 +311,7 @@ export default function AgentsDashboard() {
             Config
           </Button>
           <Badge variant="outline" className="gap-1 px-3 py-1.5">
-            <Activity className="h-3 w-3 text-green-500 animate-pulse" />
+            <Activity className="h-3 w-3 text-success animate-pulse" />
             {AUDIT_AGENTS.filter(a => a.status === "active").length} ativos
           </Badge>
         </div>
@@ -323,32 +323,32 @@ export default function AgentsDashboard() {
           icon={TrendingUp} 
           value={`${stats?.complianceRate?.toFixed(1) || "98.5"}%`}
           label="Taxa de Conformidade"
-          color="from-green-500 to-emerald-500"
+          color="from-success to-success"
           trend="+2.3%"
         />
         <StatCard 
           icon={FileCheck} 
           value={stats?.totalAudits || 0}
           label="Auditorias"
-          color="from-blue-500 to-cyan-500"
+          color="from-primary to-info"
         />
         <StatCard 
           icon={AlertTriangle} 
           value={stats?.openNCs || 0}
           label="NCs Abertas"
-          color="from-amber-500 to-orange-500"
+          color="from-warning to-warning"
         />
         <StatCard 
           icon={Brain} 
           value={stats?.activeAgents || 10}
           label="Agentes Ativos"
-          color="from-purple-500 to-pink-500"
+          color="from-accent to-accent"
         />
         <StatCard 
           icon={Zap} 
           value="24/7"
           label="Disponibilidade"
-          color="from-cyan-500 to-blue-500"
+          color="from-info to-primary"
         />
       </div>
 
@@ -538,7 +538,7 @@ export default function AgentsDashboard() {
                           </p>
                           <div className="flex items-center gap-4 mt-2">
                             <div className="flex items-center gap-1 text-xs text-muted-foreground">
-                              <CheckCircle2 className="h-3 w-3 text-green-500" />
+                              <CheckCircle2 className="h-3 w-3 text-success" />
                               {agent.successRate}% sucesso
                             </div>
                             <div className="flex gap-1">

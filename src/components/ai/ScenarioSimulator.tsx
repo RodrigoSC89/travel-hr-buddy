@@ -308,7 +308,7 @@ export const ScenarioSimulator: React.FC = () => {
             <Card>
               <CardHeader>
                 <CardTitle className="text-lg flex items-center gap-2">
-                  <Target className="h-5 w-5 text-blue-500" />
+                  <Target className="h-5 w-5 text-info" />
                   Impacto Operacional
                 </CardTitle>
               </CardHeader>
@@ -350,7 +350,7 @@ export const ScenarioSimulator: React.FC = () => {
             <Card>
               <CardHeader>
                 <CardTitle className="text-lg flex items-center gap-2">
-                  <DollarSign className="h-5 w-5 text-green-500" />
+                  <DollarSign className="h-5 w-5 text-success" />
                   Impacto Financeiro
                 </CardTitle>
               </CardHeader>
@@ -387,7 +387,7 @@ export const ScenarioSimulator: React.FC = () => {
             <Card>
               <CardHeader>
                 <CardTitle className="text-lg flex items-center gap-2">
-                  <AlertTriangle className="h-5 w-5 text-yellow-500" />
+                  <AlertTriangle className="h-5 w-5 text-warning" />
                   Riscos Identificados
                 </CardTitle>
               </CardHeader>

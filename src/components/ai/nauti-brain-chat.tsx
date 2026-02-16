@@ -214,7 +214,7 @@ ${initialContext ? `\n📍 **Contexto:** ${initialContext}` : ''}
         <div className="flex items-center gap-3">
           <div className="relative">
             <Brain className="h-8 w-8 text-primary" />
-            <Sparkles className="h-3 w-3 text-yellow-500 absolute -top-1 -right-1" />
+            <Sparkles className="h-3 w-3 text-warning absolute -top-1 -right-1" />
           </div>
           <div>
             <h3 className="font-semibold text-foreground">Nauti Brain</h3>

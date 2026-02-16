@@ -25,9 +25,9 @@ export const ExecutionLogsPanel: React.FC<ExecutionLogsPanelProps> = ({ logs }) 
           <div key={log.id} className="p-3 bg-muted rounded-lg text-sm">
             <div className="flex items-center gap-2 mb-1">
               {log.status === "success" ? (
-                <CheckCircle2 className="h-3 w-3 text-green-500" />
+                <CheckCircle2 className="h-3 w-3 text-success" />
               ) : log.status === "warning" ? (
-                <AlertTriangle className="h-3 w-3 text-yellow-500" />
+                <AlertTriangle className="h-3 w-3 text-warning" />
               ) : (
                 <XCircle className="h-3 w-3 text-destructive" />
               )}

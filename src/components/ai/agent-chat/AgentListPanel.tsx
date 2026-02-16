@@ -31,13 +31,13 @@ export const AgentListPanel: React.FC<AgentListPanelProps> = ({ agents, selected
         >
           <div className="flex items-center gap-3">
             <div className={`p-2 rounded-full ${
-              agent.status === "active" ? "bg-green-500/20"
-                : agent.status === "busy" ? "bg-yellow-500/20"
+              agent.status === "active" ? "bg-success/20"
+                : agent.status === "busy" ? "bg-warning/20"
                 : "bg-muted"
             }`}>
               <Bot className={`h-4 w-4 ${
-                agent.status === "active" ? "text-green-500"
-                  : agent.status === "busy" ? "text-yellow-500"
+                agent.status === "active" ? "text-success"
+                  : agent.status === "busy" ? "text-warning"
                   : "text-muted-foreground"
               }`} />
             </div>
