@@ -263,5 +263,24 @@
     "not_found": "リソースが見つかりません。",
     "validation": "フォームのエラーを修正してください。",
     "server": "サーバーエラー。後でもう一度お試しください。"
+  },
+  "sidebar": {
+    "pinned": "ピン留め",
+    "recent": "最近",
+    "navigation": "ナビゲーション",
+    "modulesAvailable": "{{count}} モジュール利用可能",
+    "searchModules": "モジュール検索... (⌘K)",
+    "noModuleFound": "モジュールが見つかりません",
+    "results": "{{count}} 件の結果",
+    "logout": "ログアウト",
+    "navigateTo": "{{label}} に移動"
+  },
+  "header": {
+    "openMenu": "ナビゲーションメニューを開く",
+    "settings": "設定",
+    "enableHighContrast": "ハイコントラストを有効にする",
+    "disableHighContrast": "ハイコントラストを無効にする",
+    "commandPalette": "コマンドパレット (⌘K)",
+    "breadcrumb": "パンくずリスト"
   }
 }

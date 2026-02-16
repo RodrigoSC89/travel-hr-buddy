@@ -263,5 +263,24 @@
     "not_found": "Ο πόρος δεν βρέθηκε.",
     "validation": "Διορθώστε τα σφάλματα στη φόρμα.",
     "server": "Σφάλμα διακομιστή. Δοκιμάστε αργότερα."
+  },
+  "sidebar": {
+    "pinned": "Καρφιτσωμένα",
+    "recent": "Πρόσφατα",
+    "navigation": "Πλοήγηση",
+    "modulesAvailable": "{{count}} modules διαθέσιμα",
+    "searchModules": "Αναζήτηση modules... (⌘K)",
+    "noModuleFound": "Δεν βρέθηκε module",
+    "results": "{{count}} αποτέλεσμα(τα)",
+    "logout": "Αποσύνδεση",
+    "navigateTo": "Πλοήγηση σε {{label}}"
+  },
+  "header": {
+    "openMenu": "Άνοιγμα μενού πλοήγησης",
+    "settings": "Ρυθμίσεις",
+    "enableHighContrast": "Ενεργοποίηση υψηλής αντίθεσης",
+    "disableHighContrast": "Απενεργοποίηση υψηλής αντίθεσης",
+    "commandPalette": "Παλέτα Εντολών (⌘K)",
+    "breadcrumb": "Ψίχουλα πλοήγησης"
   }
 }

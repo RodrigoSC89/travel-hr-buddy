@@ -263,5 +263,24 @@
     "not_found": "المورد غير موجود.",
     "validation": "يرجى تصحيح الأخطاء في النموذج.",
     "server": "خطأ في الخادم. يرجى المحاولة لاحقاً."
+  },
+  "sidebar": {
+    "pinned": "مثبت",
+    "recent": "الأخيرة",
+    "navigation": "التنقل",
+    "modulesAvailable": "{{count}} وحدات متاحة",
+    "searchModules": "البحث عن الوحدات... (⌘K)",
+    "noModuleFound": "لم يتم العثور على وحدة",
+    "results": "{{count}} نتيجة/نتائج",
+    "logout": "تسجيل الخروج",
+    "navigateTo": "انتقل إلى {{label}}"
+  },
+  "header": {
+    "openMenu": "فتح قائمة التنقل",
+    "settings": "الإعدادات",
+    "enableHighContrast": "تفعيل التباين العالي",
+    "disableHighContrast": "تعطيل التباين العالي",
+    "commandPalette": "لوحة الأوامر (⌘K)",
+    "breadcrumb": "مسار التنقل"
   }
 }
