@@ -314,10 +314,10 @@ export default function AboutSystem() {
                     <h3 className="text-xl font-bold">Starter</h3>
                     <p className="text-sm text-muted-foreground mt-1">Para pequenas frotas e operações costeiras</p>
                     <div className="mt-4">
-                      <span className="text-4xl font-bold">R$ 497</span>
-                      <span className="text-muted-foreground">/mês</span>
+                      <span className="text-4xl font-bold">$ 500</span>
+                      <span className="text-muted-foreground">/vessel/mo</span>
                     </div>
-                    <p className="text-xs text-muted-foreground mt-1">Até 5 embarcações • 50 tripulantes</p>
+                    <p className="text-xs text-muted-foreground mt-1">Até 10 embarcações • 100 tripulantes</p>
                     <Badge variant="secondary" className="mt-3 text-xs">7 dias grátis para testar</Badge>
                   </div>
                   <div className="flex-1">
@@ -348,12 +348,12 @@ export default function AboutSystem() {
                       <Crown className="h-6 w-6 text-primary" />
                     </div>
                     <h3 className="text-xl font-bold">Professional</h3>
-                    <p className="text-sm text-muted-foreground mt-1">Para frotas médias com compliance</p>
+                    <p className="text-sm text-muted-foreground mt-1">Para frotas médias com compliance total</p>
                     <div className="mt-4">
-                      <span className="text-4xl font-bold">R$ 1.297</span>
-                      <span className="text-muted-foreground">/mês</span>
+                      <span className="text-4xl font-bold">$ 1,200</span>
+                      <span className="text-muted-foreground">/vessel/mo</span>
                     </div>
-                    <p className="text-xs text-muted-foreground mt-1">Até 25 embarcações • 300 tripulantes</p>
+                    <p className="text-xs text-muted-foreground mt-1">Até 50 embarcações • 600 tripulantes</p>
                     <Badge variant="secondary" className="mt-3 text-xs">7 dias grátis para testar</Badge>
                   </div>
                   <div className="flex-1">
@@ -385,9 +385,10 @@ export default function AboutSystem() {
                     <h3 className="text-xl font-bold">Enterprise</h3>
                     <p className="text-sm text-muted-foreground mt-1">Para grandes armadores e offshore</p>
                     <div className="mt-4">
-                      <span className="text-3xl font-bold">Sob consulta</span>
+                      <span className="text-3xl font-bold">$ 50K–200K</span>
+                      <span className="text-muted-foreground">/year</span>
                     </div>
-                    <p className="text-xs text-muted-foreground mt-1">Embarcações & tripulantes ilimitados</p>
+                    <p className="text-xs text-muted-foreground mt-1">20+ embarcações • Tripulantes ilimitados</p>
                     <Badge variant="secondary" className="mt-3 text-xs">Demonstração personalizada</Badge>
                   </div>
                   <div className="flex-1">
