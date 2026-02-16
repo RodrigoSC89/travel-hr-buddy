@@ -114,8 +114,8 @@ export function RunningHoursTracker() {
   const avgUtilization = counters.length > 0 ? counters.reduce((s, c) => s + c.pct_used, 0) / counters.length : 0;
 
   const statusConfig = {
-    ok: { label: 'OK', color: 'bg-green-500/20 text-green-400', icon: CheckCircle },
-    warning: { label: 'Atenção', color: 'bg-yellow-500/20 text-yellow-400', icon: AlertTriangle },
+    ok: { label: 'OK', color: 'bg-success/20 text-success', icon: CheckCircle },
+    warning: { label: 'Atenção', color: 'bg-warning/20 text-warning', icon: AlertTriangle },
     overdue: { label: 'Vencido', color: 'bg-destructive/20 text-destructive', icon: AlertTriangle },
   };
 

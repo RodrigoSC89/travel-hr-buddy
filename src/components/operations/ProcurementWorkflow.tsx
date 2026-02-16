@@ -133,7 +133,7 @@ const MOCK_POS: PurchaseOrder[] = [
 
 const priorityColors: Record<string, string> = {
   critical: "bg-destructive text-destructive-foreground",
-  urgent: "bg-orange-500 text-white",
+  urgent: "bg-warning text-warning-foreground",
   routine: "bg-primary text-primary-foreground",
   planned: "bg-muted text-muted-foreground",
 };
@@ -243,7 +243,7 @@ export function ProcurementWorkflow() {
                       <div className="flex gap-1">
                         <Button size="sm" variant="ghost"><Eye className="h-4 w-4" /></Button>
                         {pr.status === "approved" && <Button size="sm" variant="ghost" onClick={() => toast.success("RFQ sent to 3 suppliers")}><Send className="h-4 w-4" /></Button>}
-                        {pr.status === "pending_approval" && <Button size="sm" variant="ghost" onClick={() => toast.success("PR approved")}><CheckCircle2 className="h-4 w-4 text-green-500" /></Button>}
+                        {pr.status === "pending_approval" && <Button size="sm" variant="ghost" onClick={() => toast.success("PR approved")}><CheckCircle2 className="h-4 w-4 text-success" /></Button>}
                       </div>
                     </TableCell>
                   </TableRow>
@@ -287,11 +287,11 @@ export function ProcurementWorkflow() {
                   </TableRow>
                 </TableHeader>
                 <TableBody>
-                  <TableRow><TableCell>Total Price</TableCell><TableCell className="text-center font-medium text-green-500">$4,250</TableCell><TableCell className="text-center">$4,890</TableCell><TableCell className="text-center">$5,120</TableCell></TableRow>
-                  <TableRow><TableCell>Delivery (days)</TableCell><TableCell className="text-center font-medium text-green-500">14</TableCell><TableCell className="text-center">18</TableCell><TableCell className="text-center">12</TableCell></TableRow>
-                  <TableRow><TableCell>Quality Score</TableCell><TableCell className="text-center">95%</TableCell><TableCell className="text-center">88%</TableCell><TableCell className="text-center font-medium text-green-500">92%</TableCell></TableRow>
-                  <TableRow><TableCell>Past Performance</TableCell><TableCell className="text-center font-medium text-green-500">4.8/5</TableCell><TableCell className="text-center">4.2/5</TableCell><TableCell className="text-center">4.5/5</TableCell></TableRow>
-                  <TableRow><TableCell className="font-bold">Overall Score</TableCell><TableCell className="text-center font-bold text-green-500">92/100 ⭐</TableCell><TableCell className="text-center font-bold">78/100</TableCell><TableCell className="text-center font-bold">85/100</TableCell></TableRow>
+                  <TableRow><TableCell>Total Price</TableCell><TableCell className="text-center font-medium text-success">$4,250</TableCell><TableCell className="text-center">$4,890</TableCell><TableCell className="text-center">$5,120</TableCell></TableRow>
+                  <TableRow><TableCell>Delivery (days)</TableCell><TableCell className="text-center font-medium text-success">14</TableCell><TableCell className="text-center">18</TableCell><TableCell className="text-center">12</TableCell></TableRow>
+                  <TableRow><TableCell>Quality Score</TableCell><TableCell className="text-center">95%</TableCell><TableCell className="text-center">88%</TableCell><TableCell className="text-center font-medium text-success">92%</TableCell></TableRow>
+                  <TableRow><TableCell>Past Performance</TableCell><TableCell className="text-center font-medium text-success">4.8/5</TableCell><TableCell className="text-center">4.2/5</TableCell><TableCell className="text-center">4.5/5</TableCell></TableRow>
+                  <TableRow><TableCell className="font-bold">Overall Score</TableCell><TableCell className="text-center font-bold text-success">92/100 ⭐</TableCell><TableCell className="text-center font-bold">78/100</TableCell><TableCell className="text-center font-bold">85/100</TableCell></TableRow>
                 </TableBody>
               </Table>
               <div className="mt-4 flex justify-end"><Button onClick={() => toast.success("PO issued to Wärtsila Marine Parts")}>Award to Best Supplier</Button></div>

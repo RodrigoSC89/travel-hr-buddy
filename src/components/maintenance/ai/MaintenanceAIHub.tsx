@@ -41,19 +41,19 @@ export const PredictiveMaintenanceAI: React.FC<{ vesselId?: string }> = ({ vesse
   ];
 
   return (
-    <Card className="border-purple-500/20">
+    <Card className="border-accent/20">
       <CardHeader>
         <CardTitle className="flex items-center gap-2">
-          <Activity className="h-5 w-5 text-purple-500" />
+          <Activity className="h-5 w-5 text-accent-foreground" />
           Manutenção Preditiva CBM
-          <Badge className="ml-auto bg-purple-500/10 text-purple-500">ML Engine</Badge>
+          <Badge className="ml-auto bg-accent/10 text-accent-foreground">ML Engine</Badge>
         </CardTitle>
       </CardHeader>
       <CardContent className="space-y-4">
         <div className="space-y-2">
           {equipment.map((eq) => (
             <div key={eq.name} className="flex items-center gap-3 p-2 rounded-lg border">
-              <eq.icon className={`h-4 w-4 ${eq.health > 80 ? 'text-green-500' : eq.health > 60 ? 'text-yellow-500' : 'text-red-500'}`} />
+              <eq.icon className={`h-4 w-4 ${eq.health > 80 ? 'text-success' : eq.health > 60 ? 'text-warning' : 'text-destructive'}`} />
               <div className="flex-1">
                 <div className="flex justify-between">
                   <span className="text-sm font-medium">{eq.name}</span>
@@ -100,12 +100,12 @@ export const EquipmentPhotoAI: React.FC = () => {
   };
 
   return (
-    <Card className="border-cyan-500/20">
+    <Card className="border-info/20">
       <CardHeader>
         <CardTitle className="flex items-center gap-2">
-          <Camera className="h-5 w-5 text-cyan-500" />
+          <Camera className="h-5 w-5 text-info" />
           Inspeção Visual IA
-          <Badge className="ml-auto bg-cyan-500/10 text-cyan-500">Vision AI</Badge>
+          <Badge className="ml-auto bg-info/10 text-info">Vision AI</Badge>
         </CardTitle>
       </CardHeader>
       <CardContent className="space-y-4">
@@ -151,30 +151,30 @@ export const SparePartsIntelligenceAI: React.FC<{ vesselId?: string }> = ({ vess
   };
 
   return (
-    <Card className="border-amber-500/20">
+    <Card className="border-warning/20">
       <CardHeader>
         <CardTitle className="flex items-center gap-2">
-          <Package className="h-5 w-5 text-amber-500" />
+          <Package className="h-5 w-5 text-warning" />
           Spare Parts Intelligence
-          <Badge className="ml-auto bg-amber-500/10 text-amber-500">Inventory AI</Badge>
+          <Badge className="ml-auto bg-warning/10 text-warning">Inventory AI</Badge>
         </CardTitle>
       </CardHeader>
       <CardContent className="space-y-4">
         <div className="grid grid-cols-3 gap-2">
           <div className="p-2 rounded border text-center">
-            <CheckCircle className="h-4 w-4 mx-auto text-green-500 mb-1" />
+            <CheckCircle className="h-4 w-4 mx-auto text-success mb-1" />
             <p className="text-xs text-muted-foreground">Em Estoque</p>
             <p className="font-bold">847</p>
           </div>
           <div className="p-2 rounded border text-center">
-            <AlertTriangle className="h-4 w-4 mx-auto text-yellow-500 mb-1" />
+            <AlertTriangle className="h-4 w-4 mx-auto text-warning mb-1" />
             <p className="text-xs text-muted-foreground">Estoque Baixo</p>
-            <p className="font-bold text-yellow-500">23</p>
+            <p className="font-bold text-warning">23</p>
           </div>
           <div className="p-2 rounded border text-center">
-            <XCircle className="h-4 w-4 mx-auto text-red-500 mb-1" />
+            <XCircle className="h-4 w-4 mx-auto text-destructive mb-1" />
             <p className="text-xs text-muted-foreground">Crítico</p>
-            <p className="font-bold text-red-500">5</p>
+            <p className="font-bold text-destructive">5</p>
           </div>
         </div>
 

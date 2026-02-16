@@ -113,12 +113,12 @@ export function WeatherRoutingEngine() {
       <div className="flex items-center justify-between">
         <div>
           <h1 className="text-2xl font-bold flex items-center gap-2">
-            <Route className="h-6 w-6 text-cyan-400" />
+            <Route className="h-6 w-6 text-info" />
             Weather Routing Engine
           </h1>
           <p className="text-muted-foreground">StormGeo-class voyage optimization with real-time marine weather</p>
         </div>
-        <Badge variant="outline" className="border-cyan-500/30 text-cyan-400">vs StormGeo / DTN</Badge>
+        <Badge variant="outline" className="border-info/30 text-info">vs StormGeo / DTN</Badge>
       </div>
 
       {/* Route Input */}
@@ -156,7 +156,7 @@ export function WeatherRoutingEngine() {
               <label className="text-xs text-muted-foreground">Speed (kts)</label>
               <Input type="number" defaultValue={14} className="bg-background/50" />
             </div>
-            <Button onClick={handleOptimize} disabled={isOptimizing} className="bg-cyan-600 hover:bg-cyan-700">
+            <Button onClick={handleOptimize} disabled={isOptimizing} className="bg-info hover:bg-info/90">
               {isOptimizing ? <RefreshCw className="h-4 w-4 animate-spin mr-2" /> : <Zap className="h-4 w-4 mr-2" />}
               {isOptimizing ? "Optimizing..." : "Optimize Route"}
             </Button>
@@ -186,7 +186,7 @@ export function WeatherRoutingEngine() {
                   <div className="flex items-center justify-between">
                     <CardTitle className="text-sm font-medium">{route.name}</CardTitle>
                     {route.id === "opt-1" && (
-                      <Badge className="bg-cyan-500/20 text-cyan-400 border-cyan-500/30">AI Pick</Badge>
+                      <Badge className="bg-info/20 text-info border-info/30">AI Pick</Badge>
                     )}
                   </div>
                 </CardHeader>
@@ -245,10 +245,10 @@ export function WeatherRoutingEngine() {
         <TabsContent value="weather" className="space-y-4">
           <div className="grid grid-cols-1 md:grid-cols-4 gap-4">
             {[
-              { icon: Wind, label: "Wind", value: "18-28 kts", sub: "NW", color: "text-blue-400" },
-              { icon: Waves, label: "Significant Wave", value: "2.1-3.2m", sub: "Peak 4.5m", color: "text-cyan-400" },
-              { icon: Thermometer, label: "Sea Temp", value: "18-24°C", sub: "SST Normal", color: "text-orange-400" },
-              { icon: Eye, label: "Visibility", value: "> 10 NM", sub: "Clear", color: "text-green-400" },
+              { icon: Wind, label: "Wind", value: "18-28 kts", sub: "NW", color: "text-primary" },
+              { icon: Waves, label: "Significant Wave", value: "2.1-3.2m", sub: "Peak 4.5m", color: "text-info" },
+              { icon: Thermometer, label: "Sea Temp", value: "18-24°C", sub: "SST Normal", color: "text-warning" },
+              { icon: Eye, label: "Visibility", value: "> 10 NM", sub: "Clear", color: "text-success" },
             ].map((item, i) => (
               <Card key={i} className="border-border/50 bg-card/80 backdrop-blur">
                 <CardContent className="pt-4 text-center">
@@ -301,7 +301,7 @@ export function WeatherRoutingEngine() {
             <Card className="border-border/50 bg-card/80 backdrop-blur">
               <CardHeader>
                 <CardTitle className="text-sm flex items-center gap-2">
-                  <AlertTriangle className="h-4 w-4 text-yellow-400" /> Weather Hazards
+                  <AlertTriangle className="h-4 w-4 text-warning" /> Weather Hazards
                 </CardTitle>
               </CardHeader>
               <CardContent className="space-y-3">
@@ -324,7 +324,7 @@ export function WeatherRoutingEngine() {
             <Card className="border-border/50 bg-card/80 backdrop-blur">
               <CardHeader>
                 <CardTitle className="text-sm flex items-center gap-2">
-                  <Shield className="h-4 w-4 text-green-400" /> Safety Recommendations
+                  <Shield className="h-4 w-4 text-success" /> Safety Recommendations
                 </CardTitle>
               </CardHeader>
               <CardContent className="space-y-3">
@@ -335,7 +335,7 @@ export function WeatherRoutingEngine() {
                   "Consider waypoint deviation south of Azores High pressure system",
                 ].map((rec, i) => (
                   <div key={i} className="flex items-start gap-2 p-2 rounded bg-background/50">
-                    <Shield className="h-3 w-3 text-cyan-400 mt-1 shrink-0" />
+                    <Shield className="h-3 w-3 text-info mt-1 shrink-0" />
                     <span className="text-xs">{rec}</span>
                   </div>
                 ))}
@@ -347,10 +347,10 @@ export function WeatherRoutingEngine() {
         <TabsContent value="fuel" className="space-y-4">
           <div className="grid grid-cols-1 md:grid-cols-4 gap-4">
             {[
-              { label: "Fuel Saved", value: "35 MT", sub: "vs Great Circle", color: "text-green-400" },
-              { label: "Cost Savings", value: "$42,000", sub: "at $1,200/MT", color: "text-cyan-400" },
-              { label: "CO₂ Reduction", value: "109 t", sub: "-8.3% emissions", color: "text-emerald-400" },
-              { label: "CII Impact", value: "+0.12", sub: "Improves rating", color: "text-blue-400" },
+              { label: "Fuel Saved", value: "35 MT", sub: "vs Great Circle", color: "text-success" },
+              { label: "Cost Savings", value: "$42,000", sub: "at $1,200/MT", color: "text-info" },
+              { label: "CO₂ Reduction", value: "109 t", sub: "-8.3% emissions", color: "text-success" },
+              { label: "CII Impact", value: "+0.12", sub: "Improves rating", color: "text-primary" },
             ].map((item, i) => (
               <Card key={i} className="border-border/50 bg-card/80 backdrop-blur">
                 <CardContent className="pt-4 text-center">

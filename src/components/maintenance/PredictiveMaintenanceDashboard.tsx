@@ -251,7 +251,7 @@ export function PredictiveMaintenanceDashboard() {
                           "h-2",
                           pred.riskScore > 80 ? "[&>div]:bg-destructive" :
                           pred.riskScore > 60 ? "[&>div]:bg-warning" :
-                          pred.riskScore > 40 ? "[&>div]:bg-amber-500" :
+                          pred.riskScore > 40 ? "[&>div]:bg-warning" :
                           "[&>div]:bg-success"
                         )}
                       />
@@ -297,8 +297,8 @@ export function PredictiveMaintenanceDashboard() {
                 </div>
 
                 {selectedEquipment.predictedFailureDate && (
-                  <div className="flex items-center gap-2 p-3 bg-amber-500/10 rounded-lg border border-amber-500/30">
-                    <Calendar className="h-4 w-4 text-amber-500" />
+                  <div className="flex items-center gap-2 p-3 bg-warning/10 rounded-lg border border-warning/30">
+                    <Calendar className="h-4 w-4 text-warning" />
                     <div>
                       <p className="text-xs text-muted-foreground">Falha prevista</p>
                       <p className="font-medium">
@@ -310,7 +310,7 @@ export function PredictiveMaintenanceDashboard() {
 
                 {selectedEquipment.estimatedCost && (
                   <div className="flex items-center gap-2 p-3 bg-muted rounded-lg">
-                    <DollarSign className="h-4 w-4 text-emerald-500" />
+                    <DollarSign className="h-4 w-4 text-success" />
                     <div>
                       <p className="text-xs text-muted-foreground">Custo estimado</p>
                       <p className="font-medium">
