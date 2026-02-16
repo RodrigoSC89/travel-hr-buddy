@@ -33,9 +33,9 @@ export function VoyageRoutesTab({ ports }: Props) {
                 {port.lat.toFixed(2)}°, {port.lng.toFixed(2)}°
               </div>
               <Badge className={`mt-2 ${
-                port.type === "origin" ? "bg-green-500/10 text-green-600" :
-                port.type === "destination" ? "bg-blue-500/10 text-blue-600" :
-                "bg-amber-500/10 text-amber-600"
+                port.type === "origin" ? "bg-success/10 text-success border-success/20" :
+                port.type === "destination" ? "bg-info/10 text-info border-info/20" :
+                "bg-warning/10 text-warning border-warning/20"
               }`}>
                 {port.type === "origin" ? "Origem" : port.type === "destination" ? "Destino" : "Escala"}
               </Badge>

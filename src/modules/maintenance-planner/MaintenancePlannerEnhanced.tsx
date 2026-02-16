@@ -51,25 +51,25 @@ const MaintenancePlannerEnhanced = () => {
     {
       title: 'Manutenção Inteligente (MMI)',
       description: 'Sistema premium de gestão de manutenção naval com IA preditiva e Digital Twin.',
-      icon: <Wrench className="h-6 w-6 text-orange-500" />,
+      icon: <Wrench className="h-6 w-6 text-warning" />,
       tip: 'O sistema aprende com seus dados para prever falhas antes que aconteçam'
     },
     {
       title: 'Monitoramento de Saúde',
       description: 'Veja o status de saúde de todos os equipamentos da frota em tempo real.',
-      icon: <Activity className="h-6 w-6 text-green-500" />,
+      icon: <Activity className="h-6 w-6 text-success" />,
       tip: 'Clique em qualquer equipamento para ver detalhes e histórico'
     },
     {
       title: 'Copilot de IA',
       description: 'Assistente inteligente que sugere manutenções e otimiza cronogramas automaticamente.',
-      icon: <Bot className="h-6 w-6 text-purple-500" />,
+      icon: <Bot className="h-6 w-6 text-primary" />,
       tip: 'Pergunte ao Copilot sobre qualquer equipamento ou manutenção'
     },
     {
       title: 'Digital Twin 3D',
       description: 'Visualize a embarcação em 3D e identifique pontos de atenção visualmente.',
-      icon: <Box className="h-6 w-6 text-blue-500" />,
+      icon: <Box className="h-6 w-6 text-info" />,
       tip: 'Clique nos componentes no modelo 3D para ver status detalhado'
     }
   ];
@@ -168,14 +168,14 @@ const MaintenancePlannerEnhanced = () => {
       {/* Header - NO motion to prevent flickering */}
       <div className="flex flex-col md:flex-row md:items-center justify-between gap-4">
         <div className="flex items-center gap-3">
-          <div className="p-3 rounded-2xl bg-gradient-to-br from-orange-500/20 to-amber-500/10 border border-orange-500/20">
-            <Wrench className="h-8 w-8 text-orange-500" />
+          <div className="p-3 rounded-2xl bg-gradient-to-br from-warning/20 to-warning/10 border border-warning/20">
+            <Wrench className="h-8 w-8 text-warning" />
           </div>
           <div>
             <h1 className="text-3xl font-bold">Manutenção Inteligente (MMI)</h1>
             <p className="text-muted-foreground">Sistema Premium de Gestão de Manutenção Naval</p>
           </div>
-          <Badge className="bg-purple-500/20 text-purple-400 border-purple-500/30">
+          <Badge className="bg-primary/20 text-primary border-primary/30">
             <Bot className="h-3 w-3 mr-1" />
             IA Integrada
           </Badge>
@@ -207,8 +207,8 @@ const MaintenancePlannerEnhanced = () => {
           value={12}
           change={8}
           icon={<Calendar className="h-5 w-5" />}
-          iconColor="text-blue-500"
-          iconBg="bg-blue-500/10"
+          iconColor="text-info"
+          iconBg="bg-info/10"
           status="info"
           details={[
             { label: 'Esta semana', value: 5 },
@@ -221,8 +221,8 @@ const MaintenancePlannerEnhanced = () => {
           value={8}
           change={15}
           icon={<CheckCircle className="h-5 w-5" />}
-          iconColor="text-green-500"
-          iconBg="bg-green-500/10"
+          iconColor="text-success"
+          iconBg="bg-success/10"
           status="success"
         />
         <InteractiveKPICard
@@ -230,8 +230,8 @@ const MaintenancePlannerEnhanced = () => {
           value={3}
           change={-25}
           icon={<AlertTriangle className="h-5 w-5" />}
-          iconColor="text-red-500"
-          iconBg="bg-red-500/10"
+          iconColor="text-destructive"
+          iconBg="bg-destructive/10"
           status="danger"
           onDrillDown={() => setActiveTab('tasks')}
           drillDownLabel="Ver vencidos"
@@ -315,12 +315,12 @@ const MaintenancePlannerEnhanced = () => {
                       >
                         <div className="flex items-center gap-3">
                           <div className={`p-2 rounded-lg ${
-                            item.priority === 'high' ? 'bg-red-500/10' :
-                            item.priority === 'medium' ? 'bg-yellow-500/10' : 'bg-green-500/10'
+                            item.priority === 'high' ? 'bg-destructive/10' :
+                            item.priority === 'medium' ? 'bg-warning/10' : 'bg-success/10'
                           }`}>
                             <Wrench className={`h-4 w-4 ${
-                              item.priority === 'high' ? 'text-red-500' :
-                              item.priority === 'medium' ? 'text-yellow-500' : 'text-green-500'
+                              item.priority === 'high' ? 'text-destructive' :
+                              item.priority === 'medium' ? 'text-warning' : 'text-success'
                             }`} />
                           </div>
                           <div>
@@ -342,10 +342,10 @@ const MaintenancePlannerEnhanced = () => {
             </Card>
 
             {/* AI Predictions */}
-            <Card className="bg-gradient-to-br from-purple-500/5 to-blue-500/5 border-purple-500/20">
+            <Card className="bg-gradient-to-br from-primary/5 to-accent/5 border-primary/20">
               <CardHeader>
                 <CardTitle className="flex items-center gap-2">
-                  <Brain className="h-5 w-5 text-purple-500" />
+                  <Brain className="h-5 w-5 text-primary" />
                   Predições de IA
                 </CardTitle>
                 <CardDescription>Análise preditiva de falhas</CardDescription>

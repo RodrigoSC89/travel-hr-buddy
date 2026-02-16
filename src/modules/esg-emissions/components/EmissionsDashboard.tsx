@@ -80,11 +80,11 @@ export const EmissionsDashboard: React.FC = () => {
 
   const getEfficiencyColor = (efficiency: string) => {
     switch (efficiency) {
-      case "A+": return "bg-green-500";
-      case "A": return "bg-green-400";
-      case "B": return "bg-yellow-400";
-      case "C": return "bg-orange-400";
-      default: return "bg-red-400";
+      case "A+": return "bg-success";
+      case "A": return "bg-success/80";
+      case "B": return "bg-warning";
+      case "C": return "bg-warning/70";
+      default: return "bg-destructive";
     }
   };
 
@@ -142,7 +142,7 @@ export const EmissionsDashboard: React.FC = () => {
 
       {/* KPI Cards */}
       <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-4 gap-4">
-        <Card className="border-l-4 border-l-green-500">
+        <Card className="border-l-4 border-l-success">
           <CardHeader className="pb-2">
             <CardTitle className="text-sm font-medium text-muted-foreground flex items-center gap-2">
               <Factory className="h-4 w-4" />
@@ -155,7 +155,7 @@ export const EmissionsDashboard: React.FC = () => {
                 <div className="text-3xl font-bold">1,769</div>
                 <p className="text-xs text-muted-foreground">Meta anual: 2,500</p>
               </div>
-              <Badge className="bg-green-100 text-green-800 flex items-center gap-1">
+              <Badge className="bg-success/10 text-success flex items-center gap-1">
                 <TrendingDown className="h-3 w-3" />
                 -12.4%
               </Badge>
@@ -164,7 +164,7 @@ export const EmissionsDashboard: React.FC = () => {
           </CardContent>
         </Card>
 
-        <Card className="border-l-4 border-l-blue-500">
+        <Card className="border-l-4 border-l-info">
           <CardHeader className="pb-2">
             <CardTitle className="text-sm font-medium text-muted-foreground flex items-center gap-2">
               <Droplets className="h-4 w-4" />
@@ -177,7 +177,7 @@ export const EmissionsDashboard: React.FC = () => {
                 <div className="text-3xl font-bold">79.5</div>
                 <p className="text-xs text-muted-foreground">Limite IMO: 0.5% S</p>
               </div>
-              <Badge className="bg-green-100 text-green-800 flex items-center gap-1">
+              <Badge className="bg-success/10 text-success flex items-center gap-1">
                 <CheckCircle className="h-3 w-3" />
                 Conforme
               </Badge>
@@ -185,7 +185,7 @@ export const EmissionsDashboard: React.FC = () => {
           </CardContent>
         </Card>
 
-        <Card className="border-l-4 border-l-purple-500">
+        <Card className="border-l-4 border-l-accent">
           <CardHeader className="pb-2">
             <CardTitle className="text-sm font-medium text-muted-foreground flex items-center gap-2">
               <Wind className="h-4 w-4" />
@@ -198,7 +198,7 @@ export const EmissionsDashboard: React.FC = () => {
                 <div className="text-3xl font-bold">187</div>
                 <p className="text-xs text-muted-foreground">Tier II compliance</p>
               </div>
-              <Badge className="bg-green-100 text-green-800 flex items-center gap-1">
+              <Badge className="bg-success/10 text-success flex items-center gap-1">
                 <CheckCircle className="h-3 w-3" />
                 Tier II
               </Badge>
@@ -206,7 +206,7 @@ export const EmissionsDashboard: React.FC = () => {
           </CardContent>
         </Card>
 
-        <Card className="border-l-4 border-l-orange-500">
+        <Card className="border-l-4 border-l-warning">
           <CardHeader className="pb-2">
             <CardTitle className="text-sm font-medium text-muted-foreground flex items-center gap-2">
               <Thermometer className="h-4 w-4" />
@@ -219,7 +219,7 @@ export const EmissionsDashboard: React.FC = () => {
                 <div className="text-3xl font-bold">B</div>
                 <p className="text-xs text-muted-foreground">Média da frota</p>
               </div>
-              <Badge className="bg-yellow-100 text-yellow-800">
+              <Badge className="bg-warning/10 text-warning">
                 Meta: A
               </Badge>
             </div>
@@ -341,7 +341,7 @@ export const EmissionsDashboard: React.FC = () => {
 
                 <div className="flex items-center gap-6">
                   <div className="text-center">
-                    <div className={`w-10 h-10 rounded-full ${getEfficiencyColor(vessel.efficiency)} flex items-center justify-center text-white font-bold`}>
+                    <div className={`w-10 h-10 rounded-full ${getEfficiencyColor(vessel.efficiency)} flex items-center justify-center text-primary-foreground font-bold`}>
                       {vessel.efficiency}
                     </div>
                     <p className="text-xs text-muted-foreground mt-1">CII</p>
@@ -350,7 +350,7 @@ export const EmissionsDashboard: React.FC = () => {
                   <div className="text-right">
                     <Badge 
                       variant={vessel.trend < 0 ? "default" : "destructive"}
-                      className={vessel.trend < 0 ? "bg-green-100 text-green-800" : ""}
+                      className={vessel.trend < 0 ? "bg-success/10 text-success" : ""}
                     >
                       {vessel.trend < 0 ? (
                         <TrendingDown className="h-3 w-3 mr-1" />
@@ -374,9 +374,9 @@ export const EmissionsDashboard: React.FC = () => {
 
       {/* Compliance Status */}
       <div className="grid grid-cols-1 md:grid-cols-2 gap-6">
-        <Card className="border-green-200 bg-green-50/50">
+        <Card className="border-success/30 bg-success/5">
           <CardHeader>
-            <CardTitle className="flex items-center gap-2 text-green-800">
+            <CardTitle className="flex items-center gap-2 text-success">
               <CheckCircle className="h-5 w-5" />
               Compliance Regulatório
             </CardTitle>
@@ -392,7 +392,7 @@ export const EmissionsDashboard: React.FC = () => {
                 <span className="text-sm">{item.reg}</span>
                 <Badge 
                   variant={item.status === "Conforme" ? "default" : "secondary"}
-                  className={item.status === "Conforme" ? "bg-green-600" : "bg-yellow-500"}
+                  className={item.status === "Conforme" ? "bg-success" : "bg-warning"}
                 >
                   <item.icon className="h-3 w-3 mr-1" />
                   {item.status}
@@ -411,36 +411,36 @@ export const EmissionsDashboard: React.FC = () => {
             <CardDescription>Recomendações para redução de emissões</CardDescription>
           </CardHeader>
           <CardContent className="space-y-3">
-            <div className="p-3 bg-blue-50 border border-blue-200 rounded-lg">
+            <div className="p-3 bg-info/10 border border-info/20 rounded-lg">
               <div className="flex items-start gap-2">
-                <Sparkles className="h-4 w-4 text-blue-600 mt-0.5" />
+                <Sparkles className="h-4 w-4 text-info mt-0.5" />
                 <div>
-                  <p className="text-sm font-medium text-blue-900">Otimização de Rota</p>
-                  <p className="text-xs text-blue-700">
+                  <p className="text-sm font-medium">Otimização de Rota</p>
+                  <p className="text-xs text-muted-foreground">
                     Análise indica potencial de -8% CO₂ com weather routing otimizado para PSV Gulf Stream.
                   </p>
                 </div>
               </div>
             </div>
 
-            <div className="p-3 bg-green-50 border border-green-200 rounded-lg">
+            <div className="p-3 bg-success/10 border border-success/20 rounded-lg">
               <div className="flex items-start gap-2">
-                <Leaf className="h-4 w-4 text-green-600 mt-0.5" />
+                <Leaf className="h-4 w-4 text-success mt-0.5" />
                 <div>
-                  <p className="text-sm font-medium text-green-900">Transição LNG</p>
-                  <p className="text-xs text-green-700">
+                  <p className="text-sm font-medium">Transição LNG</p>
+                  <p className="text-xs text-muted-foreground">
                     Aumentar uso de LNG de 5% para 15% pode reduzir SOx em 40% e CO₂ em 12%.
                   </p>
                 </div>
               </div>
             </div>
 
-            <div className="p-3 bg-purple-50 border border-purple-200 rounded-lg">
+            <div className="p-3 bg-accent/10 border border-accent/20 rounded-lg">
               <div className="flex items-start gap-2">
-                <TrendingDown className="h-4 w-4 text-purple-600 mt-0.5" />
+                <TrendingDown className="h-4 w-4 text-accent-foreground mt-0.5" />
                 <div>
-                  <p className="text-sm font-medium text-purple-900">Slow Steaming</p>
-                  <p className="text-xs text-purple-700">
+                  <p className="text-sm font-medium">Slow Steaming</p>
+                  <p className="text-xs text-muted-foreground">
                     Redução de 10% na velocidade média pode economizar 15% em combustível sem impacto operacional.
                   </p>
                 </div>

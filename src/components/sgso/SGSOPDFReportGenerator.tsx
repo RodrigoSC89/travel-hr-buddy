@@ -614,7 +614,7 @@ export const SGSOPDFReportGenerator: React.FC = () => {
               </div>
               <div className="space-y-1">
                 <Label className="text-xs text-muted-foreground">Score</Label>
-                <Badge className={auditData.complianceScore >= 80 ? "bg-green-600" : auditData.complianceScore >= 60 ? "bg-yellow-600" : "bg-red-600"}>
+                <Badge className={auditData.complianceScore >= 80 ? "bg-success" : auditData.complianceScore >= 60 ? "bg-warning" : "bg-destructive"}>
                   {auditData.complianceScore}%
                 </Badge>
               </div>
@@ -622,20 +622,20 @@ export const SGSOPDFReportGenerator: React.FC = () => {
 
             {/* Summary */}
             <div className="grid grid-cols-3 gap-4 pt-4 border-t">
-              <div className="text-center p-4 bg-green-50 dark:bg-green-950/30 rounded-lg">
-                <CheckCircle className="h-6 w-6 text-green-600 mx-auto mb-2" />
-                <p className="text-2xl font-bold text-green-700">{auditData.practices.filter(p => p.status === 'compliant').length}</p>
-                <p className="text-xs text-green-600">Práticas Conformes</p>
+              <div className="text-center p-4 bg-success/10 rounded-lg">
+                <CheckCircle className="h-6 w-6 text-success mx-auto mb-2" />
+                <p className="text-2xl font-bold text-success">{auditData.practices.filter(p => p.status === 'compliant').length}</p>
+                <p className="text-xs text-success/80">Práticas Conformes</p>
               </div>
-              <div className="text-center p-4 bg-yellow-50 dark:bg-yellow-950/30 rounded-lg">
-                <AlertTriangle className="h-6 w-6 text-yellow-600 mx-auto mb-2" />
-                <p className="text-2xl font-bold text-yellow-700">{auditData.practices.filter(p => p.status === 'partial').length}</p>
-                <p className="text-xs text-yellow-600">Parcialmente Conformes</p>
+              <div className="text-center p-4 bg-warning/10 rounded-lg">
+                <AlertTriangle className="h-6 w-6 text-warning mx-auto mb-2" />
+                <p className="text-2xl font-bold text-warning">{auditData.practices.filter(p => p.status === 'partial').length}</p>
+                <p className="text-xs text-warning/80">Parcialmente Conformes</p>
               </div>
-              <div className="text-center p-4 bg-red-50 dark:bg-red-950/30 rounded-lg">
-                <XCircle className="h-6 w-6 text-red-600 mx-auto mb-2" />
-                <p className="text-2xl font-bold text-red-700">{auditData.practices.filter(p => p.status === 'non_compliant').length}</p>
-                <p className="text-xs text-red-600">Não Conformes</p>
+              <div className="text-center p-4 bg-destructive/10 rounded-lg">
+                <XCircle className="h-6 w-6 text-destructive mx-auto mb-2" />
+                <p className="text-2xl font-bold text-destructive">{auditData.practices.filter(p => p.status === 'non_compliant').length}</p>
+                <p className="text-xs text-destructive/80">Não Conformes</p>
               </div>
             </div>
 
@@ -705,7 +705,7 @@ export const SGSOPDFReportGenerator: React.FC = () => {
             <Button 
               onClick={generatePDF} 
               disabled={isGenerating}
-              className="w-full bg-red-600 hover:bg-red-700"
+              className="w-full bg-destructive hover:bg-destructive/90"
               size="lg"
             >
               {isGenerating ? (
