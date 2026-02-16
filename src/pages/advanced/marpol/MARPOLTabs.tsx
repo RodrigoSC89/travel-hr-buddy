@@ -148,7 +148,7 @@ export function MARPOLTabs({
           distanceNm: parseFloat(entryForm.distanceNm) || 0,
           recordBook: entryBook,
           notes: entryForm.notes,
-          certificate: `CERT-${new Date().getFullYear()}-${Math.random().toString(36).slice(2, 6).toUpperCase()}`,
+          certificate: `CERT-${new Date().getFullYear()}-${Date.now().toString(36).slice(-4).toUpperCase()}`,
         },
       });
       if (error) throw error;

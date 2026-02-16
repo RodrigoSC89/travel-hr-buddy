@@ -97,7 +97,8 @@ export function ESGFuelOptimizationPanel() {
         return d.getMonth() === idx;
       });
       const total = monthRecords.reduce((s: number, f: any) => s + (Number(f.quantity) || 0), 0);
-      const actual = total || 3700 + Math.round(Math.random() * 500);
+      // Deterministic fallback based on month index
+      const actual = total || 3700 + (idx * 83) % 500;
       return {
         month,
         atual: actual,
@@ -138,56 +139,56 @@ export function ESGFuelOptimizationPanel() {
     <div className="space-y-6">
       {/* Summary Cards */}
       <div className="grid grid-cols-2 md:grid-cols-4 gap-4">
-        <Card className="border-l-4 border-l-emerald-500">
+        <Card className="border-l-4 border-l-success">
           <CardContent className="pt-4">
             <div className="flex items-center justify-between">
               <div>
                 <p className="text-xs text-muted-foreground uppercase">Economia Potencial</p>
-                <p className="text-2xl font-bold text-emerald-600">{Math.round(totalPotentialSavings / Math.max(vesselOptimizations.length, 1))}%</p>
+                <p className="text-2xl font-bold text-success">{Math.round(totalPotentialSavings / Math.max(vesselOptimizations.length, 1))}%</p>
                 <p className="text-xs text-muted-foreground">combustível/mês</p>
               </div>
-              <Fuel className="h-8 w-8 text-emerald-500 opacity-50" />
+              <Fuel className="h-8 w-8 text-success opacity-50" />
             </div>
           </CardContent>
         </Card>
 
-        <Card className="border-l-4 border-l-green-500">
+        <Card className="border-l-4 border-l-success">
           <CardContent className="pt-4">
             <div className="flex items-center justify-between">
               <div>
                 <p className="text-xs text-muted-foreground uppercase">Redução CO₂</p>
-                <p className="text-2xl font-bold text-green-600">{(totalCO2Reduction/1000).toFixed(1)}t</p>
+                <p className="text-2xl font-bold text-success">{(totalCO2Reduction/1000).toFixed(1)}t</p>
                 <p className="text-xs text-muted-foreground">toneladas/mês</p>
               </div>
-              <Leaf className="h-8 w-8 text-green-500 opacity-50" />
+              <Leaf className="h-8 w-8 text-success opacity-50" />
             </div>
           </CardContent>
         </Card>
 
-        <Card className="border-l-4 border-l-blue-500">
+        <Card className="border-l-4 border-l-info">
           <CardContent className="pt-4">
             <div className="flex items-center justify-between">
               <div>
                 <p className="text-xs text-muted-foreground uppercase">Economia Mensal</p>
-                <p className="text-2xl font-bold text-blue-600">R$ {Math.round(totalCO2Reduction * 0.15)}k</p>
+                <p className="text-2xl font-bold text-info">R$ {Math.round(totalCO2Reduction * 0.15)}k</p>
                 <p className="text-xs text-muted-foreground">projetado</p>
               </div>
-              <DollarSign className="h-8 w-8 text-blue-500 opacity-50" />
+              <DollarSign className="h-8 w-8 text-info opacity-50" />
             </div>
           </CardContent>
         </Card>
 
-        <Card className="border-l-4 border-l-purple-500">
+        <Card className="border-l-4 border-l-accent">
           <CardContent className="pt-4">
             <div className="flex items-center justify-between">
               <div>
                 <p className="text-xs text-muted-foreground uppercase">Embarcações</p>
-                <p className="text-2xl font-bold text-purple-600">
+                <p className="text-2xl font-bold text-accent-foreground">
                   {vesselOptimizations.filter(v => v.status === "applied").length}/{vesselOptimizations.length}
                 </p>
                 <p className="text-xs text-muted-foreground">otimizadas</p>
               </div>
-              <Zap className="h-8 w-8 text-purple-500 opacity-50" />
+              <Zap className="h-8 w-8 text-accent-foreground opacity-50" />
             </div>
           </CardContent>
         </Card>
@@ -243,25 +244,25 @@ export function ESGFuelOptimizationPanel() {
                 <div className="space-y-4 pr-4">
                   {vesselOptimizations.map((vessel, idx) => (
                     <motion.div key={vessel.id} initial={{ opacity: 0, y: 10 }} animate={{ opacity: 1, y: 0 }} transition={{ delay: idx * 0.05 }}>
-                      <Card className={vessel.status === "applied" ? "border-green-500/50" : ""}>
+                      <Card className={vessel.status === "applied" ? "border-success/50" : ""}>
                         <CardContent className="p-4">
                           <div className="flex items-start justify-between mb-3">
                             <div>
                               <div className="flex items-center gap-2">
                                 <span className="font-semibold">{vessel.name}</span>
                                 <Badge className={
-                                  vessel.status === "applied" ? "bg-green-500/10 text-green-600" :
-                                  vessel.status === "pending" ? "bg-yellow-500/10 text-yellow-600" :
-                                  "bg-blue-500/10 text-blue-600"
+                                  vessel.status === "applied" ? "bg-success/10 text-success" :
+                                  vessel.status === "pending" ? "bg-warning/10 text-warning" :
+                                  "bg-info/10 text-info"
                                 }>
                                   {vessel.status === "applied" ? "Aplicado" : vessel.status === "pending" ? "Pendente" : "Analisando"}
                                 </Badge>
                               </div>
                             </div>
                             <Badge className={
-                              vessel.implementationRisk === "low" ? "bg-green-500/10 text-green-600" :
-                              vessel.implementationRisk === "medium" ? "bg-yellow-500/10 text-yellow-600" :
-                              "bg-red-500/10 text-red-600"
+                              vessel.implementationRisk === "low" ? "bg-success/10 text-success" :
+                              vessel.implementationRisk === "medium" ? "bg-warning/10 text-warning" :
+                              "bg-destructive/10 text-destructive"
                             }>
                               Risco {vessel.implementationRisk === "low" ? "Baixo" : vessel.implementationRisk === "medium" ? "Médio" : "Alto"}
                             </Badge>
@@ -269,9 +270,9 @@ export function ESGFuelOptimizationPanel() {
 
                           <div className="grid grid-cols-4 gap-4 text-sm mb-3">
                             <div><p className="text-muted-foreground">Vel. Atual</p><p className="font-semibold">{vessel.currentSpeed} nós</p></div>
-                            <div><p className="text-muted-foreground">Vel. Ótima</p><p className="font-semibold text-green-600">{vessel.optimalSpeed} nós</p></div>
-                            <div><p className="text-muted-foreground">Economia</p><p className="font-semibold text-emerald-600">-{vessel.potentialSavings}%</p></div>
-                            <div><p className="text-muted-foreground">CO₂ Reduzido</p><p className="font-semibold text-green-600">-{vessel.co2Reduction}kg</p></div>
+                            <div><p className="text-muted-foreground">Vel. Ótima</p><p className="font-semibold text-success">{vessel.optimalSpeed} nós</p></div>
+                            <div><p className="text-muted-foreground">Economia</p><p className="font-semibold text-success">-{vessel.potentialSavings}%</p></div>
+                            <div><p className="text-muted-foreground">CO₂ Reduzido</p><p className="font-semibold text-success">-{vessel.co2Reduction}kg</p></div>
                           </div>
 
                           <div className="flex items-center justify-between">
@@ -279,7 +280,7 @@ export function ESGFuelOptimizationPanel() {
                               <Fuel className="h-4 w-4" />
                               <span>{vessel.currentConsumption}t/dia</span>
                               <ArrowRight className="h-4 w-4" />
-                              <span className="text-green-600">{vessel.optimalConsumption}t/dia</span>
+                              <span className="text-success">{vessel.optimalConsumption}t/dia</span>
                             </div>
                             {vessel.status !== "applied" && (
                               <Button size="sm" onClick={() => handleApplyOptimization(vessel)}>Aplicar</Button>
@@ -300,10 +301,10 @@ export function ESGFuelOptimizationPanel() {
 
         {/* Right Panel */}
         <div className="space-y-6">
-          <Card className="bg-gradient-to-br from-emerald-500/10 to-green-500/10 border-emerald-500/20">
+          <Card className="bg-gradient-to-br from-success/10 to-success/5 border-success/20">
             <CardHeader className="pb-3">
               <CardTitle className="flex items-center gap-2 text-lg">
-                <Calculator className="h-5 w-5 text-emerald-600" />
+                <Calculator className="h-5 w-5 text-success" />
                 Calculadora de Economia
               </CardTitle>
             </CardHeader>
@@ -320,15 +321,15 @@ export function ESGFuelOptimizationPanel() {
                 <div className="space-y-2">
                   <div className="flex justify-between text-sm">
                     <span className="text-muted-foreground">Economia de Combustível</span>
-                    <span className="font-semibold text-emerald-600">~{Math.round(speedReduction[0] * 2.5)}%</span>
+                    <span className="font-semibold text-success">~{Math.round(speedReduction[0] * 2.5)}%</span>
                   </div>
                   <div className="flex justify-between text-sm">
                     <span className="text-muted-foreground">Redução CO₂</span>
-                    <span className="font-semibold text-green-600">~{Math.round(speedReduction[0] * 120)}t/mês</span>
+                    <span className="font-semibold text-success">~{Math.round(speedReduction[0] * 120)}t/mês</span>
                   </div>
                   <div className="flex justify-between text-sm">
                     <span className="text-muted-foreground">Economia Mensal</span>
-                    <span className="font-semibold text-blue-600">R$ {(speedReduction[0] * 45000).toLocaleString("pt-BR")}</span>
+                    <span className="font-semibold text-info">R$ {(speedReduction[0] * 45000).toLocaleString("pt-BR")}</span>
                   </div>
                 </div>
               </div>
@@ -338,7 +339,7 @@ export function ESGFuelOptimizationPanel() {
           <Card>
             <CardHeader className="pb-3">
               <CardTitle className="flex items-center gap-2 text-lg">
-                <Brain className="h-5 w-5 text-purple-500" />
+                <Brain className="h-5 w-5 text-primary" />
                 Cenários de Otimização
                 <Badge variant="secondary" className="ml-auto"><Sparkles className="h-3 w-3 mr-1" />IA</Badge>
               </CardTitle>
@@ -354,9 +355,9 @@ export function ESGFuelOptimizationPanel() {
                       </div>
                       <p className="text-xs text-muted-foreground mb-3">{scenario.description}</p>
                       <div className="grid grid-cols-2 gap-2 text-xs">
-                        <div className="flex items-center gap-1"><Fuel className="h-3 w-3 text-emerald-500" /><span>-{scenario.fuelSavings}% combustível</span></div>
-                        <div className="flex items-center gap-1"><Leaf className="h-3 w-3 text-green-500" /><span>-{scenario.co2Reduction}t CO₂</span></div>
-                        <div className="flex items-center gap-1"><DollarSign className="h-3 w-3 text-blue-500" /><span>R$ {(scenario.costSavings/1000).toFixed(0)}k/mês</span></div>
+                        <div className="flex items-center gap-1"><Fuel className="h-3 w-3 text-success" /><span>-{scenario.fuelSavings}% combustível</span></div>
+                        <div className="flex items-center gap-1"><Leaf className="h-3 w-3 text-success" /><span>-{scenario.co2Reduction}t CO₂</span></div>
+                        <div className="flex items-center gap-1"><DollarSign className="h-3 w-3 text-info" /><span>R$ {(scenario.costSavings/1000).toFixed(0)}k/mês</span></div>
                         <div className="flex items-center gap-1"><Clock className="h-3 w-3 text-muted-foreground" /><span>{scenario.implementationTime}</span></div>
                       </div>
                     </motion.div>
