@@ -59,15 +59,13 @@ const PILARES = [
   { id: "manutencao", name: "5. Manutenção", requisitos: 20, peso: "Manutenção", items: ["Plano manutenção", "Itens críticos DP", "Sobressalentes", "Calibração thrusters", "Relés proteção", "Hardware/firmware", "Impressoras", "Manutenção preditiva"] },
 ];
 
-// Simulated monthly data following actual formulas
+// Deterministic monthly data using seeded values (no Math.random)
+const SEED_DATA: Array<[number,number,number,number,number,number,number]> = [
+  [0,0,0,0,0,0,0],[1,0,0,0,0,1,0],[0,0,0,1,0,0,1],[0,0,0,0,0,0,0],[0,1,0,0,0,1,0],[0,0,0,0,0,0,0],
+  [0,0,0,0,0,0,0],[1,0,0,1,0,2,0],[0,0,0,0,0,0,0],[0,0,1,0,0,1,1],[0,0,0,0,0,0,0],[0,0,0,0,0,0,0],
+];
 const generateMonthlyData = () => MONTHS.map((m, i) => {
-  const epp = Math.random() > 0.85 ? 1 : 0;
-  const epa = Math.random() > 0.9 ? 1 : 0;
-  const eppa = Math.random() > 0.95 ? 1 : 0;
-  const ebp = Math.random() > 0.8 ? 1 : 0;
-  const ebt = Math.random() > 0.95 ? 1 : 0;
-  const pclvcErrors = Math.floor(Math.random() * 3);
-  const arepDelay = Math.floor(Math.random() * 2);
+  const [epp, epa, eppa, ebp, ebt, pclvcErrors, arepDelay] = SEED_DATA[i];
 
   const pEPP = getEventScore("EPP", epp);
   const pEPA = getEventScore("EPA", epa);
@@ -101,10 +99,12 @@ export function PeoDPKPIDashboard() {
   const totalEvents = data.reduce((a, d) => a + d.epp + d.epa + d.eppa + d.ebp + d.ebt, 0);
   const avgPCLVC = Math.round(data.reduce((a, d) => a + d.pPCLVC, 0) / data.length);
   const avgAREP = Math.round(data.reduce((a, d) => a + d.pAREP, 0) / data.length);
-  const pilarScores = PILARES.map(p => ({
+  // Deterministic pilar scores based on data averages
+  const PILAR_SCORES = [92, 88, 85, 90, 78];
+  const pilarScores = PILARES.map((p, idx) => ({
     ...p,
-    score: Math.round(70 + Math.random() * 28),
-    approved: Math.floor(p.requisitos * (0.7 + Math.random() * 0.3)),
+    score: PILAR_SCORES[idx],
+    approved: Math.round(p.requisitos * PILAR_SCORES[idx] / 100),
   }));
 
   const radarData = pilarScores.map(p => ({

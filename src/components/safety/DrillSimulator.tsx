@@ -109,10 +109,13 @@ export function DrillSimulator() {
 
   const completeMutation = useMutation({
     mutationFn: async ({ id, score, findings }: { id: string; score: number; findings: string[] }) => {
+      // Deterministic metrics based on score and elapsed time
+      const timeEfficiency = Math.min(100, Math.max(60, 100 - Math.floor(elapsedTime / 30)));
+      const baseMetric = Math.max(60, Math.min(score, 95));
       const metrics = {
-        responseTime: 70 + Math.floor(Math.random() * 25), communication: 70 + Math.floor(Math.random() * 25),
-        coordination: 70 + Math.floor(Math.random() * 25), procedureCompliance: 70 + Math.floor(Math.random() * 25),
-        equipmentUse: 70 + Math.floor(Math.random() * 25),
+        responseTime: Math.min(100, baseMetric + 5), communication: Math.min(100, baseMetric - 2),
+        coordination: Math.min(100, baseMetric + 3), procedureCompliance: Math.min(100, timeEfficiency),
+        equipmentUse: Math.min(100, baseMetric),
       };
       const { error } = await dynamicFrom('drill_records').update({
         status: 'completed', duration_minutes: Math.ceil(elapsedTime / 60), score,
@@ -186,7 +189,7 @@ export function DrillSimulator() {
               <div className="flex gap-2">
                 {isRunning ? <Button variant="outline" onClick={() => setIsRunning(false)}><Pause className="h-4 w-4 mr-2" />Pausar</Button>
                   : <Button onClick={() => setIsRunning(true)}><Play className="h-4 w-4 mr-2" />Continuar</Button>}
-                <Button variant="destructive" onClick={() => completeMutation.mutate({ id: activeDrill.id, score: 70 + Math.floor(Math.random() * 25), findings: ['Avaliação registrada'] })}>
+                <Button variant="destructive" onClick={() => completeMutation.mutate({ id: activeDrill.id, score: Math.min(95, 70 + Math.floor(elapsedTime / 60)), findings: ['Avaliação registrada'] })}>
                   <Square className="h-4 w-4 mr-2" />Finalizar
                 </Button>
               </div>

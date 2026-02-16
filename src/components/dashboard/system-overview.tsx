@@ -38,35 +38,26 @@ const SystemOverview = () => {
     staleTime: 30_000,
   });
 
-  // Simulated real-time chart (oscillates for visual effect using actual refresh)
-  const [realTimeData, setRealTimeData] = useState(() => {
+  // Deterministic oscillating chart using sine wave for smooth visual effect
+  const [tick, setTick] = useState(0);
+  const realTimeData = React.useMemo(() => {
     const now = new Date();
     return Array.from({ length: 6 }, (_, i) => {
+      const t = tick + i;
       const h = new Date(now.getTime() - (5 - i) * 4 * 3600 * 1000);
       return {
         time: h.toLocaleTimeString("pt-BR", { hour: "2-digit", minute: "2-digit" }),
-        cpu: 20 + Math.random() * 30,
-        memory: 40 + Math.random() * 25,
-        users: sessionCount > 0 ? sessionCount + Math.floor(Math.random() * 5) : Math.floor(Math.random() * 20),
+        cpu: Math.round(30 + 15 * Math.sin(t * 0.5 + i)),
+        memory: Math.round(50 + 10 * Math.cos(t * 0.3 + i * 0.7)),
+        users: sessionCount > 0 ? sessionCount + (i % 3) : 5 + (i % 4),
       };
     });
-  });
+  }, [tick, sessionCount]);
 
   useEffect(() => {
-    const interval = setInterval(() => {
-      setRealTimeData((prev) => {
-        const next = [...prev.slice(1)];
-        next.push({
-          time: new Date().toLocaleTimeString("pt-BR", { hour: "2-digit", minute: "2-digit" }),
-          cpu: 20 + Math.random() * 35,
-          memory: 40 + Math.random() * 30,
-          users: sessionCount > 0 ? sessionCount + Math.floor(Math.random() * 5) : Math.floor(Math.random() * 20),
-        });
-        return next;
-      });
-    }, 15000);
+    const interval = setInterval(() => setTick(t => t + 1), 15000);
     return () => clearInterval(interval);
-  }, [sessionCount]);
+  }, []);
 
   const stats = systemStats || {};
   const getStatusColor = (status: string) => {

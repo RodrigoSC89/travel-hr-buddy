@@ -85,7 +85,7 @@ export function CrewFatiguePredictorDashboard() {
       const hoursWorked24h = avgDailyWork;
       const daysOnboard = crew.boarding_date 
         ? differenceInDays(new Date(), new Date(crew.boarding_date)) 
-        : Math.floor(Math.random() * 120) + 30;
+        : differenceInDays(new Date(), new Date(crew.created_at || Date.now()));
 
       // Calculate fatigue score based on STCW factors
       let fatigueScore = 0;
