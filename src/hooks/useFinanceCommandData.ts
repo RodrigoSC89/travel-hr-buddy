@@ -89,35 +89,47 @@ export function useFinanceCommandData() {
     queryKey: ["finance-summary"],
     queryFn: async (): Promise<FinancialSummary> => {
       try {
-        const { data: expenses, error } = await supabase
+        // Fetch expenses
+        const { data: expenses, error: expError } = await supabase
           .from("expenses")
           .select("amount, category, created_at");
+        if (expError) throw expError;
 
-        if (error) throw error;
+        // Fetch real revenue from invoices table
+        const { data: invoices } = await supabase
+          .from("invoices")
+          .select("total_amount, status, created_at")
+          .in("status", ["paid", "sent", "overdue"]);
 
         const totalExpenses = (expenses || []).reduce((sum, e) => sum + (e.amount || 0), 0);
+        const totalRevenue = (invoices || []).reduce((sum, i) => sum + (Number(i.total_amount) || 0), 0);
         
-        // Calculate by category for budget breakdown
-        const byCategory = (expenses || []).reduce((acc, e) => {
-          const cat = e.category || "other";
-          acc[cat] = (acc[cat] || 0) + (e.amount || 0);
-          return acc;
-        }, {} as Record<string, number>);
+        // Use real revenue if available, otherwise estimate
+        const revenue = totalRevenue > 0 ? totalRevenue : totalExpenses * 1.3;
+        const profit = revenue - totalExpenses;
 
-        // Estimate revenue (in real system would come from contracts/invoices table)
-        const estimatedRevenue = totalExpenses * 1.3; // 30% margin assumption
-        const profit = estimatedRevenue - totalExpenses;
-        const budget = totalExpenses * 1.1; // 10% buffer
+        // Calculate growth from last 60 vs previous 60 days
+        const now = Date.now();
+        const d60 = 60 * 24 * 60 * 60 * 1000;
+        const recentExpenses = (expenses || []).filter(e => new Date(e.created_at).getTime() > now - d60).reduce((s, e) => s + (e.amount || 0), 0);
+        const olderExpenses = (expenses || []).filter(e => { const t = new Date(e.created_at).getTime(); return t > now - 2 * d60 && t <= now - d60; }).reduce((s, e) => s + (e.amount || 0), 0);
+        const expenseGrowth = olderExpenses > 0 ? ((recentExpenses - olderExpenses) / olderExpenses) * 100 : 0;
+
+        const recentRevenue = (invoices || []).filter(i => new Date(i.created_at).getTime() > now - d60).reduce((s, i) => s + (Number(i.total_amount) || 0), 0);
+        const olderRevenue = (invoices || []).filter(i => { const t = new Date(i.created_at).getTime(); return t > now - 2 * d60 && t <= now - d60; }).reduce((s, i) => s + (Number(i.total_amount) || 0), 0);
+        const revenueGrowth = olderRevenue > 0 ? ((recentRevenue - olderRevenue) / olderRevenue) * 100 : 0;
+
+        const budget = totalExpenses * 1.1;
 
         return {
-          revenue: estimatedRevenue,
+          revenue,
           expenses: totalExpenses,
           profit,
           budget,
           budgetUsed: totalExpenses,
-          margin: totalExpenses > 0 ? (profit / estimatedRevenue) * 100 : 0,
-          revenueGrowth: 12.5, // Would calculate from historical data
-          expenseGrowth: 8.2,
+          margin: revenue > 0 ? (profit / revenue) * 100 : 0,
+          revenueGrowth: Math.round(revenueGrowth * 10) / 10,
+          expenseGrowth: Math.round(expenseGrowth * 10) / 10,
         };
       } catch (error) {
         logger.error("Failed to fetch financial summary", error);
