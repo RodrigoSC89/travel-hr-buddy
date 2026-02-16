@@ -1,6 +1,7 @@
 /**
  * Safety & ESG AI Hub - Suite Disruptiva IA para Segurança & ESG
  * Predição de Incidentes, Near-Miss AI, Emissões CII, Photo Risk Detection
+ * REFACTORED: All hardcoded colors replaced with semantic tokens
  */
 import React, { useState } from "react";
 import { Card, CardContent, CardHeader, CardTitle } from "@/components/ui/card";
@@ -38,12 +39,12 @@ export const IncidentPredictionAI: React.FC<{ vesselId?: string }> = ({ vesselId
   ];
 
   return (
-    <Card className="border-red-500/20">
+    <Card className="border-destructive/20">
       <CardHeader>
         <CardTitle className="flex items-center gap-2">
-          <AlertOctagon className="h-5 w-5 text-red-500" />
+          <AlertOctagon className="h-5 w-5 text-destructive" />
           Predição de Incidentes IA
-          <Badge className="ml-auto bg-red-500/10 text-red-500">Risk Engine</Badge>
+          <Badge className="ml-auto bg-destructive/10 text-destructive">Risk Engine</Badge>
         </CardTitle>
       </CardHeader>
       <CardContent className="space-y-4">
@@ -94,12 +95,12 @@ export const NearMissAI: React.FC = () => {
   };
 
   return (
-    <Card className="border-yellow-500/20">
+    <Card className="border-warning/20">
       <CardHeader>
         <CardTitle className="flex items-center gap-2">
-          <FileWarning className="h-5 w-5 text-yellow-500" />
+          <FileWarning className="h-5 w-5 text-warning" />
           Análise de Near-Miss IA
-          <Badge className="ml-auto bg-yellow-500/10 text-yellow-500">Auto Analysis</Badge>
+          <Badge className="ml-auto bg-warning/10 text-warning">Auto Analysis</Badge>
         </CardTitle>
       </CardHeader>
       <CardContent className="space-y-4">
@@ -138,21 +139,21 @@ export const CIIEmissionsAI: React.FC<{ vesselId?: string }> = ({ vesselId }) =>
   };
 
   return (
-    <Card className="border-green-500/20">
+    <Card className="border-success/20">
       <CardHeader>
         <CardTitle className="flex items-center gap-2">
-          <Leaf className="h-5 w-5 text-green-500" />
+          <Leaf className="h-5 w-5 text-success" />
           Otimização CII & Emissões
-          <Badge className="ml-auto bg-green-500/10 text-green-500">ESG Engine</Badge>
+          <Badge className="ml-auto bg-success/10 text-success">ESG Engine</Badge>
         </CardTitle>
       </CardHeader>
       <CardContent className="space-y-4">
         <div className="grid grid-cols-4 gap-2">
           {[
-            { label: "CII Atual", value: "C", color: "text-yellow-500" },
+            { label: "CII Atual", value: "C", color: "text-warning" },
             { label: "CO₂ YTD", value: "4,230 MT", color: "text-muted-foreground" },
-            { label: "Meta Anual", value: "B", color: "text-green-500" },
-            { label: "Economia", value: "$89K", color: "text-blue-500" },
+            { label: "Meta Anual", value: "B", color: "text-success" },
+            { label: "Economia", value: "$89K", color: "text-info" },
           ].map((m) => (
             <div key={m.label} className="p-2 rounded border text-center">
               <p className="text-xs text-muted-foreground">{m.label}</p>
@@ -188,12 +189,12 @@ export const HazardPhotoAI: React.FC = () => {
   };
 
   return (
-    <Card className="border-orange-500/20">
+    <Card className="border-accent/20">
       <CardHeader>
         <CardTitle className="flex items-center gap-2">
-          <Eye className="h-5 w-5 text-orange-500" />
+          <Eye className="h-5 w-5 text-accent-foreground" />
           Detecção de Riscos IA
-          <Badge className="ml-auto bg-orange-500/10 text-orange-500">Vision Safety</Badge>
+          <Badge className="ml-auto bg-accent/10 text-accent-foreground">Vision Safety</Badge>
         </CardTitle>
       </CardHeader>
       <CardContent className="space-y-4">

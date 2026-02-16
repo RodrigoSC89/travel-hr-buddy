@@ -464,7 +464,7 @@ export default function NotificationCenterProfessional() {
         <div className="flex flex-col lg:flex-row lg:items-center justify-between gap-4">
           <div>
             <h1 className="text-3xl font-bold text-foreground flex items-center gap-3">
-              <div className="p-2 rounded-xl bg-gradient-to-br from-primary/20 to-orange-500/20">
+              <div className="p-2 rounded-xl bg-gradient-to-br from-primary/20 to-accent/20">
                 <Bell className="h-6 w-6 text-primary" />
               </div>
               Central de Notificações
@@ -536,14 +536,14 @@ export default function NotificationCenterProfessional() {
           <StatCard
             title="Concluídas"
             value={stats.completed}
-            icon={<CheckCircle className="h-5 w-5 text-green-500" />}
+            icon={<CheckCircle className="h-5 w-5 text-success" />}
             subtitle="Esta semana"
             onClick={() => setSelectedType(null)}
           />
           <StatCard
             title="Informativas"
             value={stats.info}
-            icon={<Info className="h-5 w-5 text-blue-500" />}
+            icon={<Info className="h-5 w-5 text-info" />}
             subtitle="Atualizações gerais"
             onClick={() => setSelectedType(selectedType === 'info' ? null : 'info')}
             isActive={selectedType === 'info'}
@@ -670,7 +670,7 @@ export default function NotificationCenterProfessional() {
                                 </h4>
                                 {getTypeBadge(notification.type)}
                                 {notification.isStarred && (
-                                  <Star className="h-3.5 w-3.5 text-yellow-500 fill-yellow-500" />
+                                  <Star className="h-3.5 w-3.5 text-warning fill-warning" />
                                 )}
                               </div>
                               <p className="text-sm text-muted-foreground mt-1 line-clamp-2">
@@ -698,7 +698,7 @@ export default function NotificationCenterProfessional() {
                                     onClick={(e) => { e.stopPropagation(); handleToggleStar(notification.id); }}
                                     aria-label={notification.isStarred ? 'Remover favorito' : 'Favoritar'}
                                   >
-                                    <Star className={`h-4 w-4 ${notification.isStarred ? 'fill-yellow-500 text-yellow-500' : ''}`} />
+                                    <Star className={`h-4 w-4 ${notification.isStarred ? 'fill-warning text-warning' : ''}`} />
                                   </Button>
                                 </TooltipTrigger>
                                 <TooltipContent>{notification.isStarred ? 'Remover favorito' : 'Favoritar'}</TooltipContent>
@@ -1057,8 +1057,8 @@ export default function NotificationCenterProfessional() {
                   <p className="text-2xl font-bold text-destructive">{stats.critical}</p>
                   <p className="text-xs text-muted-foreground">Críticas</p>
                 </div>
-                <div className="p-3 rounded-lg bg-yellow-500/10 text-center">
-                  <p className="text-2xl font-bold text-yellow-600">{stats.starred}</p>
+                <div className="p-3 rounded-lg bg-warning/10 text-center">
+                  <p className="text-2xl font-bold text-warning">{stats.starred}</p>
                   <p className="text-xs text-muted-foreground">Favoritas</p>
                 </div>
               </div>
@@ -1115,7 +1115,7 @@ export default function NotificationCenterProfessional() {
                   aria-label="Favoritar notificação"
                   title="Favoritar"
                 >
-                  <Star className={`h-4 w-4 ${selectedNotification?.isStarred ? 'fill-yellow-500 text-yellow-500' : ''}`} />
+                  <Star className={`h-4 w-4 ${selectedNotification?.isStarred ? 'fill-warning text-warning' : ''}`} />
                 </Button>
                 <Button 
                   variant="outline" 

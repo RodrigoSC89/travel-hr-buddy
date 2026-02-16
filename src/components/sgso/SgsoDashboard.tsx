@@ -293,9 +293,9 @@ export const SgsoDashboard: React.FC = () => {
               <Users className="h-10 w-10 text-success" />
               <Badge className="bg-success text-success-foreground font-bold">TREINAMENTO</Badge>
             </div>
-            <h3 className="text-sm font-medium text-green-700 dark:text-green-400 mb-1">Compliance Treinamento</h3>
-            <p className="text-3xl font-bold text-green-900 dark:text-green-300">{kpis.training.upToDate}%</p>
-            <p className="text-xs text-green-600 dark:text-green-400 mt-2">
+            <h3 className="text-sm font-medium text-success mb-1">Compliance Treinamento</h3>
+            <p className="text-3xl font-bold text-success">{kpis.training.upToDate}%</p>
+            <p className="text-xs text-success/70 mt-2">
               {kpis.training.expiringSoon} expirando, {kpis.training.expired} expirados
             </p>
           </CardContent>
@@ -315,49 +315,49 @@ export const SgsoDashboard: React.FC = () => {
             <TabsList className="grid grid-cols-2 lg:grid-cols-4 xl:grid-cols-7 w-full h-auto gap-2 bg-muted p-2">
               <TabsTrigger 
                 value="overview" 
-                className="data-[state=active]:bg-background data-[state=active]:text-red-600 data-[state=active]:font-bold min-h-[44px]"
+                className="data-[state=active]:bg-background data-[state=active]:text-primary data-[state=active]:font-bold min-h-[44px]"
               >
                 <Shield className="h-4 w-4 mr-2" />
                 Visão Geral
               </TabsTrigger>
               <TabsTrigger 
                 value="practices"
-                className="data-[state=active]:bg-background data-[state=active]:text-red-600 data-[state=active]:font-bold min-h-[44px]"
+                className="data-[state=active]:bg-background data-[state=active]:text-primary data-[state=active]:font-bold min-h-[44px]"
               >
                 <CheckCircle className="h-4 w-4 mr-2" />
                 17 Práticas
               </TabsTrigger>
               <TabsTrigger 
                 value="risks"
-                className="data-[state=active]:bg-background data-[state=active]:text-orange-600 data-[state=active]:font-bold min-h-[44px]"
+                className="data-[state=active]:bg-background data-[state=active]:text-warning data-[state=active]:font-bold min-h-[44px]"
               >
                 <AlertTriangle className="h-4 w-4 mr-2" />
                 Riscos
               </TabsTrigger>
               <TabsTrigger 
                 value="incidents"
-                className="data-[state=active]:bg-background data-[state=active]:text-red-600 data-[state=active]:font-bold min-h-[44px]"
+                className="data-[state=active]:bg-background data-[state=active]:text-destructive data-[state=active]:font-bold min-h-[44px]"
               >
                 <Bell className="h-4 w-4 mr-2" />
                 Incidentes
               </TabsTrigger>
               <TabsTrigger 
                 value="audits"
-                className="data-[state=active]:bg-background data-[state=active]:text-blue-600 data-[state=active]:font-bold min-h-[44px]"
+                className="data-[state=active]:bg-background data-[state=active]:text-info data-[state=active]:font-bold min-h-[44px]"
               >
                 <FileText className="h-4 w-4 mr-2" />
                 Auditorias
               </TabsTrigger>
               <TabsTrigger 
                 value="training"
-                className="data-[state=active]:bg-background data-[state=active]:text-green-600 data-[state=active]:font-bold min-h-[44px]"
+                className="data-[state=active]:bg-background data-[state=active]:text-success data-[state=active]:font-bold min-h-[44px]"
               >
                 <Users className="h-4 w-4 mr-2" />
                 Treinamentos
               </TabsTrigger>
               <TabsTrigger 
                 value="assistente"
-                className="data-[state=active]:bg-background data-[state=active]:text-purple-600 data-[state=active]:font-bold min-h-[44px] bg-purple-100 dark:bg-purple-900/30"
+                className="data-[state=active]:bg-background data-[state=active]:text-accent-foreground data-[state=active]:font-bold min-h-[44px] bg-accent/10"
               >
                 <Brain className="h-4 w-4 mr-2" />
                 IA SGSO
@@ -368,49 +368,49 @@ export const SgsoDashboard: React.FC = () => {
             <TabsList className="grid grid-cols-2 lg:grid-cols-7 w-full h-auto gap-2 bg-muted p-2">
               <TabsTrigger 
                 value="emergency"
-                className="data-[state=active]:bg-background data-[state=active]:text-red-700 data-[state=active]:font-bold min-h-[44px]"
+                className="data-[state=active]:bg-background data-[state=active]:text-destructive data-[state=active]:font-bold min-h-[44px]"
               >
                 <AlertTriangle className="h-4 w-4 mr-2" />
                 Emergência
               </TabsTrigger>
               <TabsTrigger 
                 value="nc"
-                className="data-[state=active]:bg-background data-[state=active]:text-yellow-600 data-[state=active]:font-bold min-h-[44px]"
+                className="data-[state=active]:bg-background data-[state=active]:text-warning data-[state=active]:font-bold min-h-[44px]"
               >
                 <XCircle className="h-4 w-4 mr-2" />
                 NCs
               </TabsTrigger>
               <TabsTrigger 
                 value="capa"
-                className="data-[state=active]:bg-background data-[state=active]:text-orange-600 data-[state=active]:font-bold min-h-[44px]"
+                className="data-[state=active]:bg-background data-[state=active]:text-warning data-[state=active]:font-bold min-h-[44px]"
               >
                 <GitBranch className="h-4 w-4 mr-2" />
                 CAPA
               </TabsTrigger>
               <TabsTrigger 
                 value="plano-ia"
-                className="data-[state=active]:bg-background data-[state=active]:text-purple-600 data-[state=active]:font-bold min-h-[44px]"
+                className="data-[state=active]:bg-background data-[state=active]:text-accent-foreground data-[state=active]:font-bold min-h-[44px]"
               >
                 <Brain className="h-4 w-4 mr-2" />
                 Plano IA
               </TabsTrigger>
               <TabsTrigger 
                 value="dossie"
-                className="data-[state=active]:bg-background data-[state=active]:text-green-600 data-[state=active]:font-bold min-h-[44px]"
+                className="data-[state=active]:bg-background data-[state=active]:text-success data-[state=active]:font-bold min-h-[44px]"
               >
                 <Download className="h-4 w-4 mr-2" />
                 Dossiê ANP
               </TabsTrigger>
               <TabsTrigger 
                 value="metrics"
-                className="data-[state=active]:bg-background data-[state=active]:text-purple-600 data-[state=active]:font-bold min-h-[44px]"
+                className="data-[state=active]:bg-background data-[state=active]:text-accent-foreground data-[state=active]:font-bold min-h-[44px]"
               >
                 <TrendingUp className="h-4 w-4 mr-2" />
                 Métricas
               </TabsTrigger>
               <TabsTrigger 
                 value="painel"
-                className="data-[state=active]:bg-background data-[state=active]:text-red-600 data-[state=active]:font-bold min-h-[44px]"
+                className="data-[state=active]:bg-background data-[state=active]:text-destructive data-[state=active]:font-bold min-h-[44px]"
               >
                 <Activity className="h-4 w-4 mr-2" />
                 Painel
@@ -418,24 +418,24 @@ export const SgsoDashboard: React.FC = () => {
             </TabsList>
 
             {/* Advanced SGSO Tabs */}
-            <TabsList className="grid grid-cols-3 lg:grid-cols-5 w-full h-auto gap-2 bg-gradient-to-r from-red-100 to-orange-100 dark:from-red-900/20 dark:to-orange-900/20 p-2 border border-red-200 dark:border-red-800">
+            <TabsList className="grid grid-cols-3 lg:grid-cols-5 w-full h-auto gap-2 bg-gradient-to-r from-destructive/10 to-warning/10 p-2 border border-destructive/20">
               <TabsTrigger 
                 value="audit-trail"
-                className="data-[state=active]:bg-background data-[state=active]:text-red-600 data-[state=active]:font-bold min-h-[44px]"
+                className="data-[state=active]:bg-background data-[state=active]:text-primary data-[state=active]:font-bold min-h-[44px]"
               >
                 <FileText className="h-4 w-4 mr-2" />
                 Trilha Auditoria
               </TabsTrigger>
               <TabsTrigger 
                 value="maturity"
-                className="data-[state=active]:bg-background data-[state=active]:text-green-600 data-[state=active]:font-bold min-h-[44px]"
+                className="data-[state=active]:bg-background data-[state=active]:text-success data-[state=active]:font-bold min-h-[44px]"
               >
                 <TrendingUp className="h-4 w-4 mr-2" />
                 Maturidade
               </TabsTrigger>
               <TabsTrigger 
                 value="knowledge"
-                className="data-[state=active]:bg-background data-[state=active]:text-blue-600 data-[state=active]:font-bold min-h-[44px]"
+                className="data-[state=active]:bg-background data-[state=active]:text-info data-[state=active]:font-bold min-h-[44px]"
               >
                 <BookOpen className="h-4 w-4 mr-2" />
                 Base Conhecimento

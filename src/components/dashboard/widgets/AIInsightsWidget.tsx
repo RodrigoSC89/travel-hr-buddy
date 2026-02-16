@@ -22,7 +22,7 @@ export default function AIInsightsWidget() {
     <div className="space-y-2">
       <div className="flex items-center gap-2">
         <div className="text-2xl font-bold text-foreground">{insights.length}</div>
-        <Lightbulb className="h-4 w-4 text-amber-400" />
+        <Lightbulb className="h-4 w-4 text-warning" />
       </div>
       <p className="text-xs text-muted-foreground">Insights ativos</p>
       <div className="space-y-1.5 mt-2">

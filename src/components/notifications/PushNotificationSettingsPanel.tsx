@@ -156,17 +156,17 @@ export function PushNotificationSettingsPanel() {
 
   const getSeverityColor = (severity: AlertType['severity']) => {
     switch (severity) {
-      case 'critical': return 'text-red-500';
-      case 'warning': return 'text-orange-500';
-      case 'info': return 'text-blue-500';
+      case 'critical': return 'text-destructive';
+      case 'warning': return 'text-warning';
+      case 'info': return 'text-info';
     }
   };
 
   const getSeverityBadge = (severity: AlertType['severity']) => {
     const variants: Record<string, string> = {
-      'critical': 'bg-red-500/10 text-red-500 border-red-500/20',
-      'warning': 'bg-orange-500/10 text-orange-500 border-orange-500/20',
-      'info': 'bg-blue-500/10 text-blue-500 border-blue-500/20'
+      'critical': 'bg-destructive/10 text-destructive border-destructive/20',
+      'warning': 'bg-warning/10 text-warning border-warning/20',
+      'info': 'bg-info/10 text-info border-info/20'
     };
     const labels = { 'critical': 'Crítico', 'warning': 'Alerta', 'info': 'Info' };
     return <Badge variant="outline" className={variants[severity]}>{labels[severity]}</Badge>;
@@ -197,13 +197,13 @@ export function PushNotificationSettingsPanel() {
                 </Badge>
               )}
               {isSupported && isSubscribed && (
-                <Badge variant="outline" className="text-green-500 border-green-500">
+                <Badge variant="outline" className="text-success border-success">
                   <CheckCircle className="h-3 w-3 mr-1" />
                   Push Ativo
                 </Badge>
               )}
               {isSupported && !isSubscribed && permission !== 'denied' && (
-                <Badge variant="outline" className="text-orange-500 border-orange-500">
+                <Badge variant="outline" className="text-warning border-warning">
                   <AlertTriangle className="h-3 w-3 mr-1" />
                   Push Inativo
                 </Badge>
