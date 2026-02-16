@@ -1,5 +1,6 @@
 import { useMemo } from "react";
 import { useLocation } from "react-router-dom";
+import { useTranslation } from "react-i18next";
 
 export interface BreadcrumbItem {
   label: string;
@@ -7,8 +8,28 @@ export interface BreadcrumbItem {
   current?: boolean;
 }
 
+const segmentKeyMap: Record<string, string> = {
+  travel: "travel",
+  maritime: "maritime",
+  hr: "hr",
+  "human-resources": "hr",
+  "price-alerts": "priceAlerts",
+  communication: "communication",
+  settings: "settings",
+  analytics: "analytics",
+  reports: "reports",
+  admin: "admin",
+  auth: "auth",
+  innovation: "innovation",
+  strategic: "strategic",
+  optimization: "optimization",
+  intelligence: "intelligence",
+  voice: "voice",
+};
+
 export const useBreadcrumbs = () => {
   const location = useLocation();
+  const { t } = useTranslation();
   
   const breadcrumbs = useMemo(() => {
     const path = location.pathname;
@@ -16,67 +37,16 @@ export const useBreadcrumbs = () => {
     
     const items: BreadcrumbItem[] = [];
     
-    // Always start with Dashboard
     if (path !== "/") {
-      items.push({ label: "Dashboard", href: "/" });
+      items.push({ label: t('breadcrumbs.dashboard'), href: "/" });
     }
     
-    // Map path segments to breadcrumb items
     segments.forEach((segment, index) => {
       const isLast = index === segments.length - 1;
       const href = "/" + segments.slice(0, index + 1).join("/");
       
-      let label = "";
-      switch (segment) {
-      case "travel":
-        label = "Viagens";
-        break;
-      case "maritime":
-        label = "Sistema Marítimo";
-        break;
-      case "hr":
-      case "human-resources":
-        label = "Recursos Humanos";
-        break;
-      case "price-alerts":
-        label = "Alertas de Preços";
-        break;
-      case "communication":
-        label = "Comunicação";
-        break;
-      case "settings":
-        label = "Configurações";
-        break;
-      case "analytics":
-        label = "Analytics";
-        break;
-      case "reports":
-        label = "Relatórios";
-        break;
-      case "admin":
-        label = "Administração";
-        break;
-      case "auth":
-        label = "Autenticação";
-        break;
-      case "innovation":
-        label = "Inovação";
-        break;
-      case "strategic":
-        label = "Estratégico";
-        break;
-      case "optimization":
-        label = "Otimização";
-        break;
-      case "intelligence":
-        label = "Inteligência";
-        break;
-      case "voice":
-        label = "Interface de Voz";
-        break;
-      default:
-        label = segment.charAt(0).toUpperCase() + segment.slice(1);
-      }
+      const key = segmentKeyMap[segment];
+      const label = key ? t(`breadcrumbs.${key}`) : segment.charAt(0).toUpperCase() + segment.slice(1);
       
       items.push({
         label,
@@ -86,7 +56,7 @@ export const useBreadcrumbs = () => {
     });
     
     return items;
-  }, [location.pathname]);
+  }, [location.pathname, t]);
   
   return breadcrumbs;
 };
