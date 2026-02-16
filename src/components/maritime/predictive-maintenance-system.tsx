@@ -125,7 +125,7 @@ export const PredictiveMaintenanceSystem = () => {
   const getPriorityColor = (priority: string) => {
     switch (priority) {
     case "critical": return "bg-destructive/10 text-destructive border-destructive/30";
-    case "high": return "bg-orange-500/10 text-orange-400 border-orange-500/30";
+    case "high": return "bg-warning/10 text-warning border-warning/30";
     case "medium": return "bg-warning/10 text-warning border-warning/30";
     case "low": return "bg-success/10 text-success border-success/30";
     default: return "bg-secondary text-secondary-foreground border-border";

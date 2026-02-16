@@ -119,9 +119,9 @@ const AnalyticsCore = () => {
   const getTrendIcon = (trend: string) => {
     switch (trend) {
     case "up":
-      return <TrendingUp className="h-4 w-4 text-green-500" />;
+      return <TrendingUp className="h-4 w-4 text-success" />;
     case "down":
-      return <TrendingDown className="h-4 w-4 text-red-500" />;
+      return <TrendingDown className="h-4 w-4 text-destructive" />;
     default:
       return <Activity className="h-4 w-4 text-muted-foreground" />;
     }
@@ -194,9 +194,9 @@ const AnalyticsCore = () => {
                 <CardDescription>Comparative analysis over time</CardDescription>
               </CardHeader>
               <CardContent>
-                <div className="h-[250px] flex items-center justify-center border rounded-lg bg-gradient-to-br from-blue-50 to-blue-100 dark:from-blue-950 dark:to-blue-900">
+                <div className="h-[250px] flex items-center justify-center border rounded-lg bg-gradient-to-br from-primary/5 to-primary/10">
                   <div className="text-center">
-                    <BarChart3 className="h-12 w-12 mx-auto mb-2 text-blue-600" />
+                    <BarChart3 className="h-12 w-12 mx-auto mb-2 text-primary" />
                     <p className="text-sm text-muted-foreground">
                       Consumption trending down (-5.2%)<br />
                       Performance improving (+3.1%)
@@ -213,9 +213,9 @@ const AnalyticsCore = () => {
                 <CardDescription>Weekly operational metrics</CardDescription>
               </CardHeader>
               <CardContent>
-                <div className="h-[250px] flex items-center justify-center border rounded-lg bg-gradient-to-br from-green-50 to-green-100 dark:from-green-950 dark:to-green-900">
+                <div className="h-[250px] flex items-center justify-center border rounded-lg bg-gradient-to-br from-success/5 to-success/10">
                   <div className="text-center">
-                    <Activity className="h-12 w-12 mx-auto mb-2 text-green-600" />
+                    <Activity className="h-12 w-12 mx-auto mb-2 text-success" />
                     <p className="text-sm text-muted-foreground">
                       Downtime reduced to 2.1h<br />
                       Efficiency at 92%

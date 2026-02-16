@@ -184,8 +184,8 @@ export default function PeopleAnalyticsPage() {
           onClick={() => navigate('/hr-chatbot')}
         >
           <CardContent className="p-4 flex items-center gap-4">
-            <div className="h-12 w-12 rounded-lg bg-blue-500/10 flex items-center justify-center">
-              <Bot className="h-6 w-6 text-blue-500" />
+            <div className="h-12 w-12 rounded-lg bg-primary/10 flex items-center justify-center">
+              <Bot className="h-6 w-6 text-primary" />
             </div>
             <div>
               <p className="font-medium">Assistente de RH 24/7</p>
@@ -198,8 +198,8 @@ export default function PeopleAnalyticsPage() {
           onClick={() => navigate('/hr-ocr')}
         >
           <CardContent className="p-4 flex items-center gap-4">
-            <div className="h-12 w-12 rounded-lg bg-purple-500/10 flex items-center justify-center">
-              <ScanLine className="h-6 w-6 text-purple-500" />
+            <div className="h-12 w-12 rounded-lg bg-accent/10 flex items-center justify-center">
+              <ScanLine className="h-6 w-6 text-accent" />
             </div>
             <div>
               <p className="font-medium">OCR de Documentos</p>
@@ -212,8 +212,8 @@ export default function PeopleAnalyticsPage() {
           onClick={() => navigate('/hr-turnover')}
         >
           <CardContent className="p-4 flex items-center gap-4">
-            <div className="h-12 w-12 rounded-lg bg-red-500/10 flex items-center justify-center">
-              <AlertTriangle className="h-6 w-6 text-red-500" />
+            <div className="h-12 w-12 rounded-lg bg-destructive/10 flex items-center justify-center">
+              <AlertTriangle className="h-6 w-6 text-destructive" />
             </div>
             <div>
               <p className="font-medium">Predição de Turnover</p>
@@ -319,9 +319,9 @@ export default function PeopleAnalyticsPage() {
 
           {/* Risk & Climate */}
           <div className="grid lg:grid-cols-2 gap-6">
-            <Card className="border-red-500/30">
+            <Card className="border-destructive/30">
               <CardHeader>
-                <CardTitle className="flex items-center gap-2 text-red-500">
+                <CardTitle className="flex items-center gap-2 text-destructive">
                   <AlertTriangle className="h-5 w-5" />
                   Risco de Turnover - IA
                 </CardTitle>
@@ -354,7 +354,7 @@ export default function PeopleAnalyticsPage() {
             <Card>
               <CardHeader>
                 <CardTitle className="flex items-center gap-2">
-                  <Smile className="h-5 w-5 text-green-500" />
+                  <Smile className="h-5 w-5 text-success" />
                   Clima Organizacional
                 </CardTitle>
               </CardHeader>
@@ -368,7 +368,7 @@ export default function PeopleAnalyticsPage() {
                       </div>
                       <Progress 
                         value={item.score} 
-                        className={`h-2 ${item.score >= item.benchmark ? '[&>div]:bg-green-500' : item.score >= item.benchmark - 10 ? '[&>div]:bg-amber-500' : '[&>div]:bg-red-500'}`}
+                        className={`h-2 ${item.score >= item.benchmark ? '[&>div]:bg-success' : item.score >= item.benchmark - 10 ? '[&>div]:bg-warning' : '[&>div]:bg-destructive'}`}
                       />
                     </div>
                   ))}
@@ -441,7 +441,7 @@ export default function PeopleAnalyticsPage() {
           <Card>
             <CardHeader>
               <CardTitle className="flex items-center gap-2">
-                <UserMinus className="h-5 w-5 text-red-500" />
+                <UserMinus className="h-5 w-5 text-destructive" />
                 Taxa de Turnover por Departamento
               </CardTitle>
             </CardHeader>
@@ -540,7 +540,7 @@ export default function PeopleAnalyticsPage() {
             <div className="space-y-2">
               <p className="text-sm text-muted-foreground">Headcount Projetado</p>
               <p className="text-3xl font-bold">362</p>
-              <p className="text-sm text-green-500 flex items-center gap-1">
+              <p className="text-sm text-success flex items-center gap-1">
                 <ArrowUpRight className="h-4 w-4" />+15 (net)
               </p>
             </div>
@@ -554,7 +554,7 @@ export default function PeopleAnalyticsPage() {
             <div className="space-y-2">
               <p className="text-sm text-muted-foreground">eNPS Projetado</p>
               <p className="text-3xl font-bold">75</p>
-              <p className="text-sm text-green-500 flex items-center gap-1">
+              <p className="text-sm text-success flex items-center gap-1">
                 <ArrowUpRight className="h-4 w-4" />+3 pontos
               </p>
             </div>

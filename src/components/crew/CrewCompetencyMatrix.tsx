@@ -234,7 +234,7 @@ export function CrewCompetencyMatrix() {
                           <td className="p-3 text-center">
                             <div className="flex items-center gap-2 justify-center">
                               <Progress value={coverage} className="w-16 h-2" />
-                              <span className={`text-xs font-medium ${coverage < 80 ? "text-destructive" : "text-green-400"}`}>{coverage}%</span>
+                              <span className={`text-xs font-medium ${coverage < 80 ? "text-destructive" : "text-success"}`}>{coverage}%</span>
                             </div>
                           </td>
                         </tr>

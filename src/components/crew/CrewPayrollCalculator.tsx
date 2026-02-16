@@ -42,9 +42,9 @@ const PAYROLL_DATA: PayrollEntry[] = [
 
 const statusColors: Record<string, string> = {
   draft: "bg-muted text-muted-foreground",
-  approved: "bg-blue-500/20 text-blue-400",
-  processed: "bg-yellow-500/20 text-yellow-400",
-  paid: "bg-green-500/20 text-green-400",
+  approved: "bg-info/20 text-info",
+  processed: "bg-warning/20 text-warning",
+  paid: "bg-success/20 text-success",
 };
 
 export function CrewPayrollCalculator() {
@@ -66,22 +66,22 @@ export function CrewPayrollCalculator() {
             <div className="text-2xl font-bold">{data.length}</div>
           </CardContent>
         </Card>
-        <Card className="border-green-500/30 bg-green-500/5">
+        <Card className="border-success/30 bg-success/5">
           <CardContent className="pt-4 pb-3">
             <div className="flex items-center gap-2 text-sm text-muted-foreground mb-1"><DollarSign className="h-4 w-4" /> Total Payroll</div>
-            <div className="text-2xl font-bold text-green-400">${(totalCost / 1000).toFixed(1)}k</div>
+            <div className="text-2xl font-bold text-success">${(totalCost / 1000).toFixed(1)}k</div>
           </CardContent>
         </Card>
-        <Card className="border-yellow-500/30 bg-yellow-500/5">
+        <Card className="border-warning/30 bg-warning/5">
           <CardContent className="pt-4 pb-3">
             <div className="flex items-center gap-2 text-sm text-muted-foreground mb-1"><Clock className="h-4 w-4" /> Overtime Cost</div>
-            <div className="text-2xl font-bold text-yellow-400">${(totalOT / 1000).toFixed(1)}k</div>
+            <div className="text-2xl font-bold text-warning">${(totalOT / 1000).toFixed(1)}k</div>
           </CardContent>
         </Card>
-        <Card className="border-blue-500/30 bg-blue-500/5">
+        <Card className="border-info/30 bg-info/5">
           <CardContent className="pt-4 pb-3">
             <div className="flex items-center gap-2 text-sm text-muted-foreground mb-1"><TrendingUp className="h-4 w-4" /> Avg Base Salary</div>
-            <div className="text-2xl font-bold text-blue-400">${avgSalary.toLocaleString(undefined, { maximumFractionDigits: 0 })}</div>
+            <div className="text-2xl font-bold text-info">${avgSalary.toLocaleString(undefined, { maximumFractionDigits: 0 })}</div>
           </CardContent>
         </Card>
       </div>
