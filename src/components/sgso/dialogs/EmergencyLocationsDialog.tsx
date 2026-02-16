@@ -148,7 +148,7 @@ export const EmergencyLocationsDialog: React.FC<EmergencyLocationsDialogProps> =
       <DialogContent className="max-w-4xl max-h-[90vh] overflow-hidden flex flex-col">
         <DialogHeader>
           <DialogTitle className="flex items-center gap-2">
-            <MapPin className="h-5 w-5 text-orange-500" />
+            <MapPin className="h-5 w-5 text-warning" />
             Mapa de Localizações de Emergência
           </DialogTitle>
           <DialogDescription>
@@ -172,13 +172,13 @@ export const EmergencyLocationsDialog: React.FC<EmergencyLocationsDialogProps> =
             <ScrollArea className="h-[400px] pr-4">
               <div className="space-y-4">
                 {/* Visual Ship Diagram Placeholder */}
-                <Card className="bg-gradient-to-r from-blue-50 to-cyan-50">
+                <Card className="bg-gradient-to-r from-primary/5 to-info/5">
                   <CardContent className="p-6">
                     <div className="text-center mb-4">
                       <h4 className="font-semibold text-lg">Diagrama da Embarcação</h4>
                       <p className="text-sm text-muted-foreground">Vista superior com pontos de encontro</p>
                     </div>
-                    <div className="relative bg-blue-100 rounded-lg p-8 min-h-[150px]">
+                    <div className="relative bg-muted/50 rounded-lg p-8 min-h-[150px]">
                       {/* Simplified ship shape */}
                       <div className="absolute inset-x-8 inset-y-4 bg-muted rounded-t-[50%] rounded-b-lg border-2 border-border">
                         {/* Meeting points markers */}
@@ -259,7 +259,7 @@ export const EmergencyLocationsDialog: React.FC<EmergencyLocationsDialogProps> =
                   const colorClass = getTypeColor(eq.type);
                   
                   return (
-                    <Card key={eq.id} className={eq.status === "warning" ? "border-yellow-400" : ""}>
+                    <Card key={eq.id} className={eq.status === "warning" ? "border-warning" : ""}>
                       <CardContent className="p-4">
                         <div className="flex items-start gap-4">
                           <div className={`p-3 rounded-lg ${colorClass}`}>
@@ -270,9 +270,9 @@ export const EmergencyLocationsDialog: React.FC<EmergencyLocationsDialogProps> =
                               <div className="flex items-center gap-2">
                                 <h4 className="font-semibold">{eq.name}</h4>
                                 {eq.status === "ok" ? (
-                                  <CheckCircle className="h-4 w-4 text-green-500" />
+                                  <CheckCircle className="h-4 w-4 text-success" />
                                 ) : (
-                                  <AlertTriangle className="h-4 w-4 text-yellow-500" />
+                                  <AlertTriangle className="h-4 w-4 text-warning" />
                                 )}
                               </div>
                               <span className="text-xs text-muted-foreground">

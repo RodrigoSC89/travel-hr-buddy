@@ -119,7 +119,7 @@ export function NotificationSettings() {
               </div>
 
               <div className="flex items-center justify-between">
-                <Label htmlFor="warning" className="flex items-center gap-2 text-yellow-600">
+                <Label htmlFor="warning" className="flex items-center gap-2 text-warning">
                   <AlertCircle className="h-4 w-4" />
                   Avisos
                 </Label>
