@@ -36,14 +36,14 @@ export const Loading: React.FC<LoadingProps> = ({
   const renderIcon = () => {
     switch (variant) {
     case "maritime":
-      return <Anchor className="animate-pulse text-blue-600" size={iconSizes[size]} />;
+      return <Anchor className="animate-pulse text-primary" size={iconSizes[size]} />;
     case "offshore":
       return (
         <div className="relative">
-          <Ship className="animate-bounce text-blue-700" size={iconSizes[size]} />
+          <Ship className="animate-bounce text-primary" size={iconSizes[size]} />
           <Waves 
-            className="absolute -bottom-2 left-1/2 transform -translate-x-1/2 text-blue-400 animate-pulse" 
-            size={iconSizes[size] / 2} 
+            className="absolute -bottom-2 left-1/2 transform -translate-x-1/2 text-info animate-pulse" 
+            size={iconSizes[size] / 2}
           />
         </div>
       );
@@ -76,8 +76,8 @@ export const Loading: React.FC<LoadingProps> = ({
           <p className="text-xs text-muted-foreground mt-1">
             Otimizado para uso offshore
           </p>
-          <div className="w-48 h-2 bg-gray-200 rounded-full overflow-hidden">
-            <div className="h-full bg-blue-600 rounded-full animate-pulse" style={{ width: "100%" }} />
+          <div className="w-48 h-2 bg-muted rounded-full overflow-hidden">
+            <div className="h-full bg-primary rounded-full animate-pulse" style={{ width: "100%" }} />
           </div>
         </>
       )}
@@ -161,19 +161,19 @@ export const LoadingCard: React.FC<LoadingCardProps> = ({ variant = "default" })
     return (
       <div className="card-maritime p-6 space-y-4 animate-pulse">
         <div className="flex items-center gap-4">
-          <div className="w-12 h-12 bg-gray-300 rounded-lg" />
+          <div className="w-12 h-12 bg-muted rounded-lg" />
           <div className="flex-1 space-y-2">
-            <div className="h-4 bg-gray-300 rounded w-3/4" />
-            <div className="h-3 bg-gray-200 rounded w-1/2" />
+            <div className="h-4 bg-muted rounded w-3/4" />
+            <div className="h-3 bg-muted/70 rounded w-1/2" />
           </div>
         </div>
         <div className="space-y-2">
-          <div className="h-3 bg-gray-200 rounded" />
-          <div className="h-3 bg-gray-200 rounded w-5/6" />
+          <div className="h-3 bg-muted/70 rounded" />
+          <div className="h-3 bg-muted/70 rounded w-5/6" />
         </div>
         <div className="flex gap-2">
-          <div className="h-10 bg-gray-300 rounded w-24" />
-          <div className="h-10 bg-gray-300 rounded w-24" />
+          <div className="h-10 bg-muted rounded w-24" />
+          <div className="h-10 bg-muted rounded w-24" />
         </div>
       </div>
     );

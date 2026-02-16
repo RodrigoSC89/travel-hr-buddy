@@ -134,7 +134,7 @@ export const PreOVIDCompleteChecklist: React.FC<PreOVIDCompleteChecklistProps> =
   const getPriorityBadge = (priority: string) => {
     switch (priority) {
       case 'critical': return <Badge variant="destructive" className="text-xs">Crítico</Badge>;
-      case 'high': return <Badge className="bg-orange-500 text-xs">Alto</Badge>;
+      case 'high': return <Badge className="bg-warning text-xs">Alto</Badge>;
       case 'medium': return <Badge variant="secondary" className="text-xs">Médio</Badge>;
       default: return <Badge variant="outline" className="text-xs">Baixo</Badge>;
     }
@@ -221,9 +221,9 @@ export const PreOVIDCompleteChecklist: React.FC<PreOVIDCompleteChecklistProps> =
                     key={question.id} 
                     value={question.id}
                     className={`border rounded-lg ${
-                      answer?.answer === 'no' ? 'border-red-300 bg-red-50/50 dark:bg-red-950/20' :
-                      answer?.answer === 'yes' ? 'border-green-300 bg-green-50/50 dark:bg-green-950/20' :
-                      answer?.answer === 'na' ? 'border-gray-300 bg-gray-50/50 dark:bg-gray-950/20' :
+                      answer?.answer === 'no' ? 'border-destructive/30 bg-destructive/5' :
+                      answer?.answer === 'yes' ? 'border-success/30 bg-success/5' :
+                      answer?.answer === 'na' ? 'border-muted bg-muted/50' :
                       'border-border'
                     }`}
                   >

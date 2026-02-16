@@ -31,11 +31,11 @@ interface Milestone {
 }
 
 const categoryConfig: Record<string, { label: string; color: string; icon: React.ElementType }> = {
-  documentation: { label: "Documentação", color: "bg-blue-500", icon: Target },
-  inspection: { label: "Inspeção", color: "bg-amber-500", icon: Flag },
-  training: { label: "Treinamento", color: "bg-green-500", icon: Zap },
-  corrective_action: { label: "Ação Corretiva", color: "bg-red-500", icon: AlertTriangle },
-  review: { label: "Revisão", color: "bg-purple-500", icon: CheckCircle },
+  documentation: { label: "Documentação", color: "bg-info", icon: Target },
+  inspection: { label: "Inspeção", color: "bg-warning", icon: Flag },
+  training: { label: "Treinamento", color: "bg-success", icon: Zap },
+  corrective_action: { label: "Ação Corretiva", color: "bg-destructive", icon: AlertTriangle },
+  review: { label: "Revisão", color: "bg-accent", icon: CheckCircle },
 };
 
 const priorityConfig: Record<string, { label: string; variant: "destructive" | "default" | "secondary" | "outline" }> = {

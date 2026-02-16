@@ -23,9 +23,9 @@ interface Diver {
 }
 
 const STATUS_COLOR = {
-  valid: "border-green-500 text-green-600 bg-green-500/10",
-  expiring: "border-amber-500 text-amber-600 bg-amber-500/10",
-  expired: "border-red-500 text-red-600 bg-red-500/10",
+  valid: "border-success text-success bg-success/10",
+  expiring: "border-warning text-warning bg-warning/10",
+  expired: "border-destructive text-destructive bg-destructive/10",
 };
 
 export function PeotramDiverCertManager() {
