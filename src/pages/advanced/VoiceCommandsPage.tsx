@@ -116,7 +116,7 @@ const VoiceCommandsPage = () => {
         </div>
         <div className="flex items-center gap-3">
           <Badge variant="outline" className="gap-2 py-1.5">
-            <Brain className="h-4 w-4 text-green-500" />
+            <Brain className="h-4 w-4 text-success" />
             NLU Ativo
           </Badge>
           <Button variant="outline">
@@ -199,7 +199,7 @@ const VoiceCommandsPage = () => {
         <Card>
           <CardContent className="p-4">
             <div className="flex items-center gap-3">
-              <CheckCircle className="h-8 w-8 text-green-500" />
+              <CheckCircle className="h-8 w-8 text-success" />
               <div>
                 <p className="text-sm text-muted-foreground">Taxa de Sucesso</p>
                 <p className="text-2xl font-bold">{stats.successRate}%</p>
@@ -210,7 +210,7 @@ const VoiceCommandsPage = () => {
         <Card>
           <CardContent className="p-4">
             <div className="flex items-center gap-3">
-              <Zap className="h-8 w-8 text-yellow-500" />
+              <Zap className="h-8 w-8 text-warning" />
               <div>
                 <p className="text-sm text-muted-foreground">Tempo Resposta</p>
                 <p className="text-2xl font-bold">{stats.avgResponseTime}</p>
@@ -221,7 +221,7 @@ const VoiceCommandsPage = () => {
         <Card>
           <CardContent className="p-4">
             <div className="flex items-center gap-3">
-              <Activity className="h-8 w-8 text-blue-500" />
+              <Activity className="h-8 w-8 text-info" />
               <div>
                 <p className="text-sm text-muted-foreground">Mais Usado</p>
                 <p className="text-sm font-bold truncate">{stats.favoriteCommand}</p>
@@ -283,7 +283,7 @@ const VoiceCommandsPage = () => {
                       <p className="text-sm text-muted-foreground pl-6">{cmd.response}</p>
                     </div>
                     <div className="flex items-center gap-2">
-                      {cmd.success && <CheckCircle className="h-4 w-4 text-green-500" />}
+                      {cmd.success && <CheckCircle className="h-4 w-4 text-success" />}
                       <span className="text-xs text-muted-foreground">{cmd.time}</span>
                     </div>
                   </div>

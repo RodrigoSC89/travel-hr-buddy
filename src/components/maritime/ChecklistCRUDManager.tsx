@@ -465,7 +465,7 @@ export function ChecklistCRUDManager() {
   const getStatusBadge = (status: string) => {
     switch (status) {
       case 'published':
-        return <Badge className="bg-green-500">Publicado</Badge>;
+        return <Badge className="bg-success text-success-foreground">Publicado</Badge>;
       case 'draft':
         return <Badge variant="secondary">Rascunho</Badge>;
       case 'archived':
@@ -671,7 +671,7 @@ export function ChecklistCRUDManager() {
                           <>
                             <Button 
                               size="sm" 
-                              className="bg-green-600 hover:bg-green-700"
+                              className="bg-success text-success-foreground hover:bg-success/90"
                               onClick={() => handleStartExecution(checklist)}
                             >
                               <Play className="h-4 w-4 mr-1" />
@@ -736,7 +736,7 @@ export function ChecklistCRUDManager() {
                           </div>
                           <Progress value={run.progress} className="w-24 h-2 mt-1" />
                         </div>
-                        <Badge className={run.status === 'completed' ? 'bg-green-500' : 'bg-yellow-500'}>
+                        <Badge className={run.status === 'completed' ? 'bg-success text-success-foreground' : 'bg-warning text-warning-foreground'}>
                           {run.status === 'completed' ? 'Concluído' : 'Em Andamento'}
                         </Badge>
                         {run.signature && (
@@ -900,7 +900,7 @@ export function ChecklistCRUDManager() {
                 <div 
                   key={item.id} 
                   className={`flex items-start gap-3 p-3 border rounded transition-colors ${
-                    item.checked ? 'bg-green-50 border-green-200 dark:bg-green-900/20' : ''
+                    item.checked ? 'bg-success/5 border-success/20' : ''
                   }`}
                 >
                   <Checkbox
@@ -916,7 +916,7 @@ export function ChecklistCRUDManager() {
                     )}
                   </div>
                   {item.checked && (
-                    <CheckCircle className="h-5 w-5 text-green-600" />
+                    <CheckCircle className="h-5 w-5 text-success" />
                   )}
                 </div>
               ))}
@@ -930,7 +930,7 @@ export function ChecklistCRUDManager() {
             <Button 
               onClick={handleCompleteExecution} 
               disabled={actionLoading === 'complete'}
-              className="bg-green-600 hover:bg-green-700"
+              className="bg-success text-success-foreground hover:bg-success/90"
             >
               {actionLoading === 'complete' && <Loader2 className="h-4 w-4 mr-2 animate-spin" />}
               Finalizar e Assinar

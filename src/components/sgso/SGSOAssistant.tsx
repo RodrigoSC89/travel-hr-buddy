@@ -309,11 +309,11 @@ Por favor, reformule sua pergunta ou selecione um dos temas acima para que eu po
               </p>
             </div>
             <div className="ml-auto flex gap-2">
-              <Badge className="bg-green-600 text-white">
+              <Badge className="bg-success text-success-foreground">
                 <CheckCircle className="h-3 w-3 mr-1" />
                 Citação de Normas
               </Badge>
-              <Badge className="bg-blue-600 text-white">
+              <Badge className="bg-info text-info-foreground">
                 <Shield className="h-3 w-3 mr-1" />
                 RAG Ativo
               </Badge>
@@ -327,7 +327,7 @@ Por favor, reformule sua pergunta ou selecione um dos temas acima para que eu po
         <Card className="lg:col-span-3">
           <CardHeader>
             <CardTitle className="flex items-center gap-2">
-              <Sparkles className="h-5 w-5 text-yellow-500" />
+              <Sparkles className="h-5 w-5 text-warning" />
               Consulta SGSO com IA
             </CardTitle>
             <CardDescription>

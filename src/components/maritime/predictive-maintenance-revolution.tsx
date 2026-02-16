@@ -136,7 +136,7 @@ export const PredictiveMaintenanceRevolution: React.FC = () => {
   return (
     <div className="space-y-6">
       {/* Header */}
-      <Card className="bg-gradient-to-r from-purple-600 to-pink-600 text-white">
+      <Card className="bg-gradient-to-r from-accent to-accent/80 text-accent-foreground">
         <CardHeader>
           <div className="flex items-center justify-between">
             <div className="flex items-center gap-3">
@@ -160,7 +160,7 @@ export const PredictiveMaintenanceRevolution: React.FC = () => {
               onClick={runAIAnalysis}
               disabled={isAnalyzing}
               size="lg"
-              className="bg-white text-purple-600 hover:bg-white/90"
+              className="bg-background text-accent-foreground hover:bg-background/90"
             >
               <Brain className="h-5 w-5 mr-2" />
               {isAnalyzing ? "Analisando..." : "Executar Análise IA"}
@@ -171,13 +171,13 @@ export const PredictiveMaintenanceRevolution: React.FC = () => {
 
       {/* Key Metrics */}
       <div className="grid grid-cols-1 md:grid-cols-4 gap-4">
-        <Card className="bg-gradient-to-br from-green-50 to-green-100 dark:from-green-900/20 dark:to-green-800/20">
+        <Card className="bg-gradient-to-br from-success/10 to-success/5">
           <CardContent className="p-6">
             <div className="flex items-center justify-between mb-2">
               <Target className="h-8 w-8 text-success" />
               <TrendingUp className="h-5 w-5 text-success" />
             </div>
-            <div className="text-3xl font-bold text-success dark:text-success">{systemAccuracy.toFixed(1)}%</div>
+            <div className="text-3xl font-bold text-success">{systemAccuracy.toFixed(1)}%</div>
             <div className="text-sm text-muted-foreground">Precisão do Sistema</div>
             <div className="text-xs text-success mt-1">Meta: 95%+ ✅</div>
           </CardContent>
@@ -195,27 +195,27 @@ export const PredictiveMaintenanceRevolution: React.FC = () => {
           </CardContent>
         </Card>
 
-        <Card className="bg-gradient-to-br from-orange-50 to-orange-100 dark:from-orange-900/20 dark:to-orange-800/20">
+        <Card className="bg-gradient-to-br from-warning/10 to-warning/5">
           <CardContent className="p-6">
             <div className="flex items-center justify-between mb-2">
-              <DollarSign className="h-8 w-8 text-orange-600" />
-              <TrendingDown className="h-5 w-5 text-orange-600" />
+              <DollarSign className="h-8 w-8 text-warning" />
+              <TrendingDown className="h-5 w-5 text-warning" />
             </div>
-            <div className="text-3xl font-bold text-orange-700 dark:text-orange-400">40%</div>
+            <div className="text-3xl font-bold text-warning">40%</div>
             <div className="text-sm text-muted-foreground">Economia em Custos</div>
-            <div className="text-xs text-orange-600 mt-1">${(totalSavings/1000).toFixed(0)}k economizados</div>
+            <div className="text-xs text-warning mt-1">${(totalSavings/1000).toFixed(0)}k economizados</div>
           </CardContent>
         </Card>
 
-        <Card className="bg-gradient-to-br from-purple-50 to-purple-100 dark:from-purple-900/20 dark:to-purple-800/20">
+        <Card className="bg-gradient-to-br from-accent/10 to-accent/5">
           <CardContent className="p-6">
             <div className="flex items-center justify-between mb-2">
-              <Zap className="h-8 w-8 text-purple-600" />
-              <CheckCircle className="h-5 w-5 text-purple-600" />
+              <Zap className="h-8 w-8 text-accent-foreground" />
+              <CheckCircle className="h-5 w-5 text-accent-foreground" />
             </div>
-            <div className="text-3xl font-bold text-purple-700 dark:text-purple-400">100%</div>
+            <div className="text-3xl font-bold text-accent-foreground">100%</div>
             <div className="text-sm text-muted-foreground">Zero Downtime</div>
-            <div className="text-xs text-purple-600 mt-1">Não planejado eliminado</div>
+            <div className="text-xs text-accent-foreground mt-1">Não planejado eliminado</div>
           </CardContent>
         </Card>
       </div>
@@ -256,21 +256,21 @@ export const PredictiveMaintenanceRevolution: React.FC = () => {
                     {/* AI Analysis */}
                     <div className="grid grid-cols-2 md:grid-cols-4 gap-3 mb-3">
                       <div className="flex items-center gap-2">
-                        <Brain className="h-4 w-4 text-purple-600" />
+                        <Brain className="h-4 w-4 text-accent-foreground" />
                         <div>
                           <div className="text-xs text-muted-foreground">IA Confiança</div>
                           <div className="font-semibold">{prediction.aiConfidence}%</div>
                         </div>
                       </div>
                       <div className="flex items-center gap-2">
-                        <Target className="h-4 w-4 text-blue-600" />
+                        <Target className="h-4 w-4 text-info" />
                         <div>
                           <div className="text-xs text-muted-foreground">Probabilidade</div>
                           <div className="font-semibold">{prediction.probability}%</div>
                         </div>
                       </div>
                       <div className="flex items-center gap-2">
-                        <Clock className="h-4 w-4 text-orange-600" />
+                        <Clock className="h-4 w-4 text-warning" />
                         <div>
                           <div className="text-xs text-muted-foreground">Prazo</div>
                           <div className="font-semibold">{prediction.timeframe}</div>
@@ -315,7 +315,7 @@ export const PredictiveMaintenanceRevolution: React.FC = () => {
                       </div>
                       <div className="space-y-1">
                         {prediction.spareParts.map((part) => (
-                          <div key={part.id} className="flex items-center justify-between text-sm p-2 bg-gray-50 dark:bg-gray-800 rounded">
+                          <div key={part.id} className="flex items-center justify-between text-sm p-2 bg-muted rounded">
                             <div className="flex items-center gap-2">
                               <Package className="h-3 w-3" />
                               <span>{part.name}</span>

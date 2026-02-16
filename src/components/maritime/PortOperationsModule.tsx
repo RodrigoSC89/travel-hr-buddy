@@ -169,7 +169,7 @@ export function PortOperationsModule() {
                 <p className="text-sm text-muted-foreground">Eficiência Média</p>
                 <p className="text-2xl font-bold">{stats.avgEfficiency}%</p>
               </div>
-              <TrendingUp className="h-8 w-8 text-blue-400" />
+              <TrendingUp className="h-8 w-8 text-info" />
             </div>
           </CardContent>
         </Card>
@@ -277,7 +277,7 @@ export function PortOperationsModule() {
                       <span>{new Date(operation.eta).toLocaleString('pt-BR', { dateStyle: 'short', timeStyle: 'short' })}</span>
                     </div>
                     <div className="flex items-center gap-2">
-                      <Truck className="h-4 w-4 text-blue-400" />
+                      <Truck className="h-4 w-4 text-info" />
                       <span className="text-muted-foreground">ETD:</span>
                       <span>{new Date(operation.etd).toLocaleString('pt-BR', { dateStyle: 'short', timeStyle: 'short' })}</span>
                     </div>
@@ -329,7 +329,7 @@ export function PortOperationsModule() {
             </div>
             <div className="p-4 bg-background/50 rounded-lg border border-border/50">
               <h4 className="font-medium mb-2 flex items-center gap-2">
-                <Clock className="h-4 w-4 text-blue-400" />
+                <Clock className="h-4 w-4 text-info" />
                 Previsão Meteorológica
               </h4>
               <p className="text-sm text-muted-foreground">
