@@ -4,6 +4,7 @@
  * AI-powered recommendations for closing gaps fastest
  */
 import React, { useState, useMemo } from "react";
+import { quickExport } from "@/lib/export-utils";
 import { Card, CardContent, CardHeader, CardTitle } from "@/components/ui/card";
 import { Badge } from "@/components/ui/badge";
 import { Button } from "@/components/ui/button";
@@ -154,7 +155,7 @@ export function PeoDPSmartGapCloser() {
             Resolução priorizada de gaps com recomendações IA • {stats.total} gaps identificados
           </p>
         </div>
-        <Button size="sm" variant="outline" className="gap-1" onClick={() => toast.success("Gap report exportado")}>
+        <Button size="sm" variant="outline" className="gap-1" onClick={() => quickExport(GAPS, "PEO-DP Smart Gap Report")}>
           <Download className="h-3 w-3" /> Exportar
         </Button>
       </div>

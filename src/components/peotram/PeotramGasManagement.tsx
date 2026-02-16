@@ -130,7 +130,7 @@ export function PeotramGasManagement() {
                   <div className="flex items-center gap-2 p-2 bg-destructive/20 rounded text-xs text-destructive">
                     <AlertTriangle className="h-4 w-4 shrink-0" />
                     <span className="font-medium">NÍVEL CRÍTICO — Solicitar reabastecimento!</span>
-                    <Button size="sm" variant="destructive" className="ml-auto text-xs h-6" onClick={() => toast.success("Solicitação de reabastecimento enviada!")}>Solicitar</Button>
+                    <Button size="sm" variant="destructive" className="ml-auto text-xs h-6" onClick={() => { toast.success("Solicitação de reabastecimento registrada para " + GAS_LABELS[gas.gas_type]); }}>Solicitar</Button>
                   </div>
                 )}
               </CardContent>

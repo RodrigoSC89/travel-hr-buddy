@@ -4,6 +4,7 @@
  * Evaluation grades: A (omitted/errors), B (incomplete), C (satisfactory), D (N/A)
  */
 import React, { useState, useMemo } from "react";
+import { quickExport } from "@/lib/export-utils";
 import { Card, CardContent, CardHeader, CardTitle } from "@/components/ui/card";
 import { Badge } from "@/components/ui/badge";
 import { Button } from "@/components/ui/button";
@@ -197,7 +198,7 @@ export function PeoDPManualGapAnalysis() {
             {items.length} itens • TECHOP O-01 Rev.1 • IMCA M 103/M 109
           </p>
         </div>
-        <Button size="sm" variant="outline" className="gap-1 h-9" onClick={() => toast.success("GAP Analysis K-1 exportado")}>
+        <Button size="sm" variant="outline" className="gap-1 h-9" onClick={() => quickExport(items, "GAP Analysis K-1")}>
           <Download className="h-3 w-3" /> Exportar
         </Button>
       </div>

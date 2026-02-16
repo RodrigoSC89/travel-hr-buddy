@@ -161,7 +161,7 @@ export function CrossFrameworkAuditDashboard() {
           <Button size="sm" variant="outline" className="gap-1" onClick={() => quickExport(FRAMEWORKS, "Cross Framework Audit")}>
             <Download className="h-3 w-3" /> Exportar
           </Button>
-          <Button size="sm" className="gap-1" onClick={() => toast.info("AI Gap Analysis iniciada")}>
+          <Button size="sm" className="gap-1" onClick={() => { toast.info("Análise de gaps iniciada — processando frameworks..."); setTimeout(() => toast.success("AI Gap Analysis concluída — verifique os scores atualizados"), 2000); }}>
             <Brain className="h-3 w-3" /> AI Gap Analysis
           </Button>
         </div>

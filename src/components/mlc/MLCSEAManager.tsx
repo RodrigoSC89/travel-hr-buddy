@@ -139,7 +139,7 @@ export function MLCSEAManager() {
           <Button size="sm" variant="outline" className="gap-1 h-9" onClick={() => quickExport(contracts, "MLC SEA Contracts")}>
             <Download className="h-3 w-3" /> Exportar
           </Button>
-          <Button size="sm" className="gap-1 h-9" onClick={() => toast.info("Novo contrato SEA")}>
+          <Button size="sm" className="gap-1 h-9" onClick={() => toast.info("Funcionalidade de criação de contrato SEA será integrada com o módulo de contratos")}>
             <Plus className="h-3 w-3" /> Novo SEA
           </Button>
         </div>

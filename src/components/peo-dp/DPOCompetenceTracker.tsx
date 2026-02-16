@@ -3,6 +3,7 @@
  * Connected to crew_members + crew_certifications tables
  */
 import React, { useState, useMemo } from "react";
+import { quickExport } from "@/lib/export-utils";
 import { Card, CardContent } from "@/components/ui/card";
 import { Badge } from "@/components/ui/badge";
 import { Button } from "@/components/ui/button";
@@ -142,7 +143,7 @@ export function DPOCompetenceTracker() {
             IMCA M 117 Scheme • {stats.total} DPOs • {stats.totalHours.toLocaleString()}h DP acumuladas
           </p>
         </div>
-        <Button size="sm" variant="outline" className="gap-1" onClick={() => toast.success("DPO report exportado")}>
+        <Button size="sm" variant="outline" className="gap-1" onClick={() => quickExport(operators, "DPO Competence Report")}>
           <Download className="h-3 w-3" /> Exportar
         </Button>
       </div>
