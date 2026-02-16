@@ -207,9 +207,9 @@ export const ObservabilityTabs: React.FC<ObservabilityTabsProps> = ({
               <div className="flex items-center justify-between mb-2">
                 <span className="text-sm text-muted-foreground">{metric.name}</span>
                 {metric.trend === "up" ? (
-                  <TrendingUp className={`h-4 w-4 ${metric.status === "good" ? "text-green-500" : "text-red-500"}`} />
+                  <TrendingUp className={`h-4 w-4 ${metric.status === "good" ? "text-success" : "text-destructive"}`} />
                 ) : metric.trend === "down" ? (
-                  <TrendingDown className={`h-4 w-4 ${metric.status === "good" ? "text-green-500" : "text-red-500"}`} />
+                  <TrendingDown className={`h-4 w-4 ${metric.status === "good" ? "text-success" : "text-destructive"}`} />
                 ) : (
                   <Activity className="h-4 w-4 text-muted-foreground" />
                 )}

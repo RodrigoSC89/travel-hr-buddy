@@ -90,12 +90,12 @@ export const WellbeingAI: React.FC<{ vesselId?: string }> = ({ vesselId }) => {
   };
 
   return (
-    <Card className="border-pink-500/20">
+    <Card className="border-accent/20">
       <CardHeader>
         <CardTitle className="flex items-center gap-2">
-          <Heart className="h-5 w-5 text-pink-500" />
+          <Heart className="h-5 w-5 text-accent" />
           Wellbeing Score IA
-          <Badge className="ml-auto bg-pink-500/10 text-pink-500">Wellness Engine</Badge>
+          <Badge className="ml-auto bg-accent/10 text-accent">Wellness Engine</Badge>
         </CardTitle>
       </CardHeader>
       <CardContent className="space-y-4">
@@ -141,12 +141,12 @@ export const CrewMatchingAI: React.FC = () => {
   };
 
   return (
-    <Card className="border-emerald-500/20">
+    <Card className="border-success/20">
       <CardHeader>
         <CardTitle className="flex items-center gap-2">
-          <UserCheck className="h-5 w-5 text-emerald-500" />
+          <UserCheck className="h-5 w-5 text-success" />
           Crew Matching IA
-          <Badge className="ml-auto bg-emerald-500/10 text-emerald-500">Smart Match</Badge>
+          <Badge className="ml-auto bg-success/10 text-success">Smart Match</Badge>
         </CardTitle>
       </CardHeader>
       <CardContent className="space-y-4">

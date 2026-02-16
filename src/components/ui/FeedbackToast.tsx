@@ -22,7 +22,7 @@ export function successToast(message: string, options?: ToastOptions) {
   toast.success(message, {
     duration: options?.duration || 4000,
     description: options?.description,
-    icon: <CheckCircle className="h-5 w-5 text-green-500" />,
+    icon: <CheckCircle className="h-5 w-5 text-success" />,
     action: options?.action
       ? {
           label: options.action.label,
@@ -39,7 +39,7 @@ export function errorToast(message: string, options?: ToastOptions) {
   toast.error(message, {
     duration: options?.duration || 6000,
     description: options?.description,
-    icon: <XCircle className="h-5 w-5 text-red-500" />,
+    icon: <XCircle className="h-5 w-5 text-destructive" />,
     action: options?.action
       ? {
           label: options.action.label,
@@ -56,7 +56,7 @@ export function warningToast(message: string, options?: ToastOptions) {
   toast.warning(message, {
     duration: options?.duration || 5000,
     description: options?.description,
-    icon: <AlertTriangle className="h-5 w-5 text-yellow-500" />,
+    icon: <AlertTriangle className="h-5 w-5 text-warning" />,
     action: options?.action
       ? {
           label: options.action.label,
@@ -73,7 +73,7 @@ export function infoToast(message: string, options?: ToastOptions) {
   toast.info(message, {
     duration: options?.duration || 4000,
     description: options?.description,
-    icon: <Info className="h-5 w-5 text-blue-500" />,
+    icon: <Info className="h-5 w-5 text-info" />,
     action: options?.action
       ? {
           label: options.action.label,

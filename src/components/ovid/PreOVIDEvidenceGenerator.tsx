@@ -152,7 +152,7 @@ Notas Adicionais: ${generatedEvidence.additionalNotes}
       case 'high':
         return <Badge variant="destructive">Alto Risco</Badge>;
       case 'medium':
-        return <Badge variant="default" className="bg-yellow-500">Médio Risco</Badge>;
+        return <Badge variant="default" className="bg-warning text-warning-foreground">Médio Risco</Badge>;
       case 'low':
         return <Badge variant="secondary">Baixo Risco</Badge>;
       default:

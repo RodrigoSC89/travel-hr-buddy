@@ -60,9 +60,9 @@ export const SecurityAccessTab: React.FC<SecurityAccessTabProps> = ({
     if (passwordRules.requireSymbols) score++;
     if (passwordRules.requireUppercase) score++;
     
-    if (score <= 2) return { level: "Baixa", color: "text-red-600", bg: "bg-red-100" };
-    if (score <= 3) return { level: "Média", color: "text-yellow-600", bg: "bg-yellow-100" };
-    return { level: "Alta", color: "text-green-600", bg: "bg-green-100" };
+    if (score <= 2) return { level: "Baixa", color: "text-destructive", bg: "bg-destructive/10" };
+    if (score <= 3) return { level: "Média", color: "text-warning", bg: "bg-warning/10" };
+    return { level: "Alta", color: "text-success", bg: "bg-success/10" };
   };
 
   const strength = getPasswordStrength();
@@ -240,12 +240,12 @@ export const SecurityAccessTab: React.FC<SecurityAccessTabProps> = ({
           </div>
 
           {settings.twoFactorRequired && (
-            <div className="p-4 bg-blue-50 border border-blue-200 rounded-lg">
+            <div className="p-4 bg-info/10 border border-info/20 rounded-lg">
               <div className="flex items-center gap-2 mb-2">
-                <CheckCircle className="w-4 h-4 text-blue-600" />
-                <span className="font-medium text-blue-800">2FA Obrigatório Ativo</span>
+                <CheckCircle className="w-4 h-4 text-info" />
+                <span className="font-medium text-foreground">2FA Obrigatório Ativo</span>
               </div>
-              <p className="text-sm text-blue-700">
+              <p className="text-sm text-muted-foreground">
                 Todos os novos usuários serão obrigados a configurar 2FA no primeiro login.
                 Usuários existentes terão 7 dias para configurar.
               </p>
