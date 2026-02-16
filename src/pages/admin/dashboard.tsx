@@ -466,7 +466,7 @@ export default function AdminDashboard() {
               <p className="text-sm text-muted-foreground mb-2">URL Pública:</p>
               <Link 
                 to={"/admin/dashboard?public=1"}
-                className="text-sm text-blue-600 hover:underline break-all"
+                className="text-sm text-primary hover:underline break-all"
               >
                 {publicUrl}
               </Link>

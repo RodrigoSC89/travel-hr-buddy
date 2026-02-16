@@ -150,11 +150,11 @@ export function VoyageEstimateCalculator() {
           const best = results.reduce((a, b) => a.tce > b.tce ? a : b);
           const isBest = r.scenario.id === best.scenario.id;
           return (
-            <Card key={r.scenario.id} className={`${isBest ? 'border-green-500/50 bg-green-500/5' : 'border-border/30'}`}>
+            <Card key={r.scenario.id} className={`${isBest ? 'border-success/50 bg-success/5' : 'border-border/30'}`}>
               <CardContent className="pt-4">
                 <div className="flex items-center justify-between mb-3">
                   <span className="font-semibold">{r.scenario.name}</span>
-                  {isBest && <Badge className="bg-green-500/20 text-green-400">Best TCE</Badge>}
+                  {isBest && <Badge className="bg-success/20 text-success">Best TCE</Badge>}
                 </div>
                 <div className="text-3xl font-bold">${r.tce.toLocaleString(undefined, { maximumFractionDigits: 0 })}<span className="text-sm text-muted-foreground">/day</span></div>
                 <div className="text-sm text-muted-foreground mt-1">Profit: ${(r.totalProfit / 1000).toFixed(0)}k | {r.totalDays} days</div>

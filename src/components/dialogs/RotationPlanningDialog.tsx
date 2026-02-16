@@ -107,9 +107,9 @@ export const RotationPlanningDialog: React.FC<RotationPlanningDialogProps> = ({
 
   const getImpactColor = (impact: string) => {
     switch (impact) {
-    case "high": return "text-green-600 bg-green-50 border-green-200";
-    case "medium": return "text-yellow-600 bg-yellow-50 border-yellow-200";
-    case "low": return "text-blue-600 bg-blue-50 border-blue-200";
+    case "high": return "text-success bg-success/10 border-success/20";
+    case "medium": return "text-warning bg-warning/10 border-warning/20";
+    case "low": return "text-info bg-info/10 border-info/20";
     default: return "text-muted-foreground bg-muted border-border";
     }
   };
@@ -216,7 +216,7 @@ export const RotationPlanningDialog: React.FC<RotationPlanningDialogProps> = ({
                       </div>
 
                       <div className="flex items-start gap-2 text-sm">
-                        <AlertTriangle className="h-4 w-4 text-yellow-500 mt-0.5" />
+                        <AlertTriangle className="h-4 w-4 text-warning mt-0.5" />
                         <span>{suggestion.reason}</span>
                       </div>
 
@@ -243,19 +243,19 @@ export const RotationPlanningDialog: React.FC<RotationPlanningDialogProps> = ({
           <div className="grid grid-cols-1 md:grid-cols-3 gap-4">
             <Card>
               <CardContent className="p-4 text-center">
-                <div className="text-2xl font-bold text-green-600">15%</div>
+                <div className="text-2xl font-bold text-success">15%</div>
                 <div className="text-sm text-muted-foreground">Redução de Custos Estimada</div>
               </CardContent>
             </Card>
             <Card>
               <CardContent className="p-4 text-center">
-                <div className="text-2xl font-bold text-blue-600">92%</div>
+                <div className="text-2xl font-bold text-primary">92%</div>
                 <div className="text-sm text-muted-foreground">Taxa de Compliance MLC</div>
               </CardContent>
             </Card>
             <Card>
               <CardContent className="p-4 text-center">
-                <div className="text-2xl font-bold text-purple-600">8.5/10</div>
+                <div className="text-2xl font-bold text-accent-foreground">8.5/10</div>
                 <div className="text-sm text-muted-foreground">Satisfação da Tripulação</div>
               </CardContent>
             </Card>

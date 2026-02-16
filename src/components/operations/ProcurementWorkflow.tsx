@@ -192,9 +192,9 @@ export function ProcurementWorkflow() {
       {/* KPI Cards */}
       <div className="grid grid-cols-2 md:grid-cols-5 gap-4">
         <Card><CardContent className="p-4 text-center"><Package className="h-5 w-5 mx-auto text-primary mb-1" /><p className="text-2xl font-bold">{stats.totalOpen}</p><p className="text-xs text-muted-foreground">Open PRs</p></CardContent></Card>
-        <Card><CardContent className="p-4 text-center"><Clock className="h-5 w-5 mx-auto text-orange-500 mb-1" /><p className="text-2xl font-bold">{stats.pendingApproval}</p><p className="text-xs text-muted-foreground">Pending Approval</p></CardContent></Card>
-        <Card><CardContent className="p-4 text-center"><Truck className="h-5 w-5 mx-auto text-blue-500 mb-1" /><p className="text-2xl font-bold">{stats.activePOs}</p><p className="text-xs text-muted-foreground">Active POs</p></CardContent></Card>
-        <Card><CardContent className="p-4 text-center"><DollarSign className="h-5 w-5 mx-auto text-green-500 mb-1" /><p className="text-2xl font-bold">${(stats.totalSpend / 1000).toFixed(1)}K</p><p className="text-xs text-muted-foreground">Total Spend</p></CardContent></Card>
+        <Card><CardContent className="p-4 text-center"><Clock className="h-5 w-5 mx-auto text-warning mb-1" /><p className="text-2xl font-bold">{stats.pendingApproval}</p><p className="text-xs text-muted-foreground">Pending Approval</p></CardContent></Card>
+        <Card><CardContent className="p-4 text-center"><Truck className="h-5 w-5 mx-auto text-primary mb-1" /><p className="text-2xl font-bold">{stats.activePOs}</p><p className="text-xs text-muted-foreground">Active POs</p></CardContent></Card>
+        <Card><CardContent className="p-4 text-center"><DollarSign className="h-5 w-5 mx-auto text-success mb-1" /><p className="text-2xl font-bold">${(stats.totalSpend / 1000).toFixed(1)}K</p><p className="text-xs text-muted-foreground">Total Spend</p></CardContent></Card>
         <Card><CardContent className="p-4 text-center"><AlertTriangle className="h-5 w-5 mx-auto text-destructive mb-1" /><p className="text-2xl font-bold">{stats.criticalItems}</p><p className="text-xs text-muted-foreground">Critical Items</p></CardContent></Card>
       </div>
 

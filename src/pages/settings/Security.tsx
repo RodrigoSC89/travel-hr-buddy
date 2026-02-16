@@ -104,7 +104,7 @@ export default function SecuritySettings() {
               <CardTitle className="text-lg">Score de Segurança</CardTitle>
               <Badge 
                 variant={securityStatus?.has2FA ? "default" : "secondary"}
-                className={securityStatus?.has2FA ? "bg-emerald-500" : ""}
+                className={securityStatus?.has2FA ? "bg-success" : ""}
               >
                 {securityStatus?.has2FA ? "Excelente" : "Pode Melhorar"}
               </Badge>
@@ -145,12 +145,12 @@ export default function SecuritySettings() {
               <div className="flex items-center gap-2">
                 <Label htmlFor="2fa-switch">Status do 2FA</Label>
                 {securityStatus?.has2FA ? (
-                  <Badge className="bg-emerald-500">
+                  <Badge className="bg-success">
                     <CheckCircle className="h-3 w-3 mr-1" />
                     Ativo
                   </Badge>
                 ) : (
-                  <Badge variant="outline" className="text-amber-600 border-amber-600">
+                  <Badge variant="outline" className="text-warning border-warning">
                     <AlertTriangle className="h-3 w-3 mr-1" />
                     Inativo
                   </Badge>
@@ -244,8 +244,8 @@ export default function SecuritySettings() {
           <CardContent>
             <div className="flex items-center justify-between p-3 bg-muted/50 rounded-lg">
               <div className="flex items-center gap-3">
-                <div className="p-2 bg-emerald-500/10 rounded-full">
-                  <CheckCircle className="h-4 w-4 text-emerald-500" />
+                <div className="p-2 bg-success/10 rounded-full">
+                  <CheckCircle className="h-4 w-4 text-success" />
                 </div>
                 <div>
                   <p className="font-medium text-sm">Este dispositivo</p>
@@ -257,7 +257,7 @@ export default function SecuritySettings() {
                   </p>
                 </div>
               </div>
-              <Badge variant="outline" className="text-emerald-600 border-emerald-600">
+              <Badge variant="outline" className="text-success border-success">
                 Atual
               </Badge>
             </div>
@@ -276,19 +276,19 @@ export default function SecuritySettings() {
           <CardContent>
             <ul className="text-sm text-muted-foreground space-y-2">
               <li className="flex items-start gap-2">
-                <CheckCircle className="h-4 w-4 text-emerald-500 mt-0.5 flex-shrink-0" />
+                <CheckCircle className="h-4 w-4 text-success mt-0.5 flex-shrink-0" />
                 Use senhas fortes com letras, números e símbolos
               </li>
               <li className="flex items-start gap-2">
-                <CheckCircle className="h-4 w-4 text-emerald-500 mt-0.5 flex-shrink-0" />
+                <CheckCircle className="h-4 w-4 text-success mt-0.5 flex-shrink-0" />
                 Nunca compartilhe suas credenciais de acesso
               </li>
               <li className="flex items-start gap-2">
-                <CheckCircle className="h-4 w-4 text-emerald-500 mt-0.5 flex-shrink-0" />
+                <CheckCircle className="h-4 w-4 text-success mt-0.5 flex-shrink-0" />
                 Ative a autenticação de dois fatores (2FA)
               </li>
               <li className="flex items-start gap-2">
-                <CheckCircle className="h-4 w-4 text-emerald-500 mt-0.5 flex-shrink-0" />
+                <CheckCircle className="h-4 w-4 text-success mt-0.5 flex-shrink-0" />
                 Revise regularmente as sessões ativas
               </li>
             </ul>
