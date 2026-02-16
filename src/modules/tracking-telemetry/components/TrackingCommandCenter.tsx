@@ -179,45 +179,45 @@ function RealtimeStatsPanel({ stats }: { stats: TelemetryData }) {
       </motion.div>
 
       <motion.div initial={{ opacity: 0, y: 20 }} animate={{ opacity: 1, y: 0 }} transition={{ delay: 0.3 }}>
-        <Card className="border-l-4 border-l-purple-500">
+        <Card className="border-l-4 border-l-accent">
           <CardContent className="p-4">
             <div className="flex items-center justify-between">
               <div>
                 <p className="text-xs text-muted-foreground">Data Points</p>
-                <p className="text-2xl font-bold text-purple-600">{(stats.dataPoints / 1000000).toFixed(1)}M</p>
+                <p className="text-2xl font-bold text-accent-foreground">{(stats.dataPoints / 1000000).toFixed(1)}M</p>
                 <p className="text-xs">Coletados</p>
               </div>
-              <Activity className="h-8 w-8 text-purple-500 opacity-60" />
+              <Activity className="h-8 w-8 text-accent-foreground opacity-60" />
             </div>
           </CardContent>
         </Card>
       </motion.div>
 
       <motion.div initial={{ opacity: 0, y: 20 }} animate={{ opacity: 1, y: 0 }} transition={{ delay: 0.4 }}>
-        <Card className="border-l-4 border-l-cyan-500">
+        <Card className="border-l-4 border-l-info">
           <CardContent className="p-4">
             <div className="flex items-center justify-between">
               <div>
                 <p className="text-xs text-muted-foreground">Satélites</p>
-                <p className="text-2xl font-bold text-cyan-600">4</p>
+                <p className="text-2xl font-bold text-info">4</p>
                 <p className="text-xs">Conectados</p>
               </div>
-              <Satellite className="h-8 w-8 text-cyan-500 opacity-60" />
+              <Satellite className="h-8 w-8 text-info opacity-60" />
             </div>
           </CardContent>
         </Card>
       </motion.div>
 
       <motion.div initial={{ opacity: 0, y: 20 }} animate={{ opacity: 1, y: 0 }} transition={{ delay: 0.5 }}>
-        <Card className="border-l-4 border-l-emerald-500">
+        <Card className="border-l-4 border-l-success">
           <CardContent className="p-4">
             <div className="flex items-center justify-between">
               <div>
                 <p className="text-xs text-muted-foreground">Sync</p>
-                <p className="text-2xl font-bold text-emerald-600">Live</p>
+                <p className="text-2xl font-bold text-success">Live</p>
                 <p className="text-xs">{stats.lastSync}</p>
               </div>
-              <RefreshCw className="h-8 w-8 text-emerald-500 opacity-60 animate-spin" style={{ animationDuration: "3s" }} />
+              <RefreshCw className="h-8 w-8 text-success opacity-60 animate-spin" style={{ animationDuration: "3s" }} />
             </div>
           </CardContent>
         </Card>
@@ -282,10 +282,10 @@ function AlertsPanel() {
 // AI Predictions Panel
 function AIPredictionsPanel() {
   return (
-    <Card className="border-purple-500/20 bg-gradient-to-br from-purple-500/5 to-transparent">
+    <Card className="border-accent/20 bg-gradient-to-br from-accent/5 to-transparent">
       <CardHeader className="pb-3">
         <CardTitle className="flex items-center gap-2">
-          <Sparkles className="h-5 w-5 text-purple-500" />
+          <Sparkles className="h-5 w-5 text-accent-foreground" />
           IA Preditiva
         </CardTitle>
         <CardDescription>Análises e previsões em tempo real</CardDescription>

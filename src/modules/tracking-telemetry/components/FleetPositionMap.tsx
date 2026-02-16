@@ -181,11 +181,11 @@ export default function FleetPositionMap() {
           <Card className="h-[500px]">
             <CardContent className="p-0 h-full relative">
               {/* Placeholder for actual map */}
-              <div className="absolute inset-0 bg-gradient-to-br from-blue-900 to-blue-950 rounded-lg flex items-center justify-center">
+               <div className="absolute inset-0 bg-gradient-to-br from-primary/10 to-primary/20 rounded-lg flex items-center justify-center">
                 <div className="text-center">
-                  <Map className="h-16 w-16 mx-auto mb-4 text-blue-400 opacity-50" />
-                  <p className="text-blue-300 mb-2">Mapa Interativo</p>
-                  <p className="text-sm text-blue-400/60">Integração com Mapbox/Google Maps</p>
+                  <Map className="h-16 w-16 mx-auto mb-4 text-primary/50" />
+                  <p className="text-foreground/80 mb-2">Mapa Interativo</p>
+                  <p className="text-sm text-muted-foreground">Integração com Mapbox/Google Maps</p>
                 </div>
                 
                 {/* Vessel markers overlay */}

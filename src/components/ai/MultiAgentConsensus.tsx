@@ -253,7 +253,7 @@ Formato: Comece com "## 🤝 Consenso Multi-Agente" e finalize com a recomendaç
             return (
               <Card key={resp.agentId} className={cn(
                 "transition-all",
-                resp.status === "done" && "border-green-500/20",
+                resp.status === "done" && "border-success/20",
                 resp.status === "error" && "border-destructive/20",
                 resp.status === "loading" && "border-primary/20 animate-pulse"
               )}>
@@ -264,7 +264,7 @@ Formato: Comece com "## 🤝 Consenso Multi-Agente" e finalize com a recomendaç
                       <CardTitle className="text-sm">{resp.agentName}</CardTitle>
                     </div>
                     {resp.status === "done" && (
-                      <Badge variant="outline" className="text-[10px] bg-green-500/10 text-green-600">
+                      <Badge variant="outline" className="text-[10px] bg-success/10 text-success">
                         <CheckCircle2 className="h-3 w-3 mr-1" />
                         {resp.responseTimeMs ? `${(resp.responseTimeMs / 1000).toFixed(1)}s` : "OK"}
                       </Badge>
