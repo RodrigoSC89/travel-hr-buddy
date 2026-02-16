@@ -48,7 +48,7 @@ export interface PremiumReportConfig {
 export interface PremiumSection {
   title: string;
   icon?: string;
-  content: string | string[] | PremiumTableData;
+  content: string | string[] | PremiumTableData | KPIData[];
   type: "text" | "list" | "table" | "kpi-grid" | "status-summary";
 }
 

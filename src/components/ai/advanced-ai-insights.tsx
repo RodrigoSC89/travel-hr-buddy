@@ -51,11 +51,10 @@ const AdvancedAIInsights = () => {
         confidence: Math.round(i.confidence * 100),
         impact: i.priority === "high" ? "high" : i.priority === "medium" ? "medium" : "low",
         category: i.category || "general",
-        // eslint-disable-next-line @typescript-eslint/no-explicit-any -- Supabase Json metadata field
-        recommendations: Array.isArray((i.metadata as any)?.recommendations)
-          ? (i.metadata as any).recommendations
+        recommendations: Array.isArray((i.metadata as Record<string, unknown>)?.recommendations)
+          ? (i.metadata as Record<string, unknown>).recommendations as string[]
           : ["Analisar dados detalhados", "Implementar ação corretiva"],
-        estimatedSavings: (i.metadata as any)?.savings || i.impact_value || "N/A",
+        estimatedSavings: (i.metadata as Record<string, unknown>)?.savings as string || i.impact_value || "N/A",
         status: i.status === "read" ? "active" : "new",
       }));
     },

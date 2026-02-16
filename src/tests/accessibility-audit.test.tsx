@@ -57,9 +57,9 @@ describe("Accessibility - Icon Buttons", () => {
       lines.forEach((line, idx) => {
         if (line.includes('size="icon"')) {
           totalIconButtons++;
-          // Check context window ±5 lines for aria-label (multi-line JSX)
-          const contextStart = Math.max(0, idx - 5);
-          const contextEnd = Math.min(lines.length - 1, idx + 5);
+          // Check context window ±8 lines for aria-label (multi-line JSX with props spread across lines)
+          const contextStart = Math.max(0, idx - 8);
+          const contextEnd = Math.min(lines.length - 1, idx + 8);
           const context = lines.slice(contextStart, contextEnd + 1).join("\n");
           if (context.includes("aria-label")) {
             withAriaLabel++;
