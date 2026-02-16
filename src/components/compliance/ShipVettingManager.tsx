@@ -21,10 +21,10 @@ import { useQuery, useMutation, useQueryClient } from "@tanstack/react-query";
 import { toast } from "sonner";
 
 const statusColors: Record<string, string> = {
-  scheduled: "bg-blue-500/20 text-blue-400 border-blue-500/30",
-  in_progress: "bg-cyan-500/20 text-cyan-400 border-cyan-500/30",
-  completed: "bg-emerald-500/20 text-emerald-400 border-emerald-500/30",
-  overdue: "bg-rose-500/20 text-rose-400 border-rose-500/30",
+  scheduled: "bg-primary/20 text-primary border-primary/30",
+  in_progress: "bg-info/20 text-info border-info/30",
+  completed: "bg-success/20 text-success border-success/30",
+  overdue: "bg-destructive/20 text-destructive border-destructive/30",
 };
 
 export function ShipVettingManager() {
@@ -152,7 +152,7 @@ export function ShipVettingManager() {
         </CardContent></Card>
         <Card className="border-border/50 bg-card/80"><CardContent className="p-4 text-center">
           <p className="text-xs text-muted-foreground">Scheduled</p>
-          <p className="text-3xl font-bold text-blue-400">{records.filter((r: any) => r.status === "scheduled").length}</p>
+          <p className="text-3xl font-bold text-primary">{records.filter((r: any) => r.status === "scheduled").length}</p>
         </CardContent></Card>
       </div>
 

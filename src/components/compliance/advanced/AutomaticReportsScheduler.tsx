@@ -358,7 +358,7 @@ export function AutomaticReportsScheduler() {
         <Card>
           <CardContent className="pt-4">
             <div className="flex items-center gap-3">
-              <div className="p-2 rounded-lg bg-green-500/10"><Play className="h-5 w-5 text-green-500" /></div>
+              <div className="p-2 rounded-lg bg-success/10"><Play className="h-5 w-5 text-success" /></div>
               <div><p className="text-2xl font-bold">{stats.active}</p><p className="text-sm text-muted-foreground">Ativos</p></div>
             </div>
           </CardContent>
@@ -366,7 +366,7 @@ export function AutomaticReportsScheduler() {
         <Card>
           <CardContent className="pt-4">
             <div className="flex items-center gap-3">
-              <div className="p-2 rounded-lg bg-yellow-500/10"><Pause className="h-5 w-5 text-yellow-500" /></div>
+              <div className="p-2 rounded-lg bg-warning/10"><Pause className="h-5 w-5 text-warning" /></div>
               <div><p className="text-2xl font-bold">{stats.paused}</p><p className="text-sm text-muted-foreground">Pausados</p></div>
             </div>
           </CardContent>
@@ -374,7 +374,7 @@ export function AutomaticReportsScheduler() {
         <Card>
           <CardContent className="pt-4">
             <div className="flex items-center gap-3">
-              <div className="p-2 rounded-lg bg-red-500/10"><AlertTriangle className="h-5 w-5 text-red-500" /></div>
+              <div className="p-2 rounded-lg bg-destructive/10"><AlertTriangle className="h-5 w-5 text-destructive" /></div>
               <div><p className="text-2xl font-bold">{stats.failed}</p><p className="text-sm text-muted-foreground">Falharam</p></div>
             </div>
           </CardContent>

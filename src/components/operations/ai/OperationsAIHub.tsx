@@ -72,12 +72,12 @@ export const VoyageCopilotAI: React.FC<{ vesselId?: string }> = ({ vesselId }) =
                   <p className="font-bold text-sm">{result.eta || "~12 dias"}</p>
                 </div>
                 <div className="text-center p-2 rounded bg-background">
-                  <Fuel className="h-4 w-4 mx-auto text-orange-500 mb-1" />
+                  <Fuel className="h-4 w-4 mx-auto text-warning mb-1" />
                   <p className="text-xs text-muted-foreground">Combustível</p>
                   <p className="font-bold text-sm">{result.fuel || "~450 MT"}</p>
                 </div>
                 <div className="text-center p-2 rounded bg-background">
-                  <DollarSign className="h-4 w-4 mx-auto text-green-500 mb-1" />
+                  <DollarSign className="h-4 w-4 mx-auto text-success mb-1" />
                   <p className="text-xs text-muted-foreground">Custo Est.</p>
                   <p className="font-bold text-sm">{result.cost || "~$285K"}</p>
                 </div>
@@ -91,10 +91,10 @@ export const VoyageCopilotAI: React.FC<{ vesselId?: string }> = ({ vesselId }) =
 
         <div className="grid grid-cols-2 gap-2">
           {[
-            { icon: Wind, label: "Clima na Rota", color: "text-blue-500" },
-            { icon: Fuel, label: "Otimizar Combustível", color: "text-orange-500" },
-            { icon: Shield, label: "Análise de Riscos", color: "text-red-500" },
-            { icon: Anchor, label: "Portos Alternativos", color: "text-purple-500" },
+            { icon: Wind, label: "Clima na Rota", color: "text-info" },
+            { icon: Fuel, label: "Otimizar Combustível", color: "text-warning" },
+            { icon: Shield, label: "Análise de Riscos", color: "text-destructive" },
+            { icon: Anchor, label: "Portos Alternativos", color: "text-accent-foreground" },
           ].map((action) => (
             <Button key={action.label} variant="outline" size="sm" className="justify-start">
               <action.icon className={`h-3 w-3 mr-2 ${action.color}`} />
@@ -121,10 +121,10 @@ export const FuelOptimizationAI: React.FC<{ vesselId?: string }> = ({ vesselId }
   };
 
   const metrics = [
-    { label: "Consumo Atual", value: "32.5 MT/dia", trend: "+2.1%", icon: Fuel, color: "text-orange-500" },
-    { label: "Velocidade Ótima", value: "12.8 kn", trend: "-0.5 kn", icon: Navigation, color: "text-blue-500" },
-    { label: "Economia Potencial", value: "$45,200/mês", trend: "14%", icon: DollarSign, color: "text-green-500" },
-    { label: "Trim Recomendado", value: "1.2m popa", trend: "ideal", icon: Ship, color: "text-purple-500" },
+    { label: "Consumo Atual", value: "32.5 MT/dia", trend: "+2.1%", icon: Fuel, color: "text-warning" },
+    { label: "Velocidade Ótima", value: "12.8 kn", trend: "-0.5 kn", icon: Navigation, color: "text-primary" },
+    { label: "Economia Potencial", value: "$45,200/mês", trend: "14%", icon: DollarSign, color: "text-success" },
+    { label: "Trim Recomendado", value: "1.2m popa", trend: "ideal", icon: Ship, color: "text-accent-foreground" },
   ];
 
   return (
@@ -179,9 +179,9 @@ export const WeatherRoutingAI: React.FC = () => {
     <Card className="border-blue-500/20">
       <CardHeader>
         <CardTitle className="flex items-center gap-2">
-          <ThermometerSun className="h-5 w-5 text-blue-500" />
+          <ThermometerSun className="h-5 w-5 text-info" />
           Weather Routing Inteligente
-          <Badge className="ml-auto bg-blue-500/10 text-blue-500">Meteo AI</Badge>
+          <Badge className="ml-auto bg-info/10 text-info">Meteo AI</Badge>
         </CardTitle>
       </CardHeader>
       <CardContent className="space-y-4">
@@ -228,19 +228,19 @@ export const ETAPredictorAI: React.FC<{ vesselId?: string }> = ({ vesselId }) =>
   };
 
   return (
-    <Card className="border-green-500/20">
+    <Card className="border-success/20">
       <CardHeader>
         <CardTitle className="flex items-center gap-2">
-          <Clock className="h-5 w-5 text-green-500" />
+          <Clock className="h-5 w-5 text-success" />
           Predição de ETA com ML
-          <Badge className="ml-auto bg-green-500/10 text-green-500">99.2% accuracy</Badge>
+          <Badge className="ml-auto bg-success/10 text-success">99.2% accuracy</Badge>
         </CardTitle>
       </CardHeader>
       <CardContent className="space-y-4">
         <div className="space-y-2">
           <div className="flex justify-between text-sm">
             <span>Confiança do Modelo</span>
-            <span className="font-bold text-green-500">99.2%</span>
+            <span className="font-bold text-success">99.2%</span>
           </div>
           <Progress value={99.2} className="h-2" />
         </div>

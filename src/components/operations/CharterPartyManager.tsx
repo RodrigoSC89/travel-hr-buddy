@@ -61,9 +61,9 @@ const CP_FORMS = ['GENCON', 'SHELLVOY 6', 'ASBATANKVOY', 'BPVOY 5', 'NYPE 2015',
 const FREIGHT_UNITS = ['USD/MT', 'USD/Day', 'Lumpsum', 'WS (Worldscale)'];
 const STATUS_CONFIG: Record<CPStatus, { label: string; color: string }> = {
   draft: { label: 'Rascunho', color: 'bg-muted text-muted-foreground' },
-  on_subs: { label: 'On Subs', color: 'bg-yellow-500/20 text-yellow-400' },
-  fixed: { label: 'Fixado', color: 'bg-blue-500/20 text-blue-400' },
-  commenced: { label: 'Em Curso', color: 'bg-green-500/20 text-green-400' },
+  on_subs: { label: 'On Subs', color: 'bg-warning/20 text-warning' },
+  fixed: { label: 'Fixado', color: 'bg-primary/20 text-primary' },
+  commenced: { label: 'Em Curso', color: 'bg-success/20 text-success' },
   completed: { label: 'Concluído', color: 'bg-primary/20 text-primary' },
   cancelled: { label: 'Cancelado', color: 'bg-destructive/20 text-destructive' },
 };
@@ -149,9 +149,9 @@ export function CharterPartyManager() {
       <div className="grid grid-cols-2 md:grid-cols-4 gap-4">
         {[
           { label: 'Total CPs', value: totalCharters, icon: FileText, color: 'text-primary' },
-          { label: 'Ativos', value: activeCharters, icon: Ship, color: 'text-green-400' },
-          { label: 'On Subs', value: onSubs, icon: Clock, color: 'text-yellow-400' },
-          { label: 'TCE Médio', value: `$${avgTCE.toLocaleString('en', { maximumFractionDigits: 0 })}/dia`, icon: DollarSign, color: 'text-blue-400' },
+          { label: 'Ativos', value: activeCharters, icon: Ship, color: 'text-success' },
+          { label: 'On Subs', value: onSubs, icon: Clock, color: 'text-warning' },
+          { label: 'TCE Médio', value: `$${avgTCE.toLocaleString('en', { maximumFractionDigits: 0 })}/dia`, icon: DollarSign, color: 'text-primary' },
         ].map(kpi => (
           <Card key={kpi.label}>
             <CardContent className="p-4 flex items-center gap-3">
@@ -238,7 +238,7 @@ export function CharterPartyManager() {
               <div className="grid grid-cols-2 md:grid-cols-3 gap-4 pt-4 border-t">
                 <Card className="bg-muted/50"><CardContent className="p-3 text-center">
                   <p className="text-xs text-muted-foreground">Gross Freight</p>
-                  <p className="text-lg font-bold text-green-400">${tceResult.grossFreight.toLocaleString('en', { maximumFractionDigits: 0 })}</p>
+                  <p className="text-lg font-bold text-success">${tceResult.grossFreight.toLocaleString('en', { maximumFractionDigits: 0 })}</p>
                 </CardContent></Card>
                 <Card className="bg-muted/50"><CardContent className="p-3 text-center">
                   <p className="text-xs text-muted-foreground">Total Deductions</p>
@@ -297,7 +297,7 @@ export function CharterPartyManager() {
                           <td className="p-2 hidden md:table-cell">{cp.cargo_quantity.toLocaleString()} MT</td>
                           <td className="p-2 text-right font-mono">${gross.toLocaleString()}</td>
                           <td className="p-2 text-right hidden md:table-cell text-destructive">-${comm.toLocaleString('en', { maximumFractionDigits: 0 })}</td>
-                          <td className="p-2 text-right font-mono font-bold text-green-400">${net.toLocaleString('en', { maximumFractionDigits: 0 })}</td>
+                          <td className="p-2 text-right font-mono font-bold text-success">${net.toLocaleString('en', { maximumFractionDigits: 0 })}</td>
                           <td className="p-2"><Badge className={STATUS_CONFIG[cp.status]?.color}>{STATUS_CONFIG[cp.status]?.label}</Badge></td>
                         </tr>
                       );

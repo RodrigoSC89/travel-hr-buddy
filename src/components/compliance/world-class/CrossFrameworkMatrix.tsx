@@ -27,12 +27,12 @@ interface MatrixCell {
 }
 
 const FRAMEWORKS = [
-  { id: "SOLAS", label: "SOLAS", icon: Anchor, color: "text-blue-500" },
-  { id: "MARPOL", label: "MARPOL", icon: Waves, color: "text-emerald-500" },
-  { id: "MLC2006", label: "MLC 2006", icon: Users, color: "text-purple-500" },
-  { id: "STCW", label: "STCW", icon: Shield, color: "text-amber-500" },
-  { id: "ISM", label: "ISM Code", icon: CheckCircle, color: "text-cyan-500" },
-  { id: "ISPS", label: "ISPS Code", icon: Lock, color: "text-red-500" },
+  { id: "SOLAS", label: "SOLAS", icon: Anchor, color: "text-primary" },
+  { id: "MARPOL", label: "MARPOL", icon: Waves, color: "text-success" },
+  { id: "MLC2006", label: "MLC 2006", icon: Users, color: "text-accent-foreground" },
+  { id: "STCW", label: "STCW", icon: Shield, color: "text-warning" },
+  { id: "ISM", label: "ISM Code", icon: CheckCircle, color: "text-info" },
+  { id: "ISPS", label: "ISPS Code", icon: Lock, color: "text-destructive" },
 ];
 
 const COMPLIANCE_AREAS = [
