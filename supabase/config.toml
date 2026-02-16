@@ -1485,3 +1485,28 @@ comment = "Real-time fleet health scoring engine aggregating maintenance, crew, 
 [functions.crew-analytics]
 verify_jwt = false
 comment = "Crew analytics: turnover risk, fatigue, certification gaps, rank distribution"
+
+# ============================================
+# WORLD #1 COMPETITIVE EDGE FUNCTIONS
+# Surpassing Veson, AMOS, DNV, RightShip
+# ============================================
+
+[functions.calculate-voyage-pl]
+verify_jwt = false
+comment = "Auto P&L calculation from voyage_plans + bunker + port_calls — surpasses Veson IMOS"
+
+[functions.calculate-laytime]
+verify_jwt = false
+comment = "Automatic laytime/demurrage calculator from port calls — surpasses Veson IMOS"
+
+[functions.calculate-cii]
+verify_jwt = false
+comment = "IMO CII rating calculator with EU ETS exposure — surpasses RightShip/DNV Navigator"
+
+[functions.simulate-audit]
+verify_jwt = false
+comment = "Multi-module audit simulator (ISM/MLC/ISPS/DP/PEOTRAM) — surpasses DNV ShipManager"
+
+[functions.get-market-tce-benchmark]
+verify_jwt = false
+comment = "TCE market benchmark by vessel type with percentile analysis — exclusive Nauti One"
