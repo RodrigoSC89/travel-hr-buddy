@@ -207,13 +207,13 @@ export function MaintenanceCommandCenter() {
   const getPriorityBadge = (priority: WorkOrder["priority"]) => {
     switch (priority) {
       case "critical":
-        return <Badge className="bg-red-500">Crítico</Badge>;
+        return <Badge className="bg-destructive text-destructive-foreground">Crítico</Badge>;
       case "high":
-        return <Badge className="bg-orange-500">Alto</Badge>;
+        return <Badge className="bg-warning text-warning-foreground">Alto</Badge>;
       case "medium":
-        return <Badge className="bg-amber-500">Médio</Badge>;
+        return <Badge className="bg-accent text-accent-foreground">Médio</Badge>;
       case "low":
-        return <Badge className="bg-blue-500">Baixo</Badge>;
+        return <Badge className="bg-info text-info-foreground">Baixo</Badge>;
       default:
         return null;
     }
@@ -382,7 +382,7 @@ export function MaintenanceCommandCenter() {
             <Card>
               <CardHeader>
                 <CardTitle className="text-lg flex items-center gap-2">
-                  <AlertTriangle className="h-5 w-5 text-red-500" />
+                  <AlertTriangle className="h-5 w-5 text-destructive" />
                   Ordens Críticas
                 </CardTitle>
               </CardHeader>
@@ -416,7 +416,7 @@ export function MaintenanceCommandCenter() {
             <Card>
               <CardHeader>
                 <CardTitle className="text-lg flex items-center gap-2">
-                  <Gauge className="h-5 w-5 text-amber-500" />
+                  <Gauge className="h-5 w-5 text-warning" />
                   Equipamentos em Alerta
                 </CardTitle>
               </CardHeader>
@@ -434,7 +434,7 @@ export function MaintenanceCommandCenter() {
                         </span>
                       </div>
                       <Progress value={equip.health} className={`h-2 ${
-                        equip.health < 50 ? "[&>div]:bg-red-500" : "[&>div]:bg-amber-500"
+                        equip.health < 50 ? "[&>div]:bg-destructive" : "[&>div]:bg-warning"
                       }`} />
                       <p className="text-xs text-muted-foreground mt-2">
                         {equip.runningHours.toLocaleString()}h de operação
@@ -447,10 +447,10 @@ export function MaintenanceCommandCenter() {
           </div>
 
           {/* AI Insights */}
-          <Card className="bg-gradient-to-r from-violet-500/5 to-purple-500/5 border-violet-500/30">
+          <Card className="bg-gradient-to-r from-primary/5 to-accent/5 border-primary/30">
             <CardHeader>
               <CardTitle className="flex items-center gap-2">
-                <Sparkles className="h-5 w-5 text-violet-500" />
+                <Sparkles className="h-5 w-5 text-primary" />
                 Insights de Manutenção (IA)
               </CardTitle>
             </CardHeader>
@@ -458,7 +458,7 @@ export function MaintenanceCommandCenter() {
               <div className="grid grid-cols-1 md:grid-cols-3 gap-4">
                 <div className="p-4 rounded-lg bg-card">
                   <div className="flex items-center gap-2 mb-2">
-                    <AlertTriangle className="h-4 w-4 text-amber-500" />
+                    <AlertTriangle className="h-4 w-4 text-warning" />
                     <span className="font-medium text-sm">Previsão de Falha</span>
                   </div>
                   <p className="text-sm text-muted-foreground">
@@ -472,7 +472,7 @@ export function MaintenanceCommandCenter() {
                 
                 <div className="p-4 rounded-lg bg-card">
                   <div className="flex items-center gap-2 mb-2">
-                    <TrendingUp className="h-4 w-4 text-emerald-500" />
+                    <TrendingUp className="h-4 w-4 text-success" />
                     <span className="font-medium text-sm">Otimização</span>
                   </div>
                   <p className="text-sm text-muted-foreground">
@@ -572,14 +572,14 @@ export function MaintenanceCommandCenter() {
                   <div className="flex items-start justify-between mb-4">
                     <div className="flex items-center gap-3">
                       <div className={`p-2 rounded-lg ${
-                        equip.status === "operational" ? "bg-emerald-500/10" :
-                        equip.status === "degraded" ? "bg-amber-500/10" :
-                        "bg-red-500/10"
+                        equip.status === "operational" ? "bg-success/10" :
+                        equip.status === "degraded" ? "bg-warning/10" :
+                        "bg-destructive/10"
                       }`}>
                         <Cog className={`h-5 w-5 ${
-                          equip.status === "operational" ? "text-emerald-500" :
-                          equip.status === "degraded" ? "text-amber-500" :
-                          "text-red-500"
+                          equip.status === "operational" ? "text-success" :
+                          equip.status === "degraded" ? "text-warning" :
+                          "text-destructive"
                         }`} />
                       </div>
                       <div>
@@ -593,9 +593,9 @@ export function MaintenanceCommandCenter() {
                   </div>
                   
                   <Progress value={equip.health} className={`h-2 mb-4 ${
-                    equip.health >= 80 ? "[&>div]:bg-emerald-500" :
-                    equip.health >= 50 ? "[&>div]:bg-amber-500" :
-                    "[&>div]:bg-red-500"
+                    equip.health >= 80 ? "[&>div]:bg-success" :
+                    equip.health >= 50 ? "[&>div]:bg-warning" :
+                    "[&>div]:bg-destructive"
                   }`} />
                   
                   <div className="grid grid-cols-2 gap-2 text-xs text-muted-foreground">

@@ -40,11 +40,11 @@ export default function AIHubPage() {
       <div className="flex flex-col md:flex-row md:items-center justify-between gap-4">
         <div>
           <div className="flex items-center gap-3">
-            <div className="w-12 h-12 rounded-xl bg-gradient-to-br from-purple-500 to-blue-600 flex items-center justify-center">
-              <Brain className="h-6 w-6 text-white" />
+            <div className="w-12 h-12 rounded-xl bg-gradient-to-br from-primary to-accent flex items-center justify-center">
+              <Brain className="h-6 w-6 text-primary-foreground" />
             </div>
             <div>
-              <h1 className="text-2xl font-bold">Nautilus AI Hub</h1>
+              <h1 className="text-2xl font-bold">Nauti One AI Hub</h1>
               <p className="text-muted-foreground">
                 Central de Inteligência Artificial Marítima
               </p>
@@ -69,8 +69,8 @@ export default function AIHubPage() {
         <Card>
           <CardContent className="pt-6">
             <div className="flex items-center gap-4">
-              <div className="w-10 h-10 rounded-lg bg-purple-500/20 flex items-center justify-center">
-                <Bot className="h-5 w-5 text-purple-500" />
+              <div className="w-10 h-10 rounded-lg bg-accent/20 flex items-center justify-center">
+                <Bot className="h-5 w-5 text-accent-foreground" />
               </div>
               <div>
                 <div className="text-2xl font-bold">{stats.totalModules}</div>
@@ -83,8 +83,8 @@ export default function AIHubPage() {
         <Card>
           <CardContent className="pt-6">
             <div className="flex items-center gap-4">
-              <div className="w-10 h-10 rounded-lg bg-blue-500/20 flex items-center justify-center">
-                <Zap className="h-5 w-5 text-blue-500" />
+              <div className="w-10 h-10 rounded-lg bg-info/20 flex items-center justify-center">
+                <Zap className="h-5 w-5 text-info" />
               </div>
               <div>
                 <div className="text-2xl font-bold">{stats.totalCapabilities}</div>
@@ -97,8 +97,8 @@ export default function AIHubPage() {
         <Card>
           <CardContent className="pt-6">
             <div className="flex items-center gap-4">
-              <div className="w-10 h-10 rounded-lg bg-green-500/20 flex items-center justify-center">
-                <TrendingUp className="h-5 w-5 text-green-500" />
+              <div className="w-10 h-10 rounded-lg bg-success/20 flex items-center justify-center">
+                <TrendingUp className="h-5 w-5 text-success" />
               </div>
               <div>
                 <div className="text-2xl font-bold">{stats.availability}</div>
@@ -111,8 +111,8 @@ export default function AIHubPage() {
         <Card>
           <CardContent className="pt-6">
             <div className="flex items-center gap-4">
-              <div className="w-10 h-10 rounded-lg bg-amber-500/20 flex items-center justify-center">
-                <Shield className="h-5 w-5 text-amber-500" />
+              <div className="w-10 h-10 rounded-lg bg-warning/20 flex items-center justify-center">
+                <Shield className="h-5 w-5 text-warning" />
               </div>
               <div>
                 <div className="text-2xl font-bold">Enterprise</div>
@@ -210,8 +210,8 @@ export default function AIHubPage() {
         >
           <Card className="h-full">
             <CardHeader>
-              <div className="w-10 h-10 rounded-lg bg-purple-500/20 flex items-center justify-center mb-2">
-                <Brain className="h-5 w-5 text-purple-500" />
+              <div className="w-10 h-10 rounded-lg bg-primary/20 flex items-center justify-center mb-2">
+                <Brain className="h-5 w-5 text-primary" />
               </div>
               <CardTitle className="text-base">Conhecimento Profundo</CardTitle>
               <CardDescription>
@@ -228,8 +228,8 @@ export default function AIHubPage() {
         >
           <Card className="h-full">
             <CardHeader>
-              <div className="w-10 h-10 rounded-lg bg-blue-500/20 flex items-center justify-center mb-2">
-                <Sparkles className="h-5 w-5 text-blue-500" />
+              <div className="w-10 h-10 rounded-lg bg-info/20 flex items-center justify-center mb-2">
+                <Sparkles className="h-5 w-5 text-info" />
               </div>
               <CardTitle className="text-base">Respostas Estruturadas</CardTitle>
               <CardDescription>
@@ -246,8 +246,8 @@ export default function AIHubPage() {
         >
           <Card className="h-full">
             <CardHeader>
-              <div className="w-10 h-10 rounded-lg bg-green-500/20 flex items-center justify-center mb-2">
-                <Shield className="h-5 w-5 text-green-500" />
+              <div className="w-10 h-10 rounded-lg bg-success/20 flex items-center justify-center mb-2">
+                <Shield className="h-5 w-5 text-success" />
               </div>
               <CardTitle className="text-base">Compliance Integrado</CardTitle>
               <CardDescription>

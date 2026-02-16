@@ -80,9 +80,9 @@ export function PortCostManager() {
 
   const getStatusColor = (status: string) => {
     switch (status) {
-      case "settled": return "bg-green-500/10 text-green-400 border-green-500/30";
-      case "final": return "bg-blue-500/10 text-blue-400 border-blue-500/30";
-      case "proforma": return "bg-amber-500/10 text-amber-400 border-amber-500/30";
+      case "settled": return "bg-success/10 text-success border-success/30";
+      case "final": return "bg-info/10 text-info border-info/30";
+      case "proforma": return "bg-warning/10 text-warning border-warning/30";
       default: return "bg-muted text-muted-foreground";
     }
   };
@@ -109,10 +109,10 @@ export function PortCostManager() {
             <p className="text-2xl font-bold mt-1">${totalFinal.toLocaleString()}</p>
           </CardContent>
         </Card>
-        <Card className={avgVariance > 5 ? "border-destructive/30" : "border-green-500/30"}>
+        <Card className={avgVariance > 5 ? "border-destructive/30" : "border-success/30"}>
           <CardContent className="p-4">
             <div className="flex items-center gap-2 text-muted-foreground text-sm"><TrendingDown className="h-4 w-4" /> Avg Variance</div>
-            <p className={`text-2xl font-bold mt-1 ${avgVariance > 5 ? "text-destructive" : "text-green-400"}`}>{avgVariance.toFixed(1)}%</p>
+            <p className={`text-2xl font-bold mt-1 ${avgVariance > 5 ? "text-destructive" : "text-success"}`}>{avgVariance.toFixed(1)}%</p>
           </CardContent>
         </Card>
       </div>
@@ -174,7 +174,7 @@ export function PortCostManager() {
                           <td className="p-3 text-right">${pc.proforma_total.toLocaleString()}</td>
                           <td className="p-3 text-right font-medium">${pc.final_total.toLocaleString()}</td>
                           <td className="p-3 text-center">
-                            <span className={variance > 5 ? "text-destructive" : "text-green-400"}>{variance.toFixed(1)}%</span>
+                            <span className={variance > 5 ? "text-destructive" : "text-success"}>{variance.toFixed(1)}%</span>
                           </td>
                           <td className="p-3 text-center"><Badge className={getStatusColor(pc.status)}>{pc.status}</Badge></td>
                           <td className="p-3 text-xs">{pc.agent_name}</td>
