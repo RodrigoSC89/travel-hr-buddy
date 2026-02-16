@@ -1,50 +1,26 @@
 /**
  * Sync Worker
  * Web Worker for background data synchronization
- * PATCH: Phase 2 - Technical Resilience
+ * PATCH: Phase 2 - Technical Resilience (Fixed: removed TS syntax for browser compat)
  */
-
-/// <reference lib="webworker" />
 
 const SYNC_INTERVAL = 30000; // 30 seconds
 const BATCH_SIZE = 10;
 
-interface SyncMessage {
-  type: "START" | "STOP" | "SYNC_NOW" | "SET_CONFIG" | "GET_STATUS";
-  payload?: any;
-}
-
-interface SyncItem {
-  id: string;
-  table: string;
-  operation: "insert" | "update" | "delete";
-  data: any;
-  timestamp: number;
-  retryCount: number;
-  priority: "critical" | "high" | "normal" | "low";
-}
-
-interface SyncConfig {
-  supabaseUrl: string;
-  supabaseKey: string;
-  batchSize: number;
-  interval: number;
-}
-
-let config: SyncConfig | null = null;
-let syncIntervalId: number | null = null;
-let pendingItems: SyncItem[] = [];
-let isSyncing = false;
-
 // Priority weights for sorting
-const PRIORITY_WEIGHTS: Record<string, number> = {
+const PRIORITY_WEIGHTS = {
   critical: 0,
   high: 1,
   normal: 2,
   low: 3,
 };
 
-self.onmessage = async (event: MessageEvent<SyncMessage>) => {
+let config = null;
+let syncIntervalId = null;
+let pendingItems = [];
+let isSyncing = false;
+
+self.onmessage = async (event) => {
   const { type, payload } = event.data;
 
   switch (type) {
@@ -62,7 +38,7 @@ self.onmessage = async (event: MessageEvent<SyncMessage>) => {
       break;
 
     case "SYNC_NOW":
-      if (payload?.items) {
+      if (payload && payload.items) {
         pendingItems.push(...payload.items);
       }
       await processSync();
@@ -81,27 +57,25 @@ self.onmessage = async (event: MessageEvent<SyncMessage>) => {
   }
 };
 
-function startSyncLoop(): void {
+function startSyncLoop() {
   if (syncIntervalId) return;
 
   syncIntervalId = self.setInterval(() => {
     processSync();
-  }, config?.interval || SYNC_INTERVAL);
+  }, (config && config.interval) || SYNC_INTERVAL);
 
   self.postMessage({ type: "SYNC_STARTED" });
-  console.log("[SyncWorker] Sync loop started");
 }
 
-function stopSyncLoop(): void {
+function stopSyncLoop() {
   if (syncIntervalId) {
     self.clearInterval(syncIntervalId);
     syncIntervalId = null;
   }
   self.postMessage({ type: "SYNC_STOPPED" });
-  console.log("[SyncWorker] Sync loop stopped");
 }
 
-async function processSync(): Promise<void> {
+async function processSync() {
   if (isSyncing || pendingItems.length === 0 || !config) {
     return;
   }
@@ -112,12 +86,13 @@ async function processSync(): Promise<void> {
   try {
     // Sort by priority
     pendingItems.sort(
-      (a, b) => PRIORITY_WEIGHTS[a.priority] - PRIORITY_WEIGHTS[b.priority]
+      (a, b) => (PRIORITY_WEIGHTS[a.priority] || 2) - (PRIORITY_WEIGHTS[b.priority] || 2)
     );
 
     // Process in batches
-    const batch = pendingItems.splice(0, config.batchSize || BATCH_SIZE);
-    const results: { success: boolean; item: SyncItem; error?: string }[] = [];
+    const batchSize = (config && config.batchSize) || BATCH_SIZE;
+    const batch = pendingItems.splice(0, batchSize);
+    const results = [];
 
     for (const item of batch) {
       try {
@@ -125,12 +100,11 @@ async function processSync(): Promise<void> {
         results.push({ success: true, item });
       } catch (error) {
         const errorMessage = error instanceof Error ? error.message : "Unknown error";
-        
-        // Retry logic
+
         if (item.retryCount < 3) {
           item.retryCount++;
-          pendingItems.push(item); // Re-add to queue
-          results.push({ success: false, item, error: `Retry ${item.retryCount}/3` });
+          pendingItems.push(item);
+          results.push({ success: false, item, error: "Retry " + item.retryCount + "/3" });
         } else {
           results.push({ success: false, item, error: errorMessage });
         }
@@ -141,8 +115,8 @@ async function processSync(): Promise<void> {
       type: "SYNC_COMPLETE",
       payload: {
         processed: batch.length,
-        successful: results.filter((r) => r.success).length,
-        failed: results.filter((r) => !r.success).length,
+        successful: results.filter(function(r) { return r.success; }).length,
+        failed: results.filter(function(r) { return !r.success; }).length,
         remaining: pendingItems.length,
         results,
       },
@@ -157,20 +131,19 @@ async function processSync(): Promise<void> {
   }
 }
 
-async function syncItem(item: SyncItem): Promise<void> {
+async function syncItem(item) {
   if (!config) throw new Error("Config not set");
 
-  const { supabaseUrl, supabaseKey } = config;
   const headers = {
     "Content-Type": "application/json",
-    apikey: supabaseKey,
-    Authorization: `Bearer ${supabaseKey}`,
+    apikey: config.supabaseKey,
+    Authorization: "Bearer " + config.supabaseKey,
     Prefer: item.operation === "insert" ? "return=minimal" : "return=representation",
   };
 
-  let url = `${supabaseUrl}/rest/v1/${item.table}`;
-  let method: string;
-  let body: string | undefined;
+  let url = config.supabaseUrl + "/rest/v1/" + item.table;
+  let method;
+  let body;
 
   switch (item.operation) {
     case "insert":
@@ -179,25 +152,23 @@ async function syncItem(item: SyncItem): Promise<void> {
       break;
     case "update":
       method = "PATCH";
-      url += `?id=eq.${item.data.id}`;
+      url += "?id=eq." + item.data.id;
       body = JSON.stringify(item.data);
       break;
     case "delete":
       method = "DELETE";
-      url += `?id=eq.${item.data.id}`;
+      url += "?id=eq." + item.data.id;
       break;
     default:
-      throw new Error(`Unknown operation: ${item.operation}`);
+      throw new Error("Unknown operation: " + item.operation);
   }
 
   const response = await fetch(url, { method, headers, body });
 
   if (!response.ok) {
     const errorText = await response.text();
-    throw new Error(`HTTP ${response.status}: ${errorText}`);
+    throw new Error("HTTP " + response.status + ": " + errorText);
   }
-
-  console.log(`[SyncWorker] Synced ${item.operation} on ${item.table}`);
 }
 
 // Notify that worker is ready
