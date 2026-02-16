@@ -56,7 +56,7 @@ export const AutomationHub: React.FC = () => {
                 <p className="text-sm font-medium text-muted-foreground">Relatórios Automáticos</p>
                 <p className="text-2xl font-bold">5</p>
               </div>
-              <FileText className="h-8 w-8 text-green-500" />
+              <FileText className="h-8 w-8 text-success" />
             </div>
           </CardContent>
         </Card>
@@ -67,9 +67,9 @@ export const AutomationHub: React.FC = () => {
               <div>
                 <p className="text-sm font-medium text-muted-foreground">Tempo Economizado</p>
                 <p className="text-2xl font-bold">12h</p>
-                <p className="text-sm text-green-600">esta semana</p>
+                <p className="text-sm text-success">esta semana</p>
               </div>
-              <Zap className="h-8 w-8 text-purple-500" />
+              <Zap className="h-8 w-8 text-accent-foreground" />
             </div>
           </CardContent>
         </Card>

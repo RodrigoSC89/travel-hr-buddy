@@ -287,11 +287,11 @@ export function PerformanceMonitor() {
                     </span>
                   </div>
                   <div className="flex justify-between items-center pt-2 border-t">
-                    <div className="flex items-center gap-1 text-green-600">
+                    <div className="flex items-center gap-1 text-success">
                       <CheckCircle className="h-4 w-4" />
                       <span className="text-sm">{module.accepted_decisions}</span>
                     </div>
-                    <div className="flex items-center gap-1 text-red-600">
+                    <div className="flex items-center gap-1 text-destructive">
                       <XCircle className="h-4 w-4" />
                       <span className="text-sm">{module.overridden_decisions}</span>
                     </div>
@@ -316,14 +316,14 @@ export function PerformanceMonitor() {
                   <div className="flex justify-between items-center">
                     <span className="text-sm text-muted-foreground">Acceptance Rate</span>
                     <div className="flex items-center gap-2">
-                      <TrendingUp className="h-4 w-4 text-green-600" />
+                      <TrendingUp className="h-4 w-4 text-success" />
                       <span className="font-semibold">
                         {module.acceptance_rate.toFixed(1)}%
                       </span>
                     </div>
                   </div>
                   <div className="flex justify-between items-center pt-2 border-t">
-                    <div className="flex items-center gap-1 text-green-600">
+                    <div className="flex items-center gap-1 text-success">
                       <CheckCircle className="h-4 w-4" />
                       <span className="text-sm">
                         {module.accepted_suggestions} accepted
@@ -346,7 +346,7 @@ export function PerformanceMonitor() {
           {watchdogAlerts.length === 0 ? (
             <Card>
               <CardContent className="flex flex-col items-center justify-center py-12">
-                <CheckCircle className="h-12 w-12 text-green-600 mb-4" />
+                <CheckCircle className="h-12 w-12 text-success mb-4" />
                 <p className="text-lg font-semibold">All Systems Normal</p>
                 <p className="text-sm text-muted-foreground">
                   No behavioral mutations or tactical deviations detected

@@ -149,10 +149,10 @@ export function KanbanAISuggestions() {
 
   const getTypeBadge = (type: AISuggestion["type"]) => {
     const config = {
-      automation: { label: "Automação", className: "bg-purple-500/10 text-purple-500 border-purple-500/30" },
-      efficiency: { label: "Eficiência", className: "bg-green-500/10 text-green-500 border-green-500/30" },
-      optimization: { label: "Otimização", className: "bg-blue-500/10 text-blue-500 border-blue-500/30" },
-      risk: { label: "Risco", className: "bg-red-500/10 text-red-500 border-red-500/30" }
+      automation: { label: "Automação", className: "bg-accent/10 text-accent-foreground border-accent/30" },
+      efficiency: { label: "Eficiência", className: "bg-success/10 text-success border-success/30" },
+      optimization: { label: "Otimização", className: "bg-info/10 text-info border-info/30" },
+      risk: { label: "Risco", className: "bg-destructive/10 text-destructive border-destructive/30" }
     };
     return config[type];
   };
@@ -177,7 +177,7 @@ export function KanbanAISuggestions() {
             <div>
               <CardTitle className="text-base flex items-center gap-2">
                 Sugestões da IA
-                <Sparkles className="h-4 w-4 text-yellow-500" />
+                <Sparkles className="h-4 w-4 text-warning" />
               </CardTitle>
               <CardDescription className="text-xs">
                 {pendingSuggestions.length} pendentes • {appliedCount} aplicadas
@@ -248,7 +248,7 @@ export function KanbanAISuggestions() {
                             <Button 
                               variant="ghost" 
                               size="sm" 
-                              className="h-8 px-3 text-green-500 hover:text-green-600 hover:bg-green-500/10"
+                              className="h-8 px-3 text-success hover:text-success hover:bg-success/10"
                               onClick={() => handleApply(suggestion)}
                             >
                               <Check className="h-4 w-4 mr-1" />

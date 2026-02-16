@@ -52,12 +52,12 @@ export function BunkerOptimizationEngine() {
       <div className="flex items-center justify-between">
         <div>
           <h1 className="text-2xl font-bold flex items-center gap-2">
-            <Fuel className="h-6 w-6 text-amber-400" />
+            <Fuel className="h-6 w-6 text-warning" />
             Bunker Optimization Engine
           </h1>
           <p className="text-muted-foreground">AI-powered fuel procurement, pricing intelligence & ROB forecasting</p>
         </div>
-        <Badge variant="outline" className="border-amber-500/30 text-amber-400">vs Integr8 / BunkerEx</Badge>
+        <Badge variant="outline" className="border-warning/30 text-warning">vs Integr8 / BunkerEx</Badge>
       </div>
 
       {/* KPIs */}
@@ -76,7 +76,7 @@ export function BunkerOptimizationEngine() {
               </div>
               <p className="text-xl font-bold">{kpi.value}</p>
               <div className="flex items-center gap-1 text-xs">
-                {kpi.up ? <TrendingUp className="h-3 w-3 text-green-400" /> : <TrendingDown className="h-3 w-3 text-red-400" />}
+                {kpi.up ? <TrendingUp className="h-3 w-3 text-success" /> : <TrendingDown className="h-3 w-3 text-destructive" />}
                 <span className="text-muted-foreground">{kpi.trend}</span>
               </div>
             </CardContent>
@@ -112,17 +112,17 @@ export function BunkerOptimizationEngine() {
                 {bunkerPorts.map((port, i) => {
                   const isLowest = port.vlsfo_price === Math.min(...bunkerPorts.map(p => p.vlsfo_price));
                   return (
-                    <div key={i} className={`grid grid-cols-7 gap-2 text-sm items-center p-2 rounded ${isLowest ? "bg-green-500/10 border border-green-500/20" : "bg-background/50"}`}>
+                    <div key={i} className={`grid grid-cols-7 gap-2 text-sm items-center p-2 rounded ${isLowest ? "bg-success/10 border border-success/20" : "bg-background/50"}`}>
                       <div className="col-span-2 flex items-center gap-2">
                         <MapPin className="h-3 w-3 text-muted-foreground" />
                         <span className="font-medium">{port.port}</span>
                         <span className="text-xs text-muted-foreground">{port.country}</span>
                       </div>
-                      <span className={isLowest ? "text-green-400 font-bold" : ""}>${port.vlsfo_price}</span>
+                      <span className={isLowest ? "text-success font-bold" : ""}>${port.vlsfo_price}</span>
                       <span>${port.hsfo_price}</span>
                       <span>${port.mgo_price}</span>
                       <Badge variant="outline" className={`text-[10px] ${
-                        port.availability === "high" ? "text-green-400" : port.availability === "medium" ? "text-yellow-400" : "text-red-400"
+                        port.availability === "high" ? "text-success" : port.availability === "medium" ? "text-warning" : "text-destructive"
                       }`}>
                         {port.availability}
                       </Badge>
@@ -193,7 +193,7 @@ export function BunkerOptimizationEngine() {
                   <Input type="date" className="bg-background/50" />
                 </div>
               </div>
-              <Button className="mt-4 bg-amber-600 hover:bg-amber-700">
+              <Button className="mt-4 bg-warning hover:bg-warning/90 text-warning-foreground">
                 <Calculator className="h-4 w-4 mr-2" /> Get Best Price
               </Button>
             </CardContent>
@@ -215,7 +215,7 @@ export function BunkerOptimizationEngine() {
                   <span className="text-sm">{q.param}</span>
                   <span className="text-xs text-muted-foreground">{q.spec}</span>
                   <span className="text-sm font-medium">{q.result}</span>
-                  <Badge className={q.pass ? "bg-green-500/20 text-green-400" : "bg-red-500/20 text-red-400"}>
+                  <Badge className={q.pass ? "bg-success/20 text-success" : "bg-destructive/20 text-destructive"}>
                     {q.pass ? "PASS" : "FAIL"}
                   </Badge>
                 </div>

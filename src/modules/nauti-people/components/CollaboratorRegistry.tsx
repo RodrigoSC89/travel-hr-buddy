@@ -81,11 +81,11 @@ const CollaboratorRegistry: React.FC = () => {
 
   const getStatusColor = (status: string) => {
     switch (status) {
-      case 'ativo': return 'bg-green-500';
-      case 'ferias': return 'bg-blue-500';
-      case 'licenca': return 'bg-yellow-500';
-      case 'afastado': return 'bg-red-500';
-      default: return 'bg-gray-500';
+      case 'ativo': return 'bg-success';
+      case 'ferias': return 'bg-info';
+      case 'licenca': return 'bg-warning';
+      case 'afastado': return 'bg-destructive';
+      default: return 'bg-muted-foreground';
     }
   };
 
@@ -358,40 +358,40 @@ const CollaboratorRegistry: React.FC = () => {
 
       {/* Stats */}
       <div className="grid grid-cols-2 md:grid-cols-4 gap-4">
-        <Card className="bg-green-500/10 border-green-500/20">
+        <Card className="bg-success/10 border-success/20">
           <CardContent className="p-4 flex items-center justify-between">
             <div>
               <p className="text-2xl font-bold">{colaboradores.filter(c => c.status === 'ativo').length}</p>
               <p className="text-sm text-muted-foreground">Ativos</p>
             </div>
-            <div className="w-3 h-3 rounded-full bg-green-500" />
+            <div className="w-3 h-3 rounded-full bg-success" />
           </CardContent>
         </Card>
-        <Card className="bg-blue-500/10 border-blue-500/20">
+        <Card className="bg-info/10 border-info/20">
           <CardContent className="p-4 flex items-center justify-between">
             <div>
               <p className="text-2xl font-bold">{colaboradores.filter(c => c.status === 'ferias').length}</p>
               <p className="text-sm text-muted-foreground">Em Férias</p>
             </div>
-            <div className="w-3 h-3 rounded-full bg-blue-500" />
+            <div className="w-3 h-3 rounded-full bg-info" />
           </CardContent>
         </Card>
-        <Card className="bg-yellow-500/10 border-yellow-500/20">
+        <Card className="bg-warning/10 border-warning/20">
           <CardContent className="p-4 flex items-center justify-between">
             <div>
               <p className="text-2xl font-bold">{colaboradores.filter(c => c.status === 'licenca').length}</p>
               <p className="text-sm text-muted-foreground">Em Licença</p>
             </div>
-            <div className="w-3 h-3 rounded-full bg-yellow-500" />
+            <div className="w-3 h-3 rounded-full bg-warning" />
           </CardContent>
         </Card>
-        <Card className="bg-purple-500/10 border-purple-500/20">
+        <Card className="bg-accent/10 border-accent/20">
           <CardContent className="p-4 flex items-center justify-between">
             <div>
               <p className="text-2xl font-bold">{colaboradores.length}</p>
               <p className="text-sm text-muted-foreground">Total</p>
             </div>
-            <Building2 className="w-5 h-5 text-purple-500" />
+            <Building2 className="w-5 h-5 text-accent-foreground" />
           </CardContent>
         </Card>
       </div>

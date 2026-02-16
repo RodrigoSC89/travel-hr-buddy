@@ -21,10 +21,10 @@ import { useQuery, useMutation, useQueryClient } from "@tanstack/react-query";
 import { toast } from "sonner";
 
 const statusConfig: Record<string, { label: string; color: string }> = {
-  planning: { label: "Planning", color: "bg-blue-500/20 text-blue-400 border-blue-500/30" },
-  confirmed: { label: "Confirmed", color: "bg-amber-500/20 text-amber-400 border-amber-500/30" },
-  in_progress: { label: "In Progress", color: "bg-cyan-500/20 text-cyan-400 border-cyan-500/30" },
-  completed: { label: "Completed", color: "bg-emerald-500/20 text-emerald-400 border-emerald-500/30" },
+  planning: { label: "Planning", color: "bg-info/20 text-info border-info/30" },
+  confirmed: { label: "Confirmed", color: "bg-warning/20 text-warning border-warning/30" },
+  in_progress: { label: "In Progress", color: "bg-primary/20 text-primary border-primary/30" },
+  completed: { label: "Completed", color: "bg-success/20 text-success border-success/30" },
   cancelled: { label: "Cancelled", color: "bg-muted text-muted-foreground" },
 };
 
@@ -105,7 +105,7 @@ export function CrewChangeManager() {
       <div className="flex items-center justify-between">
         <div>
           <h1 className="text-2xl font-bold flex items-center gap-2">
-            <ArrowRightLeft className="h-7 w-7 text-cyan-400" />
+            <ArrowRightLeft className="h-7 w-7 text-info" />
             Crew Change Manager
           </h1>
           <p className="text-muted-foreground">End-to-end crew rotation coordination • Real-time tracking</p>
@@ -116,7 +116,7 @@ export function CrewChangeManager() {
           </Button>
           <Dialog open={showNewDialog} onOpenChange={setShowNewDialog}>
             <DialogTrigger asChild>
-              <Button size="sm" className="bg-cyan-600 hover:bg-cyan-700">
+              <Button size="sm" className="bg-info hover:bg-info/90 text-info-foreground">
                 <Plus className="h-4 w-4 mr-1" /> New Change
               </Button>
             </DialogTrigger>
@@ -144,7 +144,7 @@ export function CrewChangeManager() {
       <div className="grid grid-cols-2 md:grid-cols-4 gap-4">
         <Card className="border-border/50 bg-card/80"><CardContent className="p-4 text-center">
           <p className="text-xs text-muted-foreground">Planned Changes</p>
-          <p className="text-3xl font-bold text-cyan-400">{changes.length}</p>
+          <p className="text-3xl font-bold text-info">{changes.length}</p>
         </CardContent></Card>
         <Card className="border-border/50 bg-card/80"><CardContent className="p-4 text-center">
           <p className="text-xs text-muted-foreground">Sign-On / Sign-Off</p>
@@ -152,16 +152,16 @@ export function CrewChangeManager() {
         </CardContent></Card>
         <Card className="border-border/50 bg-card/80"><CardContent className="p-4 text-center">
           <p className="text-xs text-muted-foreground">Avg Readiness</p>
-          <p className="text-3xl font-bold text-amber-400">{avgReadiness}%</p>
+          <p className="text-3xl font-bold text-warning">{avgReadiness}%</p>
         </CardContent></Card>
         <Card className="border-border/50 bg-card/80"><CardContent className="p-4 text-center">
           <p className="text-xs text-muted-foreground">Total Records</p>
-          <p className="text-lg font-bold text-emerald-400">{changes.length} crew changes</p>
+          <p className="text-lg font-bold text-success">{changes.length} crew changes</p>
         </CardContent></Card>
       </div>
 
       {isLoading ? (
-        <div className="flex items-center justify-center py-12"><Loader2 className="h-8 w-8 animate-spin text-cyan-400" /></div>
+        <div className="flex items-center justify-center py-12"><Loader2 className="h-8 w-8 animate-spin text-info" /></div>
       ) : (
         <Tabs value={activeTab} onValueChange={setActiveTab}>
           <TabsList className="bg-muted/30">
@@ -185,7 +185,7 @@ export function CrewChangeManager() {
                     <div className="flex items-start justify-between mb-3">
                       <div>
                         <div className="flex items-center gap-2 mb-1">
-                          <Ship className="h-4 w-4 text-cyan-400" />
+                          <Ship className="h-4 w-4 text-info" />
                           <span className="font-semibold">{cc.vessel_name}</span>
                           <Badge variant="outline" className={statusConfig[cc.status]?.color || ""}>
                             {statusConfig[cc.status]?.label || cc.status}
@@ -197,7 +197,7 @@ export function CrewChangeManager() {
                         </div>
                       </div>
                       <div className="text-right">
-                        <div className="text-sm"><span className="text-emerald-400">↑{cc.sign_on_count}</span> / <span className="text-rose-400">↓{cc.sign_off_count}</span></div>
+                        <div className="text-sm"><span className="text-success">↑{cc.sign_on_count}</span> / <span className="text-destructive">↓{cc.sign_off_count}</span></div>
                         <p className="text-xs text-muted-foreground">On/Off</p>
                       </div>
                     </div>
@@ -210,7 +210,7 @@ export function CrewChangeManager() {
                         <Badge 
                           key={t.id} 
                           variant="outline" 
-                          className={`cursor-pointer ${t.is_done ? "text-emerald-400 border-emerald-500/30" : "text-muted-foreground border-border/50"}`}
+                          className={`cursor-pointer ${t.is_done ? "text-success border-success/30" : "text-muted-foreground border-border/50"}`}
                           onClick={() => toggleTask.mutate({ id: t.id, is_done: !t.is_done })}
                         >
                           {t.is_done ? <CheckCircle2 className="h-3 w-3 mr-1" /> : <Clock className="h-3 w-3 mr-1" />}
@@ -230,7 +230,7 @@ export function CrewChangeManager() {
               <CardContent className="space-y-3">
                 {["Passport validity > 6 months", "Flag State endorsements current", "STCW certificates valid", "Medical fitness certificate", "Yellow fever vaccination", "Seaman's book up to date", "Drug & alcohol test completed", "Pre-embarkation briefing done", "COVID vaccination record", "Travel insurance confirmed"].map((item, i) => (
                   <div key={i} className="flex items-center gap-3 p-2 rounded-lg bg-muted/20">
-                    <CheckCircle2 className="h-5 w-5 text-emerald-400" />
+                    <CheckCircle2 className="h-5 w-5 text-success" />
                     <span>{item}</span>
                   </div>
                 ))}
