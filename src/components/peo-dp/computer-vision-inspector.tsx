@@ -88,9 +88,11 @@ export const ComputerVisionInspector: React.FC = () => {
         { finding_type: 'wear', severity: 'low', description: 'Desgaste leve identificado', confidence: 85, location_x: 200, location_y: 150, location_width: 80, location_height: 60 },
       ];
 
-      const hasIssues = Math.random() > 0.3;
-      const status = hasIssues ? (Math.random() > 0.5 ? 'warning' : 'failed') : 'passed';
-      const confidence = Math.round(88 + Math.random() * 10);
+      // Deterministic status based on file name hash
+      const nameHash = fileName.split('').reduce((acc, c) => acc + c.charCodeAt(0), 0);
+      const hasIssues = simulatedFindings.length > 0;
+      const status = hasIssues ? (nameHash % 3 === 0 ? 'failed' : 'warning') : 'passed';
+      const confidence = Math.round(88 + (nameHash % 10));
 
       const { data: inspection, error } = await supabase
         .from('peodp_cv_inspections')

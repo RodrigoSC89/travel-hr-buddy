@@ -128,36 +128,8 @@ export const SmartNotifications = () => {
         setNotifications(mapped);
       } catch (error) {
         logger.error("Error fetching notifications:", error);
-        // Use mock data for demo
-        setNotifications([
-          {
-            id: "n1",
-            type: "deadline_warning",
-            priority: "high",
-            title: "Prazo PEOTRAM se aproximando",
-            message: "A auditoria semestral do PEOTRAM vence em 7 dias.",
-            is_read: false,
-            created_at: new Date(Date.now() - 2 * 60 * 60 * 1000).toISOString(),
-          },
-          {
-            id: "n2",
-            type: "critical_alert",
-            priority: "critical",
-            title: "Certificado ISM expirando",
-            message: "O certificado ISM da embarcação MV Atlantic Star expira em 3 dias.",
-            is_read: false,
-            created_at: new Date(Date.now() - 4 * 60 * 60 * 1000).toISOString(),
-          },
-          {
-            id: "n3",
-            type: "nc_opened",
-            priority: "medium",
-            title: "Nova NC aberta - MLC",
-            message: "Não conformidade registrada: Documentação de horas de descanso incompleta.",
-            is_read: true,
-            created_at: new Date(Date.now() - 24 * 60 * 60 * 1000).toISOString(),
-          },
-        ]);
+        // Empty state on error - no mock data
+        setNotifications([]);
       } finally {
         setLoading(false);
       }
