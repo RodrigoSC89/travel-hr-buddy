@@ -29,21 +29,21 @@ export function AdvancedCargoOperations() {
       <div className="flex items-center justify-between">
         <div>
           <h1 className="text-2xl font-bold flex items-center gap-2">
-            <Package className="h-6 w-6 text-purple-400" />
+            <Package className="h-6 w-6 text-accent-foreground" />
             Advanced Cargo Operations
           </h1>
           <p className="text-muted-foreground">STS transfers, cargo heating, tank cleaning & claims management</p>
         </div>
-        <Badge variant="outline" className="border-purple-500/30 text-purple-400">vs Veson IMOS / Danaos</Badge>
+        <Badge variant="outline" className="border-accent/30 text-accent-foreground">vs Veson IMOS / Danaos</Badge>
       </div>
 
       {/* KPIs */}
       <div className="grid grid-cols-2 md:grid-cols-4 gap-4">
         {[
-          { icon: Package, label: "Active Cargoes", value: "12", color: "text-purple-400" },
-          { icon: ArrowLeftRight, label: "STS Planned", value: "3", color: "text-cyan-400" },
-          { icon: Thermometer, label: "Cargoes Heating", value: "5", color: "text-orange-400" },
-          { icon: FileWarning, label: "Open Claims", value: "2", color: "text-red-400" },
+          { icon: Package, label: "Active Cargoes", value: "12", color: "text-accent-foreground" },
+          { icon: ArrowLeftRight, label: "STS Planned", value: "3", color: "text-info" },
+          { icon: Thermometer, label: "Cargoes Heating", value: "5", color: "text-warning" },
+          { icon: FileWarning, label: "Open Claims", value: "2", color: "text-destructive" },
         ].map((kpi, i) => (
           <Card key={i} className="border-border/50 bg-card/80 backdrop-blur">
             <CardContent className="pt-4 text-center">
@@ -67,7 +67,7 @@ export function AdvancedCargoOperations() {
           <Card className="border-border/50 bg-card/80 backdrop-blur">
             <CardHeader>
               <CardTitle className="text-sm flex items-center gap-2">
-                <ArrowLeftRight className="h-4 w-4 text-cyan-400" /> Ship-to-Ship Transfer Operations
+                <ArrowLeftRight className="h-4 w-4 text-info" /> Ship-to-Ship Transfer Operations
               </CardTitle>
             </CardHeader>
             <CardContent className="space-y-3">
@@ -83,9 +83,9 @@ export function AdvancedCargoOperations() {
                       <span className="text-sm font-medium">{sts.cargo} — {sts.qty}</span>
                     </div>
                     <Badge className={
-                      sts.status === "Completed" ? "bg-green-500/20 text-green-400" :
-                      sts.status === "In Progress" ? "bg-blue-500/20 text-blue-400" :
-                      "bg-yellow-500/20 text-yellow-400"
+                      sts.status === "Completed" ? "bg-success/20 text-success" :
+                      sts.status === "In Progress" ? "bg-info/20 text-info" :
+                      "bg-warning/20 text-warning"
                     }>{sts.status}</Badge>
                   </div>
                   <div className="flex items-center gap-2 text-xs text-muted-foreground">
@@ -107,7 +107,7 @@ export function AdvancedCargoOperations() {
           <Card className="border-border/50 bg-card/80 backdrop-blur">
             <CardHeader>
               <CardTitle className="text-sm flex items-center gap-2">
-                <Thermometer className="h-4 w-4 text-orange-400" /> Cargo Heating Monitor
+                <Thermometer className="h-4 w-4 text-warning" /> Cargo Heating Monitor
               </CardTitle>
             </CardHeader>
             <CardContent className="space-y-3">
@@ -119,8 +119,8 @@ export function AdvancedCargoOperations() {
                 { tank: "Slop", cargo: "Residues", temp: 38, target: 40, rate: 0.2, status: "Heating" },
               ].map((tank, i) => (
                 <div key={i} className="flex items-center gap-4 p-3 rounded-lg bg-background/50">
-                  <div className="w-16 h-16 rounded-lg bg-gradient-to-b from-orange-500/20 to-red-500/20 flex flex-col items-center justify-center">
-                    <span className="text-lg font-bold text-orange-400">{tank.temp}°</span>
+                  <div className="w-16 h-16 rounded-lg bg-gradient-to-b from-warning/20 to-destructive/20 flex flex-col items-center justify-center">
+                    <span className="text-lg font-bold text-warning">{tank.temp}°</span>
                     <span className="text-[10px] text-muted-foreground">C</span>
                   </div>
                   <div className="flex-1">
@@ -134,7 +134,7 @@ export function AdvancedCargoOperations() {
                     <Progress value={(tank.temp / tank.target) * 100} className="h-1.5 mt-1" />
                   </div>
                   <Badge className={
-                    tank.status === "Maintaining" ? "bg-green-500/20 text-green-400" : "bg-orange-500/20 text-orange-400"
+                    tank.status === "Maintaining" ? "bg-success/20 text-success" : "bg-warning/20 text-warning"
                   }>{tank.status}</Badge>
                 </div>
               ))}
@@ -146,7 +146,7 @@ export function AdvancedCargoOperations() {
           <Card className="border-border/50 bg-card/80 backdrop-blur">
             <CardHeader>
               <CardTitle className="text-sm flex items-center gap-2">
-                <Droplets className="h-4 w-4 text-blue-400" /> Tank Cleaning Schedule
+                <Droplets className="h-4 w-4 text-info" /> Tank Cleaning Schedule
               </CardTitle>
             </CardHeader>
             <CardContent className="space-y-3">
@@ -158,7 +158,7 @@ export function AdvancedCargoOperations() {
               ].map((tc, i) => (
                 <div key={i} className="flex items-center gap-4 p-3 rounded-lg bg-background/50">
                   <Droplets className={`h-5 w-5 ${
-                    tc.status === "Completed" ? "text-green-400" : tc.status === "In Progress" ? "text-blue-400" : "text-muted-foreground"
+                    tc.status === "Completed" ? "text-success" : tc.status === "In Progress" ? "text-info" : "text-muted-foreground"
                   }`} />
                   <div className="flex-1">
                     <p className="text-sm font-medium">Tank {tc.tank}: {tc.prevCargo} → {tc.nextCargo}</p>
@@ -175,7 +175,7 @@ export function AdvancedCargoOperations() {
           <Card className="border-border/50 bg-card/80 backdrop-blur">
             <CardHeader>
               <CardTitle className="text-sm flex items-center gap-2">
-                <FileWarning className="h-4 w-4 text-red-400" /> Cargo Claims & Disputes
+                <FileWarning className="h-4 w-4 text-destructive" /> Cargo Claims & Disputes
               </CardTitle>
             </CardHeader>
             <CardContent className="space-y-3">
@@ -183,18 +183,18 @@ export function AdvancedCargoOperations() {
                 { ref: "CLM-2026-001", cargo: "Crude Oil", type: "Shortage", amount: "$125,000", bl_qty: "95,000 MT", outturn: "94,720 MT", status: "Under Investigation" },
                 { ref: "CLM-2026-002", cargo: "Chemicals", type: "Contamination", amount: "$85,000", bl_qty: "12,000 MT", outturn: "12,000 MT", status: "P&I Notified" },
               ].map((claim, i) => (
-                <div key={i} className="p-4 rounded-lg bg-background/50 space-y-2 border border-red-500/10">
+                <div key={i} className="p-4 rounded-lg bg-background/50 space-y-2 border border-destructive/10">
                   <div className="flex items-center justify-between">
                     <div className="flex items-center gap-2">
-                      <Badge variant="outline" className="text-xs text-red-400">{claim.ref}</Badge>
+                      <Badge variant="outline" className="text-xs text-destructive">{claim.ref}</Badge>
                       <span className="text-sm font-medium">{claim.type} — {claim.cargo}</span>
                     </div>
-                    <span className="text-sm font-bold text-red-400">{claim.amount}</span>
+                    <span className="text-sm font-bold text-destructive">{claim.amount}</span>
                   </div>
                   <div className="flex items-center gap-4 text-xs text-muted-foreground">
                     <span>B/L Qty: {claim.bl_qty}</span>
                     <span>Outturn: {claim.outturn}</span>
-                    <Badge className="bg-yellow-500/20 text-yellow-400 text-[10px]">{claim.status}</Badge>
+                    <Badge className="bg-warning/20 text-warning text-[10px]">{claim.status}</Badge>
                   </div>
                 </div>
               ))}

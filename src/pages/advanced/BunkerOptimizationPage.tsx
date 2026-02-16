@@ -90,7 +90,7 @@ const BunkerOptimizationPage = () => {
         </div>
         <div className="flex items-center gap-3">
           <Badge variant="outline" className="gap-2 py-1.5">
-            <Brain className="h-4 w-4 text-green-500" />
+            <Brain className="h-4 w-4 text-success" />
             ML Engine Ativo
           </Badge>
           <Button onClick={() => setAnalyzing(true)} disabled={analyzing}>
@@ -127,7 +127,7 @@ const BunkerOptimizationPage = () => {
         <Card>
           <CardContent className="p-4">
             <div className="flex items-center gap-3">
-              <Zap className="h-8 w-8 text-yellow-500" />
+              <Zap className="h-8 w-8 text-warning" />
               <div>
                 <p className="text-sm text-muted-foreground">Consumo Diário</p>
                 <p className="text-xl font-bold">{currentStatus.dailyConsumption} t/dia</p>
@@ -138,7 +138,7 @@ const BunkerOptimizationPage = () => {
         <Card>
           <CardContent className="p-4">
             <div className="flex items-center gap-3">
-              <Ship className="h-8 w-8 text-blue-500" />
+              <Ship className="h-8 w-8 text-info" />
               <div>
                 <p className="text-sm text-muted-foreground">Autonomia</p>
                 <p className="text-xl font-bold">{currentStatus.autonomy}</p>
@@ -160,7 +160,7 @@ const BunkerOptimizationPage = () => {
           <Card>
             <CardHeader>
               <CardTitle className="flex items-center gap-2">
-                <TrendingDown className="h-5 w-5 text-green-500" />
+                <TrendingDown className="h-5 w-5 text-success" />
                 Recomendações de Otimização
               </CardTitle>
             </CardHeader>
@@ -176,9 +176,9 @@ const BunkerOptimizationPage = () => {
                         <div className="flex items-center gap-2">
                           <h3 className="font-semibold">{opt.title}</h3>
                           <Badge variant="outline" className={
-                            opt.confidence >= 90 ? "border-green-500 text-green-500" :
-                            opt.confidence >= 80 ? "border-yellow-500 text-yellow-500" :
-                            "border-orange-500 text-orange-500"
+                            opt.confidence >= 90 ? "border-success text-success" :
+                            opt.confidence >= 80 ? "border-warning text-warning" :
+                            "border-warning text-warning"
                           }>
                             {opt.confidence}% confiança
                           </Badge>
@@ -186,7 +186,7 @@ const BunkerOptimizationPage = () => {
                         <p className="text-sm text-muted-foreground">{opt.description}</p>
                       </div>
                       <div className="text-right">
-                        <p className="text-lg font-bold text-green-500">-{opt.savings}</p>
+                        <p className="text-lg font-bold text-success">-{opt.savings}</p>
                         <p className="text-sm text-muted-foreground">
                           ${opt.savingsUSD.toLocaleString()}
                         </p>
@@ -205,17 +205,14 @@ const BunkerOptimizationPage = () => {
                 ))}
               </div>
 
-              <div className="mt-6 p-4 bg-green-500/10 rounded-lg">
+              <div className="mt-6 p-4 bg-success/10 rounded-lg">
                 <div className="flex items-center justify-between">
                   <div>
-                    <p className="font-semibold">Economia Total Potencial</p>
-                    <p className="text-sm text-muted-foreground">
-                      Aplicando todas as recomendações
-                    </p>
+...
                   </div>
                   <div className="text-right">
-                    <p className="text-2xl font-bold text-green-500">103 tons</p>
-                    <p className="text-lg text-green-600">$72,100/viagem</p>
+                    <p className="text-2xl font-bold text-success">103 tons</p>
+                    <p className="text-lg text-success">$72,100/viagem</p>
                   </div>
                 </div>
               </div>
@@ -238,7 +235,7 @@ const BunkerOptimizationPage = () => {
                     key={port.port}
                     className={`p-4 rounded-lg border-2 ${
                       port.recommended 
-                        ? "border-green-500 bg-green-500/5" 
+                        ? "border-success bg-success/5" 
                         : "border-border"
                     }`}
                   >
@@ -249,14 +246,14 @@ const BunkerOptimizationPage = () => {
                           <p className="text-sm text-muted-foreground">ETA: {port.eta}</p>
                         </div>
                         {port.recommended && (
-                          <Badge className="bg-green-500">Recomendado IA</Badge>
+                          <Badge className="bg-success">Recomendado IA</Badge>
                         )}
                       </div>
                       <div className="text-right">
                         <p className="text-xl font-bold">${port.price}/mt</p>
                         <p className={`text-sm ${
-                          port.saving > 0 ? "text-green-500" :
-                          port.saving < 0 ? "text-red-500" : "text-muted-foreground"
+                          port.saving > 0 ? "text-success" :
+                          port.saving < 0 ? "text-destructive" : "text-muted-foreground"
                         }`}>
                           {port.saving > 0 ? `+$${port.saving.toLocaleString()} economia` :
                            port.saving < 0 ? `$${Math.abs(port.saving).toLocaleString()} a mais` :

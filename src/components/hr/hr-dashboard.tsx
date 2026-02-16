@@ -478,8 +478,8 @@ export const HRDashboard = () => {
                     key={star}
                     className={`h-4 w-4 ${
                       star <= Math.round(employee.rating)
-                        ? "text-yellow-400 fill-yellow-400"
-                        : "text-gray-300"
+                        ? "text-warning fill-warning"
+                        : "text-muted-foreground/40"
                     }`}
                   />
                 ))}
@@ -565,11 +565,11 @@ export const HRDashboard = () => {
                       {[1, 2, 3, 4, 5].map((star) => (
                         <Star
                           key={star}
-                          className={`h-4 w-4 ${
-                            star <= Math.round(selectedEmployee.rating)
-                              ? "text-yellow-400 fill-yellow-400"
-                              : "text-gray-300"
-                          }`}
+                           className={`h-4 w-4 ${
+                             star <= Math.round(selectedEmployee.rating)
+                               ? "text-warning fill-warning"
+                               : "text-muted-foreground/40"
+                           }`}
                         />
                       ))}
                       <span className="ml-1">{selectedEmployee.rating.toFixed(1)}</span>

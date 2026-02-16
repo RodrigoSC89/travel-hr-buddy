@@ -177,7 +177,7 @@ export function RunningHoursTracker() {
                           </div>
                           <Progress 
                             value={Math.min(counter.pct_used, 100)} 
-                            className={`h-2 ${counter.status === 'overdue' ? '[&>div]:bg-destructive' : counter.status === 'warning' ? '[&>div]:bg-yellow-500' : ''}`}
+                            className={`h-2 ${counter.status === 'overdue' ? '[&>div]:bg-destructive' : counter.status === 'warning' ? '[&>div]:bg-warning' : ''}`}
                           />
                         </div>
                         <div className="text-right min-w-[100px]">

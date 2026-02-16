@@ -292,10 +292,10 @@ export function AIExplainabilityPanel() {
                                 <span className="text-sm">{factor.name}</span>
                                 <div className="flex items-center gap-2">
                                   {factor.impact === 'positive' && (
-                                    <TrendingUp className="h-4 w-4 text-green-500" />
+                                    <TrendingUp className="h-4 w-4 text-success" />
                                   )}
                                   {factor.impact === 'negative' && (
-                                    <TrendingUp className="h-4 w-4 text-red-500 rotate-180" />
+                                    <TrendingUp className="h-4 w-4 text-destructive rotate-180" />
                                   )}
                                   <span className="text-sm font-medium">{factor.weight}%</span>
                                 </div>
@@ -347,8 +347,8 @@ export function AIExplainabilityPanel() {
                     <div className={cn(
                       'p-4 rounded-lg',
                       selectedDecision.feedback_was_correct 
-                        ? 'bg-green-500/10 text-green-700' 
-                        : 'bg-red-500/10 text-red-700'
+                        ? 'bg-success/10 text-success' 
+                        : 'bg-destructive/10 text-destructive'
                     )}>
                       <div className="flex items-center gap-2">
                         {selectedDecision.feedback_was_correct ? (

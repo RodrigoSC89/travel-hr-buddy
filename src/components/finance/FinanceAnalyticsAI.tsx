@@ -224,7 +224,7 @@ export function FinanceAnalyticsAI() {
         <Card>
           <CardContent className="pt-4">
             <div className="flex items-center gap-2">
-              <Sparkles className="h-5 w-5 text-purple-500" />
+              <Sparkles className="h-5 w-5 text-accent-foreground" />
               <div>
                 <p className="text-2xl font-bold">
                   ${(optimizations.reduce((acc, o) => acc + o.potentialSavings, 0) / 1000).toFixed(0)}k
@@ -304,7 +304,7 @@ export function FinanceAnalyticsAI() {
             <CardHeader>
               <CardTitle className="text-sm flex items-center gap-2">
                 Oportunidades de Otimização
-                <Badge className="bg-purple-500">
+                <Badge className="bg-primary">
                   <Brain className="h-3 w-3 mr-1" />
                   IA
                 </Badge>
@@ -370,8 +370,8 @@ export function FinanceAnalyticsAI() {
               ) : (
                 <div className="p-4 bg-muted rounded-lg">
                   <div className="flex items-center gap-2 mb-2">
-                    <Brain className="h-4 w-4 text-purple-500" />
-                    <span className="text-sm font-medium text-purple-600">Previsão IA</span>
+                    <Brain className="h-4 w-4 text-primary" />
+                    <span className="text-sm font-medium text-primary">Previsão IA</span>
                   </div>
                   <div className="prose prose-sm dark:prose-invert max-w-none whitespace-pre-wrap">
                     {forecast}

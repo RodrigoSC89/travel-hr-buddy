@@ -32,10 +32,10 @@ const QUICK_COMMANDS = [
 ];
 
 const VOICE_CAPABILITIES = [
-  { area: "Operações", examples: ["Status da frota", "Posição dos navios", "ETA próximos portos"], color: "bg-blue-500/10 text-blue-400" },
-  { area: "Compliance", examples: ["Score de auditoria", "NCs abertas", "Certificados críticos"], color: "bg-amber-500/10 text-amber-400" },
-  { area: "Manutenção", examples: ["Ordens de serviço", "Predições de falha", "Estoque de peças"], color: "bg-emerald-500/10 text-emerald-400" },
-  { area: "Tripulação", examples: ["Escala de embarque", "Fadiga da tripulação", "Treinamentos vencidos"], color: "bg-purple-500/10 text-purple-400" },
+  { area: "Operações", examples: ["Status da frota", "Posição dos navios", "ETA próximos portos"], color: "bg-info/10 text-info" },
+  { area: "Compliance", examples: ["Score de auditoria", "NCs abertas", "Certificados críticos"], color: "bg-warning/10 text-warning" },
+  { area: "Manutenção", examples: ["Ordens de serviço", "Predições de falha", "Estoque de peças"], color: "bg-success/10 text-success" },
+  { area: "Tripulação", examples: ["Escala de embarque", "Fadiga da tripulação", "Treinamentos vencidos"], color: "bg-accent/50 text-accent-foreground" },
 ];
 
 export default function VoiceCopilotPage() {

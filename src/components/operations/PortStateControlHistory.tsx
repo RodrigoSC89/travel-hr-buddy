@@ -65,7 +65,7 @@ export function PortStateControlHistory() {
       <div className="flex items-center justify-between">
         <div>
           <h1 className="text-2xl font-bold flex items-center gap-2">
-            <Shield className="h-7 w-7 text-blue-400" />
+            <Shield className="h-7 w-7 text-info" />
             Port State Control History
           </h1>
           <p className="text-muted-foreground">Fleet PSC performance tracker • Paris/Tokyo MoU, USCG • vs Equasis/THETIS</p>

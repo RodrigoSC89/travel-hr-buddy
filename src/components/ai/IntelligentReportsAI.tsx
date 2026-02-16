@@ -245,8 +245,8 @@ A análise contempla o período atual e inclui comparações com períodos anter
                 whileTap={{ scale: 0.98 }}
               >
                 <Card 
-                  className={`cursor-pointer transition-colors hover:border-purple-500/50 ${
-                    selectedTemplate === template.id ? 'border-purple-500 bg-purple-500/5' : ''
+                  className={`cursor-pointer transition-colors hover:border-primary/50 ${
+                    selectedTemplate === template.id ? 'border-primary bg-primary/5' : ''
                   }`}
                   onClick={() => handleGenerate(template.id)}
                 >
@@ -304,8 +304,8 @@ A análise contempla o período atual e inclui comparações com períodos anter
                 exit={{ opacity: 0 }}
                 className="flex flex-col items-center justify-center h-96"
               >
-                <div className="p-4 rounded-full bg-purple-500/10 mb-4">
-                  <Brain className="h-12 w-12 text-purple-500 animate-pulse" />
+                <div className="p-4 rounded-full bg-primary/10 mb-4">
+                  <Brain className="h-12 w-12 text-primary animate-pulse" />
                 </div>
                 <h3 className="text-lg font-medium">Gerando Relatório...</h3>
                 <p className="text-sm text-muted-foreground">
@@ -327,7 +327,7 @@ A análise contempla o período atual e inclui comparações com períodos anter
                   <CardHeader className="flex flex-row items-center justify-between">
                     <div>
                       <CardTitle className="flex items-center gap-2">
-                        <Sparkles className="h-5 w-5 text-purple-500" />
+                        <Sparkles className="h-5 w-5 text-primary" />
                         {generatedReport.title}
                       </CardTitle>
                       <p className="text-sm text-muted-foreground mt-1">
@@ -368,8 +368,8 @@ A análise contempla o período atual e inclui comparações com períodos anter
                                   <p className="text-lg font-bold">{metric.value}</p>
                                   {metric.trend && (
                                     <TrendingUp className={`h-4 w-4 ${
-                                      metric.trend === 'up' ? 'text-green-500' :
-                                      metric.trend === 'down' ? 'text-red-500 rotate-180' :
+                                      metric.trend === 'up' ? 'text-success' :
+                                      metric.trend === 'down' ? 'text-destructive rotate-180' :
                                       'text-muted-foreground'
                                     }`} />
                                   )}
@@ -382,8 +382,8 @@ A análise contempla o período atual e inclui comparações com períodos anter
                         {section.insights && (
                           <div className="space-y-2">
                             {section.insights.map((insight, iIndex) => (
-                              <div key={iIndex} className="flex items-start gap-2 p-2 rounded bg-purple-500/5 border border-purple-500/20">
-                                <Sparkles className="h-4 w-4 text-purple-500 mt-0.5 shrink-0" />
+                              <div key={iIndex} className="flex items-start gap-2 p-2 rounded bg-primary/5 border border-primary/20">
+                                <Sparkles className="h-4 w-4 text-primary mt-0.5 shrink-0" />
                                 <p className="text-sm">{insight}</p>
                               </div>
                             ))}

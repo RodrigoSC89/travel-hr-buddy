@@ -127,47 +127,47 @@ const TimeAttendance: React.FC = () => {
     <div className="space-y-6">
       {/* Header Stats */}
       <div className="grid grid-cols-2 md:grid-cols-4 gap-4">
-        <Card className="bg-gradient-to-br from-green-500/10 to-green-600/5 border-green-500/20">
+        <Card className="bg-gradient-to-br from-success/10 to-success/5 border-success/20">
           <CardContent className="p-4">
             <div className="flex items-center justify-between">
               <div>
                 <p className="text-2xl font-bold">1,189</p>
                 <p className="text-sm text-muted-foreground">Presentes Hoje</p>
               </div>
-              <CheckCircle className="w-8 h-8 text-green-500" />
+              <CheckCircle className="w-8 h-8 text-success" />
             </div>
           </CardContent>
         </Card>
-        <Card className="bg-gradient-to-br from-yellow-500/10 to-yellow-600/5 border-yellow-500/20">
+        <Card className="bg-gradient-to-br from-warning/10 to-warning/5 border-warning/20">
           <CardContent className="p-4">
             <div className="flex items-center justify-between">
               <div>
                 <p className="text-2xl font-bold">23</p>
                 <p className="text-sm text-muted-foreground">Atrasos</p>
               </div>
-              <AlertTriangle className="w-8 h-8 text-yellow-500" />
+              <AlertTriangle className="w-8 h-8 text-warning" />
             </div>
           </CardContent>
         </Card>
-        <Card className="bg-gradient-to-br from-blue-500/10 to-blue-600/5 border-blue-500/20">
+        <Card className="bg-gradient-to-br from-info/10 to-info/5 border-info/20">
           <CardContent className="p-4">
             <div className="flex items-center justify-between">
               <div>
                 <p className="text-2xl font-bold">35</p>
                 <p className="text-sm text-muted-foreground">Em Férias</p>
               </div>
-              <Sun className="w-8 h-8 text-blue-500" />
+              <Sun className="w-8 h-8 text-info" />
             </div>
           </CardContent>
         </Card>
-        <Card className="bg-gradient-to-br from-purple-500/10 to-purple-600/5 border-purple-500/20">
+        <Card className="bg-gradient-to-br from-accent/50 to-accent/20 border-accent/20">
           <CardContent className="p-4">
             <div className="flex items-center justify-between">
               <div>
                 <p className="text-2xl font-bold">+2.450h</p>
                 <p className="text-sm text-muted-foreground">Banco de Horas Total</p>
               </div>
-              <Timer className="w-8 h-8 text-purple-500" />
+              <Timer className="w-8 h-8 text-accent-foreground" />
             </div>
           </CardContent>
         </Card>
@@ -273,8 +273,8 @@ const TimeAttendance: React.FC = () => {
                         <td className="text-center p-3 text-sm">{record.saida}</td>
                         <td className="text-center p-3 text-sm font-medium">{record.horasTrabalhadas}</td>
                         <td className={`text-center p-3 text-sm font-medium ${
-                          record.extras.startsWith('+') ? 'text-green-500' : 
-                          record.extras.startsWith('-') ? 'text-red-500' : ''
+                          record.extras.startsWith('+') ? 'text-success' : 
+                          record.extras.startsWith('-') ? 'text-destructive' : ''
                         }`}>
                           {record.extras}
                         </td>
@@ -320,13 +320,13 @@ const TimeAttendance: React.FC = () => {
                     </div>
                     <div className="flex items-center gap-4">
                       <div className={`text-2xl font-bold ${
-                        item.saldoAtual >= 0 ? 'text-green-500' : 'text-red-500'
+                        item.saldoAtual >= 0 ? 'text-success' : 'text-destructive'
                       }`}>
                         {item.saldoAtual >= 0 ? '+' : ''}{item.saldoAtual}h
                       </div>
-                      {item.tendencia === 'up' && <TrendingUp className="w-5 h-5 text-green-500" />}
-                      {item.tendencia === 'down' && <TrendingUp className="w-5 h-5 text-red-500 rotate-180" />}
-                      {item.tendencia === 'stable' && <span className="text-yellow-500">→</span>}
+                      {item.tendencia === 'up' && <TrendingUp className="w-5 h-5 text-success" />}
+                      {item.tendencia === 'down' && <TrendingUp className="w-5 h-5 text-destructive rotate-180" />}
+                      {item.tendencia === 'stable' && <span className="text-warning">→</span>}
                     </div>
                   </motion.div>
                 ))}
@@ -359,23 +359,23 @@ const TimeAttendance: React.FC = () => {
                 </CardDescription>
               </CardHeader>
               <CardContent className="space-y-3">
-                <div className="p-3 bg-blue-500/10 border border-blue-500/30 rounded-lg">
+                <div className="p-3 bg-info/10 border border-info/30 rounded-lg">
                   <div className="flex items-center gap-2 mb-1">
-                    <Sun className="w-4 h-4 text-blue-500" />
+                    <Sun className="w-4 h-4 text-info" />
                     <span className="font-medium">Turno Diurno (06h-14h)</span>
                   </div>
                   <p className="text-sm text-muted-foreground">45 colaboradores escalados</p>
                 </div>
-                <div className="p-3 bg-orange-500/10 border border-orange-500/30 rounded-lg">
+                <div className="p-3 bg-warning/10 border border-warning/30 rounded-lg">
                   <div className="flex items-center gap-2 mb-1">
-                    <Clock className="w-4 h-4 text-orange-500" />
+                    <Clock className="w-4 h-4 text-warning" />
                     <span className="font-medium">Turno Vespertino (14h-22h)</span>
                   </div>
                   <p className="text-sm text-muted-foreground">38 colaboradores escalados</p>
                 </div>
-                <div className="p-3 bg-purple-500/10 border border-purple-500/30 rounded-lg">
+                <div className="p-3 bg-accent/50 border border-accent/30 rounded-lg">
                   <div className="flex items-center gap-2 mb-1">
-                    <Moon className="w-4 h-4 text-purple-500" />
+                    <Moon className="w-4 h-4 text-accent-foreground" />
                     <span className="font-medium">Turno Noturno (22h-06h)</span>
                   </div>
                   <p className="text-sm text-muted-foreground">22 colaboradores escalados</p>
@@ -407,7 +407,7 @@ const TimeAttendance: React.FC = () => {
               <div className="grid grid-cols-2 gap-3">
                 <Button
                   size="lg"
-                  className="h-20 flex-col gap-2 bg-green-500 hover:bg-green-600"
+                  className="h-20 flex-col gap-2 bg-success hover:bg-success/90"
                   onClick={() => setIsPontoActive(true)}
                 >
                   <LogIn className="w-6 h-6" />
@@ -415,7 +415,7 @@ const TimeAttendance: React.FC = () => {
                 </Button>
                 <Button
                   size="lg"
-                  className="h-20 flex-col gap-2 bg-red-500 hover:bg-red-600"
+                  className="h-20 flex-col gap-2 bg-destructive hover:bg-destructive/90"
                   onClick={() => setIsPontoActive(false)}
                 >
                   <LogOut className="w-6 h-6" />
