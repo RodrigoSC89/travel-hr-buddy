@@ -98,6 +98,7 @@ export const CrewManagementDashboard = () => {
         .order("start_date", { ascending: false })
         .limit(20);
 
+      // eslint-disable-next-line @typescript-eslint/no-explicit-any -- Supabase dynamic join response
       const realAssignments: CrewAssignment[] = (assignData || []).map((a: any) => ({
         id: a.id,
         crew_member_name: a.crew_members?.full_name || "N/A",

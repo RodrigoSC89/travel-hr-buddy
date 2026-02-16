@@ -161,7 +161,15 @@ export function CrossFrameworkAuditDashboard() {
           <Button size="sm" variant="outline" className="gap-1" onClick={() => quickExport(FRAMEWORKS, "Cross Framework Audit")}>
             <Download className="h-3 w-3" /> Exportar
           </Button>
-          <Button size="sm" className="gap-1" onClick={() => { toast.info("Análise de gaps iniciada — processando frameworks..."); setTimeout(() => toast.success("AI Gap Analysis concluída — verifique os scores atualizados"), 2000); }}>
+          <Button size="sm" className="gap-1" onClick={() => {
+            const critical = FRAMEWORKS.filter(f => f.gaps.some(g => g.severity === "critical"));
+            const totalGapsCount = FRAMEWORKS.reduce((a, f) => a + f.gaps.length, 0);
+            toast.success(`Gap Analysis: ${totalGapsCount} gaps em ${FRAMEWORKS.length} frameworks`, {
+              description: critical.length > 0
+                ? `⚠️ ${critical.map(f => f.shortName).join(", ")} possuem gaps críticos`
+                : "Nenhum gap crítico identificado",
+            });
+          }}>
             <Brain className="h-3 w-3" /> AI Gap Analysis
           </Button>
         </div>

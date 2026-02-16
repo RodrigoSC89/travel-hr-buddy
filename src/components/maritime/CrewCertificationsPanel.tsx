@@ -51,6 +51,7 @@ export const CrewCertificationsPanel: React.FC<CrewCertificationsPanelProps> = (
         .order("expiry_date", { ascending: true })
         .limit(100);
       if (error) throw error;
+      // eslint-disable-next-line @typescript-eslint/no-explicit-any -- Supabase dynamic join response
       return (data || []).map((c: any) => {
         const daysLeft = c.expiry_date ? differenceInDays(new Date(c.expiry_date), new Date()) : 999;
         return {

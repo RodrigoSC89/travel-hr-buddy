@@ -92,6 +92,7 @@ export function MLCSEAManager() {
 
   const contracts: SEAContract[] = useMemo(() => {
     if (!crewData || crewData.length === 0) return [];
+    // eslint-disable-next-line @typescript-eslint/no-explicit-any -- Supabase dynamic column access
     return crewData.map((crew: any) => {
       const endDate = crew.contract_end || "2026-12-31";
       const status = getContractStatus(endDate);
@@ -139,7 +140,12 @@ export function MLCSEAManager() {
           <Button size="sm" variant="outline" className="gap-1 h-9" onClick={() => quickExport(contracts, "MLC SEA Contracts")}>
             <Download className="h-3 w-3" /> Exportar
           </Button>
-          <Button size="sm" className="gap-1 h-9" onClick={() => toast.info("Funcionalidade de criação de contrato SEA será integrada com o módulo de contratos")}>
+          <Button size="sm" className="gap-1 h-9" onClick={() => {
+            const crewUrl = "/workbench?wtab=people";
+            window.history.pushState({}, '', crewUrl);
+            window.dispatchEvent(new PopStateEvent('popstate'));
+            toast.success("Redirecionando para cadastro de tripulante — preencha as datas de contrato para gerar o SEA");
+          }}>
             <Plus className="h-3 w-3" /> Novo SEA
           </Button>
         </div>

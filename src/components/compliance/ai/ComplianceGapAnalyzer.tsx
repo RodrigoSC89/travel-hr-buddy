@@ -95,6 +95,7 @@ export function ComplianceGapAnalyzer({
       setPhase("Analisando conformidade com IA...");
       setProgress(50);
 
+      // eslint-disable-next-line @typescript-eslint/no-explicit-any -- Supabase dynamic table responses
       const sgiSummary = {
         compliance_items: (complianceItems || []).length,
         compliant_items: (complianceItems || []).filter((i: any) => i.status === "compliant").length,

@@ -51,6 +51,7 @@ const AdvancedAIInsights = () => {
         confidence: Math.round(i.confidence * 100),
         impact: i.priority === "high" ? "high" : i.priority === "medium" ? "medium" : "low",
         category: i.category || "general",
+        // eslint-disable-next-line @typescript-eslint/no-explicit-any -- Supabase Json metadata field
         recommendations: Array.isArray((i.metadata as any)?.recommendations)
           ? (i.metadata as any).recommendations
           : ["Analisar dados detalhados", "Implementar ação corretiva"],
