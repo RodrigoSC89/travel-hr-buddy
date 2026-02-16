@@ -96,7 +96,7 @@ export const AIThreatDetection: React.FC = () => {
   const getSeverityBadge = (severity: string) => {
     switch (severity) {
       case "critical": return <Badge variant="destructive">{severity.toUpperCase()}</Badge>;
-      case "high": return <Badge className="bg-orange-500/20 text-orange-400">{severity.toUpperCase()}</Badge>;
+      case "high": return <Badge className="bg-warning/20 text-warning">{severity.toUpperCase()}</Badge>;
       case "medium": return <Badge variant="secondary">{severity.toUpperCase()}</Badge>;
       default: return <Badge variant="outline">{severity.toUpperCase()}</Badge>;
     }
@@ -104,9 +104,9 @@ export const AIThreatDetection: React.FC = () => {
 
   const getStatusIcon = (status: string) => {
     switch (status) {
-      case "active": case "pending": return <AlertTriangle className="h-4 w-4 text-red-500" />;
-      case "investigating": return <Eye className="h-4 w-4 text-yellow-500" />;
-      case "resolved": return <CheckCircle className="h-4 w-4 text-green-500" />;
+      case "active": case "pending": return <AlertTriangle className="h-4 w-4 text-destructive" />;
+      case "investigating": return <Eye className="h-4 w-4 text-warning" />;
+      case "resolved": return <CheckCircle className="h-4 w-4 text-success" />;
       default: return <Activity className="h-4 w-4 text-muted-foreground" />;
     }
   };
@@ -120,7 +120,7 @@ export const AIThreatDetection: React.FC = () => {
             <CardTitle className="text-sm font-medium">Ameaças Ativas</CardTitle>
           </CardHeader>
           <CardContent>
-            <div className="text-2xl font-bold text-red-600">{activeThreats}</div>
+            <div className="text-2xl font-bold text-destructive">{activeThreats}</div>
             <p className="text-xs text-muted-foreground">Requerem atenção</p>
           </CardContent>
         </Card>
@@ -130,7 +130,7 @@ export const AIThreatDetection: React.FC = () => {
             <CardTitle className="text-sm font-medium">Alta Severidade</CardTitle>
           </CardHeader>
           <CardContent>
-            <div className="text-2xl font-bold text-orange-600">{criticalThreats}</div>
+            <div className="text-2xl font-bold text-warning">{criticalThreats}</div>
             <p className="text-xs text-muted-foreground">Critical + High</p>
           </CardContent>
         </Card>
@@ -192,10 +192,10 @@ export const AIThreatDetection: React.FC = () => {
                 </div>
               ) : threats.map((threat) => (
                 <Card key={threat.id} className={`border-l-4 ${
-                  threat.severity === "critical" ? "border-l-red-600" :
-                    threat.severity === "high" ? "border-l-orange-600" :
-                      threat.severity === "medium" ? "border-l-yellow-600" :
-                        "border-l-blue-600"
+                  threat.severity === "critical" ? "border-l-destructive" :
+                    threat.severity === "high" ? "border-l-warning" :
+                      threat.severity === "medium" ? "border-l-warning/60" :
+                        "border-l-info"
                 }`}>
                   <CardHeader>
                     <div className="flex items-start justify-between">
@@ -247,12 +247,12 @@ export const AIThreatDetection: React.FC = () => {
                       </div>
                     </div>
 
-                    <div className="bg-blue-50 dark:bg-blue-950 p-3 rounded-lg">
+                    <div className="bg-info/10 p-3 rounded-lg">
                       <div className="flex items-start gap-2">
-                        <Shield className="h-4 w-4 mt-0.5 text-blue-600" />
+                        <Shield className="h-4 w-4 mt-0.5 text-info" />
                         <div>
-                          <div className="text-sm font-medium text-blue-900 dark:text-blue-100 mb-1">Análise da IA</div>
-                          <div className="text-sm text-blue-700 dark:text-blue-300">{threat.aiAnalysis}</div>
+                          <div className="text-sm font-medium mb-1">Análise da IA</div>
+                          <div className="text-sm text-muted-foreground">{threat.aiAnalysis}</div>
                         </div>
                       </div>
                     </div>
@@ -324,10 +324,10 @@ export const AIThreatDetection: React.FC = () => {
                     ].map((layer) => (
                       <div key={layer.name} className="flex items-center justify-between p-3 bg-muted/50 rounded-lg">
                         <div className="flex items-center gap-2">
-                          <Shield className="h-4 w-4 text-green-600" />
+                          <Shield className="h-4 w-4 text-success" />
                           <span className="text-sm font-medium">{layer.name}</span>
                         </div>
-                        <Badge variant="default" className="bg-green-600">
+                        <Badge variant="default" className="bg-success">
                           <CheckCircle className="h-3 w-3 mr-1" />
                           Ativo
                         </Badge>
@@ -349,8 +349,8 @@ export const AIThreatDetection: React.FC = () => {
                       "Validação JWT em todas as edge functions",
                       "Log detalhado de todas atividades"
                     ].map((action) => (
-                      <div key={action} className="flex items-start gap-2 p-2 bg-blue-50 dark:bg-blue-950 rounded-lg">
-                        <CheckCircle className="h-4 w-4 mt-0.5 text-blue-600" />
+                      <div key={action} className="flex items-start gap-2 p-2 bg-info/10 rounded-lg">
+                        <CheckCircle className="h-4 w-4 mt-0.5 text-info" />
                         <span className="text-sm">{action}</span>
                       </div>
                     ))}

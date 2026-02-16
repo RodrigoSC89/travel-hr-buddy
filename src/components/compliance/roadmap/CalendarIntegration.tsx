@@ -305,50 +305,50 @@ END:VCALENDAR`], { type: "text/calendar;charset=utf-8" });
 
       {/* Stats */}
       <div className="grid grid-cols-2 md:grid-cols-4 gap-4">
-        <Card className="bg-gradient-to-br from-blue-500/10 to-blue-600/5 border-blue-500/20">
+        <Card className="bg-gradient-to-br from-info/10 to-info/5 border-info/20">
           <CardContent className="pt-4">
             <div className="flex items-center justify-between">
               <div>
                 <p className="text-sm text-muted-foreground">Conexões</p>
                 <p className="text-2xl font-bold">{connectedCount}/2</p>
               </div>
-              <Link className="h-8 w-8 text-blue-500" />
+              <Link className="h-8 w-8 text-info" />
             </div>
           </CardContent>
         </Card>
         
-        <Card className="bg-gradient-to-br from-green-500/10 to-green-600/5 border-green-500/20">
+        <Card className="bg-gradient-to-br from-success/10 to-success/5 border-success/20">
           <CardContent className="pt-4">
             <div className="flex items-center justify-between">
               <div>
                 <p className="text-sm text-muted-foreground">Sincronizados</p>
                 <p className="text-2xl font-bold">{syncedCount}</p>
               </div>
-              <CheckCircle2 className="h-8 w-8 text-green-500" />
+              <CheckCircle2 className="h-8 w-8 text-success" />
             </div>
           </CardContent>
         </Card>
 
-        <Card className="bg-gradient-to-br from-yellow-500/10 to-yellow-600/5 border-yellow-500/20">
+        <Card className="bg-gradient-to-br from-warning/10 to-warning/5 border-warning/20">
           <CardContent className="pt-4">
             <div className="flex items-center justify-between">
               <div>
                 <p className="text-sm text-muted-foreground">Pendentes</p>
                 <p className="text-2xl font-bold">{pendingCount}</p>
               </div>
-              <Clock className="h-8 w-8 text-yellow-500" />
+              <Clock className="h-8 w-8 text-warning" />
             </div>
           </CardContent>
         </Card>
 
-        <Card className="bg-gradient-to-br from-purple-500/10 to-purple-600/5 border-purple-500/20">
+        <Card className="bg-gradient-to-br from-accent/10 to-accent/5 border-accent/20">
           <CardContent className="pt-4">
             <div className="flex items-center justify-between">
               <div>
                 <p className="text-sm text-muted-foreground">Total</p>
                 <p className="text-2xl font-bold">{events.length}</p>
               </div>
-              <Calendar className="h-8 w-8 text-purple-500" />
+              <Calendar className="h-8 w-8 text-accent-foreground" />
             </div>
           </CardContent>
         </Card>
@@ -515,12 +515,12 @@ END:VCALENDAR`], { type: "text/calendar;charset=utf-8" });
                           {event.priority}
                         </Badge>
                         {event.synced ? (
-                          <Badge variant="outline" className="bg-green-500/10 text-green-500">
+                          <Badge variant="outline" className="bg-success/10 text-success">
                             <CheckCircle2 className="h-3 w-3 mr-1" />
                             Sync
                           </Badge>
                         ) : (
-                          <Badge variant="outline" className="bg-yellow-500/10 text-yellow-500">
+                          <Badge variant="outline" className="bg-warning/10 text-warning">
                             <Clock className="h-3 w-3 mr-1" />
                             Pendente
                           </Badge>
