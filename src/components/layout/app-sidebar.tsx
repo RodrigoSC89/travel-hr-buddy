@@ -282,14 +282,14 @@ export function AppSidebar({ activeItem, onItemChange }: AppSidebarProps) {
       <SidebarHeader className="p-4 border-b border-border/50">
         <div className="flex items-center space-x-3">
           <motion.div 
-            className="w-10 h-10 rounded-xl overflow-hidden flex items-center justify-center flex-shrink-0 bg-gradient-to-br from-primary/20 to-primary/5 ring-1 ring-primary/20"
+            className="w-14 h-14 rounded-xl overflow-hidden flex items-center justify-center flex-shrink-0 bg-gradient-to-br from-primary/20 to-primary/5 ring-1 ring-primary/20 p-1.5"
             whileHover={{ scale: 1.05 }}
             transition={{ type: "spring", stiffness: 400, damping: 25 }}
           >
             <img 
               src={`${logoSrc}?v=4`}
               alt={currentBranding?.company_name || "Nauti One"}
-              className="w-8 h-8 object-contain"
+              className="w-full h-full object-contain"
             />
           </motion.div>
           {!collapsed && (
