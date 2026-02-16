@@ -1,38 +1,22 @@
 /**
  * RAG Knowledge Assistant - Enterprise Intelligence Suite
- * Chatbot com IA + RAG para consultas contextuais de documentos
+ * Refactored: Orchestrator pattern
  */
 
 import React, { useState, useRef, useEffect } from 'react';
 import { Helmet } from 'react-helmet-async';
-import { motion, AnimatePresence } from 'framer-motion';
-import {
-  Brain,
-  Send,
-  FileText,
-  MessageSquare,
-  Sparkles,
-  Loader2,
-  BookOpen,
-  RefreshCw,
-  Copy,
-  Check,
-  ThumbsUp,
-  ThumbsDown,
-  ExternalLink,
-  History,
-  Plus,
-  Trash2,
-} from 'lucide-react';
+import { motion } from 'framer-motion';
+import { Brain, Send, Sparkles, Loader2 } from 'lucide-react';
 import { Card, CardContent, CardHeader, CardTitle, CardDescription } from '@/components/ui/card';
 import { Button } from '@/components/ui/button';
 import { Input } from '@/components/ui/input';
 import { Badge } from '@/components/ui/badge';
 import { ScrollArea } from '@/components/ui/scroll-area';
-import { Separator } from '@/components/ui/separator';
 import { toast } from 'sonner';
-import { cn } from '@/lib/utils';
 import { supabase } from '@/integrations/supabase/client';
+
+import { ConversationSidebar } from './rag/ConversationSidebar';
+import { ChatMessage } from './rag/ChatMessage';
 
 interface Message {
   id: string;
@@ -60,12 +44,8 @@ export default function RAGAssistantPage() {
 
   const currentConversation = conversations.find(c => c.id === activeConversation);
 
-  const scrollToBottom = () => {
-    messagesEndRef.current?.scrollIntoView({ behavior: 'smooth' });
-  };
-
   useEffect(() => {
-    scrollToBottom();
+    messagesEndRef.current?.scrollIntoView({ behavior: 'smooth' });
   }, [currentConversation?.messages]);
 
   const createNewConversation = () => {
@@ -81,10 +61,7 @@ export default function RAGAssistantPage() {
 
   const sendMessage = async () => {
     if (!input.trim() || isLoading) return;
-
-    if (!activeConversation) {
-      createNewConversation();
-    }
+    if (!activeConversation) createNewConversation();
 
     const userMessage: Message = {
       id: crypto.randomUUID(),
@@ -104,42 +81,30 @@ export default function RAGAssistantPage() {
     setIsLoading(true);
 
     try {
-      // Call AI Hub Chat edge function with knowledge context
       const { data, error } = await supabase.functions.invoke('ai-hub-chat', {
         body: {
-          module: 'compliance', // Use compliance module for knowledge queries
+          module: 'compliance',
           message: input.trim(),
           context: {
             type: 'knowledge_query',
-            history: currentConversation?.messages.slice(-5).map(m => ({
-              role: m.role,
-              content: m.content
-            })) || []
+            history: currentConversation?.messages.slice(-5).map(m => ({ role: m.role, content: m.content })) || []
           }
         }
       });
-
       if (error) throw error;
 
       const assistantMessage: Message = {
         id: crypto.randomUUID(),
         role: 'assistant',
         content: data?.response || data?.message || 'Desculpe, não consegui processar sua pergunta. Tente novamente.',
-        sources: data?.sources || [
-          { title: 'Base de Conhecimento Nauti One', relevance: 90 },
-        ],
+        sources: data?.sources || [{ title: 'Base de Conhecimento Nauti One', relevance: 90 }],
         timestamp: new Date(),
       };
 
       setConversations(prev =>
-        prev.map(c =>
-          c.id === activeConversation
-            ? { ...c, messages: [...c.messages, assistantMessage] }
-            : c
-        )
+        prev.map(c => c.id === activeConversation ? { ...c, messages: [...c.messages, assistantMessage] } : c)
       );
     } catch {
-      // Fallback response when API is unavailable
       const fallbackMessage: Message = {
         id: crypto.randomUUID(),
         role: 'assistant',
@@ -151,13 +116,8 @@ export default function RAGAssistantPage() {
         ],
         timestamp: new Date(),
       };
-
       setConversations(prev =>
-        prev.map(c =>
-          c.id === activeConversation
-            ? { ...c, messages: [...c.messages, fallbackMessage] }
-            : c
-        )
+        prev.map(c => c.id === activeConversation ? { ...c, messages: [...c.messages, fallbackMessage] } : c)
       );
       toast.warning('Usando resposta offline - conecte-se para respostas em tempo real');
     } finally {
@@ -176,9 +136,7 @@ export default function RAGAssistantPage() {
     setConversations(prev =>
       prev.map(c => ({
         ...c,
-        messages: c.messages.map(m =>
-          m.id === messageId ? { ...m, feedback } : m
-        ),
+        messages: c.messages.map(m => m.id === messageId ? { ...m, feedback } : m),
       }))
     );
     toast.success(feedback === 'positive' ? 'Obrigado pelo feedback positivo!' : 'Obrigado! Vamos melhorar.');
@@ -186,9 +144,7 @@ export default function RAGAssistantPage() {
 
   const deleteConversation = (id: string) => {
     setConversations(prev => prev.filter(c => c.id !== id));
-    if (activeConversation === id) {
-      setActiveConversation(conversations[0]?.id || null);
-    }
+    if (activeConversation === id) setActiveConversation(conversations[0]?.id || null);
     toast.success('Conversa excluída');
   };
 
@@ -208,58 +164,14 @@ export default function RAGAssistantPage() {
 
       <div className="container mx-auto py-6 h-[calc(100vh-120px)]">
         <div className="flex h-full gap-4">
-          {/* Sidebar - Conversas */}
-          <Card className="w-64 flex-shrink-0">
-            <CardHeader className="pb-2">
-              <div className="flex items-center justify-between">
-                <CardTitle className="text-sm">Conversas</CardTitle>
-                <Button size="sm" onClick={createNewConversation}>
-                  <Plus className="h-4 w-4" />
-                </Button>
-              </div>
-            </CardHeader>
-            <CardContent className="p-2">
-              <ScrollArea className="h-[calc(100vh-280px)]">
-                <div className="space-y-1">
-                  {conversations.map((conv) => (
-                    <div
-                      key={conv.id}
-                      className={cn(
-                        "flex items-center justify-between p-2 rounded-lg cursor-pointer group",
-                        activeConversation === conv.id ? "bg-primary/10" : "hover:bg-muted"
-                      )}
-                      onClick={() => setActiveConversation(conv.id)}
-                    >
-                      <div className="flex items-center gap-2 min-w-0">
-                        <History className="h-4 w-4 flex-shrink-0 text-muted-foreground" />
-                        <span className="text-sm truncate">{conv.title}</span>
-                      </div>
-                      <Button
-                        variant="ghost"
-                        size="icon"
-                        className="h-6 w-6 opacity-0 group-hover:opacity-100"
-                        onClick={(e) => {
-                          e.stopPropagation();
-                          deleteConversation(conv.id);
-                        }}
-                        aria-label="Excluir conversa"
-                        title="Excluir"
-                      >
-                        <Trash2 className="h-3 w-3 text-destructive" />
-                      </Button>
-                    </div>
-                  ))}
-                  {conversations.length === 0 && (
-                    <p className="text-sm text-muted-foreground text-center py-4">
-                      Nenhuma conversa ainda
-                    </p>
-                  )}
-                </div>
-              </ScrollArea>
-            </CardContent>
-          </Card>
+          <ConversationSidebar
+            conversations={conversations}
+            activeId={activeConversation}
+            onSelect={setActiveConversation}
+            onCreate={createNewConversation}
+            onDelete={deleteConversation}
+          />
 
-          {/* Main Chat Area */}
           <Card className="flex-1 flex flex-col">
             <CardHeader className="border-b pb-4">
               <div className="flex items-center gap-3">
@@ -274,140 +186,37 @@ export default function RAGAssistantPage() {
                       Enterprise
                     </Badge>
                   </CardTitle>
-                  <CardDescription>
-                    Consulte manuais, procedimentos e documentos com IA
-                  </CardDescription>
+                  <CardDescription>Consulte manuais, procedimentos e documentos com IA</CardDescription>
                 </div>
               </div>
             </CardHeader>
 
             <CardContent className="flex-1 flex flex-col p-4 overflow-hidden">
-              {/* Messages */}
               <ScrollArea className="flex-1 pr-4">
                 <div className="space-y-4">
                   {currentConversation?.messages.map((message) => (
-                    <motion.div
+                    <ChatMessage
                       key={message.id}
-                      initial={{ opacity: 0, y: 10 }}
-                      animate={{ opacity: 1, y: 0 }}
-                      className={cn(
-                        "flex gap-3",
-                        message.role === 'user' ? 'justify-end' : 'justify-start'
-                      )}
-                    >
-                      {message.role === 'assistant' && (
-                        <div className="p-2 rounded-full bg-primary/10 h-8 w-8 flex items-center justify-center flex-shrink-0">
-                          <Brain className="h-4 w-4 text-primary" />
-                        </div>
-                      )}
-                      <div
-                        className={cn(
-                          "max-w-[80%] rounded-2xl p-4",
-                          message.role === 'user'
-                            ? 'bg-primary text-primary-foreground'
-                            : 'bg-muted'
-                        )}
-                      >
-                        <p className="whitespace-pre-wrap text-sm">{message.content}</p>
-                        
-                        {message.sources && message.sources.length > 0 && (
-                          <div className="mt-3 pt-3 border-t border-border/50">
-                            <p className="text-xs font-medium mb-2 flex items-center gap-1">
-                              <FileText className="h-3 w-3" />
-                              Fontes consultadas:
-                            </p>
-                            <div className="space-y-1">
-                               {message.sources.map((source) => (
-                                 <div
-                                   key={source.title}
-                                  className="flex items-center justify-between text-xs bg-background/50 rounded p-2"
-                                >
-                                  <span className="flex items-center gap-2">
-                                    <BookOpen className="h-3 w-3" />
-                                    {source.title}
-                                  </span>
-                                  <Badge variant="outline" className="text-xs">
-                                    {source.relevance}% relevante
-                                  </Badge>
-                                </div>
-                              ))}
-                            </div>
-                          </div>
-                        )}
-
-                        {message.role === 'assistant' && (
-                          <div className="flex items-center gap-2 mt-3 pt-2 border-t border-border/50">
-                            <Button
-                              variant="ghost"
-                              size="icon"
-                              className="h-7 w-7"
-                              onClick={() => copyToClipboard(message.content, message.id)}
-                              aria-label="Copiar resposta"
-                              title="Copiar"
-                            >
-                              {copiedId === message.id ? (
-                                <Check className="h-3 w-3 text-success" />
-                              ) : (
-                                <Copy className="h-3 w-3" />
-                              )}
-                            </Button>
-                            <Button
-                              variant="ghost"
-                              size="icon"
-                              className={cn(
-                                "h-7 w-7",
-                                message.feedback === 'positive' && "text-success"
-                              )}
-                              onClick={() => provideFeedback(message.id, 'positive')}
-                              aria-label="Feedback positivo"
-                              title="Útil"
-                            >
-                              <ThumbsUp className="h-3 w-3" />
-                            </Button>
-                            <Button
-                              variant="ghost"
-                              size="icon"
-                              className={cn(
-                                "h-7 w-7",
-                                message.feedback === 'negative' && "text-destructive"
-                              )}
-                              onClick={() => provideFeedback(message.id, 'negative')}
-                              aria-label="Feedback negativo"
-                              title="Não útil"
-                            >
-                              <ThumbsDown className="h-3 w-3" />
-                            </Button>
-                          </div>
-                        )}
-                      </div>
-                      {message.role === 'user' && (
-                        <div className="p-2 rounded-full bg-primary h-8 w-8 flex items-center justify-center flex-shrink-0">
-                          <MessageSquare className="h-4 w-4 text-primary-foreground" />
-                        </div>
-                      )}
-                    </motion.div>
+                      message={message}
+                      copiedId={copiedId}
+                      onCopy={copyToClipboard}
+                      onFeedback={provideFeedback}
+                    />
                   ))}
                   
                   {isLoading && (
-                    <motion.div
-                      initial={{ opacity: 0 }}
-                      animate={{ opacity: 1 }}
-                      className="flex gap-3"
-                    >
+                    <motion.div initial={{ opacity: 0 }} animate={{ opacity: 1 }} className="flex gap-3">
                       <div className="p-2 rounded-full bg-primary/10 h-8 w-8 flex items-center justify-center">
                         <Loader2 className="h-4 w-4 text-primary animate-spin" />
                       </div>
                       <div className="bg-muted rounded-2xl p-4">
-                        <div className="flex items-center gap-2">
-                          <span className="text-sm text-muted-foreground">Analisando documentos...</span>
-                        </div>
+                        <span className="text-sm text-muted-foreground">Analisando documentos...</span>
                       </div>
                     </motion.div>
                   )}
                   <div ref={messagesEndRef} />
                 </div>
 
-                {/* Suggested Questions - Empty State */}
                 {(!currentConversation || currentConversation.messages.length === 0) && (
                   <div className="flex flex-col items-center justify-center h-full py-12">
                     <div className="p-4 rounded-2xl bg-gradient-to-br from-primary/20 to-primary/5 mb-4">
@@ -418,9 +227,9 @@ export default function RAGAssistantPage() {
                       Faça perguntas sobre manuais, procedimentos, checklists e qualquer documento da sua base de conhecimento.
                     </p>
                     <div className="grid grid-cols-2 gap-2 max-w-lg">
-                       {suggestedQuestions.map((question) => (
-                         <Button
-                           key={question}
+                      {suggestedQuestions.map((question) => (
+                        <Button
+                          key={question}
                           variant="outline"
                           className="text-left h-auto py-3 px-4"
                           onClick={() => {
@@ -436,7 +245,6 @@ export default function RAGAssistantPage() {
                 )}
               </ScrollArea>
 
-              {/* Input Area */}
               <div className="pt-4 border-t mt-4">
                 <div className="flex gap-2">
                   <Input
@@ -448,11 +256,7 @@ export default function RAGAssistantPage() {
                     className="flex-1"
                   />
                   <Button onClick={sendMessage} disabled={isLoading || !input.trim()}>
-                    {isLoading ? (
-                      <Loader2 className="h-4 w-4 animate-spin" />
-                    ) : (
-                      <Send className="h-4 w-4" />
-                    )}
+                    {isLoading ? <Loader2 className="h-4 w-4 animate-spin" /> : <Send className="h-4 w-4" />}
                   </Button>
                 </div>
                 <p className="text-xs text-muted-foreground mt-2 text-center">
