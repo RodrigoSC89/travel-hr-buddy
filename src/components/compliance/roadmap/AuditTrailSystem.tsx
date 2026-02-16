@@ -126,9 +126,9 @@ export const AuditTrailSystem = () => {
 
   const getStatusIcon = (status: string) => {
     switch (status) {
-      case "success": return <CheckCircle2 className="h-4 w-4 text-green-500" />;
-      case "warning": return <AlertTriangle className="h-4 w-4 text-yellow-500" />;
-      case "failure": return <XCircle className="h-4 w-4 text-red-500" />;
+      case "success": return <CheckCircle2 className="h-4 w-4 text-success" />;
+      case "warning": return <AlertTriangle className="h-4 w-4 text-warning" />;
+      case "failure": return <XCircle className="h-4 w-4 text-destructive" />;
       default: return <Clock className="h-4 w-4 text-muted-foreground" />;
     }
   };
@@ -268,31 +268,31 @@ export const AuditTrailSystem = () => {
           </CardContent>
         </Card>
 
-        <Card className="bg-gradient-to-br from-green-500/10 to-green-600/5 border-green-500/20">
+        <Card className="bg-gradient-to-br from-success/10 to-success/5 border-success/20">
           <CardContent className="pt-4">
             <div className="flex items-center justify-between">
               <div>
                 <p className="text-sm text-muted-foreground">Sucesso</p>
                 <p className="text-2xl font-bold">{stats.success}</p>
               </div>
-              <CheckCircle2 className="h-8 w-8 text-green-500" />
+              <CheckCircle2 className="h-8 w-8 text-success" />
             </div>
           </CardContent>
         </Card>
 
-        <Card className="bg-gradient-to-br from-yellow-500/10 to-yellow-600/5 border-yellow-500/20">
+        <Card className="bg-gradient-to-br from-warning/10 to-warning/5 border-warning/20">
           <CardContent className="pt-4">
             <div className="flex items-center justify-between">
               <div>
                 <p className="text-sm text-muted-foreground">Avisos</p>
                 <p className="text-2xl font-bold">{stats.warning}</p>
               </div>
-              <AlertTriangle className="h-8 w-8 text-yellow-500" />
+              <AlertTriangle className="h-8 w-8 text-warning" />
             </div>
           </CardContent>
         </Card>
 
-        <Card className="bg-gradient-to-br from-red-500/10 to-red-600/5 border-red-500/20">
+        <Card className="bg-gradient-to-br from-destructive/10 to-destructive/5 border-destructive/20">
           <CardContent className="pt-4">
             <div className="flex items-center justify-between">
               <div>

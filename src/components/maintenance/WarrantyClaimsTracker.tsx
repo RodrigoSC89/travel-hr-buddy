@@ -30,11 +30,11 @@ import {
 
 const STATUS_CONFIG: Record<string, { label: string; color: string }> = {
   draft: { label: "Draft", color: "bg-muted text-muted-foreground" },
-  submitted: { label: "Submitted", color: "bg-blue-500/20 text-blue-400" },
-  under_review: { label: "Under Review", color: "bg-yellow-500/20 text-yellow-400" },
-  approved: { label: "Approved", color: "bg-green-500/20 text-green-400" },
-  partial: { label: "Partial Recovery", color: "bg-cyan-500/20 text-cyan-400" },
-  rejected: { label: "Rejected", color: "bg-red-500/20 text-red-400" },
+  submitted: { label: "Submitted", color: "bg-primary/20 text-primary" },
+  under_review: { label: "Under Review", color: "bg-warning/20 text-warning" },
+  approved: { label: "Approved", color: "bg-success/20 text-success" },
+  partial: { label: "Partial Recovery", color: "bg-info/20 text-info" },
+  rejected: { label: "Rejected", color: "bg-destructive/20 text-destructive" },
   closed: { label: "Closed", color: "bg-muted text-muted-foreground" },
 };
 
@@ -254,15 +254,15 @@ export function WarrantyClaimsTracker() {
         </CardContent></Card>
         <Card><CardContent className="pt-4 pb-3">
           <div className="flex items-center gap-2 text-sm text-muted-foreground mb-1"><DollarSign className="h-4 w-4" /> Total Claimed</div>
-          <div className="text-2xl font-bold text-yellow-400">${(totalClaimed / 1000).toFixed(0)}K</div>
+          <div className="text-2xl font-bold text-warning">${(totalClaimed / 1000).toFixed(0)}K</div>
         </CardContent></Card>
         <Card><CardContent className="pt-4 pb-3">
           <div className="flex items-center gap-2 text-sm text-muted-foreground mb-1"><CheckCircle className="h-4 w-4" /> Recovered</div>
-          <div className="text-2xl font-bold text-green-400">${(totalRecovered / 1000).toFixed(0)}K</div>
+          <div className="text-2xl font-bold text-success">${(totalRecovered / 1000).toFixed(0)}K</div>
         </CardContent></Card>
         <Card><CardContent className="pt-4 pb-3">
           <div className="text-sm text-muted-foreground mb-1">Recovery Rate</div>
-          <div className="text-2xl font-bold text-blue-400">{recoveryRate.toFixed(1)}%</div>
+          <div className="text-2xl font-bold text-primary">{recoveryRate.toFixed(1)}%</div>
           <Progress value={recoveryRate} className="h-1 mt-1" />
         </CardContent></Card>
       </div>
@@ -322,7 +322,7 @@ export function WarrantyClaimsTracker() {
                             <td className="py-2 px-2 text-xs max-w-[200px] truncate">{c.equipment}</td>
                             <td className="py-2 px-2 text-xs">{c.manufacturer}</td>
                             <td className="py-2 px-2 text-right font-mono text-xs">${Number(c.claim_amount || 0).toLocaleString()}</td>
-                            <td className="py-2 px-2 text-right font-mono text-xs text-green-400">${Number(c.recovered_amount || 0).toLocaleString()}</td>
+                            <td className="py-2 px-2 text-right font-mono text-xs text-success">${Number(c.recovered_amount || 0).toLocaleString()}</td>
                             <td className="py-2 px-2 text-center">
                               <Badge className={`text-[10px] ${STATUS_CONFIG[c.status]?.color || ""}`}>
                                 {STATUS_CONFIG[c.status]?.label || c.status}

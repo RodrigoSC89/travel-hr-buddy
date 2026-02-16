@@ -71,10 +71,10 @@ const mockRoutes: RouteOption[] = [
 
 const riskColor = (level: string) => {
   switch (level) {
-    case "low": return "text-green-400";
-    case "moderate": return "text-yellow-400";
-    case "high": return "text-orange-400";
-    case "severe": return "text-red-400";
+    case "low": return "text-success";
+    case "moderate": return "text-warning";
+    case "high": return "text-accent-foreground";
+    case "severe": return "text-destructive";
     default: return "text-muted-foreground";
   }
 };
@@ -128,14 +128,14 @@ export function WeatherRoutingEngine() {
             <div className="space-y-1">
               <label className="text-xs text-muted-foreground">Departure Port</label>
               <div className="flex items-center gap-2">
-                <MapPin className="h-4 w-4 text-green-400" />
+                <MapPin className="h-4 w-4 text-success" />
                 <Input value={departure} onChange={e => setDeparture(e.target.value)} className="bg-background/50" />
               </div>
             </div>
             <div className="space-y-1">
               <label className="text-xs text-muted-foreground">Arrival Port</label>
               <div className="flex items-center gap-2">
-                <MapPin className="h-4 w-4 text-red-400" />
+                <MapPin className="h-4 w-4 text-destructive" />
                 <Input value={arrival} onChange={e => setArrival(e.target.value)} className="bg-background/50" />
               </div>
             </div>
@@ -213,7 +213,7 @@ export function WeatherRoutingEngine() {
                   <div className="space-y-1">
                     <div className="flex justify-between text-xs">
                       <span className="text-muted-foreground">Risk Score</span>
-                      <span className={route.risk_score < 30 ? "text-green-400" : route.risk_score < 60 ? "text-yellow-400" : "text-red-400"}>
+                      <span className={route.risk_score < 30 ? "text-success" : route.risk_score < 60 ? "text-warning" : "text-destructive"}>
                         {route.risk_score}/100
                       </span>
                     </div>
@@ -232,7 +232,7 @@ export function WeatherRoutingEngine() {
                   </div>
 
                   {route.savings_usd > 0 && (
-                    <div className="text-center py-1 bg-green-500/10 rounded text-green-400 text-xs font-medium">
+                    <div className="text-center py-1 bg-success/10 rounded text-success text-xs font-medium">
                       💰 Saves US$ {route.savings_usd.toLocaleString()}
                     </div>
                   )}

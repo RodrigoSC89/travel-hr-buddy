@@ -337,9 +337,9 @@ export function ASOGStatusDisplay({
               {data.systems.map((system) => (
                 <div key={system.id} className="flex items-center justify-between p-2 rounded-lg bg-muted/50">
                   <div className="flex items-center gap-2">
-                    {system.status === "operational" && <CheckCircle className="h-4 w-4 text-green-500" />}
-                    {system.status === "degraded" && <AlertTriangle className="h-4 w-4 text-yellow-500" />}
-                    {system.status === "failed" && <XCircle className="h-4 w-4 text-red-500" />}
+                {system.status === "operational" && <CheckCircle className="h-4 w-4 text-success" />}
+                    {system.status === "degraded" && <AlertTriangle className="h-4 w-4 text-warning" />}
+                    {system.status === "failed" && <XCircle className="h-4 w-4 text-destructive" />}
                     <span className="text-sm">{system.name}</span>
                   </div>
                   <div className="flex items-center gap-2">

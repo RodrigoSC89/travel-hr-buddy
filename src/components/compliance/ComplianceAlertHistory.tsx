@@ -190,17 +190,17 @@ export function ComplianceAlertHistory({ onAlertClick }: ComplianceAlertHistoryP
 
   const getTypeIcon = (type: ComplianceAlertRecord['type']) => {
     switch (type) {
-      case 'critical': return <AlertTriangle className="h-4 w-4 text-red-500" />;
-      case 'warning': return <AlertTriangle className="h-4 w-4 text-orange-500" />;
-      case 'info': return <Info className="h-4 w-4 text-blue-500" />;
+      case 'critical': return <AlertTriangle className="h-4 w-4 text-destructive" />;
+      case 'warning': return <AlertTriangle className="h-4 w-4 text-warning" />;
+      case 'info': return <Info className="h-4 w-4 text-info" />;
     }
   };
 
   const getTypeBadge = (type: ComplianceAlertRecord['type']) => {
     const styles: Record<string, string> = {
-      critical: 'bg-red-500/10 text-red-500 border-red-500/20',
-      warning: 'bg-orange-500/10 text-orange-500 border-orange-500/20',
-      info: 'bg-blue-500/10 text-blue-500 border-blue-500/20',
+      critical: 'bg-destructive/10 text-destructive border-destructive/20',
+      warning: 'bg-warning/10 text-warning border-warning/20',
+      info: 'bg-info/10 text-info border-info/20',
     };
     const labels = { critical: 'Crítico', warning: 'Alerta', info: 'Info' };
     return <Badge variant="outline" className={styles[type]}>{labels[type]}</Badge>;
@@ -251,36 +251,36 @@ export function ComplianceAlertHistory({ onAlertClick }: ComplianceAlertHistoryP
         </Card>
         <Card className="p-4">
           <div className="flex items-center gap-2">
-            <AlertTriangle className="h-4 w-4 text-red-500" />
+            <AlertTriangle className="h-4 w-4 text-destructive" />
             <div>
-              <p className="text-2xl font-bold text-red-500">{stats.critical}</p>
+              <p className="text-2xl font-bold text-destructive">{stats.critical}</p>
               <p className="text-xs text-muted-foreground">Críticos</p>
             </div>
           </div>
         </Card>
         <Card className="p-4">
           <div className="flex items-center gap-2">
-            <AlertTriangle className="h-4 w-4 text-orange-500" />
+            <AlertTriangle className="h-4 w-4 text-warning" />
             <div>
-              <p className="text-2xl font-bold text-orange-500">{stats.warning}</p>
+              <p className="text-2xl font-bold text-warning">{stats.warning}</p>
               <p className="text-xs text-muted-foreground">Alertas</p>
             </div>
           </div>
         </Card>
         <Card className="p-4">
           <div className="flex items-center gap-2">
-            <Info className="h-4 w-4 text-blue-500" />
+            <Info className="h-4 w-4 text-info" />
             <div>
-              <p className="text-2xl font-bold text-blue-500">{stats.info}</p>
+              <p className="text-2xl font-bold text-info">{stats.info}</p>
               <p className="text-xs text-muted-foreground">Informativos</p>
             </div>
           </div>
         </Card>
         <Card className="p-4">
           <div className="flex items-center gap-2">
-            <Clock className="h-4 w-4 text-yellow-500" />
+            <Clock className="h-4 w-4 text-warning" />
             <div>
-              <p className="text-2xl font-bold text-yellow-500">{stats.unacknowledged}</p>
+              <p className="text-2xl font-bold text-warning">{stats.unacknowledged}</p>
               <p className="text-xs text-muted-foreground">Pendentes</p>
             </div>
           </div>
@@ -440,7 +440,7 @@ export function ComplianceAlertHistory({ onAlertClick }: ComplianceAlertHistoryP
                               </span>
                             )}
                             {alert.acknowledged && (
-                              <span className="flex items-center gap-1 text-green-600">
+                              <span className="flex items-center gap-1 text-success">
                                 <CheckCircle className="h-3 w-3" />
                                 Confirmado por {alert.acknowledgedBy}
                               </span>
