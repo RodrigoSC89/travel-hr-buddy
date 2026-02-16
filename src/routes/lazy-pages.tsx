@@ -330,6 +330,15 @@ export const PerformanceMonitorPage = lazy(() => import("@/pages/PerformanceMoni
 export const PremiumReportsPage = lazy(() => import("@/pages/PremiumReportsPage"));
 export const WhatsAppBotPage = lazy(() => import("@/pages/WhatsAppBotPage"));
 
+// ============================================
+// WORLD-CLASS NEXT-GEN MODULES (vs StormGeo, DNV Navigator, Integr8, Compas E-CMS, Veson)
+// ============================================
+export const WeatherRoutingPage = lazy(() => import("@/pages/WeatherRoutingPage"));
+export const EnergyEfficiencyPage = lazy(() => import("@/pages/EnergyEfficiencyPage"));
+export const BunkerOptimizationEnginePage = lazy(() => import("@/pages/BunkerOptimizationEnginePage"));
+export const CrewDocumentVaultPage = lazy(() => import("@/pages/CrewDocumentVaultPage"));
+export const AdvancedCargoPage = lazy(() => import("@/pages/AdvancedCargoPage"));
+
 // AdminRoute (lazy-loaded RoleGuard)
 export const AdminRoute = lazy(() => import('@/components/auth/RoleGuard').then(mod => ({
   default: ({ children }: { children: React.ReactNode }) => (

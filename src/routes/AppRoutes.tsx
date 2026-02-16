@@ -274,6 +274,13 @@ export const AppRoutes = () => (
       <Route path="/cap-assessment" element={<Pages.CAPAssessmentPage />} />
       <Route path="/operations-command" element={<Pages.OperationsCommandCenter />} />
       
+      {/* ======== NEXT-GEN WORLD-CLASS MODULES ======== */}
+      <Route path="/weather-routing" element={<Pages.WeatherRoutingPage />} />
+      <Route path="/energy-efficiency" element={<Pages.EnergyEfficiencyPage />} />
+      <Route path="/bunker-optimization-engine" element={<Pages.BunkerOptimizationEnginePage />} />
+      <Route path="/crew-document-vault" element={<Pages.CrewDocumentVaultPage />} />
+      <Route path="/advanced-cargo" element={<Pages.AdvancedCargoPage />} />
+      
       {/* ======== ESG & SUSTENTABILIDADE ======== */}
       <Route path="/esg-emissions" element={<Pages.ESGEmissionsPage />} />
       <Route path="/waste-management" element={<Pages.EnhancedWasteManagement />} />
