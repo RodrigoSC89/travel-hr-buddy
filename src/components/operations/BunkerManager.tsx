@@ -180,7 +180,7 @@ export function BunkerManager() {
             <CardContent className="h-64">
               <ResponsiveContainer width="100%" height="100%">
                 <PieChart><Pie data={stats.byType} dataKey="value" nameKey="name" cx="50%" cy="50%" outerRadius={80} label>
-                  {stats.byType.map((_, i) => <Cell key={i} fill={CHART_COLORS[i % CHART_COLORS.length]} />)}
+                  {stats.byType.map((entry, i) => <Cell key={`cell-${entry.name}-${i}`} fill={CHART_COLORS[i % CHART_COLORS.length]} />)}
                 </Pie><Tooltip /></PieChart>
               </ResponsiveContainer>
             </CardContent>

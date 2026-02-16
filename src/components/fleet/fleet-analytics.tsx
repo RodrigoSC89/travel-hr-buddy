@@ -155,7 +155,7 @@ const FleetAnalytics: React.FC = () => {
               <ResponsiveContainer width="100%" height={200}>
                 <PieChart>
                   <Pie data={statusData} dataKey="value" nameKey="name" cx="50%" cy="50%" outerRadius={70} label>
-                    {statusData.map((_, i) => <Cell key={i} fill={COLORS[i % COLORS.length]} />)}
+                    {statusData.map((entry, i) => <Cell key={`status-${entry.name}-${i}`} fill={COLORS[i % COLORS.length]} />)}
                   </Pie>
                   <Tooltip />
                 </PieChart>

@@ -316,7 +316,7 @@ export const RealTimeSystemMonitor: React.FC = () => {
               <Zap className="w-4 h-4 mr-2" />
               Re-check Health
             </Button>
-            <Button variant="outline" size="sm" onClick={() => { toast.info('Invalidando cache...'); queryClient.invalidateQueries(); setTimeout(() => toast.success('Cache invalidado com sucesso'), 500); }}>
+            <Button variant="outline" size="sm" onClick={async () => { toast.info('Invalidando cache...'); await queryClient.invalidateQueries(); toast.success('Cache invalidado com sucesso'); }}>
               <HardDrive className="w-4 h-4 mr-2" />
               Limpar Cache
             </Button>
