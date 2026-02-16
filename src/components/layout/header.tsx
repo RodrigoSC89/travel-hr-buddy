@@ -133,7 +133,7 @@ export const Header: FC = () => {
         
         <div className="flex flex-1 items-center justify-end gap-2 min-w-0">
           {/* Search - Desktop */}
-          <div className="hidden sm:flex flex-1 max-w-sm mx-auto">
+          <div className="hidden sm:flex flex-1 max-w-sm mx-auto" data-tour="header-search">
             <SimpleGlobalSearch />
           </div>
 
@@ -164,14 +164,14 @@ export const Header: FC = () => {
           <nav className="flex items-center gap-1 shrink-0">
             {isMobile ? (
               <>
-                <RealTimeNotificationCenter />
+                <span data-tour="header-notifications"><RealTimeNotificationCenter /></span>
                 <UserMenu />
               </>
             ) : (
               <>
                 <LanguageSelector />
                 <OrganizationSelector />
-                <RealTimeNotificationCenter />
+                <span data-tour="header-notifications"><RealTimeNotificationCenter /></span>
                 
                 <TooltipProvider delayDuration={0}>
                   <Tooltip>
