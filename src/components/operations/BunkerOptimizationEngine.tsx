@@ -137,10 +137,14 @@ export function BunkerOptimizationEngine() {
 
         <TabsContent value="rob" className="space-y-4">
           <div className="grid gap-3">
-            {(vessels || []).slice(0, 4).map((vessel, i) => {
-              const rob = 800 + Math.random() * 1200;
+          {(vessels || []).slice(0, 4).map((vessel, i) => {
+              // Deterministic ROB based on vessel index
+              const robValues = [1850, 1420, 980, 650];
+              const consumptionValues = [42, 38, 45, 35];
+              const rob = robValues[i] || 1200;
+              const consumption = consumptionValues[i] || 40;
               const capacity = 2500;
-              const daysLeft = Math.round(rob / (35 + Math.random() * 15));
+              const daysLeft = Math.round(rob / consumption);
               const pct = (rob / capacity) * 100;
               return (
                 <Card key={vessel.id} className="border-border/50 bg-card/80 backdrop-blur">
@@ -150,9 +154,9 @@ export function BunkerOptimizationEngine() {
                       <div className="flex-1">
                         <p className="text-sm font-medium">{vessel.name}</p>
                         <div className="flex items-center gap-3 text-xs text-muted-foreground mt-1">
-                          <span>ROB: {Math.round(rob)} MT</span>
-                          <span>Consumption: ~{Math.round(35 + Math.random() * 15)} MT/day</span>
-                          <span className={daysLeft < 7 ? "text-red-400 font-medium" : daysLeft < 14 ? "text-yellow-400" : "text-green-400"}>
+                          <span>ROB: {rob} MT</span>
+                          <span>Consumption: ~{consumption} MT/day</span>
+                          <span className={daysLeft < 7 ? "text-destructive font-medium" : daysLeft < 14 ? "text-warning" : "text-success"}>
                             {daysLeft} days remaining
                           </span>
                         </div>
