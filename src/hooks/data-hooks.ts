@@ -19,6 +19,8 @@ export { useNotificationsCenter, useCommunicationMessages, useCommunicationChann
 export { useAgentOrchestratorData } from "./useAgentOrchestratorData";
 export { useVesselTrackingData } from "./useVesselTrackingData";
 export { usePharmacyData } from "./usePharmacyData";
+export { useCrossModuleAutomation } from "./useCrossModuleAutomation";
+export { useSessionSecurity } from "./useSessionSecurity";
 
 // Re-export types for convenience
 export type { VoyageData, MissionData, PortData } from "./useOperationsCommandData";
