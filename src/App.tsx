@@ -21,6 +21,7 @@ import { AppRoutes } from "@/routes/AppRoutes";
 import { AppLoader } from "@/routes/AppLoader";
 import { prefetchCriticalRoutes } from "@/lib/performance/route-prefetch";
 import { initNautiOneDB } from "@/lib/offline/db";
+import { PerformanceProvider } from "@/components/ui/PerformanceProvider";
 
 // ============================================
 // GLOBAL ERROR HANDLERS - Prevent white screens
@@ -74,20 +75,22 @@ function App() {
   return (
     <QueryClientProvider client={queryClient}>
       <ThemeProvider defaultTheme="dark" storageKey="nautilus-ui-theme">
-        <AuthProvider>
-          <Router>
-            <TooltipProvider>
-              <LazyLoadErrorBoundary>
-                <main id="main-content" role="main">
-                  <Suspense fallback={<AppLoader />}>
-                    <AppRoutes />
-                  </Suspense>
-                </main>
-              </LazyLoadErrorBoundary>
-              <Toaster />
-            </TooltipProvider>
-          </Router>
-        </AuthProvider>
+        <PerformanceProvider>
+          <AuthProvider>
+            <Router>
+              <TooltipProvider>
+                <LazyLoadErrorBoundary>
+                  <main id="main-content" role="main">
+                    <Suspense fallback={<AppLoader />}>
+                      <AppRoutes />
+                    </Suspense>
+                  </main>
+                </LazyLoadErrorBoundary>
+                <Toaster />
+              </TooltipProvider>
+            </Router>
+          </AuthProvider>
+        </PerformanceProvider>
       </ThemeProvider>
     </QueryClientProvider>
   );
