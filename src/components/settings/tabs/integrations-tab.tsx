@@ -162,14 +162,14 @@ export const IntegrationsTab: React.FC<IntegrationsTabProps> = ({
   const getStatusBadge = (status: string) => {
     if (status === "connected") {
       return (
-        <Badge className="bg-green-100 text-green-800">
+        <Badge className="bg-success/10 text-success border-success/20">
           <CheckCircle className="w-3 h-3 mr-1" />
           Conectado
         </Badge>
       );
     }
     return (
-      <Badge variant="outline" className="text-orange-600 border-orange-200">
+      <Badge variant="outline" className="text-warning border-warning/30">
         <AlertTriangle className="w-3 h-3 mr-1" />
         Desconectado
       </Badge>
@@ -332,7 +332,7 @@ export const IntegrationsTab: React.FC<IntegrationsTabProps> = ({
                         <p className="text-sm text-muted-foreground">{webhook.url}</p>
                       </div>
                       {webhook.active && (
-                        <Badge className="bg-green-100 text-green-800">Ativo</Badge>
+                        <Badge className="bg-success/10 text-success border-success/20">Ativo</Badge>
                       )}
                     </div>
                     <div className="flex items-center gap-2">
@@ -382,7 +382,7 @@ export const IntegrationsTab: React.FC<IntegrationsTabProps> = ({
                   <div key={service.id} className="p-4 border rounded-lg">
                     <div className="flex items-center justify-between mb-3">
                       <span className="text-2xl">{service.icon}</span>
-                      <Badge className="bg-green-100 text-green-800">
+                      <Badge className="bg-success/10 text-success border-success/20">
                         <CheckCircle className="w-3 h-3 mr-1" />
                         Ativo
                       </Badge>
@@ -401,13 +401,13 @@ export const IntegrationsTab: React.FC<IntegrationsTabProps> = ({
                 ))}
               </div>
 
-              <div className="p-4 bg-blue-50 border border-blue-200 rounded-lg">
-                <h4 className="font-medium mb-2 text-blue-800">Hub de Integrações</h4>
-                <p className="text-sm text-blue-700">
+              <div className="p-4 bg-info/5 border border-info/20 rounded-lg">
+                <h4 className="font-medium mb-2 text-foreground">Hub de Integrações</h4>
+                <p className="text-sm text-muted-foreground">
                   Conecte-se com mais serviços através do hub de integrações. 
                   Explore centenas de conectores disponíveis para automatizar seus processos.
                 </p>
-                <Button variant="outline" className="mt-3 text-blue-800 border-blue-300 hover:bg-blue-100">
+                <Button variant="outline" className="mt-3">
                   <Link2 className="w-4 h-4 mr-2" />
                   Abrir Hub de Integrações
                 </Button>
