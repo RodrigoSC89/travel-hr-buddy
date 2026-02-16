@@ -104,9 +104,8 @@ export function MLCWelfareScoring() {
     } : cat));
   };
 
-  const generateAIReport = async () => {
+  const generateAIReport = () => {
     setGenerating(true);
-    await new Promise(r => setTimeout(r, 1500));
 
     let report = `# MLC 2006 Welfare Assessment Report\n`;
     report += `**Date**: ${new Date().toLocaleDateString("en-GB")}\n`;

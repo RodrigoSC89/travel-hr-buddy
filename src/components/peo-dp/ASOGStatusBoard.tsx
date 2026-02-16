@@ -89,10 +89,8 @@ export function ASOGStatusBoard() {
     toast.success("Status atualizado", { description: `Sistema atualizado para ${newStatus}` });
   };
 
-  const runAIAnalysis = async () => {
+  const runAIAnalysis = () => {
     setAnalyzing(true);
-    // Simulate AI analysis of ASOG status
-    await new Promise(r => setTimeout(r, 1500));
     const redSystems = systems.filter(s => s.status === "RED");
     const yellowSystems = systems.filter(s => s.status === "YELLOW");
 

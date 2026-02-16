@@ -71,9 +71,8 @@ export function PeotramCorrelationMatrix({ elementScores = {} }: Props) {
       .slice(0, 5);
   }, [elementScores]);
 
-  const runCascadeAnalysis = async () => {
+  const runCascadeAnalysis = () => {
     setAnalyzing(true);
-    await new Promise(r => setTimeout(r, 1200));
 
     let analysis = "## 🔗 Análise de Cascata PEOTRAM\n\n";
 
