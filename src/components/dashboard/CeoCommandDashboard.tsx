@@ -226,12 +226,12 @@ export default function CeoCommandDashboard() {
 
       {/* Primary KPIs */}
       <div className="grid grid-cols-2 md:grid-cols-4 lg:grid-cols-6 gap-3">
-        <KPICard title="Frota Ativa" value={`${activeVessels}/${vessels.length}`} icon={<Ship className="h-4 w-4 text-primary" />} subtitle={`${fleetUtilization}% utilização`} change={2.5} trend="up" color="bg-blue-500" />
-        <KPICard title="Tripulação" value={activeCrew} icon={<Users className="h-4 w-4 text-primary" />} subtitle={`${crewReadiness}% prontidão`} change={1.2} trend="up" color="bg-green-500" />
-        <KPICard title="Compliance" value={`${complianceScore}%`} icon={<Shield className="h-4 w-4 text-primary" />} subtitle={`${openNCs} NCs abertas`} change={-0.5} trend={complianceScore > 85 ? "up" : "down"} color="bg-purple-500" />
-        <KPICard title="OPEX Total" value={`$${(totalExpenses / 1000).toFixed(0)}K`} icon={<DollarSign className="h-4 w-4 text-primary" />} subtitle="Último período" change={-3.2} trend="down" color="bg-amber-500" />
-        <KPICard title="Manutenção" value={pendingMaint} icon={<Wrench className="h-4 w-4 text-primary" />} subtitle="Pendentes/Atrasadas" change={pendingMaint > 10 ? 5 : -2} trend={pendingMaint > 10 ? "up" : "down"} color="bg-red-500" />
-        <KPICard title="Certificados" value={expiringCerts} icon={<FileCheck className="h-4 w-4 text-primary" />} subtitle="Vencendo em 30 dias" color="bg-orange-500" />
+        <KPICard title="Frota Ativa" value={`${activeVessels}/${vessels.length}`} icon={<Ship className="h-4 w-4 text-primary" />} subtitle={`${fleetUtilization}% utilização`} change={2.5} trend="up" color="bg-primary" />
+        <KPICard title="Tripulação" value={activeCrew} icon={<Users className="h-4 w-4 text-primary" />} subtitle={`${crewReadiness}% prontidão`} change={1.2} trend="up" color="bg-success" />
+        <KPICard title="Compliance" value={`${complianceScore}%`} icon={<Shield className="h-4 w-4 text-primary" />} subtitle={`${openNCs} NCs abertas`} change={-0.5} trend={complianceScore > 85 ? "up" : "down"} color="bg-accent" />
+        <KPICard title="OPEX Total" value={`$${(totalExpenses / 1000).toFixed(0)}K`} icon={<DollarSign className="h-4 w-4 text-primary" />} subtitle="Último período" change={-3.2} trend="down" color="bg-warning" />
+        <KPICard title="Manutenção" value={pendingMaint} icon={<Wrench className="h-4 w-4 text-primary" />} subtitle="Pendentes/Atrasadas" change={pendingMaint > 10 ? 5 : -2} trend={pendingMaint > 10 ? "up" : "down"} color="bg-destructive" />
+        <KPICard title="Certificados" value={expiringCerts} icon={<FileCheck className="h-4 w-4 text-primary" />} subtitle="Vencendo em 30 dias" color="bg-warning" />
       </div>
 
       {/* Alert Banner */}

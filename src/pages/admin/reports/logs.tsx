@@ -291,11 +291,11 @@ export default function RestoreReportLogsPage() {
   function getStatusIcon(status: string) {
     switch (status) {
     case "success":
-      return <CheckCircle2 className="w-5 h-5 text-green-600" />;
+      return <CheckCircle2 className="w-5 h-5 text-success" />;
     case "error":
-      return <XCircle className="w-5 h-5 text-red-600" />;
+      return <XCircle className="w-5 h-5 text-destructive" />;
     case "pending":
-      return <Clock className="w-5 h-5 text-yellow-600" />;
+      return <Clock className="w-5 h-5 text-warning" />;
     default:
       return <AlertCircle className="w-5 h-5 text-muted-foreground" />;
     }
@@ -304,11 +304,11 @@ export default function RestoreReportLogsPage() {
   function getStatusColor(status: string) {
     switch (status) {
     case "success":
-      return "border-l-green-500 bg-green-50/50";
+      return "border-l-success bg-success/5";
     case "error":
-      return "border-l-red-500 bg-red-50/50";
+      return "border-l-destructive bg-destructive/5";
     case "pending":
-      return "border-l-yellow-500 bg-yellow-50/50";
+      return "border-l-warning bg-warning/5";
     default:
       return "border-l-muted bg-muted/50";
     }
@@ -441,7 +441,7 @@ export default function RestoreReportLogsPage() {
                   <p className="text-sm text-muted-foreground">Total de Execuções</p>
                   <p className="text-2xl font-bold">{logs.length}</p>
                 </div>
-                <Clock className="w-8 h-8 text-blue-600 opacity-50" />
+                <Clock className="w-8 h-8 text-info opacity-50" />
               </div>
             </CardContent>
           </Card>
@@ -450,9 +450,9 @@ export default function RestoreReportLogsPage() {
               <div className="flex items-center justify-between">
                 <div>
                   <p className="text-sm text-muted-foreground">Sucessos</p>
-                  <p className="text-2xl font-bold text-green-600">{successCount}</p>
+                  <p className="text-2xl font-bold text-success">{successCount}</p>
                 </div>
-                <CheckCircle2 className="w-8 h-8 text-green-600 opacity-50" />
+                <CheckCircle2 className="w-8 h-8 text-success opacity-50" />
               </div>
             </CardContent>
           </Card>
@@ -461,9 +461,9 @@ export default function RestoreReportLogsPage() {
               <div className="flex items-center justify-between">
                 <div>
                   <p className="text-sm text-muted-foreground">Erros</p>
-                  <p className="text-2xl font-bold text-red-600">{errorCount}</p>
+                  <p className="text-2xl font-bold text-destructive">{errorCount}</p>
                 </div>
-                <XCircle className="w-8 h-8 text-red-600 opacity-50" />
+                <XCircle className="w-8 h-8 text-destructive opacity-50" />
               </div>
             </CardContent>
           </Card>
@@ -486,7 +486,7 @@ export default function RestoreReportLogsPage() {
             {loading ? (
               <div className="flex items-center justify-center p-12">
                 <div className="text-center">
-                  <div className="animate-spin rounded-full h-8 w-8 border-b-2 border-blue-600 mx-auto"></div>
+                  <div className="animate-spin rounded-full h-8 w-8 border-b-2 border-primary mx-auto"></div>
                   <p className="mt-4 text-muted-foreground">Carregando logs...</p>
                 </div>
               </div>

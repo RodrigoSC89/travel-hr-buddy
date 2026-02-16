@@ -39,19 +39,19 @@ export const FatiguePredictionAI: React.FC<{ vesselId?: string }> = ({ vesselId 
   ];
 
   return (
-    <Card className="border-red-500/20">
+    <Card className="border-destructive/20">
       <CardHeader>
         <CardTitle className="flex items-center gap-2">
-          <Moon className="h-5 w-5 text-red-500" />
+          <Moon className="h-5 w-5 text-destructive" />
           Predição de Fadiga IA
-          <Badge className="ml-auto bg-red-500/10 text-red-500">MLC 2006</Badge>
+          <Badge className="ml-auto bg-destructive/10 text-destructive">MLC 2006</Badge>
         </CardTitle>
       </CardHeader>
       <CardContent className="space-y-4">
         <div className="space-y-2">
           {crewRisk.map((crew) => (
             <div key={crew.name} className="flex items-center gap-3 p-2 rounded-lg border">
-              {crew.fatigue > 60 ? <Frown className="h-4 w-4 text-red-500" /> : crew.fatigue > 40 ? <Meh className="h-4 w-4 text-yellow-500" /> : <Smile className="h-4 w-4 text-green-500" />}
+              {crew.fatigue > 60 ? <Frown className="h-4 w-4 text-destructive" /> : crew.fatigue > 40 ? <Meh className="h-4 w-4 text-warning" /> : <Smile className="h-4 w-4 text-success" />}
               <div className="flex-1">
                 <div className="flex justify-between">
                   <span className="text-sm font-medium">{crew.name}</span>
@@ -101,10 +101,10 @@ export const WellbeingAI: React.FC<{ vesselId?: string }> = ({ vesselId }) => {
       <CardContent className="space-y-4">
         <div className="grid grid-cols-2 gap-3">
           {[
-            { label: "Score Geral", value: "78/100", icon: Heart, color: "text-pink-500" },
-            { label: "Moral Equipe", value: "Alto", icon: Smile, color: "text-green-500" },
-            { label: "Estresse Médio", value: "4.2/10", icon: Activity, color: "text-yellow-500" },
-            { label: "Descanso Adequado", value: "85%", icon: Moon, color: "text-blue-500" },
+            { label: "Score Geral", value: "78/100", icon: Heart, color: "text-accent" },
+            { label: "Moral Equipe", value: "Alto", icon: Smile, color: "text-success" },
+            { label: "Estresse Médio", value: "4.2/10", icon: Activity, color: "text-warning" },
+            { label: "Descanso Adequado", value: "85%", icon: Moon, color: "text-info" },
           ].map((m) => (
             <div key={m.label} className="p-3 rounded-lg border text-center">
               <m.icon className={`h-5 w-5 mx-auto ${m.color} mb-1`} />

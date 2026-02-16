@@ -20,8 +20,8 @@ type TravelType = 'embarkation' | 'disembarkation' | 'crew_change' | 'training' 
 
 const STATUS_CONFIG: Record<string, { label: string; color: string }> = {
   pending: { label: 'Planejado', color: 'bg-muted text-muted-foreground' },
-  in_progress: { label: 'Em Trânsito', color: 'bg-yellow-500/20 text-yellow-400' },
-  completed: { label: 'Concluído', color: 'bg-green-500/20 text-green-400' },
+  in_progress: { label: 'Em Trânsito', color: 'bg-warning/20 text-warning' },
+  completed: { label: 'Concluído', color: 'bg-success/20 text-success' },
   cancelled: { label: 'Cancelado', color: 'bg-destructive/20 text-destructive' },
 };
 
@@ -94,9 +94,9 @@ export function CrewTravelManager() {
       <div className="grid grid-cols-2 md:grid-cols-4 gap-4">
         {[
           { label: 'Total Viagens', value: travels.length, icon: Plane, color: 'text-primary' },
-          { label: 'Próximas', value: upcomingCount, icon: Calendar, color: 'text-blue-400' },
-          { label: 'Em Trânsito', value: inTransitCount, icon: Globe, color: 'text-yellow-400' },
-          { label: 'Tripulantes', value: crewMembers.length, icon: CreditCard, color: 'text-green-400' },
+          { label: 'Próximas', value: upcomingCount, icon: Calendar, color: 'text-info' },
+          { label: 'Em Trânsito', value: inTransitCount, icon: Globe, color: 'text-warning' },
+          { label: 'Tripulantes', value: crewMembers.length, icon: CreditCard, color: 'text-success' },
         ].map(kpi => (
           <Card key={kpi.label}><CardContent className="p-4 flex items-center gap-3">
             <kpi.icon className={`h-8 w-8 ${kpi.color}`} />

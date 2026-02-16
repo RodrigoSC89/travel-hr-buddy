@@ -104,9 +104,9 @@ export function CrewAppraisalSystem() {
       <div className="grid grid-cols-2 md:grid-cols-4 gap-4">
         {[
           { label: 'Total Avaliações', value: appraisals.length, icon: ClipboardList, color: 'text-primary' },
-          { label: 'Score Médio', value: `${overallAvg.toFixed(0)}%`, icon: BarChart3, color: 'text-blue-400' },
-          { label: 'Excelentes (≥80%)', value: excellentCount, icon: Award, color: 'text-green-400' },
-          { label: 'Atenção (<60%)', value: needsImprovementCount, icon: AlertTriangle, color: 'text-yellow-400' },
+          { label: 'Score Médio', value: `${overallAvg.toFixed(0)}%`, icon: BarChart3, color: 'text-info' },
+          { label: 'Excelentes (≥80%)', value: excellentCount, icon: Award, color: 'text-success' },
+          { label: 'Atenção (<60%)', value: needsImprovementCount, icon: AlertTriangle, color: 'text-warning' },
         ].map(kpi => (
           <Card key={kpi.label}><CardContent className="p-4 flex items-center gap-3">
             <kpi.icon className={`h-8 w-8 ${kpi.color}`} />
@@ -130,7 +130,7 @@ export function CrewAppraisalSystem() {
         <div className="space-y-2">
           {appraisals.map(appr => {
             const score = appr.confidence_score || 0;
-            const scoreColor = score >= 80 ? 'text-green-400' : score >= 60 ? 'text-blue-400' : 'text-yellow-400';
+            const scoreColor = score >= 80 ? 'text-success' : score >= 60 ? 'text-info' : 'text-warning';
             let crewName = 'N/A';
             try { const parsed = JSON.parse(appr.feedback_text || '{}'); crewName = parsed.crew_name || 'N/A'; } catch { /* skip */ }
             return (
