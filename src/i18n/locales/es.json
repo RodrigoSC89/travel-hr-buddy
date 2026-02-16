@@ -516,5 +516,24 @@
       "security": "Seguridad",
       "rights": "Todos los derechos reservados."
     }
+  },
+  "sidebar": {
+    "pinned": "Fijados",
+    "recent": "Recientes",
+    "navigation": "Navegación",
+    "modulesAvailable": "{{count}} módulos disponibles",
+    "searchModules": "Buscar módulos... (⌘K)",
+    "noModuleFound": "Ningún módulo encontrado",
+    "results": "{{count}} resultado(s)",
+    "logout": "Salir",
+    "navigateTo": "Navegar a {{label}}"
+  },
+  "header": {
+    "openMenu": "Abrir menú de navegación",
+    "settings": "Configuraciones",
+    "enableHighContrast": "Activar alto contraste",
+    "disableHighContrast": "Desactivar alto contraste",
+    "commandPalette": "Paleta de Comandos (⌘K)",
+    "breadcrumb": "Ruta de navegación"
   }
 }

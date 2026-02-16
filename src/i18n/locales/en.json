@@ -516,5 +516,24 @@
       "security": "Security",
       "rights": "All rights reserved."
     }
+  },
+  "sidebar": {
+    "pinned": "Pinned",
+    "recent": "Recent",
+    "navigation": "Navigation",
+    "modulesAvailable": "{{count}} modules available",
+    "searchModules": "Search modules... (⌘K)",
+    "noModuleFound": "No module found",
+    "results": "{{count}} result(s)",
+    "logout": "Logout",
+    "navigateTo": "Navigate to {{label}}"
+  },
+  "header": {
+    "openMenu": "Open navigation menu",
+    "settings": "Settings",
+    "enableHighContrast": "Enable high contrast",
+    "disableHighContrast": "Disable high contrast",
+    "commandPalette": "Command Palette (⌘K)",
+    "breadcrumb": "Breadcrumb"
   }
 }

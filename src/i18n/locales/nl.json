@@ -263,5 +263,24 @@
     "not_found": "Bron niet gevonden.",
     "validation": "Corrigeer de fouten in het formulier.",
     "server": "Serverfout. Probeer het later opnieuw."
+  },
+  "sidebar": {
+    "pinned": "Vastgezet",
+    "recent": "Recent",
+    "navigation": "Navigatie",
+    "modulesAvailable": "{{count}} modules beschikbaar",
+    "searchModules": "Zoek modules... (⌘K)",
+    "noModuleFound": "Geen module gevonden",
+    "results": "{{count}} resultaat/resultaten",
+    "logout": "Uitloggen",
+    "navigateTo": "Navigeer naar {{label}}"
+  },
+  "header": {
+    "openMenu": "Open navigatiemenu",
+    "settings": "Instellingen",
+    "enableHighContrast": "Hoog contrast inschakelen",
+    "disableHighContrast": "Hoog contrast uitschakelen",
+    "commandPalette": "Opdrachtpalet (⌘K)",
+    "breadcrumb": "Broodkruimel"
   }
 }

@@ -1,8 +1,9 @@
 /**
- * Header v11.0 - World-Class Maritime Command Bar
+ * Header v11.1 - World-Class Maritime Command Bar (i18n)
  * Premium header with glassmorphism, breadcrumbs, and status indicators
  */
 import type { FC } from "react";
+import { useTranslation } from "react-i18next";
 import { Button } from "@/components/ui/button";
 import { ThemeToggle } from "./theme-toggle";
 import { useSidebar } from "@/components/ui/sidebar";
@@ -23,40 +24,45 @@ import {
   TooltipTrigger,
 } from "@/components/ui/tooltip";
 
-// Breadcrumb mapping for readable names
-const pathNames: Record<string, string> = {
-  command: "Command Center",
-  ops: "Operações",
-  maintenance: "Manutenção",
-  ai: "Inteligência Artificial",
-  tracking: "Rastreamento",
-  compliance: "Compliance",
-  workbench: "Workbench",
-  settings: "Configurações",
-  admin: "Administração",
-  "peo-dp": "PEO-DP",
-  peotram: "PEOTRAM",
-  "mlc-inspection": "MLC 2006",
-  "psc-package": "PSC Package",
-  sgso: "SGSO ANP",
-  "pre-sire": "Pre-SIRE 2.0",
-  "pre-ovid": "Pre-OVID",
-  "solas-inspection": "SOLAS",
-  "isps-security": "ISPS Security",
-  "safety-imca": "ISM Code",
-  "waste-management": "MARPOL",
-  "tmsa-assessment": "TMSA",
-  "premium-reports": "Relatórios Premium",
-  "voice-copilot": "Voice Copilot",
-  "crew-marketplace": "Crew Marketplace",
-  "fleet-benchmarking": "Fleet Benchmark",
-};
-
 export const Header: FC = () => {
+  const { t } = useTranslation();
   const { isHighContrast, toggleHighContrast } = useHighContrastTheme();
   const { isMobile, toggleSidebar, openMobile, setOpenMobile } = useSidebar();
   const navigate = useNavigate();
   const location = useLocation();
+
+  // Breadcrumb mapping using i18n keys
+  const pathNames: Record<string, string> = {
+    command: t('nav.commandCenter'),
+    ops: t('nav.operations'),
+    maintenance: t('nav.maintenance'),
+    ai: t('nav.ai'),
+    tracking: t('nav.tracking'),
+    compliance: t('nav.compliance'),
+    workbench: t('nav.workbench'),
+    settings: t('nav.settings'),
+    admin: "Admin",
+    "peo-dp": "PEO-DP",
+    peotram: "PEOTRAM",
+    "mlc-inspection": "MLC 2006",
+    "psc-package": "PSC Package",
+    sgso: "SGSO ANP",
+    "pre-sire": "Pre-SIRE 2.0",
+    "pre-ovid": "Pre-OVID",
+    "solas-inspection": "SOLAS",
+    "isps-security": "ISPS Security",
+    "safety-imca": "ISM Code",
+    "waste-management": "MARPOL",
+    "tmsa-assessment": "TMSA",
+    "premium-reports": t('nav.premiumReports'),
+    "voice-copilot": "Voice Copilot",
+    "crew-marketplace": "Crew Marketplace",
+    "fleet-benchmarking": "Fleet Benchmark",
+    "gamification": t('nav.gamification'),
+    "whatsapp-bot": t('nav.whatsapp'),
+    "security-dashboard": t('nav.security'),
+    "performance-monitor": t('nav.performance'),
+  };
 
   // Build breadcrumbs
   const pathSegments = location.pathname.split('/').filter(Boolean);
@@ -92,7 +98,7 @@ export const Header: FC = () => {
           onClick={handleMenuClick}
           onTouchEnd={handleMenuClick}
           className="h-10 w-10 md:h-9 md:w-9 shrink-0 touch-manipulation active:scale-95 transition-all flex items-center justify-center rounded-lg hover:bg-accent/80"
-          aria-label="Abrir menu de navegação"
+          aria-label={t('header.openMenu')}
           aria-expanded={openMobile}
           style={{ 
             WebkitTapHighlightColor: 'transparent',
@@ -104,7 +110,7 @@ export const Header: FC = () => {
 
         {/* Breadcrumbs - Desktop only */}
         {!isMobile && breadcrumbs.length > 0 && (
-          <nav className="hidden md:flex items-center gap-1 text-sm min-w-0" aria-label="Breadcrumb">
+          <nav className="hidden md:flex items-center gap-1 text-sm min-w-0" aria-label={t('header.breadcrumb')}>
             <button
               onClick={() => navigate('/command')}
               className="text-muted-foreground hover:text-foreground transition-colors p-1 rounded hover:bg-accent/50"
@@ -154,7 +160,7 @@ export const Header: FC = () => {
                   </button>
                 </TooltipTrigger>
                 <TooltipContent side="bottom" sideOffset={8}>
-                  <p>Command Palette (⌘K)</p>
+                  <p>{t('header.commandPalette')}</p>
                 </TooltipContent>
               </Tooltip>
             </TooltipProvider>
@@ -182,13 +188,13 @@ export const Header: FC = () => {
                         size="sm"
                         className="h-9 w-9 p-0 cursor-pointer hover:bg-accent/80 transition-all rounded-lg"
                         onClick={() => navigate("/settings")}
-                        aria-label="Configurações"
+                        aria-label={t('header.settings')}
                       >
                         <Settings className="h-4 w-4 text-foreground" />
                       </Button>
                     </TooltipTrigger>
                     <TooltipContent side="bottom" sideOffset={8}>
-                      <p>Configurações</p>
+                      <p>{t('header.settings')}</p>
                     </TooltipContent>
                   </Tooltip>
                 </TooltipProvider>
@@ -203,14 +209,14 @@ export const Header: FC = () => {
                         variant={isHighContrast ? "default" : "ghost"}
                         size="sm"
                         onClick={toggleHighContrast}
-                        aria-label={isHighContrast ? "Desativar alto contraste" : "Ativar alto contraste"}
+                        aria-label={isHighContrast ? t('header.disableHighContrast') : t('header.enableHighContrast')}
                         className="h-9 px-2.5 text-xs cursor-pointer rounded-lg"
                       >
                         Aa
                       </Button>
                     </TooltipTrigger>
                     <TooltipContent side="bottom" sideOffset={8}>
-                      <p>{isHighContrast ? "Desativar alto contraste" : "Ativar alto contraste"}</p>
+                      <p>{isHighContrast ? t('header.disableHighContrast') : t('header.enableHighContrast')}</p>
                     </TooltipContent>
                   </Tooltip>
                 </TooltipProvider>

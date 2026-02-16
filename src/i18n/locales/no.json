@@ -263,5 +263,24 @@
     "not_found": "Ressurs ikke funnet.",
     "validation": "Vennligst rett feilene i skjemaet.",
     "server": "Serverfeil. Prøv igjen senere."
+  },
+  "sidebar": {
+    "pinned": "Festet",
+    "recent": "Nylige",
+    "navigation": "Navigasjon",
+    "modulesAvailable": "{{count}} moduler tilgjengelig",
+    "searchModules": "Søk moduler... (⌘K)",
+    "noModuleFound": "Ingen modul funnet",
+    "results": "{{count}} resultat(er)",
+    "logout": "Logg ut",
+    "navigateTo": "Naviger til {{label}}"
+  },
+  "header": {
+    "openMenu": "Åpne navigasjonsmeny",
+    "settings": "Innstillinger",
+    "enableHighContrast": "Aktiver høy kontrast",
+    "disableHighContrast": "Deaktiver høy kontrast",
+    "commandPalette": "Kommandopalett (⌘K)",
+    "breadcrumb": "Brødsmule"
   }
 }

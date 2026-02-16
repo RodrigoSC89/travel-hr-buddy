@@ -156,5 +156,24 @@
   "language": {
     "select": "选择语言",
     "current": "当前语言"
+  },
+  "sidebar": {
+    "pinned": "已固定",
+    "recent": "最近",
+    "navigation": "导航",
+    "modulesAvailable": "{{count}} 个模块可用",
+    "searchModules": "搜索模块... (⌘K)",
+    "noModuleFound": "未找到模块",
+    "results": "{{count}} 个结果",
+    "logout": "退出",
+    "navigateTo": "导航到 {{label}}"
+  },
+  "header": {
+    "openMenu": "打开导航菜单",
+    "settings": "设置",
+    "enableHighContrast": "启用高对比度",
+    "disableHighContrast": "禁用高对比度",
+    "commandPalette": "命令面板 (⌘K)",
+    "breadcrumb": "面包屑导航"
   }
 }

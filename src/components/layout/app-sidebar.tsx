@@ -11,6 +11,7 @@
  * - Version & system status in footer
  */
 import React, { useState, useMemo, useCallback } from "react";
+import { useTranslation } from "react-i18next";
 import { useSidebarActions } from "@/hooks/use-sidebar-actions";
 import { 
   ChevronDown, LogOut, Building2, Search, Star, Clock, X,
@@ -137,6 +138,7 @@ export function AppSidebar({ activeItem, onItemChange }: AppSidebarProps) {
   const { handleNavigation } = useSidebarActions();
   const { currentBranding } = useOrganization();
   const { signOut } = useAuth();
+  const { t } = useTranslation();
   const { pinned, togglePin, isPinned } = usePinnedItems();
   const { recent, addRecent } = useRecentItems();
 
@@ -231,8 +233,8 @@ export function AppSidebar({ activeItem, onItemChange }: AppSidebarProps) {
           "focus-visible:ring-2 cursor-pointer group/nav-item",
           active && "bg-primary/10 text-primary font-medium shadow-sm border border-primary/20"
         )}
-        aria-label={`Navegar para ${item.label}`}
-        aria-current={active ? "page" : undefined}
+         aria-label={t('sidebar.navigateTo', { label: item.label })}
+         aria-current={active ? "page" : undefined}
       >
         {/* Active indicator bar */}
         {active && (
@@ -265,7 +267,7 @@ export function AppSidebar({ activeItem, onItemChange }: AppSidebarProps) {
               "opacity-0 group-hover/nav-item:opacity-100 transition-opacity p-0.5 rounded hover:bg-sidebar-accent",
               isPinned(item.path) && "opacity-100 text-amber-400"
             )}
-            aria-label={isPinned(item.path) ? "Desafixar" : "Fixar"}
+            aria-label={isPinned(item.path) ? t('sidebar.pinned') : "Pin"}
           >
             <Star className={cn("h-3 w-3", isPinned(item.path) && "fill-current")} />
           </button>
@@ -316,7 +318,7 @@ export function AppSidebar({ activeItem, onItemChange }: AppSidebarProps) {
           <div className="relative group">
             <Search className="absolute left-2.5 top-1/2 -translate-y-1/2 h-3.5 w-3.5 text-muted-foreground group-focus-within:text-primary transition-colors" />
             <Input
-              placeholder="Buscar módulos... (⌘K)"
+              placeholder={t('sidebar.searchModules')}
               value={searchQuery}
               onChange={(e) => setSearchQuery(e.target.value)}
               className="pl-8 h-8 text-xs bg-sidebar-accent/30 border-sidebar-border/50 focus:border-primary/50 focus:bg-sidebar-accent/50 transition-all rounded-lg"
@@ -334,7 +336,7 @@ export function AppSidebar({ activeItem, onItemChange }: AppSidebarProps) {
           <div className="flex items-center justify-between mt-2 px-1">
             <span className="text-[10px] text-muted-foreground flex items-center gap-1">
               <Sparkles className="h-3 w-3 text-primary/60" />
-              {moduleCount} módulos disponíveis
+              {t('sidebar.modulesAvailable', { count: moduleCount })}
             </span>
             <span className="flex items-center gap-1 text-[10px]">
               {isOnline ? (
@@ -354,7 +356,7 @@ export function AppSidebar({ activeItem, onItemChange }: AppSidebarProps) {
           {filteredItems && !collapsed && (
             <SidebarGroup>
               <SidebarGroupLabel className="text-xs text-primary/80">
-                🔍 {filteredItems.length} resultado{filteredItems.length !== 1 ? "s" : ""}
+                🔍 {t('sidebar.results', { count: filteredItems.length })}
               </SidebarGroupLabel>
               <SidebarGroupContent>
                 <div className="space-y-0.5 px-2">
@@ -373,7 +375,7 @@ export function AppSidebar({ activeItem, onItemChange }: AppSidebarProps) {
                   </AnimatePresence>
                   {filteredItems.length === 0 && (
                     <p className="text-xs text-muted-foreground px-2 py-4 text-center">
-                      Nenhum módulo encontrado
+                      {t('sidebar.noModuleFound')}
                     </p>
                   )}
                 </div>
@@ -385,7 +387,7 @@ export function AppSidebar({ activeItem, onItemChange }: AppSidebarProps) {
           {!filteredItems && pinnedItems.length > 0 && !collapsed && (
             <SidebarGroup>
               <SidebarGroupLabel className="text-xs flex items-center gap-1 text-amber-400/80">
-                <Star className="h-3 w-3 fill-amber-400/60" /> Fixados
+                <Star className="h-3 w-3 fill-amber-400/60" /> {t('sidebar.pinned')}
               </SidebarGroupLabel>
               <SidebarGroupContent>
                 <div className="space-y-0.5 px-2">
@@ -399,7 +401,7 @@ export function AppSidebar({ activeItem, onItemChange }: AppSidebarProps) {
           {!filteredItems && recentItems.length > 0 && !collapsed && (
             <SidebarGroup>
               <SidebarGroupLabel className="text-xs flex items-center gap-1 text-muted-foreground">
-                <Clock className="h-3 w-3" /> Recentes
+                <Clock className="h-3 w-3" /> {t('sidebar.recent')}
               </SidebarGroupLabel>
               <SidebarGroupContent>
                 <div className="space-y-0.5 px-2">
@@ -412,7 +414,7 @@ export function AppSidebar({ activeItem, onItemChange }: AppSidebarProps) {
           {/* Main navigation */}
           {!filteredItems && (
             <SidebarGroup>
-              {!collapsed && <SidebarGroupLabel className="text-xs">Navegação</SidebarGroupLabel>}
+              {!collapsed && <SidebarGroupLabel className="text-xs">{t('sidebar.navigation')}</SidebarGroupLabel>}
               <SidebarGroupContent>
                 <SidebarMenu>
                   {filteredRoutes.map((group: SidebarRouteGroup) => (
@@ -492,7 +494,7 @@ export function AppSidebar({ activeItem, onItemChange }: AppSidebarProps) {
               className="w-full flex items-center gap-2 px-3 py-2 text-sm text-destructive/80 hover:text-destructive hover:bg-destructive/10 rounded-lg transition-all"
             >
               <LogOut className="h-4 w-4" />
-              <span>Sair</span>
+              <span>{t('sidebar.logout')}</span>
             </button>
             <div className="flex items-center justify-between text-[10px] text-muted-foreground/60 pt-2 border-t border-border/30">
               <span>v11.0.0</span>
@@ -503,7 +505,7 @@ export function AppSidebar({ activeItem, onItemChange }: AppSidebarProps) {
           <button
             onClick={handleLogout}
             className="w-full flex items-center justify-center p-2 text-destructive hover:bg-destructive/10 rounded-lg transition-colors"
-            title="Sair"
+            title={t('sidebar.logout')}
           >
             <LogOut className="h-4 w-4" />
           </button>
