@@ -146,7 +146,7 @@ export function PeoDPKPIDashboard() {
               <SelectItem value="2025">2025</SelectItem>
             </SelectContent>
           </Select>
-          <Button size="sm" variant="outline" className="gap-1" onClick={() => quickExport(KPI_ITEMS || [], "PEO-DP IEODP KPIs")}>
+          <Button size="sm" variant="outline" className="gap-1" onClick={() => quickExport(PILARES || [], "PEO-DP IEODP KPIs")}>
             <Download className="h-3 w-3" /> Exportar
           </Button>
         </div>
