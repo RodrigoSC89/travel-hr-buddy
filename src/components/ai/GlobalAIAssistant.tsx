@@ -161,7 +161,7 @@ Como posso ajudar?`,
         whileHover={{ scale: 1.1 }}
         whileTap={{ scale: 0.9 }}
         onClick={() => setIsOpen(true)}
-        className="fixed bottom-24 md:bottom-6 right-4 z-50 p-4 rounded-full bg-primary text-primary-foreground shadow-2xl hover:shadow-primary/30 transition-shadow"
+        className="fixed bottom-24 md:bottom-6 right-4 z-50 p-3.5 rounded-full bg-primary text-primary-foreground shadow-2xl hover:shadow-primary/30 transition-shadow"
         aria-label="Abrir assistente AI"
       >
         <Brain className="h-6 w-6" />
@@ -179,7 +179,7 @@ Como posso ajudar?`,
         "fixed z-50 bg-card border rounded-2xl shadow-2xl flex flex-col overflow-hidden",
         isMinimized
           ? "bottom-24 md:bottom-6 right-4 w-72 h-14"
-          : "bottom-24 md:bottom-6 right-4 w-[380px] h-[520px] max-h-[80vh]"
+          : "bottom-20 md:bottom-6 right-4 w-[380px] h-[520px] max-h-[80vh]"
       )}
     >
       {/* Header */}
