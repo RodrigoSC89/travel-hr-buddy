@@ -79,15 +79,15 @@ const VESSELS: VesselCrew[] = [
 ];
 
 function getSlotColor(assigned: number, required: number) {
-  if (assigned >= required) return "bg-green-500/20 text-green-600 border-green-500/30";
-  if (assigned > 0) return "bg-orange-500/20 text-orange-600 border-orange-500/30";
+  if (assigned >= required) return "bg-success/20 text-success border-success/30";
+  if (assigned > 0) return "bg-warning/20 text-warning border-warning/30";
   return "bg-destructive/20 text-destructive border-destructive/30";
 }
 
 function getTourColor(daysOnboard: number, maxTour: number) {
   const pct = (daysOnboard / maxTour) * 100;
   if (pct >= 90) return "text-destructive font-bold";
-  if (pct >= 75) return "text-orange-500 font-medium";
+  if (pct >= 75) return "text-warning font-medium";
   return "text-foreground";
 }
 
@@ -118,10 +118,10 @@ export function CrewPlanningMatrix() {
       {/* KPIs */}
       <div className="grid grid-cols-2 md:grid-cols-5 gap-4">
         <Card><CardContent className="p-4 text-center"><Users className="h-5 w-5 mx-auto text-primary mb-1" /><p className="text-2xl font-bold">{totalAssigned}/{totalRequired}</p><p className="text-xs text-muted-foreground">Manning Level</p></CardContent></Card>
-        <Card><CardContent className="p-4 text-center"><CheckCircle2 className="h-5 w-5 mx-auto text-green-500 mb-1" /><p className="text-2xl font-bold">{Math.round((totalAssigned / totalRequired) * 100)}%</p><p className="text-xs text-muted-foreground">Fill Rate</p></CardContent></Card>
+        <Card><CardContent className="p-4 text-center"><CheckCircle2 className="h-5 w-5 mx-auto text-success mb-1" /><p className="text-2xl font-bold">{Math.round((totalAssigned / totalRequired) * 100)}%</p><p className="text-xs text-muted-foreground">Fill Rate</p></CardContent></Card>
         <Card><CardContent className="p-4 text-center"><AlertTriangle className="h-5 w-5 mx-auto text-destructive mb-1" /><p className="text-2xl font-bold">{gaps}</p><p className="text-xs text-muted-foreground">Open Positions</p></CardContent></Card>
-        <Card><CardContent className="p-4 text-center"><Clock className="h-5 w-5 mx-auto text-orange-500 mb-1" /><p className="text-2xl font-bold">{reliefDue}</p><p className="text-xs text-muted-foreground">Relief Due</p></CardContent></Card>
-        <Card><CardContent className="p-4 text-center"><Ship className="h-5 w-5 mx-auto text-blue-500 mb-1" /><p className="text-2xl font-bold">{VESSELS.length}</p><p className="text-xs text-muted-foreground">Vessels</p></CardContent></Card>
+        <Card><CardContent className="p-4 text-center"><Clock className="h-5 w-5 mx-auto text-warning mb-1" /><p className="text-2xl font-bold">{reliefDue}</p><p className="text-xs text-muted-foreground">Relief Due</p></CardContent></Card>
+        <Card><CardContent className="p-4 text-center"><Ship className="h-5 w-5 mx-auto text-primary mb-1" /><p className="text-2xl font-bold">{VESSELS.length}</p><p className="text-xs text-muted-foreground">Vessels</p></CardContent></Card>
       </div>
 
       <Tabs value={activeTab} onValueChange={setActiveTab}>

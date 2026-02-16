@@ -79,19 +79,19 @@ export const CostPredictionAI: React.FC<{ vesselId?: string }> = ({ vesselId }) 
   };
 
   const costs = [
-    { category: "Combustível", current: "$485K", forecast: "$512K", trend: "+5.6%", icon: ArrowUp, trendColor: "text-red-500" },
-    { category: "Tripulação", current: "$320K", forecast: "$315K", trend: "-1.5%", icon: ArrowDown, trendColor: "text-green-500" },
-    { category: "Manutenção", current: "$180K", forecast: "$210K", trend: "+16.7%", icon: ArrowUp, trendColor: "text-red-500" },
-    { category: "Porto/Taxas", current: "$95K", forecast: "$98K", trend: "+3.2%", icon: ArrowUp, trendColor: "text-yellow-500" },
+    { category: "Combustível", current: "$485K", forecast: "$512K", trend: "+5.6%", icon: ArrowUp, trendColor: "text-destructive" },
+    { category: "Tripulação", current: "$320K", forecast: "$315K", trend: "-1.5%", icon: ArrowDown, trendColor: "text-success" },
+    { category: "Manutenção", current: "$180K", forecast: "$210K", trend: "+16.7%", icon: ArrowUp, trendColor: "text-destructive" },
+    { category: "Porto/Taxas", current: "$95K", forecast: "$98K", trend: "+3.2%", icon: ArrowUp, trendColor: "text-warning" },
   ];
 
   return (
-    <Card className="border-green-500/20">
+    <Card className="border-success/20">
       <CardHeader>
         <CardTitle className="flex items-center gap-2">
-          <TrendingUp className="h-5 w-5 text-green-500" />
+          <TrendingUp className="h-5 w-5 text-success" />
           Previsão de Custos IA
-          <Badge className="ml-auto bg-green-500/10 text-green-500">Forecast</Badge>
+          <Badge className="ml-auto bg-success/10 text-success">Forecast</Badge>
         </CardTitle>
       </CardHeader>
       <CardContent className="space-y-4">
@@ -137,28 +137,28 @@ export const ProcurementIntelligenceAI: React.FC = () => {
   };
 
   return (
-    <Card className="border-purple-500/20">
+    <Card className="border-accent/20">
       <CardHeader>
         <CardTitle className="flex items-center gap-2">
-          <ShoppingCart className="h-5 w-5 text-purple-500" />
+          <ShoppingCart className="h-5 w-5 text-accent-foreground" />
           Procurement Intelligence
-          <Badge className="ml-auto bg-purple-500/10 text-purple-500">Smart Buy</Badge>
+          <Badge className="ml-auto bg-accent/10 text-accent-foreground">Smart Buy</Badge>
         </CardTitle>
       </CardHeader>
       <CardContent className="space-y-4">
         <div className="grid grid-cols-3 gap-2">
           <div className="p-2 rounded border text-center">
-            <Receipt className="h-4 w-4 mx-auto text-purple-500 mb-1" />
+            <Receipt className="h-4 w-4 mx-auto text-accent-foreground mb-1" />
             <p className="text-xs text-muted-foreground">Pendentes</p>
             <p className="font-bold">34</p>
           </div>
           <div className="p-2 rounded border text-center">
-            <DollarSign className="h-4 w-4 mx-auto text-green-500 mb-1" />
+            <DollarSign className="h-4 w-4 mx-auto text-success mb-1" />
             <p className="text-xs text-muted-foreground">Economia IA</p>
-            <p className="font-bold text-green-500">$127K</p>
+            <p className="font-bold text-success">$127K</p>
           </div>
           <div className="p-2 rounded border text-center">
-            <Target className="h-4 w-4 mx-auto text-blue-500 mb-1" />
+            <Target className="h-4 w-4 mx-auto text-primary mb-1" />
             <p className="text-xs text-muted-foreground">Consolidações</p>
             <p className="font-bold">8</p>
           </div>

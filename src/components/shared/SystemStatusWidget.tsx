@@ -74,11 +74,11 @@ export function SystemStatusWidget({ compact = false }: { compact?: boolean }) {
   const getStatusIcon = (status: string) => {
     switch (status) {
       case "online":
-        return <CheckCircle className="h-4 w-4 text-green-500" />;
+        return <CheckCircle className="h-4 w-4 text-success" />;
       case "degraded":
-        return <AlertTriangle className="h-4 w-4 text-yellow-500" />;
+        return <AlertTriangle className="h-4 w-4 text-warning" />;
       case "offline":
-        return <XCircle className="h-4 w-4 text-red-500" />;
+        return <XCircle className="h-4 w-4 text-destructive" />;
       default:
         return <Activity className="h-4 w-4" />;
     }
@@ -87,9 +87,9 @@ export function SystemStatusWidget({ compact = false }: { compact?: boolean }) {
   const getStatusBadge = (status: string) => {
     switch (status) {
       case "online":
-        return <Badge className="bg-green-500/10 text-green-600 hover:bg-green-500/20">Online</Badge>;
+        return <Badge className="bg-success/10 text-success hover:bg-success/20">Online</Badge>;
       case "degraded":
-        return <Badge className="bg-yellow-500/10 text-yellow-600 hover:bg-yellow-500/20">Degradado</Badge>;
+        return <Badge className="bg-warning/10 text-warning hover:bg-warning/20">Degradado</Badge>;
       case "offline":
         return <Badge variant="destructive">Offline</Badge>;
       default:
@@ -108,9 +108,9 @@ export function SystemStatusWidget({ compact = false }: { compact?: boolean }) {
           {onlineCount}/{totalCount} módulos online
         </span>
         {onlineCount === totalCount ? (
-          <CheckCircle className="h-4 w-4 text-green-500" />
+          <CheckCircle className="h-4 w-4 text-success" />
         ) : (
-          <AlertTriangle className="h-4 w-4 text-yellow-500" />
+          <AlertTriangle className="h-4 w-4 text-warning" />
         )}
       </div>
     );
@@ -134,14 +134,14 @@ export function SystemStatusWidget({ compact = false }: { compact?: boolean }) {
           <div className="flex items-center justify-between mb-2">
             <span className="text-2xl font-bold">{onlineCount}/{totalCount}</span>
             {onlineCount === totalCount ? (
-              <Badge className="bg-green-500/10 text-green-600">Todos Online</Badge>
+              <Badge className="bg-success/10 text-success">Todos Online</Badge>
             ) : (
-              <Badge className="bg-yellow-500/10 text-yellow-600">Parcial</Badge>
+              <Badge className="bg-warning/10 text-warning">Parcial</Badge>
             )}
           </div>
           <div className="h-2 bg-muted rounded-full overflow-hidden">
             <div 
-              className="h-full bg-green-500 transition-all"
+              className="h-full bg-success transition-all"
               style={{ width: `${(onlineCount / totalCount) * 100}%` }}
             />
           </div>

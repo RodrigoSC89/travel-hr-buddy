@@ -176,7 +176,7 @@ export default function CrewPoolPlanner() {
         <KPICard icon={<UserPlus />} label="Disponíveis" value={metrics.available} color="text-primary" />
         <KPICard icon={<Calendar />} label="De Folga" value={metrics.onLeave} color="text-warning" />
         <KPICard icon={<AlertTriangle />} label="Alta Fadiga" value={metrics.highFatigue} color="text-destructive" />
-        <KPICard icon={<ArrowRightLeft />} label="Rotação Próxima" value={metrics.pendingRotation} color="text-amber-500" />
+        <KPICard icon={<ArrowRightLeft />} label="Rotação Próxima" value={metrics.pendingRotation} color="text-warning" />
         <KPICard icon={<Anchor />} label="Sem Designação" value={metrics.unassigned} color="text-muted-foreground" />
       </div>
 
