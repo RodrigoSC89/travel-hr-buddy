@@ -1,4 +1,5 @@
 import React, { useState, useMemo } from "react";
+import { useTranslation } from "react-i18next";
 import { useOptimizedPolling } from "@/hooks/use-optimized-polling";
 import { useQuery } from "@tanstack/react-query";
 import { supabase } from "@/integrations/supabase/client";
@@ -102,6 +103,7 @@ function useDashboardStats() {
 }
 
 const EnhancedUnifiedDashboard = () => {
+  const { t } = useTranslation();
   const navigate = useNavigate();
   const { user } = useAuth();
   const { currentTenant, currentBranding, currentUser, tenantUsage } = useTenant();
@@ -232,78 +234,78 @@ const EnhancedUnifiedDashboard = () => {
   ];
 
   const operationalData = [
-    { metric: "Vessel Utilization", value: 87.3, target: 90, status: "warning" },
-    { metric: "Fuel Efficiency", value: 92.1, target: 88, status: "success" },
-    { metric: "Safety Score", value: 98.5, target: 95, status: "success" },
-    { metric: "Compliance Rate", value: 99.2, target: 98, status: "success" }
+    { metric: t('ui.vesselUtilization'), value: 87.3, target: 90, status: "warning" },
+    { metric: t('ui.fuelEfficiency'), value: 92.1, target: 88, status: "success" },
+    { metric: t('ui.safetyScore'), value: 98.5, target: 95, status: "success" },
+    { metric: t('ui.complianceRate'), value: 99.2, target: 98, status: "success" }
   ];
 
   const quickActions = [
     { 
-      title: "PEOTRAM Auditorias", 
-      description: "Sistema completo de auditorias marítimas", 
+      title: t('ui.peotramAudits'), 
+      description: t('ui.completeAuditSystem'), 
       icon: FileText, 
       path: "/peotram",
       color: "from-blue-600 to-blue-700",
       count: dashboardData.moduleStats.peotram.audits,
       status: "success",
-      subtitle: `Score médio: ${dashboardData.moduleStats.peotram.avgScore}%`,
-      metric: `${dashboardData.moduleStats.peotram.completion}% concluído`
+      subtitle: t('ui.avgScore', { score: dashboardData.moduleStats.peotram.avgScore }),
+      metric: t('ui.completed', { percent: dashboardData.moduleStats.peotram.completion })
     },
     { 
-      title: "Gestão da Frota", 
-      description: "Monitoramento avançado de embarcações", 
+      title: t('ui.fleetManagement'), 
+      description: t('ui.advancedVesselMonitoring'), 
       icon: Ship, 
       path: "/fleet-dashboard",
       color: "from-purple-600 to-purple-700",
       count: dashboardData.moduleStats.fleet.vessels,
       status: "info",
-      subtitle: `Utilização: ${dashboardData.operationalMetrics.vesselUtilization}%`,
-      metric: `${dashboardData.moduleStats.fleet.routes} rotas ativas`
+      subtitle: t('ui.utilization', { percent: dashboardData.operationalMetrics.vesselUtilization }),
+      metric: t('ui.activeRoutes', { count: dashboardData.moduleStats.fleet.routes })
     },
     { 
-      title: "Analytics Avançado", 
-      description: "Business Intelligence e relatórios", 
+      title: t('ui.advancedAnalytics'), 
+      description: t('ui.businessIntelligenceReports'), 
       icon: BarChart3, 
       path: "/advanced-analytics",
       color: "from-green-600 to-green-700",
       count: dashboardData.moduleStats.reports.generated,
       status: "success",
-      subtitle: `${dashboardData.moduleStats.reports.automated} automáticos`,
-      metric: `${dashboardData.moduleStats.reports.real_time} em tempo real`
+      subtitle: t('ui.automatic', { count: dashboardData.moduleStats.reports.automated }),
+      metric: t('ui.realTime', { count: dashboardData.moduleStats.reports.real_time })
     },
     { 
-      title: "IA & Automação", 
-      description: "Inteligência artificial aplicada", 
+      title: t('ui.aiAutomation'), 
+      description: t('ui.appliedAI'), 
       icon: Brain, 
       path: "/ai-insights",
       color: "from-cyan-600 to-cyan-700",
       count: dashboardData.moduleStats.documents.ai_analyzed,
       status: "success",
-      subtitle: `${dashboardData.moduleStats.documents.compliance}% compliance`,
-      metric: `${dashboardData.moduleStats.documents.digital}% digitalizados`
+      subtitle: t('ui.compliance', { percent: dashboardData.moduleStats.documents.compliance }),
+      metric: t('ui.digitized', { percent: dashboardData.moduleStats.documents.digital })
     },
     { 
-      title: "Centro Marítimo", 
-      description: "Hub completo de operações", 
+      title: t('ui.maritimeCenter'), 
+      description: t('ui.completeOpsHub'), 
       icon: Anchor, 
       path: "/maritime-command",
       color: "from-indigo-600 to-indigo-700",
       count: dashboardData.systemHealth.activeUsers,
       status: "info",
-      subtitle: `${dashboardData.operationalMetrics.safetyScore}% segurança`,
-      metric: `${dashboardData.systemHealth.uptime}% disponibilidade`
+      subtitle: t('ui.safety', { percent: dashboardData.operationalMetrics.safetyScore }),
+      metric: t('ui.availability', { percent: dashboardData.systemHealth.uptime })
     },
     { 
-      title: "Scanner Inteligente", 
-      description: "Processamento IA de documentos", 
+      title: t('ui.smartScanner'), 
+      description: t('ui.aiDocumentProcessing'), 
       icon: Zap, 
       path: "/documents",
       color: "from-orange-600 to-orange-700",
       count: dashboardData.moduleStats.documents.processed,
       status: "success",
-      subtitle: `${dashboardData.moduleStats.documents.ai_analyzed} analisados`,
-      metric: "99.1% precisão"
+      subtitle: t('ui.analyzed', { count: dashboardData.moduleStats.documents.ai_analyzed }),
+      metric: t('ui.precision')
     }
   ];
 
@@ -313,8 +315,8 @@ const EnhancedUnifiedDashboard = () => {
     setLastUpdated(new Date());
     setIsRefreshing(false);
     toast({
-      title: "Dashboard atualizado",
-      description: "Dados reais atualizados com sucesso",
+      title: t('ui.dashboardUpdated'),
+      description: t('ui.realDataUpdated'),
     });
   };
 
@@ -417,7 +419,7 @@ const EnhancedUnifiedDashboard = () => {
                     <div className="flex flex-wrap items-center gap-2 mb-4">
                       <Badge className="bg-gradient-to-r from-azure-600 to-azure-500 text-white border-0 shadow-soft">
                         <Crown className="w-3 h-3 mr-1" />
-                        Sistema Marítimo Integrado
+                        {t('ui.integratedMaritimeSystem')}
                       </Badge>
                       {currentTenant?.plan_type && (
                         <Badge className="bg-gradient-to-r from-amber-500 to-amber-600 text-white border-0">
@@ -427,15 +429,15 @@ const EnhancedUnifiedDashboard = () => {
                       )}
                       <Badge variant="secondary" className="backdrop-blur-sm bg-azure-100/80">
                         <Activity className="w-3 h-3 mr-1 text-azure-600" />
-                        {dashboardData.systemHealth.activeUsers} usuários ativos
+                        {t('ui.activeUsers', { count: dashboardData.systemHealth.activeUsers })}
                       </Badge>
                     </div>
 
                     {/* Welcome Message */}
                     <p className="text-lg text-muted-foreground max-w-2xl">
-                      Bem-vindo de volta, <strong className="text-foreground">{userDisplayName}</strong>! 
+                      {t('ui.welcomeBack')}, <strong className="text-foreground">{userDisplayName}</strong>! 
                       <br />
-                      <span className="text-azure-600 font-medium">Painel executivo de operações marítimas em tempo real</span>
+                      <span className="text-azure-600 font-medium">{t('ui.executivePanel')}</span>
                     </p>
                   </div>
                 </div>
@@ -450,26 +452,26 @@ const EnhancedUnifiedDashboard = () => {
                       className="bg-white/80 backdrop-blur-sm hover:bg-azure-50 border-azure-200 shadow-soft"
                     >
                       <RefreshCw className={`w-4 h-4 mr-2 ${isRefreshing ? "animate-spin" : ""}`} />
-                      Atualizar Dados
+                      {t('ui.refreshData')}
                     </Button>
                     <Button 
                       onClick={() => navigate("/command?tab=executive")}
                       className="bg-gradient-ocean text-white hover:shadow-glow shadow-azure"
                     >
                       <Target className="w-4 h-4 mr-2" />
-                      Visão Executiva
+                      {t('ui.executiveView')}
                     </Button>
                   </div>
 
                   {/* Status Info */}
-                  <div className="text-right space-y-2">
+                   <div className="text-right space-y-2">
                     <div className="text-sm text-muted-foreground">
-                      Última atualização: <span className="font-medium text-foreground">{lastUpdated.toLocaleTimeString()}</span>
+                      {t('ui.lastUpdate')}: <span className="font-medium text-foreground">{lastUpdated.toLocaleTimeString()}</span>
                     </div>
                      <div className="flex items-center justify-end gap-2 px-3 py-1.5 rounded-full bg-success/10 border border-success/20">
                        <div className="w-2 h-2 bg-success rounded-full animate-pulse" />
                        <span className="text-sm font-medium text-success">
-                        Sistema operacional - {dashboardData.systemHealth.uptime}% uptime
+                        {t('ui.systemOperational')} - {dashboardData.systemHealth.uptime}% {t('ui.uptime')}
                       </span>
                     </div>
                   </div>
@@ -498,11 +500,11 @@ const EnhancedUnifiedDashboard = () => {
                   <DollarSign className="w-5 h-5 text-primary-foreground" />
                 </div>
                 <span className="text-xl font-bold bg-gradient-to-r from-emerald-700 to-emerald-600 bg-clip-text text-transparent">
-                  Performance Financeira
+                  {t('ui.financialPerformance')}
                 </span>
               </CardTitle>
               <CardDescription className="text-muted-foreground">
-                Indicadores estratégicos de performance
+                {t('ui.strategicPerformanceIndicators')}
               </CardDescription>
             </CardHeader>
             
@@ -510,9 +512,9 @@ const EnhancedUnifiedDashboard = () => {
               <div className="grid grid-cols-2 gap-6">
                 <div className="space-y-3 p-4 rounded-xl bg-gradient-to-br from-emerald-50/50 to-transparent border border-emerald-100/50">
                   <div className="flex items-center justify-between">
-                    <span className="text-sm font-semibold text-muted-foreground">Margem Bruta</span>
+                    <span className="text-sm font-semibold text-muted-foreground">{t('ui.grossMargin')}</span>
                      <Badge className="bg-success/10 text-success border-0">
-                       Alto
+                       {t('ui.high')}
                      </Badge>
                   </div>
                   <div className="text-3xl font-bold bg-gradient-to-r from-emerald-600 to-emerald-500 bg-clip-text text-transparent">
@@ -523,9 +525,9 @@ const EnhancedUnifiedDashboard = () => {
 
                  <div className="space-y-3 p-4 rounded-xl bg-gradient-to-br from-info/10 to-transparent border border-info/20">
                    <div className="flex items-center justify-between">
-                     <span className="text-sm font-semibold text-muted-foreground">Margem Operacional</span>
-                     <Badge className="bg-info/10 text-info border-0">
-                       Crescendo
+                      <span className="text-sm font-semibold text-muted-foreground">{t('ui.operatingMargin')}</span>
+                      <Badge className="bg-info/10 text-info border-0">
+                        {t('ui.growing')}
                      </Badge>
                   </div>
                   <div className="text-3xl font-bold bg-gradient-to-r from-blue-600 to-blue-500 bg-clip-text text-transparent">
@@ -542,7 +544,7 @@ const EnhancedUnifiedDashboard = () => {
                   <div className="text-3xl font-bold text-accent-foreground">
                     R$ {(dashboardData.financialMetrics.ebitda / 1000000).toFixed(1)}M
                   </div>
-                  <span className="text-xs text-muted-foreground">+12.5% vs mês anterior</span>
+                  <span className="text-xs text-muted-foreground">+12.5% {t('ui.previousMonth')}</span>
                 </div>
 
                 <div className="space-y-3 p-4 rounded-xl bg-gradient-to-br from-warning/10 to-transparent border border-warning/20">
@@ -553,7 +555,7 @@ const EnhancedUnifiedDashboard = () => {
                   <div className="text-3xl font-bold bg-gradient-to-r from-warning to-warning/80 bg-clip-text text-transparent">
                     {dashboardData.financialMetrics.roe}%
                   </div>
-                  <span className="text-xs text-muted-foreground">Acima da média</span>
+                  <span className="text-xs text-muted-foreground">{t('ui.aboveAverage')}</span>
                 </div>
               </div>
             </CardContent>
@@ -570,11 +572,11 @@ const EnhancedUnifiedDashboard = () => {
                   <Activity className="w-5 h-5 text-white" />
                 </div>
                 <span className="text-xl font-bold bg-gradient-to-r from-azure-700 to-azure-600 bg-clip-text text-transparent">
-                  Indicadores Operacionais
+                  {t('ui.operationalIndicators')}
                 </span>
               </CardTitle>
               <CardDescription className="text-muted-foreground">
-                Métricas essenciais de performance
+                {t('ui.essentialPerformanceMetrics')}
               </CardDescription>
             </CardHeader>
             
@@ -602,7 +604,7 @@ const EnhancedUnifiedDashboard = () => {
                     <div className="flex items-end justify-between">
                       <div className="space-y-1">
                         <div className="text-2xl font-bold text-foreground">{item.value}%</div>
-                        <div className="text-xs text-muted-foreground">Meta: {item.target}%</div>
+                        <div className="text-xs text-muted-foreground">{t('ui.target')}: {item.target}%</div>
                       </div>
                       <Progress value={item.value} className="w-32 h-2" />
                     </div>
@@ -628,21 +630,21 @@ const EnhancedUnifiedDashboard = () => {
                       <Globe className="w-7 h-7 text-primary-foreground" />
                     </div>
                     <span className="bg-gradient-to-r from-azure-700 to-azure-600 bg-clip-text text-transparent">
-                      Módulos Operacionais
+                      {t('ui.operationalModules')}
                     </span>
                   </CardTitle>
                   <CardDescription className="text-base text-muted-foreground">
-                    Centro de controle integrado - {quickActions.length} módulos ativos e operacionais
+                    {t('ui.integratedControlCenter', { count: quickActions.length })}
                   </CardDescription>
                 </div>
                 
                 <div className="flex items-center gap-2">
                   <Badge className="bg-gradient-to-r from-azure-600 to-azure-500 text-white border-0 shadow-soft">
                     <CheckCircle className="w-3 h-3 mr-1" />
-                    Sistema Completo
+                    {t('ui.systemComplete')}
                   </Badge>
                   <Badge variant="outline" className="border-azure-300 text-azure-700">
-                    100% Online
+                    {t('ui.online100')}
                   </Badge>
                 </div>
               </div>
@@ -723,11 +725,11 @@ const EnhancedUnifiedDashboard = () => {
                   <LineChart className="w-5 h-5 text-white" />
                 </div>
                 <span className="text-xl font-bold bg-gradient-to-r from-blue-700 to-blue-600 bg-clip-text text-transparent">
-                  Performance em Tempo Real
+                  {t('ui.realTimePerformance')}
                 </span>
               </CardTitle>
               <CardDescription className="text-muted-foreground">
-                Monitoramento 24/7 do sistema operacional
+                {t('ui.monitoring247')}
               </CardDescription>
             </CardHeader>
             
@@ -770,7 +772,7 @@ const EnhancedUnifiedDashboard = () => {
                     strokeWidth={2}
                     fillOpacity={1} 
                     fill="url(#colorUsers)" 
-                    name="Usuários Ativos" 
+                    name={t('ui.activeUsersChart')} 
                   />
                   <Area 
                     type="monotone" 
@@ -779,7 +781,7 @@ const EnhancedUnifiedDashboard = () => {
                     strokeWidth={2}
                     fillOpacity={1} 
                     fill="url(#colorPerformance)" 
-                    name="Performance %" 
+                    name={t('ui.performancePercent')}
                   />
                 </AreaChart>
               </ResponsiveContainer>
@@ -797,11 +799,11 @@ const EnhancedUnifiedDashboard = () => {
                   <PieChart className="w-5 h-5 text-white" />
                 </div>
                 <span className="text-xl font-bold bg-gradient-to-r from-purple-700 to-purple-600 bg-clip-text text-transparent">
-                  Distribuição de Módulos
+                  {t('ui.moduleDistribution')}
                 </span>
               </CardTitle>
               <CardDescription className="text-muted-foreground">
-                Análise de uso por categoria do sistema
+                {t('ui.usageAnalysisByCategory')}
               </CardDescription>
             </CardHeader>
             
@@ -873,15 +875,15 @@ const EnhancedUnifiedDashboard = () => {
                       <AlertTriangle className="w-5 h-5 text-white" />
                     </div>
                     <span className="text-xl font-bold bg-gradient-to-r from-amber-700 to-amber-600 bg-clip-text text-transparent">
-                      Alertas do Sistema
+                      {t('ui.systemAlerts')}
                     </span>
                   </CardTitle>
                   <CardDescription className="text-muted-foreground mt-1">
-                    Notificações importantes e pendências
+                    {t('ui.importantNotificationsAndPending')}
                   </CardDescription>
                 </div>
                  <Badge className="bg-warning/10 text-warning border-warning/20">
-                   {dashboardData.alerts.length} novos
+                   {dashboardData.alerts.length} {t('ui.new')}
                  </Badge>
               </div>
             </CardHeader>
@@ -914,8 +916,8 @@ const EnhancedUnifiedDashboard = () => {
                                    "border-border bg-muted text-muted-foreground"
                             }`}
                           >
-                            {alert.priority === "high" ? "🔴 Alta" : 
-                              alert.priority === "medium" ? "🟡 Média" : "⚪ Baixa"}
+                            {alert.priority === "high" ? t('ui.priorityHigh') : 
+                              alert.priority === "medium" ? t('ui.priorityMedium') : t('ui.priorityLow')}
                           </Badge>
                         </div>
                       </div>
@@ -929,7 +931,7 @@ const EnhancedUnifiedDashboard = () => {
                 variant="outline" 
                 className="w-full mt-4 border-warning/20 hover:bg-warning/5 text-warning"
               >
-                Ver todos os alertas
+                {t('ui.viewAllAlerts')}
                 <ArrowRight className="w-4 h-4 ml-2" />
               </Button>
             </CardContent>
@@ -948,16 +950,16 @@ const EnhancedUnifiedDashboard = () => {
                       <Activity className="w-5 h-5 text-white" />
                     </div>
                     <span className="text-xl font-bold bg-gradient-to-r from-emerald-700 to-emerald-600 bg-clip-text text-transparent">
-                      Atividades Recentes
+                      {t('ui.recentActivities')}
                     </span>
                   </CardTitle>
                   <CardDescription className="text-muted-foreground mt-1">
-                    Timeline de operações do sistema
+                    {t('ui.systemOperationsTimeline')}
                   </CardDescription>
                 </div>
                  <div className="flex items-center gap-2 px-3 py-1.5 rounded-full bg-success/10 border border-success/20">
                    <div className="w-2 h-2 bg-success rounded-full animate-pulse" />
-                   <span className="text-xs font-medium text-success">Ao vivo</span>
+                   <span className="text-xs font-medium text-success">{t('ui.live')}</span>
                 </div>
               </div>
             </CardHeader>
@@ -995,7 +997,7 @@ const EnhancedUnifiedDashboard = () => {
                 variant="outline" 
                 className="w-full mt-4 border-success/20 hover:bg-success/5 text-success"
               >
-                Ver histórico completo
+                {t('ui.viewFullHistory')}
                 <ArrowRight className="w-4 h-4 ml-2" />
               </Button>
             </CardContent>

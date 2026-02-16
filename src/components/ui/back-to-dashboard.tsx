@@ -1,4 +1,5 @@
 import type { FC } from "react";
+import { useTranslation } from "react-i18next";
 import { Button } from "@/components/ui/button";
 import { ArrowLeft, Home } from "lucide-react";
 import { useNavigate } from "react-router-dom";
@@ -13,6 +14,7 @@ export const BackToDashboard: FC<BackToDashboardProps> = ({
   variant = "outline" 
 }) => {
   const navigate = useNavigate();
+  const { t } = useTranslation();
 
   const handleBackToDashboard = () => {
     navigate("/");
@@ -26,7 +28,7 @@ export const BackToDashboard: FC<BackToDashboardProps> = ({
     >
       <ArrowLeft className="h-4 w-4 group-hover:-translate-x-1 transition-transform duration-200" />
       <Home className="h-4 w-4" />
-      <span>Dashboard Principal</span>
+      <span>{t('ui.backToDashboard')}</span>
     </Button>
   );
 };
