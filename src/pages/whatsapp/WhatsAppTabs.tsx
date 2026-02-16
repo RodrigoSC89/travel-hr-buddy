@@ -128,7 +128,7 @@ export function WhatsAppTabs({ templates, crewMembers, sentMessages, onSend, isS
               <div className="space-y-3">
                 {sentMessages.map((msg) => (
                   <div key={msg.id} className="flex items-start gap-3 p-3 rounded-lg border bg-card/50">
-                    <div className={`p-1.5 rounded-full ${msg.status === "sent" ? "bg-green-500/10 text-green-500" : "bg-destructive/10 text-destructive"}`}>
+                    <div className={`p-1.5 rounded-full ${msg.status === "sent" ? "bg-success/10 text-success" : "bg-destructive/10 text-destructive"}`}>
                       {msg.status === "sent" ? <CheckCircle2 className="h-4 w-4" /> : <XCircle className="h-4 w-4" />}
                     </div>
                     <div className="flex-1 min-w-0">

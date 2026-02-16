@@ -136,17 +136,17 @@ export const QuantumSecurityShield: React.FC = () => {
   };
 
   const getSeverityColor = (severity: ThreatDetection["severity"]) => {
-    const map = { critical: "bg-red-100 text-red-800 dark:bg-red-900/20 dark:text-red-300", high: "bg-orange-100 text-orange-800 dark:bg-orange-900/20 dark:text-orange-300", medium: "bg-yellow-100 text-yellow-800 dark:bg-yellow-900/20 dark:text-yellow-300", low: "bg-green-100 text-green-800 dark:bg-green-900/20 dark:text-green-300" };
+    const map = { critical: "bg-destructive/10 text-destructive", high: "bg-warning/10 text-warning", medium: "bg-accent/10 text-accent-foreground", low: "bg-success/10 text-success" };
     return map[severity];
   };
 
   const getStatusColor = (status: ThreatDetection["status"]) => {
-    const map = { blocked: "text-green-600", detected: "text-yellow-600", investigating: "text-orange-600", resolved: "text-blue-600" };
+    const map = { blocked: "text-success", detected: "text-warning", investigating: "text-accent-foreground", resolved: "text-info" };
     return map[status];
   };
 
   const getMetricStatusColor = (status: SecurityMetric["status"]) => {
-    const map = { excellent: "text-green-600", good: "text-blue-600", warning: "text-yellow-600", critical: "text-red-600" };
+    const map = { excellent: "text-success", good: "text-info", warning: "text-warning", critical: "text-destructive" };
     return map[status];
   };
 
@@ -158,7 +158,7 @@ export const QuantumSecurityShield: React.FC = () => {
   return (
     <div className="space-y-6">
       {/* Header */}
-      <Card className="bg-gradient-to-r from-red-600 to-orange-600 text-white">
+      <Card className="bg-gradient-to-r from-destructive to-warning text-destructive-foreground">
         <CardHeader>
           <div className="flex items-center justify-between">
             <div className="flex items-center gap-3">
@@ -166,22 +166,22 @@ export const QuantumSecurityShield: React.FC = () => {
               <div>
                 <CardTitle className="text-2xl flex items-center gap-2">
                   Quantum Security Shield
-                  <Badge className="bg-yellow-400 text-yellow-900 hover:bg-yellow-300"><Sparkles className="h-3 w-3 mr-1" />QUANTUM</Badge>
+                  <Badge className="bg-warning text-warning-foreground hover:bg-warning/90"><Sparkles className="h-3 w-3 mr-1" />QUANTUM</Badge>
                 </CardTitle>
                 <CardDescription className="text-white/90">Fortaleza Cibernética — dados reais de access_logs e audit_chain</CardDescription>
               </div>
             </div>
-            <Button onClick={runSecurityScan} disabled={isScanning} size="lg" className="bg-white text-red-600 hover:bg-white/90"><Brain className="h-5 w-5 mr-2" />{isScanning ? "Escaneando..." : "Varredura Completa"}</Button>
+            <Button onClick={runSecurityScan} disabled={isScanning} size="lg" className="bg-white text-destructive hover:bg-white/90"><Brain className="h-5 w-5 mr-2" />{isScanning ? "Escaneando..." : "Varredura Completa"}</Button>
           </div>
         </CardHeader>
       </Card>
 
       {/* Overview Cards */}
       <div className="grid grid-cols-1 md:grid-cols-4 gap-4">
-        <Card className="bg-gradient-to-br from-green-50 to-green-100 dark:from-green-900/20 dark:to-green-800/20"><CardContent className="p-6"><div className="flex items-center justify-between mb-2"><Target className="h-8 w-8 text-green-600" /><TrendingUp className="h-5 w-5 text-green-600" /></div><div className="text-3xl font-bold text-green-700 dark:text-green-400">{detectionAccuracy.toFixed(1)}%</div><div className="text-sm text-muted-foreground">Precisão de Detecção</div></CardContent></Card>
-        <Card className="bg-gradient-to-br from-blue-50 to-blue-100 dark:from-blue-900/20 dark:to-blue-800/20"><CardContent className="p-6"><div className="flex items-center justify-between mb-2"><Zap className="h-8 w-8 text-blue-600" /><Clock className="h-5 w-5 text-blue-600" /></div><div className="text-3xl font-bold text-blue-700 dark:text-blue-400">{threats.length}</div><div className="text-sm text-muted-foreground">Eventos Detectados</div></CardContent></Card>
-        <Card className="bg-gradient-to-br from-purple-50 to-purple-100 dark:from-purple-900/20 dark:to-purple-800/20"><CardContent className="p-6"><div className="flex items-center justify-between mb-2"><ShieldCheck className="h-8 w-8 text-purple-600" /><CheckCircle className="h-5 w-5 text-purple-600" /></div><div className="text-3xl font-bold text-purple-700 dark:text-purple-400">{blockedCount}</div><div className="text-sm text-muted-foreground">Ameaças Bloqueadas</div></CardContent></Card>
-        <Card className="bg-gradient-to-br from-orange-50 to-orange-100 dark:from-orange-900/20 dark:to-orange-800/20"><CardContent className="p-6"><div className="flex items-center justify-between mb-2"><Lock className="h-8 w-8 text-orange-600" /><Layers className="h-5 w-5 text-orange-600" /></div><div className="text-3xl font-bold text-orange-700 dark:text-orange-400">{auditTrail.length}</div><div className="text-sm text-muted-foreground">Registros Audit Chain</div></CardContent></Card>
+        <Card className="bg-gradient-to-br from-success/5 to-success/10 dark:from-success/10 dark:to-success/20"><CardContent className="p-6"><div className="flex items-center justify-between mb-2"><Target className="h-8 w-8 text-success" /><TrendingUp className="h-5 w-5 text-success" /></div><div className="text-3xl font-bold text-success">{detectionAccuracy.toFixed(1)}%</div><div className="text-sm text-muted-foreground">Precisão de Detecção</div></CardContent></Card>
+        <Card className="bg-gradient-to-br from-info/5 to-info/10 dark:from-info/10 dark:to-info/20"><CardContent className="p-6"><div className="flex items-center justify-between mb-2"><Zap className="h-8 w-8 text-info" /><Clock className="h-5 w-5 text-info" /></div><div className="text-3xl font-bold text-info">{threats.length}</div><div className="text-sm text-muted-foreground">Eventos Detectados</div></CardContent></Card>
+        <Card className="bg-gradient-to-br from-accent/5 to-accent/10 dark:from-accent/10 dark:to-accent/20"><CardContent className="p-6"><div className="flex items-center justify-between mb-2"><ShieldCheck className="h-8 w-8 text-accent-foreground" /><CheckCircle className="h-5 w-5 text-accent-foreground" /></div><div className="text-3xl font-bold text-accent-foreground">{blockedCount}</div><div className="text-sm text-muted-foreground">Ameaças Bloqueadas</div></CardContent></Card>
+        <Card className="bg-gradient-to-br from-warning/5 to-warning/10 dark:from-warning/10 dark:to-warning/20"><CardContent className="p-6"><div className="flex items-center justify-between mb-2"><Lock className="h-8 w-8 text-warning" /><Layers className="h-5 w-5 text-warning" /></div><div className="text-3xl font-bold text-warning">{auditTrail.length}</div><div className="text-sm text-muted-foreground">Registros Audit Chain</div></CardContent></Card>
       </div>
 
       {/* Threats */}
@@ -192,7 +192,7 @@ export const QuantumSecurityShield: React.FC = () => {
         </CardHeader>
         <CardContent className="space-y-4">
           {threats.length === 0 ? <p className="text-center text-muted-foreground py-4">Nenhuma ameaça detectada — sistema seguro ✅</p> : threats.slice(0, 5).map((threat) => (
-            <Card key={threat.id} className="border-l-4" style={{ borderLeftColor: threat.severity === "critical" ? "#ef4444" : threat.severity === "high" ? "#f97316" : "#eab308" }}>
+            <Card key={threat.id} className={`border-l-4 ${threat.severity === "critical" ? "border-l-destructive" : threat.severity === "high" ? "border-l-warning" : "border-l-accent"}`}>
               <CardContent className="p-4">
                 <div className="flex items-start justify-between mb-3">
                   <div className="flex-1">
@@ -205,9 +205,9 @@ export const QuantumSecurityShield: React.FC = () => {
                       <div><div className="text-xs text-muted-foreground">Origem</div><div className="font-medium">{threat.source}</div></div>
                       <div><div className="text-xs text-muted-foreground">Alvo</div><div className="font-medium">{threat.target}</div></div>
                       <div><div className="text-xs text-muted-foreground">Status</div><div className={`font-medium ${getStatusColor(threat.status)}`}>{threat.status === "blocked" ? "🛡️ Bloqueado" : "👁️ Detectado"}</div></div>
-                      <div><div className="text-xs text-muted-foreground">Confiança</div><div className="font-medium text-purple-600">{threat.aiConfidence.toFixed(1)}%</div></div>
+                      <div><div className="text-xs text-muted-foreground">Confiança</div><div className="font-medium text-accent-foreground">{threat.aiConfidence.toFixed(1)}%</div></div>
                     </div>
-                    <div className="p-3 bg-blue-50 dark:bg-blue-900/10 rounded-lg"><div className="flex items-start gap-2"><Zap className="h-4 w-4 text-blue-600 mt-0.5" /><div className="text-sm text-blue-800 dark:text-blue-200">{threat.action}</div></div></div>
+                    <div className="p-3 bg-info/5 rounded-lg"><div className="flex items-start gap-2"><Zap className="h-4 w-4 text-info mt-0.5" /><div className="text-sm text-foreground">{threat.action}</div></div></div>
                   </div>
                 </div>
                 <div className="text-xs text-muted-foreground flex items-center gap-1"><Clock className="h-3 w-3" />{threat.timestamp.toLocaleString("pt-BR")}</div>
@@ -232,7 +232,7 @@ export const QuantumSecurityShield: React.FC = () => {
                   </div>
                 </div>
                 <Progress value={Math.min(100, metric.value)} className="h-2 mb-2" />
-                <Badge className={metric.status === "excellent" ? "bg-green-100 text-green-800 dark:bg-green-900/20 dark:text-green-300" : "bg-blue-100 text-blue-800"}>{metric.status === "excellent" ? "✅ Excelente" : "👍 Bom"}</Badge>
+                <Badge className={metric.status === "excellent" ? "bg-success/10 text-success" : "bg-info/10 text-info"}>{metric.status === "excellent" ? "✅ Excelente" : "👍 Bom"}</Badge>
               </div>
             ))}
           </div>
@@ -253,7 +253,7 @@ export const QuantumSecurityShield: React.FC = () => {
                 </div>
                 <div className="text-right">
                   <p className="text-xs font-mono text-muted-foreground truncate max-w-[200px]">{entry.hash.substring(0, 20)}...</p>
-                  {entry.verified && <Badge className="bg-green-100 text-green-800 text-xs mt-1"><CheckCircle className="h-3 w-3 mr-1" />Verificado</Badge>}
+                  {entry.verified && <Badge className="bg-success/10 text-success text-xs mt-1"><CheckCircle className="h-3 w-3 mr-1" />Verificado</Badge>}
                 </div>
               </div>
             ))}

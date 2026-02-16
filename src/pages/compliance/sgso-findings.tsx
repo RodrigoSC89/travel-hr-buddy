@@ -47,9 +47,9 @@ export default function SGSOFindings() {
 
   const getStatusColor = (status: string) => {
     switch (status) {
-      case 'closed': return 'text-green-600';
-      case 'in_progress': return 'text-blue-600';
-      case 'open': return 'text-orange-600';
+      case 'closed': return 'text-success';
+      case 'in_progress': return 'text-info';
+      case 'open': return 'text-warning';
       default: return 'text-muted-foreground';
     }
   };
@@ -73,7 +73,7 @@ export default function SGSOFindings() {
             <CardTitle className="text-sm">Abertas</CardTitle>
           </CardHeader>
           <CardContent>
-            <div className="text-2xl font-bold text-orange-600">3</div>
+            <div className="text-2xl font-bold text-warning">3</div>
           </CardContent>
         </Card>
         <Card>
@@ -81,7 +81,7 @@ export default function SGSOFindings() {
             <CardTitle className="text-sm">Em Progresso</CardTitle>
           </CardHeader>
           <CardContent>
-            <div className="text-2xl font-bold text-blue-600">5</div>
+            <div className="text-2xl font-bold text-info">5</div>
           </CardContent>
         </Card>
         <Card>
@@ -89,7 +89,7 @@ export default function SGSOFindings() {
             <CardTitle className="text-sm">Concluídas</CardTitle>
           </CardHeader>
           <CardContent>
-            <div className="text-2xl font-bold text-green-600">28</div>
+            <div className="text-2xl font-bold text-success">28</div>
           </CardContent>
         </Card>
       </div>
