@@ -28,6 +28,12 @@ const GlobalAIAssistant = lazy(() =>
 const GlobalAICopilot = lazy(() => 
   import("@/components/ai/GlobalAICopilot").then(mod => ({ default: mod.GlobalAICopilot }))
 );
+const PEOTRAMVoiceButton = lazy(() => 
+  import("@/components/ai/peotram-voice-button").then(mod => ({ default: mod.PEOTRAMVoiceButton }))
+);
+const FloatingActionButton = lazy(() => 
+  import("@/components/ui/floating-action-button").then(mod => ({ default: mod.FloatingActionButton }))
+);
 const InstallPrompt = lazy(() => 
   import("@/components/pwa/InstallPrompt").then(mod => ({ default: mod.InstallPrompt }))
 );
@@ -79,7 +85,12 @@ export const AuthenticatedLayout = () => {
         <Suspense fallback={null}><UpdatePrompt /></Suspense>
         <Suspense fallback={null}><KeyboardShortcutsPanel /></Suspense>
         <Suspense fallback={null}><SpotlightSearch /></Suspense>
-        {/* GlobalAICopilot removed - GlobalAIAssistant already provides AI access */}
+        <Suspense fallback={null}><PEOTRAMVoiceButton /></Suspense>
+        <Suspense fallback={null}>
+          <div className="fixed bottom-20 right-4 z-40 md:bottom-24">
+            <FloatingActionButton />
+          </div>
+        </Suspense>
       </div>
     </SidebarProvider>
   );
