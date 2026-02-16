@@ -504,16 +504,16 @@ const Auth: React.FC = () => {
           className="hidden lg:flex flex-col space-y-8"
         >
           {/* Logo & Title */}
-          <div className="flex items-center space-x-4">
+          <div className="flex items-center space-x-5">
             <motion.div 
-              className="w-20 h-20 rounded-2xl bg-card flex items-center justify-center shadow-premium-lg p-3 border border-border/50 ring-1 ring-primary/20 animate-pulse-glow"
-              whileHover={{ scale: 1.12, rotate: 5 }}
+              className="w-28 h-28 rounded-3xl bg-card flex items-center justify-center shadow-premium-lg p-4 border border-border/50 ring-2 ring-primary/20 animate-pulse-glow"
+              whileHover={{ scale: 1.08, rotate: 3 }}
               whileTap={{ scale: 0.95 }}
               initial={{ scale: 0, rotate: -15 }}
               animate={{ scale: 1, rotate: 0 }}
               transition={{ type: "spring", stiffness: 260, damping: 15, delay: 0.3 }}
             >
-              <img src={nautiLogo} alt="Nauti One Logo" className="w-full h-full object-contain" width={56} height={56} />
+              <img src={nautiLogo} alt="Nauti One Logo" className="w-full h-full object-contain" width={80} height={80} />
             </motion.div>
             <div>
               <h1 className="text-4xl font-bold tracking-tight">
@@ -613,8 +613,8 @@ const Auth: React.FC = () => {
             <CardHeader className="space-y-1.5 text-center pb-4">
               {/* Mobile logo */}
               <div className="lg:hidden flex justify-center mb-5">
-                <div className="w-20 h-20 rounded-2xl bg-card flex items-center justify-center shadow-premium-lg p-3 ring-1 ring-primary/10">
-                  <img src={nautiLogo} alt="Nauti One" className="w-full h-full object-contain" width={56} height={56} />
+                <div className="w-24 h-24 rounded-3xl bg-card flex items-center justify-center shadow-premium-lg p-3.5 ring-2 ring-primary/10">
+                  <img src={nautiLogo} alt="Nauti One" className="w-full h-full object-contain" width={72} height={72} />
                 </div>
               </div>
               <CardTitle className="text-2xl font-bold text-card-foreground">
