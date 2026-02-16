@@ -3,6 +3,7 @@
  * 7 sections × 54+ requirements with gap analysis
  */
 import React, { useState } from "react";
+import { quickExport } from "@/lib/export-utils";
 import { Card, CardContent, CardHeader, CardTitle } from "@/components/ui/card";
 import { Badge } from "@/components/ui/badge";
 import { Button } from "@/components/ui/button";
@@ -116,7 +117,7 @@ export function PeoDPAuditPrep() {
           <h3 className="text-lg font-semibold">Preparação para Auditoria PEO-DP</h3>
           <p className="text-sm text-muted-foreground">7 Seções • {allReqs.length} Requisitos • Gap Analysis com IA</p>
         </div>
-        <Button size="sm" className="gap-1" onClick={() => toast.success("Relatório de Gap Analysis gerado")}>
+        <Button size="sm" className="gap-1" onClick={() => quickExport(allReqs, "PEO-DP Audit Gap Analysis")}>
           <FileText className="h-3 w-3" /> Gerar Relatório
         </Button>
       </div>

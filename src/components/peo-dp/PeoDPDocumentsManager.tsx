@@ -176,7 +176,7 @@ export function PeoDPDocumentsManager() {
                   </div>
                   <p className="text-xs text-muted-foreground mt-0.5">{doc.description}</p>
                 </div>
-                <Button size="sm" variant="ghost" className="shrink-0 h-7 gap-1 text-xs" onClick={() => toast.info(`Upload para: ${doc.title}`)}>
+                <Button size="sm" variant="ghost" className="shrink-0 h-7 gap-1 text-xs" onClick={() => { const input = document.createElement('input'); input.type = 'file'; input.accept = '.pdf,.doc,.docx,.xls,.xlsx'; input.onchange = (e) => { const file = (e.target as HTMLInputElement).files?.[0]; if (file) toast.success(`Arquivo "${file.name}" selecionado para: ${doc.title}`); }; input.click(); }}>
                   <Upload className="h-3 w-3" /> Upload
                 </Button>
               </div>

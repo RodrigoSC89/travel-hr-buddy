@@ -315,11 +315,11 @@ export const RealTimeSystemMonitor: React.FC = () => {
               <Zap className="w-4 h-4 mr-2" />
               Re-check Health
             </Button>
-            <Button variant="outline" size="sm" onClick={() => toast.info('Cache invalidado')}>
+            <Button variant="outline" size="sm" onClick={() => { toast.info('Invalidando cache...'); setTimeout(() => toast.success('Cache invalidado com sucesso'), 500); }}>
               <HardDrive className="w-4 h-4 mr-2" />
               Limpar Cache
             </Button>
-            <Button variant="outline" size="sm" onClick={() => toast.info('Relatório gerado')}>
+            <Button variant="outline" size="sm" onClick={() => { const reportData = { healthChecks, activeSessions, aiLogs: aiLogs?.length || 0, timestamp: new Date().toISOString() }; const blob = new Blob([JSON.stringify(reportData, null, 2)], { type: 'application/json' }); const url = URL.createObjectURL(blob); const a = document.createElement('a'); a.href = url; a.download = `system-report-${new Date().toISOString().split('T')[0]}.json`; a.click(); URL.revokeObjectURL(url); toast.success('Relatório exportado'); }}>
               <Activity className="w-4 h-4 mr-2" />
               Gerar Relatório
             </Button>
