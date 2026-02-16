@@ -267,6 +267,11 @@ export const AppRoutes = () => (
       <Route path="/crew-competency" element={<Pages.CrewCompetencyPage />} />
       <Route path="/insurance-pi" element={<Pages.InsurancePIPage />} />
       <Route path="/pool-distribution" element={<Pages.PoolDistributionPage />} />
+      <Route path="/procurement" element={<Pages.ProcurementPage />} />
+      <Route path="/tc-charter" element={<Pages.TCCharterPage />} />
+      <Route path="/crew-planning" element={<Pages.CrewPlanningPage />} />
+      <Route path="/vessel-kpi" element={<Pages.VesselKPIPage />} />
+      <Route path="/cap-assessment" element={<Pages.CAPAssessmentPage />} />
       <Route path="/operations-command" element={<Pages.OperationsCommandCenter />} />
       
       {/* ======== ESG & SUSTENTABILIDADE ======== */}

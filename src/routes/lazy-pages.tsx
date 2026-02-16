@@ -300,6 +300,15 @@ export const InsurancePIPage = lazy(() => import("@/pages/InsurancePIPage"));
 export const PoolDistributionPage = lazy(() => import("@/pages/PoolDistributionPage"));
 
 // ============================================
+// WORLD-CLASS FINAL GAP-CLOSING (vs AMOS, Veson, Compas, CFM, DNV)
+// ============================================
+export const ProcurementPage = lazy(() => import("@/pages/ProcurementPage"));
+export const TCCharterPage = lazy(() => import("@/pages/TCCharterPage"));
+export const CrewPlanningPage = lazy(() => import("@/pages/CrewPlanningPage"));
+export const VesselKPIPage = lazy(() => import("@/pages/VesselKPIPage"));
+export const CAPAssessmentPage = lazy(() => import("@/pages/CAPAssessmentPage"));
+
+// ============================================
 // WORLD-CLASS DISRUPTIVE FEATURES
 // ============================================
 export const ComputerVisionInspectorPage = lazy(() => import("@/pages/ComputerVisionInspectorPage"));
