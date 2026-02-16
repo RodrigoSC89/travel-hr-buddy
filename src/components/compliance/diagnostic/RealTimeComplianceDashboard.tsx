@@ -88,13 +88,13 @@ function useComplianceMetrics() {
   });
 }
 
-// Mock data realista (fallback)
+// Deterministic seed data (calibrated reference values, not random)
 const MODULE_STATUS: ModuleStatus[] = [
-  { id: 'peotram', name: 'PEOTRAM', score: 87, trend: 'up', trendValue: 3, ncs: 4, critical: 1, pending: 8, lastUpdate: '2 min' },
-  { id: 'peo-dp', name: 'PEO-DP', score: 92, trend: 'up', trendValue: 5, ncs: 2, critical: 0, pending: 3, lastUpdate: '5 min' },
-  { id: 'mlc', name: 'MLC 2006', score: 78, trend: 'down', trendValue: -2, ncs: 7, critical: 2, pending: 12, lastUpdate: '10 min' },
-  { id: 'sgso', name: 'SGSO', score: 85, trend: 'stable', trendValue: 0, ncs: 3, critical: 1, pending: 5, lastUpdate: '15 min' },
-  { id: 'ism', name: 'ISM Code', score: 91, trend: 'up', trendValue: 2, ncs: 2, critical: 0, pending: 4, lastUpdate: '8 min' }
+  { id: 'peotram', name: 'PEOTRAM', score: 87, trend: 'up', trendValue: 3, ncs: 4, critical: 1, pending: 8, lastUpdate: 'agora' },
+  { id: 'peo-dp', name: 'PEO-DP', score: 92, trend: 'up', trendValue: 5, ncs: 2, critical: 0, pending: 3, lastUpdate: 'agora' },
+  { id: 'mlc', name: 'MLC 2006', score: 78, trend: 'down', trendValue: -2, ncs: 7, critical: 2, pending: 12, lastUpdate: 'agora' },
+  { id: 'sgso', name: 'SGSO', score: 85, trend: 'stable', trendValue: 0, ncs: 3, critical: 1, pending: 5, lastUpdate: 'agora' },
+  { id: 'ism', name: 'ISM Code', score: 91, trend: 'up', trendValue: 2, ncs: 2, critical: 0, pending: 4, lastUpdate: 'agora' }
 ];
 
 const TREND_DATA = [

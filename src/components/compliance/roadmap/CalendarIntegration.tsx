@@ -64,25 +64,60 @@ export const CalendarIntegration = () => {
     autoCreateReminders: true
   });
 
-  // Fetch events - using mock data due to schema constraints
+  // Fetch events from real compliance data (internal_audits + maritime_certificates)
   useEffect(() => {
     const fetchEvents = async () => {
       try {
         setLoading(true);
-        
-        // Mock events for demo - real integration would query actual tables
-        const calendarEvents: CalendarEvent[] = [
-          { id: "evt-1", title: "Auditoria PEOTRAM Semestral", date: new Date(Date.now() + 3 * 24 * 60 * 60 * 1000), type: "audit", source: "local", synced: false, priority: "critical" },
-          { id: "evt-2", title: "Inspeção MLC 2006", date: new Date(Date.now() + 7 * 24 * 60 * 60 * 1000), type: "inspection", source: "local", synced: false, priority: "high" },
-          { id: "evt-3", title: "Prazo Renovação ISM", date: new Date(Date.now() + 14 * 24 * 60 * 60 * 1000), type: "deadline", source: "local", synced: false, priority: "critical" },
-          { id: "evt-4", title: "Treinamento SGSO", date: new Date(Date.now() + 21 * 24 * 60 * 60 * 1000), type: "training", source: "local", synced: true, priority: "medium" }
-        ];
+        const calendarEvents: CalendarEvent[] = [];
+
+        // Fetch upcoming audits
+        const { data: audits } = await supabase
+          .from('internal_audits')
+          .select('id, audit_type, scheduled_date, status')
+          .gte('scheduled_date', new Date().toISOString())
+          .order('scheduled_date', { ascending: true })
+          .limit(20);
+
+        // eslint-disable-next-line @typescript-eslint/no-explicit-any
+        (audits || []).forEach((a: any) => {
+          calendarEvents.push({
+            id: a.id,
+            title: `Auditoria ${a.audit_type || 'Interna'}`,
+            date: new Date(a.scheduled_date),
+            type: 'audit',
+            source: 'local',
+            synced: false,
+            priority: 'high',
+          });
+        });
+
+        // Fetch expiring certificates as deadlines
+        const { data: certs } = await supabase
+          .from('maritime_certificates')
+          .select('id, cert_name, expiry_date')
+          .gte('expiry_date', new Date().toISOString())
+          .order('expiry_date', { ascending: true })
+          .limit(20);
+
+        // eslint-disable-next-line @typescript-eslint/no-explicit-any
+        (certs || []).forEach((c: any) => {
+          const daysUntil = Math.ceil((new Date(c.expiry_date).getTime() - Date.now()) / (1000 * 60 * 60 * 24));
+          calendarEvents.push({
+            id: c.id,
+            title: `Renovar: ${c.cert_name || 'Certificado'}`,
+            date: new Date(c.expiry_date),
+            type: 'deadline',
+            source: 'local',
+            synced: false,
+            priority: daysUntil <= 7 ? 'critical' : daysUntil <= 30 ? 'high' : 'medium',
+          });
+        });
 
         setEvents(calendarEvents);
-        logSuccess("FETCH", "calendar_events", null, { count: calendarEvents.length });
       } catch (error) {
         logger.error("Error fetching events:", error);
-        logError("FETCH", "calendar_events", error as Error);
+        setEvents([]);
       } finally {
         setLoading(false);
       }
