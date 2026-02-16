@@ -56,6 +56,11 @@ const MODULE_ROUTES: Record<string, string> = {
   "crew-competency": "/crew-competency",
   "insurance-pi": "/insurance-pi",
   "pool-distribution": "/pool-distribution",
+  "procurement": "/procurement",
+  "tc-charter": "/tc-charter",
+  "crew-planning": "/crew-planning",
+  "vessel-kpi": "/vessel-kpi",
+  "cap-assessment": "/cap-assessment",
 };
 
 /**
