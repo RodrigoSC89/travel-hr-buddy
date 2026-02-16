@@ -366,7 +366,7 @@ export default function LaytimeDemurrageCalculator() {
                           />
                         </td>
                         <td className="py-2 px-2">
-                          <Button variant="ghost" size="icon" className="h-7 w-7" onClick={() => removeEvent(event.id)}>
+                          <Button variant="ghost" size="icon" className="h-7 w-7" onClick={() => removeEvent(event.id)} aria-label="Remover evento">
                             <Trash2 className="h-3.5 w-3.5 text-destructive" />
                           </Button>
                         </td>

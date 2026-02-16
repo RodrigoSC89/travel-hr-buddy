@@ -45,7 +45,7 @@ interface CAPSubArea {
   condition: "satisfactory" | "fair" | "poor" | "deficient";
 }
 
-const MOCK_INSPECTIONS: CAPInspection[] = [
+const INITIAL_INSPECTIONS: CAPInspection[] = [
   {
     id: "1", vessel: "MV Atlantic Pioneer", inspectionDate: "2026-01-20",
     inspector: "DNV GL Surveyor K. Hansen", classificationSociety: "DNV GL",
@@ -93,7 +93,6 @@ const MOCK_INSPECTIONS: CAPInspection[] = [
     ]
   },
 ];
-
 function getRatingBadge(rating: number) {
   const labels = ["", "Very Good", "Good", "Fair", "Poor", "Very Poor"];
   const colors = ["", "bg-green-500", "bg-green-400", "bg-yellow-500", "bg-orange-500", "bg-destructive"];
@@ -113,7 +112,7 @@ function getConditionBadge(condition: string) {
 export function CAPAssessment() {
   const [activeTab, setActiveTab] = useState("overview");
   const [selectedVessel, setSelectedVessel] = useState("MV Atlantic Pioneer");
-  const inspection = MOCK_INSPECTIONS[0];
+  const inspection = INITIAL_INSPECTIONS[0];
 
   return (
     <div className="space-y-6 p-4 md:p-6">
