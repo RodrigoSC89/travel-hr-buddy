@@ -41,7 +41,16 @@ const MODULE_ROUTES: Record<string, string> = {
   "responsibility-matrix": "/responsibility-matrix-v2",
   "contract-downtime": "/vessel-contracts-v2",
   "cts-compliance": "/cts-compliance-v2",
-  "imca-incidents": "/imca-incidents-v2"
+  "imca-incidents": "/imca-incidents-v2",
+  // World-Class Competitive Modules
+  "charter-party": "/charter-party",
+  "laytime-demurrage": "/laytime-demurrage",
+  "running-hours": "/running-hours",
+  "crew-appraisal": "/crew-appraisal",
+  "crew-travel": "/crew-travel",
+  "crew-rotation": "/crew-rotation",
+  "qhse-incidents": "/qhse-incidents",
+  "class-surveys": "/class-surveys",
 };
 
 /**

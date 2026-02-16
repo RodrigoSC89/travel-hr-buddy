@@ -246,6 +246,16 @@ export const AppRoutes = () => (
       <Route path="/voyage-pnl" element={<Pages.VoyagePnLPage />} />
       <Route path="/crew-scheduler" element={<Pages.CrewSchedulerPage />} />
       <Route path="/analytics-command" element={<Pages.AnalyticsCommandCenter />} />
+      
+      {/* ======== WORLD-CLASS COMPETITIVE MODULES ======== */}
+      <Route path="/charter-party" element={<Pages.CharterPartyPage />} />
+      <Route path="/laytime-demurrage" element={<Pages.LaytimeDemurragePage />} />
+      <Route path="/running-hours" element={<Pages.RunningHoursPage />} />
+      <Route path="/crew-appraisal" element={<Pages.CrewAppraisalPage />} />
+      <Route path="/crew-travel" element={<Pages.CrewTravelPage />} />
+      <Route path="/crew-rotation" element={<Pages.CrewRotationPage />} />
+      <Route path="/qhse-incidents" element={<Pages.QHSEIncidentPage />} />
+      <Route path="/class-surveys" element={<Pages.ClassSurveyPage />} />
       <Route path="/operations-command" element={<Pages.OperationsCommandCenter />} />
       
       {/* ======== ESG & SUSTENTABILIDADE ======== */}
@@ -451,7 +461,7 @@ export const AppRoutes = () => (
       <Route path="/route-optimizer" element={<Navigate to="/ops" replace />} />
       <Route path="/drydock-management" element={<Navigate to="/maintenance" replace />} />
       <Route path="/vessel-contracts" element={<Navigate to="/ops" replace />} />
-      <Route path="/charter-party" element={<Navigate to="/ops" replace />} />
+      <Route path="/charter-party-legacy" element={<Navigate to="/charter-party" replace />} />
       <Route path="/cargo-management" element={<Navigate to="/ops" replace />} />
       <Route path="/port-call" element={<Navigate to="/ops" replace />} />
       <Route path="/vessel-cts" element={<Navigate to="/ops" replace />} />
