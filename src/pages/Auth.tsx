@@ -1,5 +1,5 @@
 /**
- * Auth Page - PATCH v28 Production Login + Live System Metrics
+ * Auth Page - PATCH v29 Cinematic Deep Ocean Login
  * Login, Signup, Password Recovery + OAuth + System Overview
  */
 import React, { useState, useEffect, useCallback } from "react";
@@ -19,11 +19,11 @@ import { zodResolver } from "@hookform/resolvers/zod";
 import { z } from "zod";
 import { supabase } from "@/integrations/supabase/client";
 import { useQuery } from "@tanstack/react-query";
-import { 
-  Eye, 
-  EyeOff, 
-  Lock, 
-  Mail, 
+import {
+  Eye,
+  EyeOff,
+  Lock,
+  Mail,
   User,
   CheckCircle,
   Loader2,
@@ -36,6 +36,7 @@ import { toast } from "sonner";
 import nautiLogo from "@/assets/nauti-one-logo.png";
 import { logger } from '@/lib/logger';
 
+// Schemas and types for forms
 const signInSchema = z.object({
   email: z.string().email("Email inválido"),
   password: z.string().min(6, "Senha deve ter pelo menos 6 caracteres")
@@ -69,7 +70,6 @@ const Auth: React.FC = () => {
   const [oauthLoading, setOauthLoading] = useState<string | null>(null);
   const [showTroubleshooting, setShowTroubleshooting] = useState(false);
 
-  // All hooks must be called before any conditional returns
   const signInForm = useForm<SignInFormData>({
     resolver: zodResolver(signInSchema),
     defaultValues: { email: "", password: "" }
@@ -85,9 +85,6 @@ const Auth: React.FC = () => {
     defaultValues: { email: "" }
   });
 
-  // Live system metrics - disabled to prevent blocking login
-  // The RPC call was failing and retrying (4x with 20s+ timeouts each),
-  // consuming all browser connections and aborting the auth request
   const systemStats = null;
 
   // Cleanup corrupted tokens on mount
@@ -118,7 +115,6 @@ const Auth: React.FC = () => {
     cleanup();
   }, []);
 
-  // Redirect after all hooks
   if (user) {
     return <Navigate to="/" replace />;
   }
@@ -127,13 +123,10 @@ const Auth: React.FC = () => {
     setIsLoading(true);
     try {
       await clearSession();
-      
-      // Also clear SW caches
       if ('caches' in window) {
         const keys = await caches.keys();
         await Promise.all(keys.map(k => caches.delete(k)));
       }
-      
       toast.success("Sessão e cache limpos", { description: "Tente fazer login novamente." });
     } catch {
       toast.error("Erro ao limpar sessão");
@@ -144,24 +137,18 @@ const Auth: React.FC = () => {
 
   const handleSignIn = async (data: SignInFormData) => {
     setIsLoading(true);
-    
     try {
-      // Show progress feedback for slow connections
       const progressToast = toast.loading("Conectando ao servidor...", {
         description: "Aguarde, tentando estabelecer conexão segura."
       });
-      
       const { data: authData, error } = await supabase.auth.signInWithPassword({
         email: data.email.toLowerCase().trim(),
         password: data.password,
       });
-      
       toast.dismiss(progressToast);
-      
       if (error) {
         const errorMsg = error.message.toLowerCase();
         logger.error('[Auth] Login error:', { message: error.message, status: error.status });
-        
         if (errorMsg.includes('invalid login credentials') || errorMsg.includes('invalid')) {
           toast.error("Credenciais inválidas", { description: "Email ou senha incorretos." });
         } else if (errorMsg.includes('email not confirmed')) {
@@ -180,7 +167,6 @@ const Auth: React.FC = () => {
     } catch (err) {
       const errorMessage = err instanceof Error ? err.message : String(err);
       logger.error('[Auth] Login exception:', errorMessage);
-      
       if (errorMessage.includes('CORS') ||
           errorMessage.includes('Failed to fetch') || 
           errorMessage.includes('NetworkError') ||
@@ -190,7 +176,7 @@ const Auth: React.FC = () => {
           errorMessage.includes('aborted') ||
           errorMessage.includes('ERR_FAILED')) {
         toast.error("Servidor indisponível", { 
-          description: "O servidor está reiniciando. O sistema tentou 5 vezes automaticamente. Aguarde 2-3 minutos e tente novamente.",
+          description: "O servidor está reiniciando. Aguarde 2-3 minutos e tente novamente.",
           duration: 15000,
         });
         setShowTroubleshooting(true);
@@ -206,10 +192,8 @@ const Auth: React.FC = () => {
 
   const handleSignUp = async (data: SignUpFormData) => {
     setIsLoading(true);
-    
     try {
       const redirectUrl = `${window.location.origin}/`;
-      
       const { error } = await supabase.auth.signUp({
         email: data.email.toLowerCase().trim(),
         password: data.password,
@@ -218,7 +202,6 @@ const Auth: React.FC = () => {
           data: { full_name: data.fullName }
         }
       });
-
       if (error) {
         const errorMsg = error.message.toLowerCase();
         if (errorMsg.includes('already registered') || errorMsg.includes('already exists')) {
@@ -238,8 +221,6 @@ const Auth: React.FC = () => {
       }
     } catch (err) {
       const errorMessage = err instanceof Error ? err.message : '';
-      
-      // Handle network errors specifically
       if (errorMessage.includes('Failed to fetch') || 
           errorMessage.includes('NetworkError') ||
           errorMessage.includes('fetch') ||
@@ -258,14 +239,11 @@ const Auth: React.FC = () => {
 
   const handleResetPassword = async (data: ResetFormData) => {
     setIsLoading(true);
-    
     try {
       const redirectUrl = `${window.location.origin}/auth?type=recovery`;
-      
       const { error } = await supabase.auth.resetPasswordForEmail(data.email.toLowerCase().trim(), {
         redirectTo: redirectUrl,
       });
-
       if (error) {
         toast.error("Erro", { description: error.message });
       } else {
@@ -283,35 +261,30 @@ const Auth: React.FC = () => {
 
   const handleOAuthSignIn = async (provider: "google" | "github" | "azure") => {
     setOauthLoading(provider);
-    
     try {
       const redirectUrl = `${window.location.origin}/`;
-      
       const { error } = await supabase.auth.signInWithOAuth({
         provider,
         options: { redirectTo: redirectUrl }
       });
-
       if (error) {
         toast.error("Erro no login", { description: error.message });
         setOauthLoading(null);
       }
-      // Don't reset loading on success - OAuth redirects
     } catch {
       toast.error("Erro no login", { description: "Tente novamente." });
       setOauthLoading(null);
     }
   };
 
-  // OAuth buttons component
   const OAuthButtons = () => (
     <div className="space-y-3">
       <div className="relative">
         <div className="absolute inset-0 flex items-center">
-          <Separator className="w-full" />
+          <Separator className="w-full border-white/10" />
         </div>
         <div className="relative flex justify-center text-xs uppercase">
-          <span className="bg-card px-2 text-muted-foreground">
+          <span className="bg-[hsla(220,40%,8%,0.9)] px-3 text-[hsla(210,30%,60%,0.6)]">
             ou continue com
           </span>
         </div>
@@ -323,7 +296,7 @@ const Auth: React.FC = () => {
           variant="outline"
           onClick={() => handleOAuthSignIn("google")}
           disabled={!!oauthLoading || isLoading}
-          className="w-full"
+          className="w-full border-white/10 bg-white/[0.03] hover:bg-white/[0.08] hover:border-white/20 text-foreground"
         >
           {oauthLoading === "google" ? (
             <Loader2 className="mr-2 h-4 w-4 animate-spin" />
@@ -343,7 +316,7 @@ const Auth: React.FC = () => {
           variant="outline"
           onClick={() => handleOAuthSignIn("github")}
           disabled={!!oauthLoading || isLoading}
-          className="w-full"
+          className="w-full border-white/10 bg-white/[0.03] hover:bg-white/[0.08] hover:border-white/20 text-foreground"
         >
           {oauthLoading === "github" ? (
             <Loader2 className="mr-2 h-4 w-4 animate-spin" />
@@ -360,7 +333,7 @@ const Auth: React.FC = () => {
           variant="outline"
           onClick={() => handleOAuthSignIn("azure")}
           disabled={!!oauthLoading || isLoading}
-          className="w-full"
+          className="w-full border-white/10 bg-white/[0.03] hover:bg-white/[0.08] hover:border-white/20 text-foreground"
         >
           {oauthLoading === "azure" ? (
             <Loader2 className="mr-2 h-4 w-4 animate-spin" />
@@ -378,9 +351,8 @@ const Auth: React.FC = () => {
     </div>
   );
 
-  // Troubleshooting section
   const TroubleshootingSection = () => (
-    <div className="mt-4 p-4 bg-muted/50 rounded-lg space-y-3">
+    <div className="mt-4 p-4 bg-white/[0.03] rounded-lg space-y-3 border border-white/[0.06]">
       <div className="flex items-center gap-2 text-sm font-medium">
         <AlertCircle className="h-4 w-4 text-warning" />
         Problemas para entrar?
@@ -399,7 +371,7 @@ const Auth: React.FC = () => {
         size="sm"
         onClick={handleClearSession}
         disabled={isLoading}
-        className="w-full"
+        className="w-full border-white/10 hover:bg-white/[0.06]"
       >
         <RefreshCw className={`mr-2 h-4 w-4 ${isLoading ? 'animate-spin' : ''}`} />
         Limpar sessão e cache
@@ -408,88 +380,93 @@ const Auth: React.FC = () => {
   );
 
   return (
-     <div className="min-h-screen bg-gradient-to-br from-background via-background to-primary/10 flex items-center justify-center p-4 overflow-hidden relative">
-      {/* Cinematic background - animated mesh gradient */}
+    <div className="min-h-screen flex items-center justify-center p-4 overflow-hidden relative" style={{ background: '#040a18' }}>
+      {/* === CINEMATIC DEEP OCEAN BACKGROUND === */}
       <div className="absolute inset-0 pointer-events-none overflow-hidden">
-        {/* Primary orb - deep ocean pulse */}
+        
+        {/* Deep space gradient base */}
+        <div className="absolute inset-0" style={{ background: 'linear-gradient(180deg, #040a18 0%, #0a1628 40%, #061224 100%)' }} />
+        
+        {/* Aurora borealis ribbon */}
         <motion.div
-          className="absolute top-1/4 left-1/4 w-[700px] h-[700px] rounded-full blur-[100px]"
-          style={{ background: 'radial-gradient(circle, hsla(214, 84%, 46%, 0.35) 0%, hsla(214, 84%, 46%, 0.08) 50%, transparent 70%)' }}
-          animate={{ 
-            scale: [1, 1.2, 1], 
-            x: [0, 60, 0], 
-            y: [0, -40, 0],
-            opacity: [0.7, 1, 0.7]
+          className="absolute -top-20 left-0 right-0 h-[500px]"
+          style={{ 
+            background: 'linear-gradient(180deg, hsla(190, 95%, 50%, 0.07) 0%, hsla(214, 84%, 46%, 0.1) 30%, hsla(270, 70%, 55%, 0.05) 60%, transparent 100%)',
+            filter: 'blur(60px)',
           }}
-          transition={{ duration: 8, repeat: Infinity, ease: "easeInOut" }}
+          animate={{ opacity: [0.4, 0.7, 0.4], scaleX: [1, 1.05, 1] }}
+          transition={{ duration: 6, repeat: Infinity, ease: "easeInOut" }}
         />
-        {/* Secondary orb - cyan accent */}
+
+        {/* Primary orb */}
         <motion.div
-          className="absolute bottom-1/4 right-1/5 w-[600px] h-[600px] rounded-full blur-[90px]"
-          style={{ background: 'radial-gradient(circle, hsla(190, 95%, 50%, 0.25) 0%, hsla(190, 95%, 50%, 0.05) 50%, transparent 70%)' }}
-          animate={{ 
-            scale: [1.1, 0.9, 1.1], 
-            x: [0, -50, 0], 
-            y: [0, 50, 0],
-            opacity: [0.6, 1, 0.6]
-          }}
+          className="absolute top-1/4 left-1/4 w-[800px] h-[800px] rounded-full"
+          style={{ background: 'radial-gradient(circle, hsla(214, 84%, 46%, 0.25) 0%, hsla(214, 84%, 46%, 0.04) 40%, transparent 70%)', filter: 'blur(80px)' }}
+          animate={{ scale: [1, 1.25, 1], x: [0, 80, 0], y: [0, -50, 0], opacity: [0.5, 0.9, 0.5] }}
           transition={{ duration: 10, repeat: Infinity, ease: "easeInOut" }}
         />
-        {/* Tertiary orb - purple accent */}
+        
+        {/* Cyan orb */}
         <motion.div
-          className="absolute top-2/3 left-1/2 w-[400px] h-[400px] rounded-full blur-[80px]"
-          style={{ background: 'radial-gradient(circle, hsla(270, 70%, 55%, 0.15) 0%, transparent 70%)' }}
-          animate={{ 
-            scale: [0.9, 1.15, 0.9], 
-            x: [0, -40, 0], 
-            y: [0, -30, 0],
-            opacity: [0.4, 0.8, 0.4]
-          }}
-          transition={{ duration: 14, repeat: Infinity, ease: "easeInOut" }}
+          className="absolute bottom-1/4 right-[10%] w-[700px] h-[700px] rounded-full"
+          style={{ background: 'radial-gradient(circle, hsla(190, 95%, 50%, 0.18) 0%, hsla(190, 95%, 50%, 0.02) 45%, transparent 70%)', filter: 'blur(70px)' }}
+          animate={{ scale: [1.1, 0.85, 1.1], x: [0, -60, 0], y: [0, 60, 0], opacity: [0.4, 0.8, 0.4] }}
+          transition={{ duration: 12, repeat: Infinity, ease: "easeInOut" }}
         />
-        {/* Floating particles - larger and more visible */}
-        {[...Array(12)].map((_, i) => (
+        
+        {/* Purple orb */}
+        <motion.div
+          className="absolute top-2/3 left-1/2 w-[500px] h-[500px] rounded-full"
+          style={{ background: 'radial-gradient(circle, hsla(270, 70%, 55%, 0.1) 0%, transparent 60%)', filter: 'blur(60px)' }}
+          animate={{ scale: [0.9, 1.2, 0.9], x: [0, -50, 0], y: [0, -40, 0], opacity: [0.3, 0.6, 0.3] }}
+          transition={{ duration: 16, repeat: Infinity, ease: "easeInOut" }}
+        />
+
+        {/* Horizontal scan line */}
+        <motion.div
+          className="absolute left-0 right-0 h-[1px]"
+          style={{ background: 'linear-gradient(90deg, transparent 0%, hsla(190, 95%, 60%, 0.35) 50%, transparent 100%)' }}
+          animate={{ top: ['-2%', '102%'] }}
+          transition={{ duration: 8, repeat: Infinity, ease: "linear" }}
+        />
+
+        {/* Floating particles */}
+        {[...Array(18)].map((_, i) => (
           <motion.div
-            key={`particle-${i}`}
+            key={`p-${i}`}
             className="absolute rounded-full"
             style={{
-              left: `${8 + i * 8}%`,
-              top: `${10 + (i % 4) * 22}%`,
-              width: i % 3 === 0 ? 4 : 2,
-              height: i % 3 === 0 ? 4 : 2,
-              background: i % 2 === 0 
-                ? 'hsla(214, 84%, 56%, 0.6)' 
-                : 'hsla(190, 95%, 60%, 0.5)',
-              boxShadow: i % 3 === 0 
-                ? '0 0 8px 2px hsla(214, 84%, 56%, 0.3)' 
-                : 'none',
+              left: `${5 + i * 5}%`,
+              top: `${8 + (i % 5) * 18}%`,
+              width: i % 4 === 0 ? 3 : i % 3 === 0 ? 2 : 1,
+              height: i % 4 === 0 ? 3 : i % 3 === 0 ? 2 : 1,
+              background: i % 3 === 0 ? 'hsla(190, 95%, 70%, 0.8)' : i % 2 === 0 ? 'hsla(214, 84%, 65%, 0.5)' : 'hsla(0, 0%, 100%, 0.25)',
+              boxShadow: i % 4 === 0 ? '0 0 10px 2px hsla(190, 95%, 60%, 0.3)' : 'none',
             }}
-            animate={{
-              y: [0, -(30 + i * 5), 0],
-              x: [0, (i % 2 === 0 ? 15 : -15), 0],
-              opacity: [0.1, 0.8, 0.1],
-              scale: [0.5, 1.5, 0.5],
-            }}
-            transition={{
-              duration: 3 + i * 0.5,
-              repeat: Infinity,
-              delay: i * 0.6,
-              ease: "easeInOut",
-            }}
+            animate={{ y: [0, -(35 + i * 4), 0], x: [0, (i % 2 === 0 ? 18 : -18), 0], opacity: [0, 0.8, 0], scale: [0.3, 1.2, 0.3] }}
+            transition={{ duration: 4 + i * 0.4, repeat: Infinity, delay: i * 0.5, ease: "easeInOut" }}
           />
         ))}
-        {/* Grid overlay - visible */}
+        
+        {/* Grid overlay */}
         <div 
-          className="absolute inset-0 opacity-[0.06]"
+          className="absolute inset-0 opacity-[0.035]"
           style={{
-            backgroundImage: `linear-gradient(hsl(var(--primary) / 0.4) 1px, transparent 1px), linear-gradient(90deg, hsl(var(--primary) / 0.4) 1px, transparent 1px)`,
-            backgroundSize: '50px 50px',
+            backgroundImage: `linear-gradient(hsla(190, 95%, 50%, 0.5) 1px, transparent 1px), linear-gradient(90deg, hsla(190, 95%, 50%, 0.5) 1px, transparent 1px)`,
+            backgroundSize: '60px 60px',
           }}
         />
-        {/* Horizon line glow */}
-        <div className="absolute bottom-0 left-0 right-0 h-px bg-gradient-to-r from-transparent via-primary/30 to-transparent" />
-        <div className="absolute bottom-0 left-0 right-0 h-32 bg-gradient-to-t from-primary/5 to-transparent" />
+        
+        {/* Vignette */}
+        <div className="absolute inset-0" style={{ background: 'radial-gradient(ellipse at center, transparent 35%, hsla(220, 60%, 4%, 0.7) 100%)' }} />
+        
+        {/* Edge lines */}
+        <div className="absolute bottom-0 left-0 right-0 h-[1px]" style={{ background: 'linear-gradient(90deg, transparent, hsla(190,95%,50%,0.25), transparent)' }} />
+        <div className="absolute bottom-0 left-0 right-0 h-40" style={{ background: 'linear-gradient(to top, hsla(214,84%,46%,0.06), transparent)' }} />
+        <div className="absolute top-0 left-0 right-0 h-[1px]" style={{ background: 'linear-gradient(90deg, transparent, hsla(190,95%,50%,0.12), transparent)' }} />
       </div>
+
+      {/* === MAIN CONTENT === */}
       <motion.div
         initial={{ opacity: 0, y: 30, filter: "blur(10px)" }}
         animate={{ opacity: 1, y: 0, filter: "blur(0px)" }}
@@ -503,36 +480,59 @@ const Auth: React.FC = () => {
           transition={{ duration: 0.9, delay: 0.15, ease: [0.25, 0.46, 0.45, 0.94] }}
           className="hidden lg:flex flex-col space-y-8"
         >
-          {/* Logo & Title */}
-          <div className="flex items-center space-x-5">
+          {/* Logo & Title - Cinematic */}
+          <div className="flex items-center space-x-6">
             <motion.div 
-              className="w-28 h-28 rounded-3xl bg-card flex items-center justify-center shadow-premium-lg p-4 border border-border/50 ring-2 ring-primary/20 animate-pulse-glow"
-              whileHover={{ scale: 1.08, rotate: 3 }}
+              className="relative w-28 h-28 rounded-3xl flex items-center justify-center p-4 border border-[hsla(190,95%,50%,0.2)]"
+              style={{
+                background: 'linear-gradient(135deg, hsla(220, 40%, 12%, 0.9), hsla(220, 40%, 8%, 0.9))',
+                boxShadow: '0 0 40px hsla(214, 84%, 46%, 0.2), 0 0 80px hsla(190, 95%, 50%, 0.06), inset 0 1px 0 hsla(0, 0%, 100%, 0.08)',
+                backdropFilter: 'blur(20px)',
+              }}
+              whileHover={{ scale: 1.06, rotate: 2 }}
               whileTap={{ scale: 0.95 }}
               initial={{ scale: 0, rotate: -15 }}
               animate={{ scale: 1, rotate: 0 }}
               transition={{ type: "spring", stiffness: 260, damping: 15, delay: 0.3 }}
             >
-              <img src={nautiLogo} alt="Nauti One Logo" className="w-full h-full object-contain" width={80} height={80} />
+              {/* Animated glow ring */}
+              <motion.div
+                className="absolute inset-[-1px] rounded-3xl pointer-events-none"
+                style={{ boxShadow: '0 0 25px hsla(190, 95%, 50%, 0.12), inset 0 0 25px hsla(190, 95%, 50%, 0.04)' }}
+                animate={{ opacity: [0.4, 1, 0.4] }}
+                transition={{ duration: 3, repeat: Infinity, ease: "easeInOut" }}
+              />
+              <img src={nautiLogo} alt="Nauti One Logo" className="w-full h-full object-contain relative z-10 drop-shadow-[0_0_12px_hsla(190,95%,50%,0.3)]" width={80} height={80} />
             </motion.div>
             <div>
-              <h1 className="text-4xl font-bold tracking-tight">
-                <span className="bg-gradient-to-r from-primary via-primary/80 to-primary-glow bg-clip-text text-transparent bg-[length:200%_auto] animate-[gradient-shift_3s_ease-in-out_infinite]">
+              <motion.h1 
+                className="text-5xl font-bold tracking-tight"
+                initial={{ opacity: 0, x: -20 }}
+                animate={{ opacity: 1, x: 0 }}
+                transition={{ delay: 0.5, duration: 0.6 }}
+              >
+                <span 
+                  className="bg-clip-text text-transparent bg-[length:200%_auto] animate-[gradient-shift_4s_ease-in-out_infinite]"
+                  style={{ backgroundImage: 'linear-gradient(90deg, #ffffff, hsla(190,95%,70%,1), #ffffff)' }}
+                >
                   NAUTI ONE
                 </span>
-              </h1>
-              <p className="text-xs text-muted-foreground font-medium tracking-[0.25em] uppercase mt-0.5">
+              </motion.h1>
+              <motion.p 
+                className="text-sm font-medium tracking-[0.3em] uppercase mt-1"
+                style={{ color: 'hsla(190,95%,60%,0.6)' }}
+                initial={{ opacity: 0 }}
+                animate={{ opacity: 1 }}
+                transition={{ delay: 0.7, duration: 0.6 }}
+              >
                 Maritime Operations Platform
-              </p>
+              </motion.p>
             </div>
           </div>
 
-          {/* Live System Stats */}
-          {/* System stats disabled to fix login blocking */}
-
           {/* 7 Mega-Hubs */}
           <div className="space-y-3">
-            <span className="text-xs font-semibold text-muted-foreground uppercase tracking-wider">
+            <span className="text-xs font-semibold uppercase tracking-wider" style={{ color: 'hsla(210, 30%, 55%, 0.6)' }}>
               7 Mega-Hubs • 75+ Módulos
             </span>
             <div className="grid grid-cols-2 gap-2.5">
@@ -550,7 +550,12 @@ const Auth: React.FC = () => {
                   animate={{ opacity: 1, y: 0, scale: 1 }}
                   transition={{ delay: 0.4 + index * 0.08, duration: 0.5, ease: [0.25, 0.46, 0.45, 0.94] }}
                   whileHover={{ scale: 1.04, y: -3, transition: { type: "spring", stiffness: 400, damping: 20 } }}
-                  className="bg-card/50 border border-border/30 rounded-xl p-3 flex items-center gap-3 hover:bg-card/80 hover:border-primary/20 hover:shadow-[0_0_20px_hsla(var(--primary)/0.1)] transition-all duration-300 group cursor-default backdrop-blur-sm"
+                  className="rounded-xl p-3 flex items-center gap-3 transition-all duration-300 group cursor-default"
+                  style={{
+                    background: 'hsla(220, 40%, 12%, 0.5)',
+                    border: '1px solid hsla(190, 95%, 50%, 0.08)',
+                    backdropFilter: 'blur(8px)',
+                  }}
                 >
                   <div className="relative">
                     <hub.icon className="h-4 w-4 text-primary shrink-0 group-hover:scale-110 transition-transform duration-300" />
@@ -558,12 +563,12 @@ const Auth: React.FC = () => {
                   </div>
                   <div className="min-w-0 flex-1">
                     <div className="flex items-center gap-1.5">
-                      <span className="text-xs font-semibold truncate">{hub.name}</span>
-                      <Badge variant="secondary" className="text-[9px] px-1.5 py-0 h-4 shrink-0 font-bold bg-primary/10 text-primary border-primary/20">
+                      <span className="text-xs font-semibold truncate text-white/90">{hub.name}</span>
+                      <Badge variant="secondary" className="text-[9px] px-1.5 py-0 h-4 shrink-0 font-bold bg-primary/15 text-primary border-primary/20">
                         {hub.badge}
                       </Badge>
                     </div>
-                    <p className="text-[10px] text-muted-foreground truncate">{hub.desc}</p>
+                    <p className="text-[10px] truncate" style={{ color: 'hsla(210, 30%, 55%, 0.6)' }}>{hub.desc}</p>
                   </div>
                 </motion.div>
               ))}
@@ -594,7 +599,7 @@ const Auth: React.FC = () => {
                     transition={{ delay: 1.2 + i * 0.15, duration: 0.6 }}
                   />
                 </div>
-                <span className="text-sm text-foreground/80">{feature}</span>
+                <span className="text-sm text-white/70">{feature}</span>
               </motion.div>
             ))}
           </div>
@@ -607,22 +612,44 @@ const Auth: React.FC = () => {
           transition={{ duration: 0.9, delay: 0.25, ease: [0.25, 0.46, 0.45, 0.94] }}
           className="w-full max-w-md mx-auto"
         >
-          <Card className="shadow-premium-xl border-border/50 bg-card/95 backdrop-blur-xl relative overflow-hidden animate-pulse-glow">
-            {/* Top gradient line - more visible */}
-            <div className="absolute top-0 left-0 right-0 h-[2px] bg-gradient-to-r from-primary/20 via-primary/60 to-primary/20" />
+          <Card 
+            className="border-white/[0.08] relative overflow-hidden"
+            style={{
+              background: 'hsla(220, 40%, 8%, 0.85)',
+              backdropFilter: 'blur(24px) saturate(1.5)',
+              boxShadow: '0 0 60px hsla(214, 84%, 46%, 0.08), 0 25px 50px -12px hsla(0,0%,0%,0.5), inset 0 1px 0 hsla(0,0%,100%,0.05)',
+            }}
+          >
+            {/* Top gradient line */}
+            <motion.div 
+              className="absolute top-0 left-0 right-0 h-[1px]"
+              style={{ background: 'linear-gradient(90deg, transparent, hsla(190,95%,50%,0.5), transparent)' }}
+              animate={{ opacity: [0.5, 1, 0.5] }}
+              transition={{ duration: 3, repeat: Infinity, ease: "easeInOut" }}
+            />
+            {/* Side glow accents */}
+            <div className="absolute top-0 left-0 w-[1px] h-full" style={{ background: 'linear-gradient(180deg, transparent, hsla(190,95%,50%,0.1), transparent)' }} />
+            <div className="absolute top-0 right-0 w-[1px] h-full" style={{ background: 'linear-gradient(180deg, transparent, hsla(214,84%,46%,0.1), transparent)' }} />
+            
             <CardHeader className="space-y-1.5 text-center pb-4">
               {/* Mobile logo */}
               <div className="lg:hidden flex justify-center mb-5">
-                <div className="w-24 h-24 rounded-3xl bg-card flex items-center justify-center shadow-premium-lg p-3.5 ring-2 ring-primary/10">
-                  <img src={nautiLogo} alt="Nauti One" className="w-full h-full object-contain" width={72} height={72} />
+                <div 
+                  className="relative w-24 h-24 rounded-3xl flex items-center justify-center p-3.5 border border-[hsla(190,95%,50%,0.2)]"
+                  style={{
+                    background: 'linear-gradient(135deg, hsla(220, 40%, 12%, 0.9), hsla(220, 40%, 8%, 0.9))',
+                    boxShadow: '0 0 30px hsla(214, 84%, 46%, 0.15), 0 0 60px hsla(190, 95%, 50%, 0.05)',
+                  }}
+                >
+                  <img src={nautiLogo} alt="Nauti One" className="w-full h-full object-contain drop-shadow-[0_0_10px_hsla(190,95%,50%,0.25)]" width={72} height={72} />
                 </div>
               </div>
-              <CardTitle className="text-2xl font-bold text-card-foreground">
+              <CardTitle className="text-2xl font-bold text-white">
                 {activeTab === "signin" ? "Entrar na Conta" : 
                   activeTab === "signup" ? "Criar Conta" : 
                     "Recuperar Senha"}
               </CardTitle>
-              <CardDescription className="text-muted-foreground">
+              <CardDescription style={{ color: 'hsla(210, 30%, 55%, 0.6)' }}>
                 {activeTab === "signin" ? "Entre com suas credenciais para acessar o sistema" :
                   activeTab === "signup" ? "Crie sua conta para começar a usar o sistema" :
                     "Digite seu email para receber as instruções"}
@@ -630,11 +657,11 @@ const Auth: React.FC = () => {
             </CardHeader>
             <CardContent>
               <Tabs value={activeTab} onValueChange={setActiveTab}>
-                <TabsList className="grid w-full grid-cols-2 mb-6 h-11 p-1 bg-muted/50 rounded-lg">
-                  <TabsTrigger value="signin" className="rounded-md data-[state=active]:bg-primary data-[state=active]:text-primary-foreground data-[state=active]:shadow-sm transition-all duration-200">
+                <TabsList className="grid w-full grid-cols-2 mb-6 h-11 p-1 rounded-lg" style={{ background: 'hsla(220, 40%, 12%, 0.8)' }}>
+                  <TabsTrigger value="signin" className="rounded-md data-[state=active]:bg-primary data-[state=active]:text-primary-foreground data-[state=active]:shadow-[0_0_15px_hsla(214,84%,46%,0.3)] transition-all duration-200">
                     Entrar
                   </TabsTrigger>
-                  <TabsTrigger value="signup" className="rounded-md data-[state=active]:bg-primary data-[state=active]:text-primary-foreground data-[state=active]:shadow-sm transition-all duration-200">
+                  <TabsTrigger value="signup" className="rounded-md data-[state=active]:bg-primary data-[state=active]:text-primary-foreground data-[state=active]:shadow-[0_0_15px_hsla(214,84%,46%,0.3)] transition-all duration-200">
                     Cadastrar
                   </TabsTrigger>
                 </TabsList>
@@ -643,14 +670,14 @@ const Auth: React.FC = () => {
                 <TabsContent value="signin" className="space-y-4">
                   <form onSubmit={signInForm.handleSubmit(handleSignIn)} className="space-y-4">
                     <div className="space-y-2">
-                      <Label htmlFor="signin-email">Email</Label>
+                      <Label htmlFor="signin-email" className="text-white/80">Email</Label>
                       <div className="relative">
                         <Mail className="absolute left-3 top-3 h-4 w-4 text-muted-foreground" />
                         <Input
                           id="signin-email"
                           type="email"
                           placeholder="seu@email.com"
-                          className="pl-10"
+                          className="pl-10 bg-white/[0.04] border-white/[0.1] focus:border-primary/50 focus:ring-primary/20 text-white placeholder:text-white/30"
                           autoComplete="email"
                           {...signInForm.register("email")}
                         />
@@ -661,14 +688,14 @@ const Auth: React.FC = () => {
                     </div>
 
                     <div className="space-y-2">
-                      <Label htmlFor="signin-password">Senha</Label>
+                      <Label htmlFor="signin-password" className="text-white/80">Senha</Label>
                       <div className="relative">
                         <Lock className="absolute left-3 top-3 h-4 w-4 text-muted-foreground" />
                         <Input
                           id="signin-password"
                           type={showPassword ? "text" : "password"}
                           placeholder="Digite sua senha"
-                          className="pl-10 pr-10"
+                          className="pl-10 pr-10 bg-white/[0.04] border-white/[0.1] focus:border-primary/50 focus:ring-primary/20 text-white placeholder:text-white/30"
                           autoComplete="current-password"
                           {...signInForm.register("password")}
                         />
@@ -676,7 +703,7 @@ const Auth: React.FC = () => {
                           type="button"
                           variant="ghost"
                           size="sm"
-                          className="absolute right-0 top-0 h-full px-3 hover:bg-transparent"
+                          className="absolute right-0 top-0 h-full px-3 hover:bg-transparent text-white/50 hover:text-white/80"
                           onClick={() => setShowPassword(!showPassword)}
                           aria-label={showPassword ? "Ocultar senha" : "Mostrar senha"}
                         >
@@ -692,14 +719,22 @@ const Auth: React.FC = () => {
                       <Button
                         type="button"
                         variant="link"
-                        className="px-0 text-sm"
+                        className="px-0 text-sm text-primary/70 hover:text-primary"
                         onClick={() => setActiveTab("reset")}
                       >
                         Esqueceu a senha?
                       </Button>
                     </div>
 
-                    <Button type="submit" className="w-full h-11 text-sm font-semibold" size="lg" disabled={isLoading || authLoading}>
+                    <Button 
+                      type="submit" 
+                      className="w-full h-11 text-sm font-semibold relative overflow-hidden" 
+                      style={{
+                        boxShadow: '0 0 20px hsla(214, 84%, 46%, 0.3)',
+                      }}
+                      size="lg" 
+                      disabled={isLoading || authLoading}
+                    >
                       {isLoading ? <Loader2 className="mr-2 h-4 w-4 animate-spin" /> : null}
                       Entrar
                     </Button>
@@ -707,13 +742,12 @@ const Auth: React.FC = () => {
 
                   <OAuthButtons />
                   
-                  {/* Troubleshooting toggle */}
                   <div className="pt-2">
                     <Button
                       type="button"
                       variant="ghost"
                       size="sm"
-                      className="w-full text-xs text-muted-foreground"
+                      className="w-full text-xs text-white/30 hover:text-white/50 hover:bg-white/[0.03]"
                       onClick={() => setShowTroubleshooting(!showTroubleshooting)}
                     >
                       {showTroubleshooting ? "Ocultar" : "Problemas para entrar?"}
@@ -726,14 +760,14 @@ const Auth: React.FC = () => {
                 <TabsContent value="signup" className="space-y-4">
                   <form onSubmit={signUpForm.handleSubmit(handleSignUp)} className="space-y-4">
                     <div className="space-y-2">
-                      <Label htmlFor="signup-name">Nome Completo</Label>
+                      <Label htmlFor="signup-name" className="text-white/80">Nome Completo</Label>
                       <div className="relative">
                         <User className="absolute left-3 top-3 h-4 w-4 text-muted-foreground" />
                         <Input
                           id="signup-name"
                           type="text"
                           placeholder="Seu nome completo"
-                          className="pl-10"
+                          className="pl-10 bg-white/[0.04] border-white/[0.1] focus:border-primary/50 text-white placeholder:text-white/30"
                           autoComplete="name"
                           {...signUpForm.register("fullName")}
                         />
@@ -744,14 +778,14 @@ const Auth: React.FC = () => {
                     </div>
 
                     <div className="space-y-2">
-                      <Label htmlFor="signup-email">Email</Label>
+                      <Label htmlFor="signup-email" className="text-white/80">Email</Label>
                       <div className="relative">
                         <Mail className="absolute left-3 top-3 h-4 w-4 text-muted-foreground" />
                         <Input
                           id="signup-email"
                           type="email"
                           placeholder="seu@email.com"
-                          className="pl-10"
+                          className="pl-10 bg-white/[0.04] border-white/[0.1] focus:border-primary/50 text-white placeholder:text-white/30"
                           autoComplete="email"
                           {...signUpForm.register("email")}
                         />
@@ -762,14 +796,14 @@ const Auth: React.FC = () => {
                     </div>
 
                     <div className="space-y-2">
-                      <Label htmlFor="signup-password">Senha</Label>
+                      <Label htmlFor="signup-password" className="text-white/80">Senha</Label>
                       <div className="relative">
                         <Lock className="absolute left-3 top-3 h-4 w-4 text-muted-foreground" />
                         <Input
                           id="signup-password"
                           type={showPassword ? "text" : "password"}
                           placeholder="Mínimo 6 caracteres"
-                          className="pl-10 pr-10"
+                          className="pl-10 pr-10 bg-white/[0.04] border-white/[0.1] focus:border-primary/50 text-white placeholder:text-white/30"
                           autoComplete="new-password"
                           {...signUpForm.register("password")}
                         />
@@ -777,7 +811,7 @@ const Auth: React.FC = () => {
                           type="button"
                           variant="ghost"
                           size="sm"
-                          className="absolute right-0 top-0 h-full px-3 hover:bg-transparent"
+                          className="absolute right-0 top-0 h-full px-3 hover:bg-transparent text-white/50 hover:text-white/80"
                           onClick={() => setShowPassword(!showPassword)}
                           aria-label={showPassword ? "Ocultar senha" : "Mostrar senha"}
                         >
@@ -790,14 +824,14 @@ const Auth: React.FC = () => {
                     </div>
 
                     <div className="space-y-2">
-                      <Label htmlFor="signup-confirm">Confirmar Senha</Label>
+                      <Label htmlFor="signup-confirm" className="text-white/80">Confirmar Senha</Label>
                       <div className="relative">
                         <Lock className="absolute left-3 top-3 h-4 w-4 text-muted-foreground" />
                         <Input
                           id="signup-confirm"
                           type={showPassword ? "text" : "password"}
                           placeholder="Repita a senha"
-                          className="pl-10"
+                          className="pl-10 bg-white/[0.04] border-white/[0.1] focus:border-primary/50 text-white placeholder:text-white/30"
                           autoComplete="new-password"
                           {...signUpForm.register("confirmPassword")}
                         />
@@ -807,7 +841,12 @@ const Auth: React.FC = () => {
                       )}
                     </div>
 
-                    <Button type="submit" className="w-full" disabled={isLoading}>
+                    <Button 
+                      type="submit" 
+                      className="w-full" 
+                      style={{ boxShadow: '0 0 20px hsla(214, 84%, 46%, 0.3)' }}
+                      disabled={isLoading}
+                    >
                       {isLoading ? <Loader2 className="mr-2 h-4 w-4 animate-spin" /> : null}
                       Criar Conta
                     </Button>
@@ -820,14 +859,14 @@ const Auth: React.FC = () => {
                 <TabsContent value="reset" className="space-y-4">
                   <form onSubmit={resetForm.handleSubmit(handleResetPassword)} className="space-y-4">
                     <div className="space-y-2">
-                      <Label htmlFor="reset-email">Email</Label>
+                      <Label htmlFor="reset-email" className="text-white/80">Email</Label>
                       <div className="relative">
                         <Mail className="absolute left-3 top-3 h-4 w-4 text-muted-foreground" />
                         <Input
                           id="reset-email"
                           type="email"
                           placeholder="seu@email.com"
-                          className="pl-10"
+                          className="pl-10 bg-white/[0.04] border-white/[0.1] focus:border-primary/50 text-white placeholder:text-white/30"
                           autoComplete="email"
                           {...resetForm.register("email")}
                         />
@@ -837,7 +876,7 @@ const Auth: React.FC = () => {
                       )}
                     </div>
 
-                    <Button type="submit" className="w-full" disabled={isLoading}>
+                    <Button type="submit" className="w-full" disabled={isLoading} style={{ boxShadow: '0 0 20px hsla(214, 84%, 46%, 0.3)' }}>
                       {isLoading ? <Loader2 className="mr-2 h-4 w-4 animate-spin" /> : null}
                       Enviar Email de Recuperação
                     </Button>
@@ -845,7 +884,7 @@ const Auth: React.FC = () => {
                     <Button
                       type="button"
                       variant="outline"
-                      className="w-full"
+                      className="w-full border-white/10 hover:bg-white/[0.06] text-white/70"
                       onClick={() => setActiveTab("signin")}
                     >
                       Voltar para Login
@@ -856,12 +895,12 @@ const Auth: React.FC = () => {
             </CardContent>
           </Card>
 
-
           {/* About System CTA */}
           <div className="text-center mt-4">
             <Button
               variant="outline"
-              className="w-full max-w-md border-primary/30 text-primary hover:bg-primary/10 hover:border-primary/50 hover:shadow-[0_0_15px_hsl(var(--primary)/0.15)] transition-all duration-300"
+              className="w-full max-w-md border-[hsla(190,95%,50%,0.15)] hover:border-[hsla(190,95%,50%,0.35)] hover:shadow-[0_0_25px_hsla(190,95%,50%,0.08)] transition-all duration-300"
+              style={{ color: 'hsla(190,95%,60%,0.8)', background: 'hsla(190,95%,50%,0.04)' }}
               onClick={() => navigate('/about')}
             >
               <Compass className="mr-2 h-4 w-4" />
@@ -870,7 +909,7 @@ const Auth: React.FC = () => {
           </div>
 
           {/* Footer */}
-          <p className="text-center text-xs text-muted-foreground mt-4">
+          <p className="text-center text-xs mt-4" style={{ color: 'hsla(210,30%,50%,0.4)' }}>
             © {new Date().getFullYear()} Nauti One. Todos os direitos reservados.
           </p>
         </motion.div>
