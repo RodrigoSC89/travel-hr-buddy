@@ -78,8 +78,15 @@ export const DocumentManagement: React.FC = () => {
   });
 
   const handleAddDocument = async () => {
-    // For now, show a file picker simulation
-    sonnerToast.info("Selecione um arquivo para upload");
+    const input = document.createElement('input');
+    input.type = 'file';
+    input.accept = '.pdf,.doc,.docx,.jpg,.png,.xlsx';
+    input.onchange = () => {
+      if (input.files?.[0]) {
+        sonnerToast.success(`Arquivo "${input.files[0].name}" selecionado para upload`);
+      }
+    };
+    input.click();
     setShowAddDialog(false);
   };
 
