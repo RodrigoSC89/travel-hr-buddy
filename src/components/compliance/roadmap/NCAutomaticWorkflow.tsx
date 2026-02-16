@@ -420,19 +420,19 @@ export function NCAutomaticWorkflow() {
           <div className="text-xs text-muted-foreground">Críticas</div>
         </Card>
         <Card className="p-3">
-          <div className="text-2xl font-bold text-blue-500">{stats.open}</div>
+          <div className="text-2xl font-bold text-info">{stats.open}</div>
           <div className="text-xs text-muted-foreground">Abertas</div>
         </Card>
         <Card className="p-3">
-          <div className="text-2xl font-bold text-yellow-500">{stats.inProgress}</div>
+          <div className="text-2xl font-bold text-warning">{stats.inProgress}</div>
           <div className="text-xs text-muted-foreground">Em Andamento</div>
         </Card>
         <Card className="p-3">
-          <div className="text-2xl font-bold text-orange-500">{stats.pendingApproval}</div>
+          <div className="text-2xl font-bold text-accent-foreground">{stats.pendingApproval}</div>
           <div className="text-xs text-muted-foreground">Aguardando</div>
         </Card>
         <Card className="p-3">
-          <div className="text-2xl font-bold text-green-500">{stats.closed}</div>
+          <div className="text-2xl font-bold text-success">{stats.closed}</div>
           <div className="text-xs text-muted-foreground">Fechadas</div>
         </Card>
         <Card className="p-3 border-destructive/50">

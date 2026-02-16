@@ -326,26 +326,26 @@ const OverviewDashboard: React.FC<OverviewDashboardProps> = ({ onNavigate }) => 
             </CardHeader>
             <CardContent>
               <div className="space-y-3">
-                <div className="p-3 bg-red-50 border border-red-200 rounded-lg">
+                <div className="p-3 bg-destructive/10 border border-destructive/20 rounded-lg">
                   <div className="flex items-center gap-2 mb-1">
-                    <AlertTriangle className="h-4 w-4 text-red-600" />
-                    <span className="font-medium text-red-800">Certificação Vencida</span>
+                    <AlertTriangle className="h-4 w-4 text-destructive" />
+                    <span className="font-medium text-destructive">Certificação Vencida</span>
                   </div>
-                  <p className="text-sm text-red-600">SSO Certificate - MV Ocean Pioneer</p>
+                  <p className="text-sm text-destructive/80">SSO Certificate - MV Ocean Pioneer</p>
                 </div>
-                <div className="p-3 bg-yellow-50 border border-yellow-200 rounded-lg">
+                <div className="p-3 bg-warning/10 border border-warning/20 rounded-lg">
                   <div className="flex items-center gap-2 mb-1">
-                    <Clock className="h-4 w-4 text-yellow-600" />
-                    <span className="font-medium text-yellow-800">Rotação Pendente</span>
+                    <Clock className="h-4 w-4 text-warning" />
+                    <span className="font-medium text-warning">Rotação Pendente</span>
                   </div>
-                  <p className="text-sm text-yellow-600">2 oficiais - Santos, 15/01</p>
+                  <p className="text-sm text-warning/80">2 oficiais - Santos, 15/01</p>
                 </div>
-                <div className="p-3 bg-blue-50 border border-blue-200 rounded-lg">
+                <div className="p-3 bg-info/10 border border-info/20 rounded-lg">
                   <div className="flex items-center gap-2 mb-1">
-                    <Radio className="h-4 w-4 text-blue-600" />
-                    <span className="font-medium text-blue-800">Comunicação Perdida</span>
+                    <Radio className="h-4 w-4 text-info" />
+                    <span className="font-medium text-info">Comunicação Perdida</span>
                   </div>
-                  <p className="text-sm text-blue-600">MV Atlantic Star - 2h ago</p>
+                  <p className="text-sm text-info/80">MV Atlantic Star - 2h ago</p>
                 </div>
               </div>
             </CardContent>

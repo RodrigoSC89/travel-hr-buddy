@@ -42,11 +42,11 @@ interface Message {
 }
 
 const profileConfig: Record<UserProfile, { label: string; icon: React.ReactNode; color: string }> = {
-  dpo: { label: "DPO Operador", icon: <Anchor className="h-4 w-4" />, color: "bg-blue-500" },
-  inspector: { label: "Inspetor", icon: <ClipboardCheck className="h-4 w-4" />, color: "bg-green-500" },
-  manager: { label: "Gestor", icon: <BarChart3 className="h-4 w-4" />, color: "bg-purple-500" },
-  engineer: { label: "Engenheiro", icon: <Wrench className="h-4 w-4" />, color: "bg-orange-500" },
-  auditor: { label: "Auditor", icon: <Shield className="h-4 w-4" />, color: "bg-red-500" },
+  dpo: { label: "DPO Operador", icon: <Anchor className="h-4 w-4" />, color: "bg-primary" },
+  inspector: { label: "Inspetor", icon: <ClipboardCheck className="h-4 w-4" />, color: "bg-success" },
+  manager: { label: "Gestor", icon: <BarChart3 className="h-4 w-4" />, color: "bg-accent" },
+  engineer: { label: "Engenheiro", icon: <Wrench className="h-4 w-4" />, color: "bg-warning" },
+  auditor: { label: "Auditor", icon: <Shield className="h-4 w-4" />, color: "bg-destructive" },
 };
 
 const quickActions: Record<UserProfile, string[]> = {

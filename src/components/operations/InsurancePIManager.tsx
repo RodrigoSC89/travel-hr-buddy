@@ -32,10 +32,10 @@ const CLAIM_STATUSES = ["open", "under_review", "approved", "paid", "rejected"] 
 const COLORS = ["hsl(var(--primary))", "hsl(210,70%,55%)", "hsl(160,60%,45%)", "hsl(35,80%,55%)", "hsl(280,60%,55%)", "hsl(0,70%,55%)"];
 
 const POLICY_STATUS_CONFIG: Record<string, { label: string; color: string }> = {
-  active: { label: "Active", color: "bg-green-500/20 text-green-400" },
-  expiring: { label: "Expiring", color: "bg-yellow-500/20 text-yellow-400" },
-  expired: { label: "Expired", color: "bg-red-500/20 text-red-400" },
-  renewal: { label: "Renewal", color: "bg-blue-500/20 text-blue-400" },
+  active: { label: "Active", color: "bg-success/20 text-success" },
+  expiring: { label: "Expiring", color: "bg-warning/20 text-warning" },
+  expired: { label: "Expired", color: "bg-destructive/20 text-destructive" },
+  renewal: { label: "Renewal", color: "bg-primary/20 text-primary" },
 };
 
 const emptyPolicy = {
@@ -283,7 +283,7 @@ export function InsurancePIManager() {
                   <div>
                     <div className="flex items-center gap-2 mb-1">
                       <Badge variant="outline">{(c.insurance_policies as any)?.type || "—"}</Badge>
-                      <Badge className={c.status === "paid" || c.status === "approved" ? "bg-green-500/20 text-green-400" : c.status === "rejected" ? "bg-red-500/20 text-red-400" : "bg-yellow-500/20 text-yellow-400"}>
+                      <Badge className={c.status === "paid" || c.status === "approved" ? "bg-success/20 text-success" : c.status === "rejected" ? "bg-destructive/20 text-destructive" : "bg-warning/20 text-warning"}>
                         {c.status}
                       </Badge>
                       {(c.vessels as any)?.name && <span className="text-xs text-muted-foreground">🚢 {(c.vessels as any).name}</span>}
@@ -292,8 +292,8 @@ export function InsurancePIManager() {
                     <p className="text-xs text-muted-foreground mt-1">Incident: {c.incident_date || "—"} • Insurer: {(c.insurance_policies as any)?.insurer || "—"}</p>
                   </div>
                   <div className="text-right">
-                    <p className="text-sm font-mono">Claimed: <span className="text-yellow-400">${Number(c.amount_claimed || 0).toLocaleString()}</span></p>
-                    <p className="text-sm font-mono">Recovered: <span className="text-green-400">${Number(c.amount_recovered || 0).toLocaleString()}</span></p>
+                    <p className="text-sm font-mono">Claimed: <span className="text-warning">${Number(c.amount_claimed || 0).toLocaleString()}</span></p>
+                    <p className="text-sm font-mono">Recovered: <span className="text-success">${Number(c.amount_recovered || 0).toLocaleString()}</span></p>
                   </div>
                 </div>
               </CardContent>
@@ -304,7 +304,7 @@ export function InsurancePIManager() {
         <TabsContent value="renewals" className="mt-4">
           {expiringPolicies.length === 0 ? (
             <Card><CardContent className="p-8 text-center text-muted-foreground">
-              <CheckCircle className="h-10 w-10 mx-auto mb-2 opacity-50 text-green-400" />
+              <CheckCircle className="h-10 w-10 mx-auto mb-2 opacity-50 text-success" />
               All policies are current. No upcoming renewals within 60 days.
             </CardContent></Card>
           ) : expiringPolicies.map((p: any) => (
@@ -318,7 +318,7 @@ export function InsurancePIManager() {
                   </div>
                   <p className="text-xs text-muted-foreground mt-1">Expires: {format(new Date(p.end_date), "dd MMM yyyy")} ({p.days_until_expiry} days)</p>
                 </div>
-                <Badge className="bg-yellow-500/20 text-yellow-400">{p.days_until_expiry}d remaining</Badge>
+                <Badge className="bg-warning/20 text-warning">{p.days_until_expiry}d remaining</Badge>
               </CardContent>
             </Card>
           ))}
@@ -348,8 +348,8 @@ export function InsurancePIManager() {
               <CardHeader><CardTitle className="text-base">Loss Ratio Summary</CardTitle></CardHeader>
               <CardContent className="space-y-4 pt-4">
                 <div className="flex justify-between"><span className="text-muted-foreground">Total Premiums Paid</span><span className="font-mono font-bold">${(totalPremium / 1000).toFixed(0)}K</span></div>
-                <div className="flex justify-between"><span className="text-muted-foreground">Total Claims Filed</span><span className="font-mono font-bold text-yellow-400">${(totalClaimed / 1000).toFixed(0)}K</span></div>
-                <div className="flex justify-between"><span className="text-muted-foreground">Total Recovered</span><span className="font-mono font-bold text-green-400">${(totalRecovered / 1000).toFixed(0)}K</span></div>
+                <div className="flex justify-between"><span className="text-muted-foreground">Total Claims Filed</span><span className="font-mono font-bold text-warning">${(totalClaimed / 1000).toFixed(0)}K</span></div>
+                <div className="flex justify-between"><span className="text-muted-foreground">Total Recovered</span><span className="font-mono font-bold text-success">${(totalRecovered / 1000).toFixed(0)}K</span></div>
                 <div className="border-t pt-3 flex justify-between"><span className="text-muted-foreground">Loss Ratio</span><span className="font-bold">{totalPremium > 0 ? ((totalClaimed / totalPremium) * 100).toFixed(1) : 0}%</span></div>
               </CardContent>
             </Card>

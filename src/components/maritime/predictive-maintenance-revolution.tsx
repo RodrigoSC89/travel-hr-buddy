@@ -183,15 +183,15 @@ export const PredictiveMaintenanceRevolution: React.FC = () => {
           </CardContent>
         </Card>
 
-        <Card className="bg-gradient-to-br from-blue-50 to-blue-100 dark:from-blue-900/20 dark:to-blue-800/20">
+        <Card className="bg-gradient-to-br from-primary/10 to-primary/5">
           <CardContent className="p-6">
             <div className="flex items-center justify-between mb-2">
-              <BarChart3 className="h-8 w-8 text-blue-600" />
-              <CheckCircle className="h-5 w-5 text-blue-600" />
+              <BarChart3 className="h-8 w-8 text-primary" />
+              <CheckCircle className="h-5 w-5 text-primary" />
             </div>
-            <div className="text-3xl font-bold text-blue-700 dark:text-blue-400">10,148</div>
+            <div className="text-3xl font-bold text-primary">10,148</div>
             <div className="text-sm text-muted-foreground">Padrões Conhecidos</div>
-            <div className="text-xs text-blue-600 mt-1">Base de dados atualizada</div>
+            <div className="text-xs text-primary mt-1">Base de dados atualizada</div>
           </CardContent>
         </Card>
 
@@ -376,7 +376,7 @@ export const PredictiveMaintenanceRevolution: React.FC = () => {
                   <p className="text-sm text-muted-foreground">{pattern.description}</p>
                 </div>
                 <div className="text-right">
-                  <div className="text-sm font-medium text-green-600">{pattern.accuracy}% precisão</div>
+                  <div className="text-sm font-medium text-success">{pattern.accuracy}% precisão</div>
                   <div className="text-xs text-muted-foreground">{pattern.occurrences} ocorrências</div>
                 </div>
               </div>
@@ -403,11 +403,11 @@ export const PredictiveMaintenanceRevolution: React.FC = () => {
                 <div className="flex items-center justify-between mb-3">
                   <h4 className="font-medium">{metric.metric}</h4>
                   {metric.trend === "up" ? (
-                    <TrendingUp className="h-5 w-5 text-green-600" />
+                    <TrendingUp className="h-5 w-5 text-success" />
                   ) : metric.trend === "down" ? (
-                    <TrendingDown className="h-5 w-5 text-green-600" />
+                    <TrendingDown className="h-5 w-5 text-success" />
                   ) : (
-                    <Activity className="h-5 w-5 text-blue-600" />
+                    <Activity className="h-5 w-5 text-primary" />
                   )}
                 </div>
                 <div className="space-y-2">
@@ -418,7 +418,7 @@ export const PredictiveMaintenanceRevolution: React.FC = () => {
                   <Progress value={metric.current} className="h-2" />
                   <div className="flex items-center justify-between">
                     <span className="text-xs text-muted-foreground">Meta: {metric.target}%</span>
-                    <span className="text-sm font-medium text-green-600">
+                    <span className="text-sm font-medium text-success">
                       ${(metric.savings/1000).toFixed(0)}k economizados
                     </span>
                   </div>
@@ -427,10 +427,10 @@ export const PredictiveMaintenanceRevolution: React.FC = () => {
             ))}
           </div>
 
-          <div className="p-6 bg-gradient-to-r from-green-100 to-emerald-100 dark:from-green-900/20 dark:to-emerald-900/20 rounded-lg">
+          <div className="p-6 bg-gradient-to-r from-success/10 to-success/5 rounded-lg">
             <div className="flex items-center justify-between">
               <div>
-                <h3 className="text-2xl font-bold text-green-700 dark:text-green-400">
+                <h3 className="text-2xl font-bold text-success">
                   ${(totalSavings/1000).toFixed(0)}k
                 </h3>
                 <p className="text-sm text-muted-foreground">Economia Total Anual</p>
