@@ -35,8 +35,8 @@ export function STCWComplianceChecker({ crewMemberId, rank, crewName }: STCWComp
     queryKey: ["stcw-check", crewMemberId],
     queryFn: async () => {
       const { data: certs, error } = await supabase
-        .from("certificates")
-        .select("certificate_type, expiry_date, status")
+        .from("maritime_certificates")
+        .select("issuing_authority, expiry_date, status")
         .eq("crew_member_id", crewMemberId)
         .in("status", ["active", "valid"]);
       if (error) throw error;
@@ -44,7 +44,7 @@ export function STCWComplianceChecker({ crewMemberId, rank, crewName }: STCWComp
       const validCerts = new Set(
         (certs ?? [])
           .filter((c) => !c.expiry_date || new Date(c.expiry_date) > new Date())
-          .map((c) => c.certificate_type)
+          .map((c) => c.issuing_authority)
       );
 
       const missing = required.filter((r) => !validCerts.has(r));
