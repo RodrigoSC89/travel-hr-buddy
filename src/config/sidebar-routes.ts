@@ -34,7 +34,8 @@ import {
   DollarSign, Leaf, ClipboardList, Cloud,
   Calendar, Server, Radio, Globe, Plane,
   Lock, GraduationCap, Trash2, Fuel, Stethoscope, Terminal,
-  Briefcase, Gamepad2, Waves, Search, Trophy, Lightbulb, Handshake, Calculator, ShoppingCart
+  Briefcase, Gamepad2, Waves, Search, Trophy, Lightbulb, Handshake, Calculator, ShoppingCart,
+  ArrowRightLeft, ShieldAlert, Layers
 } from "lucide-react";
 import type { LucideIcon } from "lucide-react";
 
@@ -279,6 +280,12 @@ export const SIDEBAR_ROUTES: SidebarGroup[] = [
       { label: "Bunker Engine", path: "/bunker-optimization-engine", icon: Fuel, emoji: "⛽", badge: "FUEL", status: "new" as const },
       { label: "Crew Doc Vault", path: "/crew-document-vault", icon: FileText, emoji: "🗂️", badge: "STCW", status: "new" as const },
       { label: "Cargo Ops Adv", path: "/advanced-cargo", icon: Package, emoji: "📦", badge: "STS", status: "new" as const },
+      { label: "Crew Change Mgr", path: "/crew-change", icon: ArrowRightLeft, emoji: "🔄", badge: "COMPAS", status: "new" as const },
+      { label: "Permit to Work", path: "/permit-to-work", icon: ShieldAlert, emoji: "🔥", badge: "PTW", status: "new" as const },
+      { label: "Ship Vetting", path: "/ship-vetting", icon: Shield, emoji: "🛡️", badge: "SIRE", status: "new" as const },
+      { label: "Noon Analytics", path: "/noon-report-analytics", icon: BarChart3, emoji: "📊", badge: "CFM", status: "new" as const },
+      { label: "PSC History", path: "/psc-history", icon: Globe, emoji: "🌍", badge: "MoU", status: "new" as const },
+      { label: "Stowage Plan", path: "/stowage-plan", icon: Layers, emoji: "📦", badge: "NAPA", status: "new" as const },
     ],
   },
 ];
