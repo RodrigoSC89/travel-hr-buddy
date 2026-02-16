@@ -26,7 +26,7 @@ import { toast } from "sonner";
 import { PieChart, Pie, Cell, ResponsiveContainer, Legend, Tooltip } from "recharts";
 import { format } from "date-fns";
 
-const COLORS = ["#22c55e", "#eab308", "#f97316", "#ef4444"];
+const COLORS = ["hsl(var(--success))", "hsl(var(--warning))", "hsl(var(--accent))", "hsl(var(--destructive))"];
 
 const SECURITY_LEVELS = [
   { level: 1, name: "Normal", description: "Operações normais, medidas mínimas de segurança", color: "bg-success" },
@@ -160,7 +160,7 @@ export function ISPSModule() {
     const map: Record<string, React.ReactNode> = {
       compliant: <Badge className="bg-success/20 text-success">Conforme</Badge>,
       minor: <Badge className="bg-warning/20 text-warning">Menor</Badge>,
-      major: <Badge className="bg-orange-500/20 text-orange-500">Maior</Badge>,
+      major: <Badge className="bg-warning/20 text-warning">Maior</Badge>,
       critical: <Badge variant="destructive">Crítico</Badge>,
       pending: <Badge variant="secondary">Pendente</Badge>,
     };
@@ -170,7 +170,7 @@ export function ISPSModule() {
   const getSeverityBadge = (severity: string) => {
     const map: Record<string, React.ReactNode> = {
       critical: <Badge variant="destructive">Crítico</Badge>,
-      high: <Badge className="bg-orange-500/20 text-orange-500">Alto</Badge>,
+      high: <Badge className="bg-warning/20 text-warning">Alto</Badge>,
       medium: <Badge className="bg-warning/20 text-warning">Médio</Badge>,
       low: <Badge className="bg-success/20 text-success">Baixo</Badge>,
     };
@@ -203,7 +203,7 @@ export function ISPSModule() {
           <div>
             <h2 className="text-xl font-bold flex items-center gap-2">
               ISPS Code Compliance
-              <Badge className="bg-gradient-to-r from-red-500 to-orange-500 text-white">
+              <Badge className="bg-gradient-to-r from-destructive to-warning text-destructive-foreground">
                 Security Level {currentSecurityLevel}
               </Badge>
             </h2>

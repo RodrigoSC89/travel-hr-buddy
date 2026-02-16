@@ -192,12 +192,12 @@ export const TrainingSimulatorAI: React.FC = () => {
   ];
 
   return (
-    <Card className="border-orange-500/20">
+    <Card className="border-warning/20">
       <CardHeader>
         <CardTitle className="flex items-center gap-2">
-          <GraduationCap className="h-5 w-5 text-orange-500" />
+          <GraduationCap className="h-5 w-5 text-warning" />
           Simulador de Treinamento IA
-          <Badge className="ml-auto bg-orange-500/10 text-orange-500">Drill Sim</Badge>
+          <Badge className="ml-auto bg-warning/10 text-warning">Drill Sim</Badge>
         </CardTitle>
       </CardHeader>
       <CardContent className="space-y-4">

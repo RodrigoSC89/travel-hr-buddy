@@ -119,19 +119,19 @@ const VoyageAccountingPage = () => {
       {/* Stats Cards */}
       <div className="grid gap-4 md:grid-cols-6">
         {[
-          { label: "Receita Total", value: `$${(stats.totalRevenue / 1000000).toFixed(2)}M`, sub: "Viagens concluídas", color: "text-green-600" },
+          { label: "Receita Total", value: `$${(stats.totalRevenue / 1000000).toFixed(2)}M`, sub: "Viagens concluídas", color: "text-success" },
           { label: "Custos Total", value: `$${(stats.totalCosts / 1000000).toFixed(2)}M`, sub: "Viagens concluídas" },
-          { label: "Lucro Líquido", value: `$${(stats.totalProfit / 1000000).toFixed(2)}M`, sub: "+12% vs período anterior", color: "text-green-600", trend: true },
-          { label: "Margem Média", value: `${stats.avgMargin.toFixed(1)}%`, sub: "Net margin", color: "text-blue-600" },
+          { label: "Lucro Líquido", value: `$${(stats.totalProfit / 1000000).toFixed(2)}M`, sub: "+12% vs período anterior", color: "text-success", trend: true },
+          { label: "Margem Média", value: `${stats.avgMargin.toFixed(1)}%`, sub: "Net margin", color: "text-primary" },
           { label: "TCE Médio", value: `$${stats.avgTCE.toLocaleString()}`, sub: "Por dia" },
-          { label: "Em Andamento", value: String(stats.inProgress), sub: "viagens ativas", color: "text-orange-600" },
+          { label: "Em Andamento", value: String(stats.inProgress), sub: "viagens ativas", color: "text-warning" },
         ].map(s => (
           <Card key={s.label}>
             <CardHeader className="pb-2"><CardTitle className="text-sm font-medium text-muted-foreground">{s.label}</CardTitle></CardHeader>
             <CardContent>
               <div className={`text-2xl font-bold ${s.color || ""}`}>{s.value}</div>
               {s.trend ? (
-                <div className="flex items-center text-xs text-green-600"><ArrowUp className="h-3 w-3 mr-1" />{s.sub}</div>
+                <div className="flex items-center text-xs text-success"><ArrowUp className="h-3 w-3 mr-1" />{s.sub}</div>
               ) : (
                 <p className="text-xs text-muted-foreground">{s.sub}</p>
               )}
@@ -142,13 +142,13 @@ const VoyageAccountingPage = () => {
 
       {/* AI Analysis Panel */}
       {aiAnalysis && (
-        <Card className="border-blue-200 bg-blue-50/50 dark:bg-blue-950/20">
-          <CardHeader><CardTitle className="flex items-center gap-2"><Brain className="h-5 w-5 text-blue-600" />Análise IA - Performance Financeira</CardTitle></CardHeader>
+        <Card className="border-primary/20 bg-primary/5">
+          <CardHeader><CardTitle className="flex items-center gap-2"><Brain className="h-5 w-5 text-primary" />Análise IA - Performance Financeira</CardTitle></CardHeader>
           <CardContent className="space-y-4">
             <div className="grid gap-4 md:grid-cols-3">
-              <div className="p-4 bg-background rounded-lg"><p className="text-sm text-muted-foreground">Score Rentabilidade</p><p className="text-2xl font-bold text-green-600">{aiAnalysis.profitability_score}%</p></div>
-              <div className="p-4 bg-background rounded-lg"><p className="text-sm text-muted-foreground">Eficiência de Custos</p><p className="text-2xl font-bold text-blue-600">{aiAnalysis.cost_efficiency}%</p></div>
-              <div className="p-4 bg-background rounded-lg"><p className="text-sm text-muted-foreground">TCE vs Mercado</p><p className="text-lg font-medium text-green-600">{aiAnalysis.tce_benchmark}</p></div>
+              <div className="p-4 bg-background rounded-lg"><p className="text-sm text-muted-foreground">Score Rentabilidade</p><p className="text-2xl font-bold text-success">{aiAnalysis.profitability_score}%</p></div>
+              <div className="p-4 bg-background rounded-lg"><p className="text-sm text-muted-foreground">Eficiência de Custos</p><p className="text-2xl font-bold text-primary">{aiAnalysis.cost_efficiency}%</p></div>
+              <div className="p-4 bg-background rounded-lg"><p className="text-sm text-muted-foreground">TCE vs Mercado</p><p className="text-lg font-medium text-success">{aiAnalysis.tce_benchmark}</p></div>
             </div>
             <div>
               <h4 className="font-medium mb-2 flex items-center gap-2"><TrendingUp className="h-4 w-4 text-info" />Previsão IA</h4>

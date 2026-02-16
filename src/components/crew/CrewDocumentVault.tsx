@@ -76,7 +76,7 @@ export function CrewDocumentVault() {
       <div className="flex items-center justify-between">
         <div>
           <h1 className="text-2xl font-bold flex items-center gap-2">
-            <FileText className="h-6 w-6 text-blue-400" />
+            <FileText className="h-6 w-6 text-primary" />
             Crew Document Vault
           </h1>
           <p className="text-muted-foreground">Centralized seafarer document management with STCW/Flag State tracking</p>
@@ -193,7 +193,7 @@ export function CrewDocumentVault() {
           })}
           {expiringIn90.length === 0 && (
             <div className="text-center py-8 text-muted-foreground">
-              <CheckCircle className="h-8 w-8 mx-auto mb-2 text-green-400" />
+              <CheckCircle className="h-8 w-8 mx-auto mb-2 text-success" />
               <p>All documents are valid beyond 90 days</p>
             </div>
           )}
@@ -203,10 +203,10 @@ export function CrewDocumentVault() {
           {expired.map(cert => {
             const crew = crewMembers?.find(c => c.id === cert.crew_member_id);
             return (
-              <Card key={cert.id} className="border-border/50 bg-card/80 backdrop-blur border-red-500/20">
+              <Card key={cert.id} className="border-border/50 bg-card/80 backdrop-blur border-destructive/20">
                 <CardContent className="py-3">
                   <div className="flex items-center gap-4">
-                    <XCircle className="h-5 w-5 text-red-400" />
+                    <XCircle className="h-5 w-5 text-destructive" />
                     <div className="flex-1">
                       <p className="text-sm font-medium">{cert.certification_name}</p>
                       <p className="text-xs text-muted-foreground">{crew?.full_name || "Unknown"} • Expired: {new Date(cert.expiry_date!).toLocaleDateString()}</p>
@@ -234,7 +234,7 @@ export function CrewDocumentVault() {
                   <div className="flex-1">
                     <div className="flex justify-between text-sm mb-1">
                       <span>{fs.held}/{fs.required} documents</span>
-                      <span className={`font-medium ${fs.compliance === 100 ? "text-green-400" : "text-yellow-400"}`}>
+                      <span className={`font-medium ${fs.compliance === 100 ? "text-success" : "text-warning"}`}>
                         {fs.compliance}%
                       </span>
                     </div>

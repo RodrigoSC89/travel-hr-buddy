@@ -174,10 +174,10 @@ export default function CrewManagementPremium() {
           { icon: <UserPlus className="h-4 w-4" />, label: 'Disponíveis', value: metrics.available, color: 'text-primary' },
           { icon: <Clock className="h-4 w-4" />, label: 'De Folga', value: metrics.onLeave, color: 'text-warning' },
           { icon: <Award className="h-4 w-4" />, label: 'Treino', value: metrics.training, color: 'text-accent-foreground' },
-          { icon: <AlertTriangle className="h-4 w-4" />, label: 'Cert. Expirando', value: metrics.expiring, color: 'text-amber-500' },
+          { icon: <AlertTriangle className="h-4 w-4" />, label: 'Cert. Expirando', value: metrics.expiring, color: 'text-warning' },
           { icon: <Shield className="h-4 w-4" />, label: 'Cert. Vencidos', value: metrics.expired, color: 'text-destructive' },
           { icon: <CheckCircle className="h-4 w-4" />, label: 'STCW', value: `${metrics.complianceRate}%`, color: metrics.complianceRate >= 95 ? 'text-success' : 'text-warning' },
-          { icon: <ArrowRightLeft className="h-4 w-4" />, label: 'Rotação', value: metrics.pendingRotation, color: 'text-amber-500' },
+          { icon: <ArrowRightLeft className="h-4 w-4" />, label: 'Rotação', value: metrics.pendingRotation, color: 'text-warning' },
           { icon: <Heart className="h-4 w-4" />, label: 'Bem-estar', value: metrics.avgWellness > 0 ? `${metrics.avgWellness}%` : '—', color: 'text-primary' },
         ].map((kpi, i) => (
           <motion.div key={kpi.label} initial={{ opacity: 0, y: 10 }} animate={{ opacity: 1, y: 0 }} transition={{ delay: i * 0.03 }}>
@@ -469,7 +469,7 @@ export default function CrewManagementPremium() {
             <Card><CardContent className="p-4 text-center"><Heart className="h-8 w-8 text-primary mx-auto mb-2" /><p className="text-2xl font-bold">{metrics.avgWellness > 0 ? `${metrics.avgWellness}%` : '—'}</p><p className="text-xs text-muted-foreground">Score Geral</p></CardContent></Card>
             <Card><CardContent className="p-4 text-center"><Activity className="h-8 w-8 text-success mx-auto mb-2" /><p className="text-2xl font-bold">{wellnessRecords.length}</p><p className="text-xs text-muted-foreground">Avaliações</p></CardContent></Card>
             <Card><CardContent className="p-4 text-center"><Shield className="h-8 w-8 text-warning mx-auto mb-2" /><p className="text-2xl font-bold">0</p><p className="text-xs text-muted-foreground">Alertas Críticos</p></CardContent></Card>
-            <Card><CardContent className="p-4 text-center"><Star className="h-8 w-8 text-amber-500 mx-auto mb-2" /><p className="text-2xl font-bold">92%</p><p className="text-xs text-muted-foreground">Satisfação</p></CardContent></Card>
+            <Card><CardContent className="p-4 text-center"><Star className="h-8 w-8 text-warning mx-auto mb-2" /><p className="text-2xl font-bold">92%</p><p className="text-xs text-muted-foreground">Satisfação</p></CardContent></Card>
           </div>
           <Card>
             <CardContent className="p-6 text-center">
