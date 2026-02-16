@@ -157,6 +157,7 @@ export const CrewSchedulerPage = lazy(() => import("@/pages/CrewSchedulerPage"))
 export const AnalyticsCommandCenter = lazy(() => import("@/pages/AnalyticsCommandCenter"));
 export const OperationsCommandCenter = lazy(() => import("@/pages/OperationsCommandCenter"));
 export const FinanceProcurementAIPage = lazy(() => import("@/pages/FinanceProcurementAIPage"));
+export const WorldClassDashboard = lazy(() => import("@/pages/WorldClassDashboard"));
 
 // ============================================
 // ESG & SUSTENTABILIDADE
