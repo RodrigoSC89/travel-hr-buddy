@@ -9750,6 +9750,113 @@ export type Database = {
           },
         ]
       }
+      crew_change_tasks: {
+        Row: {
+          assigned_to: string | null
+          created_at: string | null
+          crew_change_id: string | null
+          due_date: string | null
+          id: string
+          is_done: boolean | null
+          task_name: string
+        }
+        Insert: {
+          assigned_to?: string | null
+          created_at?: string | null
+          crew_change_id?: string | null
+          due_date?: string | null
+          id?: string
+          is_done?: boolean | null
+          task_name: string
+        }
+        Update: {
+          assigned_to?: string | null
+          created_at?: string | null
+          crew_change_id?: string | null
+          due_date?: string | null
+          id?: string
+          is_done?: boolean | null
+          task_name?: string
+        }
+        Relationships: [
+          {
+            foreignKeyName: "crew_change_tasks_crew_change_id_fkey"
+            columns: ["crew_change_id"]
+            isOneToOne: false
+            referencedRelation: "crew_changes"
+            referencedColumns: ["id"]
+          },
+        ]
+      }
+      crew_changes: {
+        Row: {
+          coordinator_id: string | null
+          created_at: string | null
+          created_by: string | null
+          id: string
+          notes: string | null
+          organization_id: string | null
+          planned_date: string
+          port: string
+          readiness_percent: number | null
+          sign_off_count: number | null
+          sign_on_count: number | null
+          status: string
+          updated_at: string | null
+          vessel_id: string | null
+          vessel_name: string
+        }
+        Insert: {
+          coordinator_id?: string | null
+          created_at?: string | null
+          created_by?: string | null
+          id?: string
+          notes?: string | null
+          organization_id?: string | null
+          planned_date: string
+          port: string
+          readiness_percent?: number | null
+          sign_off_count?: number | null
+          sign_on_count?: number | null
+          status?: string
+          updated_at?: string | null
+          vessel_id?: string | null
+          vessel_name: string
+        }
+        Update: {
+          coordinator_id?: string | null
+          created_at?: string | null
+          created_by?: string | null
+          id?: string
+          notes?: string | null
+          organization_id?: string | null
+          planned_date?: string
+          port?: string
+          readiness_percent?: number | null
+          sign_off_count?: number | null
+          sign_on_count?: number | null
+          status?: string
+          updated_at?: string | null
+          vessel_id?: string | null
+          vessel_name?: string
+        }
+        Relationships: [
+          {
+            foreignKeyName: "crew_changes_organization_id_fkey"
+            columns: ["organization_id"]
+            isOneToOne: false
+            referencedRelation: "organizations"
+            referencedColumns: ["id"]
+          },
+          {
+            foreignKeyName: "crew_changes_vessel_id_fkey"
+            columns: ["vessel_id"]
+            isOneToOne: false
+            referencedRelation: "vessels"
+            referencedColumns: ["id"]
+          },
+        ]
+      }
       crew_communications: {
         Row: {
           content: string | null
@@ -28803,6 +28910,114 @@ export type Database = {
           },
         ]
       }
+      noon_report_entries: {
+        Row: {
+          cargo_onboard_mt: number | null
+          course: number | null
+          created_at: string | null
+          distance_nm: number | null
+          draft_aft: number | null
+          draft_fwd: number | null
+          engine_rpm: number | null
+          fuel_consumed_mt: number | null
+          fuel_rob_mt: number | null
+          fuel_type: string | null
+          id: string
+          me_power_kw: number | null
+          organization_id: string | null
+          position_lat: number | null
+          position_lon: number | null
+          remarks: string | null
+          report_date: string
+          reported_by: string | null
+          sea_state: number | null
+          slip_percent: number | null
+          speed_avg: number | null
+          speed_ordered: number | null
+          swell_height: number | null
+          updated_at: string | null
+          vessel_id: string | null
+          weather_conditions: string | null
+          wind_direction: string | null
+          wind_force: number | null
+        }
+        Insert: {
+          cargo_onboard_mt?: number | null
+          course?: number | null
+          created_at?: string | null
+          distance_nm?: number | null
+          draft_aft?: number | null
+          draft_fwd?: number | null
+          engine_rpm?: number | null
+          fuel_consumed_mt?: number | null
+          fuel_rob_mt?: number | null
+          fuel_type?: string | null
+          id?: string
+          me_power_kw?: number | null
+          organization_id?: string | null
+          position_lat?: number | null
+          position_lon?: number | null
+          remarks?: string | null
+          report_date: string
+          reported_by?: string | null
+          sea_state?: number | null
+          slip_percent?: number | null
+          speed_avg?: number | null
+          speed_ordered?: number | null
+          swell_height?: number | null
+          updated_at?: string | null
+          vessel_id?: string | null
+          weather_conditions?: string | null
+          wind_direction?: string | null
+          wind_force?: number | null
+        }
+        Update: {
+          cargo_onboard_mt?: number | null
+          course?: number | null
+          created_at?: string | null
+          distance_nm?: number | null
+          draft_aft?: number | null
+          draft_fwd?: number | null
+          engine_rpm?: number | null
+          fuel_consumed_mt?: number | null
+          fuel_rob_mt?: number | null
+          fuel_type?: string | null
+          id?: string
+          me_power_kw?: number | null
+          organization_id?: string | null
+          position_lat?: number | null
+          position_lon?: number | null
+          remarks?: string | null
+          report_date?: string
+          reported_by?: string | null
+          sea_state?: number | null
+          slip_percent?: number | null
+          speed_avg?: number | null
+          speed_ordered?: number | null
+          swell_height?: number | null
+          updated_at?: string | null
+          vessel_id?: string | null
+          weather_conditions?: string | null
+          wind_direction?: string | null
+          wind_force?: number | null
+        }
+        Relationships: [
+          {
+            foreignKeyName: "noon_report_entries_organization_id_fkey"
+            columns: ["organization_id"]
+            isOneToOne: false
+            referencedRelation: "organizations"
+            referencedColumns: ["id"]
+          },
+          {
+            foreignKeyName: "noon_report_entries_vessel_id_fkey"
+            columns: ["vessel_id"]
+            isOneToOne: false
+            referencedRelation: "vessels"
+            referencedColumns: ["id"]
+          },
+        ]
+      }
       noon_reports: {
         Row: {
           air_temp: number | null
@@ -33990,6 +34205,102 @@ export type Database = {
           trend?: string | null
         }
         Relationships: []
+      }
+      permits_to_work: {
+        Row: {
+          approved_by: string | null
+          approved_by_name: string | null
+          checklist: Json | null
+          closed_at: string | null
+          created_at: string | null
+          description: string | null
+          gas_readings: Json | null
+          id: string
+          isolation_points: Json | null
+          location: string
+          organization_id: string | null
+          permit_number: string
+          permit_type: string
+          ppe_required: string[] | null
+          rejection_reason: string | null
+          requested_by: string | null
+          requested_by_name: string | null
+          risk_level: string | null
+          status: string
+          title: string
+          updated_at: string | null
+          valid_from: string | null
+          valid_to: string | null
+          vessel_id: string | null
+        }
+        Insert: {
+          approved_by?: string | null
+          approved_by_name?: string | null
+          checklist?: Json | null
+          closed_at?: string | null
+          created_at?: string | null
+          description?: string | null
+          gas_readings?: Json | null
+          id?: string
+          isolation_points?: Json | null
+          location: string
+          organization_id?: string | null
+          permit_number: string
+          permit_type: string
+          ppe_required?: string[] | null
+          rejection_reason?: string | null
+          requested_by?: string | null
+          requested_by_name?: string | null
+          risk_level?: string | null
+          status?: string
+          title: string
+          updated_at?: string | null
+          valid_from?: string | null
+          valid_to?: string | null
+          vessel_id?: string | null
+        }
+        Update: {
+          approved_by?: string | null
+          approved_by_name?: string | null
+          checklist?: Json | null
+          closed_at?: string | null
+          created_at?: string | null
+          description?: string | null
+          gas_readings?: Json | null
+          id?: string
+          isolation_points?: Json | null
+          location?: string
+          organization_id?: string | null
+          permit_number?: string
+          permit_type?: string
+          ppe_required?: string[] | null
+          rejection_reason?: string | null
+          requested_by?: string | null
+          requested_by_name?: string | null
+          risk_level?: string | null
+          status?: string
+          title?: string
+          updated_at?: string | null
+          valid_from?: string | null
+          valid_to?: string | null
+          vessel_id?: string | null
+        }
+        Relationships: [
+          {
+            foreignKeyName: "permits_to_work_organization_id_fkey"
+            columns: ["organization_id"]
+            isOneToOne: false
+            referencedRelation: "organizations"
+            referencedColumns: ["id"]
+          },
+          {
+            foreignKeyName: "permits_to_work_vessel_id_fkey"
+            columns: ["vessel_id"]
+            isOneToOne: false
+            referencedRelation: "vessels"
+            referencedColumns: ["id"]
+          },
+        ]
       }
       plan_modules: {
         Row: {
@@ -39887,6 +40198,90 @@ export type Database = {
           },
         ]
       }
+      ship_vetting_records: {
+        Row: {
+          created_at: string | null
+          created_by: string | null
+          critical_findings: number | null
+          findings: Json | null
+          id: string
+          inspection_date: string | null
+          inspection_type: string
+          inspector_name: string | null
+          next_due_date: string | null
+          observations_count: number | null
+          oil_major_approvals: Json | null
+          organization_id: string | null
+          overall_score: number | null
+          port: string | null
+          report_url: string | null
+          rightship_ghg_rating: string | null
+          status: string | null
+          updated_at: string | null
+          vessel_id: string | null
+          vessel_name: string
+        }
+        Insert: {
+          created_at?: string | null
+          created_by?: string | null
+          critical_findings?: number | null
+          findings?: Json | null
+          id?: string
+          inspection_date?: string | null
+          inspection_type: string
+          inspector_name?: string | null
+          next_due_date?: string | null
+          observations_count?: number | null
+          oil_major_approvals?: Json | null
+          organization_id?: string | null
+          overall_score?: number | null
+          port?: string | null
+          report_url?: string | null
+          rightship_ghg_rating?: string | null
+          status?: string | null
+          updated_at?: string | null
+          vessel_id?: string | null
+          vessel_name: string
+        }
+        Update: {
+          created_at?: string | null
+          created_by?: string | null
+          critical_findings?: number | null
+          findings?: Json | null
+          id?: string
+          inspection_date?: string | null
+          inspection_type?: string
+          inspector_name?: string | null
+          next_due_date?: string | null
+          observations_count?: number | null
+          oil_major_approvals?: Json | null
+          organization_id?: string | null
+          overall_score?: number | null
+          port?: string | null
+          report_url?: string | null
+          rightship_ghg_rating?: string | null
+          status?: string | null
+          updated_at?: string | null
+          vessel_id?: string | null
+          vessel_name?: string
+        }
+        Relationships: [
+          {
+            foreignKeyName: "ship_vetting_records_organization_id_fkey"
+            columns: ["organization_id"]
+            isOneToOne: false
+            referencedRelation: "organizations"
+            referencedColumns: ["id"]
+          },
+          {
+            foreignKeyName: "ship_vetting_records_vessel_id_fkey"
+            columns: ["vessel_id"]
+            isOneToOne: false
+            referencedRelation: "vessels"
+            referencedColumns: ["id"]
+          },
+        ]
+      }
       shipments: {
         Row: {
           actual_arrival: string | null
@@ -41791,6 +42186,96 @@ export type Database = {
           training_required?: boolean | null
         }
         Relationships: []
+      }
+      stowage_plans: {
+        Row: {
+          approved_at: string | null
+          approved_by: string | null
+          bm_limit: number | null
+          bm_max: number | null
+          cargo_holds: Json | null
+          created_at: string | null
+          created_by: string | null
+          displacement: number | null
+          draft_aft: number | null
+          draft_fwd: number | null
+          gm: number | null
+          gm_required: number | null
+          id: string
+          organization_id: string | null
+          sf_limit: number | null
+          sf_max: number | null
+          status: string | null
+          total_cargo_mt: number | null
+          trim: number | null
+          updated_at: string | null
+          vessel_id: string | null
+          voyage_ref: string | null
+        }
+        Insert: {
+          approved_at?: string | null
+          approved_by?: string | null
+          bm_limit?: number | null
+          bm_max?: number | null
+          cargo_holds?: Json | null
+          created_at?: string | null
+          created_by?: string | null
+          displacement?: number | null
+          draft_aft?: number | null
+          draft_fwd?: number | null
+          gm?: number | null
+          gm_required?: number | null
+          id?: string
+          organization_id?: string | null
+          sf_limit?: number | null
+          sf_max?: number | null
+          status?: string | null
+          total_cargo_mt?: number | null
+          trim?: number | null
+          updated_at?: string | null
+          vessel_id?: string | null
+          voyage_ref?: string | null
+        }
+        Update: {
+          approved_at?: string | null
+          approved_by?: string | null
+          bm_limit?: number | null
+          bm_max?: number | null
+          cargo_holds?: Json | null
+          created_at?: string | null
+          created_by?: string | null
+          displacement?: number | null
+          draft_aft?: number | null
+          draft_fwd?: number | null
+          gm?: number | null
+          gm_required?: number | null
+          id?: string
+          organization_id?: string | null
+          sf_limit?: number | null
+          sf_max?: number | null
+          status?: string | null
+          total_cargo_mt?: number | null
+          trim?: number | null
+          updated_at?: string | null
+          vessel_id?: string | null
+          voyage_ref?: string | null
+        }
+        Relationships: [
+          {
+            foreignKeyName: "stowage_plans_organization_id_fkey"
+            columns: ["organization_id"]
+            isOneToOne: false
+            referencedRelation: "organizations"
+            referencedColumns: ["id"]
+          },
+          {
+            foreignKeyName: "stowage_plans_vessel_id_fkey"
+            columns: ["vessel_id"]
+            isOneToOne: false
+            referencedRelation: "vessels"
+            referencedColumns: ["id"]
+          },
+        ]
       }
       subscription_plans: {
         Row: {
