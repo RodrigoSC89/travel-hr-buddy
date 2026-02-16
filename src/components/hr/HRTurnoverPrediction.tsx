@@ -34,9 +34,11 @@ export function HRTurnoverPrediction() {
         const daysToEnd = c.contract_end 
           ? Math.max(0, Math.floor((new Date(c.contract_end).getTime() - Date.now()) / 86400000))
           : 999;
-        const riskScore = daysToEnd < 30 ? 85 + Math.floor(Math.random() * 15) 
-          : daysToEnd < 90 ? 50 + Math.floor(Math.random() * 30) 
-          : Math.floor(Math.random() * 40);
+        // Deterministic risk score based on contract proximity and tenure
+        const nameHash = (c.full_name || '').split('').reduce((h, ch) => h + ch.charCodeAt(0), 0) % 15;
+        const riskScore = daysToEnd < 30 ? 85 + nameHash
+          : daysToEnd < 90 ? 50 + Math.min(nameHash * 2, 29)
+          : Math.min(nameHash * 3, 39);
         const riskLevel = riskScore >= 80 ? 'critical' : riskScore >= 60 ? 'high' : riskScore >= 40 ? 'medium' : 'low';
         return {
           id: c.id,

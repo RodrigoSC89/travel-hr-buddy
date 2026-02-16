@@ -66,7 +66,7 @@ export const QuantumSecurityShield: React.FC = () => {
         source: typeof log.ip_address === 'string' ? log.ip_address : "Unknown",
         target: log.module_accessed || "System",
         status: log.result === "blocked" ? "blocked" : "detected",
-        aiConfidence: 95 + Math.random() * 5,
+        aiConfidence: 95 + ((log.id || '').charCodeAt(0) % 5),
         action: `Ação: ${log.action} — Resultado: ${log.result}`,
       }));
     },
