@@ -43,27 +43,43 @@ const VESSEL_TYPES = [
   "Offshore Drill", "Cable Layer", "Tug", "MPSV", "DSV",
 ];
 
-// Generate realistic candidates
+// Generate deterministic candidates using seed-based values
+function seedHash(str: string): number {
+  let h = 0;
+  for (let i = 0; i < str.length; i++) h = ((h << 5) - h + str.charCodeAt(i)) | 0;
+  return Math.abs(h);
+}
+
 function generateCandidates(count: number): CrewCandidate[] {
   const firstNames = ["João", "Maria", "Pedro", "Ana", "Carlos", "Fernanda", "Lucas", "Julia", "Rafael", "Camila", "Andrei", "Sven", "Raj", "Yuki", "Kim"];
   const lastNames = ["Silva", "Santos", "Oliveira", "Souza", "Pereira", "Costa", "Ferreira", "Rodrigues", "Petrov", "Müller", "Patel", "Tanaka", "Lee"];
   const nationalities = ["🇧🇷 Brasil", "🇵🇭 Filipinas", "🇮🇳 Índia", "🇺🇦 Ucrânia", "🇷🇺 Rússia", "🇳🇴 Noruega", "🇬🇧 Reino Unido", "🇯🇵 Japão", "🇰🇷 Coreia"];
   const skills = ["DP-2", "GMDSS", "Tanker", "HUET", "BOSIET", "H2S", "ECDIS", "Crane", "Welding", "ERM"];
+  const availabilities = ["Imediata", "15 dias", "30 dias", "45 dias", "60 dias"];
 
-  return Array.from({ length: count }, (_, i) => ({
-    id: `CRW-${String(i + 1).padStart(4, "0")}`,
-    name: `${firstNames[i % firstNames.length]} ${lastNames[i % lastNames.length]}`,
-    rank: RANKS[i % RANKS.length],
-    nationality: nationalities[i % nationalities.length],
-    experience_years: 3 + Math.floor(Math.random() * 20),
-    stcw_valid: Math.random() > 0.15,
-    mlc_compliant: Math.random() > 0.1,
-    availability: ["Imediata", "15 dias", "30 dias", "45 dias", "60 dias"][Math.floor(Math.random() * 5)],
-    match_score: 60 + Math.floor(Math.random() * 40),
-    skills: skills.sort(() => Math.random() - 0.5).slice(0, 2 + Math.floor(Math.random() * 4)),
-    last_vessel_type: VESSEL_TYPES[Math.floor(Math.random() * VESSEL_TYPES.length)],
-    rating: 3 + Math.round(Math.random() * 20) / 10,
-  }));
+  return Array.from({ length: count }, (_, i) => {
+    const id = `CRW-${String(i + 1).padStart(4, "0")}`;
+    const h = seedHash(id);
+    const name = `${firstNames[i % firstNames.length]} ${lastNames[i % lastNames.length]}`;
+    const skillCount = 2 + (h % 4);
+    const startIdx = h % skills.length;
+    const candidateSkills = Array.from({ length: skillCount }, (_, si) => skills[(startIdx + si) % skills.length]);
+
+    return {
+      id,
+      name,
+      rank: RANKS[i % RANKS.length],
+      nationality: nationalities[i % nationalities.length],
+      experience_years: 3 + (h % 20),
+      stcw_valid: (h % 100) > 15,
+      mlc_compliant: (h % 100) > 10,
+      availability: availabilities[h % availabilities.length],
+      match_score: 60 + (h % 40),
+      skills: candidateSkills,
+      last_vessel_type: VESSEL_TYPES[h % VESSEL_TYPES.length],
+      rating: 3 + ((h % 21) / 10),
+    };
+  });
 }
 
 export default function CrewMarketplacePage() {
