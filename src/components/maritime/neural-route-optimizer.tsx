@@ -216,7 +216,7 @@ export const NeuralRouteOptimizer: React.FC = () => {
               onClick={optimizeRoute}
               disabled={isOptimizing}
               size="lg"
-              className="bg-white text-cyan-600 hover:bg-white/90"
+              className="bg-background text-primary hover:bg-background/90"
             >
               <Brain className="h-5 w-5 mr-2" />
               {isOptimizing ? "Otimizando..." : "Otimizar Rota"}

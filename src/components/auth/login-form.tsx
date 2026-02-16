@@ -59,7 +59,7 @@ export const LoginForm: React.FC = () => {
       <Card className="w-full max-w-md">
         <CardHeader className="text-center space-y-4">
           <div className="flex justify-center">
-            <div className="w-20 h-20 rounded-xl bg-white flex items-center justify-center shadow-lg p-3">
+            <div className="w-20 h-20 rounded-xl bg-card flex items-center justify-center shadow-lg p-3">
               <img 
                 src={nautiLogo} 
                 alt="Nauti One Logo" 

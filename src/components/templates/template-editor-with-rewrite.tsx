@@ -76,7 +76,7 @@ export default function TemplateEditorWithRewrite() {
     <div className="p-4 space-y-4">
       <EditorContent 
         editor={editor} 
-        className="border p-4 bg-white rounded min-h-[200px]" 
+        className="border p-4 bg-background rounded min-h-[200px]" 
       />
       <Button 
         onClick={handleRewrite} 

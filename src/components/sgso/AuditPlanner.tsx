@@ -250,7 +250,7 @@ export const AuditPlanner: React.FC = () => {
                             <Badge className={statusConfig.color}>
                               {statusConfig.label}
                             </Badge>
-                            <Badge variant="outline" className="bg-white">
+                            <Badge variant="outline" className="bg-background">
                               {getTypeLabel(audit.type)}
                             </Badge>
                           </div>

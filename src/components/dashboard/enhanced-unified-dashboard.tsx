@@ -377,7 +377,7 @@ const EnhancedUnifiedDashboard = () => {
                   {/* Logo Nautilus com Glow */}
                   <div className="relative group">
                     <div className="absolute inset-0 bg-gradient-to-br from-azure-400 to-azure-600 rounded-2xl blur-xl opacity-60 group-hover:opacity-100 transition-opacity" />
-                    <div className="relative p-4 rounded-2xl bg-white dark:bg-azure-900/50 shadow-glow backdrop-blur-sm">
+                    <div className="relative p-4 rounded-2xl bg-background shadow-glow backdrop-blur-sm">
                       <img 
                         src={nautilusLogoNew} 
                         alt="Nauti One"
