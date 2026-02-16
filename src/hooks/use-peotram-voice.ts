@@ -103,9 +103,8 @@ export function usePEOTRAMVoice() {
         // Call PEOTRAM AI via Edge Function
         const { data, error } = await supabase.functions.invoke('peotram-ai-chat', {
           body: { 
-            message: transcript,
-            context: 'voice_assistant',
-            module: 'PEOTRAM'
+            messages: [{ role: 'user', content: transcript }],
+            action: 'voice_assistant'
           }
         });
         
