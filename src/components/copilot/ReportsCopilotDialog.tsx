@@ -138,7 +138,14 @@ export function ReportsCopilotDialog({
   };
 
   const handleExport = (reportName: string) => {
-    toast.success(`Exportando ${reportName}...`);
+    const blob = new Blob([`Report: ${reportName}\nGenerated: ${new Date().toISOString()}\n\n${messages.map(m => `[${m.role}] ${m.content}`).join('\n')}`], { type: 'text/plain' });
+    const url = URL.createObjectURL(blob);
+    const a = document.createElement('a');
+    a.href = url;
+    a.download = `${reportName.replace(/\s+/g, '-').toLowerCase()}-${new Date().toISOString().slice(0,10)}.txt`;
+    a.click();
+    URL.revokeObjectURL(url);
+    toast.success(`${reportName} exportado com sucesso`);
   };
 
   return (

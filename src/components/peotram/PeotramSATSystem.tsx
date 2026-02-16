@@ -30,7 +30,8 @@ export function PeotramSATSystem() {
       const { data, error } = await (supabase.from as Function)("peotram_sat_chambers")
         .select("*").order("chamber_name");
       if (error) throw error;
-      return data as any[];
+      // eslint-disable-next-line @typescript-eslint/no-explicit-any -- Dynamic table not in generated types
+      return data as Record<string, unknown>[];
     },
   });
 

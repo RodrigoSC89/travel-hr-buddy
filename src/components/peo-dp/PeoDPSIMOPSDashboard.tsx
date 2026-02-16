@@ -200,8 +200,8 @@ export const PeoDPSIMOPSDashboard: React.FC = () => {
                   </div>
                   {op.restrictions.length > 0 && (
                     <div className="flex flex-wrap gap-1">
-                      {op.restrictions.map((r, i) => (
-                        <Badge key={i} variant="outline" className="text-[10px] bg-warning/5 text-warning border-warning/20">⚠ {r}</Badge>
+                      {op.restrictions.map((r) => (
+                        <Badge key={r} variant="outline" className="text-[10px] bg-warning/5 text-warning border-warning/20">⚠ {r}</Badge>
                       ))}
                     </div>
                   )}

@@ -286,8 +286,8 @@ export function MLCWorkRestEntry() {
             </CardTitle>
           </CardHeader>
           <CardContent className="space-y-1">
-            {validation.violations.map((v, i) => (
-              <div key={i} className={`flex items-center gap-2 p-2 rounded text-sm ${
+            {validation.violations.map((v) => (
+              <div key={v.message} className={`flex items-center gap-2 p-2 rounded text-sm ${
                 v.severity === "critical" ? "bg-destructive/10 text-destructive" : "bg-warning/10 text-warning"
               }`}>
                 {v.severity === "critical" ? <AlertTriangle className="h-3 w-3 shrink-0" /> : <Clock className="h-3 w-3 shrink-0" />}
@@ -310,8 +310,8 @@ export function MLCWorkRestEntry() {
               "Mín 77h descanso em 7 dias",
               "Descanso dividido em máx 2 períodos",
               "Um período mín 6h consecutivas",
-            ].map((r, i) => (
-              <div key={i} className="p-2 rounded bg-muted/50 text-xs flex items-start gap-2">
+            ].map((r) => (
+              <div key={r} className="p-2 rounded bg-muted/50 text-xs flex items-start gap-2">
                 <Shield className="h-3 w-3 text-primary mt-0.5 shrink-0" />
                 <span>{r}</span>
               </div>

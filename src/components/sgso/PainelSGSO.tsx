@@ -57,7 +57,8 @@ export const PainelSGSO: React.FC = () => {
       const vesselMap = new Map<string, { name: string; ncs: typeof ncs }>();
       for (const nc of ncs) {
         const vesselId = nc.vessel_id || "unknown";
-        const vesselName = (nc.vessels as any)?.name || "Embarcação Desconhecida";
+        // eslint-disable-next-line @typescript-eslint/no-explicit-any -- Supabase joined relation returns dynamic shape
+        const vesselName = (nc.vessels as Record<string, unknown>)?.name as string || "Embarcação Desconhecida";
         if (!vesselMap.has(vesselId)) {
           vesselMap.set(vesselId, { name: vesselName, ncs: [] });
         }
