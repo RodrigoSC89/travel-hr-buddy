@@ -38,11 +38,13 @@ const LandingPage = () => {
     {
       id: 'starter',
       name: 'Starter',
-      price: 497,
+      price: 500,
+      currency: 'USD',
+      priceLabel: '/vessel/mo',
       isEnterprise: false,
       recommended: false,
       description: t('landing.pricing.starterDesc'),
-      limits: { vessels: 5, crew: 50 },
+      limits: { vessels: 10, crew: 100 },
       modules: [
         t('landing.pricing.starterMod1'),
         t('landing.pricing.starterMod2'),
@@ -56,11 +58,13 @@ const LandingPage = () => {
     {
       id: 'pro',
       name: 'Professional',
-      price: 1297,
+      price: 1200,
+      currency: 'USD',
+      priceLabel: '/vessel/mo',
       isEnterprise: false,
       recommended: true,
       description: t('landing.pricing.proDesc'),
-      limits: { vessels: 25, crew: 300 },
+      limits: { vessels: 50, crew: 600 },
       modules: [
         t('landing.pricing.allFromStarter'),
         t('landing.pricing.proMod1'),
@@ -78,6 +82,8 @@ const LandingPage = () => {
       id: 'enterprise',
       name: 'Enterprise',
       price: 0,
+      currency: 'USD',
+      priceLabel: '',
       isEnterprise: true,
       recommended: false,
       description: t('landing.pricing.enterpriseDesc'),
@@ -147,7 +153,7 @@ const LandingPage = () => {
           "applicationCategory": "BusinessApplication",
           "operatingSystem": "Web",
           "description": "Maritime HR & Operations Platform with AI",
-          "offers": { "@type": "Offer", "price": "497", "priceCurrency": "BRL" }
+          "offers": { "@type": "AggregateOffer", "lowPrice": "500", "highPrice": "2000", "priceCurrency": "USD", "offerCount": "3" }
         })}</script>
       </Helmet>
 
@@ -407,8 +413,8 @@ const LandingPage = () => {
                             <span className="text-2xl font-bold">{t('landing.pricing.custom')}</span>
                           ) : (
                             <div>
-                              <span className="text-3xl font-bold">R$ {tier.price}</span>
-                              <span className="text-muted-foreground text-sm">/{t('landing.pricing.month')}</span>
+                              <span className="text-3xl font-bold">$ {tier.price.toLocaleString()}</span>
+                              <span className="text-muted-foreground text-sm">{tier.priceLabel}</span>
                             </div>
                           )}
                           <p className="text-xs text-muted-foreground mt-1">
