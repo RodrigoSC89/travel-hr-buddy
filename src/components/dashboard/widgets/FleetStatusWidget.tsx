@@ -1,7 +1,7 @@
 import React from "react";
 import { supabase } from "@/integrations/supabase/client";
 import { useQuery } from "@tanstack/react-query";
-import { Ship, Anchor, Navigation } from "lucide-react";
+import { Ship } from "lucide-react";
 import { Badge } from "@/components/ui/badge";
 import { cn } from "@/lib/utils";
 
@@ -16,9 +16,9 @@ export default function FleetStatusWidget() {
   });
 
   const statusColors: Record<string, string> = {
-    active: "bg-emerald-500/20 text-emerald-400 border-emerald-500/30",
-    maintenance: "bg-amber-500/20 text-amber-400 border-amber-500/30",
-    docked: "bg-blue-500/20 text-blue-400 border-blue-500/30",
+    active: "bg-success/20 text-success border-success/30",
+    maintenance: "bg-warning/20 text-warning border-warning/30",
+    docked: "bg-primary/20 text-primary border-primary/30",
   };
 
   return (

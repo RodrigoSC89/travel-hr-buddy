@@ -53,11 +53,11 @@ function KPICard({ title, value, change, icon, subtitle, trend, color }: KPICard
           {change !== undefined && (
             <div className="flex items-center gap-1 mt-2">
               {trend === "up" ? (
-                <ArrowUpRight className="h-3 w-3 text-green-500" />
+                <ArrowUpRight className="h-3 w-3 text-success" />
               ) : trend === "down" ? (
-                <ArrowDownRight className="h-3 w-3 text-red-500" />
+                <ArrowDownRight className="h-3 w-3 text-destructive" />
               ) : null}
-              <span className={`text-xs font-medium ${trend === "up" ? "text-green-500" : trend === "down" ? "text-red-500" : "text-muted-foreground"}`}>
+              <span className={`text-xs font-medium ${trend === "up" ? "text-success" : trend === "down" ? "text-destructive" : "text-muted-foreground"}`}>
                 {change > 0 ? "+" : ""}{change}% vs mês anterior
               </span>
             </div>
@@ -218,7 +218,7 @@ export default function CeoCommandDashboard() {
         </div>
         <div className="flex items-center gap-2">
           <Badge variant="outline" className="gap-1">
-            <Activity className="h-3 w-3 text-green-500 animate-pulse" />
+            <Activity className="h-3 w-3 text-success animate-pulse" />
             Live
           </Badge>
         </div>
@@ -326,7 +326,7 @@ export default function CeoCommandDashboard() {
               <Card key={gauge.label}>
                 <CardContent className="p-4 text-center space-y-2">
                   <div className="flex items-center justify-center gap-2 text-muted-foreground">{gauge.icon}<span className="text-xs">{gauge.label}</span></div>
-                  <p className={`text-3xl font-bold ${gauge.value >= 80 ? "text-green-500" : gauge.value >= 60 ? "text-yellow-500" : "text-red-500"}`}>{gauge.value}%</p>
+                  <p className={`text-3xl font-bold ${gauge.value >= 80 ? "text-success" : gauge.value >= 60 ? "text-warning" : "text-destructive"}`}>{gauge.value}%</p>
                   <Progress value={gauge.value} className="h-1.5" />
                 </CardContent>
               </Card>
@@ -388,21 +388,21 @@ export default function CeoCommandDashboard() {
           <div className="grid grid-cols-1 md:grid-cols-3 gap-4">
             <Card>
               <CardContent className="p-4 text-center space-y-2">
-                <CheckCircle className={`h-8 w-8 mx-auto ${complianceScore >= 80 ? "text-green-500" : "text-yellow-500"}`} />
+                <CheckCircle className={`h-8 w-8 mx-auto ${complianceScore >= 80 ? "text-success" : "text-warning"}`} />
                 <p className="text-3xl font-bold">{complianceScore}%</p>
                 <p className="text-xs text-muted-foreground">Compliance Score Global</p>
               </CardContent>
             </Card>
             <Card>
               <CardContent className="p-4 text-center space-y-2">
-                <AlertTriangle className={`h-8 w-8 mx-auto ${openNCs > 5 ? "text-red-500" : "text-yellow-500"}`} />
+                <AlertTriangle className={`h-8 w-8 mx-auto ${openNCs > 5 ? "text-destructive" : "text-warning"}`} />
                 <p className="text-3xl font-bold">{openNCs}</p>
                 <p className="text-xs text-muted-foreground">Não-Conformidades Abertas</p>
               </CardContent>
             </Card>
             <Card>
               <CardContent className="p-4 text-center space-y-2">
-                <Clock className={`h-8 w-8 mx-auto ${expiringCerts > 5 ? "text-red-500" : "text-blue-500"}`} />
+                <Clock className={`h-8 w-8 mx-auto ${expiringCerts > 5 ? "text-destructive" : "text-primary"}`} />
                 <p className="text-3xl font-bold">{expiringCerts}</p>
                 <p className="text-xs text-muted-foreground">Certificados Vencendo (30d)</p>
               </CardContent>

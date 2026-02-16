@@ -6,38 +6,17 @@ import { CheckCircle2, XCircle, Loader2 } from "lucide-react";
 import { logger } from '@/lib/logger';
 
 interface PatternDetection {
-  dashboardPatterns: Array<{
-    type: string;
-    location: string;
-    confidence: number;
-  }>;
-  mapPatterns: Array<{
-    type: string;
-    vessels: number;
-    confidence: number;
-  }>;
+  dashboardPatterns: Array<{ type: string; location: string; confidence: number }>;
+  mapPatterns: Array<{ type: string; vessels: number; confidence: number }>;
 }
-
 interface VisualAlert {
-  id: string;
-  severity: string;
-  message: string;
-  context: Record<string, unknown>;
-  visualContext: boolean;
+  id: string; severity: string; message: string; context: Record<string, unknown>; visualContext: boolean;
 }
-
 interface PerformanceMetrics {
-  detectionLatency: number;
-  analysisTime: number;
-  alertGenerationTime: number;
-  totalProcessingTime: number;
-  threshold: number;
+  detectionLatency: number; analysisTime: number; alertGenerationTime: number; totalProcessingTime: number; threshold: number;
 }
-
 interface EngineData {
-  patterns: PatternDetection;
-  alerts: VisualAlert[];
-  performance: PerformanceMetrics;
+  patterns: PatternDetection; alerts: VisualAlert[]; performance: PerformanceMetrics;
 }
 
 export function Patch606Validation() {
@@ -48,68 +27,30 @@ export function Patch606Validation() {
   const runValidation = async () => {
     setLoading(true);
     const testResults: Record<string, boolean> = {};
-
     try {
-      // Test 1: IA detectou padrões em dashboards/mapas
       const patternDetection = {
         dashboardPatterns: [
           { type: "anomaly_cluster", location: "sector_3", confidence: 0.92 },
           { type: "traffic_spike", location: "zone_a", confidence: 0.87 }
         ],
-        mapPatterns: [
-          { type: "route_deviation", vessels: 3, confidence: 0.89 }
-        ]
+        mapPatterns: [{ type: "route_deviation", vessels: 3, confidence: 0.89 }]
       };
+      testResults["pattern_detection"] = patternDetection.dashboardPatterns.length > 0 && patternDetection.mapPatterns.length > 0;
 
-      testResults["pattern_detection"] = 
-        patternDetection.dashboardPatterns.length > 0 && 
-        patternDetection.mapPatterns.length > 0;
-
-      // Test 2: Alertas emitidos visualmente com contexto
       const visualAlerts = [
-        { 
-          id: "va1", 
-          severity: "high", 
-          message: "Anomaly cluster detected in sector 3",
-          context: { location: "sector_3", affectedVessels: 2 },
-          visualContext: true
-        },
-        { 
-          id: "va2", 
-          severity: "medium", 
-          message: "Route deviation pattern identified",
-          context: { vessels: 3, deviation: "15%" },
-          visualContext: true
-        }
+        { id: "va1", severity: "high", message: "Anomaly cluster detected in sector 3", context: { location: "sector_3", affectedVessels: 2 }, visualContext: true },
+        { id: "va2", severity: "medium", message: "Route deviation pattern identified", context: { vessels: 3, deviation: "15%" }, visualContext: true }
       ];
-
       testResults["visual_alerts"] = visualAlerts.every(a => a.visualContext === true);
 
-      // Test 3: Performance medida e aprovada
-      const performanceMetrics = {
-        detectionLatency: 45, // ms
-        analysisTime: 120, // ms
-        alertGenerationTime: 30, // ms
-        totalProcessingTime: 195, // ms
-        threshold: 500 // ms
-      };
+      const performanceMetrics = { detectionLatency: 45, analysisTime: 120, alertGenerationTime: 30, totalProcessingTime: 195, threshold: 500 };
+      testResults["performance_approved"] = performanceMetrics.totalProcessingTime < performanceMetrics.threshold;
 
-      testResults["performance_approved"] = 
-        performanceMetrics.totalProcessingTime < performanceMetrics.threshold;
-
-      setEngineData({
-        patterns: patternDetection,
-        alerts: visualAlerts,
-        performance: performanceMetrics
-      });
-
+      setEngineData({ patterns: patternDetection, alerts: visualAlerts, performance: performanceMetrics });
     } catch (error) {
       logger.error("Validation error:", error);
-      Object.keys(testResults).forEach(key => {
-        if (testResults[key] === undefined) testResults[key] = false;
-      });
+      Object.keys(testResults).forEach(key => { if (testResults[key] === undefined) testResults[key] = false; });
     }
-
     setResults(testResults);
     setLoading(false);
   };
@@ -122,39 +63,22 @@ export function Patch606Validation() {
       <CardHeader>
         <CardTitle className="flex items-center gap-2">
           PATCH 606 – Visual Situational Awareness Engine
-          {hasResults && (
-            <Badge variant={allPassed ? "default" : "destructive"}>
-              {allPassed ? "✓ PASS" : "✗ FAIL"}
-            </Badge>
-          )}
+          {hasResults && <Badge variant={allPassed ? "default" : "destructive"}>{allPassed ? "✓ PASS" : "✗ FAIL"}</Badge>}
         </CardTitle>
-        <CardDescription>
-          Valida detecção de padrões em dashboards/mapas, alertas visuais e performance
-        </CardDescription>
+        <CardDescription>Valida detecção de padrões em dashboards/mapas, alertas visuais e performance</CardDescription>
       </CardHeader>
       <CardContent className="space-y-4">
         <Button onClick={runValidation} disabled={loading}>
           {loading && <Loader2 className="mr-2 h-4 w-4 animate-spin" />}
           Executar Validação
         </Button>
-
         {hasResults && (
           <div className="space-y-2">
-            <ValidationItem
-              label="IA detectou padrões em dashboards/mapas"
-              passed={results.pattern_detection}
-            />
-            <ValidationItem
-              label="Alertas emitidos visualmente com contexto"
-              passed={results.visual_alerts}
-            />
-            <ValidationItem
-              label="Performance medida e aprovada"
-              passed={results.performance_approved}
-            />
+            <ValidationItem label="IA detectou padrões em dashboards/mapas" passed={results.pattern_detection} />
+            <ValidationItem label="Alertas emitidos visualmente com contexto" passed={results.visual_alerts} />
+            <ValidationItem label="Performance medida e aprovada" passed={results.performance_approved} />
           </div>
         )}
-
         {engineData && (
           <div className="mt-4 p-4 bg-muted rounded-lg">
             <p className="text-sm font-medium mb-2">Status do Engine:</p>
@@ -176,9 +100,9 @@ function ValidationItem({ label, passed }: { label: string; passed: boolean }) {
   return (
     <div className="flex items-center gap-2 text-sm">
       {passed ? (
-        <CheckCircle2 className="h-4 w-4 text-green-500" />
+        <CheckCircle2 className="h-4 w-4 text-success" />
       ) : (
-        <XCircle className="h-4 w-4 text-red-500" />
+        <XCircle className="h-4 w-4 text-destructive" />
       )}
       <span>{label}</span>
     </div>

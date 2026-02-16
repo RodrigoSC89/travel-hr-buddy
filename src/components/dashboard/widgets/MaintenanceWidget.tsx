@@ -1,7 +1,6 @@
 import React from "react";
 import { supabase } from "@/integrations/supabase/client";
 import { useQuery } from "@tanstack/react-query";
-import { Wrench, Clock } from "lucide-react";
 import { Badge } from "@/components/ui/badge";
 
 export default function MaintenanceWidget() {
@@ -20,9 +19,9 @@ export default function MaintenanceWidget() {
   });
 
   const priorityColors: Record<string, string> = {
-    critical: "text-red-400",
-    high: "text-amber-400",
-    medium: "text-blue-400",
+    critical: "text-destructive",
+    high: "text-warning",
+    medium: "text-primary",
     low: "text-muted-foreground",
   };
 

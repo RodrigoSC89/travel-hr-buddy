@@ -9,13 +9,11 @@ export default function CertificatesWidget() {
     queryFn: async () => {
       const thirtyDaysFromNow = new Date();
       thirtyDaysFromNow.setDate(thirtyDaysFromNow.getDate() + 30);
-      
       const { count } = await supabase
         .from("certificates")
         .select("id", { count: "exact", head: true })
         .eq("status", "active")
         .lte("expiry_date", thirtyDaysFromNow.toISOString());
-
       return count || 0;
     },
     staleTime: 60_000,
@@ -23,15 +21,15 @@ export default function CertificatesWidget() {
 
   return (
     <div className="space-y-2 text-center">
-      <div className={`text-3xl font-bold ${(data || 0) > 0 ? "text-amber-400" : "text-emerald-400"}`}>
+      <div className={`text-3xl font-bold ${(data || 0) > 0 ? "text-warning" : "text-success"}`}>
         {data || 0}
       </div>
       <p className="text-xs text-muted-foreground">Vencendo em 30 dias</p>
       <div className="flex items-center justify-center gap-1 text-xs">
         {(data || 0) > 0 ? (
-          <><AlertTriangle className="h-3 w-3 text-amber-400" /> Ação necessária</>
+          <><AlertTriangle className="h-3 w-3 text-warning" /> Ação necessária</>
         ) : (
-          <><Clock className="h-3 w-3 text-emerald-400" /> Tudo em dia</>
+          <><Clock className="h-3 w-3 text-success" /> Tudo em dia</>
         )}
       </div>
     </div>

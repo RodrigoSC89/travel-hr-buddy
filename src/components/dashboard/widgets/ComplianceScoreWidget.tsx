@@ -1,7 +1,7 @@
 import React from "react";
 import { supabase } from "@/integrations/supabase/client";
 import { useQuery } from "@tanstack/react-query";
-import { Shield, CheckCircle2 } from "lucide-react";
+import { CheckCircle2 } from "lucide-react";
 
 export default function ComplianceScoreWidget() {
   const { data } = useQuery({
@@ -18,12 +18,12 @@ export default function ComplianceScoreWidget() {
 
   return (
     <div className="space-y-2 text-center">
-      <div className={`text-3xl font-bold ${score >= 90 ? "text-emerald-400" : score >= 70 ? "text-amber-400" : "text-destructive"}`}>
+      <div className={`text-3xl font-bold ${score >= 90 ? "text-success" : score >= 70 ? "text-warning" : "text-destructive"}`}>
         {score}%
       </div>
       <p className="text-xs text-muted-foreground">Compliance Score</p>
       <div className="flex items-center justify-center gap-1 text-xs text-muted-foreground">
-        <CheckCircle2 className="h-3 w-3 text-emerald-400" />
+        <CheckCircle2 className="h-3 w-3 text-success" />
         {data?.compliant || 0} / {data?.total || 0} itens
       </div>
     </div>

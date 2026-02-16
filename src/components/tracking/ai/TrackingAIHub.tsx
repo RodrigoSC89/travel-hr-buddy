@@ -1,12 +1,5 @@
 /**
  * Tracking AI Hub - Inteligência Artificial para Rastreamento & Telemetria
- * 
- * Ferramentas IA disruptivas:
- * 1. Route Prediction AI - Previsão de rotas e ETA com ML
- * 2. Anomaly Detection AI - Detecção de anomalias em padrões de navegação
- * 3. Geofencing Intelligence - Geofencing inteligente com IA
- * 4. Weather Routing AI - Otimização de rotas por condições climáticas
- * 5. Fuel Efficiency AI - Análise de eficiência de combustível por rota
  */
 
 import React, { useState, useCallback } from 'react';
@@ -31,7 +24,7 @@ const AI_TOOLS = [
     name: 'Route Prediction AI',
     description: 'Previsão de rotas e ETA com machine learning baseado em histórico',
     icon: Navigation,
-    color: 'text-blue-500',
+    color: 'text-primary',
     prompt: 'Analise padrões de navegação históricos e forneça previsões de rota e ETA para as embarcações da frota. Considere: 1) Rotas mais frequentes, 2) Velocidade média por segmento, 3) Paradas típicas em portos, 4) Sazonalidade. Forneça previsões com nível de confiança.',
   },
   {
@@ -39,7 +32,7 @@ const AI_TOOLS = [
     name: 'Anomaly Detection AI',
     description: 'Detecta padrões anômalos de navegação que podem indicar problemas',
     icon: AlertTriangle,
-    color: 'text-red-500',
+    color: 'text-destructive',
     prompt: 'Identifique possíveis anomalias em padrões de navegação marítima: 1) Desvios significativos de rota planejada, 2) Paradas não programadas, 3) Velocidade anormalmente baixa/alta, 4) Consumo de combustível irregular, 5) Perda de sinal AIS. Para cada anomalia, classifique a severidade e sugira ações.',
   },
   {
@@ -47,7 +40,7 @@ const AI_TOOLS = [
     name: 'Geofencing Intelligence',
     description: 'Geofencing adaptativo com IA que aprende padrões operacionais',
     icon: MapPin,
-    color: 'text-emerald-500',
+    color: 'text-success',
     prompt: 'Sugira configurações inteligentes de geofencing para a frota: 1) Zonas de exclusão baseadas em regulamentação marítima, 2) Alertas de aproximação de áreas de alto risco, 3) Corredores de navegação seguros, 4) Zonas de fundeio otimizadas, 5) Áreas de pesca proibida. Inclua coordenadas sugeridas e raio de cada zona.',
   },
   {
@@ -55,7 +48,7 @@ const AI_TOOLS = [
     name: 'Weather Routing AI',
     description: 'Otimização de rotas baseada em previsão meteorológica avançada',
     icon: Cloud,
-    color: 'text-sky-500',
+    color: 'text-info',
     prompt: 'Forneça recomendações de weather routing para operações marítimas: 1) Análise de condições meteorológicas para as próximas 72h, 2) Rotas alternativas para evitar tempestades, 3) Janelas de tempo ideais para travessias, 4) Impacto de correntes e ondulação na eficiência, 5) Alertas de condições severas.',
   },
   {
@@ -63,7 +56,7 @@ const AI_TOOLS = [
     name: 'Fuel Efficiency AI',
     description: 'Análise e otimização de consumo de combustível por rota e condição',
     icon: Fuel,
-    color: 'text-amber-500',
+    color: 'text-warning',
     prompt: 'Analise a eficiência de combustível da frota e sugira otimizações: 1) Velocidade econômica ideal por tipo de embarcação, 2) Impacto de correntes e ventos no consumo, 3) Comparação de eficiência entre rotas, 4) Oportunidades de economia com slow steaming, 5) Projeção de custos de bunker para próximo trimestre.',
   },
 ];

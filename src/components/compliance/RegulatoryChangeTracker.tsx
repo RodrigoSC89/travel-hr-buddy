@@ -38,26 +38,21 @@ const REGULATIONS: RegulatoryChange[] = [
 ];
 
 const impactColors: Record<string, string> = {
-  high: "bg-red-500/20 text-red-400",
-  medium: "bg-yellow-500/20 text-yellow-400",
-  low: "bg-blue-500/20 text-blue-400",
+  high: "bg-destructive/20 text-destructive",
+  medium: "bg-warning/20 text-warning",
+  low: "bg-primary/20 text-primary",
 };
 
 const statusColors: Record<string, string> = {
-  upcoming: "bg-blue-500/20 text-blue-400",
-  in_force: "bg-green-500/20 text-green-400",
-  preparation: "bg-yellow-500/20 text-yellow-400",
-  compliant: "bg-green-500/20 text-green-400",
-  gap_identified: "bg-red-500/20 text-red-400",
+  upcoming: "bg-primary/20 text-primary",
+  in_force: "bg-success/20 text-success",
+  preparation: "bg-warning/20 text-warning",
+  compliant: "bg-success/20 text-success",
+  gap_identified: "bg-destructive/20 text-destructive",
 };
 
 const categoryIcons: Record<string, string> = {
-  environmental: "🌱",
-  safety: "🛡️",
-  security: "🔒",
-  crew: "👥",
-  technical: "⚙️",
-  operational: "🚢",
+  environmental: "🌱", safety: "🛡️", security: "🔒", crew: "👥", technical: "⚙️", operational: "🚢",
 };
 
 export function RegulatoryChangeTracker() {
@@ -74,7 +69,6 @@ export function RegulatoryChangeTracker() {
 
   return (
     <div className="space-y-6">
-      {/* KPIs */}
       <div className="grid grid-cols-1 md:grid-cols-4 gap-4">
         <Card className="border-primary/30 bg-primary/5">
           <CardContent className="pt-4 pb-3">
@@ -82,27 +76,26 @@ export function RegulatoryChangeTracker() {
             <div className="text-2xl font-bold">{REGULATIONS.length}</div>
           </CardContent>
         </Card>
-        <Card className="border-red-500/30 bg-red-500/5">
+        <Card className="border-destructive/30 bg-destructive/5">
           <CardContent className="pt-4 pb-3">
             <div className="flex items-center gap-2 text-sm text-muted-foreground mb-1"><AlertTriangle className="h-4 w-4" /> High Impact</div>
-            <div className="text-2xl font-bold text-red-400">{highImpact}</div>
+            <div className="text-2xl font-bold text-destructive">{highImpact}</div>
           </CardContent>
         </Card>
-        <Card className="border-yellow-500/30 bg-yellow-500/5">
+        <Card className="border-warning/30 bg-warning/5">
           <CardContent className="pt-4 pb-3">
             <div className="flex items-center gap-2 text-sm text-muted-foreground mb-1"><Shield className="h-4 w-4" /> Gaps Identified</div>
-            <div className="text-2xl font-bold text-yellow-400">{gaps}</div>
+            <div className="text-2xl font-bold text-warning">{gaps}</div>
           </CardContent>
         </Card>
-        <Card className="border-blue-500/30 bg-blue-500/5">
+        <Card className="border-primary/30 bg-primary/5">
           <CardContent className="pt-4 pb-3">
             <div className="flex items-center gap-2 text-sm text-muted-foreground mb-1"><Calendar className="h-4 w-4" /> Upcoming</div>
-            <div className="text-2xl font-bold text-blue-400">{upcoming}</div>
+            <div className="text-2xl font-bold text-primary">{upcoming}</div>
           </CardContent>
         </Card>
       </div>
 
-      {/* Filters */}
       <div className="flex gap-3 flex-wrap">
         <Select value={filterImpact} onValueChange={setFilterImpact}>
           <SelectTrigger className="w-40"><SelectValue placeholder="Impact" /></SelectTrigger>
@@ -127,7 +120,6 @@ export function RegulatoryChangeTracker() {
         <Button size="sm" variant="outline" className="gap-2"><Bell className="h-4 w-4" /> Set Alerts</Button>
       </div>
 
-      {/* Regulation Cards */}
       <div className="space-y-3">
         {filtered.map(r => (
           <Card key={r.id} className="hover:border-primary/30 transition-colors">
