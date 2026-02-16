@@ -86,11 +86,9 @@ export const AuthenticatedLayout = () => {
         <Suspense fallback={null}><KeyboardShortcutsPanel /></Suspense>
         <Suspense fallback={null}><SpotlightSearch /></Suspense>
         <Suspense fallback={null}><PEOTRAMVoiceButton /></Suspense>
-        <Suspense fallback={null}>
-          <div className="fixed bottom-20 right-4 z-40 md:bottom-24">
-            <FloatingActionButton />
-          </div>
-        </Suspense>
+        {/* FloatingActionButton removed from global layout - 
+            GlobalAIAssistant (right-4) + PEOTRAMVoiceButton (right-20) already occupy the corner.
+            FAB actions (search, notifications, settings) are accessible via header/sidebar */}
       </div>
     </SidebarProvider>
   );

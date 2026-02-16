@@ -1,6 +1,7 @@
 /**
  * PEOTRAM Voice Button Component
  * Floating voice assistant for operational procedures
+ * Positioned to avoid overlap with GlobalAIAssistant and FloatingActionButton
  */
 import { Mic, MicOff, Volume2, VolumeX, Loader2 } from 'lucide-react';
 import { Button } from '@/components/ui/button';
@@ -34,7 +35,7 @@ export function PEOTRAMVoiceButton() {
   };
   
   return (
-    <div className="fixed bottom-24 right-4 z-50 md:bottom-8 flex flex-col items-end gap-3">
+    <div className="fixed bottom-24 right-20 z-50 md:bottom-6 flex flex-col items-end gap-2">
       {/* Transcript/Response Bubble */}
       <AnimatePresence>
         {(transcript || response) && (
@@ -42,28 +43,28 @@ export function PEOTRAMVoiceButton() {
             initial={{ opacity: 0, y: 10, scale: 0.95 }}
             animate={{ opacity: 1, y: 0, scale: 1 }}
             exit={{ opacity: 0, y: 10, scale: 0.95 }}
-            className="max-w-xs bg-card border border-border rounded-xl p-4 shadow-xl"
+            className="max-w-xs bg-card border border-border rounded-xl p-3 shadow-xl"
           >
             {transcript && (
-              <div className="mb-3">
-                <p className="text-xs text-muted-foreground font-medium mb-1">
-                  {t('peotram.youSaid', 'Você disse:')}
+              <div className="mb-2">
+                <p className="text-[10px] text-muted-foreground font-medium mb-0.5">
+                  {t('peotram.youSaid', '🎤 Você disse:')}
                 </p>
-                <p className="text-sm text-foreground">{transcript}</p>
+                <p className="text-xs text-foreground">{transcript}</p>
               </div>
             )}
             {response && (
               <div>
-                <p className="text-xs text-primary font-medium mb-1">
-                  {t('peotram.aiResponse', 'PEOTRAM AI:')}
+                <p className="text-[10px] text-primary font-medium mb-0.5">
+                  {t('peotram.aiResponse', '🧠 PEOTRAM AI:')}
                 </p>
-                <p className="text-sm text-foreground">{response}</p>
+                <p className="text-xs text-foreground leading-relaxed">{response}</p>
               </div>
             )}
             {(transcript || response) && (
               <button
                 onClick={reset}
-                className="text-xs text-muted-foreground hover:text-foreground mt-2 underline"
+                className="text-[10px] text-muted-foreground hover:text-foreground mt-1.5 underline"
               >
                 Limpar
               </button>
@@ -73,41 +74,49 @@ export function PEOTRAMVoiceButton() {
       </AnimatePresence>
       
       {/* Voice Button */}
-      <motion.div
-        whileHover={{ scale: 1.05 }}
-        whileTap={{ scale: 0.95 }}
-      >
-        <Button
-          onClick={handleClick}
-          size="lg"
-          className={cn(
-            "h-14 w-14 rounded-full shadow-xl transition-all duration-300",
-            isListening && "bg-destructive hover:bg-destructive/90 animate-pulse",
-            isSpeaking && "bg-success hover:bg-success/90",
-            isProcessing && "bg-warning hover:bg-warning/90",
-            !isListening && !isSpeaking && !isProcessing && "bg-primary hover:bg-primary/90"
-          )}
-          disabled={isProcessing}
+      <div className="flex flex-col items-center gap-1">
+        <motion.div
+          whileHover={{ scale: 1.05 }}
+          whileTap={{ scale: 0.95 }}
         >
-          {isListening ? (
-            <MicOff className="h-6 w-6" />
-          ) : isSpeaking ? (
-            <VolumeX className="h-6 w-6" />
-          ) : isProcessing ? (
-            <Loader2 className="h-6 w-6 animate-spin" />
-          ) : (
-            <Mic className="h-6 w-6" />
-          )}
-        </Button>
-      </motion.div>
-      
-      {/* Status Text */}
-      <p className="text-xs text-muted-foreground text-center">
-        {isListening && t('peotram.listening', '🎤 Ouvindo...')}
-        {isProcessing && t('peotram.processing', '🤔 Processando...')}
-        {isSpeaking && t('peotram.speaking', '🔊 Falando...')}
-        {!isListening && !isProcessing && !isSpeaking && t('peotram.clickToSpeak', 'Clique para falar')}
-      </p>
+          <Button
+            onClick={handleClick}
+            size="lg"
+            aria-label={
+              isListening ? 'Parar de ouvir' : 
+              isSpeaking ? 'Parar fala' : 
+              'Comando de voz'
+            }
+            className={cn(
+              "h-12 w-12 rounded-full shadow-lg transition-all duration-300",
+              isListening && "bg-destructive hover:bg-destructive/90 animate-pulse",
+              isSpeaking && "bg-success hover:bg-success/90",
+              isProcessing && "bg-warning hover:bg-warning/90",
+              !isListening && !isSpeaking && !isProcessing && "bg-accent hover:bg-accent/90"
+            )}
+            disabled={isProcessing}
+          >
+            {isListening ? (
+              <MicOff className="h-5 w-5" />
+            ) : isSpeaking ? (
+              <VolumeX className="h-5 w-5" />
+            ) : isProcessing ? (
+              <Loader2 className="h-5 w-5 animate-spin" />
+            ) : (
+              <Mic className="h-5 w-5" />
+            )}
+          </Button>
+        </motion.div>
+        
+        {/* Status Text - only show when active */}
+        {(isListening || isProcessing || isSpeaking) && (
+          <p className="text-[10px] text-muted-foreground text-center whitespace-nowrap">
+            {isListening && '🎤 Ouvindo...'}
+            {isProcessing && '🤔 Processando...'}
+            {isSpeaking && '🔊 Falando...'}
+          </p>
+        )}
+      </div>
     </div>
   );
 }
