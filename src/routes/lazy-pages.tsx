@@ -273,6 +273,18 @@ export const AdminApiTester = lazy(() => import("@/pages/admin/api-tester"));
 export const AIEnterpriseEnginesHub = lazy(() => import("@/pages/AIEnterpriseEnginesHub"));
 
 // ============================================
+// WORLD-CLASS COMPETITIVE MODULES (vs IMOS, AMOS, DNV, Compas)
+// ============================================
+export const CharterPartyPage = lazy(() => import("@/pages/CharterPartyPage"));
+export const LaytimeDemurragePage = lazy(() => import("@/pages/LaytimeDemurragePage"));
+export const RunningHoursPage = lazy(() => import("@/pages/RunningHoursPage"));
+export const CrewAppraisalPage = lazy(() => import("@/pages/CrewAppraisalPage"));
+export const CrewTravelPage = lazy(() => import("@/pages/CrewTravelPage"));
+export const CrewRotationPage = lazy(() => import("@/pages/CrewRotationPage"));
+export const QHSEIncidentPage = lazy(() => import("@/pages/QHSEIncidentPage"));
+export const ClassSurveyPage = lazy(() => import("@/pages/ClassSurveyPage"));
+
+// ============================================
 // WORLD-CLASS DISRUPTIVE FEATURES
 // ============================================
 export const ComputerVisionInspectorPage = lazy(() => import("@/pages/ComputerVisionInspectorPage"));
