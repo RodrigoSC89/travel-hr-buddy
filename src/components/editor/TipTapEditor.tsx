@@ -58,7 +58,7 @@ export default function TipTapEditor({
   }, [content, editor]);
 
   return (
-    <div className={`border rounded-lg bg-white ${className}`}>
+    <div className={`border rounded-lg bg-background ${className}`}>
       <EditorContent editor={editor} />
     </div>
   );

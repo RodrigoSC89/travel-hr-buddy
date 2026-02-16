@@ -380,13 +380,13 @@ export default function TemplateEditor() {
               </Dialog>
             </div>
 
-            <div className="border rounded-lg bg-white">
+            <div className="border rounded-lg bg-background">
               <EditorContent editor={editor} />
             </div>
           </TabsContent>
 
           <TabsContent value="preview" className="space-y-4">
-            <div className="border rounded-lg bg-white p-4 min-h-[400px]">
+            <div className="border rounded-lg bg-background p-4 min-h-[400px]">
               <div 
                 className="prose prose-sm sm:prose lg:prose-lg xl:prose-2xl mx-auto"
                 dangerouslySetInnerHTML={createSafeHTML(editor?.getHTML() || "")}
