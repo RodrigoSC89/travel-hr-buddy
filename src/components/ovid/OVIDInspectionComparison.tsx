@@ -107,7 +107,7 @@ export const OVIDInspectionComparison: React.FC<OVIDInspectionComparisonProps> =
     const isPositive = inverse ? diff < 0 : diff > 0;
     if (diff === 0) return <Badge variant="outline" className="font-mono">0</Badge>;
     return (
-      <Badge className={isPositive ? 'bg-green-500' : 'bg-red-500'}>
+      <Badge className={isPositive ? 'bg-success' : 'bg-destructive'}>
         <span className="font-mono">
           {diff > 0 ? '+' : ''}{diff}
         </span>
@@ -231,7 +231,7 @@ export const OVIDInspectionComparison: React.FC<OVIDInspectionComparisonProps> =
         <>
           {/* Summary Cards */}
           <div className="grid grid-cols-1 md:grid-cols-3 gap-4">
-            <Card className={comparison.scoreDiff > 0 ? 'border-green-500/50' : comparison.scoreDiff < 0 ? 'border-red-500/50' : ''}>
+            <Card className={comparison.scoreDiff > 0 ? 'border-success/50' : comparison.scoreDiff < 0 ? 'border-destructive/50' : ''}>
               <CardContent className="pt-6">
                 <div className="flex items-center justify-between">
                   <div>
@@ -257,7 +257,7 @@ export const OVIDInspectionComparison: React.FC<OVIDInspectionComparisonProps> =
                   <div>
                     <p className="text-sm text-muted-foreground">Conformidades</p>
                     <div className="flex items-center gap-2 mt-1">
-                      <span className="text-2xl font-bold text-green-500">
+                      <span className="text-2xl font-bold text-success">
                         {inspection1.compliant_count}
                       </span>
                       <ArrowRight className="w-4 h-4 text-muted-foreground" />
@@ -277,7 +277,7 @@ export const OVIDInspectionComparison: React.FC<OVIDInspectionComparisonProps> =
                   <div>
                     <p className="text-sm text-muted-foreground">Não Conformidades</p>
                     <div className="flex items-center gap-2 mt-1">
-                      <span className="text-2xl font-bold text-red-500">
+                      <span className="text-2xl font-bold text-destructive">
                         {inspection1.non_compliant_count}
                       </span>
                       <ArrowRight className="w-4 h-4 text-muted-foreground" />
@@ -315,8 +315,8 @@ export const OVIDInspectionComparison: React.FC<OVIDInspectionComparisonProps> =
                   <div className="flex justify-between items-center">
                     <span className="text-sm text-muted-foreground">Score</span>
                     <span className={`text-xl font-bold ${
-                      inspection1.compliance_score >= 85 ? 'text-green-500' : 
-                      inspection1.compliance_score >= 70 ? 'text-yellow-500' : 'text-red-500'
+                      inspection1.compliance_score >= 85 ? 'text-success' : 
+                      inspection1.compliance_score >= 70 ? 'text-warning' : 'text-destructive'
                     }`}>
                       {inspection1.compliance_score}%
                     </span>
@@ -324,14 +324,14 @@ export const OVIDInspectionComparison: React.FC<OVIDInspectionComparisonProps> =
                   <Progress value={inspection1.compliance_score} className="h-2" />
                   <Separator />
                   <div className="grid grid-cols-3 gap-2 text-center">
-                    <div className="p-2 bg-green-500/10 rounded-lg">
-                      <CheckCircle className="w-4 h-4 mx-auto text-green-500" />
-                      <p className="text-lg font-bold text-green-500">{inspection1.compliant_count}</p>
+                    <div className="p-2 bg-success/10 rounded-lg">
+                      <CheckCircle className="w-4 h-4 mx-auto text-success" />
+                      <p className="text-lg font-bold text-success">{inspection1.compliant_count}</p>
                       <p className="text-xs text-muted-foreground">Conforme</p>
                     </div>
-                    <div className="p-2 bg-red-500/10 rounded-lg">
-                      <XCircle className="w-4 h-4 mx-auto text-red-500" />
-                      <p className="text-lg font-bold text-red-500">{inspection1.non_compliant_count}</p>
+                    <div className="p-2 bg-destructive/10 rounded-lg">
+                      <XCircle className="w-4 h-4 mx-auto text-destructive" />
+                      <p className="text-lg font-bold text-destructive">{inspection1.non_compliant_count}</p>
                       <p className="text-xs text-muted-foreground">NC</p>
                     </div>
                     <div className="p-2 bg-muted/50 rounded-lg">
@@ -374,8 +374,8 @@ export const OVIDInspectionComparison: React.FC<OVIDInspectionComparisonProps> =
                   <div className="flex justify-between items-center">
                     <span className="text-sm text-muted-foreground">Score</span>
                     <span className={`text-xl font-bold ${
-                      inspection2.compliance_score >= 85 ? 'text-green-500' : 
-                      inspection2.compliance_score >= 70 ? 'text-yellow-500' : 'text-red-500'
+                      inspection2.compliance_score >= 85 ? 'text-success' : 
+                      inspection2.compliance_score >= 70 ? 'text-warning' : 'text-destructive'
                     }`}>
                       {inspection2.compliance_score}%
                     </span>
@@ -383,14 +383,14 @@ export const OVIDInspectionComparison: React.FC<OVIDInspectionComparisonProps> =
                   <Progress value={inspection2.compliance_score} className="h-2" />
                   <Separator />
                   <div className="grid grid-cols-3 gap-2 text-center">
-                    <div className="p-2 bg-green-500/10 rounded-lg">
-                      <CheckCircle className="w-4 h-4 mx-auto text-green-500" />
-                      <p className="text-lg font-bold text-green-500">{inspection2.compliant_count}</p>
+                    <div className="p-2 bg-success/10 rounded-lg">
+                      <CheckCircle className="w-4 h-4 mx-auto text-success" />
+                      <p className="text-lg font-bold text-success">{inspection2.compliant_count}</p>
                       <p className="text-xs text-muted-foreground">Conforme</p>
                     </div>
-                    <div className="p-2 bg-red-500/10 rounded-lg">
-                      <XCircle className="w-4 h-4 mx-auto text-red-500" />
-                      <p className="text-lg font-bold text-red-500">{inspection2.non_compliant_count}</p>
+                    <div className="p-2 bg-destructive/10 rounded-lg">
+                      <XCircle className="w-4 h-4 mx-auto text-destructive" />
+                      <p className="text-lg font-bold text-destructive">{inspection2.non_compliant_count}</p>
                       <p className="text-xs text-muted-foreground">NC</p>
                     </div>
                     <div className="p-2 bg-muted/50 rounded-lg">
@@ -451,13 +451,13 @@ export const OVIDInspectionComparison: React.FC<OVIDInspectionComparisonProps> =
           </Card>
 
           {/* Analysis Summary */}
-          <Card className={comparison.isImproved ? 'border-green-500/30 bg-green-500/5' : 'border-yellow-500/30 bg-yellow-500/5'}>
+          <Card className={comparison.isImproved ? 'border-success/30 bg-success/5' : 'border-warning/30 bg-warning/5'}>
             <CardContent className="pt-6">
               <div className="flex items-start gap-4">
                 {comparison.isImproved ? (
-                  <TrendingUp className="w-8 h-8 text-green-500 flex-shrink-0" />
+                  <TrendingUp className="w-8 h-8 text-success flex-shrink-0" />
                 ) : (
-                  <AlertTriangle className="w-8 h-8 text-yellow-500 flex-shrink-0" />
+                  <AlertTriangle className="w-8 h-8 text-warning flex-shrink-0" />
                 )}
                 <div>
                   <h4 className="font-semibold mb-1">

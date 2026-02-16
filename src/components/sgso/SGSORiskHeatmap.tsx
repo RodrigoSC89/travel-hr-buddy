@@ -34,10 +34,10 @@ const SEV_LABELS = ["", "Insignificante", "Menor", "Moderado", "Maior", "Catastr
 
 const getRiskLevel = (p: number, s: number): { level: string; color: string } => {
   const score = p * s;
-  if (score >= 15) return { level: "Extremo", color: "bg-red-600 text-white" };
-  if (score >= 10) return { level: "Alto", color: "bg-orange-500 text-white" };
-  if (score >= 5) return { level: "Médio", color: "bg-amber-400 text-black" };
-  return { level: "Baixo", color: "bg-emerald-500 text-white" };
+  if (score >= 15) return { level: "Extremo", color: "bg-destructive text-destructive-foreground" };
+  if (score >= 10) return { level: "Alto", color: "bg-warning text-warning-foreground" };
+  if (score >= 5) return { level: "Médio", color: "bg-warning/70 text-warning-foreground" };
+  return { level: "Baixo", color: "bg-success text-success-foreground" };
 };
 
 const CATEGORIES = ["Ambiental", "Pessoal", "Processo", "Operacional", "Regulatório"];
@@ -162,10 +162,10 @@ export function SGSORiskHeatmap() {
       {/* Risk Summary */}
       <div className="grid grid-cols-2 md:grid-cols-4 gap-3">
         {[
-          { level: "Extremo", count: risks.filter((r: Risk) => r.probability * r.severity >= 15).length, color: "text-red-600 bg-red-500/10 border-red-500/30" },
-          { level: "Alto", count: risks.filter((r: Risk) => { const s = r.probability * r.severity; return s >= 10 && s < 15; }).length, color: "text-orange-600 bg-orange-500/10 border-orange-500/30" },
-          { level: "Médio", count: risks.filter((r: Risk) => { const s = r.probability * r.severity; return s >= 5 && s < 10; }).length, color: "text-amber-600 bg-amber-500/10 border-amber-500/30" },
-          { level: "Baixo", count: risks.filter((r: Risk) => r.probability * r.severity < 5).length, color: "text-emerald-600 bg-emerald-500/10 border-emerald-500/30" },
+          { level: "Extremo", count: risks.filter((r: Risk) => r.probability * r.severity >= 15).length, color: "text-destructive bg-destructive/10 border-destructive/30" },
+          { level: "Alto", count: risks.filter((r: Risk) => { const s = r.probability * r.severity; return s >= 10 && s < 15; }).length, color: "text-warning bg-warning/10 border-warning/30" },
+          { level: "Médio", count: risks.filter((r: Risk) => { const s = r.probability * r.severity; return s >= 5 && s < 10; }).length, color: "text-warning bg-warning/10 border-warning/30" },
+          { level: "Baixo", count: risks.filter((r: Risk) => r.probability * r.severity < 5).length, color: "text-success bg-success/10 border-success/30" },
         ].map(item => (
           <Card key={item.level} className={`border ${item.color}`}><CardContent className="pt-4 text-center"><p className="text-3xl font-bold">{item.count}</p><p className="text-sm font-medium">{item.level}</p></CardContent></Card>
         ))}
@@ -179,8 +179,8 @@ export function SGSORiskHeatmap() {
               <DialogHeader><DialogTitle className="flex items-center gap-2"><Shield className="h-5 w-5 text-primary" />Análise Bow-Tie: {selectedRisk.name}</DialogTitle></DialogHeader>
               <div className="grid grid-cols-[1fr,auto,1fr,auto,1fr] gap-4 items-center py-6">
                 <div className="space-y-2">
-                  <h4 className="text-sm font-bold text-emerald-600 flex items-center gap-1"><Shield className="h-4 w-4" /> Barreiras Preventivas</h4>
-                  {selectedRisk.barriers.length > 0 ? selectedRisk.barriers.map((b, i) => <div key={`barrier-${b.substring(0, 15)}-${i}`} className="p-2 rounded bg-emerald-500/10 border border-emerald-500/30 text-sm">{b}</div>) : <p className="text-sm text-muted-foreground">Nenhuma barreira cadastrada</p>}
+                  <h4 className="text-sm font-bold text-success flex items-center gap-1"><Shield className="h-4 w-4" /> Barreiras Preventivas</h4>
+                  {selectedRisk.barriers.length > 0 ? selectedRisk.barriers.map((b, i) => <div key={`barrier-${b.substring(0, 15)}-${i}`} className="p-2 rounded bg-success/10 border border-success/30 text-sm">{b}</div>) : <p className="text-sm text-muted-foreground">Nenhuma barreira cadastrada</p>}
                 </div>
                 <ArrowRight className="h-6 w-6 text-muted-foreground" />
                 <Card className="border-2 border-destructive bg-destructive/5">
@@ -198,12 +198,12 @@ export function SGSORiskHeatmap() {
                 <ArrowRight className="h-6 w-6 text-muted-foreground" />
                 <div className="space-y-4">
                   <div className="space-y-2">
-                    <h4 className="text-sm font-bold text-blue-600 flex items-center gap-1"><Zap className="h-4 w-4" /> Controles Mitigatórios</h4>
-                    {selectedRisk.controls.length > 0 ? selectedRisk.controls.map((c, i) => <div key={`ctrl-${c.substring(0, 15)}-${i}`} className="p-2 rounded bg-blue-500/10 border border-blue-500/30 text-sm">{c}</div>) : <p className="text-sm text-muted-foreground">Nenhum controle</p>}
+                    <h4 className="text-sm font-bold text-info flex items-center gap-1"><Zap className="h-4 w-4" /> Controles Mitigatórios</h4>
+                    {selectedRisk.controls.length > 0 ? selectedRisk.controls.map((c, i) => <div key={`ctrl-${c.substring(0, 15)}-${i}`} className="p-2 rounded bg-info/10 border border-info/30 text-sm">{c}</div>) : <p className="text-sm text-muted-foreground">Nenhum controle</p>}
                   </div>
                   <div className="space-y-2">
-                    <h4 className="text-sm font-bold text-red-600 flex items-center gap-1"><AlertTriangle className="h-4 w-4" /> Consequências</h4>
-                    {selectedRisk.consequences.length > 0 ? selectedRisk.consequences.map((c, i) => <div key={`csq-${c.substring(0, 15)}-${i}`} className="p-2 rounded bg-red-500/10 border border-red-500/30 text-sm">{c}</div>) : <p className="text-sm text-muted-foreground">Nenhuma</p>}
+                    <h4 className="text-sm font-bold text-destructive flex items-center gap-1"><AlertTriangle className="h-4 w-4" /> Consequências</h4>
+                    {selectedRisk.consequences.length > 0 ? selectedRisk.consequences.map((c, i) => <div key={`csq-${c.substring(0, 15)}-${i}`} className="p-2 rounded bg-destructive/10 border border-destructive/30 text-sm">{c}</div>) : <p className="text-sm text-muted-foreground">Nenhuma</p>}
                   </div>
                 </div>
               </div>

@@ -342,10 +342,10 @@ const RealTimeWorkspace: React.FC = () => {
   // Obter cor do status
   const getStatusColor = (status: string) => {
     switch (status) {
-    case "online": return "bg-green-500";
-    case "busy": return "bg-red-500";
-    case "away": return "bg-yellow-500";
-    default: return "bg-gray-400";
+    case "online": return "bg-success";
+    case "busy": return "bg-destructive";
+    case "away": return "bg-warning";
+    default: return "bg-muted-foreground";
     }
   };
 
@@ -360,9 +360,9 @@ const RealTimeWorkspace: React.FC = () => {
 
   const getPriorityColor = (priority: string) => {
     switch (priority) {
-    case "high": return "text-red-600 bg-red-50 border-red-200";
-    case "medium": return "text-yellow-600 bg-yellow-50 border-yellow-200";
-    default: return "text-blue-600 bg-blue-50 border-blue-200";
+    case "high": return "text-destructive bg-destructive/10 border-destructive/20";
+    case "medium": return "text-warning bg-warning/10 border-warning/20";
+    default: return "text-info bg-info/10 border-info/20";
     }
   };
 
@@ -387,7 +387,7 @@ const RealTimeWorkspace: React.FC = () => {
                   onClick={() => changeStatus("online")}
                   className="text-xs"
                 >
-                  <Circle className="h-3 w-3 mr-1 fill-current text-green-500" />
+                  <Circle className="h-3 w-3 mr-1 fill-current text-success" />
                   Online
                 </Button>
                 <Button
@@ -396,7 +396,7 @@ const RealTimeWorkspace: React.FC = () => {
                   onClick={() => changeStatus("busy")}
                   className="text-xs"
                 >
-                  <AlertTriangle className="h-3 w-3 mr-1 text-red-500" />
+                  <AlertTriangle className="h-3 w-3 mr-1 text-destructive" />
                   Ocupado
                 </Button>
                 <Button
@@ -405,7 +405,7 @@ const RealTimeWorkspace: React.FC = () => {
                   onClick={() => changeStatus("away")}
                   className="text-xs"
                 >
-                  <Clock className="h-3 w-3 mr-1 text-yellow-500" />
+                  <Clock className="h-3 w-3 mr-1 text-warning" />
                   Ausente
                 </Button>
               </div>
@@ -598,8 +598,8 @@ const RealTimeWorkspace: React.FC = () => {
                             </p>
                           </div>
                           <div className={`w-2 h-2 rounded-full ${
-                            update.priority === "high" ? "bg-red-500" :
-                              update.priority === "medium" ? "bg-yellow-500" : "bg-blue-500"
+                            update.priority === "high" ? "bg-destructive" :
+                              update.priority === "medium" ? "bg-warning" : "bg-info"
                           }`} />
                         </div>
                       </div>

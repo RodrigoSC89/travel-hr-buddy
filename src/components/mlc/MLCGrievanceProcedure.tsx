@@ -31,9 +31,9 @@ const CATEGORIES = [
 
 const statusConfig: Record<string, { label: string; color: string; level: number }> = {
   filed: { label: "Registrada", color: "bg-muted text-muted-foreground", level: 0 },
-  level_1: { label: "Nível 1 — Supervisor", color: "bg-blue-500/10 text-blue-400 border-blue-500/30", level: 1 },
+  level_1: { label: "Nível 1 — Supervisor", color: "bg-info/10 text-info border-info/30", level: 1 },
   level_2: { label: "Nível 2 — Capitão", color: "bg-warning/10 text-warning border-warning/30", level: 2 },
-  level_3: { label: "Nível 3 — DPA/Companhia", color: "bg-orange-500/10 text-orange-400 border-orange-500/30", level: 3 },
+  level_3: { label: "Nível 3 — DPA/Companhia", color: "bg-warning/10 text-warning border-warning/30", level: 3 },
   flag_state: { label: "Nível 4 — Estado de Bandeira", color: "bg-destructive/10 text-destructive border-destructive/30", level: 4 },
   resolved: { label: "Resolvida", color: "bg-success/10 text-success border-success/30", level: 5 },
   closed: { label: "Encerrada", color: "bg-muted text-muted-foreground", level: 5 },
@@ -42,7 +42,7 @@ const statusConfig: Record<string, { label: string; color: string; level: number
 const priorityColors: Record<string, string> = {
   low: "bg-muted text-muted-foreground",
   medium: "bg-warning/10 text-warning border-warning/30",
-  high: "bg-orange-500/10 text-orange-400 border-orange-500/30",
+  high: "bg-destructive/10 text-destructive border-destructive/30",
   critical: "bg-destructive/10 text-destructive border-destructive/30",
 };
 

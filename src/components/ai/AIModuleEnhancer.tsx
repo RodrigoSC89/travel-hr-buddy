@@ -235,8 +235,8 @@ export function AIModuleEnhancer({
           <div className="rounded-lg bg-muted p-4 space-y-3">
             <div className="flex items-start justify-between">
               <div className="flex items-center gap-2">
-                <Brain className="h-4 w-4 text-purple-500" />
-                <span className="text-xs font-medium text-purple-600">Resposta IA</span>
+                <Brain className="h-4 w-4 text-accent-foreground" />
+                <span className="text-xs font-medium text-accent-foreground">Resposta IA</span>
               </div>
               <div className="flex gap-1">
                 <Button variant="ghost" size="sm" className="h-6 w-6 p-0" onClick={copyResponse}>

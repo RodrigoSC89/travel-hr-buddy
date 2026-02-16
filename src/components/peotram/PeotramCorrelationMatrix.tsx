@@ -57,9 +57,9 @@ export function PeotramCorrelationMatrix({ elementScores = {} }: Props) {
 
   const getCellColor = (value: number) => {
     if (value === 0) return "bg-muted/20";
-    if (value === 1) return "bg-blue-500/20";
-    if (value === 2) return "bg-amber-500/30";
-    return "bg-red-500/30";
+    if (value === 1) return "bg-info/20";
+    if (value === 2) return "bg-warning/30";
+    return "bg-destructive/30";
   };
 
   const weakestElements = useMemo(() => {
@@ -124,9 +124,9 @@ export function PeotramCorrelationMatrix({ elementScores = {} }: Props) {
           {/* Legend */}
           <div className="flex items-center gap-4 mb-4 text-xs">
             <div className="flex items-center gap-1"><div className="w-4 h-4 rounded bg-muted/20 border" /> Sem correlação</div>
-            <div className="flex items-center gap-1"><div className="w-4 h-4 rounded bg-blue-500/20 border" /> Fraca</div>
-            <div className="flex items-center gap-1"><div className="w-4 h-4 rounded bg-amber-500/30 border" /> Moderada</div>
-            <div className="flex items-center gap-1"><div className="w-4 h-4 rounded bg-red-500/30 border" /> Forte</div>
+            <div className="flex items-center gap-1"><div className="w-4 h-4 rounded bg-info/20 border" /> Fraca</div>
+            <div className="flex items-center gap-1"><div className="w-4 h-4 rounded bg-warning/30 border" /> Moderada</div>
+            <div className="flex items-center gap-1"><div className="w-4 h-4 rounded bg-destructive/30 border" /> Forte</div>
             <Badge variant="destructive" className="text-xs ml-4">★ = Crítico</Badge>
           </div>
 
@@ -201,7 +201,7 @@ export function PeotramCorrelationMatrix({ elementScores = {} }: Props) {
                   <span className="text-sm">{el.name}</span>
                 </div>
                 <div className="flex items-center gap-2">
-                  <span className={`text-lg font-bold ${el.score < 60 ? "text-destructive" : el.score < 80 ? "text-amber-600" : "text-emerald-600"}`}>
+                  <span className={`text-lg font-bold ${el.score < 60 ? "text-destructive" : el.score < 80 ? "text-warning" : "text-success"}`}>
                     {el.score}%
                   </span>
                   <ArrowRight className="h-3 w-3 text-muted-foreground" />

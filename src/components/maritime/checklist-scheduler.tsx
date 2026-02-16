@@ -182,7 +182,7 @@ export const ChecklistScheduler = () => {
                         {schedule.isActive ? "Ativo" : "Inativo"}
                       </Badge>
                       {schedule.notifications && (
-                        <Bell className="h-4 w-4 text-orange-500" />
+                        <Bell className="h-4 w-4 text-warning" />
                       )}
                     </div>
                   </div>

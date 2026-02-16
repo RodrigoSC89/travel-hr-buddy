@@ -59,7 +59,7 @@ export function PeotramGasManagement() {
         <Card><CardContent className="pt-4 pb-3 text-center"><p className="text-2xl font-bold">{gases.length}</p><p className="text-xs text-muted-foreground">Tipos de Gás</p></CardContent></Card>
         <Card className={criticalCount > 0 ? "border-destructive/50 bg-destructive/5" : ""}>
           <CardContent className="pt-4 pb-3 text-center">
-            <p className={`text-2xl font-bold ${criticalCount > 0 ? "text-destructive" : "text-green-600"}`}>{criticalCount > 0 ? `⚠️ ${criticalCount}` : "✅ 0"}</p>
+            <p className={`text-2xl font-bold ${criticalCount > 0 ? "text-destructive" : "text-success"}`}>{criticalCount > 0 ? `⚠️ ${criticalCount}` : "✅ 0"}</p>
             <p className="text-xs text-muted-foreground">Nível Crítico</p>
           </CardContent>
         </Card>
@@ -116,13 +116,13 @@ export function PeotramGasManagement() {
                     </div>
                   </div>
                   <div className="text-right">
-                    <p className={`text-2xl font-bold ${critical ? "text-destructive" : warning ? "text-warning" : "text-green-600"}`}>
+                    <p className={`text-2xl font-bold ${critical ? "text-destructive" : warning ? "text-warning" : "text-success"}`}>
                       {Math.min(level, 100)}%
                     </p>
                     <p className="text-xs text-muted-foreground">{gas.quantity_liters?.toLocaleString()} L</p>
                   </div>
                 </div>
-                <Progress value={Math.min(level, 100)} className={`h-3 ${critical ? "[&>div]:bg-destructive" : warning ? "[&>div]:bg-amber-500" : "[&>div]:bg-green-500"}`} />
+                <Progress value={Math.min(level, 100)} className={`h-3 ${critical ? "[&>div]:bg-destructive" : warning ? "[&>div]:bg-warning" : "[&>div]:bg-success"}`} />
                 <div className="flex items-center justify-between text-xs text-muted-foreground">
                   <span>Nível mínimo: {gas.min_stock_level?.toLocaleString() || "N/A"} L</span>
                   {gas.storage_location && <span>📍 {gas.storage_location}</span>}

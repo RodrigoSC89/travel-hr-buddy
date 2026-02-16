@@ -408,8 +408,8 @@ export const PreOVIDReportGenerator: React.FC<PreOVIDReportGeneratorProps> = ({
             <div>
               <p className="text-xs text-muted-foreground">Score</p>
               <p className={`text-sm font-bold ${
-                totals.score >= 85 ? 'text-green-500' : 
-                totals.score >= 70 ? 'text-yellow-500' : 'text-red-500'
+                totals.score >= 85 ? 'text-success' : 
+                totals.score >= 70 ? 'text-warning' : 'text-destructive'
               }`}>
                 {totals.score}%
               </p>
@@ -425,20 +425,20 @@ export const PreOVIDReportGenerator: React.FC<PreOVIDReportGeneratorProps> = ({
             <p className="text-2xl font-bold">{totalQuestions}</p>
             <p className="text-xs text-muted-foreground">Total</p>
           </div>
-          <div className="p-3 rounded-lg bg-green-500/10 text-center">
-            <p className="text-2xl font-bold text-green-500">{totals.compliant}</p>
+          <div className="p-3 rounded-lg bg-success/10 text-center">
+            <p className="text-2xl font-bold text-success">{totals.compliant}</p>
             <p className="text-xs text-muted-foreground">Conforme</p>
           </div>
-          <div className="p-3 rounded-lg bg-red-500/10 text-center">
-            <p className="text-2xl font-bold text-red-500">{totals.nonCompliant}</p>
+          <div className="p-3 rounded-lg bg-destructive/10 text-center">
+            <p className="text-2xl font-bold text-destructive">{totals.nonCompliant}</p>
             <p className="text-xs text-muted-foreground">Não Conforme</p>
           </div>
           <div className="p-3 rounded-lg bg-muted text-center">
             <p className="text-2xl font-bold text-muted-foreground">{totals.notApplicable}</p>
             <p className="text-xs text-muted-foreground">N/A</p>
           </div>
-          <div className="p-3 rounded-lg bg-yellow-500/10 text-center">
-            <p className="text-2xl font-bold text-yellow-500">{totals.pending}</p>
+          <div className="p-3 rounded-lg bg-warning/10 text-center">
+            <p className="text-2xl font-bold text-warning">{totals.pending}</p>
             <p className="text-xs text-muted-foreground">Pendente</p>
           </div>
         </div>
@@ -472,7 +472,7 @@ export const PreOVIDReportGenerator: React.FC<PreOVIDReportGeneratorProps> = ({
                       <span className="text-sm">{chapter.name}</span>
                     </div>
                     <div className="flex items-center gap-2">
-                      <Badge variant="secondary" className="bg-green-500/20 text-green-700">
+                      <Badge variant="secondary" className="bg-success/20 text-success">
                         <CheckCircle className="w-3 h-3 mr-1" />
                         {chapter.compliant}
                       </Badge>
@@ -483,8 +483,8 @@ export const PreOVIDReportGenerator: React.FC<PreOVIDReportGeneratorProps> = ({
                         </Badge>
                       )}
                       <span className={`text-xs font-bold ${
-                        chapterScore >= 85 ? 'text-green-500' : 
-                        chapterScore >= 70 ? 'text-yellow-500' : 'text-red-500'
+                        chapterScore >= 85 ? 'text-success' : 
+                        chapterScore >= 70 ? 'text-warning' : 'text-destructive'
                       }`}>
                         {chapterScore}%
                       </span>
@@ -504,39 +504,39 @@ export const PreOVIDReportGenerator: React.FC<PreOVIDReportGeneratorProps> = ({
           </h4>
           <div className="grid grid-cols-2 md:grid-cols-4 gap-2 text-xs text-muted-foreground">
             <div className="flex items-center gap-1">
-              <CheckCircle className="w-3 h-3 text-green-500" />
+              <CheckCircle className="w-3 h-3 text-success" />
               <span>Dados da Embarcação</span>
             </div>
             <div className="flex items-center gap-1">
-              <CheckCircle className="w-3 h-3 text-green-500" />
+              <CheckCircle className="w-3 h-3 text-success" />
               <span>Sumário de Conformidade</span>
             </div>
             <div className="flex items-center gap-1">
-              <CheckCircle className="w-3 h-3 text-green-500" />
+              <CheckCircle className="w-3 h-3 text-success" />
               <span>Resultados por Capítulo</span>
             </div>
             <div className="flex items-center gap-1">
-              <CheckCircle className="w-3 h-3 text-green-500" />
+              <CheckCircle className="w-3 h-3 text-success" />
               <span>Não-Conformidades</span>
             </div>
             <div className="flex items-center gap-1">
               {evidencePhotos.length > 0 ? (
-                <CheckCircle className="w-3 h-3 text-green-500" />
+                <CheckCircle className="w-3 h-3 text-success" />
               ) : (
-                <AlertTriangle className="w-3 h-3 text-yellow-500" />
+                <AlertTriangle className="w-3 h-3 text-warning" />
               )}
               <span>Fotos de Evidência ({evidencePhotos.length})</span>
             </div>
             <div className="flex items-center gap-1">
-              <CheckCircle className="w-3 h-3 text-green-500" />
+              <CheckCircle className="w-3 h-3 text-success" />
               <span>Respostas Detalhadas</span>
             </div>
             <div className="flex items-center gap-1">
-              <CheckCircle className="w-3 h-3 text-green-500" />
+              <CheckCircle className="w-3 h-3 text-success" />
               <span>Seção de Assinaturas</span>
             </div>
             <div className="flex items-center gap-1">
-              <CheckCircle className="w-3 h-3 text-green-500" />
+              <CheckCircle className="w-3 h-3 text-success" />
               <span>Certificação OCIMF</span>
             </div>
           </div>

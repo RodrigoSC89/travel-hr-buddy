@@ -12,9 +12,9 @@ import { useQuery, useMutation, useQueryClient } from "@tanstack/react-query";
 import { supabase } from "@/integrations/supabase/client";
 
 const STATUS_CONFIG: Record<string, { label: string; color: string }> = {
-  operational: { label: "Operacional", color: "bg-green-500" },
-  maintenance: { label: "Manutenção", color: "bg-gray-500" },
-  decommissioned: { label: "Descomissionado", color: "bg-slate-400" },
+  operational: { label: "Operacional", color: "bg-success" },
+  maintenance: { label: "Manutenção", color: "bg-muted-foreground" },
+  decommissioned: { label: "Descomissionado", color: "bg-muted" },
 };
 
 const LIMITS = { o2_min: 19.5, o2_max: 23.5, co2_max: 500, temp_min: 26, temp_max: 32, humidity_min: 40, humidity_max: 60 };
@@ -61,9 +61,9 @@ export function PeotramSATSystem() {
   return (
     <div className="space-y-4">
       <div className="grid grid-cols-2 md:grid-cols-4 gap-3">
-        <Card className="bg-gradient-to-br from-blue-500/10 to-blue-500/5 border-blue-500/20">
+        <Card className="bg-primary/10 border-primary/20">
           <CardContent className="pt-4 pb-3 text-center">
-            <p className="text-3xl font-bold text-blue-600">{activeChambers}</p>
+            <p className="text-3xl font-bold text-primary">{activeChambers}</p>
             <p className="text-xs text-muted-foreground">Câmaras Ativas</p>
           </CardContent>
         </Card>
@@ -108,7 +108,7 @@ export function PeotramSATSystem() {
           {chambers.map((chamber: any) => {
             const specs = chamber.specifications || {};
             const statusCfg = STATUS_CONFIG[chamber.status] || STATUS_CONFIG.operational;
-            const certColor = chamber.certification_status === "valid" ? "text-green-600" : chamber.certification_status === "expiring" ? "text-warning" : "text-destructive";
+            const certColor = chamber.certification_status === "valid" ? "text-success" : chamber.certification_status === "expiring" ? "text-warning" : "text-destructive";
 
             return (
               <Card key={chamber.id} className="transition-all">
@@ -137,7 +137,7 @@ export function PeotramSATSystem() {
                   </div>
                   {specs.o2_percent && (
                     <div className="grid grid-cols-2 gap-2">
-                      <div className="p-2 rounded text-center bg-green-500/10">
+                      <div className="p-2 rounded text-center bg-success/10">
                         <p className="text-xs text-muted-foreground flex items-center justify-center gap-1"><Wind className="h-3 w-3" /> O₂</p>
                         <p className="font-mono font-bold">{specs.o2_percent}%</p>
                       </div>

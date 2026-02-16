@@ -212,7 +212,7 @@ Notas Adicionais: ${generatedEvidence.additionalNotes}
               <div className="space-y-4 pr-4">
                 <div className="flex items-center justify-between">
                   <h4 className="font-medium flex items-center gap-2">
-                    <CheckCircle className="w-4 h-4 text-green-500" />
+                    <CheckCircle className="w-4 h-4 text-success" />
                     Evidência Gerada
                   </h4>
                   <div className="flex gap-2">

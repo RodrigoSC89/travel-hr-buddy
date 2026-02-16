@@ -98,13 +98,13 @@ export function EnhancedAuditAgentsHub() {
       <motion.div initial={{ opacity: 0, y: -20 }} animate={{ opacity: 1, y: 0 }} className="flex items-center justify-between">
         <div className="flex items-center gap-4">
           <div className="relative">
-            <div className="absolute inset-0 bg-gradient-to-br from-primary/30 to-purple-500/30 blur-xl rounded-full" />
-            <div className="relative p-4 bg-gradient-to-br from-primary/20 to-purple-500/20 rounded-2xl border border-primary/20">
+            <div className="absolute inset-0 bg-gradient-to-br from-primary/30 to-accent/30 blur-xl rounded-full" />
+            <div className="relative p-4 bg-gradient-to-br from-primary/20 to-accent/20 rounded-2xl border border-primary/20">
               <Brain className="h-10 w-10 text-primary" />
             </div>
           </div>
           <div>
-            <h1 className="text-3xl font-bold bg-gradient-to-r from-primary to-purple-500 bg-clip-text text-transparent">
+            <h1 className="text-3xl font-bold bg-gradient-to-r from-primary to-accent bg-clip-text text-transparent">
               Central de Agentes de Auditoria
             </h1>
             <p className="text-muted-foreground flex items-center gap-2">
@@ -127,11 +127,11 @@ export function EnhancedAuditAgentsHub() {
 
       {/* Stats */}
       <div className="grid grid-cols-2 md:grid-cols-5 gap-4">
-        <EnhancedStatCard icon={TrendingUp} value={`${stats?.complianceRate?.toFixed(1) || "98.5"}%`} label="Taxa de Conformidade" color="from-green-500 to-emerald-500" loading={statsLoading} />
-        <EnhancedStatCard icon={FileCheck} value={stats?.totalAudits || 0} label="Auditorias" color="from-blue-500 to-cyan-500" loading={statsLoading} />
-        <EnhancedStatCard icon={AlertTriangle} value={stats?.openNCs || 0} label="NCs Abertas" color="from-amber-500 to-orange-500" loading={statsLoading} />
-        <EnhancedStatCard icon={Brain} value={stats?.activeAgents || 10} label="Agentes Ativos" color="from-purple-500 to-pink-500" loading={statsLoading} />
-        <EnhancedStatCard icon={Zap} value="24/7" label="Disponibilidade" color="from-cyan-500 to-blue-500" />
+        <EnhancedStatCard icon={TrendingUp} value={`${stats?.complianceRate?.toFixed(1) || "98.5"}%`} label="Taxa de Conformidade" color="from-success to-success/70" loading={statsLoading} />
+        <EnhancedStatCard icon={FileCheck} value={stats?.totalAudits || 0} label="Auditorias" color="from-primary to-info" loading={statsLoading} />
+        <EnhancedStatCard icon={AlertTriangle} value={stats?.openNCs || 0} label="NCs Abertas" color="from-warning to-warning/70" loading={statsLoading} />
+        <EnhancedStatCard icon={Brain} value={stats?.activeAgents || 10} label="Agentes Ativos" color="from-accent to-accent/70" loading={statsLoading} />
+        <EnhancedStatCard icon={Zap} value="24/7" label="Disponibilidade" color="from-info to-primary" />
       </div>
 
       {/* Search */}

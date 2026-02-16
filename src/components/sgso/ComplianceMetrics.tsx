@@ -48,16 +48,16 @@ const practiceCompliance = [
 ];
 
 const incidentStats = [
-  { name: "Críticos", value: 1, color: "#dc2626" },
-  { name: "Altos", value: 3, color: "#ea580c" },
-  { name: "Médios", value: 5, color: "#eab308" },
-  { name: "Baixos", value: 3, color: "#3b82f6" }
+  { name: "Críticos", value: 1, color: "hsl(var(--destructive))" },
+  { name: "Altos", value: 3, color: "hsl(var(--warning))" },
+  { name: "Médios", value: 5, color: "hsl(var(--warning))" },
+  { name: "Baixos", value: 3, color: "hsl(var(--info))" }
 ];
 
 const auditResults = [
-  { category: "Conformidades", value: 85, color: "#16a34a" },
-  { category: "Não Conformidades", value: 10, color: "#dc2626" },
-  { category: "Observações", value: 5, color: "#3b82f6" }
+  { category: "Conformidades", value: 85, color: "hsl(var(--success))" },
+  { category: "Não Conformidades", value: 10, color: "hsl(var(--destructive))" },
+  { category: "Observações", value: 5, color: "hsl(var(--info))" }
 ];
 
 export const ComplianceMetrics: React.FC = () => {
@@ -69,54 +69,54 @@ export const ComplianceMetrics: React.FC = () => {
     <div className="space-y-6">
       {/* KPI Summary */}
       <div className="grid grid-cols-1 md:grid-cols-4 gap-4">
-        <Card className="bg-gradient-to-br from-blue-50 to-blue-100 border-blue-200">
+        <Card className="bg-primary/5 border-primary/20">
           <CardContent className="p-6">
             <div className="flex items-center justify-between mb-4">
-              <Shield className="h-10 w-10 text-blue-600" />
-              <Badge className="bg-blue-600 text-white font-bold">COMPLIANCE</Badge>
+              <Shield className="h-10 w-10 text-primary" />
+              <Badge className="bg-primary text-primary-foreground font-bold">COMPLIANCE</Badge>
             </div>
-            <h3 className="text-sm font-medium text-blue-700 mb-1">Compliance Geral</h3>
-            <p className="text-3xl font-bold text-blue-900">{currentCompliance}%</p>
+            <h3 className="text-sm font-medium text-primary mb-1">Compliance Geral</h3>
+            <p className="text-3xl font-bold text-foreground">{currentCompliance}%</p>
             <div className="flex items-center gap-2 mt-2">
-              <TrendingUp className="h-4 w-4 text-green-600" />
-              <p className="text-xs text-green-600 font-bold">{trend} vs. mês anterior</p>
+              <TrendingUp className="h-4 w-4 text-success" />
+              <p className="text-xs text-success font-bold">{trend} vs. mês anterior</p>
             </div>
           </CardContent>
         </Card>
 
-        <Card className="bg-gradient-to-br from-green-50 to-green-100 border-green-200">
+        <Card className="bg-success/5 border-success/20">
           <CardContent className="p-6">
             <div className="flex items-center justify-between mb-4">
-              <CheckCircle className="h-10 w-10 text-green-600" />
-              <Badge className="bg-green-600 text-white font-bold">PRÁTICAS</Badge>
+              <CheckCircle className="h-10 w-10 text-success" />
+              <Badge className="bg-success text-success-foreground font-bold">PRÁTICAS</Badge>
             </div>
-            <h3 className="text-sm font-medium text-green-700 mb-1">Práticas Conformes</h3>
-            <p className="text-3xl font-bold text-green-900">10/17</p>
-            <p className="text-xs text-green-600 mt-2">58.8% do total</p>
+            <h3 className="text-sm font-medium text-success mb-1">Práticas Conformes</h3>
+            <p className="text-3xl font-bold text-foreground">10/17</p>
+            <p className="text-xs text-success mt-2">58.8% do total</p>
           </CardContent>
         </Card>
 
-        <Card className="bg-gradient-to-br from-orange-50 to-orange-100 border-orange-200">
+        <Card className="bg-warning/5 border-warning/20">
           <CardContent className="p-6">
             <div className="flex items-center justify-between mb-4">
-              <AlertTriangle className="h-10 w-10 text-orange-600" />
-              <Badge className="bg-orange-600 text-white font-bold">INCIDENTES</Badge>
+              <AlertTriangle className="h-10 w-10 text-warning" />
+              <Badge className="bg-warning text-warning-foreground font-bold">INCIDENTES</Badge>
             </div>
-            <h3 className="text-sm font-medium text-orange-700 mb-1">Incidentes Ativos</h3>
-            <p className="text-3xl font-bold text-orange-900">4</p>
-            <p className="text-xs text-orange-600 mt-2">12 total no mês</p>
+            <h3 className="text-sm font-medium text-warning mb-1">Incidentes Ativos</h3>
+            <p className="text-3xl font-bold text-foreground">4</p>
+            <p className="text-xs text-warning mt-2">12 total no mês</p>
           </CardContent>
         </Card>
 
-        <Card className="bg-gradient-to-br from-purple-50 to-purple-100 border-purple-200">
+        <Card className="bg-accent/50 border-accent">
           <CardContent className="p-6">
             <div className="flex items-center justify-between mb-4">
-              <Target className="h-10 w-10 text-purple-600" />
-              <Badge className="bg-purple-600 text-white font-bold">META</Badge>
+              <Target className="h-10 w-10 text-accent-foreground" />
+              <Badge className="bg-accent text-accent-foreground font-bold">META</Badge>
             </div>
-            <h3 className="text-sm font-medium text-purple-700 mb-1">Meta ANP</h3>
-            <p className="text-3xl font-bold text-purple-900">{targetCompliance}%</p>
-            <p className="text-xs text-purple-600 mt-2">Gap: {targetCompliance - currentCompliance}%</p>
+            <h3 className="text-sm font-medium text-accent-foreground mb-1">Meta ANP</h3>
+            <p className="text-3xl font-bold text-foreground">{targetCompliance}%</p>
+            <p className="text-xs text-accent-foreground mt-2">Gap: {targetCompliance - currentCompliance}%</p>
           </CardContent>
         </Card>
       </div>
@@ -143,7 +143,7 @@ export const ComplianceMetrics: React.FC = () => {
                 <Line
                   type="monotone"
                   dataKey="compliance"
-                  stroke="#3b82f6"
+                  stroke="hsl(var(--primary))"
                   strokeWidth={3}
                   name="Compliance Atual"
                   dot={{ r: 5 }}
@@ -151,7 +151,7 @@ export const ComplianceMetrics: React.FC = () => {
                 <Line
                   type="monotone"
                   dataKey="target"
-                  stroke="#dc2626"
+                  stroke="hsl(var(--destructive))"
                   strokeWidth={2}
                   strokeDasharray="5 5"
                   name="Meta ANP"
@@ -186,7 +186,7 @@ export const ComplianceMetrics: React.FC = () => {
                   {practiceCompliance.map((entry) => (
                     <Cell
                       key={`cell-${entry.name}`}
-                      fill={entry.score >= 85 ? "#16a34a" : entry.score >= 70 ? "#eab308" : "#dc2626"}
+                      fill={entry.score >= 85 ? "hsl(var(--success))" : entry.score >= 70 ? "hsl(var(--warning))" : "hsl(var(--destructive))"}
                     />
                   ))}
                 </Bar>
@@ -288,7 +288,7 @@ export const ComplianceMetrics: React.FC = () => {
                     </Badge>
                     <span className="font-bold text-foreground">{practice.name}</span>
                   </div>
-                  <span className="text-2xl font-bold text-gray-900">{practice.score}%</span>
+                  <span className="text-2xl font-bold text-foreground">{practice.score}%</span>
                 </div>
                 <Progress value={practice.score} className="h-3" />
               </div>
