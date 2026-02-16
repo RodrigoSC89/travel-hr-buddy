@@ -41,7 +41,7 @@ export function NoonReportAnalytics() {
       <div className="flex items-center justify-between">
         <div>
           <h1 className="text-2xl font-bold flex items-center gap-2">
-            <BarChart3 className="h-7 w-7 text-cyan-400" />
+            <BarChart3 className="h-7 w-7 text-primary" />
             Noon Report Analytics
           </h1>
           <p className="text-muted-foreground">Vessel performance intelligence • vs Cloud Fleet Manager</p>
@@ -62,16 +62,16 @@ export function NoonReportAnalytics() {
         ].map((kpi, i) => (
           <Card key={i} className="border-border/50 bg-card/80">
             <CardContent className="p-3 text-center">
-              <kpi.icon className="h-4 w-4 mx-auto mb-1 text-cyan-400" />
+              <kpi.icon className="h-4 w-4 mx-auto mb-1 text-primary" />
               <p className="text-xs text-muted-foreground">{kpi.label}</p>
               <p className="text-xl font-bold">{kpi.value}</p>
               {kpi.trend && (
                 <div className="flex items-center justify-center gap-1 text-xs">
                   {parseFloat(kpi.trend) < 0 ? 
-                    <TrendingDown className="h-3 w-3 text-emerald-400" /> : 
-                    <TrendingUp className="h-3 w-3 text-amber-400" />
+                    <TrendingDown className="h-3 w-3 text-success" /> : 
+                    <TrendingUp className="h-3 w-3 text-warning" />
                   }
-                  <span className={parseFloat(kpi.trend) < 0 ? "text-emerald-400" : "text-amber-400"}>{kpi.trend}</span>
+                  <span className={parseFloat(kpi.trend) < 0 ? "text-success" : "text-warning"}>{kpi.trend}</span>
                 </div>
               )}
             </CardContent>
@@ -132,7 +132,7 @@ export function NoonReportAnalytics() {
                     <span className="text-sm font-medium w-32">{row.metric}</span>
                     <span className="text-sm">{row.actual}</span>
                     <span className="text-sm text-muted-foreground">{row.charter}</span>
-                    <Badge variant="outline" className={row.variance < 0 ? "text-emerald-400 border-emerald-500/30" : "text-rose-400 border-rose-500/30"}>
+                    <Badge variant="outline" className={row.variance < 0 ? "text-success border-success/30" : "text-destructive border-destructive/30"}>
                       {row.variance > 0 ? "+" : ""}{row.variance}%
                     </Badge>
                   </div>

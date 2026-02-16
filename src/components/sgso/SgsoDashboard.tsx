@@ -213,15 +213,15 @@ export const SgsoDashboard: React.FC = () => {
                 Compliance ANP Resolução 43/2007 - 17 Práticas Obrigatórias
               </p>
               <div className="flex gap-3 flex-wrap">
-                <Badge className="bg-green-600 text-white px-4 py-2 text-sm font-semibold">
+                <Badge className="bg-success text-success-foreground px-4 py-2 text-sm font-semibold">
                   <CheckCircle className="h-4 w-4 mr-2" />
                   {kpis.practices.compliant} Práticas Conformes
                 </Badge>
-                <Badge className="bg-red-600 text-white px-4 py-2 text-sm font-semibold">
+                <Badge className="bg-destructive text-destructive-foreground px-4 py-2 text-sm font-semibold">
                   <XCircle className="h-4 w-4 mr-2" />
                   {kpis.practices.nonCompliant} Não Conformes
                 </Badge>
-                <Badge className="bg-blue-600 text-white px-4 py-2 text-sm font-semibold">
+                <Badge className="bg-primary text-primary-foreground px-4 py-2 text-sm font-semibold">
                   <TrendingUp className="h-4 w-4 mr-2" />
                   {kpis.overallCompliance}% Compliance Geral
                 </Badge>
@@ -449,7 +449,7 @@ export const SgsoDashboard: React.FC = () => {
               </TabsTrigger>
               <TabsTrigger 
                 value="pdf-report"
-                className="data-[state=active]:bg-background data-[state=active]:text-purple-600 data-[state=active]:font-bold min-h-[44px]"
+                className="data-[state=active]:bg-background data-[state=active]:text-accent-foreground data-[state=active]:font-bold min-h-[44px]"
               >
                 <Download className="h-4 w-4 mr-2" />
                 Relatório PDF
@@ -542,7 +542,7 @@ export const SgsoDashboard: React.FC = () => {
                     {/* Incident Dialog */}
                     <Dialog open={incidentDialogOpen} onOpenChange={setIncidentDialogOpen}>
                       <DialogTrigger asChild>
-                        <Button className="bg-red-600 hover:bg-red-700 text-white h-auto py-6 flex-col gap-2">
+                        <Button className="bg-destructive hover:bg-destructive/90 text-destructive-foreground h-auto py-6 flex-col gap-2">
                           <Bell className="h-6 w-6" />
                           <span className="font-semibold">Reportar Incidente</span>
                         </Button>
@@ -550,7 +550,7 @@ export const SgsoDashboard: React.FC = () => {
                       <DialogContent className="max-w-lg">
                         <DialogHeader>
                           <DialogTitle className="flex items-center gap-2">
-                            <Bell className="h-5 w-5 text-red-600" />
+                            <Bell className="h-5 w-5 text-destructive" />
                             Registrar Novo Incidente
                           </DialogTitle>
                           <DialogDescription>
@@ -628,7 +628,7 @@ export const SgsoDashboard: React.FC = () => {
                               onChange={(e) => setIncidentForm(prev => ({ ...prev, description: e.target.value }))}
                             />
                           </div>
-                          <Button className="w-full bg-red-600 hover:bg-red-700" onClick={handleSubmitIncident}>
+                          <Button className="w-full bg-destructive hover:bg-destructive/90 text-destructive-foreground" onClick={handleSubmitIncident}>
                             <Save className="h-4 w-4 mr-2" />
                             Registrar Incidente
                           </Button>
@@ -639,7 +639,7 @@ export const SgsoDashboard: React.FC = () => {
                     {/* Risk Dialog */}
                     <Dialog open={riskDialogOpen} onOpenChange={setRiskDialogOpen}>
                       <DialogTrigger asChild>
-                        <Button className="bg-orange-600 hover:bg-orange-700 text-white h-auto py-6 flex-col gap-2">
+                        <Button className="bg-warning hover:bg-warning/90 text-warning-foreground h-auto py-6 flex-col gap-2">
                           <AlertTriangle className="h-6 w-6" />
                           <span className="font-semibold">Registrar Risco</span>
                         </Button>
@@ -647,7 +647,7 @@ export const SgsoDashboard: React.FC = () => {
                       <DialogContent className="max-w-lg">
                         <DialogHeader>
                           <DialogTitle className="flex items-center gap-2">
-                            <AlertTriangle className="h-5 w-5 text-orange-600" />
+                            <AlertTriangle className="h-5 w-5 text-warning" />
                             Registrar Novo Risco
                           </DialogTitle>
                           <DialogDescription>
@@ -721,7 +721,7 @@ export const SgsoDashboard: React.FC = () => {
                               onChange={(e) => setRiskForm(prev => ({ ...prev, mitigation: e.target.value }))}
                             />
                           </div>
-                          <Button className="w-full bg-orange-600 hover:bg-orange-700" onClick={handleSubmitRisk}>
+                          <Button className="w-full bg-warning hover:bg-warning/90 text-warning-foreground" onClick={handleSubmitRisk}>
                             <Save className="h-4 w-4 mr-2" />
                             Registrar Risco
                           </Button>
@@ -732,7 +732,7 @@ export const SgsoDashboard: React.FC = () => {
                     {/* Audit Dialog */}
                     <Dialog open={auditDialogOpen} onOpenChange={setAuditDialogOpen}>
                       <DialogTrigger asChild>
-                        <Button className="bg-blue-600 hover:bg-blue-700 text-white h-auto py-6 flex-col gap-2">
+                        <Button className="bg-primary hover:bg-primary/90 text-primary-foreground h-auto py-6 flex-col gap-2">
                           <FileText className="h-6 w-6" />
                           <span className="font-semibold">Nova Auditoria</span>
                         </Button>
@@ -740,7 +740,7 @@ export const SgsoDashboard: React.FC = () => {
                       <DialogContent className="max-w-lg">
                         <DialogHeader>
                           <DialogTitle className="flex items-center gap-2">
-                            <FileText className="h-5 w-5 text-blue-600" />
+                            <FileText className="h-5 w-5 text-primary" />
                             Agendar Nova Auditoria
                           </DialogTitle>
                           <DialogDescription>
@@ -801,7 +801,7 @@ export const SgsoDashboard: React.FC = () => {
                               onChange={(e) => setAuditForm(prev => ({ ...prev, scope: e.target.value }))}
                             />
                           </div>
-                          <Button className="w-full bg-blue-600 hover:bg-blue-700" onClick={handleSubmitAudit}>
+                          <Button className="w-full bg-primary hover:bg-primary/90 text-primary-foreground" onClick={handleSubmitAudit}>
                             <Calendar className="h-4 w-4 mr-2" />
                             Agendar Auditoria
                           </Button>
@@ -811,7 +811,7 @@ export const SgsoDashboard: React.FC = () => {
 
                     {/* Report Button */}
                     <Button 
-                      className="bg-green-600 hover:bg-green-700 text-white h-auto py-6 flex-col gap-2"
+                      className="bg-success hover:bg-success/90 text-success-foreground h-auto py-6 flex-col gap-2"
                       onClick={handleGenerateANPReport}
                     >
                       <TrendingUp className="h-6 w-6" />

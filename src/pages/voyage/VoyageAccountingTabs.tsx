@@ -63,9 +63,9 @@ export function VoyageAccountingTabs({ voyages, costs, stats, onSelectVoyage, on
             </CardHeader>
             <CardContent>
               <div className="space-y-4">
-                <div className="flex justify-between items-center p-3 bg-green-50 dark:bg-green-950/30 rounded-lg">
+                <div className="flex justify-between items-center p-3 bg-success/5 rounded-lg">
                   <span className="font-medium">Receita Total</span>
-                  <span className="text-xl font-bold text-green-600">${(stats.totalRevenue / 1000000).toFixed(2)}M</span>
+                  <span className="text-xl font-bold text-success">${(stats.totalRevenue / 1000000).toFixed(2)}M</span>
                 </div>
                 <div className="flex justify-between items-center p-3 bg-muted/50 rounded-lg">
                   <span className="font-medium">(-) Custos Operacionais</span>
@@ -74,7 +74,7 @@ export function VoyageAccountingTabs({ voyages, costs, stats, onSelectVoyage, on
                 <div className="border-t pt-4">
                   <div className="flex justify-between items-center">
                     <span className="font-bold text-lg">Resultado Líquido</span>
-                    <span className="text-2xl font-bold text-green-600">${(stats.totalProfit / 1000000).toFixed(2)}M</span>
+                    <span className="text-2xl font-bold text-success">${(stats.totalProfit / 1000000).toFixed(2)}M</span>
                   </div>
                 </div>
               </div>
@@ -128,14 +128,14 @@ export function VoyageAccountingTabs({ voyages, costs, stats, onSelectVoyage, on
                       <div className="flex items-center gap-2"><Ship className="h-4 w-4 text-muted-foreground" />{voyage.vessel_name}</div>
                     </TableCell>
                     <TableCell className="text-sm">{voyage.departure_port} → {voyage.arrival_port}</TableCell>
-                    <TableCell className="text-green-600 font-medium">
+                    <TableCell className="text-success font-medium">
                       {voyage.actual_revenue > 0 ? `$${(voyage.actual_revenue / 1000).toFixed(0)}k` : "-"}
                     </TableCell>
                     <TableCell>${(voyage.actual_costs / 1000).toFixed(0)}k</TableCell>
-                    <TableCell className={voyage.net_result > 0 ? "text-green-600 font-medium" : ""}>
+                    <TableCell className={voyage.net_result > 0 ? "text-success font-medium" : ""}>
                       {voyage.net_result > 0 ? `$${(voyage.net_result / 1000).toFixed(0)}k` : "-"}
                     </TableCell>
-                    <TableCell className={voyage.margin_percent > 50 ? "text-green-600" : ""}>
+                    <TableCell className={voyage.margin_percent > 50 ? "text-success" : ""}>
                       {voyage.margin_percent > 0 ? `${voyage.margin_percent.toFixed(1)}%` : "-"}
                     </TableCell>
                     <TableCell>${voyage.tce_daily.toLocaleString()}</TableCell>
@@ -181,7 +181,7 @@ export function VoyageAccountingTabs({ voyages, costs, stats, onSelectVoyage, on
                     <TableCell className="font-medium">{cost.category}</TableCell>
                     <TableCell className="text-right">${cost.budgeted.toLocaleString()}</TableCell>
                     <TableCell className="text-right">${cost.actual.toLocaleString()}</TableCell>
-                    <TableCell className={`text-right ${cost.variance < 0 ? "text-green-600" : cost.variance > 0 ? "text-red-600" : ""}`}>
+                    <TableCell className={`text-right ${cost.variance < 0 ? "text-success" : cost.variance > 0 ? "text-destructive" : ""}`}>
                       {cost.variance < 0 ? "" : "+"}{cost.variance.toLocaleString()}
                     </TableCell>
                     <TableCell className="text-right">{cost.percent_of_total}%</TableCell>
@@ -191,7 +191,7 @@ export function VoyageAccountingTabs({ voyages, costs, stats, onSelectVoyage, on
                   <TableCell>TOTAL</TableCell>
                   <TableCell className="text-right">${totalBudgetedCosts.toLocaleString()}</TableCell>
                   <TableCell className="text-right">${totalActualCosts.toLocaleString()}</TableCell>
-                  <TableCell className={`text-right ${totalVariance < 0 ? "text-green-600" : "text-red-600"}`}>
+                  <TableCell className={`text-right ${totalVariance < 0 ? "text-success" : "text-destructive"}`}>
                     {totalVariance < 0 ? "" : "+"}{totalVariance.toLocaleString()}
                   </TableCell>
                   <TableCell className="text-right">100%</TableCell>
