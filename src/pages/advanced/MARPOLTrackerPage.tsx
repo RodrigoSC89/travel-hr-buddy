@@ -6,7 +6,7 @@ import { useCallback } from "react";
 import { Badge } from "@/components/ui/badge";
 import { Button } from "@/components/ui/button";
 import { ShipLoader } from "@/components/ui/ship-loader";
-import { Leaf, Activity, RefreshCw, FileText, FileDown } from "lucide-react";
+import { Leaf, Activity, RefreshCw, FileText } from "lucide-react";
 import { toast } from "sonner";
 import { useMARPOLData } from "./marpol/useMARPOLData";
 import { MARPOLTabs } from "./marpol/MARPOLTabs";
@@ -56,12 +56,6 @@ const MARPOLTrackerPage = () => {
           </Badge>
           <Button variant="outline" size="sm" onClick={() => refetch()}>
             <RefreshCw className="h-4 w-4 mr-2" />Atualizar
-          </Button>
-          <Button variant="outline" size="sm" onClick={handleExportORB}>
-            <FileDown className="h-4 w-4 mr-2" />e-ORB
-          </Button>
-          <Button variant="outline" size="sm" onClick={handleExportGRB}>
-            <FileDown className="h-4 w-4 mr-2" />e-GRB
           </Button>
           <Button size="sm">
             <FileText className="h-4 w-4 mr-2" />Relatório MARPOL
