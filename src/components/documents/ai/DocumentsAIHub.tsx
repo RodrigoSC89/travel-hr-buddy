@@ -41,12 +41,12 @@ export const AutoDocumentGenerationAI: React.FC = () => {
   };
 
   return (
-    <Card className="border-blue-500/20">
+    <Card className="border-primary/20">
       <CardHeader>
         <CardTitle className="flex items-center gap-2">
-          <FilePlus className="h-5 w-5 text-blue-500" />
+          <FilePlus className="h-5 w-5 text-primary" />
           Auto-Geração de Documentos
-          <Badge className="ml-auto bg-blue-500/10 text-blue-500">DocGen AI</Badge>
+          <Badge className="ml-auto bg-primary/10 text-primary">DocGen AI</Badge>
         </CardTitle>
       </CardHeader>
       <CardContent className="space-y-4">

@@ -185,10 +185,10 @@ export const VesselDigitalTwin: React.FC<VesselTwinProps> = ({
   }, []);
 
   const statusConfig = useMemo(() => ({
-    operational: { label: "Operacional", color: "bg-green-500", icon: <CheckCircle2 className="h-4 w-4" /> },
-    maintenance: { label: "Manutenção", color: "bg-yellow-500", icon: <AlertTriangle className="h-4 w-4" /> },
-    docked: { label: "Atracado", color: "bg-blue-500", icon: <Ship className="h-4 w-4" /> },
-    alert: { label: "Alerta", color: "bg-red-500", icon: <AlertTriangle className="h-4 w-4" /> },
+    operational: { label: "Operacional", color: "bg-success", icon: <CheckCircle2 className="h-4 w-4" /> },
+    maintenance: { label: "Manutenção", color: "bg-warning", icon: <AlertTriangle className="h-4 w-4" /> },
+    docked: { label: "Atracado", color: "bg-info", icon: <Ship className="h-4 w-4" /> },
+    alert: { label: "Alerta", color: "bg-destructive", icon: <AlertTriangle className="h-4 w-4" /> },
   }), []);
 
   const warnings = sensors.filter(s => s.status !== "normal").length;

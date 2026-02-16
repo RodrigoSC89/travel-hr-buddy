@@ -37,9 +37,9 @@ export function VoyageWeatherTab({ weather, weatherLoading, onRefresh }: Props) 
           <Card key={`wx-card-${w.location}-${idx}`} className={getWeatherBgColor(w.risk)}>
             <CardHeader>
               <CardTitle className="flex items-center gap-2">
-                {w.risk === "low" && <ThermometerSun className="h-5 w-5 text-green-500" />}
-                {w.risk === "medium" && <Cloud className="h-5 w-5 text-amber-500" />}
-                {w.risk === "high" && <AlertTriangle className="h-5 w-5 text-red-500" />}
+                {w.risk === "low" && <ThermometerSun className="h-5 w-5 text-success" />}
+                {w.risk === "medium" && <Cloud className="h-5 w-5 text-warning" />}
+                {w.risk === "high" && <AlertTriangle className="h-5 w-5 text-destructive" />}
                 {w.location}
               </CardTitle>
               <CardDescription>{w.condition}</CardDescription>
@@ -67,9 +67,9 @@ export function VoyageWeatherTab({ weather, weatherLoading, onRefresh }: Props) 
                 <span className="font-bold">{w.visibility}</span>
               </div>
               <Badge className={`w-full justify-center ${
-                w.risk === "low" ? "bg-green-500/20 text-green-600" :
-                w.risk === "medium" ? "bg-amber-500/20 text-amber-600" :
-                "bg-red-500/20 text-red-600"
+                w.risk === "low" ? "bg-success/20 text-success" :
+                w.risk === "medium" ? "bg-warning/20 text-warning" :
+                "bg-destructive/20 text-destructive"
               }`}>
                 Risco {w.risk === "low" ? "Baixo" : w.risk === "medium" ? "Médio" : "Alto"}
               </Badge>

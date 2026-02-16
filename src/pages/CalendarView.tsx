@@ -114,9 +114,9 @@ const CalendarView: React.FC = () => {
 
         <div className="grid grid-cols-2 md:grid-cols-5 gap-3">
           <Card className="p-3"><div className="flex items-center justify-between"><span className="text-sm text-muted-foreground">Total</span><Badge variant="secondary">{stats.total}</Badge></div></Card>
-          <Card className="p-3"><div className="flex items-center justify-between"><span className="text-sm text-muted-foreground">Pendentes</span><Badge variant="outline" className="text-yellow-600 border-yellow-500/30">{stats.pending}</Badge></div></Card>
-          <Card className="p-3"><div className="flex items-center justify-between"><span className="text-sm text-muted-foreground">Em Progresso</span><Badge variant="outline" className="text-blue-600 border-blue-500/30">{stats.inProgress}</Badge></div></Card>
-          <Card className="p-3"><div className="flex items-center justify-between"><span className="text-sm text-muted-foreground">Concluídas</span><Badge variant="outline" className="text-green-600 border-green-500/30">{stats.completed}</Badge></div></Card>
+          <Card className="p-3"><div className="flex items-center justify-between"><span className="text-sm text-muted-foreground">Pendentes</span><Badge variant="outline" className="text-warning border-warning/30">{stats.pending}</Badge></div></Card>
+          <Card className="p-3"><div className="flex items-center justify-between"><span className="text-sm text-muted-foreground">Em Progresso</span><Badge variant="outline" className="text-info border-info/30">{stats.inProgress}</Badge></div></Card>
+          <Card className="p-3"><div className="flex items-center justify-between"><span className="text-sm text-muted-foreground">Concluídas</span><Badge variant="outline" className="text-success border-success/30">{stats.completed}</Badge></div></Card>
           <Card className="p-3"><div className="flex items-center justify-between"><span className="text-sm text-muted-foreground">Atrasadas</span><Badge variant={stats.overdue > 0 ? 'destructive' : 'outline'}>{stats.overdue}</Badge></div></Card>
         </div>
 

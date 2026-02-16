@@ -169,29 +169,29 @@ export const FMEADPTrialsIntegration: React.FC = () => {
 
   const getRiskBadge = (risk: string) => {
     const colors = {
-      low: "bg-green-100 text-green-800",
-      medium: "bg-yellow-100 text-yellow-800",
-      high: "bg-orange-100 text-orange-800",
-      critical: "bg-red-100 text-red-800"
+      low: "bg-success/20 text-success",
+      medium: "bg-warning/20 text-warning",
+      high: "bg-warning/30 text-warning",
+      critical: "bg-destructive/20 text-destructive"
     };
     return colors[risk as keyof typeof colors] || colors.low;
   };
 
   const getStatusIcon = (status: string) => {
-    if (status === "analyzed") return <CheckCircle className="h-4 w-4 text-green-600" />;
-    if (status === "imported") return <Clock className="h-4 w-4 text-yellow-600" />;
+    if (status === "analyzed") return <CheckCircle className="h-4 w-4 text-success" />;
+    if (status === "imported") return <Clock className="h-4 w-4 text-warning" />;
     return <AlertCircle className="h-4 w-4 text-muted-foreground" />;
   };
 
   return (
     <div className="space-y-6">
       {/* Header */}
-      <Card className="border-2 border-blue-200 bg-gradient-to-r from-blue-50 to-indigo-50">
+        <Card className="border-2 border-primary/20 bg-gradient-to-r from-primary/5 to-primary/10">
         <CardHeader>
           <div className="flex items-center justify-between">
             <div className="flex items-center gap-3">
-              <div className="p-3 rounded-lg bg-blue-600/10">
-                <Database className="h-6 w-6 text-blue-600" />
+              <div className="p-3 rounded-lg bg-primary/10">
+                <Database className="h-6 w-6 text-primary" />
               </div>
               <div>
                 <CardTitle className="text-2xl">Integração FMEA & DP Trials</CardTitle>
@@ -239,7 +239,7 @@ export const FMEADPTrialsIntegration: React.FC = () => {
           </CardHeader>
           <CardContent>
             <div className="flex items-center gap-2">
-              <FileText className="h-5 w-5 text-blue-600" />
+              <FileText className="h-5 w-5 text-primary" />
               <span className="text-2xl font-bold">
                 {reports.filter(r => r.reportType === "FMEA").length}
               </span>
@@ -255,7 +255,7 @@ export const FMEADPTrialsIntegration: React.FC = () => {
           </CardHeader>
           <CardContent>
             <div className="flex items-center gap-2">
-              <Target className="h-5 w-5 text-green-600" />
+              <Target className="h-5 w-5 text-success" />
               <span className="text-2xl font-bold">
                 {reports.filter(r => r.reportType === "DP_TRIAL").length}
               </span>
@@ -271,7 +271,7 @@ export const FMEADPTrialsIntegration: React.FC = () => {
           </CardHeader>
           <CardContent>
             <div className="flex items-center gap-2">
-              <Shield className="h-5 w-5 text-orange-600" />
+              <Shield className="h-5 w-5 text-warning" />
               <span className="text-2xl font-bold">
                 {reports.filter(r => r.reportType === "ASOG").length}
               </span>
@@ -287,8 +287,8 @@ export const FMEADPTrialsIntegration: React.FC = () => {
           </CardHeader>
           <CardContent>
             <div className="flex items-center gap-2">
-              <AlertTriangle className="h-5 w-5 text-red-600" />
-              <span className="text-2xl font-bold text-red-600">
+              <AlertTriangle className="h-5 w-5 text-destructive" />
+              <span className="text-2xl font-bold text-destructive">
                 {reports.reduce((sum, r) => sum + r.criticalFindings, 0)}
               </span>
             </div>
@@ -338,8 +338,8 @@ export const FMEADPTrialsIntegration: React.FC = () => {
                     <div className="flex items-center gap-4">
                       <div className="text-right text-sm">
                         <div className="flex items-center gap-2">
-                          <span className="text-red-600">{report.criticalFindings} críticos</span>
-                          <span className="text-yellow-600">{report.majorFindings} maiores</span>
+                          <span className="text-destructive">{report.criticalFindings} críticos</span>
+                          <span className="text-warning">{report.majorFindings} maiores</span>
                         </div>
                       </div>
                       <Badge className={getRiskBadge(report.overallRisk)}>
@@ -373,20 +373,20 @@ export const FMEADPTrialsIntegration: React.FC = () => {
               </CardHeader>
               <CardContent className="space-y-4">
                 <div className="grid grid-cols-1 md:grid-cols-3 gap-4">
-                  <div className="p-4 bg-red-50 rounded-lg border border-red-200">
-                    <div className="text-sm text-red-600 font-medium">Achados Críticos</div>
-                    <div className="text-3xl font-bold text-red-700">{selectedReport.criticalFindings}</div>
-                    <p className="text-xs text-red-500 mt-1">Requerem ação imediata</p>
+                  <div className="p-4 bg-destructive/10 rounded-lg border border-destructive/20">
+                    <div className="text-sm text-destructive font-medium">Achados Críticos</div>
+                    <div className="text-3xl font-bold text-destructive">{selectedReport.criticalFindings}</div>
+                    <p className="text-xs text-destructive/70 mt-1">Requerem ação imediata</p>
                   </div>
-                  <div className="p-4 bg-yellow-50 rounded-lg border border-yellow-200">
-                    <div className="text-sm text-yellow-600 font-medium">Achados Maiores</div>
-                    <div className="text-3xl font-bold text-yellow-700">{selectedReport.majorFindings}</div>
-                    <p className="text-xs text-yellow-500 mt-1">Prazo de 30 dias</p>
+                  <div className="p-4 bg-warning/10 rounded-lg border border-warning/20">
+                    <div className="text-sm text-warning font-medium">Achados Maiores</div>
+                    <div className="text-3xl font-bold text-warning">{selectedReport.majorFindings}</div>
+                    <p className="text-xs text-warning/70 mt-1">Prazo de 30 dias</p>
                   </div>
-                  <div className="p-4 bg-blue-50 rounded-lg border border-blue-200">
-                    <div className="text-sm text-blue-600 font-medium">Achados Menores</div>
-                    <div className="text-3xl font-bold text-blue-700">{selectedReport.minorFindings}</div>
-                    <p className="text-xs text-blue-500 mt-1">Melhoria contínua</p>
+                  <div className="p-4 bg-info/10 rounded-lg border border-info/20">
+                    <div className="text-sm text-info font-medium">Achados Menores</div>
+                    <div className="text-3xl font-bold text-info">{selectedReport.minorFindings}</div>
+                    <p className="text-xs text-info/70 mt-1">Melhoria contínua</p>
                   </div>
                 </div>
 
@@ -410,7 +410,7 @@ export const FMEADPTrialsIntegration: React.FC = () => {
           <Card>
             <CardHeader>
               <CardTitle className="flex items-center gap-2">
-                <Shield className="h-5 w-5 text-orange-600" />
+                <Shield className="h-5 w-5 text-warning" />
                 Matriz ASOG (Activity Specific Operating Guidelines)
               </CardTitle>
               <CardDescription>
@@ -422,17 +422,17 @@ export const FMEADPTrialsIntegration: React.FC = () => {
                 <div
                   key={level.level}
                   className={`p-4 rounded-lg border-2 ${
-                    level.status === "green" ? "border-green-200 bg-green-50" :
-                    level.status === "yellow" ? "border-yellow-200 bg-yellow-50" :
-                    "border-red-200 bg-red-50"
+                    level.status === "green" ? "border-success/30 bg-success/5" :
+                    level.status === "yellow" ? "border-warning/30 bg-warning/5" :
+                    "border-destructive/30 bg-destructive/5"
                   }`}
                 >
                   <div className="flex items-center justify-between mb-3">
                     <div className="flex items-center gap-3">
                       <div className={`w-10 h-10 rounded-full flex items-center justify-center font-bold text-white ${
-                        level.status === "green" ? "bg-green-600" :
-                        level.status === "yellow" ? "bg-yellow-600" :
-                        "bg-red-600"
+                        level.status === "green" ? "bg-success" :
+                        level.status === "yellow" ? "bg-warning" :
+                        "bg-destructive"
                       }`}>
                         {level.level}
                       </div>

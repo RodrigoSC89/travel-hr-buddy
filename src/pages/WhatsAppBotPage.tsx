@@ -105,9 +105,9 @@ export default function WhatsAppBotPage() {
             <CardContent className="space-y-4">
               {[
                 { label: "Mensagens Hoje", value: sentMessages.filter((m: any) => m.sent_at && new Date(m.sent_at).toDateString() === new Date().toDateString()).length, icon: MessageSquare, color: "text-primary" },
-                { label: "Total Enviadas", value: sentMessages.length, icon: Send, color: "text-green-500" },
-                { label: "Taxa de Entrega", value: sentMessages.length > 0 ? `${Math.round((sentMessages.filter((m: any) => m.status === "sent").length / sentMessages.length) * 100)}%` : "—", icon: CheckCircle2, color: "text-emerald-500" },
-                { label: "Tripulantes Alcançáveis", value: crewMembers.length, icon: Users, color: "text-blue-500" },
+                { label: "Total Enviadas", value: sentMessages.length, icon: Send, color: "text-success" },
+                { label: "Taxa de Entrega", value: sentMessages.length > 0 ? `${Math.round((sentMessages.filter((m: any) => m.status === "sent").length / sentMessages.length) * 100)}%` : "—", icon: CheckCircle2, color: "text-success" },
+                { label: "Tripulantes Alcançáveis", value: crewMembers.length, icon: Users, color: "text-info" },
               ].map((stat) => (
                 <div key={stat.label} className="flex items-center justify-between">
                   <div className="flex items-center gap-2"><stat.icon className={`h-4 w-4 ${stat.color}`} /><span className="text-sm text-muted-foreground">{stat.label}</span></div>

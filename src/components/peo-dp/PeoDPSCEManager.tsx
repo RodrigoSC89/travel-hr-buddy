@@ -24,10 +24,10 @@ interface SCElement {
 }
 
 const categoryConfig: Record<string, { label: string; color: string; icon: React.ElementType }> = {
-  propulsion: { label: "Propulsão", color: "text-blue-400", icon: Activity },
+  propulsion: { label: "Propulsão", color: "text-info", icon: Activity },
   power: { label: "Energia", color: "text-warning", icon: Activity },
   positioning: { label: "Posicionamento", color: "text-primary", icon: Activity },
-  control: { label: "Controle", color: "text-purple-400", icon: Settings },
+  control: { label: "Controle", color: "text-accent-foreground", icon: Settings },
   safety: { label: "Segurança", color: "text-destructive", icon: Shield },
 };
 
