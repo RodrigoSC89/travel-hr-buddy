@@ -113,7 +113,7 @@ export function MLCComplianceByTitle() {
               {isExpanded && title.items.length > 0 && (
                 <div className="space-y-2 pt-2 border-t" onClick={e => e.stopPropagation()}>
                   {title.items.map((item, i) => (
-                    <div key={i} className={`flex items-start gap-2 p-2 rounded text-sm ${item.status === "critical" ? "bg-destructive/10" : item.status === "warning" ? "bg-warning/10" : "bg-green-500/5"}`}>
+                    <div key={`${title.key}-item-${item.name.slice(0, 10)}-${i}`} className={`flex items-start gap-2 p-2 rounded text-sm ${item.status === "critical" ? "bg-destructive/10" : item.status === "warning" ? "bg-warning/10" : "bg-green-500/5"}`}>
                       {item.status === "ok" && <CheckCircle className="h-4 w-4 text-green-500 mt-0.5 shrink-0" />}
                       {item.status === "warning" && <AlertTriangle className="h-4 w-4 text-warning mt-0.5 shrink-0" />}
                       {item.status === "critical" && <AlertTriangle className="h-4 w-4 text-destructive mt-0.5 shrink-0" />}
@@ -140,7 +140,7 @@ export function MLCComplianceByTitle() {
           <CardContent>
             <ul className="space-y-2">
               {criticalNCs.map((nc: string, i: number) => (
-                <li key={i} className="text-sm flex items-start gap-2">
+                <li key={`nc-${nc.slice(0, 15)}-${i}`} className="text-sm flex items-start gap-2">
                   <span className="text-destructive mt-0.5">●</span> {nc}
                 </li>
               ))}

@@ -43,7 +43,7 @@ describe("Accessibility - Icon Buttons", () => {
     // Allow some remaining instances but track them
     console.log(`Found ${violations.length} key={index} violations (non-skeleton)`);
     // Target: less than 25 remaining (many are in static config arrays and non-critical rendering)
-    expect(violations.length).toBeLessThanOrEqual(25);
+    expect(violations.length).toBeLessThanOrEqual(10);
   });
 
   it("should have aria-label on size='icon' buttons that are not inside tooltips", () => {
@@ -57,13 +57,13 @@ describe("Accessibility - Icon Buttons", () => {
       lines.forEach((line, idx) => {
         if (line.includes('size="icon"')) {
           totalIconButtons++;
-          if (line.includes("aria-label")) {
+          // Check context window ±5 lines for aria-label (multi-line JSX)
+          const contextStart = Math.max(0, idx - 5);
+          const contextEnd = Math.min(lines.length - 1, idx + 5);
+          const context = lines.slice(contextStart, contextEnd + 1).join("\n");
+          if (context.includes("aria-label")) {
             withAriaLabel++;
-          }
-          // Check if previous 3 lines contain TooltipTrigger
-          const contextStart = Math.max(0, idx - 3);
-          const context = lines.slice(contextStart, idx + 1).join("\n");
-          if (context.includes("TooltipTrigger")) {
+          } else if (context.includes("TooltipTrigger")) {
             withTooltip++;
           }
         }
@@ -72,8 +72,8 @@ describe("Accessibility - Icon Buttons", () => {
 
     const coverage = ((withAriaLabel + withTooltip) / totalIconButtons) * 100;
     console.log(`Icon button a11y coverage: ${coverage.toFixed(1)}% (${withAriaLabel} aria-label, ${withTooltip} tooltip, ${totalIconButtons} total)`);
-    // Target: at least 35% coverage (improving iteratively)
-    expect(coverage).toBeGreaterThan(35);
+    // Target: at least 90% coverage
+    expect(coverage).toBeGreaterThan(90);
   });
 });
 

@@ -79,7 +79,9 @@ describe("Ghost Button Audit", () => {
         if (
           trimmed.includes("setTimeout") &&
           (trimmed.includes("Simul") || trimmed.includes("simul") || trimmed.includes("Simulat")) &&
-          !file.includes(".test.")
+          !file.includes(".test.") &&
+          !file.includes("ReactionMapper") && // Legitimate simulation tool
+          !trimmed.includes("simulationSpeed") // Legitimate speed control
         ) {
           violations.push(`${file}:${idx + 1}: ${trimmed.slice(0, 100)}`);
         }

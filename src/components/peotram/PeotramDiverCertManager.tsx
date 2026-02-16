@@ -179,7 +179,7 @@ export function PeotramDiverCertManager() {
               <div className="space-y-1.5">
                 <p className="text-xs font-medium text-muted-foreground">Certificações:</p>
                 {diver.certifications.map((cert: { name: string; issuer: string; number: string; expiry: string; status: "valid" | "expiring" | "expired" }, i: number) => (
-                  <div key={i} className={`flex items-center justify-between p-2 rounded border text-xs ${STATUS_COLOR[cert.status] || ""}`}>
+                  <div key={`${diver.id}-cert-${cert.number}-${i}`} className={`flex items-center justify-between p-2 rounded border text-xs ${STATUS_COLOR[cert.status] || ""}`}>
                     <div>
                       <p className="font-medium">{cert.name}</p>
                       <p className="opacity-70">{cert.issuer} • {cert.number}</p>

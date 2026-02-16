@@ -118,7 +118,7 @@ export function MLCPSCSimulator() {
             <CardContent>
               <ul className="space-y-2">
                 {result.deficiencies.map((d: any, i: number) => (
-                  <li key={i} className="text-sm flex items-start gap-2">
+                  <li key={`def-${d.area}-${i}`} className="text-sm flex items-start gap-2">
                     <Badge variant={d.detention_risk === "high" ? "destructive" : "secondary"} className="text-xs shrink-0 mt-0.5">
                       {d.detention_risk === "high" ? "DETENÇÃO" : "ATENÇÃO"}
                     </Badge>
@@ -141,7 +141,7 @@ export function MLCPSCSimulator() {
             <CardContent>
               <ul className="space-y-1">
                 {result.recommendations.map((r: string, i: number) => (
-                  <li key={i} className="text-sm">{r}</li>
+                  <li key={`rec-${r.slice(0, 15)}-${i}`} className="text-sm">{r}</li>
                 ))}
               </ul>
             </CardContent>

@@ -117,9 +117,9 @@ export default function DemoLauncher() {
 
           {/* Dots */}
           <div className="flex justify-center gap-2 mb-6">
-            {TOUR_SLIDES.map((_, i) => (
+            {TOUR_SLIDES.map((slide, i) => (
               <button
-                key={i}
+                key={`slide-dot-${slide.title.slice(0, 10)}-${i}`}
                 onClick={() => { setAutoPlay(false); setCurrentSlide(i); }}
                 className={`h-2 rounded-full transition-all ${i === currentSlide ? 'w-6 bg-primary' : 'w-2 bg-muted-foreground/30'}`}
               />

@@ -194,7 +194,7 @@ Responda em formato JSON válido com a estrutura:
               {previews.length > 0 && (
                 <div className="grid grid-cols-3 gap-2">
                   {previews.map((src, i) => (
-                    <div key={i} className="relative group">
+                    <div key={`preview-${src.slice(-20)}-${i}`} className="relative group">
                       <img src={src} alt={`Foto ${i + 1}`} className="w-full h-20 object-cover rounded-lg" />
                       <button
                         onClick={() => removeFile(i)}
@@ -223,7 +223,7 @@ Responda em formato JSON válido com a estrutura:
               <CardContent>
                 <div className="space-y-2">
                   {history.map((h, i) => (
-                    <div key={i} className="flex items-center justify-between p-2 border rounded-lg text-sm cursor-pointer hover:bg-muted/50" onClick={() => setResult(h)}>
+                    <div key={`hist-${h.overallCondition}-${h.score}-${i}`} className="flex items-center justify-between p-2 border rounded-lg text-sm cursor-pointer hover:bg-muted/50" onClick={() => setResult(h)}>
                       <div>
                         <span className={`font-bold ${conditionColors[h.overallCondition]}`}>{conditionLabels[h.overallCondition]}</span>
                         <span className="text-muted-foreground ml-2">Score: {h.score}</span>

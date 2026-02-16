@@ -119,7 +119,7 @@ export function MLCWorkRestCalculator() {
         <CardContent>
           <div className="grid md:grid-cols-3 gap-2">
             {MLC_RULES.map((r, i) => (
-              <div key={i} className="p-2 rounded bg-muted/50 text-xs flex items-start gap-2">
+              <div key={`mlc-rule-${r.rule.slice(0, 15)}-${i}`} className="p-2 rounded bg-muted/50 text-xs flex items-start gap-2">
                 <Shield className="h-3 w-3 text-primary mt-0.5 shrink-0" /><span>{r.rule}</span>
               </div>
             ))}
