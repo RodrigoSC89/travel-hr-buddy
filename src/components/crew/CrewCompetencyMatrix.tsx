@@ -85,10 +85,10 @@ export function CrewCompetencyMatrix() {
             <p className="text-2xl font-bold mt-1">{totalCerts}</p>
           </CardContent>
         </Card>
-        <Card className={expiringSoon > 0 ? "border-amber-500/30" : ""}>
+        <Card className={expiringSoon > 0 ? "border-warning/30" : ""}>
           <CardContent className="p-4">
-            <div className="flex items-center gap-2 text-amber-400 text-sm"><AlertTriangle className="h-4 w-4" /> Expiring &lt;90d</div>
-            <p className="text-2xl font-bold mt-1 text-amber-400">{expiringSoon}</p>
+            <div className="flex items-center gap-2 text-warning text-sm"><AlertTriangle className="h-4 w-4" /> Expiring &lt;90d</div>
+            <p className="text-2xl font-bold mt-1 text-warning">{expiringSoon}</p>
           </CardContent>
         </Card>
         <Card>
@@ -182,7 +182,7 @@ export function CrewCompetencyMatrix() {
                 {expired > 0 ? (
                   <div className="text-sm space-y-2">
                     <p className="text-destructive font-medium">{expired} expired certificates require immediate retraining</p>
-                    <p className="text-amber-400">{expiringSoon} certificates expiring within 90 days</p>
+                    <p className="text-warning">{expiringSoon} certificates expiring within 90 days</p>
                     <Button size="sm" className="mt-3">Generate Training Plan</Button>
                   </div>
                 ) : (

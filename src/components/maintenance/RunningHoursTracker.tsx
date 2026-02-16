@@ -126,8 +126,8 @@ export function RunningHoursTracker() {
         {[
           { label: 'Equipamentos', value: totalEquipment, icon: Gauge, color: 'text-primary' },
           { label: 'Vencidos', value: overdueCount, icon: AlertTriangle, color: 'text-destructive' },
-          { label: 'Atenção', value: warningCount, icon: Clock, color: 'text-yellow-400' },
-          { label: 'Utilização Média', value: `${avgUtilization.toFixed(0)}%`, icon: Activity, color: 'text-blue-400' },
+          { label: 'Atenção', value: warningCount, icon: Clock, color: 'text-warning' },
+          { label: 'Utilização Média', value: `${avgUtilization.toFixed(0)}%`, icon: Activity, color: 'text-primary' },
         ].map(kpi => (
           <Card key={kpi.label}>
             <CardContent className="p-4 flex items-center gap-3">

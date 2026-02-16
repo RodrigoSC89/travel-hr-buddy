@@ -132,7 +132,7 @@ export function CrewPayrollCalculator() {
                     <td className="py-2 px-2 text-right text-xs">{p.overtime_hours}h</td>
                     <td className="py-2 px-2 text-right font-mono text-xs">${(p.overtime_hours * p.overtime_rate).toFixed(0)}</td>
                     <td className="py-2 px-2 text-right font-mono text-xs">${p.leave_pay.toLocaleString()}</td>
-                    <td className="py-2 px-2 text-right font-mono text-xs text-red-400">-${p.deductions}</td>
+                    <td className="py-2 px-2 text-right font-mono text-xs text-destructive">-${p.deductions}</td>
                     <td className="py-2 px-2 text-right font-mono text-xs">${p.allotment.toLocaleString()}</td>
                     <td className="py-2 px-2 text-right font-mono text-xs font-bold">${p.total_cost.toLocaleString()}</td>
                     <td className="py-2 px-2 text-center"><Badge className={`text-[10px] ${statusColors[p.status]}`}>{p.status}</Badge></td>
