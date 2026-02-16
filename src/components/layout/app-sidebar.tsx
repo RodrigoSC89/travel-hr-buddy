@@ -18,7 +18,7 @@ import {
 } from "lucide-react";
 import { useAuth } from "@/contexts/AuthContext";
 import { useNavigate, useLocation } from "react-router-dom";
-import nautiLogo from "@/assets/nauti-one-logo-hd.png";
+import nautiLogo from "@/assets/nauti-one-logo.png";
 import { usePermissions } from "@/hooks/use-permissions";
 import { useOrganization } from "@/contexts/OrganizationContext";
 import { Badge } from "@/components/ui/badge";
