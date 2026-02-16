@@ -65,18 +65,24 @@ export default function SparePartsInventory() {
           .select('id, title, component_name, priority, status, vessel_id')
           .limit(50);
 
-        return (maintData || []).map((m): SparePart => ({
-          id: m.id,
-          part_number: `SP-${m.id.slice(0, 6).toUpperCase()}`,
-          description: m.component_name || m.title || 'Peça genérica',
-          category: 'Motor',
-          quantity_on_hand: Math.floor(Math.random() * 20) + 1,
-          minimum_stock: 5,
-          unit_cost: Math.floor(Math.random() * 500) + 50,
-          location: 'Paiol Principal',
-          status: 'in_stock',
-          last_used: new Date().toISOString(),
-        }));
+        return (maintData || []).map((m, idx): SparePart => {
+          // Deterministic values based on ID hash
+          const hash = m.id.charCodeAt(0) + m.id.charCodeAt(1) + m.id.charCodeAt(2);
+          const qty = (hash % 18) + 2;
+          const cost = ((hash * 7) % 450) + 50;
+          return {
+            id: m.id,
+            part_number: `SP-${m.id.slice(0, 6).toUpperCase()}`,
+            description: m.component_name || m.title || 'Peça genérica',
+            category: ['Motor', 'Elétrica', 'Hidráulica', 'Convés', 'Segurança'][idx % 5],
+            quantity_on_hand: qty,
+            minimum_stock: 5,
+            unit_cost: cost,
+            location: 'Paiol Principal',
+            status: qty === 0 ? 'out_of_stock' : qty <= 5 ? 'low_stock' : 'in_stock',
+            last_used: new Date().toISOString(),
+          };
+        });
       }
 
       return (data || []).map((item): SparePart => ({

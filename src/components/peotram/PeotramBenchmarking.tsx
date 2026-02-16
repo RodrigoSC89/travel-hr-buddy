@@ -72,8 +72,10 @@ export function PeotramBenchmarking() {
       const rows = vesselList.map((v: any, idx: number) => {
         const baseScore = 90 - idx * 6;
         const elementScores: Record<string, number> = {};
-        Object.keys(INDUSTRY_AVG).forEach(key => {
-          elementScores[key] = Math.min(100, Math.max(50, baseScore + Math.floor(Math.random() * 10 - 5)));
+        Object.keys(INDUSTRY_AVG).forEach((key, ki) => {
+          // Deterministic variation based on vessel index + element index
+          const variation = ((idx * 7 + ki * 3) % 11) - 5;
+          elementScores[key] = Math.min(100, Math.max(50, baseScore + variation));
         });
         return {
           vessel_id: v.id,
