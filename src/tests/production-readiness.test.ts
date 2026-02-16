@@ -32,7 +32,7 @@ describe("Production Readiness", () => {
   it("should not have console.log in production code", () => {
     const violations: string[] = [];
     for (const file of allTsFiles) {
-      if (file.includes("tests/") || file.includes("__tests__/") || file.includes("logger") || file.includes("setup")) continue;
+      if (file.includes("tests/") || file.includes("__tests__/") || file.includes("logger") || file.includes("setup") || file.includes("scripts/")) continue;
       const content = readFileSync(file, "utf-8");
       const lines = content.split("\n");
       lines.forEach((line, idx) => {
@@ -43,7 +43,7 @@ describe("Production Readiness", () => {
       });
     }
     // Allow very few console.log (some are intentional in monitoring)
-    expect(violations.length).toBeLessThan(20);
+    expect(violations.length).toBe(0);
   });
 
   it("should not have TODO/FIXME/HACK markers exceeding threshold", () => {
