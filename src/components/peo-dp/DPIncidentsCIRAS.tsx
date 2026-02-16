@@ -78,7 +78,7 @@ export function DPIncidentsCIRAS() {
 
   const reportCIRAS = useMutation({
     mutationFn: async (id: string) => {
-      const cirasRef = `CIRAS-${new Date().getFullYear()}-${String(Math.floor(Math.random() * 9999)).padStart(4, "0")}`;
+      const cirasRef = `CIRAS-${new Date().getFullYear()}-${String(Date.now()).slice(-4)}`;
       const { error } = await (supabase.from as Function)("peodp_incidents")
         .update({ reported_to_client: true, imca_reference: cirasRef, status: "closed" })
         .eq("id", id);

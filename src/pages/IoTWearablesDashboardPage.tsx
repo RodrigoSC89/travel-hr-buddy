@@ -35,9 +35,20 @@ function generateVitals(count: number): CrewVitals[] {
   const ranks = ["Master", "Chief Officer", "2nd Officer", "Chief Engineer", "2nd Engineer", "Electrician", "Bosun", "AB Seaman", "AB Seaman", "Cook", "Steward", "DPO"];
   const locations = ["Ponte", "Praça de Máquinas", "Convés", "Cabine", "Cozinha", "Sala de Controle DP", "Paiol", "Oficina"];
 
+  // Deterministic seed-based values per crew member
+  const hrSeeds = [72, 68, 78, 85, 74, 65, 88, 70, 76, 62, 69, 92];
+  const fatigueSeeds = [25, 35, 42, 68, 30, 22, 75, 45, 38, 20, 55, 82];
+  const tempSeeds = [36.4, 36.2, 36.7, 37.1, 36.5, 36.3, 36.9, 36.6, 36.5, 36.1, 36.8, 37.2];
+  const o2Seeds = [98, 97, 96, 95, 99, 98, 94, 97, 98, 99, 96, 95];
+  const stepSeeds = [8500, 6200, 9800, 4300, 7100, 5500, 11200, 9500, 8800, 3200, 6800, 5100];
+  const stressSeeds = [20, 30, 35, 55, 25, 18, 65, 40, 32, 15, 48, 70];
+  const sleepSeeds = [7.2, 6.8, 6.1, 5.2, 7.5, 7.8, 4.8, 6.5, 6.9, 8.0, 5.5, 4.5];
+  const locationIdx = [0, 1, 2, 3, 4, 5, 6, 7, 2, 4, 3, 5];
+  const dutyPattern = [true, true, false, true, true, false, true, true, true, false, true, true];
+
   return Array.from({ length: Math.min(count, names.length) }, (_, i) => {
-    const hr = 60 + Math.floor(Math.random() * 45);
-    const fatigue = Math.floor(Math.random() * 100);
+    const hr = hrSeeds[i];
+    const fatigue = fatigueSeeds[i];
     const alert: CrewVitals["alertLevel"] = hr > 95 || fatigue > 80 ? "critical" : hr > 85 || fatigue > 60 ? "warning" : "normal";
 
     return {
@@ -45,16 +56,16 @@ function generateVitals(count: number): CrewVitals[] {
       name: names[i],
       rank: ranks[i],
       heartRate: hr,
-      temperature: 36 + Math.round(Math.random() * 15) / 10,
-      oxygenSat: 94 + Math.floor(Math.random() * 6),
-      steps: Math.floor(Math.random() * 12000),
+      temperature: tempSeeds[i],
+      oxygenSat: o2Seeds[i],
+      steps: stepSeeds[i],
       fatigueScore: fatigue,
-      stressLevel: Math.floor(Math.random() * 100),
-      sleepHours: 4 + Math.round(Math.random() * 40) / 10,
-      location: locations[Math.floor(Math.random() * locations.length)],
-      isOnDuty: Math.random() > 0.35,
+      stressLevel: stressSeeds[i],
+      sleepHours: sleepSeeds[i],
+      location: locations[locationIdx[i]],
+      isOnDuty: dutyPattern[i],
       alertLevel: alert,
-      lastUpdate: new Date(Date.now() - Math.random() * 300000).toISOString(),
+      lastUpdate: new Date(Date.now() - i * 25000).toISOString(),
     };
   });
 }
@@ -62,9 +73,9 @@ function generateVitals(count: number): CrewVitals[] {
 function generateTimeSeries(): { time: string; heartRate: number; fatigue: number; stress: number }[] {
   return Array.from({ length: 24 }, (_, i) => ({
     time: `${String(i).padStart(2, "0")}:00`,
-    heartRate: 65 + Math.floor(Math.random() * 30),
-    fatigue: 20 + Math.floor(Math.random() * 60),
-    stress: 15 + Math.floor(Math.random() * 50),
+    heartRate: Math.round(68 + 12 * Math.sin(i * 0.26)),
+    fatigue: Math.round(30 + 25 * Math.sin(i * 0.28 + 1)),
+    stress: Math.round(25 + 20 * Math.sin(i * 0.3 + 2)),
   }));
 }
 
@@ -78,14 +89,19 @@ export default function IoTWearablesDashboardPage() {
     setCrew(data);
     setSelected(data[0]);
 
-    // Simulate real-time updates
+    // Deterministic micro-oscillations simulating sensor drift
     const interval = setInterval(() => {
-      setCrew(prev => prev.map(c => ({
-        ...c,
-        heartRate: Math.max(55, Math.min(110, c.heartRate + Math.floor(Math.random() * 7) - 3)),
-        fatigueScore: Math.max(0, Math.min(100, c.fatigueScore + Math.floor(Math.random() * 5) - 2)),
-        lastUpdate: new Date().toISOString(),
-      })));
+      setCrew(prev => prev.map((c, idx) => {
+        const tick = Math.floor(Date.now() / 5000);
+        const drift = Math.round(3 * Math.sin(tick * 0.7 + idx));
+        const fatigueDrift = Math.round(2 * Math.sin(tick * 0.5 + idx * 1.3));
+        return {
+          ...c,
+          heartRate: Math.max(55, Math.min(110, c.heartRate + drift)),
+          fatigueScore: Math.max(0, Math.min(100, c.fatigueScore + fatigueDrift)),
+          lastUpdate: new Date().toISOString(),
+        };
+      }));
     }, 5000);
 
     return () => clearInterval(interval);

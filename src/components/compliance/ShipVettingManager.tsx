@@ -193,7 +193,7 @@ export function ShipVettingManager() {
                         <p className="text-2xl font-bold">{rec.overall_score}<span className="text-sm text-muted-foreground">/100</span></p>
                       )}
                       {rec.status === "scheduled" && (
-                        <Button size="sm" variant="outline" onClick={() => completeInspection.mutate({ id: rec.id, score: Math.floor(Math.random() * 15 + 85), findings: Math.floor(Math.random() * 5) })}>
+                        <Button size="sm" variant="outline" onClick={() => completeInspection.mutate({ id: rec.id, score: 92, findings: 2 })}>
                           Complete
                         </Button>
                       )}

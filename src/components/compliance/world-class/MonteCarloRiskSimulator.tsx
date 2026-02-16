@@ -101,18 +101,19 @@ export function MonteCarloRiskSimulator() {
     setIsRunning(true);
     setProgress(0);
 
-    // Simulate progress
+    // Run computation synchronously, no fake delay
     const progressInterval = setInterval(() => {
       setProgress(prev => Math.min(prev + 15, 90));
     }, 100);
 
-    setTimeout(() => {
+    // Use requestAnimationFrame for visual feedback before heavy computation
+    requestAnimationFrame(() => {
       const res = runMonteCarlo(scenarios, iterations);
       clearInterval(progressInterval);
       setProgress(100);
       setResult(res);
-      setTimeout(() => setIsRunning(false), 300);
-    }, 800);
+      requestAnimationFrame(() => setIsRunning(false));
+    });
   }, [scenarios, iterations]);
 
   const fmt = (val: number) => `$${(val / 1000).toFixed(0)}k`;
