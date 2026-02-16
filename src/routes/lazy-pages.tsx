@@ -283,6 +283,12 @@ export const CrewTravelPage = lazy(() => import("@/pages/CrewTravelPage"));
 export const CrewRotationPage = lazy(() => import("@/pages/CrewRotationPage"));
 export const QHSEIncidentPage = lazy(() => import("@/pages/QHSEIncidentPage"));
 export const ClassSurveyPage = lazy(() => import("@/pages/ClassSurveyPage"));
+export const FreightInvoicePage = lazy(() => import("@/pages/FreightInvoicePage"));
+export const VoyageEstimatePage = lazy(() => import("@/pages/VoyageEstimatePage"));
+export const CrewPayrollPage = lazy(() => import("@/pages/CrewPayrollPage"));
+export const BudgetOpexPage = lazy(() => import("@/pages/BudgetOpexPage"));
+export const RegulatoryRadarPage = lazy(() => import("@/pages/RegulatoryRadarPage"));
+export const WarrantyClaimsPage = lazy(() => import("@/pages/WarrantyClaimsPage"));
 
 // ============================================
 // WORLD-CLASS DISRUPTIVE FEATURES
