@@ -268,6 +268,7 @@ export const SIDEBAR_ROUTES: SidebarGroup[] = [
     title: "🏆 Destaques",
     defaultOpen: false,
     items: [
+      { label: "World-Class Dashboard", path: "/world-class", icon: Trophy, emoji: "🏆", badge: "NEW", status: "new" as const },
       { label: "Voice Copilot", path: "/voice-copilot", icon: Mic, emoji: "🎙️", badge: "AI", status: "new" as const },
       { label: "Computer Vision", path: "/computer-vision-inspector", icon: Eye, emoji: "👁️", badge: "CV", status: "new" as const },
       { label: "Crew Marketplace", path: "/crew-marketplace", icon: Users, emoji: "🌍", badge: "GLOBAL", status: "new" as const },

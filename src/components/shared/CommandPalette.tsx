@@ -30,7 +30,7 @@ import {
   Lock, Fuel, Stethoscope, Terminal, Plane,
   Search, Plus, RefreshCw, Download, Package,
   Clock, Mic, ScanLine, GraduationCap, Radio,
-  Gauge, Container, Globe, Sparkles, Calculator
+  Gauge, Container, Globe, Sparkles, Calculator, Trophy
 } from 'lucide-react';
 import type { LucideIcon } from 'lucide-react';
 
@@ -170,6 +170,9 @@ const ALL_MODULES: PaletteItem[] = [
   { id: 'monte-carlo', label: 'Monte Carlo Simulation', aliases: ['risco financeiro', 'simulação', 'probabilidade'], path: '/company-financials', icon: Calculator, group: '🚀 Disruptive' },
   { id: 'evidence-pack', label: 'Smart Evidence Pack', aliases: ['evidências', 'pacote de auditoria', 'PSC documents', 'compliance pack'], path: '/evidence-pack', icon: Package, group: '🚀 Disruptive', badge: 'PSC' },
   { id: 'voyage-optimizer', label: 'Voyage Optimizer AI', aliases: ['otimizador de rotas', 'route optimization', 'waypoints', 'fuel savings'], path: '/voyage-optimizer', icon: Map, group: '🚀 Disruptive', badge: 'AI' },
+
+  // WORLD-CLASS
+  { id: 'world-class', label: 'World-Class Dashboard', aliases: ['world class', 'command center', 'benchmark', 'TCE', 'CII', 'compliance score'], path: '/world-class', icon: Trophy, group: '🏆 World-Class', badge: '#1' },
 
   // SYSTEM
   { id: 'system', label: 'System Hub', aliases: ['configurações', 'settings', 'sistema'], path: '/workbench?section=system', icon: Settings, group: 'System' },
