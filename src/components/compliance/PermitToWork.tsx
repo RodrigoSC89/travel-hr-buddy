@@ -20,30 +20,30 @@ import { useQuery, useMutation, useQueryClient } from "@tanstack/react-query";
 import { toast } from "sonner";
 
 const typeConfig: Record<string, { label: string; icon: any; color: string }> = {
-  hot_work: { label: "Hot Work", icon: Flame, color: "text-orange-400" },
-  confined_space: { label: "Confined Space", icon: Wind, color: "text-blue-400" },
-  working_height: { label: "Working at Height", icon: Eye, color: "text-purple-400" },
-  electrical: { label: "Electrical", icon: Zap, color: "text-yellow-400" },
-  diving: { label: "Diving Ops", icon: Users, color: "text-cyan-400" },
+  hot_work: { label: "Hot Work", icon: Flame, color: "text-warning" },
+  confined_space: { label: "Confined Space", icon: Wind, color: "text-primary" },
+  working_height: { label: "Working at Height", icon: Eye, color: "text-secondary" },
+  electrical: { label: "Electrical", icon: Zap, color: "text-warning" },
+  diving: { label: "Diving Ops", icon: Users, color: "text-info" },
   cold_work: { label: "Cold Work", icon: ShieldAlert, color: "text-muted-foreground" },
-  radiation: { label: "Radiation", icon: AlertTriangle, color: "text-rose-400" },
+  radiation: { label: "Radiation", icon: AlertTriangle, color: "text-destructive" },
 };
 
 const statusConfig: Record<string, { label: string; color: string }> = {
   draft: { label: "Draft", color: "bg-muted text-muted-foreground" },
-  pending: { label: "Pending Approval", color: "bg-amber-500/20 text-amber-400 border-amber-500/30" },
-  approved: { label: "Approved", color: "bg-blue-500/20 text-blue-400 border-blue-500/30" },
-  active: { label: "Active", color: "bg-emerald-500/20 text-emerald-400 border-emerald-500/30" },
+  pending: { label: "Pending Approval", color: "bg-warning/20 text-warning border-warning/30" },
+  approved: { label: "Approved", color: "bg-primary/20 text-primary border-primary/30" },
+  active: { label: "Active", color: "bg-success/20 text-success border-success/30" },
   closed: { label: "Closed", color: "bg-muted text-muted-foreground" },
-  rejected: { label: "Rejected", color: "bg-rose-500/20 text-rose-400 border-rose-500/30" },
-  suspended: { label: "Suspended", color: "bg-orange-500/20 text-orange-400 border-orange-500/30" },
+  rejected: { label: "Rejected", color: "bg-destructive/20 text-destructive border-destructive/30" },
+  suspended: { label: "Suspended", color: "bg-warning/20 text-warning border-warning/30" },
 };
 
 const riskColors: Record<string, string> = {
-  low: "text-emerald-400 border-emerald-500/30",
-  medium: "text-amber-400 border-amber-500/30",
-  high: "text-orange-400 border-orange-500/30",
-  critical: "text-rose-400 border-rose-500/30",
+  low: "text-success border-success/30",
+  medium: "text-warning border-warning/30",
+  high: "text-warning border-warning/30",
+  critical: "text-destructive border-destructive/30",
 };
 
 export function PermitToWork() {
@@ -66,7 +66,7 @@ export function PermitToWork() {
   const createMutation = useMutation({
     mutationFn: async (form: typeof newForm) => {
       const num = `PTW-${new Date().getFullYear()}-${String(permits.length + 1).padStart(3, "0")}`;
-      const defaultChecklist = {
+      const defaultChecklist: Record<string, string[]> = {
         hot_work: ["Fire watch assigned", "Gas free certificate obtained", "Fire extinguishers on site", "Adjacent compartments checked", "Hot work area boundaries defined"],
         confined_space: ["Atmosphere tested (O2, LEL, H2S)", "Rescue team standby", "Communication equipment tested", "Entry/exit procedures briefed", "Ventilation confirmed"],
         working_height: ["Harness inspected", "Fall arrest system rigged", "Weather conditions acceptable", "Tool tethering in place", "Exclusion zone marked"],
@@ -75,16 +75,11 @@ export function PermitToWork() {
         cold_work: ["Area inspected", "Tools appropriate", "PPE confirmed", "Supervision assigned", "Risk assessment complete"],
         radiation: ["Source secured", "Dosimeters issued", "Exclusion zone established", "Radiation survey complete", "Emergency procedures briefed"],
       };
-      const checklist = (defaultChecklist[form.permit_type as keyof typeof defaultChecklist] || []).map(item => ({ item, checked: false }));
+      const checklist = (defaultChecklist[form.permit_type] || []).map(item => ({ item, checked: false }));
       const { error } = await (supabase.from as Function)("permits_to_work").insert({
-        permit_number: num,
-        permit_type: form.permit_type,
-        title: form.title,
-        location: form.location,
-        risk_level: form.risk_level,
-        requested_by_name: form.requested_by_name,
-        status: "pending",
-        checklist,
+        permit_number: num, permit_type: form.permit_type, title: form.title,
+        location: form.location, risk_level: form.risk_level, requested_by_name: form.requested_by_name,
+        status: "pending", checklist,
       });
       if (error) throw error;
     },
@@ -118,7 +113,7 @@ export function PermitToWork() {
       <div className="flex items-center justify-between">
         <div>
           <h1 className="text-2xl font-bold flex items-center gap-2">
-            <ShieldAlert className="h-7 w-7 text-orange-400" />
+            <ShieldAlert className="h-7 w-7 text-warning" />
             Permit to Work (PTW)
           </h1>
           <p className="text-muted-foreground">Digital permit management • ISM/ISPS compliant</p>
@@ -129,7 +124,7 @@ export function PermitToWork() {
           </Button>
           <Dialog open={showNewDialog} onOpenChange={setShowNewDialog}>
             <DialogTrigger asChild>
-              <Button size="sm" className="bg-orange-600 hover:bg-orange-700">
+              <Button size="sm">
                 <Plus className="h-4 w-4 mr-1" /> New Permit
               </Button>
             </DialogTrigger>
@@ -166,28 +161,27 @@ export function PermitToWork() {
         </div>
       </div>
 
-      {/* KPIs */}
       <div className="grid grid-cols-2 md:grid-cols-4 gap-4">
         <Card className="border-border/50 bg-card/80"><CardContent className="p-4 text-center">
           <p className="text-xs text-muted-foreground">Active Permits</p>
-          <p className="text-3xl font-bold text-emerald-400">{activeCount}</p>
+          <p className="text-3xl font-bold text-success">{activeCount}</p>
         </CardContent></Card>
         <Card className="border-border/50 bg-card/80"><CardContent className="p-4 text-center">
           <p className="text-xs text-muted-foreground">Pending Approval</p>
-          <p className="text-3xl font-bold text-amber-400">{pendingCount}</p>
+          <p className="text-3xl font-bold text-warning">{pendingCount}</p>
         </CardContent></Card>
         <Card className="border-border/50 bg-card/80"><CardContent className="p-4 text-center">
           <p className="text-xs text-muted-foreground">Total PTWs</p>
-          <p className="text-3xl font-bold text-cyan-400">{permits.length}</p>
+          <p className="text-3xl font-bold text-info">{permits.length}</p>
         </CardContent></Card>
         <Card className="border-border/50 bg-card/80"><CardContent className="p-4 text-center">
           <p className="text-xs text-muted-foreground">Compliance Rate</p>
-          <p className="text-3xl font-bold text-emerald-400">100%</p>
+          <p className="text-3xl font-bold text-success">100%</p>
         </CardContent></Card>
       </div>
 
       {isLoading ? (
-        <div className="flex items-center justify-center py-12"><Loader2 className="h-8 w-8 animate-spin text-orange-400" /></div>
+        <div className="flex items-center justify-center py-12"><Loader2 className="h-8 w-8 animate-spin text-warning" /></div>
       ) : (
         <Tabs value={tab} onValueChange={setTab}>
           <TabsList className="bg-muted/30">
@@ -224,16 +218,16 @@ export function PermitToWork() {
                           <p className="text-sm text-muted-foreground">{permit.permit_number} • {permit.location}</p>
                           <div className="flex items-center gap-4 mt-1 text-xs text-muted-foreground">
                             <span>By: {permit.requested_by_name || "N/A"}</span>
-                            {permit.approved_by_name && <span className="text-emerald-400">✓ {permit.approved_by_name}</span>}
+                            {permit.approved_by_name && <span className="text-success">✓ {permit.approved_by_name}</span>}
                           </div>
                         </div>
                       </div>
                       <div className="flex gap-1">
                         {permit.status === "pending" && (
-                          <Button size="sm" variant="outline" className="text-emerald-400" onClick={() => updateStatus.mutate({ id: permit.id, status: "approved" })}>Approve</Button>
+                          <Button size="sm" variant="outline" className="text-success" onClick={() => updateStatus.mutate({ id: permit.id, status: "approved" })}>Approve</Button>
                         )}
                         {permit.status === "approved" && (
-                          <Button size="sm" variant="outline" className="text-cyan-400" onClick={() => updateStatus.mutate({ id: permit.id, status: "active" })}>Activate</Button>
+                          <Button size="sm" variant="outline" className="text-info" onClick={() => updateStatus.mutate({ id: permit.id, status: "active" })}>Activate</Button>
                         )}
                         {permit.status === "active" && (
                           <Button size="sm" variant="outline" className="text-muted-foreground" onClick={() => updateStatus.mutate({ id: permit.id, status: "closed" })}>Close</Button>
@@ -243,7 +237,7 @@ export function PermitToWork() {
                     {checklist.length > 0 && (
                       <div className="flex flex-wrap gap-1">
                         {checklist.map((c: any, i: number) => (
-                          <Badge key={i} variant="outline" className={`text-xs ${c.checked ? "text-emerald-400 border-emerald-500/30" : "text-muted-foreground border-border/50"}`}>
+                          <Badge key={i} variant="outline" className={`text-xs ${c.checked ? "text-success border-success/30" : "text-muted-foreground border-border/50"}`}>
                             {c.checked ? <CheckCircle2 className="h-3 w-3 mr-1" /> : <AlertTriangle className="h-3 w-3 mr-1" />}
                             {c.item}
                           </Badge>
