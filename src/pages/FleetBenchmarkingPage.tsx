@@ -55,9 +55,9 @@ const comparisonData = VESSELS.map(v => ({
 }));
 
 const medalColor = (rank: number) => {
-  if (rank === 1) return "text-amber-400";
-  if (rank === 2) return "text-gray-300";
-  if (rank === 3) return "text-amber-700";
+  if (rank === 1) return "text-warning";
+  if (rank === 2) return "text-muted-foreground";
+  if (rank === 3) return "text-warning/70";
   return "text-muted-foreground";
 };
 
@@ -83,7 +83,7 @@ export default function FleetBenchmarkingPage() {
     <div className="space-y-4 py-4">
       <div>
         <h1 className="text-2xl font-bold flex items-center gap-2">
-          <Trophy className="h-6 w-6 text-amber-400" />
+          <Trophy className="h-6 w-6 text-warning" />
           Fleet Benchmarking
           <Badge variant="secondary">World-Class</Badge>
         </h1>
@@ -114,15 +114,15 @@ export default function FleetBenchmarkingPage() {
                     <Ship className="h-4 w-4 text-muted-foreground" />
                     <h3 className="font-medium text-sm truncate">{vessel.name}</h3>
                     <Badge variant="outline" className="text-[10px]">{vessel.type}</Badge>
-                    {vessel.trend === "up" && <TrendingUp className="h-3 w-3 text-emerald-400" />}
-                    {vessel.trend === "down" && <TrendingUp className="h-3 w-3 text-red-400 rotate-180" />}
+                    {vessel.trend === "up" && <TrendingUp className="h-3 w-3 text-success" />}
+                    {vessel.trend === "down" && <TrendingUp className="h-3 w-3 text-destructive rotate-180" />}
                   </div>
                 </div>
                 <div className="flex items-center gap-4">
                   {Object.entries(vessel.kpis).map(([key, val]) => (
                     <div key={key} className="text-center hidden md:block">
                       <p className="text-[10px] text-muted-foreground capitalize">{key === "fuel" ? "Comb." : key === "crew" ? "Trip." : key.substring(0, 4)}</p>
-                      <p className={cn("text-xs font-bold", val >= 90 ? "text-emerald-400" : val >= 75 ? "text-amber-400" : "text-red-400")}>{val}</p>
+                      <p className={cn("text-xs font-bold", val >= 90 ? "text-success" : val >= 75 ? "text-warning" : "text-destructive")}>{val}</p>
                     </div>
                   ))}
                   <div className="w-20 text-center">
@@ -158,7 +158,7 @@ export default function FleetBenchmarkingPage() {
                   <PolarAngleAxis dataKey="kpi" tick={{ fontSize: 11, fill: "hsl(var(--muted-foreground))" }} />
                   <PolarRadiusAxis angle={90} domain={[0, 100]} tick={{ fontSize: 10 }} />
                   <Radar name={selectedVessel.name.replace("MV ", "")} dataKey="value" stroke="hsl(var(--primary))" fill="hsl(var(--primary))" fillOpacity={0.3} />
-                  <Radar name="Média Indústria" dataKey="industry" stroke="#f59e0b" fill="#f59e0b" fillOpacity={0.1} />
+                  <Radar name="Média Indústria" dataKey="industry" stroke="hsl(var(--warning))" fill="hsl(var(--warning))" fillOpacity={0.1} />
                   <Legend />
                 </RadarChart>
               </ResponsiveContainer>
@@ -179,10 +179,10 @@ export default function FleetBenchmarkingPage() {
                   <YAxis type="category" dataKey="name" width={100} stroke="hsl(var(--muted-foreground))" fontSize={11} />
                   <Tooltip contentStyle={{ backgroundColor: "hsl(var(--card))", border: "1px solid hsl(var(--border))" }} />
                   <Legend />
-                  <Bar dataKey="Segurança" fill="#3b82f6" />
-                  <Bar dataKey="Compliance" fill="#22c55e" />
-                  <Bar dataKey="Manutenção" fill="#f59e0b" />
-                  <Bar dataKey="Combustível" fill="#8b5cf6" />
+                  <Bar dataKey="Segurança" fill="hsl(var(--primary))" />
+                  <Bar dataKey="Compliance" fill="hsl(var(--success))" />
+                  <Bar dataKey="Manutenção" fill="hsl(var(--warning))" />
+                  <Bar dataKey="Combustível" fill="hsl(var(--accent))" />
                 </BarChart>
               </ResponsiveContainer>
             </CardContent>
@@ -194,7 +194,7 @@ export default function FleetBenchmarkingPage() {
             <Card className="border-border/50">
               <CardContent className="p-4 space-y-3">
                 <div className="flex items-center gap-2">
-                  <Shield className="h-4 w-4 text-emerald-400" />
+                  <Shield className="h-4 w-4 text-success" />
                   <span className="font-medium text-sm">PSC Detentions</span>
                 </div>
                 <p className="text-3xl font-bold">{selectedVessel.details.psciRate}</p>
@@ -204,7 +204,7 @@ export default function FleetBenchmarkingPage() {
             <Card className="border-border/50">
               <CardContent className="p-4 space-y-3">
                 <div className="flex items-center gap-2">
-                  <Wrench className="h-4 w-4 text-amber-400" />
+                  <Wrench className="h-4 w-4 text-warning" />
                   <span className="font-medium text-sm">MTBF</span>
                 </div>
                 <p className="text-3xl font-bold">{selectedVessel.details.mtbf}h</p>
@@ -214,7 +214,7 @@ export default function FleetBenchmarkingPage() {
             <Card className="border-border/50">
               <CardContent className="p-4 space-y-3">
                 <div className="flex items-center gap-2">
-                  <Fuel className="h-4 w-4 text-purple-400" />
+                  <Fuel className="h-4 w-4 text-accent-foreground" />
                   <span className="font-medium text-sm">Fuel Efficiency</span>
                 </div>
                 <p className="text-3xl font-bold">{selectedVessel.details.fuelEfficiency}%</p>
@@ -224,7 +224,7 @@ export default function FleetBenchmarkingPage() {
             <Card className="border-border/50">
               <CardContent className="p-4 space-y-3">
                 <div className="flex items-center gap-2">
-                  <Users className="h-4 w-4 text-blue-400" />
+                  <Users className="h-4 w-4 text-primary" />
                   <span className="font-medium text-sm">Crew Satisfaction</span>
                 </div>
                 <p className="text-3xl font-bold">{selectedVessel.details.crewSatisfaction}%</p>
@@ -234,7 +234,7 @@ export default function FleetBenchmarkingPage() {
             <Card className="border-border/50">
               <CardContent className="p-4 space-y-3">
                 <div className="flex items-center gap-2">
-                  <BarChart3 className="h-4 w-4 text-red-400" />
+                  <BarChart3 className="h-4 w-4 text-destructive" />
                   <span className="font-medium text-sm">Non-Conformities</span>
                 </div>
                 <p className="text-3xl font-bold">{selectedVessel.details.ncCount}</p>
@@ -244,7 +244,7 @@ export default function FleetBenchmarkingPage() {
             <Card className="border-border/50">
               <CardContent className="p-4 space-y-3">
                 <div className="flex items-center gap-2">
-                  <Star className="h-4 w-4 text-emerald-400" />
+                  <Star className="h-4 w-4 text-success" />
                   <span className="font-medium text-sm">CO₂/NM</span>
                 </div>
                 <p className="text-3xl font-bold">{selectedVessel.details.co2PerNm} <span className="text-sm font-normal">kg</span></p>

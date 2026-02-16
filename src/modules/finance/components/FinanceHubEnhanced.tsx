@@ -86,19 +86,19 @@ const FinanceHubEnhanced: React.FC = () => {
     {
       title: 'Centro Financeiro Completo',
       description: 'Gerencie receitas, despesas, faturas e orçamentos em um só lugar com inteligência artificial integrada.',
-      icon: <DollarSign className="h-6 w-6 text-green-500" />,
+      icon: <DollarSign className="h-6 w-6 text-success" />,
       tip: 'Use o filtro de período para analisar diferentes intervalos de tempo'
     },
     {
       title: 'Aprovações Inteligentes',
       description: 'Fluxo de aprovação de despesas e faturas com priorização automática por urgência.',
-      icon: <CheckCircle className="h-6 w-6 text-blue-500" />,
+      icon: <CheckCircle className="h-6 w-6 text-primary" />,
       tip: 'Aprovações urgentes aparecem destacadas em vermelho'
     },
     {
       title: 'Insights de IA',
       description: 'A IA analisa seus gastos e sugere oportunidades de economia e otimização.',
-      icon: <Brain className="h-6 w-6 text-purple-500" />,
+      icon: <Brain className="h-6 w-6 text-accent-foreground" />,
       tip: 'Clique em qualquer insight para ver detalhes e aplicar a recomendação'
     }
   ];
@@ -144,14 +144,14 @@ const FinanceHubEnhanced: React.FC = () => {
       {/* Header - NO motion to prevent flickering */}
       <div className="flex flex-col md:flex-row md:items-center justify-between gap-4">
         <div className="flex items-center gap-4">
-          <div className="p-3 rounded-2xl bg-gradient-to-br from-green-500/20 to-emerald-500/10 border border-green-500/20">
-            <DollarSign className="h-8 w-8 text-green-500" />
+          <div className="p-3 rounded-2xl bg-gradient-to-br from-success/20 to-success/10 border border-success/20">
+            <DollarSign className="h-8 w-8 text-success" />
           </div>
           <div>
             <h1 className="text-3xl font-bold">Centro Financeiro</h1>
             <p className="text-muted-foreground">Gestão completa de finanças com IA integrada</p>
           </div>
-          <Badge className="bg-green-500/20 text-green-400 border-green-500/30">
+          <Badge className="bg-success/20 text-success border-success/30">
             <Sparkles className="h-3 w-3 mr-1" />
             AI-Powered
           </Badge>
@@ -183,8 +183,8 @@ const FinanceHubEnhanced: React.FC = () => {
           value={2450000}
           change={12.4}
           icon={<TrendingUp className="h-5 w-5" />}
-          iconColor="text-green-500"
-          iconBg="bg-green-500/10"
+          iconColor="text-success"
+          iconBg="bg-success/10"
           format="currency"
           status="success"
           details={[
@@ -199,8 +199,8 @@ const FinanceHubEnhanced: React.FC = () => {
           value={1680000}
           change={-2.3}
           icon={<TrendingDown className="h-5 w-5" />}
-          iconColor="text-red-500"
-          iconBg="bg-red-500/10"
+          iconColor="text-destructive"
+          iconBg="bg-destructive/10"
           format="currency"
           status="success"
           details={[
@@ -225,8 +225,8 @@ const FinanceHubEnhanced: React.FC = () => {
           value={12}
           change={-33}
           icon={<FileText className="h-5 w-5" />}
-          iconColor="text-yellow-500"
-          iconBg="bg-yellow-500/10"
+          iconColor="text-warning"
+          iconBg="bg-warning/10"
           status="warning"
           onDrillDown={() => setActiveTab('approvals')}
           drillDownLabel="Ver pendências"
@@ -295,7 +295,7 @@ const FinanceHubEnhanced: React.FC = () => {
                     </div>
                     <Progress 
                       value={cat.percentage} 
-                      className={`h-2 ${cat.percentage > 95 ? '[&>div]:bg-destructive' : cat.percentage > 85 ? '[&>div]:bg-yellow-500' : ''}`}
+                      className={`h-2 ${cat.percentage > 95 ? '[&>div]:bg-destructive' : cat.percentage > 85 ? '[&>div]:bg-warning' : ''}`}
                     />
                   </div>
                 ))}
@@ -327,10 +327,10 @@ const FinanceHubEnhanced: React.FC = () => {
                         className="flex items-center justify-between p-3 rounded-lg bg-muted/30 hover:bg-muted/50 transition-colors cursor-pointer"
                       >
                         <div className="flex items-center gap-3">
-                          <div className={`p-2 rounded-lg ${tx.type === 'income' ? 'bg-green-500/10' : 'bg-red-500/10'}`}>
+                          <div className={`p-2 rounded-lg ${tx.type === 'income' ? 'bg-success/10' : 'bg-destructive/10'}`}>
                             {tx.type === 'income' ? 
-                              <ArrowUpRight className="h-4 w-4 text-green-500" /> : 
-                              <ArrowDownRight className="h-4 w-4 text-red-500" />
+                              <ArrowUpRight className="h-4 w-4 text-success" /> : 
+                              <ArrowDownRight className="h-4 w-4 text-destructive" />
                             }
                           </div>
                           <div>
@@ -338,7 +338,7 @@ const FinanceHubEnhanced: React.FC = () => {
                             <p className="text-xs text-muted-foreground">{format(tx.date, 'dd/MM/yyyy', { locale: ptBR })}</p>
                           </div>
                         </div>
-                        <span className={`font-semibold ${tx.type === 'income' ? 'text-green-500' : 'text-red-500'}`}>
+                        <span className={`font-semibold ${tx.type === 'income' ? 'text-success' : 'text-destructive'}`}>
                           {tx.type === 'income' ? '+' : ''}R$ {Math.abs(tx.amount).toLocaleString('pt-BR')}
                         </span>
                       </motion.div>
@@ -453,9 +453,9 @@ const FinanceHubEnhanced: React.FC = () => {
             <CardContent>
               <div className="grid grid-cols-1 md:grid-cols-3 gap-4">
                 {[
-                  { category: 'Operacional', total: 2000000, used: 1680000, color: 'bg-blue-500' },
-                  { category: 'Manutenção', total: 500000, used: 420000, color: 'bg-orange-500' },
-                  { category: 'Administrativo', total: 300000, used: 180000, color: 'bg-green-500' },
+                  { category: 'Operacional', total: 2000000, used: 1680000, color: 'bg-primary' },
+                  { category: 'Manutenção', total: 500000, used: 420000, color: 'bg-warning' },
+                  { category: 'Administrativo', total: 300000, used: 180000, color: 'bg-success' },
                 ].map((budget) => (
                   <Card key={budget.category}>
                     <CardContent className="p-4">
@@ -505,10 +505,10 @@ const FinanceHubEnhanced: React.FC = () => {
         </TabsContent>
 
         <TabsContent value="ai" className="space-y-4">
-          <Card className="bg-gradient-to-r from-purple-500/10 to-blue-500/10 border-purple-500/20">
+          <Card className="bg-gradient-to-r from-accent/10 to-primary/10 border-accent/20">
             <CardHeader>
               <CardTitle className="flex items-center gap-2">
-                <Brain className="h-5 w-5 text-purple-500" />
+                <Brain className="h-5 w-5 text-accent-foreground" />
                 Insights de IA
               </CardTitle>
               <CardDescription>Recomendações inteligentes para otimização financeira</CardDescription>
@@ -529,12 +529,12 @@ const FinanceHubEnhanced: React.FC = () => {
                   <div className="flex items-start justify-between">
                     <div className="flex items-start gap-3">
                       <div className={`p-2 rounded-lg ${
-                        insight.type === 'saving' ? 'bg-green-500/10' :
-                        insight.type === 'risk' ? 'bg-red-500/10' : 'bg-blue-500/10'
+                        insight.type === 'saving' ? 'bg-success/10' :
+                        insight.type === 'risk' ? 'bg-destructive/10' : 'bg-primary/10'
                       }`}>
-                        {insight.type === 'saving' ? <PiggyBank className="h-5 w-5 text-green-500" /> :
-                         insight.type === 'risk' ? <AlertTriangle className="h-5 w-5 text-red-500" /> :
-                         <Zap className="h-5 w-5 text-blue-500" />}
+                        {insight.type === 'saving' ? <PiggyBank className="h-5 w-5 text-success" /> :
+                         insight.type === 'risk' ? <AlertTriangle className="h-5 w-5 text-destructive" /> :
+                         <Zap className="h-5 w-5 text-primary" />}
                       </div>
                       <div>
                         <h4 className="font-semibold">{insight.title}</h4>
@@ -544,7 +544,7 @@ const FinanceHubEnhanced: React.FC = () => {
                             <Brain className="h-3 w-3 mr-1" />
                             {insight.confidence}% confiança
                           </Badge>
-                          <Badge className="bg-green-500/20 text-green-400">
+                          <Badge className="bg-success/20 text-success">
                             R$ {insight.value.toLocaleString('pt-BR')} potencial
                           </Badge>
                         </div>

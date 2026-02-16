@@ -95,7 +95,7 @@ const INITIAL_INSPECTIONS: CAPInspection[] = [
 ];
 function getRatingBadge(rating: number) {
   const labels = ["", "Very Good", "Good", "Fair", "Poor", "Very Poor"];
-  const colors = ["", "bg-green-500", "bg-green-400", "bg-yellow-500", "bg-orange-500", "bg-destructive"];
+  const colors = ["", "bg-success", "bg-success/80", "bg-warning", "bg-warning/70", "bg-destructive"];
   return <span className={`px-2 py-0.5 rounded text-white text-xs font-bold ${colors[rating]}`}>{rating} - {labels[rating]}</span>;
 }
 
@@ -139,10 +139,10 @@ export function CAPAssessment() {
       {/* Summary Cards */}
       <div className="grid grid-cols-2 md:grid-cols-5 gap-4">
         <Card><CardContent className="p-4 text-center"><Ship className="h-5 w-5 mx-auto text-primary mb-1" /><div className="mt-1">{getRatingBadge(inspection.overallRating)}</div><p className="text-xs text-muted-foreground mt-1">Overall Rating</p></CardContent></Card>
-        <Card><CardContent className="p-4 text-center"><Anchor className="h-5 w-5 mx-auto text-blue-500 mb-1" />{getRatingBadge(inspection.areas.find(a => a.category === "hull")?.rating || 0)}<p className="text-xs text-muted-foreground mt-1">Hull</p></CardContent></Card>
-        <Card><CardContent className="p-4 text-center"><Wrench className="h-5 w-5 mx-auto text-orange-500 mb-1" />{getRatingBadge(inspection.areas.find(a => a.category === "machinery")?.rating || 0)}<p className="text-xs text-muted-foreground mt-1">Machinery</p></CardContent></Card>
-        <Card><CardContent className="p-4 text-center"><Shield className="h-5 w-5 mx-auto text-green-500 mb-1" />{getRatingBadge(inspection.areas.find(a => a.category === "safety")?.rating || 0)}<p className="text-xs text-muted-foreground mt-1">Safety</p></CardContent></Card>
-        <Card><CardContent className="p-4 text-center"><Camera className="h-5 w-5 mx-auto text-purple-500 mb-1" /><p className="text-2xl font-bold">{inspection.areas.flatMap(a => a.subAreas).reduce((s, sa) => s + sa.photos, 0)}</p><p className="text-xs text-muted-foreground">Photos</p></CardContent></Card>
+        <Card><CardContent className="p-4 text-center"><Anchor className="h-5 w-5 mx-auto text-primary mb-1" />{getRatingBadge(inspection.areas.find(a => a.category === "hull")?.rating || 0)}<p className="text-xs text-muted-foreground mt-1">Hull</p></CardContent></Card>
+        <Card><CardContent className="p-4 text-center"><Wrench className="h-5 w-5 mx-auto text-warning mb-1" />{getRatingBadge(inspection.areas.find(a => a.category === "machinery")?.rating || 0)}<p className="text-xs text-muted-foreground mt-1">Machinery</p></CardContent></Card>
+        <Card><CardContent className="p-4 text-center"><Shield className="h-5 w-5 mx-auto text-success mb-1" />{getRatingBadge(inspection.areas.find(a => a.category === "safety")?.rating || 0)}<p className="text-xs text-muted-foreground mt-1">Safety</p></CardContent></Card>
+        <Card><CardContent className="p-4 text-center"><Camera className="h-5 w-5 mx-auto text-accent-foreground mb-1" /><p className="text-2xl font-bold">{inspection.areas.flatMap(a => a.subAreas).reduce((s, sa) => s + sa.photos, 0)}</p><p className="text-xs text-muted-foreground">Photos</p></CardContent></Card>
       </div>
 
       <Tabs value={activeTab} onValueChange={setActiveTab}>
@@ -228,7 +228,7 @@ export function CAPAssessment() {
             <CardContent className="space-y-3">
               {inspection.recommendations.map((rec, i) => (
                 <div key={`rec-${rec.slice(0, 20)}-${i}`} className="flex items-start gap-3 p-3 rounded-lg bg-muted/50 border">
-                  <AlertTriangle className="h-5 w-5 text-orange-500 mt-0.5 flex-shrink-0" />
+                  <AlertTriangle className="h-5 w-5 text-warning mt-0.5 flex-shrink-0" />
                   <div className="flex-1">
                     <p className="text-sm">{rec}</p>
                     <div className="flex gap-2 mt-2">
