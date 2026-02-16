@@ -282,7 +282,7 @@ export function ISPSModule() {
                   <ResponsiveContainer width="100%" height={200}>
                     <PieChart>
                       <Pie data={complianceData} cx="50%" cy="50%" outerRadius={70} dataKey="value" label={({ name, value }) => `${name}: ${value}`}>
-                        {complianceData.map((_, i) => <Cell key={i} fill={COLORS[i % COLORS.length]} />)}
+                        {complianceData.map((entry, i) => <Cell key={`compliance-cell-${entry.name}-${i}`} fill={COLORS[i % COLORS.length]} />)}
                       </Pie>
                       <Tooltip /><Legend />
                     </PieChart>

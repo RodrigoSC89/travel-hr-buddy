@@ -6,7 +6,7 @@ import { useState } from "react";
 import { Card, CardContent, CardDescription, CardHeader, CardTitle } from "@/components/ui/card";
 import { Button } from "@/components/ui/button";
 import { Badge } from "@/components/ui/badge";
-import { generatePremiumReport, type PremiumReportConfig } from "@/lib/reports/premium-pdf-generator";
+import { generatePremiumReport, type PremiumReportConfig, type KPIData } from "@/lib/reports/premium-pdf-generator";
 import { toast } from "sonner";
 import {
   FileText, Download, Ship, Users, Shield, Leaf,
@@ -33,7 +33,6 @@ const REPORT_TEMPLATES: Array<{
       title: "Fleet Overview Report",
       subtitle: "Relatório Executivo de Frota",
       module: "Fleet Command",
-      /* eslint-disable @typescript-eslint/no-explicit-any -- Report template sections use polymorphic content (kpi-grid | table | text | list) */
       sections: [
         { title: "Resumo Executivo", type: "text", content: "Relatório gerado automaticamente com dados em tempo real da frota marítima. Este documento contém informações confidenciais sobre operações e performance dos navios." },
         { title: "KPIs da Frota", type: "kpi-grid", content: [
@@ -41,7 +40,7 @@ const REPORT_TEMPLATES: Array<{
           { label: "Compliance", value: "97%", status: "good" },
           { label: "Manutenções Pendentes", value: "3", status: "warning" },
           { label: "Certificados OK", value: "156", status: "good" },
-        ] as any },
+        ] as KPIData[] },
         { title: "Status por Embarcação", type: "table", content: {
           headers: ["Embarcação", "Status", "Compliance", "Próx. Manutenção"],
           rows: [
@@ -72,7 +71,7 @@ const REPORT_TEMPLATES: Array<{
           { label: "Certificados Válidos", value: "94%", status: "good" },
           { label: "Vencendo em 90d", value: "12", status: "warning" },
           { label: "Vencidos", value: "2", status: "critical" },
-        ] as any },
+        ] as KPIData[] },
       ],
     },
   },
@@ -122,7 +121,7 @@ const REPORT_TEMPLATES: Array<{
           { label: "CO₂ (ton/mês)", value: "245", status: "warning" },
           { label: "Waste Recycled", value: "78%", status: "good" },
           { label: "MARPOL Score", value: "92%", status: "good" },
-        ] as any },
+        ] as KPIData[] },
         { title: "Ações Recomendadas", type: "list", content: [
           "Otimizar velocidade de cruzeiro para reduzir emissões em 12%",
           "Instalar sistema de tratamento de água de lastro",
@@ -150,7 +149,7 @@ const REPORT_TEMPLATES: Array<{
           { label: "Completadas (mês)", value: "42", status: "good" },
           { label: "Overdue", value: "3", status: "critical" },
           { label: "Uptime", value: "98.2%", status: "good" },
-        ] as any },
+        ] as KPIData[] },
       ],
     },
   },
@@ -172,7 +171,7 @@ const REPORT_TEMPLATES: Array<{
           { label: "Crew Readiness", value: "94%", status: "good" },
           { label: "OPEX (mês)", value: "$1.2M", status: "good" },
           { label: "Risk Score", value: "Low", status: "good" },
-        ] as any },
+        ] as KPIData[] },
         { title: "Alertas Críticos", type: "list", content: [
           "2 certificados STCW vencem nos próximos 30 dias",
           "Manutenção preventiva do motor principal agendada para 28/02",

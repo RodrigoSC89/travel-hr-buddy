@@ -136,6 +136,7 @@ export const MLCRecruitmentCompliance: React.FC = () => {
       placements: 0,
       complaints: 0,
       certifications: ['MLC 2006'],
+    // eslint-disable-next-line @typescript-eslint/no-explicit-any -- mlc_recruitment_agencies columns not fully in generated types
     } as any);
   };
 

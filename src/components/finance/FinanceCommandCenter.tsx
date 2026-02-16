@@ -244,6 +244,7 @@ export function FinanceCommandCenter() {
 
   const updateInvoiceStatusMutation = useMutation({
     mutationFn: async ({ id, status }: { id: string; status: string }) => {
+      // eslint-disable-next-line @typescript-eslint/no-explicit-any -- invoice status is dynamic string from DB enum
       const { error } = await supabase.from("invoices").update({ status: status as any }).eq("id", id);
       if (error) throw error;
     },

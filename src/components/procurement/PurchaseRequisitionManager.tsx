@@ -321,7 +321,7 @@ export default function PurchaseRequisitionManager() {
                   <thead><tr className="bg-muted/30"><th className="p-2 text-left">Item</th><th className="p-2 text-center">Qtd</th><th className="p-2 text-right">Custo Unit.</th><th className="p-2 text-right">Total</th></tr></thead>
                   <tbody>
                     {selectedReq.items.map((item, i) => (
-                      <tr key={i} className="border-t"><td className="p-2">{item.name}</td><td className="p-2 text-center">{item.qty} {item.unit}</td><td className="p-2 text-right">${item.unit_cost}</td><td className="p-2 text-right font-medium">${(item.qty * item.unit_cost).toLocaleString()}</td></tr>
+                      <tr key={`req-item-${item.name}-${i}`} className="border-t"><td className="p-2">{item.name}</td><td className="p-2 text-center">{item.qty} {item.unit}</td><td className="p-2 text-right">${item.unit_cost}</td><td className="p-2 text-right font-medium">${(item.qty * item.unit_cost).toLocaleString()}</td></tr>
                     ))}
                     <tr className="border-t bg-muted/20"><td colSpan={3} className="p-2 text-right font-bold">Total Estimado</td><td className="p-2 text-right font-bold">${selectedReq.estimated_total.toLocaleString()}</td></tr>
                   </tbody>
