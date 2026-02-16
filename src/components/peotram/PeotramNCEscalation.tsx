@@ -28,9 +28,9 @@ interface NCItem {
 
 const CLASSIFICATIONS = {
   A: { label: "NC Maior — Sistema", color: "bg-destructive/10 text-destructive border-destructive/30", sla: 30, desc: "Falha sistêmica que compromete a eficácia do programa" },
-  B: { label: "NC Menor — Processo", color: "bg-orange-500/10 text-orange-400 border-orange-500/30", sla: 60, desc: "Desvio pontual que não compromete o sistema" },
-  C: { label: "Observação", color: "bg-warning/10 text-warning border-warning/30", sla: 90, desc: "Oportunidade de melhoria identificada" },
-  D: { label: "Recomendação", color: "bg-blue-500/10 text-blue-400 border-blue-500/30", sla: 120, desc: "Sugestão de melhoria ou boa prática" },
+  B: { label: "NC Menor — Processo", color: "bg-warning/10 text-warning border-warning/30", sla: 60, desc: "Desvio pontual que não compromete o sistema" },
+  C: { label: "Observação", color: "bg-info/10 text-info border-info/30", sla: 90, desc: "Oportunidade de melhoria identificada" },
+  D: { label: "Recomendação", color: "bg-primary/10 text-primary border-primary/30", sla: 120, desc: "Sugestão de melhoria ou boa prática" },
 };
 
 const STATUS_FLOW = [
@@ -135,8 +135,8 @@ export const PeotramNCEscalation: React.FC = () => {
           <p className="text-2xl font-bold text-destructive">{overdueCount}</p>
         </CardContent></Card>
         <Card><CardContent className="pt-5">
-          <div className="flex items-center gap-2 mb-1"><TrendingUp className="h-4 w-4 text-orange-400" /><p className="text-xs text-muted-foreground">Escalonadas</p></div>
-          <p className="text-2xl font-bold text-orange-400">{escalatedCount}</p>
+          <div className="flex items-center gap-2 mb-1"><TrendingUp className="h-4 w-4 text-accent-foreground" /><p className="text-xs text-muted-foreground">Escalonadas</p></div>
+          <p className="text-2xl font-bold text-accent-foreground">{escalatedCount}</p>
         </CardContent></Card>
         <Card><CardContent className="pt-5">
           <div className="flex items-center gap-2 mb-1"><CheckCircle className="h-4 w-4 text-success" /><p className="text-xs text-muted-foreground">Taxa Encerr.</p></div>

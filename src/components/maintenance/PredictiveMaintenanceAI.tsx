@@ -143,7 +143,7 @@ export function PredictiveMaintenanceAI() {
           <div>
             <h2 className="text-xl font-bold flex items-center gap-2">
               Manutenção Preditiva IA
-              <Badge className="bg-gradient-to-r from-orange-500 to-red-500">
+              <Badge className="bg-gradient-to-r from-warning to-destructive">
                 <Sparkles className="h-3 w-3 mr-1" />
                 Revolucionário
               </Badge>
@@ -201,7 +201,7 @@ export function PredictiveMaintenanceAI() {
         <Card>
           <CardContent className="pt-4">
             <div className="flex items-center gap-2">
-              <Clock className="h-5 w-5 text-purple-500" />
+              <Clock className="h-5 w-5 text-accent-foreground" />
               <div>
                 <p className="text-2xl font-bold">
                   {lastAnalysis ? lastAnalysis.toLocaleTimeString("pt-BR", { hour: "2-digit", minute: "2-digit" }) : "--:--"}

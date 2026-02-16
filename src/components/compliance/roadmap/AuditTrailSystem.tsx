@@ -299,19 +299,19 @@ export const AuditTrailSystem = () => {
                 <p className="text-sm text-muted-foreground">Falhas</p>
                 <p className="text-2xl font-bold">{stats.failure}</p>
               </div>
-              <XCircle className="h-8 w-8 text-red-500" />
+              <XCircle className="h-8 w-8 text-destructive" />
             </div>
           </CardContent>
         </Card>
 
-        <Card className="bg-gradient-to-br from-blue-500/10 to-blue-600/5 border-blue-500/20">
+        <Card className="bg-gradient-to-br from-info/10 to-info/5 border-info/20">
           <CardContent className="pt-4">
             <div className="flex items-center justify-between">
               <div>
                 <p className="text-sm text-muted-foreground">Hoje</p>
                 <p className="text-2xl font-bold">{stats.today}</p>
               </div>
-              <Calendar className="h-8 w-8 text-blue-500" />
+              <Calendar className="h-8 w-8 text-info" />
             </div>
           </CardContent>
         </Card>
