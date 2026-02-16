@@ -64,7 +64,7 @@ export function AuditAgentsHub() {
           <div className="p-3 bg-gradient-to-br from-primary/20 to-primary/5 rounded-xl"><Brain className="h-8 w-8 text-primary" /></div>
           <div><h1 className="text-2xl font-bold">Central de Agentes de Auditoria</h1><p className="text-muted-foreground">10 agentes especializados em compliance marítimo</p></div>
         </div>
-        <Badge variant="outline" className="gap-1"><Activity className="h-3 w-3 text-green-500" />{AUDIT_AGENTS.filter(a => a.status === "active").length} ativos</Badge>
+        <Badge variant="outline" className="gap-1"><Activity className="h-3 w-3 text-success" />{AUDIT_AGENTS.filter(a => a.status === "active").length} ativos</Badge>
       </div>
 
       <div className="relative"><Search className="absolute left-3 top-1/2 -translate-y-1/2 h-4 w-4 text-muted-foreground" /><Input placeholder="Buscar agente por nome, descrição ou norma..." value={searchTerm} onChange={(e) => setSearchTerm(e.target.value)} className="pl-10" /></div>
@@ -101,11 +101,11 @@ export function AuditAgentsHub() {
       </div>
 
       <div className="grid grid-cols-2 md:grid-cols-5 gap-4">
-        <Card><CardContent className="pt-6"><div className="flex items-center gap-3"><CheckCircle2 className="h-8 w-8 text-green-500" /><div><p className="text-2xl font-bold">98.5%</p><p className="text-xs text-muted-foreground">Taxa de Conformidade</p></div></div></CardContent></Card>
-        <Card><CardContent className="pt-6"><div className="flex items-center gap-3"><FileCheck className="h-8 w-8 text-blue-500" /><div><p className="text-2xl font-bold">1,234</p><p className="text-xs text-muted-foreground">Auditorias</p></div></div></CardContent></Card>
-        <Card><CardContent className="pt-6"><div className="flex items-center gap-3"><AlertTriangle className="h-8 w-8 text-amber-500" /><div><p className="text-2xl font-bold">12</p><p className="text-xs text-muted-foreground">NCs Abertas</p></div></div></CardContent></Card>
-        <Card><CardContent className="pt-6"><div className="flex items-center gap-3"><Brain className="h-8 w-8 text-purple-500" /><div><p className="text-2xl font-bold">10</p><p className="text-xs text-muted-foreground">Agentes Ativos</p></div></div></CardContent></Card>
-        <Card><CardContent className="pt-6"><div className="flex items-center gap-3"><Clock className="h-8 w-8 text-cyan-500" /><div><p className="text-2xl font-bold">24/7</p><p className="text-xs text-muted-foreground">Disponibilidade</p></div></div></CardContent></Card>
+        <Card><CardContent className="pt-6"><div className="flex items-center gap-3"><CheckCircle2 className="h-8 w-8 text-success" /><div><p className="text-2xl font-bold">98.5%</p><p className="text-xs text-muted-foreground">Taxa de Conformidade</p></div></div></CardContent></Card>
+        <Card><CardContent className="pt-6"><div className="flex items-center gap-3"><FileCheck className="h-8 w-8 text-primary" /><div><p className="text-2xl font-bold">1,234</p><p className="text-xs text-muted-foreground">Auditorias</p></div></div></CardContent></Card>
+        <Card><CardContent className="pt-6"><div className="flex items-center gap-3"><AlertTriangle className="h-8 w-8 text-warning" /><div><p className="text-2xl font-bold">12</p><p className="text-xs text-muted-foreground">NCs Abertas</p></div></div></CardContent></Card>
+        <Card><CardContent className="pt-6"><div className="flex items-center gap-3"><Brain className="h-8 w-8 text-accent-foreground" /><div><p className="text-2xl font-bold">10</p><p className="text-xs text-muted-foreground">Agentes Ativos</p></div></div></CardContent></Card>
+        <Card><CardContent className="pt-6"><div className="flex items-center gap-3"><Clock className="h-8 w-8 text-info" /><div><p className="text-2xl font-bold">24/7</p><p className="text-xs text-muted-foreground">Disponibilidade</p></div></div></CardContent></Card>
       </div>
     </div>
   );

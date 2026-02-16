@@ -80,7 +80,7 @@ const CargoPlanningPage = () => {
         </div>
         <div className="flex items-center gap-3">
           <Badge variant="outline" className="gap-2 py-1.5">
-            <Brain className="h-4 w-4 text-green-500" />
+            <Brain className="h-4 w-4 text-success" />
             IA Ativa
           </Badge>
           <Button onClick={() => setCalculating(true)} disabled={calculating}>
@@ -104,7 +104,7 @@ const CargoPlanningPage = () => {
             </div>
             <div>
               <p className="text-sm text-muted-foreground">Disponível</p>
-              <p className="text-xl font-bold text-green-500">{vesselStats.remainingCapacity.toLocaleString()} t</p>
+              <p className="text-xl font-bold text-success">{vesselStats.remainingCapacity.toLocaleString()} t</p>
             </div>
             <div>
               <p className="text-sm text-muted-foreground">Draft Atual</p>
@@ -124,7 +124,7 @@ const CargoPlanningPage = () => {
             </div>
             <div>
               <p className="text-sm text-muted-foreground">Status</p>
-              <Badge className="bg-green-500 mt-1">
+              <Badge className="bg-success mt-1">
                 <CheckCircle className="h-3 w-3 mr-1" />
                 Estável
               </Badge>
@@ -151,8 +151,8 @@ const CargoPlanningPage = () => {
                 >
                   <div 
                     className={`absolute bottom-0 w-full transition-all ${
-                      hold.status === "loaded" ? "bg-green-500" :
-                      hold.status === "loading" ? "bg-yellow-500 animate-pulse" :
+                      hold.status === "loaded" ? "bg-success" :
+                      hold.status === "loading" ? "bg-warning animate-pulse" :
                       "bg-muted"
                     }`}
                     style={{ height: `${(hold.loaded / hold.capacity) * 100}%` }}
@@ -210,10 +210,10 @@ const CargoPlanningPage = () => {
                           </div>
                           <div>
                             <span className="text-muted-foreground">Recomendado: </span>
-                            <span className="text-green-500 font-medium">{opt.recommended}</span>
+                            <span className="text-success font-medium">{opt.recommended}</span>
                           </div>
                         </div>
-                        <p className="text-sm text-green-600">Benefício: {opt.benefit}</p>
+                        <p className="text-sm text-success">Benefício: {opt.benefit}</p>
                       </div>
                       <div className="text-right">
                         <Badge variant="outline">{opt.confidence}% confiança</Badge>
@@ -239,26 +239,26 @@ const CargoPlanningPage = () => {
             </CardHeader>
             <CardContent>
               <div className="grid grid-cols-1 md:grid-cols-3 gap-4">
-                <div className="p-4 bg-green-500/10 rounded-lg text-center">
+                <div className="p-4 bg-success/10 rounded-lg text-center">
                   <p className="text-sm text-muted-foreground">GM (Altura Metacêntrica)</p>
-                  <p className="text-3xl font-bold text-green-500">{vesselStats.gm}m</p>
+                  <p className="text-3xl font-bold text-success">{vesselStats.gm}m</p>
                   <p className="text-xs text-muted-foreground">Mínimo: 0.15m</p>
                 </div>
-                <div className="p-4 bg-blue-500/10 rounded-lg text-center">
+                <div className="p-4 bg-primary/10 rounded-lg text-center">
                   <p className="text-sm text-muted-foreground">GZ Máximo</p>
-                  <p className="text-3xl font-bold text-blue-500">1.8m @ 35°</p>
+                  <p className="text-3xl font-bold text-primary">1.8m @ 35°</p>
                   <p className="text-xs text-muted-foreground">Critério IMO: OK</p>
                 </div>
-                <div className="p-4 bg-purple-500/10 rounded-lg text-center">
+                <div className="p-4 bg-accent/10 rounded-lg text-center">
                   <p className="text-sm text-muted-foreground">Ângulo de Alagamento</p>
-                  <p className="text-3xl font-bold text-purple-500">42°</p>
+                  <p className="text-3xl font-bold text-accent-foreground">42°</p>
                   <p className="text-xs text-muted-foreground">Mínimo: 25°</p>
                 </div>
               </div>
               
               <div className="mt-6 p-4 bg-muted/50 rounded-lg">
                 <div className="flex items-center gap-2 mb-2">
-                  <CheckCircle className="h-5 w-5 text-green-500" />
+                  <CheckCircle className="h-5 w-5 text-success" />
                   <span className="font-medium">Todos os critérios de estabilidade atendidos</span>
                 </div>
                 <p className="text-sm text-muted-foreground">

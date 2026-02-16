@@ -126,11 +126,11 @@ export default function AIObservabilityDashboard() {
     switch (status) {
       case "approved":
       case "executed":
-        return <Badge className="bg-green-500/20 text-green-400 border-green-500/30">Aprovado</Badge>;
+        return <Badge className="bg-success/20 text-success border-success/30">Aprovado</Badge>;
       case "pending":
-        return <Badge className="bg-yellow-500/20 text-yellow-400 border-yellow-500/30">Pendente</Badge>;
+        return <Badge className="bg-warning/20 text-warning border-warning/30">Pendente</Badge>;
       case "rejected":
-        return <Badge className="bg-red-500/20 text-red-400 border-red-500/30">Rejeitado</Badge>;
+        return <Badge className="bg-destructive/20 text-destructive border-destructive/30">Rejeitado</Badge>;
       default:
         return <Badge variant="outline">{status}</Badge>;
     }
@@ -139,11 +139,11 @@ export default function AIObservabilityDashboard() {
   const getImpactBadge = (impact: string) => {
     switch (impact) {
       case "high":
-        return <Badge className="bg-red-500/20 text-red-400">Alto</Badge>;
+        return <Badge className="bg-destructive/20 text-destructive">Alto</Badge>;
       case "medium":
-        return <Badge className="bg-yellow-500/20 text-yellow-400">Médio</Badge>;
+        return <Badge className="bg-warning/20 text-warning">Médio</Badge>;
       case "low":
-        return <Badge className="bg-green-500/20 text-green-400">Baixo</Badge>;
+        return <Badge className="bg-success/20 text-success">Baixo</Badge>;
       default:
         return <Badge variant="outline">{impact}</Badge>;
     }
@@ -197,7 +197,7 @@ export default function AIObservabilityDashboard() {
                 <CardTitle className="text-sm font-medium text-muted-foreground">
                   Taxa de Aprovação
                 </CardTitle>
-                <CheckCircle2 className="w-4 h-4 text-green-500" />
+                <CheckCircle2 className="w-4 h-4 text-success" />
               </CardHeader>
               <CardContent>
                 <div className="text-2xl font-bold text-foreground">
@@ -219,7 +219,7 @@ export default function AIObservabilityDashboard() {
                 <CardTitle className="text-sm font-medium text-muted-foreground">
                   Confiança Média
                 </CardTitle>
-                <TrendingUp className="w-4 h-4 text-blue-500" />
+                <TrendingUp className="w-4 h-4 text-primary" />
               </CardHeader>
               <CardContent>
                 <div className="text-2xl font-bold text-foreground">
@@ -234,7 +234,7 @@ export default function AIObservabilityDashboard() {
                 <CardTitle className="text-sm font-medium text-muted-foreground">
                   Tokens Utilizados
                 </CardTitle>
-                <Zap className="w-4 h-4 text-yellow-500" />
+                <Zap className="w-4 h-4 text-warning" />
               </CardHeader>
               <CardContent>
                 <div className="text-2xl font-bold text-foreground">
@@ -320,9 +320,9 @@ export default function AIObservabilityDashboard() {
                               {decision.feedback_was_correct !== null && (
                                 <span className="flex items-center gap-1">
                                   {decision.feedback_was_correct ? (
-                                    <CheckCircle2 className="w-3 h-3 text-green-500" />
+                                    <CheckCircle2 className="w-3 h-3 text-success" />
                                   ) : (
-                                    <XCircle className="w-3 h-3 text-red-500" />
+                                    <XCircle className="w-3 h-3 text-destructive" />
                                   )}
                                   Feedback
                                 </span>

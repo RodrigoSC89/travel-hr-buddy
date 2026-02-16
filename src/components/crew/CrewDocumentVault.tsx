@@ -90,11 +90,11 @@ export function CrewDocumentVault() {
       {/* KPIs */}
       <div className="grid grid-cols-2 md:grid-cols-5 gap-4">
         {[
-          { icon: FileText, label: "Total Documents", value: totalCerts, color: "text-blue-400" },
-          { icon: CheckCircle, label: "Valid", value: valid.length, color: "text-green-400" },
-          { icon: Clock, label: "Expiring ≤30d", value: expiringIn30.length, color: "text-orange-400" },
-          { icon: AlertTriangle, label: "Expiring ≤90d", value: expiringIn90.length, color: "text-yellow-400" },
-          { icon: XCircle, label: "Expired", value: expired.length, color: "text-red-400" },
+          { icon: FileText, label: "Total Documents", value: totalCerts, color: "text-primary" },
+          { icon: CheckCircle, label: "Valid", value: valid.length, color: "text-success" },
+          { icon: Clock, label: "Expiring ≤30d", value: expiringIn30.length, color: "text-warning" },
+          { icon: AlertTriangle, label: "Expiring ≤90d", value: expiringIn90.length, color: "text-warning" },
+          { icon: XCircle, label: "Expired", value: expired.length, color: "text-destructive" },
         ].map((kpi, i) => (
           <Card key={i} className="border-border/50 bg-card/80 backdrop-blur">
             <CardContent className="pt-4 text-center">
@@ -110,7 +110,7 @@ export function CrewDocumentVault() {
       <Card className="border-border/50 bg-card/80 backdrop-blur">
         <CardContent className="py-3">
           <div className="flex items-center gap-4">
-            <Shield className="h-5 w-5 text-cyan-400" />
+            <Shield className="h-5 w-5 text-info" />
             <div className="flex-1">
               <div className="flex justify-between text-sm mb-1">
                 <span>Document Compliance Rate</span>
@@ -156,9 +156,9 @@ export function CrewDocumentVault() {
                       <div className="flex items-center gap-2">
                         <Badge variant="outline" className="text-xs">{crewCerts.length} docs</Badge>
                         {crewExpired > 0 && (
-                          <Badge className="bg-red-500/20 text-red-400 text-xs">{crewExpired} expired</Badge>
+                          <Badge className="bg-destructive/20 text-destructive text-xs">{crewExpired} expired</Badge>
                         )}
-                        <Badge className={crew.status === "active" ? "bg-green-500/20 text-green-400" : "bg-gray-500/20 text-gray-400"}>
+                        <Badge className={crew.status === "active" ? "bg-success/20 text-success" : "bg-muted text-muted-foreground"}>
                           {crew.status}
                         </Badge>
                       </div>
@@ -178,12 +178,12 @@ export function CrewDocumentVault() {
               <Card key={cert.id} className="border-border/50 bg-card/80 backdrop-blur">
                 <CardContent className="py-3">
                   <div className="flex items-center gap-4">
-                    <Clock className={`h-5 w-5 ${daysLeft <= 30 ? "text-orange-400" : "text-yellow-400"}`} />
+                    <Clock className={`h-5 w-5 ${daysLeft <= 30 ? "text-warning" : "text-warning/70"}`} />
                     <div className="flex-1">
                       <p className="text-sm font-medium">{cert.certification_name}</p>
                       <p className="text-xs text-muted-foreground">{crew?.full_name || "Unknown"} • {cert.certification_type}</p>
                     </div>
-                    <Badge className={daysLeft <= 30 ? "bg-orange-500/20 text-orange-400" : "bg-yellow-500/20 text-yellow-400"}>
+                    <Badge className={daysLeft <= 30 ? "bg-warning/20 text-warning" : "bg-warning/10 text-warning/80"}>
                       {daysLeft} days left
                     </Badge>
                   </div>
