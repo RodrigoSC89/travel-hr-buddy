@@ -84,13 +84,13 @@ const VESSELS: VesselKPI[] = [
 ];
 
 function getScoreColor(value: number, thresholds: [number, number] = [80, 90]) {
-  if (value >= thresholds[1]) return "text-green-500";
-  if (value >= thresholds[0]) return "text-orange-500";
+  if (value >= thresholds[1]) return "text-success";
+  if (value >= thresholds[0]) return "text-warning";
   return "text-destructive";
 }
 
 function getCIIColor(rating: string) {
-  const colors: Record<string, string> = { A: "bg-green-500", B: "bg-green-400", C: "bg-yellow-500", D: "bg-orange-500", E: "bg-destructive" };
+  const colors: Record<string, string> = { A: "bg-success", B: "bg-success/80", C: "bg-warning", D: "bg-warning/80", E: "bg-destructive" };
   return colors[rating] || "bg-muted";
 }
 
@@ -131,9 +131,9 @@ export function VesselKPIDashboard() {
       {/* Fleet Summary */}
       <div className="grid grid-cols-2 md:grid-cols-4 gap-4">
         <Card><CardContent className="p-4 text-center"><Activity className="h-5 w-5 mx-auto text-primary mb-1" /><p className="text-2xl font-bold">{fleetAvg.utilization}%</p><p className="text-xs text-muted-foreground">Fleet Utilization</p></CardContent></Card>
-        <Card><CardContent className="p-4 text-center"><DollarSign className="h-5 w-5 mx-auto text-green-500 mb-1" /><p className="text-2xl font-bold">${fleetAvg.opex.toLocaleString()}</p><p className="text-xs text-muted-foreground">Avg OPEX/Day</p></CardContent></Card>
-        <Card><CardContent className="p-4 text-center"><Shield className="h-5 w-5 mx-auto text-blue-500 mb-1" /><p className="text-2xl font-bold">{fleetAvg.compliance}%</p><p className="text-xs text-muted-foreground">Compliance Score</p></CardContent></Card>
-        <Card><CardContent className="p-4 text-center"><TrendingUp className="h-5 w-5 mx-auto text-purple-500 mb-1" /><p className="text-2xl font-bold">${fleetAvg.tce.toLocaleString()}</p><p className="text-xs text-muted-foreground">Avg TCE/Day</p></CardContent></Card>
+        <Card><CardContent className="p-4 text-center"><DollarSign className="h-5 w-5 mx-auto text-success mb-1" /><p className="text-2xl font-bold">${fleetAvg.opex.toLocaleString()}</p><p className="text-xs text-muted-foreground">Avg OPEX/Day</p></CardContent></Card>
+        <Card><CardContent className="p-4 text-center"><Shield className="h-5 w-5 mx-auto text-info mb-1" /><p className="text-2xl font-bold">{fleetAvg.compliance}%</p><p className="text-xs text-muted-foreground">Compliance Score</p></CardContent></Card>
+        <Card><CardContent className="p-4 text-center"><TrendingUp className="h-5 w-5 mx-auto text-accent-foreground mb-1" /><p className="text-2xl font-bold">${fleetAvg.tce.toLocaleString()}</p><p className="text-xs text-muted-foreground">Avg TCE/Day</p></CardContent></Card>
       </div>
 
       <Tabs value={activeTab} onValueChange={setActiveTab}>
@@ -152,7 +152,7 @@ export function VesselKPIDashboard() {
                   <CardTitle className="text-base flex items-center gap-2">
                     {v.flag} {v.vessel}
                     <Badge variant="outline">{v.vesselType}</Badge>
-                    {v.trend === "improving" && <TrendingUp className="h-4 w-4 text-green-500" />}
+                    {v.trend === "improving" && <TrendingUp className="h-4 w-4 text-success" />}
                     {v.trend === "declining" && <TrendingDown className="h-4 w-4 text-destructive" />}
                   </CardTitle>
                   <div className={`w-8 h-8 rounded-full ${getCIIColor(v.kpis.ciiRating)} text-white flex items-center justify-center font-bold text-sm`}>
@@ -200,18 +200,18 @@ export function VesselKPIDashboard() {
                 const margin = v.kpis.revenuePerDay - v.kpis.opexPerDay;
                 return (
                   <div key={v.vessel} className="space-y-2">
-                    <div className="flex justify-between"><span className="font-medium">{v.flag} {v.vessel}</span><span className="font-bold text-green-500">Margin: ${margin.toLocaleString()}/day</span></div>
+                    <div className="flex justify-between"><span className="font-medium">{v.flag} {v.vessel}</span><span className="font-bold text-success">Margin: ${margin.toLocaleString()}/day</span></div>
                     <div className="flex gap-2 items-center">
                       <span className="text-xs w-16 text-right">Revenue</span>
                       <div className="flex-1 bg-muted rounded-full h-4 relative overflow-hidden">
-                        <div className="bg-green-500 h-full rounded-full" style={{ width: `${(v.kpis.revenuePerDay / 25000) * 100}%` }} />
+                        <div className="bg-success h-full rounded-full" style={{ width: `${(v.kpis.revenuePerDay / 25000) * 100}%` }} />
                       </div>
                       <span className="text-xs w-20">${v.kpis.revenuePerDay.toLocaleString()}</span>
                     </div>
                     <div className="flex gap-2 items-center">
                       <span className="text-xs w-16 text-right">OPEX</span>
                       <div className="flex-1 bg-muted rounded-full h-4 relative overflow-hidden">
-                        <div className="bg-orange-500 h-full rounded-full" style={{ width: `${(v.kpis.opexPerDay / 25000) * 100}%` }} />
+                        <div className="bg-warning h-full rounded-full" style={{ width: `${(v.kpis.opexPerDay / 25000) * 100}%` }} />
                       </div>
                       <span className="text-xs w-20">${v.kpis.opexPerDay.toLocaleString()}</span>
                     </div>
@@ -260,7 +260,7 @@ export function VesselKPIDashboard() {
                   </div>
                   <div className="grid grid-cols-4 gap-4 text-center">
                     <div><p className="text-sm font-bold">{v.kpis.carbonIntensity}</p><p className="text-xs text-muted-foreground">CO₂ g/nm</p></div>
-                    <div><p className={`text-sm font-bold ${v.kpis.safetyScore <= 1.0 ? "text-green-500" : "text-orange-500"}`}>{v.kpis.safetyScore}</p><p className="text-xs text-muted-foreground">LTIF</p></div>
+                    <div><p className={`text-sm font-bold ${v.kpis.safetyScore <= 1.0 ? "text-success" : "text-warning"}`}>{v.kpis.safetyScore}</p><p className="text-xs text-muted-foreground">LTIF</p></div>
                     <div><p className="text-sm font-bold">{v.kpis.complianceScore}%</p><p className="text-xs text-muted-foreground">Compliance</p></div>
                     <div><p className="text-sm font-bold">{v.kpis.fuelConsumption} MT</p><p className="text-xs text-muted-foreground">Fuel/Day</p></div>
                   </div>

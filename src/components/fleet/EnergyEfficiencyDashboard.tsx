@@ -37,12 +37,12 @@ const mockFleetCII: VesselCII[] = [
 ];
 
 const ratingColor: Record<string, string> = {
-  A: "bg-green-500", B: "bg-emerald-500", C: "bg-yellow-500", D: "bg-orange-500", E: "bg-red-500"
+  A: "bg-success", B: "bg-success/80", C: "bg-warning", D: "bg-warning/80", E: "bg-destructive"
 };
 
 const ratingBg: Record<string, string> = {
-  A: "bg-green-500/20 text-green-400", B: "bg-emerald-500/20 text-emerald-400",
-  C: "bg-yellow-500/20 text-yellow-400", D: "bg-orange-500/20 text-orange-400", E: "bg-red-500/20 text-red-400"
+  A: "bg-success/20 text-success", B: "bg-success/15 text-success",
+  C: "bg-warning/20 text-warning", D: "bg-warning/15 text-warning", E: "bg-destructive/20 text-destructive"
 };
 
 export function EnergyEfficiencyDashboard() {
@@ -66,7 +66,7 @@ export function EnergyEfficiencyDashboard() {
       <div className="flex items-center justify-between">
         <div>
           <h1 className="text-2xl font-bold flex items-center gap-2">
-            <Leaf className="h-6 w-6 text-green-400" />
+            <Leaf className="h-6 w-6 text-success" />
             Energy Efficiency & Decarbonization
           </h1>
           <p className="text-muted-foreground">EEXI, CII Rating, EU ETS & IMO 2030/2050 compliance</p>
@@ -85,10 +85,10 @@ export function EnergyEfficiencyDashboard() {
       {/* KPI Row */}
       <div className="grid grid-cols-2 md:grid-cols-4 gap-4">
         {[
-          { icon: Gauge, label: "Fleet Avg CII", value: fleetAvgCII.toFixed(1), sub: "gCO₂/dwt·nm", color: "text-cyan-400" },
-          { icon: Ship, label: "CII Compliant", value: `${compliantCount}/${mockFleetCII.length}`, sub: "vessels ≤C rating", color: "text-green-400" },
-          { icon: Globe, label: "Total CO₂", value: `${(totalCO2 / 1000).toFixed(1)}k t`, sub: `Year ${selectedYear}`, color: "text-orange-400" },
-          { icon: Target, label: "EU ETS Cost", value: `€${(totalETS * 85).toLocaleString()}`, sub: `${totalETS} allowances`, color: "text-blue-400" },
+          { icon: Gauge, label: "Fleet Avg CII", value: fleetAvgCII.toFixed(1), sub: "gCO₂/dwt·nm", color: "text-info" },
+          { icon: Ship, label: "CII Compliant", value: `${compliantCount}/${mockFleetCII.length}`, sub: "vessels ≤C rating", color: "text-success" },
+          { icon: Globe, label: "Total CO₂", value: `${(totalCO2 / 1000).toFixed(1)}k t`, sub: `Year ${selectedYear}`, color: "text-warning" },
+          { icon: Target, label: "EU ETS Cost", value: `€${(totalETS * 85).toLocaleString()}`, sub: `${totalETS} allowances`, color: "text-info" },
         ].map((item, i) => (
           <Card key={i} className="border-border/50 bg-card/80 backdrop-blur">
             <CardContent className="pt-4">
@@ -134,11 +134,11 @@ export function EnergyEfficiencyDashboard() {
                     <div className="text-right">
                       <div className="flex items-center gap-1">
                         {vessel.trend === "improving" ? (
-                          <TrendingDown className="h-4 w-4 text-green-400" />
+                          <TrendingDown className="h-4 w-4 text-success" />
                         ) : vessel.trend === "declining" ? (
-                          <AlertTriangle className="h-4 w-4 text-red-400" />
+                          <AlertTriangle className="h-4 w-4 text-destructive" />
                         ) : (
-                          <Activity className="h-4 w-4 text-yellow-400" />
+                          <Activity className="h-4 w-4 text-warning" />
                         )}
                         <span className="text-xs capitalize">{vessel.trend}</span>
                       </div>
@@ -159,7 +159,7 @@ export function EnergyEfficiencyDashboard() {
                 {mockFleetCII.map((v, i) => (
                   <div key={i} className="flex items-center justify-between p-3 rounded-lg bg-background/50">
                     <span className="text-sm">{v.vessel_name}</span>
-                    <Badge className={v.eexi_compliant ? "bg-green-500/20 text-green-400" : "bg-red-500/20 text-red-400"}>
+                    <Badge className={v.eexi_compliant ? "bg-success/20 text-success" : "bg-destructive/20 text-destructive"}>
                       {v.eexi_compliant ? "Compliant" : "Non-Compliant"}
                     </Badge>
                   </div>
@@ -201,14 +201,14 @@ export function EnergyEfficiencyDashboard() {
                       <p className="text-xs text-muted-foreground">{v.eu_ets_allowances} allowances required</p>
                     </div>
                     <div className="text-right">
-                      <p className="text-sm font-bold text-orange-400">€{(v.eu_ets_allowances * 85).toLocaleString()}</p>
+                      <p className="text-sm font-bold text-warning">€{(v.eu_ets_allowances * 85).toLocaleString()}</p>
                       <p className="text-[10px] text-muted-foreground">at €85/tCO₂</p>
                     </div>
                   </div>
                 ))}
                 <div className="flex items-center justify-between p-3 rounded-lg bg-primary/5 border border-primary/20">
                   <span className="font-medium">Total Fleet EU ETS Exposure</span>
-                  <span className="text-lg font-bold text-orange-400">€{(totalETS * 85).toLocaleString()}</span>
+                  <span className="text-lg font-bold text-warning">€{(totalETS * 85).toLocaleString()}</span>
                 </div>
               </div>
             </CardContent>

@@ -216,11 +216,11 @@ export const PatternRecognition: React.FC = () => {
                 {patterns
                   .filter(p => tab === "all" || p.patternType === tab)
                   .map((pattern) => (
-                    <Card key={pattern.id} className="border-l-4 border-l-blue-500">
+                    <Card key={pattern.id} className="border-l-4 border-l-primary">
                       <CardHeader>
                         <div className="flex items-start justify-between">
                           <div className="flex items-start gap-3">
-                            <div className="p-2 bg-blue-100 dark:bg-blue-900 rounded-lg">
+                            <div className="p-2 bg-primary/10 rounded-lg">
                               {getPatternIcon(pattern.patternType)}
                             </div>
                             <div>
@@ -287,7 +287,7 @@ export const PatternRecognition: React.FC = () => {
                           </div>
                           <div>
                             <span className="text-muted-foreground">Próxima prevista:</span>
-                            <span className="ml-2 font-medium text-blue-600">
+                            <span className="ml-2 font-medium text-primary">
                               {new Date(pattern.predictedNext).toLocaleDateString("pt-BR")}
                             </span>
                           </div>

@@ -157,7 +157,7 @@ export const OVIDAnalyticsDashboard: React.FC = () => {
                 <p className="text-xs text-muted-foreground">Score Médio</p>
                 <p className="text-2xl font-bold">{avgScore}%</p>
               </div>
-              <Target className={`w-8 h-8 ${avgScore >= 85 ? 'text-green-500' : avgScore >= 70 ? 'text-yellow-500' : 'text-red-500'}`} />
+              <Target className={`w-8 h-8 ${avgScore >= 85 ? 'text-success' : avgScore >= 70 ? 'text-warning' : 'text-destructive'}`} />
             </div>
           </CardContent>
         </Card>
@@ -167,9 +167,9 @@ export const OVIDAnalyticsDashboard: React.FC = () => {
             <div className="flex items-center justify-between">
               <div>
                 <p className="text-xs text-muted-foreground">Finalizadas</p>
-                <p className="text-2xl font-bold text-green-500">{completedInspections}</p>
+                <p className="text-2xl font-bold text-success">{completedInspections}</p>
               </div>
-              <CheckCircle className="w-8 h-8 text-green-500" />
+              <CheckCircle className="w-8 h-8 text-success" />
             </div>
           </CardContent>
         </Card>
@@ -179,9 +179,9 @@ export const OVIDAnalyticsDashboard: React.FC = () => {
             <div className="flex items-center justify-between">
               <div>
                 <p className="text-xs text-muted-foreground">Não Conformidades</p>
-                <p className="text-2xl font-bold text-red-500">{totalNonConformities}</p>
+                <p className="text-2xl font-bold text-destructive">{totalNonConformities}</p>
               </div>
-              <AlertTriangle className="w-8 h-8 text-red-500" />
+              <AlertTriangle className="w-8 h-8 text-destructive" />
             </div>
           </CardContent>
         </Card>
@@ -358,7 +358,7 @@ export const OVIDAnalyticsDashboard: React.FC = () => {
           <Card>
             <CardHeader>
               <CardTitle className="text-base flex items-center gap-2">
-                <AlertTriangle className="w-4 h-4 text-red-500" />
+                <AlertTriangle className="w-4 h-4 text-destructive" />
                 Áreas Críticas
               </CardTitle>
               <CardDescription>Capítulos com menor desempenho que requerem atenção</CardDescription>
@@ -382,13 +382,13 @@ export const OVIDAnalyticsDashboard: React.FC = () => {
                       </div>
                       <div className="flex items-center gap-2">
                         <span className={`text-xl font-bold ${
-                          area.score >= 80 ? 'text-green-500' : 
-                          area.score >= 60 ? 'text-yellow-500' : 'text-red-500'
+                          area.score >= 80 ? 'text-success' : 
+                          area.score >= 60 ? 'text-warning' : 'text-destructive'
                         }`}>
                           {area.score}%
                         </span>
                         {area.score < 70 && (
-                          <TrendingDown className="w-4 h-4 text-red-500" />
+                          <TrendingDown className="w-4 h-4 text-destructive" />
                         )}
                       </div>
                     </div>
