@@ -373,7 +373,7 @@ export function AutoScoringEngine() {
                   {result.scoreFinal}%
                 </div>
                 {result.penalizacaoTotal > 0 && (
-                  <div className="absolute -top-2 -right-8 text-xs text-red-500">
+                  <div className="absolute -top-2 -right-8 text-xs text-destructive">
                     -{result.penalizacaoTotal}%
                   </div>
                 )}
@@ -385,12 +385,12 @@ export function AutoScoringEngine() {
               
               <div className="mt-4">
                 {result.aprovado ? (
-                  <div className="flex items-center justify-center gap-2 text-green-600">
+                  <div className="flex items-center justify-center gap-2 text-success">
                     <CheckCircle className="h-5 w-5" />
                     <span className="font-medium">APROVADO</span>
                   </div>
                 ) : (
-                  <div className="flex items-center justify-center gap-2 text-red-600">
+                  <div className="flex items-center justify-center gap-2 text-destructive">
                     <XCircle className="h-5 w-5" />
                     <span className="font-medium">REPROVADO</span>
                   </div>
@@ -398,7 +398,7 @@ export function AutoScoringEngine() {
               </div>
               
               {result.criticosNC > 0 && (
-                <div className="mt-3 p-2 bg-red-500/10 rounded text-xs text-red-600">
+                <div className="mt-3 p-2 bg-destructive/10 rounded text-xs text-destructive">
                   ⚠️ {result.criticosNC} item(s) CRÍTICO(s) não conforme(s)
                 </div>
               )}
@@ -422,12 +422,12 @@ export function AutoScoringEngine() {
             <Progress value={result.scorePonderado} className="h-2" />
             
             <div className="grid grid-cols-3 gap-2 pt-2">
-              <div className="text-center p-2 bg-green-500/10 rounded">
-                <div className="text-lg font-bold text-green-600">{result.conformes}</div>
+              <div className="text-center p-2 bg-success/10 rounded">
+                <div className="text-lg font-bold text-success">{result.conformes}</div>
                 <div className="text-xs text-muted-foreground">Conformes</div>
               </div>
-              <div className="text-center p-2 bg-red-500/10 rounded">
-                <div className="text-lg font-bold text-red-600">{result.naoConformes}</div>
+              <div className="text-center p-2 bg-destructive/10 rounded">
+                <div className="text-lg font-bold text-destructive">{result.naoConformes}</div>
                 <div className="text-xs text-muted-foreground">NC</div>
               </div>
               <div className="text-center p-2 bg-muted/30 rounded">
@@ -556,11 +556,11 @@ export function AutoScoringEngine() {
             <CardContent>
               <div className="space-y-2">
                 {[
-                  { nivel: 'EXCELENTE', min: 90, max: 100, color: 'bg-green-600' },
-                  { nivel: 'BOM', min: 80, max: 89, color: 'bg-lime-500' },
-                  { nivel: 'ACEITÁVEL', min: 70, max: 79, color: 'bg-yellow-500' },
-                  { nivel: 'INADEQUADO', min: 50, max: 69, color: 'bg-orange-500' },
-                  { nivel: 'CRÍTICO', min: 0, max: 49, color: 'bg-red-500' }
+                  { nivel: 'EXCELENTE', min: 90, max: 100, color: 'bg-success' },
+                  { nivel: 'BOM', min: 80, max: 89, color: 'bg-success/70' },
+                  { nivel: 'ACEITÁVEL', min: 70, max: 79, color: 'bg-warning' },
+                  { nivel: 'INADEQUADO', min: 50, max: 69, color: 'bg-warning/70' },
+                  { nivel: 'CRÍTICO', min: 0, max: 49, color: 'bg-destructive' }
                 ].map(faixa => (
                   <div 
                     key={faixa.nivel}
@@ -611,8 +611,8 @@ export function AutoScoringEngine() {
                   <div
                     key={item.id}
                     className={`flex items-center justify-between p-3 rounded-lg border ${
-                      item.conforme === true ? 'bg-green-500/5 border-green-500/30' :
-                      item.conforme === false ? 'bg-red-500/5 border-red-500/30' :
+                      item.conforme === true ? 'bg-success/5 border-success/30' :
+                      item.conforme === false ? 'bg-destructive/5 border-destructive/30' :
                       'bg-muted/30 border-muted'
                     }`}
                   >
@@ -632,7 +632,7 @@ export function AutoScoringEngine() {
                       <Button
                         size="sm"
                         variant={item.conforme === true ? 'default' : 'outline'}
-                        className={item.conforme === true ? 'bg-green-600' : ''}
+                        className={item.conforme === true ? 'bg-success' : ''}
                         onClick={() => handleToggleItem(item.id, true)}
                       >
                         <CheckCircle className="h-4 w-4" />
@@ -663,7 +663,7 @@ export function AutoScoringEngine() {
           <Card>
             <CardHeader>
               <CardTitle className="text-sm flex items-center gap-2">
-                <AlertTriangle className="h-4 w-4 text-red-500" />
+                <AlertTriangle className="h-4 w-4 text-destructive" />
                 Itens Não Conformes
               </CardTitle>
             </CardHeader>
@@ -672,7 +672,7 @@ export function AutoScoringEngine() {
                 {items.filter(i => i.conforme === false).map(item => (
                   <div
                     key={item.id}
-                    className="p-4 rounded-lg border border-red-500/30 bg-red-500/5"
+                    className="p-4 rounded-lg border border-destructive/30 bg-destructive/5"
                   >
                     <div className="flex items-center justify-between">
                       <div className="flex items-center gap-3">
@@ -689,7 +689,7 @@ export function AutoScoringEngine() {
                     </div>
                     <p className="text-xs text-muted-foreground mt-2">{item.elemento}</p>
                     {item.observacao && (
-                      <p className="text-sm text-red-600 mt-2">{item.observacao}</p>
+                      <p className="text-sm text-destructive mt-2">{item.observacao}</p>
                     )}
                     <div className="mt-3 flex items-center gap-2">
                       <Button size="sm" variant="outline">
@@ -704,7 +704,7 @@ export function AutoScoringEngine() {
                 
                 {items.filter(i => i.conforme === false).length === 0 && (
                   <div className="text-center py-8 text-muted-foreground">
-                    <CheckCircle className="h-12 w-12 mx-auto text-green-500 mb-2" />
+                    <CheckCircle className="h-12 w-12 mx-auto text-success mb-2" />
                     <p>Nenhum item não conforme!</p>
                   </div>
                 )}

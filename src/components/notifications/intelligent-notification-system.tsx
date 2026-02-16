@@ -345,14 +345,14 @@ const IntelligentNotificationSystem = () => {
               {notifications
                 .filter(n => n.type === "ai_insight")
                 .map((insight) => (
-                  <div key={insight.id} className="p-4 border rounded-lg bg-purple-50 dark:bg-purple-950/20">
+                  <div key={insight.id} className="p-4 border rounded-lg bg-accent/10 dark:bg-accent/10">
                     <div className="flex items-start gap-3">
-                      <Brain className="w-5 h-5 text-purple-600 mt-1" />
+                      <Brain className="w-5 h-5 text-accent-foreground mt-1" />
                       <div className="flex-1">
-                        <h4 className="font-medium text-purple-900 dark:text-purple-100">
+                        <h4 className="font-medium text-foreground">
                           {insight.title}
                         </h4>
-                        <p className="text-sm text-purple-700 dark:text-purple-300 mt-1">
+                        <p className="text-sm text-muted-foreground mt-1">
                           {insight.message}
                         </p>
                         <div className="flex items-center gap-2 mt-3">

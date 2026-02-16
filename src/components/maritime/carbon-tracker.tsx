@@ -123,15 +123,15 @@ export const CarbonFootprintTracker: React.FC = () => {
   const avgTrend = emissions.reduce((sum, e) => sum + e.currentMonth.change, 0) / emissions.length;
 
   const getTrendIcon = (trend: string) => {
-    if (trend === "down") return <TrendingDown className="h-4 w-4 text-green-600" />;
-    if (trend === "up") return <TrendingUp className="h-4 w-4 text-red-600" />;
-    return <BarChart3 className="h-4 w-4 text-yellow-600" />;
+    if (trend === "down") return <TrendingDown className="h-4 w-4 text-success" />;
+    if (trend === "up") return <TrendingUp className="h-4 w-4 text-destructive" />;
+    return <BarChart3 className="h-4 w-4 text-warning" />;
   };
 
   const getPerformanceColor = (percentage: number) => {
-    if (percentage <= 90) return "text-green-600";
-    if (percentage <= 100) return "text-yellow-600";
-    return "text-red-600";
+    if (percentage <= 90) return "text-success";
+    if (percentage <= 100) return "text-warning";
+    return "text-destructive";
   };
 
   return (
@@ -165,7 +165,7 @@ export const CarbonFootprintTracker: React.FC = () => {
             <CardTitle className="text-sm font-medium">Tendência Média</CardTitle>
           </CardHeader>
           <CardContent>
-            <div className={`text-2xl font-bold ${avgTrend < 0 ? "text-green-600" : "text-red-600"}`}>
+            <div className={`text-2xl font-bold ${avgTrend < 0 ? "text-success" : "text-destructive"}`}>
               {avgTrend > 0 ? "+" : ""}{avgTrend.toFixed(1)}%
             </div>
             <p className="text-xs text-muted-foreground">vs. mês anterior</p>
@@ -177,7 +177,7 @@ export const CarbonFootprintTracker: React.FC = () => {
             <CardTitle className="text-sm font-medium">Offset Ativo</CardTitle>
           </CardHeader>
           <CardContent>
-            <div className="text-2xl font-bold text-green-600">{totalOffset.toFixed(1)}t</div>
+            <div className="text-2xl font-bold text-success">{totalOffset.toFixed(1)}t</div>
             <p className="text-xs text-muted-foreground">Compensação carbono</p>
           </CardContent>
         </Card>
@@ -240,7 +240,7 @@ export const CarbonFootprintTracker: React.FC = () => {
                     </div>
                     <div>
                       <div className="text-muted-foreground">Diferença</div>
-                      <div className={`font-bold ${totalYTD < targetYTD ? "text-green-600" : "text-red-600"}`}>
+                      <div className={`font-bold ${totalYTD < targetYTD ? "text-success" : "text-destructive"}`}>
                         {((totalYTD - targetYTD) / 1000).toFixed(2)}k t
                       </div>
                     </div>
@@ -283,7 +283,7 @@ export const CarbonFootprintTracker: React.FC = () => {
 
             <TabsContent value="vessels" className="space-y-4 mt-4">
               {emissions.map((emission) => (
-                <Card key={emission.vessel} className="border-l-4 border-l-green-500">
+                <Card key={emission.vessel} className="border-l-4 border-l-success">
                   <CardHeader>
                     <div className="flex items-center justify-between">
                       <div className="flex items-center gap-3">
@@ -293,13 +293,13 @@ export const CarbonFootprintTracker: React.FC = () => {
                         </Badge>
                         {getTrendIcon(emission.currentMonth.trend)}
                         <span className={`text-sm font-medium ${
-                          emission.currentMonth.change < 0 ? "text-green-600" : "text-red-600"
+                          emission.currentMonth.change < 0 ? "text-success" : "text-destructive"
                         }`}>
                           {emission.currentMonth.change > 0 ? "+" : ""}{emission.currentMonth.change}%
                         </span>
                       </div>
                       {emission.yearToDate.percentage <= 90 && (
-                        <Badge variant="default" className="gap-1 bg-green-600">
+                        <Badge variant="default" className="gap-1 bg-success">
                           <Award className="h-3 w-3" />
                           Meta Atingida
                         </Badge>
@@ -391,10 +391,10 @@ export const CarbonFootprintTracker: React.FC = () => {
                   </CardHeader>
                   <CardContent className="space-y-3">
                     {emission.offsetPrograms.map((program) => (
-                      <div key={program.name} className="flex items-center justify-between p-3 bg-green-50 dark:bg-green-950 rounded-lg">
+                      <div key={program.name} className="flex items-center justify-between p-3 bg-success/10 dark:bg-success/10 rounded-lg">
                         <div className="flex items-center gap-3">
-                          <div className="p-2 bg-green-100 dark:bg-green-900 rounded-lg">
-                            <Leaf className="h-4 w-4 text-green-600" />
+                          <div className="p-2 bg-success/20 dark:bg-success/20 rounded-lg">
+                            <Leaf className="h-4 w-4 text-success" />
                           </div>
                           <div>
                             <div className="font-medium text-sm">{program.name}</div>
@@ -404,7 +404,7 @@ export const CarbonFootprintTracker: React.FC = () => {
                           </div>
                         </div>
                         <div className="text-right">
-                          <div className="text-lg font-bold text-green-600">
+                          <div className="text-lg font-bold text-success">
                             {program.amount}t
                           </div>
                           <div className="text-xs text-muted-foreground">CO₂</div>
