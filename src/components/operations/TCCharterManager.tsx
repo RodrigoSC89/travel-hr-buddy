@@ -117,9 +117,9 @@ export function TCCharterManager() {
       {/* KPI Cards */}
       <div className="grid grid-cols-2 md:grid-cols-5 gap-4">
         <Card><CardContent className="p-4 text-center"><Ship className="h-5 w-5 mx-auto text-primary mb-1" /><p className="text-2xl font-bold">{activeCharters.length}</p><p className="text-xs text-muted-foreground">Active Charters</p></CardContent></Card>
-        <Card><CardContent className="p-4 text-center"><DollarSign className="h-5 w-5 mx-auto text-green-500 mb-1" /><p className="text-2xl font-bold">${totalDailyHire.toLocaleString()}</p><p className="text-xs text-muted-foreground">Daily Hire Rate</p></CardContent></Card>
-        <Card><CardContent className="p-4 text-center"><TrendingUp className="h-5 w-5 mx-auto text-blue-500 mb-1" /><p className="text-2xl font-bold">${(totalEarned / 1000).toFixed(0)}K</p><p className="text-xs text-muted-foreground">Total Hire Earned</p></CardContent></Card>
-        <Card><CardContent className="p-4 text-center"><AlertTriangle className="h-5 w-5 mx-auto text-orange-500 mb-1" /><p className="text-2xl font-bold">{totalOffHire}</p><p className="text-xs text-muted-foreground">Off-Hire Days</p></CardContent></Card>
+        <Card><CardContent className="p-4 text-center"><DollarSign className="h-5 w-5 mx-auto text-success mb-1" /><p className="text-2xl font-bold">${totalDailyHire.toLocaleString()}</p><p className="text-xs text-muted-foreground">Daily Hire Rate</p></CardContent></Card>
+        <Card><CardContent className="p-4 text-center"><TrendingUp className="h-5 w-5 mx-auto text-primary mb-1" /><p className="text-2xl font-bold">${(totalEarned / 1000).toFixed(0)}K</p><p className="text-xs text-muted-foreground">Total Hire Earned</p></CardContent></Card>
+        <Card><CardContent className="p-4 text-center"><AlertTriangle className="h-5 w-5 mx-auto text-warning mb-1" /><p className="text-2xl font-bold">{totalOffHire}</p><p className="text-xs text-muted-foreground">Off-Hire Days</p></CardContent></Card>
         <Card><CardContent className="p-4 text-center"><Calendar className="h-5 w-5 mx-auto text-muted-foreground mb-1" /><p className="text-2xl font-bold">{MOCK_CHARTERS.filter(c => c.status === "pending").length}</p><p className="text-xs text-muted-foreground">Pending</p></CardContent></Card>
       </div>
 
@@ -161,7 +161,7 @@ export function TCCharterManager() {
                     <TableCell className="font-medium">${charter.hireRate.toLocaleString()}/day</TableCell>
                     <TableCell className="text-xs">{charter.commencementDate} → {charter.redeliveryDate}</TableCell>
                     <TableCell><Badge variant={charter.status === "active" ? "default" : "outline"}>{charter.status}</Badge></TableCell>
-                    <TableCell>{charter.offHireDays > 0 ? <span className="text-orange-500 font-medium">{charter.offHireDays}d</span> : <span className="text-green-500">0</span>}</TableCell>
+                    <TableCell>{charter.offHireDays > 0 ? <span className="text-warning font-medium">{charter.offHireDays}d</span> : <span className="text-success">0</span>}</TableCell>
                   </TableRow>
                 ))}
               </TableBody>

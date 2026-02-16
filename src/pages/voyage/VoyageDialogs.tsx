@@ -138,7 +138,7 @@ export function VoyageDetailsDialog({ open, onOpenChange, voyage, onOptimize }: 
                 <ul className="space-y-1">
                   {voyage.aiRecommendations.map((rec, idx) => (
                     <li key={`vcc-rec-${idx}-${rec.slice(0, 10)}`} className="text-sm text-muted-foreground flex items-start gap-2">
-                      <CheckCircle2 className="h-4 w-4 text-green-500 mt-0.5 shrink-0" />
+                      <CheckCircle2 className="h-4 w-4 text-success mt-0.5 shrink-0" />
                       {rec}
                     </li>
                   ))}

@@ -72,10 +72,10 @@ const statusIcons: Record<StepStatus, React.ReactNode> = {
 };
 
 const statusColors: Record<StepStatus, string> = {
-  completed: 'bg-green-500 text-white',
+  completed: 'bg-success text-success-foreground',
   current: 'bg-primary text-primary-foreground ring-4 ring-primary/20',
   pending: 'bg-muted text-muted-foreground',
-  skipped: 'bg-gray-400 text-white',
+  skipped: 'bg-muted-foreground text-background',
   error: 'bg-destructive text-destructive-foreground',
 };
 

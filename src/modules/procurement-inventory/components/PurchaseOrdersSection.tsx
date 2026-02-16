@@ -191,14 +191,14 @@ export default function PurchaseOrdersSection({ searchQuery }: PurchaseOrdersSec
             </div>
           </CardContent>
         </Card>
-        <Card className="border-blue-500/50">
+        <Card className="border-primary/50">
           <CardContent className="p-4">
             <div className="flex items-center justify-between">
               <div>
                 <p className="text-sm text-muted-foreground">Em Andamento</p>
-                <p className="text-2xl font-bold text-blue-600">{activeOrders}</p>
+                <p className="text-2xl font-bold text-primary">{activeOrders}</p>
               </div>
-              <Truck className="h-8 w-8 text-blue-500 opacity-60" />
+              <Truck className="h-8 w-8 text-primary opacity-60" />
             </div>
           </CardContent>
         </Card>
@@ -213,14 +213,14 @@ export default function PurchaseOrdersSection({ searchQuery }: PurchaseOrdersSec
             </div>
           </CardContent>
         </Card>
-        <Card className="border-green-500/50">
+        <Card className="border-success/50">
           <CardContent className="p-4">
             <div className="flex items-center justify-between">
               <div>
                 <p className="text-sm text-muted-foreground">Valor Total</p>
-                <p className="text-2xl font-bold text-green-600">R$ {(totalValue / 1000).toFixed(1)}k</p>
+                <p className="text-2xl font-bold text-success">R$ {(totalValue / 1000).toFixed(1)}k</p>
               </div>
-              <DollarSign className="h-8 w-8 text-green-500 opacity-60" />
+              <DollarSign className="h-8 w-8 text-success opacity-60" />
             </div>
           </CardContent>
         </Card>
@@ -316,7 +316,7 @@ export default function PurchaseOrdersSection({ searchQuery }: PurchaseOrdersSec
                       <Progress
                         value={order.totalItems ? (order.receivedItems! / order.totalItems) * 100 : 0}
                         className={`h-2 ${
-                          order.status === "delivered" ? "[&>div]:bg-green-500" :
+                          order.status === "delivered" ? "[&>div]:bg-success" :
                           order.status === "delayed" ? "[&>div]:bg-destructive" : "[&>div]:bg-primary"
                         }`}
                       />
