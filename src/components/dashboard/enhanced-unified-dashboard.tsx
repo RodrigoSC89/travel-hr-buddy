@@ -1,5 +1,7 @@
-import React, { useState, useEffect } from "react";
+import React, { useState, useMemo } from "react";
 import { useOptimizedPolling } from "@/hooks/use-optimized-polling";
+import { useQuery } from "@tanstack/react-query";
+import { supabase } from "@/integrations/supabase/client";
 import { Card, CardContent, CardDescription, CardHeader, CardTitle } from "@/components/ui/card";
 import { Button } from "@/components/ui/button";
 import { Badge } from "@/components/ui/badge";
@@ -57,6 +59,48 @@ import nautilusLogoNew from "@/assets/nautilus-logo-new.png";
 import ProfessionalKPICards from "@/components/ui/professional-kpi-cards";
 import SystemStatusDashboard from "@/components/ui/system-status-dashboard";
 import ExecutiveMetricsPanel from "@/components/ui/executive-metrics-panel";
+
+/** Fetch real dashboard stats from Supabase */
+function useDashboardStats() {
+  return useQuery({
+    queryKey: ['dashboard-real-stats'],
+    queryFn: async () => {
+      const [vessels, crewOnboard, crewAll, maintPending, maintOverdue, incidents, certs, expenses, audits, docs] = await Promise.all([
+        supabase.from('vessels').select('id, name, vessel_type, status', { count: 'exact' }),
+        supabase.from('crew_members').select('id', { count: 'exact' }).eq('status', 'on_board'),
+        supabase.from('crew_members').select('id, status', { count: 'exact' }),
+        supabase.from('maintenance_tasks').select('id', { count: 'exact' }).eq('status', 'pending'),
+        supabase.from('maintenance_tasks').select('id', { count: 'exact' }).eq('status', 'pending').lt('due_date', new Date().toISOString()),
+        supabase.from('soc_alerts').select('id', { count: 'exact' }).eq('status', 'open'),
+        supabase.from('crew_certifications').select('id, expiry_date', { count: 'exact' }).lte('expiry_date', new Date(Date.now() + 90 * 86400000).toISOString()).gte('expiry_date', new Date().toISOString()),
+        supabase.from('expenses').select('amount').gte('created_at', new Date(Date.now() - 30 * 86400000).toISOString()),
+        supabase.from('internal_audits').select('id', { count: 'exact' }),
+        supabase.from('ai_documents').select('id', { count: 'exact' }),
+      ]);
+
+      const totalExpenses = (expenses.data ?? []).reduce((s, e) => s + (Number(e.amount) || 0), 0);
+      const crewOnLeave = (crewAll.data ?? []).filter(c => c.status === 'on_leave').length;
+
+      return {
+        vessels_total: vessels.count ?? 0,
+        vessels_data: vessels.data ?? [],
+        crew_onboard: crewOnboard.count ?? 0,
+        crew_total: crewAll.count ?? 0,
+        crew_on_leave: crewOnLeave,
+        maint_pending: maintPending.count ?? 0,
+        maint_overdue: maintOverdue.count ?? 0,
+        incidents_open: incidents.count ?? 0,
+        certs_expiring: certs.count ?? 0,
+        total_expenses: totalExpenses,
+        audits_count: audits.count ?? 0,
+        docs_count: docs.count ?? 0,
+      };
+    },
+    staleTime: 1000 * 60 * 2,
+    refetchInterval: 1000 * 60 * 5,
+  });
+}
+
 const EnhancedUnifiedDashboard = () => {
   const navigate = useNavigate();
   const { user } = useAuth();
@@ -68,108 +112,98 @@ const EnhancedUnifiedDashboard = () => {
   const [isAutoUpdate, setIsAutoUpdate] = useState(true);
   const [filterPeriod, setFilterPeriod] = useState("30d");
 
-  // Enhanced dashboard data with professional metrics
-  const [dashboardData, setDashboardData] = useState({
+  const { data: realStats, refetch: refetchStats } = useDashboardStats();
+
+  // Dashboard data derived from real Supabase stats
+  const dashboardData = useMemo(() => ({
     kpis: {
       revenue: { 
-        value: 2450000, 
-        change: 12.5, 
+        value: realStats?.total_expenses ?? 0, 
+        change: 0, 
         status: "up", 
         target: 3000000,
-        previous: 2180000,
-        forecast: 2850000
+        previous: 0,
+        forecast: 0
       },
       employees: { 
-        value: 125, 
-        change: 4.2, 
+        value: realStats?.crew_total ?? 0, 
+        change: 0, 
         status: "up",
-        active: 118,
-        onLeave: 7,
-        contractors: 15
+        active: realStats?.crew_onboard ?? 0,
+        onLeave: realStats?.crew_on_leave ?? 0,
+        contractors: 0
       },
       efficiency: { 
-        value: 94.2, 
-        change: 2.8, 
+        value: realStats?.maint_overdue === 0 ? 99 : Math.max(70, 100 - (realStats?.maint_overdue ?? 0) * 5), 
+        change: 0, 
         status: "up",
         target: 95,
         industry_avg: 87.5
       },
       satisfaction: { 
-        value: 4.6, 
-        change: 4.5, 
+        value: 0, 
+        change: 0, 
         status: "up",
-        responses: 89,
-        nps: 72
+        responses: 0,
+        nps: 0
       }
     },
     financialMetrics: {
-      grossMargin: 68.5,
-      operatingMargin: 15.3,
-      ebitda: 1850000,
-      cashFlow: 980000,
-      roe: 18.7,
-      debt: 2100000
+      grossMargin: 0,
+      operatingMargin: 0,
+      ebitda: realStats?.total_expenses ?? 0,
+      cashFlow: 0,
+      roe: 0,
+      debt: 0
     },
     operationalMetrics: {
-      vesselUtilization: 87.3,
-      fuelEfficiency: 92.1,
-      maintenanceCost: 340000,
-      downtime: 2.1,
-      safetyScore: 98.5,
-      complianceRate: 99.2
+      vesselUtilization: realStats?.vessels_total ? Math.round((realStats.vessels_data.filter(v => v.status === 'active' || v.status === 'at_sea').length / realStats.vessels_total) * 100) : 0,
+      fuelEfficiency: 0,
+      maintenanceCost: 0,
+      downtime: 0,
+      safetyScore: realStats?.incidents_open === 0 ? 100 : Math.max(80, 100 - (realStats?.incidents_open ?? 0) * 2),
+      complianceRate: realStats?.certs_expiring === 0 ? 100 : Math.max(85, 100 - (realStats?.certs_expiring ?? 0))
     },
-    alerts: [
-      { id: 1, title: "Certificado STCW da MV Ocean Explorer expira em 15 dias", type: "warning", priority: "high", module: "hr", vessel: "MV Ocean Explorer", date: "2024-01-15" },
-      { id: 2, title: "Meta mensal de eficiência operacional atingida - 94.2%", type: "success", priority: "medium", module: "fleet", percentage: 94.2 },
-      { id: 3, title: "Análise IA detectou 3 oportunidades de otimização no PEOTRAM", type: "info", priority: "medium", module: "peotram", insights: 3 },
-      { id: 4, title: "Backup automático da base de dados concluído com sucesso", type: "success", priority: "low", module: "system", size: "2.3GB" },
-      { id: 5, title: "Manutenção preventiva agendada para MV Atlantic Dawn", type: "warning", priority: "medium", module: "maintenance", vessel: "MV Atlantic Dawn", date: "2024-01-20" }
-    ],
-    recentActivities: [
-      { id: 1, user: "João Silva", action: "Completou auditoria PEOTRAM #2024-001 com score 98.5%", time: "2h atrás", type: "peotram", vessel: "MV Ocean Explorer", score: 98.5 },
-      { id: 2, user: "Maria Santos", action: "Aprovou relatório mensal de frota - Janeiro 2024", time: "4h atrás", type: "fleet", documents: 15 },
-      { id: 3, user: "Carlos Lima", action: "Atualizou cronograma de viagem para rota Santos-Houston", time: "6h atrás", type: "travel", route: "Santos-Houston" },
-      { id: 4, user: "Ana Costa", action: "Upload de certificado STCW renovado", time: "8h atrás", type: "certificate", validity: "5 anos" },
-      { id: 5, user: "Pedro Oliveira", action: "Finalizou inspeção de segurança com nota A+", time: "1d atrás", type: "safety", grade: "A+" }
-    ],
+    alerts: [] as { id: number; title: string; type: string; priority: string; module: string; vessel?: string; date?: string; percentage?: number; insights?: number; size?: string }[],
+    recentActivities: [] as { id: number; user: string; action: string; time: string; type: string; vessel?: string; score?: number; documents?: number; route?: string; validity?: string; grade?: string }[],
     systemHealth: {
-      performance: 97.3,
-      uptime: 99.95,
-      activeUsers: tenantUsage?.active_users || 42,
-      errorRate: 0.08,
-      apiCalls: tenantUsage?.api_calls_made || 1250,
-      storageUsed: tenantUsage?.storage_used_gb || 2.3,
+      performance: 97,
+      uptime: 99.9,
+      activeUsers: tenantUsage?.active_users || 0,
+      errorRate: 0,
+      apiCalls: tenantUsage?.api_calls_made || 0,
+      storageUsed: tenantUsage?.storage_used_gb || 0,
       totalStorage: 50,
-      bandwidth: 245.8,
-      responseTime: 180
+      bandwidth: 0,
+      responseTime: 0
     },
     moduleStats: {
       peotram: { 
-        audits: tenantUsage?.peotram_audits_created || 15, 
-        completion: 94.2,
-        nonConformities: 3,
-        avgScore: 96.8
+        audits: realStats?.audits_count ?? 0, 
+        completion: 0,
+        nonConformities: 0,
+        avgScore: 0
       },
       fleet: { 
-        vessels: tenantUsage?.vessels_managed || 8, 
-        efficiency: 92.1,
-        utilization: 87.3,
-        routes: 24
+        vessels: realStats?.vessels_total ?? 0, 
+        efficiency: 0,
+        utilization: 0,
+        routes: 0
       },
       documents: { 
-        processed: tenantUsage?.documents_processed || 42, 
-        ai_analyzed: 38,
-        compliance: 99.1,
-        digital: 89
+        processed: realStats?.docs_count ?? 0, 
+        ai_analyzed: 0,
+        compliance: 0,
+        digital: 0
       },
       reports: { 
-        generated: tenantUsage?.reports_generated || 23, 
-        automated: 18,
-        scheduled: 45,
-        real_time: 12
+        generated: tenantUsage?.reports_generated || 0, 
+        automated: 0,
+        scheduled: 0,
+        real_time: 0
       }
     }
-  });
+  }), [realStats, tenantUsage]);
 
   // Enhanced performance data
   const performanceData = [
@@ -275,25 +309,12 @@ const EnhancedUnifiedDashboard = () => {
 
   const refreshData = async () => {
     setIsRefreshing(true);
-    
-    const elapsed = Date.now() / 1000;
-    setDashboardData(prev => ({
-      ...prev,
-      kpis: {
-        ...prev.kpis,
-        efficiency: { ...prev.kpis.efficiency, value: prev.kpis.efficiency.value + Math.sin(elapsed / 10) * 0.5 }
-      },
-      systemHealth: {
-        ...prev.systemHealth,
-        performance: Math.max(90, Math.min(100, prev.systemHealth.performance + Math.sin(elapsed / 15) * 1))
-      }
-    }));
-    
+    await refetchStats();
     setLastUpdated(new Date());
     setIsRefreshing(false);
     toast({
       title: "Dashboard atualizado",
-      description: "Dados atualizados com sucesso",
+      description: "Dados reais atualizados com sucesso",
     });
   };
 
