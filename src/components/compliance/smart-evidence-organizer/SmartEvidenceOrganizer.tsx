@@ -36,8 +36,10 @@ import { EvidenceCollaboration } from "./EvidenceCollaboration";
 import type { EvidenceElement, EvidenceItem, EvidenceMatch, ViewMode } from "./types";
 import { Dialog, DialogContent, DialogHeader, DialogTitle } from "@/components/ui/dialog";
 
+export type ComplianceFramework = "peodp" | "peotram" | "ism_isps" | "mlc" | "sgso" | "ovid_ocimf";
+
 interface Props {
-  framework: "peodp" | "peotram";
+  framework: ComplianceFramework;
 }
 
 // ─── Status Badge ─────────────────────────────────────────
@@ -462,7 +464,15 @@ export function SmartEvidenceOrganizer({ framework }: Props) {
     loadPacks();
   }, [setActivePack, loadPacks]);
 
-  const frameworkLabel = framework === "peodp" ? "PEO-DP" : "PEOTRAM";
+  const FRAMEWORK_LABELS: Record<string, string> = {
+    peodp: "PEO-DP",
+    peotram: "PEOTRAM",
+    ism_isps: "ISM/ISPS",
+    mlc: "MLC 2006",
+    sgso: "SGSO ANP",
+    ovid_ocimf: "OVID/OCIMF",
+  };
+  const frameworkLabel = FRAMEWORK_LABELS[framework] || framework.toUpperCase();
 
   return (
     <motion.div initial="hidden" animate="visible" variants={staggerContainer} className="space-y-4">

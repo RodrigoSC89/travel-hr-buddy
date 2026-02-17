@@ -14,6 +14,7 @@ import { ComplianceVoiceChat } from "@/components/compliance/ComplianceVoiceChat
 import { CompliancePredictiveAI } from "@/components/compliance/CompliancePredictiveAI";
 import { ComplianceEvidenceGenerator } from "@/components/compliance/ComplianceEvidenceGenerator";
 import { ComplianceSGIAutoEvidence, ComplianceGapAnalyzer, ComplianceInterviewSimulator, ComplianceOneClickAuditPrep, ComplianceScoreBenchmark, ComplianceAutoNCResolver, CompliancePhotoEvidenceAI, CompliancePSCRiskPredictor } from "@/components/compliance/ai";
+import { SmartEvidenceOrganizer } from "@/components/compliance/smart-evidence-organizer";
 import { useMaritimeActions } from "@/hooks/useMaritimeActions";
 import {
   Shield, Lock, ShieldAlert, Users, RefreshCw, Download,
@@ -106,6 +107,10 @@ const ISPSSecurityPage = () => {
           <TabsTrigger value="ai-predictive" className="gap-2">
             <TrendingUp className="h-4 w-4" />
             IA Preditiva
+          </TabsTrigger>
+          <TabsTrigger value="evidence-organizer" className="gap-2">
+            <Brain className="h-4 w-4" />
+            Organizador IA
           </TabsTrigger>
         </TabsList>
 
@@ -213,6 +218,10 @@ const ISPSSecurityPage = () => {
         {/* PSC RISK PREDICTOR */}
         <TabsContent value="psc-risk" className="space-y-4">
           <CompliancePSCRiskPredictor moduleId="isps-security" moduleName="ISPS Code" />
+        </TabsContent>
+
+        <TabsContent value="evidence-organizer">
+          <SmartEvidenceOrganizer framework="ism_isps" />
         </TabsContent>
       </Tabs>
 

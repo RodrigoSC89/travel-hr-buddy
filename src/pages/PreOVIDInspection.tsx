@@ -3,6 +3,7 @@ import { useState, Suspense, lazy } from 'react';
 import { ModulePageWrapper } from '@/components/ui/module-page-wrapper';
 import { ModuleHeader } from '@/components/ui/module-header';
 import { Ship, FileCheck, Brain, ClipboardCheck, Sparkles, Search, MessageSquare, Zap, Globe, Clock, FileSearch } from 'lucide-react';
+import { SmartEvidenceOrganizer } from "@/components/compliance/smart-evidence-organizer";
 import { OVIDInspectionDashboard } from '@/components/ovid/OVIDInspectionDashboard';
 import { Tabs, TabsContent, TabsList, TabsTrigger } from '@/components/ui/tabs';
 import { Skeleton } from '@/components/ui/skeleton';
@@ -61,6 +62,7 @@ const PreOVIDInspection: FC = () => {
           <TabsTrigger value="photo-ai" className="gap-1"><Search className="h-3 w-3" />Foto IA</TabsTrigger>
           <TabsTrigger value="psc-risk" className="gap-1"><Ship className="h-3 w-3" />Risco PSC</TabsTrigger>
           <TabsTrigger value="reg-tracker" className="gap-1"><Globe className="h-3 w-3" />Regulatório</TabsTrigger>
+          <TabsTrigger value="evidence-organizer" className="gap-1"><Brain className="h-3 w-3" />Organizador IA</TabsTrigger>
         </TabsList>
 
         <TabsContent value="dashboard"><OVIDInspectionDashboard /></TabsContent>
@@ -78,6 +80,10 @@ const PreOVIDInspection: FC = () => {
           <TabsContent value="photo-ai"><CompliancePhotoEvidenceAI moduleId="pre-ovid" moduleName="Pre-OVID/OVIQ4" /></TabsContent>
           <TabsContent value="psc-risk"><CompliancePSCRiskPredictor moduleId="pre-ovid" moduleName="Pre-OVID/OVIQ4" /></TabsContent>
         </Suspense>
+
+        <TabsContent value="evidence-organizer">
+          <SmartEvidenceOrganizer framework="ovid_ocimf" />
+        </TabsContent>
       </Tabs>
     </ModulePageWrapper>
   );

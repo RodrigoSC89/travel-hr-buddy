@@ -18,6 +18,7 @@ import {
   Shield, AlertTriangle, FileCheck, Bell, Target, Users, BookOpen, Activity, Plus, RefreshCw, Download, Eye, Search, Brain, ClipboardCheck, CheckCircle2, GitCompare, Calendar
 } from "lucide-react";
 import { staggerContainer, fadeUp } from "@/lib/animations/motion-variants";
+import { SmartEvidenceOrganizer } from "@/components/compliance/smart-evidence-organizer";
 
 const ComplianceSGIAutoEvidence = lazy(() => import('@/components/compliance/ai/ComplianceSGIAutoEvidence').then(m => ({ default: m.ComplianceSGIAutoEvidence })));
 const ComplianceGapAnalyzer = lazy(() => import('@/components/compliance/ai/ComplianceGapAnalyzer').then(m => ({ default: m.ComplianceGapAnalyzer })));
@@ -88,6 +89,7 @@ const SGSO = () => {
               <TabsTrigger value="nc-resolver" className="gap-1"><AlertTriangle className="h-3 w-3" />NC Resolver</TabsTrigger>
               <TabsTrigger value="photo-ai" className="gap-1"><Eye className="h-3 w-3" />Foto IA</TabsTrigger>
               <TabsTrigger value="psc-risk" className="gap-1"><Shield className="h-3 w-3" />Risco PSC</TabsTrigger>
+              <TabsTrigger value="evidence-organizer" className="gap-1"><Brain className="h-3 w-3" />Organizador IA</TabsTrigger>
             </TabsList>
 
             <TabsContent value="dashboard">
@@ -108,6 +110,7 @@ const SGSO = () => {
             <TabsContent value="nc-resolver"><Suspense fallback={<AILoader />}><ComplianceAutoNCResolver moduleId="sgso" moduleName="SGSO ANP" /></Suspense></TabsContent>
             <TabsContent value="photo-ai"><Suspense fallback={<AILoader />}><CompliancePhotoEvidenceAI moduleId="sgso" moduleName="SGSO ANP" /></Suspense></TabsContent>
             <TabsContent value="psc-risk"><Suspense fallback={<AILoader />}><CompliancePSCRiskPredictor moduleId="sgso" moduleName="SGSO ANP" /></Suspense></TabsContent>
+            <TabsContent value="evidence-organizer"><SmartEvidenceOrganizer framework="sgso" /></TabsContent>
           </Tabs>
         </motion.div>
       </motion.div>

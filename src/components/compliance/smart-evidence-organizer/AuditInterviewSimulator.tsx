@@ -18,8 +18,10 @@ import { toast } from "sonner";
 import type { EvidenceElement, EvidencePack } from "./types";
 import { cn } from "@/lib/utils";
 
+import type { ComplianceFramework } from "./SmartEvidenceOrganizer";
+
 interface Props {
-  framework: "peodp" | "peotram";
+  framework: ComplianceFramework;
   pack?: EvidencePack | null;
   elements: EvidenceElement[];
 }
@@ -148,7 +150,11 @@ export const AuditInterviewSimulator = memo(({ framework, pack, elements }: Prop
     ? Math.round(((stats.correct + stats.partial * 0.5) / stats.total) * 100)
     : 0;
 
-  const frameworkLabel = framework === "peodp" ? "PEO-DP" : "PEOTRAM";
+  const FRAMEWORK_LABELS: Record<string, string> = {
+    peodp: "PEO-DP", peotram: "PEOTRAM", ism_isps: "ISM/ISPS",
+    mlc: "MLC 2006", sgso: "SGSO ANP", ovid_ocimf: "OVID/OCIMF",
+  };
+  const frameworkLabel = FRAMEWORK_LABELS[framework] || framework.toUpperCase();
 
   // Not started yet
   if (!sessionId) {

@@ -33,7 +33,7 @@ import {
   CompliancePhotoEvidenceAI
 } from "@/components/compliance/ai";
 import { useMaritimeActions } from "@/hooks/useMaritimeActions";
-import { toast } from "sonner";
+import { SmartEvidenceOrganizer } from "@/components/compliance/smart-evidence-organizer";
 import {
   Shield,
   Anchor,
@@ -56,6 +56,7 @@ import {
   Search,
   MessageSquare,
   Zap,
+  Brain,
 } from "lucide-react";
 
 const ISM_CODE_ELEMENTS = [
@@ -225,6 +226,10 @@ const ISMCodePage = () => {
           <TabsTrigger value="ai-photo" className="gap-2">
             <Search className="h-4 w-4" />
             Foto IA
+          </TabsTrigger>
+          <TabsTrigger value="evidence-organizer" className="gap-2">
+            <Brain className="h-4 w-4" />
+            Organizador IA
           </TabsTrigger>
         </TabsList>
 
@@ -588,6 +593,10 @@ const ISMCodePage = () => {
         {/* PHOTO EVIDENCE AI */}
         <TabsContent value="ai-photo" className="space-y-4">
           <CompliancePhotoEvidenceAI moduleId="ism-code" moduleName="ISM Code" />
+        </TabsContent>
+
+        <TabsContent value="evidence-organizer">
+          <SmartEvidenceOrganizer framework="ism_isps" />
         </TabsContent>
       </Tabs>
 
