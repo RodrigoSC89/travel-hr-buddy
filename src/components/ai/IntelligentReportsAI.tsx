@@ -190,10 +190,10 @@ A análise contempla o período atual e inclui comparações com períodos anter
   return (
     <div className="space-y-6">
       {/* Header */}
-      <Card className="bg-gradient-to-r from-purple-600/10 via-pink-500/10 to-purple-600/10 border-purple-500/20">
+      <Card className="bg-gradient-to-r from-accent/10 via-primary/10 to-accent/10 border-accent/20">
         <CardContent className="p-6">
           <div className="flex items-center gap-4 mb-4">
-            <div className="p-3 rounded-xl bg-gradient-to-br from-purple-600 to-pink-500">
+            <div className="p-3 rounded-xl bg-gradient-to-br from-primary to-accent">
               <Brain className="h-6 w-6 text-white" />
             </div>
             <div>
@@ -215,7 +215,7 @@ A análise contempla o período atual e inclui comparações com períodos anter
             <Button 
               onClick={() => handleGenerate()}
               disabled={!prompt.trim() || isGenerating}
-              className="bg-gradient-to-r from-purple-600 to-pink-500 hover:from-purple-700 hover:to-pink-600"
+              className="bg-gradient-to-r from-primary to-accent hover:from-primary/90 hover:to-accent/90"
             >
               {isGenerating ? (
                 <Loader2 className="h-4 w-4 animate-spin" />

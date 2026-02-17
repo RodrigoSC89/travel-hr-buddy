@@ -66,23 +66,23 @@ export const ActionableAlert: React.FC<ActionableAlertProps> = ({
       case 'medium':
         return {
           icon: <AlertCircle className="h-5 w-5" />,
-          bg: 'bg-yellow-500/10 border-yellow-500/30',
-          iconColor: 'text-yellow-600 dark:text-yellow-400',
-          badgeClass: 'bg-yellow-500 text-yellow-950'
+          bg: 'bg-warning/10 border-warning/30',
+          iconColor: 'text-warning',
+          badgeClass: 'bg-warning text-warning-foreground'
         };
       case 'success':
         return {
           icon: <CheckCircle className="h-5 w-5" />,
-          bg: 'bg-green-500/10 border-green-500/30',
-          iconColor: 'text-green-600 dark:text-green-400',
-          badgeClass: 'bg-green-500 text-white'
+          bg: 'bg-success/10 border-success/30',
+          iconColor: 'text-success',
+          badgeClass: 'bg-success text-success-foreground'
         };
       default:
         return {
           icon: <Info className="h-5 w-5" />,
-          bg: 'bg-blue-500/10 border-blue-500/30',
-          iconColor: 'text-blue-600 dark:text-blue-400',
-          badgeClass: 'bg-blue-500 text-white'
+          bg: 'bg-info/10 border-info/30',
+          iconColor: 'text-info',
+          badgeClass: 'bg-info text-info-foreground'
         };
     }
   };
@@ -199,7 +199,7 @@ export const ActionableAlertList: React.FC<{
     return (
       <Card className="border-dashed">
         <CardContent className="p-6 text-center text-muted-foreground">
-          <CheckCircle className="h-8 w-8 mx-auto mb-2 text-green-500" />
+          <CheckCircle className="h-8 w-8 mx-auto mb-2 text-success" />
           <p>{emptyMessage}</p>
         </CardContent>
       </Card>

@@ -71,15 +71,15 @@ export function getStatusMessage(status: IntegrationStatus): string {
 export function getStatusColor(status: IntegrationStatus): string {
   switch (status) {
     case 'CONNECTED':
-      return 'bg-green-500/20 text-green-400 border-green-500/30';
+      return 'bg-success/20 text-success border-success/30';
     case 'DEGRADED':
-      return 'bg-amber-500/20 text-amber-400 border-amber-500/30';
+      return 'bg-warning/20 text-warning border-warning/30';
     case 'DISCONNECTED':
-      return 'bg-orange-500/20 text-orange-400 border-orange-500/30';
+      return 'bg-warning/20 text-warning border-warning/30';
     case 'NOT_CONFIGURED':
-      return 'bg-slate-500/20 text-slate-400 border-slate-500/30';
+      return 'bg-muted text-muted-foreground border-border';
     case 'ERROR':
-      return 'bg-red-500/20 text-red-400 border-red-500/30';
+      return 'bg-destructive/20 text-destructive border-destructive/30';
   }
 }
 

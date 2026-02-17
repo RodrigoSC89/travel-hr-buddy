@@ -41,18 +41,18 @@ export default function CrewHealthTab() {
 
   const getStatusBadge = (status: string) => {
     switch (status) {
-      case 'fit': return <Badge className="bg-green-500/20 text-green-500">Apto</Badge>;
-      case 'restricted': return <Badge className="bg-amber-500/20 text-amber-500">Restrição</Badge>;
-      case 'unfit': return <Badge className="bg-red-500/20 text-red-500">Inapto</Badge>;
+      case 'fit': return <Badge className="bg-success/20 text-success">Apto</Badge>;
+      case 'restricted': return <Badge className="bg-warning/20 text-warning">Restrição</Badge>;
+      case 'unfit': return <Badge className="bg-destructive/20 text-destructive">Inapto</Badge>;
       default: return null;
     }
   };
 
   const getVaccinationStatus = (status: string) => {
     switch (status) {
-      case 'valid': return <CheckCircle2 className="h-4 w-4 text-green-500" />;
-      case 'expiring': return <Clock className="h-4 w-4 text-amber-500" />;
-      case 'expired': return <AlertTriangle className="h-4 w-4 text-red-500" />;
+      case 'valid': return <CheckCircle2 className="h-4 w-4 text-success" />;
+      case 'expiring': return <Clock className="h-4 w-4 text-warning" />;
+      case 'expired': return <AlertTriangle className="h-4 w-4 text-destructive" />;
       default: return null;
     }
   };
@@ -182,9 +182,9 @@ export default function CrewHealthTab() {
       {/* AI Prediction Alert */}
       {aiPrediction && (
         <Card className={`border-l-4 ${
-          aiPrediction.riskLevel === 'high' ? 'border-l-red-500 bg-red-500/5' :
-          aiPrediction.riskLevel === 'medium' ? 'border-l-amber-500 bg-amber-500/5' :
-          'border-l-green-500 bg-green-500/5'
+          aiPrediction.riskLevel === 'high' ? 'border-l-destructive bg-destructive/5' :
+          aiPrediction.riskLevel === 'medium' ? 'border-l-warning bg-warning/5' :
+          'border-l-success bg-success/5'
         }`}>
           <CardHeader className="pb-2">
             <CardTitle className="text-lg flex items-center gap-2">
@@ -201,7 +201,7 @@ export default function CrewHealthTab() {
                   {(aiPrediction.predictedIssues?.length ?? 0) > 0 ? 
                     aiPrediction.predictedIssues?.map((issue: string) => (
                       <li key={issue} className="flex items-center gap-2">
-                        <AlertTriangle className="h-3 w-3 text-amber-500" />
+                        <AlertTriangle className="h-3 w-3 text-warning" />
                         {issue}
                       </li>
                     )) : 
@@ -214,7 +214,7 @@ export default function CrewHealthTab() {
                 <ul className="text-sm space-y-1">
                   {aiPrediction.recommendations?.slice(0, 3).map((rec: string) => (
                     <li key={rec} className="flex items-center gap-2">
-                      <CheckCircle2 className="h-3 w-3 text-green-500" />
+                      <CheckCircle2 className="h-3 w-3 text-success" />
                       {rec}
                     </li>
                   ))}
@@ -243,8 +243,8 @@ export default function CrewHealthTab() {
         <Card>
           <CardContent className="pt-4">
             <div className="flex items-center gap-3">
-              <div className="p-2 rounded-lg bg-green-500/10">
-                <Heart className="h-5 w-5 text-green-500" />
+              <div className="p-2 rounded-lg bg-success/10">
+                <Heart className="h-5 w-5 text-success" />
               </div>
               <div>
                 <p className="text-2xl font-bold">{stats.fit}</p>
@@ -256,8 +256,8 @@ export default function CrewHealthTab() {
         <Card>
           <CardContent className="pt-4">
             <div className="flex items-center gap-3">
-              <div className="p-2 rounded-lg bg-amber-500/10">
-                <Syringe className="h-5 w-5 text-amber-500" />
+              <div className="p-2 rounded-lg bg-warning/10">
+                <Syringe className="h-5 w-5 text-warning" />
               </div>
               <div>
                 <p className="text-2xl font-bold">{stats.expiringVaccines}</p>
@@ -269,8 +269,8 @@ export default function CrewHealthTab() {
         <Card>
           <CardContent className="pt-4">
             <div className="flex items-center gap-3">
-              <div className="p-2 rounded-lg bg-blue-500/10">
-                <Calendar className="h-5 w-5 text-blue-500" />
+              <div className="p-2 rounded-lg bg-info/10">
+                <Calendar className="h-5 w-5 text-info" />
               </div>
               <div>
                 <p className="text-2xl font-bold">{stats.upcomingCheckups}</p>
@@ -376,8 +376,8 @@ export default function CrewHealthTab() {
                           </div>
                         </div>
                         
-                        <div className="p-3 rounded-lg bg-red-500/10 border border-red-500/20">
-                          <p className="text-sm font-medium text-red-500 mb-2">Alergias</p>
+                         <div className="p-3 rounded-lg bg-destructive/10 border border-destructive/20">
+                           <p className="text-sm font-medium text-destructive mb-2">Alergias</p>
                           {member.allergies.length > 0 ? (
                             <div className="flex flex-wrap gap-2">
                               {member.allergies.map((allergy) => (

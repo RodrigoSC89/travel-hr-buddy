@@ -472,11 +472,11 @@ export const SGSOAuditTrail: React.FC = () => {
           </div>
           <Progress value={overallScore} className="mt-4 h-3" />
           <div className="grid grid-cols-5 gap-2 mt-4 text-xs text-center">
-            <div className={overallScore < 40 ? 'font-bold text-red-600' : 'text-muted-foreground'}>Crítico<br/>&lt;40%</div>
-            <div className={overallScore >= 40 && overallScore < 60 ? 'font-bold text-orange-600' : 'text-muted-foreground'}>Inicial<br/>40-59%</div>
-            <div className={overallScore >= 60 && overallScore < 75 ? 'font-bold text-yellow-600' : 'text-muted-foreground'}>Em Dev.<br/>60-74%</div>
-            <div className={overallScore >= 75 && overallScore < 90 ? 'font-bold text-blue-600' : 'text-muted-foreground'}>Maduro<br/>75-89%</div>
-            <div className={overallScore >= 90 ? 'font-bold text-green-600' : 'text-muted-foreground'}>Excelência<br/>≥90%</div>
+            <div className={overallScore < 40 ? 'font-bold text-destructive' : 'text-muted-foreground'}>Crítico<br/>&lt;40%</div>
+            <div className={overallScore >= 40 && overallScore < 60 ? 'font-bold text-warning' : 'text-muted-foreground'}>Inicial<br/>40-59%</div>
+            <div className={overallScore >= 60 && overallScore < 75 ? 'font-bold text-warning' : 'text-muted-foreground'}>Em Dev.<br/>60-74%</div>
+            <div className={overallScore >= 75 && overallScore < 90 ? 'font-bold text-info' : 'text-muted-foreground'}>Maduro<br/>75-89%</div>
+            <div className={overallScore >= 90 ? 'font-bold text-success' : 'text-muted-foreground'}>Excelência<br/>≥90%</div>
           </div>
         </CardContent>
       </Card>
@@ -586,19 +586,19 @@ export const SGSOAuditTrail: React.FC = () => {
                                   <SelectContent>
                                     <SelectItem value="sim">
                                       <div className="flex items-center gap-2">
-                                        <CheckCircle className="h-4 w-4 text-green-500" />
+                                        <CheckCircle className="h-4 w-4 text-success" />
                                         Sim - Conforme
                                       </div>
                                     </SelectItem>
                                     <SelectItem value="parcial">
                                       <div className="flex items-center gap-2">
-                                        <AlertTriangle className="h-4 w-4 text-yellow-500" />
+                                        <AlertTriangle className="h-4 w-4 text-warning" />
                                         Parcial
                                       </div>
                                     </SelectItem>
                                     <SelectItem value="nao">
                                       <div className="flex items-center gap-2">
-                                        <XCircle className="h-4 w-4 text-red-500" />
+                                        <XCircle className="h-4 w-4 text-destructive" />
                                         Não - Não Conforme
                                       </div>
                                     </SelectItem>

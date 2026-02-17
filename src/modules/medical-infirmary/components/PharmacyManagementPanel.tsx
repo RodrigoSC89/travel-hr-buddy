@@ -263,7 +263,7 @@ export default function PharmacyManagementPanel() {
                         <div className="flex items-center gap-2 flex-wrap text-xs"><Badge variant="outline">{med.category}</Badge><Badge variant="outline">{med.form}</Badge><span className="text-muted-foreground">{med.location}</span></div>
                         <div className="flex items-center justify-between text-xs">
                           <span className="text-muted-foreground flex items-center gap-1"><Calendar className="h-3 w-3" />Validade</span>
-                          <span className={`font-medium ${status === "expired" ? "text-destructive" : status === "expiring-soon" ? "text-amber-600" : "text-muted-foreground"}`}>
+                          <span className={`font-medium ${status === "expired" ? "text-destructive" : status === "expiring-soon" ? "text-warning" : "text-muted-foreground"}`}>
                             {status === "expired" ? "VENCIDO" : `${Math.abs(daysUntilExpiry)} dias`}
                           </span>
                         </div>

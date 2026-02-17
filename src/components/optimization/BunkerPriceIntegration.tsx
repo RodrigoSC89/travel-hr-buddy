@@ -86,15 +86,15 @@ export function BunkerPriceIntegration({ onPriceSelect, selectedPort, className 
 
   const getTrendIcon = (trend: BunkerPrice["trend"]) => {
     switch (trend) {
-      case "up": return <TrendingUp className="h-3 w-3 text-red-500" />;
-      case "down": return <TrendingDown className="h-3 w-3 text-green-500" />;
+      case "up": return <TrendingUp className="h-3 w-3 text-destructive" />;
+      case "down": return <TrendingDown className="h-3 w-3 text-success" />;
       default: return <Minus className="h-3 w-3 text-muted-foreground" />;
     }
   };
 
   const getChangeColor = (change: number) => {
-    if (change > 0) return "text-red-500";
-    if (change < 0) return "text-green-500";
+    if (change > 0) return "text-destructive";
+    if (change < 0) return "text-success";
     return "text-muted-foreground";
   };
 
@@ -106,7 +106,7 @@ export function BunkerPriceIntegration({ onPriceSelect, selectedPort, className 
     return (
       <Card className={className}>
         <CardContent className="p-6 text-center">
-          <AlertCircle className="h-8 w-8 text-yellow-500 mx-auto mb-2" />
+          <AlertCircle className="h-8 w-8 text-warning mx-auto mb-2" />
           <p className="text-sm text-muted-foreground">{error}</p>
           <Button variant="outline" size="sm" onClick={fetchPrices} className="mt-2">
             <RefreshCw className="h-3 w-3 mr-1" /> Tentar Novamente
@@ -122,7 +122,7 @@ export function BunkerPriceIntegration({ onPriceSelect, selectedPort, className 
         <div className="flex items-center justify-between">
           <div>
             <CardTitle className="text-sm flex items-center gap-2">
-              <Fuel className="h-4 w-4 text-orange-500" />
+              <Fuel className="h-4 w-4 text-warning" />
               Preços de Bunker em Tempo Real
             </CardTitle>
             <CardDescription className="text-xs">
@@ -148,15 +148,15 @@ export function BunkerPriceIntegration({ onPriceSelect, selectedPort, className 
           <>
             {/* Cheapest Port Highlight */}
             {cheapestPort && (
-              <div className="bg-green-500/10 border border-green-500/20 rounded-lg p-3 mb-3">
+              <div className="bg-success/10 border border-success/20 rounded-lg p-3 mb-3">
                 <div className="flex items-center justify-between">
                   <div className="flex items-center gap-2">
-                    <Badge variant="default" className="bg-green-600 text-xs">
+                    <Badge variant="default" className="bg-success text-xs">
                       Melhor Preço
                     </Badge>
                     <span className="font-medium text-sm">{cheapestPort.port}</span>
                   </div>
-                  <span className="text-lg font-bold text-green-600">
+                  <span className="text-lg font-bold text-success">
                     ${cheapestPort.vlsfo}/ton
                   </span>
                 </div>

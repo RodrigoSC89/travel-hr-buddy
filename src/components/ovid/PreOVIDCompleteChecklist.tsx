@@ -232,9 +232,9 @@ export const PreOVIDCompleteChecklist: React.FC<PreOVIDCompleteChecklistProps> =
                         <div className="flex items-center gap-2 shrink-0">
                           {hasAnswer ? (
                             answer?.answer === 'yes' ? (
-                              <CheckCircle className="w-5 h-5 text-green-500" />
+                              <CheckCircle className="w-5 h-5 text-success" />
                             ) : answer?.answer === 'no' ? (
-                              <XCircle className="w-5 h-5 text-red-500" />
+                              <XCircle className="w-5 h-5 text-destructive" />
                             ) : (
                               <AlertTriangle className="w-5 h-5 text-muted-foreground" />
                             )
@@ -290,14 +290,14 @@ export const PreOVIDCompleteChecklist: React.FC<PreOVIDCompleteChecklistProps> =
                             <div className="flex items-center space-x-2">
                               <RadioGroupItem value="yes" id={`${question.id}-yes`} />
                               <Label htmlFor={`${question.id}-yes`} className="flex items-center gap-1 cursor-pointer">
-                                <CheckCircle className="w-4 h-4 text-green-500" />
+                                <CheckCircle className="w-4 h-4 text-success" />
                                 Sim
                               </Label>
                             </div>
                             <div className="flex items-center space-x-2">
                               <RadioGroupItem value="no" id={`${question.id}-no`} />
                               <Label htmlFor={`${question.id}-no`} className="flex items-center gap-1 cursor-pointer">
-                                <XCircle className="w-4 h-4 text-red-500" />
+                                <XCircle className="w-4 h-4 text-destructive" />
                                 Não
                               </Label>
                             </div>
@@ -321,7 +321,7 @@ export const PreOVIDCompleteChecklist: React.FC<PreOVIDCompleteChecklistProps> =
                             value={answer?.observation || ''}
                             onChange={(e) => handleObservationChange(question.id, e.target.value)}
                             rows={3}
-                            className={answer?.answer === 'no' && !answer?.observation ? 'border-red-300' : ''}
+                            className={answer?.answer === 'no' && !answer?.observation ? 'border-destructive/50' : ''}
                           />
                         </div>
 
