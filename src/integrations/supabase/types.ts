@@ -44591,6 +44591,93 @@ export type Database = {
         }
         Relationships: []
       }
+      time_charters: {
+        Row: {
+          address_commission: string | null
+          bunker_on_delivery: Json | null
+          bunker_on_redelivery: Json | null
+          charter_id: string
+          commencement_date: string
+          counterparty: string
+          cp_form: string | null
+          created_at: string
+          created_by: string | null
+          currency: string
+          hire_rate: number
+          id: string
+          off_hire_days: number | null
+          organization_id: string | null
+          period: string | null
+          redelivery_date: string | null
+          status: string
+          total_hire_earned: number | null
+          type: string
+          updated_at: string
+          vessel_id: string | null
+        }
+        Insert: {
+          address_commission?: string | null
+          bunker_on_delivery?: Json | null
+          bunker_on_redelivery?: Json | null
+          charter_id: string
+          commencement_date: string
+          counterparty: string
+          cp_form?: string | null
+          created_at?: string
+          created_by?: string | null
+          currency?: string
+          hire_rate?: number
+          id?: string
+          off_hire_days?: number | null
+          organization_id?: string | null
+          period?: string | null
+          redelivery_date?: string | null
+          status?: string
+          total_hire_earned?: number | null
+          type: string
+          updated_at?: string
+          vessel_id?: string | null
+        }
+        Update: {
+          address_commission?: string | null
+          bunker_on_delivery?: Json | null
+          bunker_on_redelivery?: Json | null
+          charter_id?: string
+          commencement_date?: string
+          counterparty?: string
+          cp_form?: string | null
+          created_at?: string
+          created_by?: string | null
+          currency?: string
+          hire_rate?: number
+          id?: string
+          off_hire_days?: number | null
+          organization_id?: string | null
+          period?: string | null
+          redelivery_date?: string | null
+          status?: string
+          total_hire_earned?: number | null
+          type?: string
+          updated_at?: string
+          vessel_id?: string | null
+        }
+        Relationships: [
+          {
+            foreignKeyName: "time_charters_organization_id_fkey"
+            columns: ["organization_id"]
+            isOneToOne: false
+            referencedRelation: "organizations"
+            referencedColumns: ["id"]
+          },
+          {
+            foreignKeyName: "time_charters_vessel_id_fkey"
+            columns: ["vessel_id"]
+            isOneToOne: false
+            referencedRelation: "vessels"
+            referencedColumns: ["id"]
+          },
+        ]
+      }
       tracking_alerts: {
         Row: {
           alert_type: string
