@@ -30,7 +30,7 @@ interface SparePart {
   criticality: "critical" | "essential" | "standard";
 }
 
-const MOCK_CRITICAL_PARTS: SparePart[] = [];
+const EMPTY_PARTS: SparePart[] = [];
 
 export function SparePartsCatalog() {
   const [searchTerm, setSearchTerm] = useState("");
@@ -43,7 +43,7 @@ export function SparePartsCatalog() {
         .select("*")
         .order("created_at", { ascending: false })
         .limit(200);
-      if (error) return MOCK_CRITICAL_PARTS;
+      if (error) return EMPTY_PARTS;
       return (data || []).map((item: Record<string, unknown>) => ({
         id: item.id as string,
         part_number: (item.part_number as string) || `PN-${(item.id as string).slice(0, 6)}`,
