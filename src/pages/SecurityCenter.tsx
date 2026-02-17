@@ -3,6 +3,8 @@
  * (~200 lines from 701)
  */
 import React, { useState, useEffect, useCallback } from "react";
+import { motion } from "framer-motion";
+import { staggerContainer, fadeUp } from "@/lib/animations/motion-variants";
 import { logger } from "@/lib/logger";
 import { Helmet } from "react-helmet-async";
 import { Card, CardContent } from "@/components/ui/card";
@@ -129,10 +131,10 @@ export default function SecurityCenter() {
         <title>Security Center | Nauti One</title>
         <meta name="description" content="Centro de segurança em tempo real com monitoramento de RLS, tokens e PII" />
       </Helmet>
-      <div className="min-h-screen bg-background p-6">
+      <motion.div initial="hidden" animate="visible" variants={staggerContainer} className="min-h-screen bg-background p-6">
         <div className="max-w-7xl mx-auto space-y-6">
           {/* Header */}
-          <div className="flex items-center justify-between">
+          <motion.div variants={fadeUp} className="flex items-center justify-between">
             <div className="flex items-center gap-4">
               <Button variant="ghost" size="sm" onClick={() => navigate(-1)}>
                 <ArrowLeft className="h-4 w-4 mr-2" />Voltar
@@ -154,10 +156,10 @@ export default function SecurityCenter() {
                 <RefreshCw className={`h-4 w-4 mr-2 ${loading ? "animate-spin" : ""}`} />Varredura
               </Button>
             </div>
-          </div>
+          </motion.div>
 
           {/* Risk Score & Metrics */}
-          <div className="grid grid-cols-1 md:grid-cols-5 gap-4">
+          <motion.div variants={fadeUp} className="grid grid-cols-1 md:grid-cols-5 gap-4">
             <Card className={`col-span-1 md:col-span-2 ${
               riskScore >= 80 ? "bg-gradient-to-br from-success/10 to-success/5 border-success/20" :
               riskScore >= 60 ? "bg-gradient-to-br from-warning/10 to-warning/5 border-warning/20" :
@@ -202,10 +204,10 @@ export default function SecurityCenter() {
                 </CardContent>
               </Card>
             ))}
-          </div>
+          </motion.div>
 
           {/* Activity Chart */}
-          <Card>
+          <motion.div variants={fadeUp}><Card>
             <CardContent className="pt-6">
               <h3 className="text-lg font-semibold flex items-center gap-2 mb-4"><BarChart3 className="h-5 w-5 text-primary" />Atividade de Segurança (24h)</h3>
               <ResponsiveContainer width="100%" height={200}>
@@ -228,7 +230,7 @@ export default function SecurityCenter() {
                 </AreaChart>
               </ResponsiveContainer>
             </CardContent>
-          </Card>
+          </Card></motion.div>
 
           {/* Main Tabs */}
           <Tabs defaultValue="threats">
@@ -251,7 +253,7 @@ export default function SecurityCenter() {
             />
           </Tabs>
         </div>
-      </div>
+      </motion.div>
     </>
   );
 }

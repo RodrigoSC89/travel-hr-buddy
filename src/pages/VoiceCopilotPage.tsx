@@ -3,6 +3,8 @@
  * Real-time voice commands for operational procedures
  */
 import React, { useState, useCallback, useRef, useEffect } from "react";
+import { motion } from "framer-motion";
+import { staggerContainer, fadeUp } from "@/lib/animations/motion-variants";
 import { Card, CardContent, CardHeader, CardTitle } from "@/components/ui/card";
 import { Button } from "@/components/ui/button";
 import { Badge } from "@/components/ui/badge";
@@ -180,9 +182,9 @@ export default function VoiceCopilotPage() {
   };
 
   return (
-    <div className="space-y-4 py-4">
+    <motion.div initial="hidden" animate="visible" variants={staggerContainer} className="space-y-4 py-4">
       {/* Header */}
-      <div className="flex items-center justify-between">
+      <motion.div variants={fadeUp} className="flex items-center justify-between">
         <div>
           <h1 className="text-2xl font-bold flex items-center gap-2">
             <Mic className="h-6 w-6 text-primary" />
@@ -200,9 +202,9 @@ export default function VoiceCopilotPage() {
             </Button>
           )}
         </div>
-      </div>
+      </motion.div>
 
-      <div className="grid grid-cols-1 lg:grid-cols-3 gap-4">
+      <motion.div variants={fadeUp} className="grid grid-cols-1 lg:grid-cols-3 gap-4">
         {/* Main Chat */}
         <div className="lg:col-span-2 space-y-4">
           <Card className="border-border/50">
@@ -392,7 +394,7 @@ export default function VoiceCopilotPage() {
             </CardContent>
           </Card>
         </div>
-      </div>
-    </div>
+      </motion.div>
+    </motion.div>
   );
 }

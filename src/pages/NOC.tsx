@@ -4,6 +4,8 @@
  */
 import { useState, useEffect, useCallback } from "react";
 import { Helmet } from "react-helmet-async";
+import { motion } from "framer-motion";
+import { staggerContainer, fadeUp } from "@/lib/animations/motion-variants";
 import { useQuery } from "@tanstack/react-query";
 import { supabase } from "@/integrations/supabase/client";
 import { AlertTriangle, Activity, Ship, Shield, Fuel, Users, RefreshCw, Volume2, VolumeX, Maximize, Minimize, Mic, Clock, TrendingUp, AlertCircle, CheckCircle2, XCircle } from "lucide-react";
@@ -127,8 +129,8 @@ export default function NOC() {
   return (
     <>
       <Helmet><title>NOC 24/7 | Centro de Operações</title></Helmet>
-      <div className="min-h-screen bg-zinc-950 text-white p-4">
-        <header className="flex items-center justify-between mb-4">
+      <motion.div initial="hidden" animate="visible" variants={staggerContainer} className="min-h-screen bg-zinc-950 text-white p-4">
+        <motion.header variants={fadeUp} className="flex items-center justify-between mb-4">
           <div className="flex items-center gap-4">
             <h1 className="text-2xl font-bold flex items-center gap-2"><Activity className="h-6 w-6 text-primary animate-pulse" />NOC 24/7</h1>
             <Badge variant="outline" className="border-success text-success"><span className="w-2 h-2 bg-success rounded-full mr-2 animate-pulse" />ONLINE</Badge>
@@ -141,7 +143,7 @@ export default function NOC() {
               <Button variant="ghost" size="icon" onClick={toggleFullscreen} aria-label={isFullscreen ? "Sair da tela cheia" : "Tela cheia"} title={isFullscreen ? "Sair da tela cheia" : "Tela cheia"}>{isFullscreen ? <Minimize className="h-5 w-5" /> : <Maximize className="h-5 w-5" />}</Button>
             </div>
           </div>
-        </header>
+        </motion.header>
 
         {criticalAlerts.length > 0 && (
           <div className="mb-4 p-4 bg-destructive/20 border border-destructive rounded-lg animate-pulse">
@@ -149,7 +151,7 @@ export default function NOC() {
           </div>
         )}
 
-        <div className="grid grid-cols-12 gap-4">
+        <motion.div variants={fadeUp} className="grid grid-cols-12 gap-4">
           <div className="col-span-8">
             <Card className="bg-zinc-900 border-zinc-800">
               <CardHeader className="pb-2"><CardTitle className="flex items-center gap-2 text-lg"><TrendingUp className="h-5 w-5 text-primary" />Métricas em Tempo Real</CardTitle></CardHeader>
@@ -215,7 +217,7 @@ export default function NOC() {
               </CardContent>
             </Card>
           </div>
-        </div>
+        </motion.div>
 
         <div className="fixed bottom-0 left-0 right-0 bg-sidebar border-t border-sidebar-border px-4 py-2">
           <div className="flex items-center justify-between text-sm">
@@ -227,7 +229,7 @@ export default function NOC() {
             <div className="text-muted-foreground">Nauti One NOC v2.0 | Real-time</div>
           </div>
         </div>
-      </div>
+      </motion.div>
     </>
   );
 }
