@@ -20,6 +20,7 @@ import {
   TrendingUp, AlertTriangle, CheckCircle2, BarChart3, Anchor 
 } from "lucide-react";
 import { toast } from "sonner";
+import { quickExport } from "@/lib/export-utils";
 
 interface TimeCharter {
   id: string;
@@ -110,7 +111,7 @@ export function TCCharterManager() {
                 <div><Label>Commencement</Label><Input type="date" /></div>
                 <div><Label>Redelivery</Label><Input type="date" /></div>
               </div>
-              <Button className="w-full" onClick={() => { setShowNewCharter(false); toast.success("Charter TC-IN-2026-006 created"); }}>Create Charter</Button>
+              <Button className="w-full" onClick={() => { setShowNewCharter(false); toast.info("Charter creation requires backend integration — coming soon"); }}>Create Charter</Button>
             </div>
           </DialogContent>
         </Dialog>
@@ -185,8 +186,8 @@ export function TCCharterManager() {
                 </TableBody>
               </Table>
               <div className="mt-4 flex justify-end gap-2">
-                <Button variant="outline" onClick={() => toast.success("Hire statement exported to PDF")}><FileText className="h-4 w-4 mr-2" />Export PDF</Button>
-                <Button onClick={() => toast.success("Hire statement sent to counterparty")}>Send Statement</Button>
+                <Button variant="outline" onClick={() => quickExport([{ Item: "Hire: 15 Jan → 14 Feb 2026", Days: 31, Rate: "$18,500", Amount: "$573,500.00" }, { Item: "Off-hire (Engine repair)", Days: -2.5, Rate: "$18,500", Amount: "-$46,250.00" }, { Item: "Address Commission (5%)", Days: "—", Rate: "5.00%", Amount: "-$26,362.50" }, { Item: "Net Hire Due", Days: "", Rate: "", Amount: "$500,887.50" }], "Hire Statement")}><FileText className="h-4 w-4 mr-2" />Export PDF</Button>
+                <Button onClick={() => toast.info("Send Statement requires email integration — coming soon")}>Send Statement</Button>
               </div>
             </CardContent>
           </Card>
