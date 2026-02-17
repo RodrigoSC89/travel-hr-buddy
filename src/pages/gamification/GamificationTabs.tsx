@@ -42,10 +42,10 @@ const LEADERBOARD = [
 ];
 
 const CHALLENGES = [
-  { id: "c1", title: "Maratona de Segurança", description: "Complete 3 módulos de segurança esta semana", progress: 2, target: 3, xpReward: 200, deadline: "3 dias", icon: Target, color: "text-red-500" },
-  { id: "c2", title: "Embaixador Ambiental", description: "Conclua o treinamento MARPOL Anexo VI", progress: 0, target: 1, xpReward: 150, deadline: "5 dias", icon: Target, color: "text-green-500" },
-  { id: "c3", title: "Sprint de Conhecimento", description: "Estude 5h esta semana", progress: 3.5, target: 5, xpReward: 100, deadline: "4 dias", icon: BookOpen, color: "text-blue-500" },
-  { id: "c4", title: "Nota Perfeita", description: "Tire 100% em qualquer avaliação", progress: 0, target: 1, xpReward: 300, deadline: "7 dias", icon: Star, color: "text-yellow-500" },
+  { id: "c1", title: "Maratona de Segurança", description: "Complete 3 módulos de segurança esta semana", progress: 2, target: 3, xpReward: 200, deadline: "3 dias", icon: Target, color: "text-destructive" },
+  { id: "c2", title: "Embaixador Ambiental", description: "Conclua o treinamento MARPOL Anexo VI", progress: 0, target: 1, xpReward: 150, deadline: "5 dias", icon: Target, color: "text-success" },
+  { id: "c3", title: "Sprint de Conhecimento", description: "Estude 5h esta semana", progress: 3.5, target: 5, xpReward: 100, deadline: "4 dias", icon: BookOpen, color: "text-primary" },
+  { id: "c4", title: "Nota Perfeita", description: "Tire 100% em qualquer avaliação", progress: 0, target: 1, xpReward: 300, deadline: "7 dias", icon: Star, color: "text-warning" },
 ];
 
 interface GamificationTabsProps {
@@ -68,7 +68,7 @@ export function GamificationTabs({ activeTab, setActiveTab, badgeStates }: Gamif
       <TabsContent value="overview" className="space-y-6 mt-4">
         <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-4">
           <Card>
-            <CardHeader className="pb-3"><CardTitle className="text-sm flex items-center gap-2"><Award className="h-4 w-4 text-yellow-500" /> Badges Recentes</CardTitle></CardHeader>
+            <CardHeader className="pb-3"><CardTitle className="text-sm flex items-center gap-2"><Award className="h-4 w-4 text-warning" /> Badges Recentes</CardTitle></CardHeader>
             <CardContent>
               <div className="flex flex-wrap gap-2">
                 {badgeStates.filter(b => b.earned).slice(0, 6).map(badge => (
@@ -81,7 +81,7 @@ export function GamificationTabs({ activeTab, setActiveTab, badgeStates }: Gamif
             </CardContent>
           </Card>
           <Card>
-            <CardHeader className="pb-3"><CardTitle className="text-sm flex items-center gap-2"><Target className="h-4 w-4 text-blue-500" /> Desafio da Semana</CardTitle></CardHeader>
+            <CardHeader className="pb-3"><CardTitle className="text-sm flex items-center gap-2"><Target className="h-4 w-4 text-primary" /> Desafio da Semana</CardTitle></CardHeader>
             <CardContent>
               {CHALLENGES.slice(0, 2).map(challenge => {
                 const CIcon = challenge.icon;
@@ -100,11 +100,11 @@ export function GamificationTabs({ activeTab, setActiveTab, badgeStates }: Gamif
             </CardContent>
           </Card>
           <Card>
-            <CardHeader className="pb-3"><CardTitle className="text-sm flex items-center gap-2"><Crown className="h-4 w-4 text-yellow-500" /> Top 3</CardTitle></CardHeader>
+            <CardHeader className="pb-3"><CardTitle className="text-sm flex items-center gap-2"><Crown className="h-4 w-4 text-warning" /> Top 3</CardTitle></CardHeader>
             <CardContent className="space-y-2">
               {LEADERBOARD.slice(0, 3).map((user, i) => (
                 <div key={user.rank} className="flex items-center gap-3">
-                  <div className={cn("text-lg font-bold w-6 text-center", i === 0 ? "text-yellow-500" : i === 1 ? "text-slate-400" : "text-amber-700")}>{["🥇", "🥈", "🥉"][i]}</div>
+                  <div className={cn("text-lg font-bold w-6 text-center", i === 0 ? "text-warning" : i === 1 ? "text-muted-foreground" : "text-warning/70")}>{["🥇", "🥈", "🥉"][i]}</div>
                   <Avatar className="h-7 w-7"><AvatarFallback className="text-[10px]">{user.avatar}</AvatarFallback></Avatar>
                   <div className="flex-1 min-w-0"><div className="text-xs font-medium truncate">{user.name}</div><div className="text-[10px] text-muted-foreground">{user.xp} XP</div></div>
                 </div>
@@ -138,7 +138,7 @@ export function GamificationTabs({ activeTab, setActiveTab, badgeStates }: Gamif
                                 <div className="text-2xl mb-1">{badge.emoji}</div>
                                 <p className={cn("text-[10px] font-medium leading-tight", badge.earned ? tier.text : "text-muted-foreground")}>{badge.name}</p>
                                 {!badge.earned && badge.progressPercent > 0 && <Progress value={badge.progressPercent} className="h-1 mt-1" />}
-                                {badge.earned && <CheckCircle2 className="absolute -top-1 -right-1 h-4 w-4 text-green-500 bg-background rounded-full" />}
+                                {badge.earned && <CheckCircle2 className="absolute -top-1 -right-1 h-4 w-4 text-success bg-background rounded-full" />}
                                 {!badge.earned && <Lock className="absolute -top-1 -right-1 h-3.5 w-3.5 text-muted-foreground bg-background rounded-full p-0.5" />}
                               </motion.div>
                             </TooltipTrigger>
@@ -162,12 +162,12 @@ export function GamificationTabs({ activeTab, setActiveTab, badgeStates }: Gamif
       {/* LEADERBOARD TAB */}
       <TabsContent value="leaderboard" className="mt-4">
         <Card>
-          <CardHeader><CardTitle className="flex items-center gap-2"><Crown className="h-5 w-5 text-yellow-500" /> Ranking da Tripulação</CardTitle><CardDescription>Classificação baseada em XP acumulado</CardDescription></CardHeader>
+          <CardHeader><CardTitle className="flex items-center gap-2"><Crown className="h-5 w-5 text-warning" /> Ranking da Tripulação</CardTitle><CardDescription>Classificação baseada em XP acumulado</CardDescription></CardHeader>
           <CardContent>
             <div className="space-y-2">
               {LEADERBOARD.map((user, i) => (
                 <motion.div key={user.rank} initial={{ opacity: 0, x: -20 }} animate={{ opacity: 1, x: 0 }} transition={{ delay: i * 0.05 }} className={cn("flex items-center gap-4 p-3 rounded-lg border transition-colors", i < 3 ? "bg-primary/5 border-primary/20" : "hover:bg-muted/50")}>
-                  <div className={cn("text-xl font-bold w-8 text-center", i === 0 ? "text-yellow-500" : i === 1 ? "text-slate-400" : i === 2 ? "text-amber-700" : "text-muted-foreground")}>{i < 3 ? ["🥇", "🥈", "🥉"][i] : `#${user.rank}`}</div>
+                  <div className={cn("text-xl font-bold w-8 text-center", i === 0 ? "text-warning" : i === 1 ? "text-muted-foreground" : i === 2 ? "text-warning/70" : "text-muted-foreground")}>{i < 3 ? ["🥇", "🥈", "🥉"][i] : `#${user.rank}`}</div>
                   <Avatar><AvatarFallback>{user.avatar}</AvatarFallback></Avatar>
                   <div className="flex-1"><div className="font-medium text-sm">{user.name}</div><div className="text-xs text-muted-foreground">{user.role}</div></div>
                   <div className="text-center"><div className="text-sm font-bold">{user.xp}</div><div className="text-[10px] text-muted-foreground">XP</div></div>
@@ -194,7 +194,7 @@ export function GamificationTabs({ activeTab, setActiveTab, badgeStates }: Gamif
                     <div className="flex items-start gap-4">
                       <div className={cn("p-3 rounded-xl", completed ? "bg-success/20" : "bg-muted")}><CIcon className={cn("h-6 w-6", completed ? "text-success" : challenge.color)} /></div>
                       <div className="flex-1">
-                        <div className="flex items-center justify-between"><h3 className="font-semibold text-sm">{challenge.title}</h3><Badge variant={completed ? "default" : "outline"} className={cn("text-xs", completed && "bg-green-600")}>{completed ? "✅ Completo" : `+${challenge.xpReward} XP`}</Badge></div>
+                        <div className="flex items-center justify-between"><h3 className="font-semibold text-sm">{challenge.title}</h3><Badge variant={completed ? "default" : "outline"} className={cn("text-xs", completed && "bg-success")}>{completed ? "✅ Completo" : `+${challenge.xpReward} XP`}</Badge></div>
                         <p className="text-xs text-muted-foreground mt-1">{challenge.description}</p>
                         <div className="mt-3">
                           <div className="flex justify-between text-[10px] mb-1"><span>{challenge.progress}/{challenge.target}</span><span className="flex items-center gap-1"><Calendar className="h-3 w-3" /> {challenge.deadline}</span></div>

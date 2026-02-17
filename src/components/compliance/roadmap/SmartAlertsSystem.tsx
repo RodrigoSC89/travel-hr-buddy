@@ -395,62 +395,62 @@ export function SmartAlertsSystem() {
           </CardContent>
         </Card>
         
-        <Card className="border-yellow-500/30">
+        <Card className="border-warning/30">
           <CardContent className="pt-4">
             <div className="flex items-center justify-between">
               <div>
                 <p className="text-xs text-muted-foreground">Pendentes</p>
-                <p className="text-2xl font-bold text-yellow-600">{stats.pendentes}</p>
+                <p className="text-2xl font-bold text-warning">{stats.pendentes}</p>
               </div>
-              <Clock className="h-6 w-6 text-yellow-500/50" />
+              <Clock className="h-6 w-6 text-warning/50" />
             </div>
           </CardContent>
         </Card>
         
-        <Card className="border-blue-500/30">
+        <Card className="border-info/30">
           <CardContent className="pt-4">
             <div className="flex items-center justify-between">
               <div>
                 <p className="text-xs text-muted-foreground">Enviados</p>
-                <p className="text-2xl font-bold text-blue-600">{stats.enviados}</p>
+                <p className="text-2xl font-bold text-info">{stats.enviados}</p>
               </div>
-              <Mail className="h-6 w-6 text-blue-500/50" />
+              <Mail className="h-6 w-6 text-info/50" />
             </div>
           </CardContent>
         </Card>
         
-        <Card className="border-purple-500/30">
+        <Card className="border-accent/30">
           <CardContent className="pt-4">
             <div className="flex items-center justify-between">
               <div>
                 <p className="text-xs text-muted-foreground">Lidos</p>
-                <p className="text-2xl font-bold text-purple-600">{stats.lidos}</p>
+                <p className="text-2xl font-bold text-accent-foreground">{stats.lidos}</p>
               </div>
-              <Eye className="h-6 w-6 text-purple-500/50" />
+              <Eye className="h-6 w-6 text-accent-foreground/50" />
             </div>
           </CardContent>
         </Card>
         
-        <Card className="border-green-500/30">
+        <Card className="border-success/30">
           <CardContent className="pt-4">
             <div className="flex items-center justify-between">
               <div>
                 <p className="text-xs text-muted-foreground">Ação Tomada</p>
-                <p className="text-2xl font-bold text-green-600">{stats.acaoTomada}</p>
+                <p className="text-2xl font-bold text-success">{stats.acaoTomada}</p>
               </div>
-              <CheckCircle className="h-6 w-6 text-green-500/50" />
+              <CheckCircle className="h-6 w-6 text-success/50" />
             </div>
           </CardContent>
         </Card>
         
-        <Card className="border-red-500/30">
+        <Card className="border-destructive/30">
           <CardContent className="pt-4">
             <div className="flex items-center justify-between">
               <div>
                 <p className="text-xs text-muted-foreground">Erros</p>
-                <p className="text-2xl font-bold text-red-600">{stats.erros}</p>
+                <p className="text-2xl font-bold text-destructive">{stats.erros}</p>
               </div>
-              <XCircle className="h-6 w-6 text-red-500/50" />
+              <XCircle className="h-6 w-6 text-destructive/50" />
             </div>
           </CardContent>
         </Card>
@@ -522,8 +522,8 @@ export function SmartAlertsSystem() {
                   <div
                     key={log.id}
                     className={`flex items-center justify-between p-4 rounded-lg border transition-colors ${
-                      log.status === 'pendente' ? 'bg-yellow-500/5 border-yellow-500/30' :
-                      log.status === 'acao_tomada' ? 'bg-green-500/5 border-green-500/30' :
+                      log.status === 'pendente' ? 'bg-warning/5 border-warning/30' :
+                      log.status === 'acao_tomada' ? 'bg-success/5 border-success/30' :
                       'bg-card hover:bg-muted/30'
                     }`}
                   >

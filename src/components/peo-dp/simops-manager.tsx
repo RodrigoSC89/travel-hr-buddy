@@ -437,16 +437,16 @@ export const SIMOPSManager: React.FC = () => {
         <Card>
           <CardHeader className="pb-2">
             <CardTitle className="flex items-center gap-2">
-              <AlertTriangle className="h-5 w-5 text-yellow-500" />
+              <AlertTriangle className="h-5 w-5 text-warning" />
               Conflitos e Recomendações
             </CardTitle>
           </CardHeader>
           <CardContent>
             <div className="grid grid-cols-2 gap-4">
               {conflicts.map(conflict => (
-                <div key={conflict.id} className={`p-4 rounded-lg border ${conflict.severity === "critical" ? "border-red-500/50 bg-red-500/5" : "border-yellow-500/50 bg-yellow-500/5"}`}>
+                <div key={conflict.id} className={`p-4 rounded-lg border ${conflict.severity === "critical" ? "border-destructive/50 bg-destructive/5" : "border-warning/50 bg-warning/5"}`}>
                   <div className="flex items-start gap-3">
-                    <AlertTriangle className={`h-5 w-5 mt-0.5 ${conflict.severity === "critical" ? "text-red-500" : "text-yellow-500"}`} />
+                    <AlertTriangle className={`h-5 w-5 mt-0.5 ${conflict.severity === "critical" ? "text-destructive" : "text-warning"}`} />
                     <div>
                       <div className="flex items-center gap-2">
                         <p className="font-medium">{conflict.description}</p>

@@ -221,8 +221,8 @@ export const EnhancedOperationsCenter: React.FC = () => {
           </div>
         </div>
         <div className="flex items-center gap-2">
-          <Badge variant="outline" className="gap-1 bg-green-500/10 text-green-500">
-            <div className="h-2 w-2 rounded-full bg-green-500 animate-pulse" />
+          <Badge variant="outline" className="gap-1 bg-success/10 text-success">
+            <div className="h-2 w-2 rounded-full bg-success animate-pulse" />
             {vessels.filter(v => v.status === 'underway').length} navegando
           </Badge>
           <Button variant="outline" onClick={loadOperationsData}>

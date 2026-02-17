@@ -18,9 +18,9 @@ const sizeClasses = {
 
 const variantClasses = {
   default: "bg-primary",
-  success: "bg-green-500",
-  warning: "bg-yellow-500",
-  danger: "bg-red-500"
+  success: "bg-success",
+  warning: "bg-warning",
+  danger: "bg-destructive"
 };
 
 export const ProgressBar: React.FC<ProgressBarProps> = ({
