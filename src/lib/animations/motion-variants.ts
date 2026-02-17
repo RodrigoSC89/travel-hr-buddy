@@ -91,3 +91,24 @@ export const pulseVariant: Variants = {
     transition: { duration: 2, repeat: Infinity, ease: "easeInOut" },
   },
 };
+
+// === Micro-interactions ===
+export const microBounce = {
+  whileTap: { scale: 0.95, transition: { type: "spring", stiffness: 400, damping: 17 } },
+};
+
+export const cardHoverLift = {
+  whileHover: { y: -4, boxShadow: "0 12px 24px -8px hsla(var(--primary) / 0.12)", transition: { duration: 0.25 } },
+  whileTap: { y: 0, scale: 0.99 },
+};
+
+export const shimmerPulse: Variants = {
+  initial: { opacity: 0.5 },
+  animate: { opacity: [0.5, 0.8, 0.5], transition: { duration: 1.5, repeat: Infinity, ease: "easeInOut" } },
+};
+
+// === Badge / notification bounce ===
+export const notificationBadge: Variants = {
+  hidden: { scale: 0, opacity: 0 },
+  visible: { scale: 1, opacity: 1, transition: { type: "spring", stiffness: 500, damping: 15 } },
+};

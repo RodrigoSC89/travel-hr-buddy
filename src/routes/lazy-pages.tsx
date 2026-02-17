@@ -9,6 +9,7 @@ import { lazy } from "react";
 // ============================================
 export const Auth = lazy(() => import("@/pages/Auth"));
 export const AuthCallback = lazy(() => import("@/pages/AuthCallback"));
+export const ResetPassword = lazy(() => import("@/pages/ResetPassword"));
 export const LandingPage = lazy(() => import("@/pages/LandingPage"));
 export const AboutSystem = lazy(() => import("@/pages/AboutSystem"));
 export const DemoLauncher = lazy(() => import("@/pages/DemoLauncher"));

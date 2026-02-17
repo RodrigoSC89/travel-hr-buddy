@@ -357,7 +357,7 @@ export function AuthProvider({ children }: AuthProviderProps): JSX.Element {
   }, []);
 
   const resetPassword = useCallback(async (email: string) => {
-    const redirectUrl = `${getRedirectUrl()}auth?type=recovery`;
+    const redirectUrl = `${getRedirectUrl()}reset-password`;
     
     try {
       const { error } = await supabase.auth.resetPasswordForEmail(email.toLowerCase().trim(), {
