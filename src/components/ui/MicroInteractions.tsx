@@ -49,11 +49,11 @@ export const SuccessAnimation: React.FC<SuccessAnimationProps> = ({
             animate={{ scale: [0.8, 1.2, 1] }}
             transition={{ duration: 0.4, times: [0, 0.6, 1] }}
             className={cn(
-              "rounded-full bg-green-500/10 p-2 ring-2 ring-green-500/20",
+              "rounded-full bg-success/10 p-2 ring-2 ring-success/20",
               sizes[size]
             )}
           >
-            <Check className="h-full w-full text-green-500" strokeWidth={3} />
+            <Check className="h-full w-full text-success" strokeWidth={3} />
           </motion.div>
         </motion.div>
       )}
@@ -121,10 +121,10 @@ export const PulseDot: React.FC<PulseDotProps> = ({
   size = 'md'
 }) => {
   const colors = {
-    green: 'bg-green-500',
-    red: 'bg-red-500',
-    yellow: 'bg-yellow-500',
-    blue: 'bg-blue-500'
+    green: 'bg-success',
+    red: 'bg-destructive',
+    yellow: 'bg-warning',
+    blue: 'bg-info'
   };
 
   const sizes = {
@@ -162,11 +162,19 @@ export const StatusIndicator: React.FC<StatusIndicatorProps> = ({
   showLabel = false,
   size = 'md'
 }) => {
+  const colorMap = {
+    green: 'bg-success',
+    red: 'bg-destructive',
+    yellow: 'bg-warning',
+    blue: 'bg-info',
+    gray: 'bg-muted-foreground',
+  };
+
   const config = {
-    online: { color: 'green', label: 'Online', pulse: true },
-    offline: { color: 'gray', label: 'Offline', pulse: false },
-    busy: { color: 'red', label: 'Ocupado', pulse: true },
-    away: { color: 'yellow', label: 'Ausente', pulse: false }
+    online: { color: 'green' as const, label: 'Online', pulse: true },
+    offline: { color: 'gray' as const, label: 'Offline', pulse: false },
+    busy: { color: 'red' as const, label: 'Ocupado', pulse: true },
+    away: { color: 'yellow' as const, label: 'Ausente', pulse: false }
   };
 
   const { color, label, pulse } = config[status];
@@ -179,7 +187,7 @@ export const StatusIndicator: React.FC<StatusIndicatorProps> = ({
         <span className={cn(
           "rounded-full",
           size === 'sm' ? 'h-2 w-2' : 'h-3 w-3',
-          color === 'gray' ? 'bg-gray-400' : `bg-${color}-500`
+          colorMap[color] || 'bg-muted'
         )} />
       )}
       {showLabel && (

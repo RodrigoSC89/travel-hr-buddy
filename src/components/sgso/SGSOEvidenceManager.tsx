@@ -621,11 +621,11 @@ export const SGSOEvidenceManager: React.FC = () => {
       {/* Evidence Grid by Practice */}
       <div className="grid grid-cols-1 lg:grid-cols-2 gap-4">
         {groupedByPractice.map(practice => (
-          <Card key={practice.number} className={practice.count > 0 ? "border-green-200 dark:border-green-800" : ""}>
+          <Card key={practice.number} className={practice.count > 0 ? "border-success/30" : ""}>
             <CardHeader className="pb-2">
               <div className="flex items-center justify-between">
                 <div className="flex items-center gap-2">
-                  <Badge variant={practice.count > 0 ? "default" : "outline"} className={practice.count > 0 ? "bg-green-600" : ""}>
+                  <Badge variant={practice.count > 0 ? "default" : "outline"} className={practice.count > 0 ? "bg-success" : ""}>
                     {practice.number}
                   </Badge>
                   <CardTitle className="text-sm font-medium">{practice.name}</CardTitle>

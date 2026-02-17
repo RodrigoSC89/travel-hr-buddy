@@ -173,7 +173,7 @@ export function DPIncidentsCIRAS() {
                   )}
                   <div className="flex items-center justify-between">
                     {incident.reported_to_client ? (
-                      <Badge variant="outline" className="gap-1 text-xs border-green-500 text-green-600">
+                      <Badge variant="outline" className="gap-1 text-xs border-success text-success">
                         <FileText className="h-3 w-3" /> {incident.imca_reference || "Reportado"}
                       </Badge>
                     ) : (

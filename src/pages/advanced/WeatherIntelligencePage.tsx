@@ -260,7 +260,7 @@ const WeatherIntelligencePage = () => {
             <CardContent>
               <div className="space-y-4">
                 {/* Route risk based on real weather data */}
-                <div className={`p-4 rounded-lg border-2 ${overallRisk === "high" ? "border-red-500 bg-red-500/5" : overallRisk === "medium" ? "border-yellow-500 bg-yellow-500/5" : "border-green-500 bg-green-500/5"}`}>
+                <div className={`p-4 rounded-lg border-2 ${overallRisk === "high" ? "border-destructive bg-destructive/5" : overallRisk === "medium" ? "border-warning bg-warning/5" : "border-success bg-success/5"}`}>
                   <div className="flex items-center justify-between mb-3">
                     <h3 className="font-semibold">Risco Meteorológico Atual</h3>
                     <Badge variant={overallRisk === "high" ? "destructive" : overallRisk === "medium" ? "outline" : "default"}>

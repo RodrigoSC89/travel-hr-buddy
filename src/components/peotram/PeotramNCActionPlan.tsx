@@ -56,7 +56,7 @@ const STATUS_CONFIG: Record<NCStatus, { label: string; color: string; icon: Reac
   open: { label: "Aberta", color: "border-destructive/30 bg-destructive/5", icon: <AlertTriangle className="h-3.5 w-3.5 text-destructive" /> },
   in_progress: { label: "Em Andamento", color: "border-warning/30 bg-warning/5", icon: <Clock className="h-3.5 w-3.5 text-warning" /> },
   evidence_pending: { label: "Aguardando Evidência", color: "border-primary/30 bg-primary/5", icon: <FileText className="h-3.5 w-3.5 text-primary" /> },
-  verification: { label: "Em Verificação", color: "border-blue-500/30 bg-blue-500/5", icon: <Eye className="h-3.5 w-3.5 text-blue-400" /> },
+  verification: { label: "Em Verificação", color: "border-info/30 bg-info/5", icon: <Eye className="h-3.5 w-3.5 text-info" /> },
   closed: { label: "Fechada", color: "border-success/30 bg-success/5", icon: <CheckCircle className="h-3.5 w-3.5 text-success" /> },
 };
 

@@ -32,7 +32,7 @@ const AI_TOOLS = [
     name: 'Auto-Evidence Generator',
     description: 'Gera evidências de conformidade automaticamente a partir de todo o SGI da empresa',
     icon: FileCheck,
-    color: 'text-emerald-500',
+    color: 'text-success',
     prompt: 'Gere automaticamente evidências de conformidade para auditoria marítima. Busque dados de: 1) Registros de manutenção (PMS), 2) Treinamentos e certificações da tripulação (STCW), 3) Inspeções realizadas, 4) Drills e exercícios de emergência, 5) Registros de segurança do trabalho. Para cada item, indique a fonte, data e relevância para ISM/ISPS/MLC/SOLAS.',
   },
   {
@@ -40,7 +40,7 @@ const AI_TOOLS = [
     name: 'Gap Analyzer AI',
     description: 'Identifica lacunas de conformidade comparando dados reais vs requisitos',
     icon: Search,
-    color: 'text-red-500',
+    color: 'text-destructive',
     prompt: 'Realize uma análise de gap completa comparando o estado atual de conformidade com os requisitos de: 1) ISM Code - 13 elementos, 2) ISPS Code - Níveis 1-3, 3) MLC 2006 - Condições de trabalho e vida a bordo, 4) STCW - Competências e certificações, 5) MARPOL - Gestão de resíduos. Para cada gap, classifique a severidade (Crítico/Maior/Menor) e prazo de remediação.',
   },
   {
@@ -64,7 +64,7 @@ const AI_TOOLS = [
     name: 'Audit Prep AI',
     description: 'Gera pacotes completos de preparação para inspeções e auditorias',
     icon: ClipboardCheck,
-    color: 'text-purple-500',
+    color: 'text-accent-foreground',
     prompt: 'Prepare um pacote completo de preparação para auditoria: 1) Checklist de documentos obrigatórios por tipo de inspeção, 2) Briefing para tripulação sobre pontos de atenção, 3) Áreas de risco baseadas em histórico, 4) Simulação de perguntas típicas do auditor, 5) Plano de apresentação da documentação. Inclua dicas específicas para PSC, OVID, SIRE e auditorias internas.',
   },
   {
@@ -72,7 +72,7 @@ const AI_TOOLS = [
     name: 'Compliance Score Predictor',
     description: 'Prevê scores de conformidade e identifica tendências de risco',
     icon: TrendingUp,
-    color: 'text-cyan-500',
+    color: 'text-info',
     prompt: 'Projete os scores de conformidade para os próximos 6 meses: 1) Score geral de compliance (0-100), 2) Score por categoria (ISM, ISPS, MLC, STCW, MARPOL), 3) Tendência de evolução, 4) Áreas que mais impactam o score, 5) Ações que mais elevariam o score rapidamente. Inclua benchmarking com padrões da indústria marítima.',
   },
 ];

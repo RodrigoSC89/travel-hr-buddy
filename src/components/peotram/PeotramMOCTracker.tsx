@@ -34,7 +34,7 @@ const changeTypeConfig: Record<string, { label: string; color: string }> = {
 const riskColors: Record<string, string> = {
   low: "bg-success/10 text-success border-success/30",
   medium: "bg-warning/10 text-warning border-warning/30",
-  high: "bg-orange-500/10 text-orange-400 border-orange-500/30",
+  high: "bg-destructive/10 text-destructive border-destructive/30",
   critical: "bg-destructive/10 text-destructive border-destructive/30",
 };
 

@@ -213,7 +213,7 @@ export default function AIModulesHubPage() {
                     <div className={`p-3 rounded-lg ${module.color} text-white`}>
                       <Icon className="h-6 w-6" />
                     </div>
-                    <Badge variant="outline" className="text-green-600 border-green-600">
+                    <Badge variant="outline" className="text-success border-success">
                       Ativo
                     </Badge>
                   </div>

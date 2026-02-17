@@ -235,9 +235,9 @@ export const AuditInterviewSimulator = memo(({ framework, pack, elements }: Prop
           </CardTitle>
           <div className="flex items-center gap-3">
             <div className="flex items-center gap-1 text-xs">
-              <CheckCircle2 className="h-3 w-3 text-green-500" />
+              <CheckCircle2 className="h-3 w-3 text-success" />
               <span>{stats.correct}</span>
-              <AlertTriangle className="h-3 w-3 text-yellow-500 ml-1" />
+              <AlertTriangle className="h-3 w-3 text-warning ml-1" />
               <span>{stats.partial}</span>
               <XCircle className="h-3 w-3 text-destructive ml-1" />
               <span>{stats.wrong}</span>
@@ -281,8 +281,8 @@ export const AuditInterviewSimulator = memo(({ framework, pack, elements }: Prop
                   {msg.evaluation && (
                     <div className={cn(
                       "mt-2 p-2 rounded text-xs border",
-                      msg.evaluation.score === "correct" ? "bg-green-500/10 border-green-500/30 text-green-700 dark:text-green-400" :
-                      msg.evaluation.score === "partial" ? "bg-yellow-500/10 border-yellow-500/30 text-yellow-700 dark:text-yellow-400" :
+                      msg.evaluation.score === "correct" ? "bg-success/10 border-success/30 text-success" :
+                      msg.evaluation.score === "partial" ? "bg-warning/10 border-warning/30 text-warning" :
                       "bg-destructive/10 border-destructive/30 text-destructive"
                     )}>
                       <div className="flex items-center gap-1 font-medium mb-0.5">
@@ -314,14 +314,14 @@ export const AuditInterviewSimulator = memo(({ framework, pack, elements }: Prop
           <div className="space-y-3">
             <Card className={cn(
               "border-2",
-              scorePercent >= 80 ? "border-green-500/40 bg-green-500/5" :
-              scorePercent >= 50 ? "border-yellow-500/40 bg-yellow-500/5" :
+              scorePercent >= 80 ? "border-success/40 bg-success/5" :
+              scorePercent >= 50 ? "border-warning/40 bg-warning/5" :
               "border-destructive/40 bg-destructive/5"
             )}>
               <CardContent className="pt-4 text-center">
                 <Trophy className={cn(
                   "h-10 w-10 mx-auto mb-2",
-                  scorePercent >= 80 ? "text-green-500" : scorePercent >= 50 ? "text-yellow-500" : "text-destructive"
+                  scorePercent >= 80 ? "text-success" : scorePercent >= 50 ? "text-warning" : "text-destructive"
                 )} />
                 <p className="text-2xl font-bold">{scorePercent}%</p>
                 <p className="text-sm text-muted-foreground">Score Final da Entrevista</p>
