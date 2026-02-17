@@ -10,6 +10,7 @@ export function useEvidenceOrganizer(framework: string) {
   const [items, setItems] = useState<EvidenceItem[]>([]);
   const [matches, setMatches] = useState<EvidenceMatch[]>([]);
   const [isLoading, setIsLoading] = useState(false);
+  const [isRematching, setIsRematching] = useState(false);
   const [processingStep, setProcessingStep] = useState<string | null>(null);
 
   const loadPacks = useCallback(async () => {
@@ -36,6 +37,12 @@ export function useEvidenceOrganizer(framework: string) {
     setItems((itemResult.data as EvidenceItem[]) || []);
     setMatches((matchResult.data as EvidenceMatch[]) || []);
     if (packResult.data) setActivePack(packResult.data as EvidencePack);
+  }, []);
+
+  const loadPackElements = useCallback(async (packId: string): Promise<EvidenceElement[]> => {
+    const { data } = await (supabase.from as Function)("audit_evidence_elements")
+      .select("*").eq("pack_id", packId).order("sort_order");
+    return (data as EvidenceElement[]) || [];
   }, []);
 
   const uploadAndProcess = useCallback(async (
@@ -106,6 +113,34 @@ export function useEvidenceOrganizer(framework: string) {
     }
   }, [framework, loadPackDetails, loadPacks]);
 
+  const rematchGaps = useCallback(async () => {
+    if (!activePack) return;
+    setIsRematching(true);
+
+    try {
+      const result = await supabase.functions.invoke("smart-evidence-organizer", {
+        body: { action: "rematch_gaps", pack_id: activePack.id, framework },
+      });
+
+      if (result.error) throw result.error;
+
+      const { gaps_processed, improved, new_score } = result.data;
+      toast.success("Re-matching concluído!", {
+        description: `${gaps_processed} gaps processados, ${improved} melhorados. Novo score: ${new_score}%`,
+      });
+
+      await loadPackDetails(activePack.id);
+      await loadPacks();
+    } catch (error) {
+      console.error("Rematch error:", error);
+      toast.error("Erro no re-matching", {
+        description: error instanceof Error ? error.message : "Erro desconhecido",
+      });
+    } finally {
+      setIsRematching(false);
+    }
+  }, [activePack, framework, loadPackDetails, loadPacks]);
+
   const addManualEvidence = useCallback(async (itemId: string, documentTitle: string, documentPath?: string) => {
     if (!activePack) return;
 
@@ -134,11 +169,14 @@ export function useEvidenceOrganizer(framework: string) {
     items,
     matches,
     isLoading,
+    isRematching,
     processingStep,
     loadPacks,
     loadPackDetails,
+    loadPackElements,
     setActivePack,
     uploadAndProcess,
     addManualEvidence,
+    rematchGaps,
   };
 }
