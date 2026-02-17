@@ -303,7 +303,7 @@ export default function EditTemplatePage() {
                 </>
               ) : (
                 <>
-                  <Sparkles className="w-4 h-4 mr-2 text-yellow-400" /> Gerar com IA
+                  <Sparkles className="w-4 h-4 mr-2 text-warning" /> Gerar com IA
                 </>
               )}
             </Button>

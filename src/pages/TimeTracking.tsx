@@ -146,7 +146,7 @@ const TimeTracking: React.FC = () => {
                   </p>
                   <p className="text-sm text-muted-foreground">Banco de Horas</p>
                 </div>
-                <Timer className="w-8 h-8 text-purple-500" />
+                <Timer className="w-8 h-8 text-accent" />
               </div>
             </CardContent>
           </Card>

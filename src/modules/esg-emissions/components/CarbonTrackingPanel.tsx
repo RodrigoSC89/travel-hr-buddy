@@ -100,11 +100,11 @@ const fuelEmissionFactors = [
 
 // Emission sources breakdown (industry standard proportions)
 const emissionsBySource = [
-  { name: "Main Engine", value: 78, color: "#3b82f6" },
-  { name: "Auxiliary Engine", value: 12, color: "#22c55e" },
-  { name: "Boilers", value: 6, color: "#f59e0b" },
-  { name: "Incinerator", value: 2, color: "#ef4444" },
-  { name: "Other", value: 2, color: "#6b7280" }
+  { name: "Main Engine", value: 78, color: "hsl(var(--primary))" },
+  { name: "Auxiliary Engine", value: 12, color: "hsl(var(--success))" },
+  { name: "Boilers", value: 6, color: "hsl(var(--warning))" },
+  { name: "Incinerator", value: 2, color: "hsl(var(--destructive))" },
+  { name: "Other", value: 2, color: "hsl(var(--muted-foreground))" }
 ];
 
 export const CarbonTrackingPanel: React.FC = () => {
@@ -401,9 +401,9 @@ export const CarbonTrackingPanel: React.FC = () => {
                     <YAxis tickFormatter={(v) => `${v/1000}k`} />
                     <Tooltip formatter={(v) => `${formatNumber(Number(v))} ton`} />
                     <Legend />
-                    <Bar dataKey="scope1" stackId="a" fill="#3b82f6" name="Scope 1" />
-                    <Bar dataKey="scope2" stackId="a" fill="#22c55e" name="Scope 2" />
-                    <Bar dataKey="scope3" stackId="a" fill="#f59e0b" name="Scope 3" />
+                    <Bar dataKey="scope1" stackId="a" fill="hsl(var(--primary))" name="Scope 1" />
+                    <Bar dataKey="scope2" stackId="a" fill="hsl(var(--success))" name="Scope 2" />
+                    <Bar dataKey="scope3" stackId="a" fill="hsl(var(--warning))" name="Scope 3" />
                   </BarChart>
                 </ResponsiveContainer>
               </CardContent>

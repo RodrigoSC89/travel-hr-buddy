@@ -166,17 +166,17 @@ export function ComplianceAIAnalysisPanel({
                 {analysis.complianceGaps.length > 0 && (
                   <div className="space-y-3">
                     <h4 className="font-medium flex items-center gap-2">
-                      <AlertTriangle className="h-4 w-4 text-yellow-500" />
+                      <AlertTriangle className="h-4 w-4 text-warning" />
                       Lacunas de Conformidade
                     </h4>
                     {analysis.complianceGaps.slice(0, 3).map((gap) => (
-                      <div key={gap.regulation} className="p-3 rounded-lg border border-yellow-500/20 bg-yellow-500/5">
+                      <div key={gap.regulation} className="p-3 rounded-lg border border-warning/20 bg-warning/5">
                         <div className="flex items-center justify-between mb-1">
                           <span className="font-medium text-sm">{gap.regulation}</span>
                           <Badge variant="outline" className={
-                            gap.priority === 'high' ? 'border-red-500/50 text-red-500' :
-                            gap.priority === 'medium' ? 'border-yellow-500/50 text-yellow-500' :
-                            'border-green-500/50 text-green-500'
+                            gap.priority === 'high' ? 'border-destructive/50 text-destructive' :
+                            gap.priority === 'medium' ? 'border-warning/50 text-warning' :
+                            'border-success/50 text-success'
                           }>
                             {gap.priority === 'high' ? 'Alta' : gap.priority === 'medium' ? 'Média' : 'Baixa'}
                           </Badge>
@@ -202,13 +202,13 @@ export function ComplianceAIAnalysisPanel({
             {analysis?.predictedIssues.map((issue) => (
               <div key={issue.issue} className="p-4 rounded-lg border">
                 <div className="flex items-start gap-3">
-                  <div className="p-2 rounded-lg bg-orange-500/10">
-                    <Zap className="h-4 w-4 text-orange-500" />
+                  <div className="p-2 rounded-lg bg-warning/10">
+                    <Zap className="h-4 w-4 text-warning" />
                   </div>
                   <div className="flex-1">
                     <div className="flex items-center justify-between mb-2">
                       <span className="font-medium">{issue.issue}</span>
-                      <Badge variant="outline" className="bg-orange-500/10 text-orange-500 border-orange-500/20">
+                      <Badge variant="outline" className="bg-warning/10 text-warning border-warning/20">
                         {Math.round(issue.probability * 100)}% probabilidade
                       </Badge>
                     </div>
@@ -235,8 +235,8 @@ export function ComplianceAIAnalysisPanel({
                   <div className="flex items-center gap-2">
                     <span className="text-sm text-muted-foreground">Prontidão:</span>
                     <Badge className={
-                      audit.readinessScore >= 90 ? 'bg-green-500' :
-                      audit.readinessScore >= 75 ? 'bg-yellow-500' : 'bg-red-500'
+                      audit.readinessScore >= 90 ? 'bg-success' :
+                      audit.readinessScore >= 75 ? 'bg-warning' : 'bg-destructive'
                     }>
                       {audit.readinessScore}%
                     </Badge>

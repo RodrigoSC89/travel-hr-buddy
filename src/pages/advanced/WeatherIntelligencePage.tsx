@@ -308,7 +308,7 @@ const WeatherIntelligencePage = () => {
                   </div>
                 )}
                 {current && (current?.windSpeedKnots ?? 0) > 20 && (
-                  <div className="p-3 bg-blue-500/10 border border-blue-500/20 rounded-lg">
+                  <div className="p-3 bg-info/10 border border-info/20 rounded-lg">
                     <p className="text-sm">
                       <strong>🌬️ Ventos fortes:</strong> {current.windSpeedKnots} kn de {windDegreesToCardinal(current.windDirection)}.
                       {current.windDirection && current.windDirection > 135 && current.windDirection < 225
@@ -318,14 +318,14 @@ const WeatherIntelligencePage = () => {
                   </div>
                 )}
                 {current && (current?.visibility ?? 999) < 5 && (
-                  <div className="p-3 bg-red-500/10 border border-red-500/20 rounded-lg">
+                  <div className="p-3 bg-destructive/10 border border-destructive/20 rounded-lg">
                     <p className="text-sm">
                       <strong>👁️ Baixa visibilidade:</strong> {current.visibility}km — ativar radar e reduzir velocidade conforme COLREG.
                     </p>
                   </div>
                 )}
                 {overallRisk === "low" && (
-                  <div className="p-3 bg-green-500/10 border border-green-500/20 rounded-lg">
+                  <div className="p-3 bg-success/10 border border-success/20 rounded-lg">
                     <p className="text-sm">
                       <strong>✅ Condições favoráveis:</strong> Mar calmo com ondas de {current?.waveHeight ?? 0}m e ventos de {current?.windSpeedKnots ?? 0}kn. Condições ideais para navegação.
                     </p>
@@ -353,8 +353,8 @@ const WeatherIntelligencePage = () => {
                       <div
                         key={day.day}
                         className={`p-4 rounded-lg border text-center ${
-                          risk === "high" ? "border-red-500/50 bg-red-500/5" :
-                          risk === "medium" ? "border-yellow-500/50 bg-yellow-500/5" :
+                          risk === "high" ? "border-destructive/50 bg-destructive/5" :
+                          risk === "medium" ? "border-warning/50 bg-warning/5" :
                           "border-border"
                         }`}
                       >
@@ -440,9 +440,9 @@ const WeatherIntelligencePage = () => {
                 <div className="space-y-3">
                   {alerts.map((alert, idx) => (
                     <div key={`alert-${idx}-${alert.severity}`} className={`p-4 border rounded-lg ${
-                      alert.severity === "high" || alert.severity === "critical" ? "bg-red-500/10 border-red-500/50" :
-                      alert.severity === "medium" ? "bg-yellow-500/10 border-yellow-500/50" :
-                      "bg-blue-500/10 border-blue-500/50"
+                      alert.severity === "high" || alert.severity === "critical" ? "bg-destructive/10 border-destructive/50" :
+                      alert.severity === "medium" ? "bg-warning/10 border-warning/50" :
+                      "bg-info/10 border-info/50"
                     }`}>
                       <div className="flex items-center gap-3">
                         <AlertTriangle className={`h-5 w-5 ${

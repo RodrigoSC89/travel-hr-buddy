@@ -426,8 +426,8 @@ export default function CrewMatchingPage() {
                                     </div>
                                   )}
                                   {candidate.risks.length > 0 && (
-                                    <div className="p-2 bg-amber-500/5 rounded text-xs">
-                                      <div className="flex items-center gap-1 text-amber-600 font-medium mb-1">
+                                     <div className="p-2 bg-warning/5 rounded text-xs">
+                                      <div className="flex items-center gap-1 text-warning font-medium mb-1">
                                         <AlertTriangle className="h-3 w-3" />
                                         Atenção
                                       </div>

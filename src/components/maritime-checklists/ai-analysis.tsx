@@ -143,19 +143,19 @@ export const AIAnalysisComponent: React.FC<AIAnalysisProps> = ({
             </div>
           ) : (
             <div className="grid grid-cols-1 md:grid-cols-4 gap-4">
-              <div className="text-center p-4 bg-blue-50 rounded-lg">
-                <div className="text-2xl font-bold text-blue-600">{analysis.overallScore}%</div>
+              <div className="text-center p-4 bg-primary/5 rounded-lg">
+                <div className="text-2xl font-bold text-primary">{analysis.overallScore}%</div>
                 <div className="text-sm text-muted-foreground">Score Geral</div>
               </div>
-              <div className="text-center p-4 bg-red-50 rounded-lg">
-                <div className="text-2xl font-bold text-red-600">{analysis.anomalies.length}</div>
+              <div className="text-center p-4 bg-destructive/5 rounded-lg">
+                <div className="text-2xl font-bold text-destructive">{analysis.anomalies.length}</div>
                 <div className="text-sm text-muted-foreground">Anomalias</div>
               </div>
-              <div className="text-center p-4 bg-green-50 rounded-lg">
-                <div className="text-2xl font-bold text-green-600">{analysis.suggestions.length}</div>
+              <div className="text-center p-4 bg-success/5 rounded-lg">
+                <div className="text-2xl font-bold text-success">{analysis.suggestions.length}</div>
                 <div className="text-sm text-muted-foreground">Sugestões</div>
               </div>
-              <div className="text-center p-4 bg-purple-50 rounded-lg">
+              <div className="text-center p-4 bg-accent/5 rounded-lg">
                 <div className={`text-2xl font-bold ${getRiskLevelColor(analysis.riskLevel)}`}>
                   {analysis.riskLevel.toUpperCase()}
                 </div>
@@ -174,7 +174,7 @@ export const AIAnalysisComponent: React.FC<AIAnalysisProps> = ({
             <Card>
               <CardHeader>
                 <CardTitle className="flex items-center gap-2">
-                  <AlertTriangle className="w-5 h-5 text-orange-600" />
+                  <AlertTriangle className="w-5 h-5 text-warning" />
                   Anomalias Detectadas
                 </CardTitle>
                 <CardDescription>

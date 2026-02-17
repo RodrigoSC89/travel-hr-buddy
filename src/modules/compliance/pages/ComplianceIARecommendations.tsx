@@ -53,7 +53,7 @@ export default function ComplianceIARecommendations() {
       <div className="flex items-center justify-between">
         <div>
           <h1 className="text-2xl font-bold flex items-center gap-2">
-            <Brain className="h-6 w-6 text-purple-500" />
+            <Brain className="h-6 w-6 text-accent" />
             IA de Compliance
           </h1>
           <p className="text-muted-foreground">
@@ -142,7 +142,7 @@ export default function ComplianceIARecommendations() {
                   %
                 </p>
               </div>
-              <Brain className="h-8 w-8 text-purple-500" />
+              <Brain className="h-8 w-8 text-accent" />
             </div>
           </CardContent>
         </Card>

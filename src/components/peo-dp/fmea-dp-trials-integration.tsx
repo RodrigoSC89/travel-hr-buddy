@@ -490,7 +490,7 @@ export const FMEADPTrialsIntegration: React.FC = () => {
                 {/* Wind Capability */}
                 <div className="p-4 border rounded-lg">
                   <h4 className="font-medium mb-3 flex items-center gap-2">
-                    <Zap className="h-4 w-4 text-blue-600" />
+                    <Zap className="h-4 w-4 text-primary" />
                     Capacidade vs Vento
                   </h4>
                   <div className="space-y-2">
@@ -501,8 +501,8 @@ export const FMEADPTrialsIntegration: React.FC = () => {
                           <span className="text-sm w-16">{wind} kts</span>
                           <Progress value={capability} className="flex-1 h-3" />
                           <span className={`text-sm font-medium w-12 ${
-                            capability >= 80 ? "text-green-600" :
-                            capability >= 60 ? "text-yellow-600" : "text-red-600"
+                            capability >= 80 ? "text-success" :
+                            capability >= 60 ? "text-warning" : "text-destructive"
                           }`}>
                             {capability}%
                           </span>
@@ -515,7 +515,7 @@ export const FMEADPTrialsIntegration: React.FC = () => {
                 {/* Current Capability */}
                 <div className="p-4 border rounded-lg">
                   <h4 className="font-medium mb-3 flex items-center gap-2">
-                    <TrendingUp className="h-4 w-4 text-green-600" />
+                    <TrendingUp className="h-4 w-4 text-success" />
                     Capacidade vs Corrente
                   </h4>
                   <div className="space-y-2">

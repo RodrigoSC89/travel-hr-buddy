@@ -39,10 +39,10 @@ export const PresenceAvatars: React.FC = () => {
                     <span
                       className={`absolute -bottom-0.5 -right-0.5 h-2.5 w-2.5 rounded-full border-2 border-background ${
                         user.status === "online"
-                          ? "bg-green-500"
+                          ? "bg-success"
                           : user.status === "away"
-                          ? "bg-yellow-500"
-                          : "bg-red-500"
+                          ? "bg-warning"
+                          : "bg-destructive"
                       }`}
                     />
                   </div>

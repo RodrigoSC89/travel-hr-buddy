@@ -429,17 +429,17 @@ export const FleetOperationsCenter: React.FC = () => {
                 <CardTitle>Previsão de Falhas (ML)</CardTitle>
               </CardHeader>
               <CardContent className="space-y-3">
-                <div className="p-3 bg-yellow-500/10 rounded-lg border border-yellow-500/20">
+                <div className="p-3 bg-warning/10 rounded-lg border border-warning/20">
                   <div className="flex items-center justify-between">
                     <span className="font-medium">PLSV Campos Star</span>
-                    <Badge className="bg-yellow-500 text-black">75% risco</Badge>
+                    <Badge className="bg-warning text-warning-foreground">75% risco</Badge>
                   </div>
                   <p className="text-sm text-muted-foreground mt-1">Thruster #3 - manutenção recomendada em 48h</p>
                 </div>
-                <div className="p-3 bg-green-500/10 rounded-lg border border-green-500/20">
+                <div className="p-3 bg-success/10 rounded-lg border border-success/20">
                   <div className="flex items-center justify-between">
                     <span className="font-medium">MV Atlantic Explorer</span>
-                    <Badge className="bg-green-500">5% risco</Badge>
+                    <Badge className="bg-success">5% risco</Badge>
                   </div>
                   <p className="text-sm text-muted-foreground mt-1">Todos os sistemas operando normalmente</p>
                 </div>
