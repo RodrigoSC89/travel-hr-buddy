@@ -3,7 +3,7 @@
  * Supera UniSea, TM Master e Compas
  * Features: STCW Compliance, Rest Hours, Rotations, Certificates, Wellness, Payroll
  */
-import React, { useState, useMemo } from 'react';
+import React, { useState, useMemo, useCallback, memo } from 'react';
 import { useQuery, useMutation, useQueryClient } from '@tanstack/react-query';
 import { supabase } from '@/integrations/supabase/client';
 import { Card, CardContent, CardHeader, CardTitle } from '@/components/ui/card';
@@ -152,7 +152,7 @@ export default function CrewManagementPremium() {
     return <Badge className={cn("text-[10px] border-0", c.color)}>{c.label}</Badge>;
   };
 
-  const exportCSV = () => {
+  const exportCSV = useCallback(() => {
     const csv = ['Nome,Cargo,Status,Nacionalidade,Embarcação,ID',
       ...filteredCrew.map((c) => {
         const vessel = c.vessels as { name?: string } | null;
@@ -162,7 +162,7 @@ export default function CrewManagementPremium() {
     const blob = new Blob([csv], { type: 'text/csv' });
     const a = document.createElement('a'); a.href = URL.createObjectURL(blob); a.download = `crew-${new Date().toISOString().split('T')[0]}.csv`; a.click();
     toast.success('CSV exportado!');
-  };
+  }, [filteredCrew]);
 
   return (
     <div className="space-y-6">
@@ -195,24 +195,30 @@ export default function CrewManagementPremium() {
       </div>
 
       {/* STCW Compliance */}
-      <Card className={cn("transition-colors", metrics.complianceRate >= 95 ? 'border-success/30' : metrics.complianceRate >= 80 ? 'border-warning/30' : 'border-destructive/30')}>
-        <CardContent className="p-4">
-          <div className="flex items-center justify-between mb-2">
-            <div className="flex items-center gap-2">
-              <Shield className={cn("h-5 w-5", metrics.complianceRate >= 95 ? 'text-success' : 'text-warning')} />
-              <span className="font-semibold">STCW Compliance Rate</span>
+      <motion.div
+        initial={{ opacity: 0, y: 12 }}
+        animate={{ opacity: 1, y: 0 }}
+        transition={{ delay: 0.3 }}
+      >
+        <Card className={cn("transition-colors", metrics.complianceRate >= 95 ? 'border-success/30 shadow-[0_0_15px_hsla(var(--success)/0.1)]' : metrics.complianceRate >= 80 ? 'border-warning/30' : 'border-destructive/30')}>
+          <CardContent className="p-4">
+            <div className="flex items-center justify-between mb-2">
+              <div className="flex items-center gap-2">
+                <Shield className={cn("h-5 w-5", metrics.complianceRate >= 95 ? 'text-success' : 'text-warning')} />
+                <span className="font-semibold">STCW Compliance Rate</span>
+              </div>
+              <span className={cn("text-lg font-bold", metrics.complianceRate >= 95 ? 'text-success' : 'text-warning')}>{metrics.complianceRate}%</span>
             </div>
-            <span className={cn("text-lg font-bold", metrics.complianceRate >= 95 ? 'text-success' : 'text-warning')}>{metrics.complianceRate}%</span>
-          </div>
-          <Progress value={metrics.complianceRate} className="h-3" />
-          {metrics.expired > 0 && (
-            <p className="text-sm text-destructive mt-2 flex items-center gap-1"><AlertTriangle className="h-4 w-4" />{metrics.expired} certificado(s) vencido(s) — ação imediata necessária</p>
-          )}
-          {metrics.expiring > 0 && (
-            <p className="text-sm text-warning mt-1 flex items-center gap-1"><Clock className="h-4 w-4" />{metrics.expiring} certificado(s) expirando nos próximos 30 dias</p>
-          )}
-        </CardContent>
-      </Card>
+            <Progress value={metrics.complianceRate} className="h-3" />
+            {metrics.expired > 0 && (
+              <p className="text-sm text-destructive mt-2 flex items-center gap-1"><AlertTriangle className="h-4 w-4" />{metrics.expired} certificado(s) vencido(s) — ação imediata necessária</p>
+            )}
+            {metrics.expiring > 0 && (
+              <p className="text-sm text-warning mt-1 flex items-center gap-1"><Clock className="h-4 w-4" />{metrics.expiring} certificado(s) expirando nos próximos 30 dias</p>
+            )}
+          </CardContent>
+        </Card>
+      </motion.div>
 
       {/* Main Tabs */}
       <Tabs value={activeTab} onValueChange={setActiveTab}>

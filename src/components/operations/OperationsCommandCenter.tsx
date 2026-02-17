@@ -1,10 +1,11 @@
 /**
  * Operations Command Center (SOC-style Dashboard)
- * PATCH 903 - Mock Zero compliance - Uses real data from Supabase
- * Refactored: KPI and sub-components extracted to soc/
+ * PATCH 904 - Performance + Cinematic UX upgrade
+ * Real data from Supabase with memo + stagger animations
  */
 
-import React, { useState } from 'react';
+import React, { useState, memo, useCallback } from 'react';
+import { motion } from 'framer-motion';
 import { Card, CardContent, CardHeader, CardTitle } from '@/components/ui/card';
 import { Badge } from '@/components/ui/badge';
 import { Button } from '@/components/ui/button';
@@ -21,6 +22,12 @@ import { format, formatDistanceToNow } from 'date-fns';
 import { ptBR } from 'date-fns/locale';
 import { useOperationalAlertsData } from '@/hooks/useIntelligentAlertsData';
 import { SOCKPIRow } from './soc/SOCKPIRow';
+
+const fadeUp = {
+  hidden: { opacity: 0, y: 16 },
+  visible: { opacity: 1, y: 0, transition: { duration: 0.35, ease: [0.25, 0.46, 0.45, 0.94] } },
+};
+const stagger = { visible: { transition: { staggerChildren: 0.05 } } };
 
 // Types
 interface Alert {
@@ -45,11 +52,11 @@ const severityConfig = {
   low: { color: 'text-info', bg: 'bg-info/10', border: 'border-info/30', icon: Bell },
 };
 
-const AlertItem: React.FC<{ alert: Alert; onAcknowledge: (id: string) => void }> = ({ alert, onAcknowledge }) => {
+const AlertItem = memo<{ alert: Alert; onAcknowledge: (id: string) => void }>(({ alert, onAcknowledge }) => {
   const config = severityConfig[alert.severity];
   const Icon = config.icon;
   return (
-    <div className={cn('p-3 rounded-lg border transition-all', config.bg, config.border, alert.acknowledged && 'opacity-50')}>
+    <motion.div variants={fadeUp} className={cn('p-3 rounded-lg border transition-all', config.bg, config.border, alert.acknowledged && 'opacity-50')}>
       <div className="flex items-start gap-3">
         <Icon className={cn('h-5 w-5 mt-0.5', config.color)} />
         <div className="flex-1 min-w-0">
@@ -66,16 +73,16 @@ const AlertItem: React.FC<{ alert: Alert; onAcknowledge: (id: string) => void }>
           </Button>
         )}
       </div>
-    </div>
+    </motion.div>
   );
-};
+});
 
-const VesselCard: React.FC<{ vessel: VesselStatus }> = ({ vessel }) => {
+const VesselCard = memo<{ vessel: VesselStatus }>(({ vessel }) => {
   const statusColors = { operational: 'bg-success', maintenance: 'bg-warning', offline: 'bg-muted-foreground', alert: 'bg-destructive' };
   return (
-    <div className="p-3 rounded-lg border bg-card hover:bg-accent/50 transition-colors">
+    <motion.div variants={fadeUp} className="p-3 rounded-lg border bg-card hover:bg-accent/50 transition-colors">
       <div className="flex items-center gap-3">
-        <div className={cn('w-2 h-2 rounded-full', statusColors[vessel.status])} />
+        <div className={cn('w-2.5 h-2.5 rounded-full shadow-[0_0_6px_currentColor]', statusColors[vessel.status])} />
         <div className="flex-1 min-w-0">
           <p className="font-medium text-sm truncate">{vessel.name}</p>
           <div className="flex items-center gap-2 text-xs text-muted-foreground">
@@ -85,23 +92,23 @@ const VesselCard: React.FC<{ vessel: VesselStatus }> = ({ vessel }) => {
         </div>
         <div className="text-right text-xs text-muted-foreground"><p>{format(vessel.lastUpdate, 'HH:mm')}</p></div>
       </div>
-    </div>
+    </motion.div>
   );
-};
+});
 
-const SystemHealthPanel: React.FC<{ systems: SystemHealth[] }> = ({ systems }) => (
+const SystemHealthPanel = memo<{ systems: SystemHealth[] }>(({ systems }) => (
   <div className="space-y-2">
     {systems.map((system) => (
-      <div key={system.service} className="flex items-center gap-3 p-2 rounded-lg hover:bg-accent/50">
-        <div className={cn('w-2 h-2 rounded-full',
+      <div key={system.service} className="flex items-center gap-3 p-2 rounded-lg hover:bg-accent/50 transition-colors">
+        <div className={cn('w-2.5 h-2.5 rounded-full shadow-[0_0_6px_currentColor]',
           system.status === 'healthy' ? 'bg-success' : system.status === 'degraded' ? 'bg-warning animate-pulse' : 'bg-destructive'
         )} />
         <span className="flex-1 text-sm">{system.service}</span>
-        <span className="text-xs text-muted-foreground">{system.latency}ms</span>
+        <span className={cn("text-xs font-mono", system.latency > 500 ? 'text-warning' : 'text-muted-foreground')}>{system.latency}ms</span>
       </div>
     ))}
   </div>
-);
+));
 
 export const OperationsCommandCenter: React.FC = () => {
   const [lastRefresh, setLastRefresh] = useState(new Date());
@@ -168,24 +175,34 @@ export const OperationsCommandCenter: React.FC = () => {
   });
 
   const systemHealth: SystemHealth[] = systemHealthData || [];
-  const handleAcknowledge = () => { refetchAlerts(); };
-  const handleRefresh = () => { setLastRefresh(new Date()); };
+  const handleAcknowledge = useCallback(() => { refetchAlerts(); }, [refetchAlerts]);
+  const handleRefresh = useCallback(() => { setLastRefresh(new Date()); }, []);
   const criticalAlerts = activeAlerts.filter(a => !a.acknowledged && (a.severity === 'critical' || a.severity === 'high'));
 
   return (
-    <div className="min-h-screen bg-background p-4 space-y-4">
-      <div className="flex items-center justify-between">
+    <motion.div
+      className="min-h-screen bg-background p-4 space-y-4"
+      initial="hidden"
+      animate="visible"
+      variants={stagger}
+    >
+      <motion.div variants={fadeUp} className="flex items-center justify-between">
         <div>
-          <h1 className="text-2xl font-bold flex items-center gap-2"><Shield className="h-6 w-6 text-primary" />Centro de Operações</h1>
+          <h1 className="text-2xl font-bold flex items-center gap-2">
+            <div className="p-2 rounded-lg bg-primary/10 shadow-[0_0_15px_hsla(var(--primary)/0.15)]">
+              <Shield className="h-6 w-6 text-primary" />
+            </div>
+            Centro de Operações
+          </h1>
           <p className="text-muted-foreground text-sm">Monitoramento em tempo real • Última atualização: {format(lastRefresh, 'HH:mm:ss', { locale: ptBR })}</p>
         </div>
         <div className="flex items-center gap-3">
           {criticalAlerts.length > 0 && (
-            <Badge variant="destructive" className="animate-pulse"><AlertTriangle className="h-3 w-3 mr-1" />{criticalAlerts.length} Alertas Críticos</Badge>
+            <Badge variant="destructive" className="animate-pulse shadow-[0_0_10px_hsla(var(--destructive)/0.3)]"><AlertTriangle className="h-3 w-3 mr-1" />{criticalAlerts.length} Alertas Críticos</Badge>
           )}
           <Button variant="outline" size="sm" onClick={handleRefresh}><RefreshCw className="h-4 w-4 mr-2" />Atualizar</Button>
         </div>
-      </div>
+      </motion.div>
 
       <SOCKPIRow
         vesselCount={vessels?.length || 0}
@@ -195,7 +212,7 @@ export const OperationsCommandCenter: React.FC = () => {
         criticalAlertCount={criticalAlerts.length}
       />
 
-      <div className="grid grid-cols-1 lg:grid-cols-3 gap-4">
+      <motion.div variants={fadeUp} className="grid grid-cols-1 lg:grid-cols-3 gap-4">
         <Card className="lg:col-span-2">
           <CardHeader className="pb-2">
             <div className="flex items-center justify-between">
@@ -211,12 +228,12 @@ export const OperationsCommandCenter: React.FC = () => {
           </CardHeader>
           <CardContent>
             <ScrollArea className="h-[400px] pr-4">
-              <div className="space-y-2">
+              <motion.div className="space-y-2" initial="hidden" animate="visible" variants={stagger}>
                 {activeAlerts.sort((a, b) => {
                   const severityOrder = { critical: 0, high: 1, medium: 2, low: 3 };
                   return severityOrder[a.severity] - severityOrder[b.severity];
                 }).map(alert => <AlertItem key={alert.id} alert={alert} onAcknowledge={handleAcknowledge} />)}
-              </div>
+              </motion.div>
             </ScrollArea>
           </CardContent>
         </Card>
@@ -230,19 +247,21 @@ export const OperationsCommandCenter: React.FC = () => {
             <CardHeader className="pb-2"><CardTitle className="text-sm flex items-center gap-2"><Ship className="h-4 w-4" />Frota ({vessels?.length || 0} embarcações)</CardTitle></CardHeader>
             <CardContent>
               <ScrollArea className="h-[200px]">
-                <div className="space-y-2">{vessels?.slice(0, 10).map(vessel => <VesselCard key={vessel.id} vessel={vessel} />)}</div>
+                <motion.div className="space-y-2" initial="hidden" animate="visible" variants={stagger}>
+                  {vessels?.slice(0, 10).map(vessel => <VesselCard key={vessel.id} vessel={vessel} />)}
+                </motion.div>
               </ScrollArea>
             </CardContent>
           </Card>
         </div>
-      </div>
+      </motion.div>
 
-      <div className="grid grid-cols-1 md:grid-cols-3 gap-4">
-        <Card><CardContent className="pt-4"><div className="flex items-center gap-4"><Thermometer className="h-8 w-8 text-warning" /><div><p className="text-2xl font-bold">28°C</p><p className="text-xs text-muted-foreground">Temperatura Média</p></div></div></CardContent></Card>
-        <Card><CardContent className="pt-4"><div className="flex items-center gap-4"><Wind className="h-8 w-8 text-info" /><div><p className="text-2xl font-bold">15 kts</p><p className="text-xs text-muted-foreground">Vento Médio</p></div></div></CardContent></Card>
-        <Card><CardContent className="pt-4"><div className="flex items-center gap-4"><Waves className="h-8 w-8 text-accent" /><div><p className="text-2xl font-bold">1.2m</p><p className="text-xs text-muted-foreground">Altura de Ondas</p></div></div></CardContent></Card>
-      </div>
-    </div>
+      <motion.div variants={fadeUp} className="grid grid-cols-1 md:grid-cols-3 gap-4">
+        <Card className="hover:shadow-md transition-shadow"><CardContent className="pt-4"><div className="flex items-center gap-4"><Thermometer className="h-8 w-8 text-warning" /><div><p className="text-2xl font-bold">28°C</p><p className="text-xs text-muted-foreground">Temperatura Média</p></div></div></CardContent></Card>
+        <Card className="hover:shadow-md transition-shadow"><CardContent className="pt-4"><div className="flex items-center gap-4"><Wind className="h-8 w-8 text-info" /><div><p className="text-2xl font-bold">15 kts</p><p className="text-xs text-muted-foreground">Vento Médio</p></div></div></CardContent></Card>
+        <Card className="hover:shadow-md transition-shadow"><CardContent className="pt-4"><div className="flex items-center gap-4"><Waves className="h-8 w-8 text-accent" /><div><p className="text-2xl font-bold">1.2m</p><p className="text-xs text-muted-foreground">Altura de Ondas</p></div></div></CardContent></Card>
+      </motion.div>
+    </motion.div>
   );
 };
 
