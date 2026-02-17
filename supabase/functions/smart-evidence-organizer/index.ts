@@ -11,8 +11,105 @@ const LOVABLE_API_KEY = Deno.env.get("LOVABLE_API_KEY");
 const SUPABASE_URL = Deno.env.get("SUPABASE_URL")!;
 const SUPABASE_SERVICE_KEY = Deno.env.get("SUPABASE_SERVICE_ROLE_KEY")!;
 
+// ─── Framework-specific expert system prompts ─────────────────────────────
+const FRAMEWORK_PROMPTS: Record<string, { systemPrompt: string; parserContext: string; responseContext: string }> = {
+  peodp: {
+    systemPrompt: `Você é o mais renomado especialista mundial em auditorias PEO-DP (Petrobras Equipment Operability - Dynamic Positioning).
+Seu conhecimento abrange TODAS as normas aplicáveis:
+- IMCA M 117 (The training and experience of key DP personnel)
+- IMCA M 166 (Guidance on the design, selection, installation and use of DP systems)
+- IMCA M 182 (DP Station Keeping Incidents)
+- IMO MSC/Circ.645 (Guidelines for DP vessels)
+- Petrobras N-2784 (Requisitos de DP)
+- DPVOA Annual DP Trials guidelines
+- Anexos A-O do PEO-DP 2026 da Petrobras
+- MTS/IMCA DP ASOG (Activity Specific Operating Guidelines)
+- FMECA (Failure Mode, Effects and Criticality Analysis)
+
+Você conhece em detalhes cada ELEMENTO e ITEM do checklist PEO-DP, incluindo:
+- Redundância de sistemas (power, thrusters, reference systems)
+- Annual Trials requirements e relatórios
+- WSOG/ASOG preparation
+- Capability plots e footprint analysis
+- Treinamento de DPOs (Dynamic Positioning Operators)
+- Manutenção preventiva e registros de equipamentos DP`,
+    parserContext: `Framework PEO-DP (Petrobras Dynamic Positioning). Identifique elementos conforme os Anexos A-O do PEO-DP:
+- Anexo A: Sistema DP principal
+- Anexo B: Sistemas de referência de posição  
+- Anexo C: Sistemas de potência
+- Anexo D: Thrusters e propulsão
+- Anexo E: UPS e sistemas de emergência
+- Anexo F: Comunicação e alarmes
+- Anexo G: Treinamento de DPOs
+- Anexo H: Procedimentos operacionais
+- Anexo I: FMECA e redundância
+- Anexo J: ASOG/WSOG
+- Anexo K: Annual trials
+- Anexo L: Manutenção preventiva
+- Anexo M: Documentação e certificados
+- Anexo N: Incidentes e relatórios
+- Anexo O: Gestão de mudanças`,
+    responseContext: `Ao gerar respostas para auditoria PEO-DP:
+1. Cite normas IMCA e IMO aplicáveis (ex: "Conforme IMCA M 166, Seção 4.3...")
+2. Referencie o Anexo PEO-DP específico
+3. Use terminologia técnica de DP (redundancy, common point failure, worst case failure, etc.)
+4. Mencione registros e evidências típicas (DP log, trial reports, maintenance records)
+5. Seja EXTREMAMENTE preciso e detalhado — o auditor é especialista
+6. A resposta deve convencer um auditor da Petrobras de que o vessel está 100% conforme`,
+  },
+  peotram: {
+    systemPrompt: `Você é o mais renomado especialista mundial em auditorias PEOTRAM (Petrobras Equipment Operability - Trabalho Remoto e Mergulho).
+Seu conhecimento abrange TODAS as normas aplicáveis:
+- IMCA D 014 (International Code of Practice for Offshore Diving)
+- IMCA D 018 (Code of Practice for the Initial and Periodic Examination of Diving Plant)
+- IMCA D 022 (Diving equipment systems inspection guidance)
+- IMCA D 024 (Diving operational guidance)
+- IMCA S 002 (Diving Division guidance and recommendations)
+- NORMAM-15/DPC (Normas da Autoridade Marítima para Atividades Subaquáticas)
+- ABNT NBR 15475 (Mergulho Saturado)
+- Petrobras N-2680/N-2681 (Requisitos de Mergulho e ROV)
+- DMCR/ANP regulations
+
+Você conhece em detalhes cada ELEMENTO do PEOTRAM (13 elementos):
+1. Gestão de Segurança e SMS
+2. Planejamento de Operações de Mergulho
+3. Câmaras Hiperbáricas (SAT System)
+4. Sistemas de Suporte à Vida (Life Support)
+5. Equipamentos de Mergulho
+6. Certificação de Mergulhadores
+7. Procedimentos de Emergência
+8. Inventário de Gases
+9. Monitoramento Ambiental
+10. ROV Operations
+11. Gestão de Mudanças (MOC)
+12. Lições Aprendidas
+13. Não-Conformidades e Ações Corretivas`,
+    parserContext: `Framework PEOTRAM (Petrobras - Trabalho Remoto e Mergulho). Identifique elementos dos 13 elementos do PEOTRAM:
+Elemento 1: Gestão de Segurança (SMS, SIMOPS, PTW)
+Elemento 2: Planejamento Operacional (dive plans, risk assessment)
+Elemento 3: Câmaras SAT (manutenção, testes, certificados)
+Elemento 4: Life Support (O2, He, environmental control)
+Elemento 5: Equipamentos de Mergulho (bells, umbilicals, helmets)
+Elemento 6: Certificação de Mergulhadores (STCW, medical fitness, training)
+Elemento 7: Emergência (hiperbárica, médica, escape)
+Elemento 8: Gases (inventário, qualidade, análise)
+Elemento 9: Monitoramento Ambiental (corrente, visibilidade, temperatura)
+Elemento 10: ROV (operação, manutenção, certificados)
+Elemento 11: MOC (gestão de mudanças)
+Elemento 12: Lições Aprendidas (incident reports, near misses)
+Elemento 13: NC/AC (não-conformidades, ações corretivas, follow-up)`,
+    responseContext: `Ao gerar respostas para auditoria PEOTRAM:
+1. Cite normas IMCA D-series e NORMAM-15 aplicáveis
+2. Referencie o Elemento PEOTRAM específico
+3. Use terminologia técnica de mergulho (saturation depth, bell run, living chamber, TUP, etc.)
+4. Mencione registros típicos (dive log, chamber maintenance log, gas analysis records)
+5. Inclua referências a certificados obrigatórios (IMCA certificates, NORMAM-15, medical fitness)
+6. A resposta deve convencer um auditor da Petrobras de que as operações de mergulho estão 100% conformes`,
+  },
+};
+
 interface ParseRequest {
-  action: "parse_checklist" | "match_evidence" | "generate_responses";
+  action: "parse_checklist" | "match_evidence" | "generate_responses" | "rematch_gaps";
   pack_id?: string;
   framework: string;
   checklist_text?: string;
@@ -51,6 +148,10 @@ serve(async (req) => {
   }
 });
 
+function getFrameworkPrompts(framework: string) {
+  return FRAMEWORK_PROMPTS[framework] || FRAMEWORK_PROMPTS["peodp"];
+}
+
 /**
  * Step 1: Parse checklist text into elements and items using AI
  */
@@ -64,15 +165,18 @@ async function parseChecklist(supabase: any, body: ParseRequest) {
     });
   }
 
-  // Use AI to parse the checklist into structured elements and items
-  const parsePrompt = `Você é um especialista em auditorias marítimas ${framework.toUpperCase()}.
-Analise o texto do checklist/lista de verificação abaixo e extraia a estrutura hierárquica.
+  const prompts = getFrameworkPrompts(framework);
 
-REGRAS IMPORTANTES:
-1. Identifique cada ELEMENTO (seção principal, categoria, capítulo)
-2. Para cada elemento, identifique os ITENS individuais (requisitos, perguntas, verificações)
+  const parsePrompt = `${prompts.parserContext}
+
+REGRAS RIGOROSAS DE EXTRAÇÃO:
+1. Identifique CADA ELEMENTO (seção principal, categoria, capítulo) com código e nome
+2. Para cada elemento, identifique TODOS os ITENS individuais (requisitos, perguntas, verificações)
 3. Classifique se cada item é CRÍTICO (impacta segurança/compliance diretamente)
-4. Retorne usando a tool function fornecida
+4. Para cada item, identifique palavras-chave para busca de evidências na biblioteca de documentos
+5. Mantenha a numeração original do checklist
+6. NÃO agrupe ou simplifique — extraia TODOS os itens individualmente
+7. Preserve a descrição técnica completa de cada item
 
 TEXTO DO CHECKLIST:
 ${checklist_text.substring(0, 15000)}`;
@@ -86,7 +190,7 @@ ${checklist_text.substring(0, 15000)}`;
     body: JSON.stringify({
       model: "google/gemini-3-flash-preview",
       messages: [
-        { role: "system", content: `Você é um parser especializado em checklists de auditoria marítima (${framework.toUpperCase()}). Extraia elementos e itens de forma estruturada.` },
+        { role: "system", content: prompts.systemPrompt },
         { role: "user", content: parsePrompt },
       ],
       tools: [
@@ -94,7 +198,7 @@ ${checklist_text.substring(0, 15000)}`;
           type: "function",
           function: {
             name: "structure_checklist",
-            description: "Estrutura o checklist em elementos e itens hierárquicos",
+            description: "Estrutura o checklist em elementos e itens hierárquicos com máxima precisão",
             parameters: {
               type: "object",
               properties: {
@@ -104,9 +208,9 @@ ${checklist_text.substring(0, 15000)}`;
                     type: "object",
                     properties: {
                       element_number: { type: "number" },
-                      element_code: { type: "string" },
+                      element_code: { type: "string", description: "Código do elemento (ex: A, B, E1, E2)" },
                       element_name: { type: "string" },
-                      element_description: { type: "string" },
+                      element_description: { type: "string", description: "Descrição detalhada do escopo do elemento" },
                       items: {
                         type: "array",
                         items: {
@@ -114,13 +218,13 @@ ${checklist_text.substring(0, 15000)}`;
                           properties: {
                             item_number: { type: "string" },
                             item_code: { type: "string" },
-                            item_text: { type: "string" },
-                            requirement_description: { type: "string" },
-                            is_critical: { type: "boolean" },
+                            item_text: { type: "string", description: "Texto completo do requisito/verificação" },
+                            requirement_description: { type: "string", description: "Detalhamento do requisito, norma aplicável e critério de aceitação" },
+                            is_critical: { type: "boolean", description: "True se impacta segurança, conformidade ou operação diretamente" },
                             evidence_keywords: {
                               type: "array",
                               items: { type: "string" },
-                              description: "Palavras-chave para buscar evidências na biblioteca de documentos"
+                              description: "Palavras-chave para buscar evidências: nomes de certificados, procedimentos, registros, etc."
                             },
                           },
                           required: ["item_number", "item_text"],
@@ -256,12 +360,14 @@ ${checklist_text.substring(0, 15000)}`;
  * Step 2: Search document library and match evidence to items
  */
 async function matchEvidence(supabase: any, body: ParseRequest) {
-  const { pack_id } = body;
+  const { pack_id, framework } = body;
   if (!pack_id) {
     return new Response(JSON.stringify({ error: "pack_id required" }), {
       status: 400, headers: { ...corsHeaders, "Content-Type": "application/json" },
     });
   }
+
+  const prompts = getFrameworkPrompts(framework || "peodp");
 
   // Update status
   await supabase.from("audit_evidence_packs").update({ status: "matching" }).eq("id", pack_id);
@@ -289,27 +395,37 @@ async function matchEvidence(supabase: any, body: ParseRequest) {
     name: d.file_name || d.title,
     category: d.category,
     type: d.file_type,
-    excerpt: (d.ocr_text || d.description || "").substring(0, 200),
+    excerpt: (d.ocr_text || d.description || "").substring(0, 300),
   }));
 
-  // Process items in batches of 10
+  // Process items in batches of 8
   let matchedCount = 0;
   let unmatchedCount = 0;
   let partialCount = 0;
-  const batchSize = 10;
+  const batchSize = 8;
 
   for (let i = 0; i < items.length; i += batchSize) {
     const batch = items.slice(i, i + batchSize);
     
-    const matchPrompt = `Você é um especialista em auditorias marítimas. Para cada item de verificação abaixo, identifique quais documentos da biblioteca são evidências aplicáveis.
+    const matchPrompt = `Analise cada item de verificação ${(framework || "peodp").toUpperCase()} abaixo e identifique as evidências documentais MAIS ADEQUADAS da biblioteca.
+
+CRITÉRIOS DE MATCHING:
+- "found": Documento cobre diretamente o requisito (≥80% de relevância)
+- "partial": Documento cobre parcialmente ou indiretamente (40-79%)
+- "not_found": Nenhum documento adequado na biblioteca
+
+PARA CADA MATCH, forneça:
+- confidence: score de 0-100
+- reason: explicação TÉCNICA de por que este documento atende ao requisito
+- ai_response: resposta PROFISSIONAL que o operador pode usar durante a auditoria
 
 ITENS DE VERIFICAÇÃO:
-${batch.map((item: any, idx: number) => `[${idx}] ID:${item.id} | ${item.item_text}${item.requirement_description ? ` | Req: ${item.requirement_description}` : ""}`).join("\n")}
+${batch.map((item: any, idx: number) => `[${idx}] ID:${item.id} | ${item.item_text}${item.requirement_description ? ` | Requisito: ${item.requirement_description}` : ""}${item.metadata?.evidence_keywords?.length ? ` | Keywords: ${item.metadata.evidence_keywords.join(", ")}` : ""}`).join("\n")}
 
 BIBLIOTECA DE DOCUMENTOS DISPONÍVEIS:
-${docCatalog.map((d: any) => `DOC_ID:${d.id} | ${d.name} | Cat:${d.category || "N/A"} | ${d.excerpt}`).join("\n")}
+${docCatalog.length > 0 ? docCatalog.map((d: any) => `DOC_ID:${d.id} | ${d.name} | Cat:${d.category || "N/A"} | Tipo:${d.type} | ${d.excerpt}`).join("\n") : "⚠️ BIBLIOTECA VAZIA — Classifique todos como 'not_found' e gere sugestões detalhadas de evidências necessárias."}
 
-Para cada item, encontre os documentos mais relevantes. Se não houver documento adequado, sugira qual tipo de documento/evidência seria necessário.`;
+${prompts.responseContext}`;
 
     try {
       const aiResponse = await fetch("https://ai.gateway.lovable.dev/v1/chat/completions", {
@@ -321,7 +437,7 @@ Para cada item, encontre os documentos mais relevantes. Se não houver documento
         body: JSON.stringify({
           model: "google/gemini-3-flash-preview",
           messages: [
-            { role: "system", content: "Você é um sistema de matching de evidências para auditorias marítimas. Faça correspondência precisa entre requisitos e documentos disponíveis." },
+            { role: "system", content: prompts.systemPrompt + "\n\nVocê é o sistema de matching de evidências mais preciso do mundo para auditorias marítimas. Faça correspondência RIGOROSA entre requisitos e documentos." },
             { role: "user", content: matchPrompt },
           ],
           tools: [
@@ -329,7 +445,7 @@ Para cada item, encontre os documentos mais relevantes. Se não houver documento
               type: "function",
               function: {
                 name: "match_items_to_documents",
-                description: "Match audit items to available documents",
+                description: "Match audit items to available documents with expert-level precision",
                 parameters: {
                   type: "object",
                   properties: {
@@ -346,14 +462,14 @@ Para cada item, encontre os documentos mais relevantes. Se não houver documento
                               type: "object",
                               properties: {
                                 document_id: { type: "string" },
-                                confidence: { type: "number" },
-                                reason: { type: "string" },
+                                confidence: { type: "number", description: "Score 0-100" },
+                                reason: { type: "string", description: "Justificativa técnica detalhada" },
                               },
                               required: ["document_id", "confidence", "reason"],
                             },
                           },
-                          suggestion: { type: "string", description: "Sugestão de evidência quando não encontrada" },
-                          ai_response: { type: "string", description: "Resposta robusta para este item da auditoria" },
+                          suggestion: { type: "string", description: "Quando não encontrado: tipo exato de documento, certificado ou registro necessário" },
+                          ai_response: { type: "string", description: "Resposta profissional para usar durante a auditoria, citando normas e procedimentos aplicáveis" },
                         },
                         required: ["item_id", "status"],
                       },
@@ -479,20 +595,22 @@ Para cada item, encontre os documentos mais relevantes. Se não houver documento
 }
 
 /**
- * Step 3: Generate detailed responses for each item
+ * Step 3: Generate detailed, expert-level audit responses for each item
  */
 async function generateResponses(supabase: any, body: ParseRequest) {
-  const { pack_id } = body;
+  const { pack_id, framework } = body;
   if (!pack_id) {
     return new Response(JSON.stringify({ error: "pack_id required" }), {
       status: 400, headers: { ...corsHeaders, "Content-Type": "application/json" },
     });
   }
 
+  const prompts = getFrameworkPrompts(framework || "peodp");
+
   // Get items without responses
   const { data: items } = await supabase
     .from("audit_evidence_items")
-    .select("id, item_text, requirement_description, evidence_status, ai_suggestion")
+    .select("id, item_text, requirement_description, evidence_status, ai_suggestion, metadata")
     .eq("pack_id", pack_id)
     .is("ai_response", null)
     .limit(50);
@@ -504,24 +622,26 @@ async function generateResponses(supabase: any, body: ParseRequest) {
     );
   }
 
-  // Get pack info
-  const { data: pack } = await supabase
-    .from("audit_evidence_packs")
-    .select("framework")
-    .eq("id", pack_id)
-    .single();
-
-  const framework = pack?.framework || "general";
-
   for (let i = 0; i < items.length; i += 5) {
     const batch = items.slice(i, i + 5);
     
-    const prompt = `Gere respostas robustas e profissionais para cada item de auditoria ${framework.toUpperCase()} abaixo. 
-As respostas devem ser detalhadas, citar normas aplicáveis e demonstrar conformidade.
+    const prompt = `Gere respostas PROFISSIONAIS e DETALHADAS para cada item de auditoria ${(framework || "peodp").toUpperCase()} abaixo.
 
+REQUISITOS DAS RESPOSTAS:
+1. Cada resposta deve ter 3-5 parágrafos
+2. CITE normas internacionais específicas (IMCA, IMO, SOLAS, MARPOL)
+3. MENCIONE procedimentos e registros que comprovam conformidade
+4. Use linguagem técnica precisa e profissional
+5. Inclua o CRITÉRIO DE ACEITAÇÃO aplicável
+6. Se o status é "not_found", sugira EXATAMENTE qual evidência obter e como
+
+${prompts.responseContext}
+
+ITENS:
 ${batch.map((item: any, idx: number) => `[${idx}] ${item.item_text}
 Status: ${item.evidence_status}
-${item.ai_suggestion ? `Sugestão: ${item.ai_suggestion}` : ""}`).join("\n\n")}`;
+${item.requirement_description ? `Requisito: ${item.requirement_description}` : ""}
+${item.ai_suggestion ? `Sugestão anterior: ${item.ai_suggestion}` : ""}`).join("\n\n")}`;
 
     try {
       const aiResponse = await fetch("https://ai.gateway.lovable.dev/v1/chat/completions", {
@@ -533,7 +653,7 @@ ${item.ai_suggestion ? `Sugestão: ${item.ai_suggestion}` : ""}`).join("\n\n")}`
         body: JSON.stringify({
           model: "google/gemini-3-flash-preview",
           messages: [
-            { role: "system", content: `Especialista em compliance marítimo ${framework.toUpperCase()}. Gere respostas de auditoria em PT-BR.` },
+            { role: "system", content: prompts.systemPrompt + "\n\nGere respostas que convenceriam o auditor mais rigoroso do mundo." },
             { role: "user", content: prompt },
           ],
           tools: [
@@ -541,7 +661,7 @@ ${item.ai_suggestion ? `Sugestão: ${item.ai_suggestion}` : ""}`).join("\n\n")}`
               type: "function",
               function: {
                 name: "generate_audit_responses",
-                description: "Generate audit responses for each item",
+                description: "Generate expert-level audit responses",
                 parameters: {
                   type: "object",
                   properties: {
@@ -551,7 +671,7 @@ ${item.ai_suggestion ? `Sugestão: ${item.ai_suggestion}` : ""}`).join("\n\n")}`
                         type: "object",
                         properties: {
                           index: { type: "number" },
-                          response: { type: "string", description: "Resposta robusta para o auditor" },
+                          response: { type: "string", description: "Resposta profissional e detalhada citando normas aplicáveis" },
                         },
                         required: ["index", "response"],
                       },
@@ -594,7 +714,7 @@ ${item.ai_suggestion ? `Sugestão: ${item.ai_suggestion}` : ""}`).join("\n\n")}`
 }
 
 /**
- * Step 4: Re-match only gap items (not_found or partial)
+ * Step 4: Re-match only gap items (not_found or partial) with deeper analysis
  */
 async function rematchGaps(supabase: any, body: ParseRequest) {
   const { pack_id, framework } = body;
@@ -603,6 +723,8 @@ async function rematchGaps(supabase: any, body: ParseRequest) {
       status: 400, headers: { ...corsHeaders, "Content-Type": "application/json" },
     });
   }
+
+  const prompts = getFrameworkPrompts(framework || "peodp");
 
   // Get only gap items
   const { data: gapItems } = await supabase
@@ -614,7 +736,7 @@ async function rematchGaps(supabase: any, body: ParseRequest) {
 
   if (!gapItems?.length) {
     return new Response(
-      JSON.stringify({ success: true, message: "Nenhum gap encontrado", rematched: 0 }),
+      JSON.stringify({ success: true, message: "Nenhum gap encontrado", gaps_processed: 0, improved: 0, new_score: 0 }),
       { headers: { ...corsHeaders, "Content-Type": "application/json" } }
     );
   }
@@ -631,24 +753,31 @@ async function rematchGaps(supabase: any, body: ParseRequest) {
     name: d.file_name || d.title,
     category: d.category,
     type: d.file_type,
-    excerpt: (d.ocr_text || d.description || "").substring(0, 200),
+    excerpt: (d.ocr_text || d.description || "").substring(0, 300),
   }));
 
   let improvedCount = 0;
-  const batchSize = 10;
+  const batchSize = 8;
 
   for (let i = 0; i < gapItems.length; i += batchSize) {
     const batch = gapItems.slice(i, i + batchSize);
 
-    const matchPrompt = `Você é um especialista em auditorias marítimas. Estes itens NÃO tiveram evidência encontrada anteriormente. Faça uma busca MAIS APROFUNDADA, considerando sinônimos, documentos relacionados indiretamente e evidências parciais.
+    const matchPrompt = `Estes itens de auditoria ${(framework || "peodp").toUpperCase()} NÃO tiveram evidência encontrada no primeiro scan.
+
+FAÇA UMA ANÁLISE MAIS PROFUNDA:
+1. Considere SINÔNIMOS e termos equivalentes
+2. Busque documentos INDIRETAMENTE relacionados
+3. Considere que um manual pode cobrir múltiplos requisitos
+4. Aceite evidências PARCIAIS quando aplicável
+5. Se realmente não encontrar, gere uma resposta de auditoria robusta mesmo sem evidência documental
 
 ITENS COM GAP:
-${batch.map((item: any, idx: number) => `[${idx}] ID:${item.id} | Status atual: ${item.evidence_status} | ${item.item_text}`).join("\n")}
+${batch.map((item: any, idx: number) => `[${idx}] ID:${item.id} | Status: ${item.evidence_status} | ${item.item_text}${item.metadata?.evidence_keywords?.length ? ` | Keywords: ${item.metadata.evidence_keywords.join(", ")}` : ""}`).join("\n")}
 
 BIBLIOTECA DE DOCUMENTOS:
-${docCatalog.map((d: any) => `DOC_ID:${d.id} | ${d.name} | Cat:${d.category || "N/A"} | ${d.excerpt}`).join("\n")}
+${docCatalog.length > 0 ? docCatalog.map((d: any) => `DOC_ID:${d.id} | ${d.name} | ${d.category || "N/A"} | ${d.excerpt}`).join("\n") : "⚠️ BIBLIOTECA VAZIA"}
 
-IMPORTANTE: Seja mais flexível no matching. Considere evidências indiretas e parciais.`;
+${prompts.responseContext}`;
 
     try {
       const aiResponse = await fetch("https://ai.gateway.lovable.dev/v1/chat/completions", {
@@ -660,14 +789,14 @@ IMPORTANTE: Seja mais flexível no matching. Considere evidências indiretas e p
         body: JSON.stringify({
           model: "google/gemini-3-flash-preview",
           messages: [
-            { role: "system", content: "Re-matching expert. Busca mais flexível para evidências de auditoria marítima." },
+            { role: "system", content: prompts.systemPrompt + "\n\nRe-matching expert. Busca aprofundada para evidências de auditoria marítima. Seja mais flexível que o primeiro scan." },
             { role: "user", content: matchPrompt },
           ],
           tools: [{
             type: "function",
             function: {
               name: "match_items_to_documents",
-              description: "Match gap items to documents with deeper analysis",
+              description: "Deep re-match gap items to documents",
               parameters: {
                 type: "object",
                 properties: {
@@ -691,7 +820,7 @@ IMPORTANTE: Seja mais flexível no matching. Considere evidências indiretas e p
                           },
                         },
                         suggestion: { type: "string" },
-                        ai_response: { type: "string" },
+                        ai_response: { type: "string", description: "Resposta de auditoria detalhada mesmo sem evidência documental" },
                       },
                       required: ["item_id", "status"],
                     },

@@ -14,35 +14,37 @@ export function useEvidenceOrganizer(framework: string) {
   const [processingStep, setProcessingStep] = useState<string | null>(null);
 
   const loadPacks = useCallback(async () => {
-    const { data } = await (supabase.from as Function)("audit_evidence_packs")
+    const { data } = await supabase
+      .from("audit_evidence_packs")
       .select("*")
       .eq("framework", framework)
       .order("created_at", { ascending: false });
-    setPacks((data as EvidencePack[]) || []);
+    setPacks((data as unknown as EvidencePack[]) || []);
   }, [framework]);
 
   const loadPackDetails = useCallback(async (packId: string) => {
     const [elemResult, itemResult, matchResult, packResult] = await Promise.all([
-      (supabase.from as Function)("audit_evidence_elements")
+      supabase.from("audit_evidence_elements")
         .select("*").eq("pack_id", packId).order("sort_order"),
-      (supabase.from as Function)("audit_evidence_items")
+      supabase.from("audit_evidence_items")
         .select("*").eq("pack_id", packId).order("sort_order"),
-      (supabase.from as Function)("audit_evidence_matches")
+      supabase.from("audit_evidence_matches")
         .select("*").eq("pack_id", packId).order("created_at"),
-      (supabase.from as Function)("audit_evidence_packs")
+      supabase.from("audit_evidence_packs")
         .select("*").eq("id", packId).single(),
     ]);
 
-    setElements((elemResult.data as EvidenceElement[]) || []);
-    setItems((itemResult.data as EvidenceItem[]) || []);
-    setMatches((matchResult.data as EvidenceMatch[]) || []);
-    if (packResult.data) setActivePack(packResult.data as EvidencePack);
+    setElements((elemResult.data as unknown as EvidenceElement[]) || []);
+    setItems((itemResult.data as unknown as EvidenceItem[]) || []);
+    setMatches((matchResult.data as unknown as EvidenceMatch[]) || []);
+    if (packResult.data) setActivePack(packResult.data as unknown as EvidencePack);
   }, []);
 
   const loadPackElements = useCallback(async (packId: string): Promise<EvidenceElement[]> => {
-    const { data } = await (supabase.from as Function)("audit_evidence_elements")
+    const { data } = await supabase
+      .from("audit_evidence_elements")
       .select("*").eq("pack_id", packId).order("sort_order");
-    return (data as EvidenceElement[]) || [];
+    return (data as unknown as EvidenceElement[]) || [];
   }, []);
 
   const uploadAndProcess = useCallback(async (
@@ -144,7 +146,7 @@ export function useEvidenceOrganizer(framework: string) {
   const addManualEvidence = useCallback(async (itemId: string, documentTitle: string, documentPath?: string) => {
     if (!activePack) return;
 
-    await (supabase.from as Function)("audit_evidence_matches").insert({
+    await supabase.from("audit_evidence_matches").insert({
       item_id: itemId,
       pack_id: activePack.id,
       document_title: documentTitle,
@@ -154,7 +156,7 @@ export function useEvidenceOrganizer(framework: string) {
       match_reason: "Adicionado manualmente pelo usuário",
     });
 
-    await (supabase.from as Function)("audit_evidence_items")
+    await supabase.from("audit_evidence_items")
       .update({ evidence_status: "found" })
       .eq("id", itemId);
 
