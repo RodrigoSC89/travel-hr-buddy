@@ -29,8 +29,8 @@ export default function FinanceProcurementAIPage() {
         {/* Header */}
         <div className="flex items-center justify-between">
           <div className="flex items-center gap-4">
-            <div className="p-3 rounded-2xl bg-gradient-to-br from-green-500/20 to-emerald-500/10">
-              <DollarSign className="h-8 w-8 text-green-600" />
+            <div className="p-3 rounded-2xl bg-gradient-to-br from-success/20 to-success/10">
+              <DollarSign className="h-8 w-8 text-success" />
             </div>
             <div>
               <h1 className="text-3xl font-bold flex items-center gap-2">

@@ -25,11 +25,11 @@ import {
 type IncidentSeverity = 'near_miss' | 'minor' | 'moderate' | 'serious' | 'fatal';
 
 const SEVERITY_CONFIG: Record<IncidentSeverity, { label: string; color: string }> = {
-  near_miss: { label: 'Quase Acidente', color: 'bg-blue-500/20 text-blue-400' },
-  minor: { label: 'Menor', color: 'bg-yellow-500/20 text-yellow-400' },
-  moderate: { label: 'Moderado', color: 'bg-orange-500/20 text-orange-400' },
+  near_miss: { label: 'Quase Acidente', color: 'bg-info/20 text-info' },
+  minor: { label: 'Menor', color: 'bg-warning/20 text-warning' },
+  moderate: { label: 'Moderado', color: 'bg-warning/20 text-warning' },
   serious: { label: 'Sério', color: 'bg-destructive/20 text-destructive' },
-  fatal: { label: 'Fatal', color: 'bg-red-900/40 text-red-300' },
+  fatal: { label: 'Fatal', color: 'bg-destructive/40 text-destructive' },
 };
 
 const CATEGORIES: Record<string, string> = {
@@ -147,7 +147,7 @@ export function QHSEIncidentManager() {
                     <Badge className={SEVERITY_CONFIG[severity]?.color}>{SEVERITY_CONFIG[severity]?.label}</Badge>
                     <Badge variant="outline">{CATEGORIES[category] || category}</Badge>
                     {vessel && <span className="text-xs text-muted-foreground">🚢 {vessel}</span>}
-                    {inc.resolved_at ? <Badge className="bg-green-500/20 text-green-400">Resolvido</Badge> : <Badge className="bg-muted text-muted-foreground">Aberto</Badge>}
+                    {inc.resolved_at ? <Badge className="bg-success/20 text-success">Resolvido</Badge> : <Badge className="bg-muted text-muted-foreground">Aberto</Badge>}
                   </div>
                   <p className="font-semibold text-sm">{inc.title}</p>
                   <p className="text-xs text-muted-foreground mt-1">{new Date(inc.created_at).toLocaleDateString('pt-BR')} {meta.location ? `| 📍 ${meta.location}` : ''}</p>

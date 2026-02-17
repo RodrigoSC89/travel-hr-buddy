@@ -172,19 +172,19 @@ export const EmergencyReportDialog: React.FC<EmergencyReportDialogProps> = ({
             </Card>
             <Card>
               <CardContent className="p-4 text-center">
-                <div className="text-2xl font-bold text-green-600">{REPORT_DATA.summary.activePlans}</div>
+                <div className="text-2xl font-bold text-success">{REPORT_DATA.summary.activePlans}</div>
                 <div className="text-xs text-muted-foreground">Planos Ativos</div>
               </CardContent>
             </Card>
             <Card>
               <CardContent className="p-4 text-center">
-                <div className="text-2xl font-bold text-blue-600">{REPORT_DATA.drills.completed}</div>
+                <div className="text-2xl font-bold text-primary">{REPORT_DATA.drills.completed}</div>
                 <div className="text-xs text-muted-foreground">Simulados Realizados</div>
               </CardContent>
             </Card>
             <Card>
               <CardContent className="p-4 text-center">
-                <div className="text-2xl font-bold text-orange-600">{REPORT_DATA.drills.scheduled}</div>
+                <div className="text-2xl font-bold text-warning">{REPORT_DATA.drills.scheduled}</div>
                 <div className="text-xs text-muted-foreground">Agendados</div>
               </CardContent>
             </Card>

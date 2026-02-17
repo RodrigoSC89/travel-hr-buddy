@@ -328,7 +328,7 @@ export const ExecutiveSummaryGenerator: React.FC<ExecutiveSummaryGeneratorProps>
           <div className="flex items-center justify-between">
             <div>
               <CardTitle className="flex items-center space-x-2">
-                <Brain className="w-6 h-6 text-purple-600" />
+                <Brain className="w-6 h-6 text-accent-foreground" />
                 <span>Executive Summary Generator</span>
               </CardTitle>
               <CardDescription>
@@ -403,30 +403,30 @@ export const ExecutiveSummaryGenerator: React.FC<ExecutiveSummaryGeneratorProps>
             <CardContent>
               <div className="grid grid-cols-2 md:grid-cols-4 gap-4">
                 <div className="flex items-center space-x-3">
-                  <CheckCircle className="w-8 h-8 text-green-600" />
+                  <CheckCircle className="w-8 h-8 text-success" />
                   <div>
-                    <p className="text-sm text-gray-500">Approved</p>
+                    <p className="text-sm text-muted-foreground">Approved</p>
                     <p className="text-2xl font-bold">{summaryData.summary.approvedStrategies}</p>
                   </div>
                 </div>
                 <div className="flex items-center space-x-3">
-                  <AlertTriangle className="w-8 h-8 text-red-600" />
+                  <AlertTriangle className="w-8 h-8 text-destructive" />
                   <div>
-                    <p className="text-sm text-gray-500">Rejected</p>
+                    <p className="text-sm text-muted-foreground">Rejected</p>
                     <p className="text-2xl font-bold">{summaryData.summary.rejectedStrategies}</p>
                   </div>
                 </div>
                 <div className="flex items-center space-x-3">
-                  <Clock className="w-8 h-8 text-yellow-600" />
+                  <Clock className="w-8 h-8 text-warning" />
                   <div>
-                    <p className="text-sm text-gray-500">Pending</p>
+                    <p className="text-sm text-muted-foreground">Pending</p>
                     <p className="text-2xl font-bold">{summaryData.summary.pendingStrategies}</p>
                   </div>
                 </div>
                 <div className="flex items-center space-x-3">
-                  <TrendingUp className="w-8 h-8 text-blue-600" />
+                  <TrendingUp className="w-8 h-8 text-primary" />
                   <div>
-                    <p className="text-sm text-gray-500">Success Rate</p>
+                    <p className="text-sm text-muted-foreground">Success Rate</p>
                     <p className="text-2xl font-bold">
                       {(summaryData.summary.avgSuccessProbability * 100).toFixed(0)}%
                     </p>

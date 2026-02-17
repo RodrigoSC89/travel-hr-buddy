@@ -170,9 +170,9 @@ export const SafetyDashboard: React.FC = () => {
 
   const getStatusBadge = (status: string) => {
     switch (status) {
-      case "investigating": return <Badge className="bg-yellow-500">Investigando</Badge>;
-      case "resolved": return <Badge className="bg-blue-500">Resolvido</Badge>;
-      case "closed": return <Badge className="bg-green-500">Fechado</Badge>;
+      case "investigating": return <Badge className="bg-warning text-warning-foreground">Investigando</Badge>;
+      case "resolved": return <Badge className="bg-info text-info-foreground">Resolvido</Badge>;
+      case "closed": return <Badge className="bg-success text-success-foreground">Fechado</Badge>;
       default: return <Badge>{status}</Badge>;
     }
   };
@@ -197,7 +197,7 @@ export const SafetyDashboard: React.FC = () => {
 
         <Dialog open={isReportDialogOpen} onOpenChange={setIsReportDialogOpen}>
           <DialogTrigger asChild>
-            <Button className="bg-red-600 hover:bg-red-700">
+            <Button className="bg-destructive hover:bg-destructive/90">
               <Plus className="h-4 w-4 mr-2" />
               Reportar Ocorrência
             </Button>
@@ -239,7 +239,7 @@ export const SafetyDashboard: React.FC = () => {
       </div>
 
       {/* LTI Counter Banner */}
-      <Card className="bg-gradient-to-r from-green-600 to-emerald-600 text-white border-0">
+      <Card className="bg-gradient-to-r from-success to-success/80 text-success-foreground border-0">
         <CardContent className="py-6">
           <div className="flex items-center justify-between">
             <div className="flex items-center gap-4">
@@ -248,14 +248,14 @@ export const SafetyDashboard: React.FC = () => {
               </div>
               <div>
                 <h2 className="text-3xl font-bold">{daysWithoutLTI} Dias</h2>
-                <p className="text-green-100">Sem Acidentes com Afastamento (LTI)</p>
+                <p className="text-success-foreground/80">Sem Acidentes com Afastamento (LTI)</p>
               </div>
             </div>
             <div className="text-right">
               <Badge className="bg-success-foreground/20 text-success-foreground text-lg px-4 py-2">
                 Meta: 365 dias
               </Badge>
-              <p className="text-sm text-green-100 mt-2">
+              <p className="text-sm text-success-foreground/80 mt-2">
                 Progresso: {Math.round((daysWithoutLTI / 365) * 100)}%
               </p>
             </div>
@@ -265,7 +265,7 @@ export const SafetyDashboard: React.FC = () => {
 
       {/* KPI Cards */}
       <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-4 gap-4">
-        <Card className="border-l-4 border-l-red-500">
+        <Card className="border-l-4 border-l-destructive">
           <CardHeader className="pb-2">
             <CardTitle className="text-sm font-medium text-muted-foreground flex items-center gap-2">
               <AlertCircle className="h-4 w-4" />
@@ -275,7 +275,7 @@ export const SafetyDashboard: React.FC = () => {
           <CardContent>
             <div className="flex items-end justify-between">
               <div className="text-3xl font-bold">31</div>
-              <Badge className="bg-green-100 text-green-800">
+              <Badge className="bg-success/10 text-success">
                 <TrendingDown className="h-3 w-3 mr-1" />
                 -42%
               </Badge>
@@ -284,7 +284,7 @@ export const SafetyDashboard: React.FC = () => {
           </CardContent>
         </Card>
 
-        <Card className="border-l-4 border-l-yellow-500">
+        <Card className="border-l-4 border-l-warning">
           <CardHeader className="pb-2">
             <CardTitle className="text-sm font-medium text-muted-foreground flex items-center gap-2">
               <AlertTriangle className="h-4 w-4" />
@@ -294,7 +294,7 @@ export const SafetyDashboard: React.FC = () => {
           <CardContent>
             <div className="flex items-end justify-between">
               <div className="text-3xl font-bold">72</div>
-              <Badge className="bg-green-100 text-green-800">
+              <Badge className="bg-success/10 text-success">
                 <TrendingDown className="h-3 w-3 mr-1" />
                 -28%
               </Badge>
@@ -302,7 +302,7 @@ export const SafetyDashboard: React.FC = () => {
           </CardContent>
         </Card>
 
-        <Card className="border-l-4 border-l-blue-500">
+        <Card className="border-l-4 border-l-primary">
           <CardHeader className="pb-2">
             <CardTitle className="text-sm font-medium text-muted-foreground flex items-center gap-2">
               <Activity className="h-4 w-4" />
@@ -312,7 +312,7 @@ export const SafetyDashboard: React.FC = () => {
           <CardContent>
             <div className="flex items-end justify-between">
               <div className="text-3xl font-bold">0.42</div>
-              <Badge className="bg-green-100 text-green-800">
+              <Badge className="bg-success/10 text-success">
                 <CheckCircle className="h-3 w-3 mr-1" />
                 Abaixo da meta
               </Badge>
@@ -321,7 +321,7 @@ export const SafetyDashboard: React.FC = () => {
           </CardContent>
         </Card>
 
-        <Card className="border-l-4 border-l-purple-500">
+        <Card className="border-l-4 border-l-accent">
           <CardHeader className="pb-2">
             <CardTitle className="text-sm font-medium text-muted-foreground flex items-center gap-2">
               <FileText className="h-4 w-4" />
@@ -331,7 +331,7 @@ export const SafetyDashboard: React.FC = () => {
           <CardContent>
             <div className="flex items-end justify-between">
               <div className="text-3xl font-bold">1,248</div>
-              <Badge className="bg-green-100 text-green-800">
+              <Badge className="bg-success/10 text-success">
                 98%
               </Badge>
             </div>
@@ -475,15 +475,15 @@ export const SafetyDashboard: React.FC = () => {
               >
                 <div className="flex items-center gap-4">
                   <div className={`p-2 rounded-full ${
-                    incident.type === "Incident" ? "bg-red-100" :
-                    incident.type === "Near Miss" ? "bg-yellow-100" : "bg-blue-100"
+                    incident.type === "Incident" ? "bg-destructive/10" :
+                    incident.type === "Near Miss" ? "bg-warning/10" : "bg-info/10"
                   }`}>
                     {incident.type === "Incident" ? (
-                      <AlertCircle className="h-5 w-5 text-red-600" />
+                      <AlertCircle className="h-5 w-5 text-destructive" />
                     ) : incident.type === "Near Miss" ? (
-                      <AlertTriangle className="h-5 w-5 text-yellow-600" />
+                      <AlertTriangle className="h-5 w-5 text-warning" />
                     ) : (
-                      <Shield className="h-5 w-5 text-blue-600" />
+                      <Shield className="h-5 w-5 text-info" />
                     )}
                   </div>
                   <div>
