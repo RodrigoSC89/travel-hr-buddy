@@ -1,13 +1,14 @@
 /**
- * Document Library Sidebar - Browse & drag documents to link as evidence
+ * Document Library Sidebar v2 - Browse & link documents with category filter
  */
-import React, { useState, useCallback, memo } from "react";
+import React, { useState, useCallback, useMemo, memo } from "react";
 import { Card, CardContent, CardHeader, CardTitle } from "@/components/ui/card";
 import { Button } from "@/components/ui/button";
 import { Input } from "@/components/ui/input";
 import { Badge } from "@/components/ui/badge";
 import { ScrollArea } from "@/components/ui/scroll-area";
-import { Search, FileText, GripVertical, Library, Plus } from "lucide-react";
+import { Select, SelectContent, SelectItem, SelectTrigger, SelectValue } from "@/components/ui/select";
+import { Search, FileText, Library, Plus, Filter } from "lucide-react";
 import { useDocuments } from "@/hooks/use-documents-crud";
 import { cn } from "@/lib/utils";
 
@@ -17,9 +18,29 @@ interface Props {
   onSelectItem: (itemId: string | null) => void;
 }
 
+const CATEGORIES = [
+  { value: "all", label: "Todas" },
+  { value: "certificate", label: "Certificados" },
+  { value: "procedure", label: "Procedimentos" },
+  { value: "manual", label: "Manuais" },
+  { value: "report", label: "Relatórios" },
+  { value: "training", label: "Treinamentos" },
+  { value: "inspection", label: "Inspeções" },
+  { value: "contract", label: "Contratos" },
+];
+
 export const DocumentLibrarySidebar = memo(({ onLinkDocument, activeItemId, onSelectItem }: Props) => {
   const [search, setSearch] = useState("");
+  const [category, setCategory] = useState("all");
   const { data: documents = [], isLoading } = useDocuments({ search: search || undefined, limit: 50 });
+
+  const filteredDocs = useMemo(() => {
+    if (category === "all") return documents;
+    return documents.filter(doc =>
+      (doc.category || "").toLowerCase().includes(category.toLowerCase()) ||
+      (doc.file_type || "").toLowerCase().includes(category.toLowerCase())
+    );
+  }, [documents, category]);
 
   const handleLinkClick = useCallback((doc: any) => {
     if (!activeItemId) return;
@@ -33,15 +54,31 @@ export const DocumentLibrarySidebar = memo(({ onLinkDocument, activeItemId, onSe
         <CardTitle className="text-sm flex items-center gap-2">
           <Library className="h-4 w-4 text-primary" />
           Biblioteca de Documentos
+          <Badge variant="outline" className="text-[10px] ml-auto">{filteredDocs.length}</Badge>
         </CardTitle>
-        <div className="relative mt-2">
-          <Search className="absolute left-2 top-2 h-3.5 w-3.5 text-muted-foreground" />
-          <Input
-            placeholder="Buscar documento..."
-            value={search}
-            onChange={e => setSearch(e.target.value)}
-            className="pl-7 h-8 text-xs"
-          />
+        <div className="space-y-2 mt-2">
+          <div className="relative">
+            <Search className="absolute left-2 top-2 h-3.5 w-3.5 text-muted-foreground" />
+            <Input
+              placeholder="Buscar documento..."
+              value={search}
+              onChange={e => setSearch(e.target.value)}
+              className="pl-7 h-8 text-xs"
+            />
+          </div>
+          <Select value={category} onValueChange={setCategory}>
+            <SelectTrigger className="h-7 text-xs">
+              <Filter className="h-3 w-3 mr-1" />
+              <SelectValue />
+            </SelectTrigger>
+            <SelectContent>
+              {CATEGORIES.map(c => (
+                <SelectItem key={c.value} value={c.value} className="text-xs">
+                  {c.label}
+                </SelectItem>
+              ))}
+            </SelectContent>
+          </Select>
         </div>
       </CardHeader>
       <CardContent className="px-2 pb-2">
@@ -54,9 +91,9 @@ export const DocumentLibrarySidebar = memo(({ onLinkDocument, activeItemId, onSe
             Selecione "Vincular" em um item para conectar um documento
           </p>
         )}
-        <ScrollArea className="h-[calc(100vh-340px)]">
+        <ScrollArea className="h-[calc(100vh-380px)]">
           <div className="space-y-1 pr-1">
-            {documents.map(doc => (
+            {filteredDocs.map(doc => (
               <div
                 key={doc.id}
                 onClick={() => handleLinkClick(doc)}
@@ -79,9 +116,9 @@ export const DocumentLibrarySidebar = memo(({ onLinkDocument, activeItemId, onSe
                 )}
               </div>
             ))}
-            {documents.length === 0 && !isLoading && (
+            {filteredDocs.length === 0 && !isLoading && (
               <p className="text-xs text-muted-foreground text-center py-6">
-                {search ? "Nenhum documento encontrado" : "Biblioteca vazia"}
+                {search || category !== "all" ? "Nenhum documento encontrado" : "Biblioteca vazia"}
               </p>
             )}
           </div>

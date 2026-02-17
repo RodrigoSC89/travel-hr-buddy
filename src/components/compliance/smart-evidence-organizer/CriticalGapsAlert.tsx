@@ -1,15 +1,14 @@
 /**
- * Critical Gaps Alert - Post-processing notifications for critical gaps
+ * Critical Gaps Alert v2 - Post-processing notifications with element context
  */
 import React, { useMemo, memo, useState } from "react";
 import { Card, CardContent, CardHeader, CardTitle } from "@/components/ui/card";
 import { Badge } from "@/components/ui/badge";
 import { Button } from "@/components/ui/button";
-import { Alert, AlertDescription, AlertTitle } from "@/components/ui/alert";
 import { ScrollArea } from "@/components/ui/scroll-area";
 import {
   ShieldAlert, XCircle, AlertTriangle, ChevronDown, ChevronUp,
-  Bell, Zap, FileWarning
+  Bell, Zap, FileWarning, FolderOpen
 } from "lucide-react";
 import type { EvidenceItem, EvidenceElement } from "./types";
 import { cn } from "@/lib/utils";
@@ -47,6 +46,20 @@ export const CriticalGapsAlert = memo(({ items, elements, overallScore, onRematc
       .slice(0, 5),
     [elements]
   );
+
+  // Group critical gaps by element for context
+  const gapsByElement = useMemo(() => {
+    const map = new Map<string, { element: EvidenceElement; items: EvidenceItem[] }>();
+    for (const gap of criticalGaps) {
+      const el = elements.find(e => e.id === gap.element_id);
+      if (!el) continue;
+      if (!map.has(el.id)) {
+        map.set(el.id, { element: el, items: [] });
+      }
+      map.get(el.id)!.items.push(gap);
+    }
+    return Array.from(map.values()).sort((a, b) => a.element.compliance_score - b.element.compliance_score);
+  }, [criticalGaps, elements]);
 
   if (criticalGaps.length === 0 && allGaps.length === 0) return null;
 
@@ -129,22 +142,37 @@ export const CriticalGapsAlert = memo(({ items, elements, overallScore, onRematc
             </div>
           </div>
 
-          {/* Critical Items List */}
-          {criticalGaps.length > 0 && (
+          {/* Critical Items grouped by Element */}
+          {gapsByElement.length > 0 && (
             <div>
-              <p className="text-xs font-semibold text-destructive mb-2">Itens Críticos sem Evidência:</p>
-              <ScrollArea className="h-[160px]">
-                <div className="space-y-1.5 pr-2">
-                  {criticalGaps.map(item => (
-                    <div key={item.id} className="flex items-start gap-2 p-2 bg-destructive/5 border border-destructive/20 rounded-md">
-                      <XCircle className="h-3.5 w-3.5 text-destructive shrink-0 mt-0.5" />
-                      <div className="flex-1 min-w-0">
-                        <p className="text-xs font-medium">{item.item_number} — {item.item_text}</p>
-                        {item.ai_suggestion && (
-                          <p className="text-[10px] text-muted-foreground mt-0.5">💡 {item.ai_suggestion}</p>
-                        )}
+              <p className="text-xs font-semibold text-destructive mb-2">Itens Críticos por Elemento:</p>
+              <ScrollArea className="h-[200px]">
+                <div className="space-y-3 pr-2">
+                  {gapsByElement.map(({ element, items: gapItems }) => (
+                    <div key={element.id} className="space-y-1.5">
+                      <div className="flex items-center gap-2 px-2">
+                        <FolderOpen className="h-3.5 w-3.5 text-muted-foreground" />
+                        <span className="text-xs font-semibold">{element.element_code || `E${element.element_number}`}</span>
+                        <span className="text-xs text-muted-foreground truncate">{element.element_name}</span>
+                        <Badge variant="outline" className={cn(
+                          "text-[9px] ml-auto",
+                          element.compliance_score < 40 ? "border-destructive/50 text-destructive" : "border-yellow-500/50 text-yellow-600"
+                        )}>
+                          {element.compliance_score.toFixed(0)}%
+                        </Badge>
                       </div>
-                      <Badge variant="destructive" className="text-[9px] shrink-0">CRÍTICO</Badge>
+                      {gapItems.map(item => (
+                        <div key={item.id} className="flex items-start gap-2 p-2 ml-4 bg-destructive/5 border border-destructive/20 rounded-md">
+                          <XCircle className="h-3.5 w-3.5 text-destructive shrink-0 mt-0.5" />
+                          <div className="flex-1 min-w-0">
+                            <p className="text-xs font-medium">{item.item_number} — {item.item_text}</p>
+                            {item.ai_suggestion && (
+                              <p className="text-[10px] text-muted-foreground mt-0.5">💡 {item.ai_suggestion}</p>
+                            )}
+                          </div>
+                          <Badge variant="destructive" className="text-[9px] shrink-0">CRÍTICO</Badge>
+                        </div>
+                      ))}
                     </div>
                   ))}
                 </div>
