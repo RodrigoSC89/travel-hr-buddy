@@ -1,6 +1,7 @@
 /**
- * Smart Evidence Organizer - Organizador Inteligente de Evidências
+ * Smart Evidence Organizer - Organizador Inteligente de Evidências v2
  * Upload de checklists → IA parseia → Busca evidências → Gera respostas
+ * + Dashboard visual, Export PDF, Document Library, History
  */
 
 import React, { useState, useEffect, useMemo, useCallback, memo } from "react";
@@ -14,16 +15,20 @@ import { Tabs, TabsContent, TabsList, TabsTrigger } from "@/components/ui/tabs";
 import { ScrollArea } from "@/components/ui/scroll-area";
 import { Collapsible, CollapsibleContent, CollapsibleTrigger } from "@/components/ui/collapsible";
 import { Input } from "@/components/ui/input";
-import { Textarea } from "@/components/ui/textarea";
 import {
   Upload, FolderOpen, FileCheck, FileX, FileQuestion, Brain,
-  ChevronRight, ChevronDown, Search, Filter, Loader2,
-  CheckCircle2, XCircle, AlertTriangle, Sparkles, Eye,
-  LayoutGrid, List, FolderTree, Plus, RefreshCw
+  ChevronRight, ChevronDown, Search, Loader2,
+  CheckCircle2, XCircle, AlertTriangle, Sparkles,
+  LayoutGrid, List, FolderTree, Plus, RefreshCw,
+  BarChart3, Library, ArrowLeft
 } from "lucide-react";
 import { useEvidenceOrganizer } from "./useEvidenceOrganizer";
+import { EvidenceDashboard } from "./EvidenceDashboard";
+import { EvidenceExporter } from "./EvidenceExporter";
+import { DocumentLibrarySidebar } from "./DocumentLibrarySidebar";
+import { PackHistoryComparison } from "./PackHistoryComparison";
 import type { EvidenceElement, EvidenceItem, EvidenceMatch, ViewMode } from "./types";
-import { Dialog, DialogContent, DialogHeader, DialogTitle, DialogTrigger } from "@/components/ui/dialog";
+import { Dialog, DialogContent, DialogHeader, DialogTitle } from "@/components/ui/dialog";
 
 interface Props {
   framework: "peodp" | "peotram";
@@ -51,7 +56,7 @@ StatusBadge.displayName = "StatusBadge";
 const KPIBar = memo(({ pack }: { pack: any }) => {
   if (!pack) return null;
   const stats = [
-    { label: "Elementos", value: pack.total_elements, icon: FolderOpen, color: "text-blue-500" },
+    { label: "Elementos", value: pack.total_elements, icon: FolderOpen, color: "text-primary" },
     { label: "Itens", value: pack.total_items, icon: FileCheck, color: "text-foreground" },
     { label: "Encontradas", value: pack.matched_items, icon: CheckCircle2, color: "text-green-500" },
     { label: "Parciais", value: pack.partial_items, icon: AlertTriangle, color: "text-yellow-500" },
@@ -84,11 +89,7 @@ function UploadPanel({ onUpload, isLoading, processingStep }: {
 
   const handleFile = useCallback(async (file: File) => {
     const ext = file.name.split(".").pop()?.toLowerCase();
-    if (!["pdf", "xlsx", "csv", "txt", "docx"].includes(ext || "")) {
-      return;
-    }
-
-    // Read as text for txt/csv, otherwise read as base64 for AI processing
+    if (!["pdf", "xlsx", "csv", "txt", "docx"].includes(ext || "")) return;
     const text = await file.text();
     onUpload(text, file.name, ext || "txt");
   }, [onUpload]);
@@ -108,7 +109,7 @@ function UploadPanel({ onUpload, isLoading, processingStep }: {
             <Loader2 className="h-12 w-12 animate-spin text-primary mx-auto" />
             <div>
               <p className="text-lg font-semibold">{processingStep || "Processando..."}</p>
-              <p className="text-sm text-muted-foreground mt-1">A IA está analisando seu checklist e buscando evidências</p>
+              <p className="text-sm text-muted-foreground mt-1">A IA está analisando e vinculando evidências automaticamente</p>
             </div>
             <Progress value={processingStep?.includes("respostas") ? 80 : processingStep?.includes("evidências") ? 50 : 20} className="max-w-md mx-auto" />
           </div>
@@ -134,10 +135,11 @@ function UploadPanel({ onUpload, isLoading, processingStep }: {
             <p className="text-sm text-muted-foreground mt-1">
               Arraste ou clique para enviar (PDF, Excel, CSV, TXT)
             </p>
-            <div className="flex items-center justify-center gap-2 mt-4">
-              <Badge variant="outline"><Brain className="h-3 w-3 mr-1" /> IA Parseia Elementos</Badge>
+            <div className="flex items-center justify-center gap-2 mt-4 flex-wrap">
+              <Badge variant="outline"><Brain className="h-3 w-3 mr-1" /> IA Parseia</Badge>
               <Badge variant="outline"><Search className="h-3 w-3 mr-1" /> Busca Evidências</Badge>
               <Badge variant="outline"><Sparkles className="h-3 w-3 mr-1" /> Gera Respostas</Badge>
+              <Badge variant="outline" className="border-primary/40 text-primary"><CheckCircle2 className="h-3 w-3 mr-1" /> 100% Automático</Badge>
             </div>
           </div>
         )}
@@ -147,10 +149,11 @@ function UploadPanel({ onUpload, isLoading, processingStep }: {
 }
 
 // ─── Evidence Item Row ────────────────────────────────────
-const EvidenceItemRow = memo(({ item, itemMatches, onAddManual }: {
+const EvidenceItemRow = memo(({ item, itemMatches, onAddManual, onLinkFromLibrary }: {
   item: EvidenceItem;
   itemMatches: EvidenceMatch[];
   onAddManual: (itemId: string) => void;
+  onLinkFromLibrary: (itemId: string) => void;
 }) => {
   const [expanded, setExpanded] = useState(false);
 
@@ -185,7 +188,6 @@ const EvidenceItemRow = memo(({ item, itemMatches, onAddManual }: {
             className="overflow-hidden"
           >
             <div className="px-3 pb-3 pt-0 space-y-3 border-t">
-              {/* AI Response */}
               {item.ai_response && (
                 <div className="bg-primary/5 border border-primary/20 rounded-md p-3 mt-3">
                   <div className="flex items-center gap-1 text-xs font-medium text-primary mb-1">
@@ -195,7 +197,6 @@ const EvidenceItemRow = memo(({ item, itemMatches, onAddManual }: {
                 </div>
               )}
 
-              {/* AI Suggestion (when evidence not found) */}
               {item.ai_suggestion && (
                 <div className="bg-yellow-500/5 border border-yellow-500/20 rounded-md p-3">
                   <div className="flex items-center gap-1 text-xs font-medium text-yellow-600 mb-1">
@@ -205,7 +206,6 @@ const EvidenceItemRow = memo(({ item, itemMatches, onAddManual }: {
                 </div>
               )}
 
-              {/* Matched Documents */}
               {itemMatches.length > 0 && (
                 <div className="space-y-2">
                   <p className="text-xs font-medium text-muted-foreground">Evidências Vinculadas:</p>
@@ -222,9 +222,14 @@ const EvidenceItemRow = memo(({ item, itemMatches, onAddManual }: {
                 </div>
               )}
 
-              <Button size="sm" variant="outline" onClick={() => onAddManual(item.id)} className="gap-1">
-                <Plus className="h-3 w-3" /> Adicionar Evidência Manual
-              </Button>
+              <div className="flex gap-2">
+                <Button size="sm" variant="outline" onClick={(e) => { e.stopPropagation(); onLinkFromLibrary(item.id); }} className="gap-1">
+                  <Library className="h-3 w-3" /> Vincular da Biblioteca
+                </Button>
+                <Button size="sm" variant="ghost" onClick={(e) => { e.stopPropagation(); onAddManual(item.id); }} className="gap-1">
+                  <Plus className="h-3 w-3" /> Manual
+                </Button>
+              </div>
             </div>
           </motion.div>
         )}
@@ -234,12 +239,13 @@ const EvidenceItemRow = memo(({ item, itemMatches, onAddManual }: {
 });
 EvidenceItemRow.displayName = "EvidenceItemRow";
 
-// ─── Element Folder (Tree View / Accordion) ───────────────
-function ElementFolder({ element, elementItems, matches, onAddManual }: {
+// ─── Element Folder ───────────────────────────────────────
+function ElementFolder({ element, elementItems, matches, onAddManual, onLinkFromLibrary }: {
   element: EvidenceElement;
   elementItems: EvidenceItem[];
   matches: EvidenceMatch[];
   onAddManual: (itemId: string) => void;
+  onLinkFromLibrary: (itemId: string) => void;
 }) {
   const [isOpen, setIsOpen] = useState(false);
   const scoreColor = element.compliance_score >= 80 ? "text-green-500" : element.compliance_score >= 50 ? "text-yellow-500" : "text-destructive";
@@ -285,6 +291,7 @@ function ElementFolder({ element, elementItems, matches, onAddManual }: {
                 item={item}
                 itemMatches={matches.filter((m) => m.item_id === item.id)}
                 onAddManual={onAddManual}
+                onLinkFromLibrary={onLinkFromLibrary}
               />
             ))}
         </div>
@@ -294,10 +301,11 @@ function ElementFolder({ element, elementItems, matches, onAddManual }: {
 }
 
 // ─── Kanban View ──────────────────────────────────────────
-function KanbanView({ items, matches, onAddManual }: {
+function KanbanView({ items, matches, onAddManual, onLinkFromLibrary }: {
   items: EvidenceItem[];
   matches: EvidenceMatch[];
   onAddManual: (itemId: string) => void;
+  onLinkFromLibrary: (itemId: string) => void;
 }) {
   const columns = useMemo(() => ({
     found: items.filter((i) => i.evidence_status === "found"),
@@ -330,6 +338,7 @@ function KanbanView({ items, matches, onAddManual }: {
                     item={item}
                     itemMatches={matches.filter((m) => m.item_id === item.id)}
                     onAddManual={onAddManual}
+                    onLinkFromLibrary={onLinkFromLibrary}
                   />
                 ))}
                 {col.items.length === 0 && (
@@ -391,13 +400,16 @@ export function SmartEvidenceOrganizer({ framework }: Props) {
   const {
     packs, activePack, elements, items, matches,
     isLoading, processingStep,
-    loadPacks, loadPackDetails, uploadAndProcess, addManualEvidence,
+    loadPacks, loadPackDetails, setActivePack, uploadAndProcess, addManualEvidence,
   } = useEvidenceOrganizer(framework);
 
   const [viewMode, setViewMode] = useState<ViewMode>("tree");
+  const [activeTab, setActiveTab] = useState("evidence");
   const [searchTerm, setSearchTerm] = useState("");
   const [manualDialogOpen, setManualDialogOpen] = useState(false);
   const [manualItemId, setManualItemId] = useState<string | null>(null);
+  const [showLibrary, setShowLibrary] = useState(false);
+  const [linkingItemId, setLinkingItemId] = useState<string | null>(null);
 
   useEffect(() => { loadPacks(); }, [loadPacks]);
 
@@ -418,6 +430,22 @@ export function SmartEvidenceOrganizer({ framework }: Props) {
     addManualEvidence(itemId, title);
   }, [addManualEvidence]);
 
+  const handleLinkFromLibrary = useCallback((itemId: string) => {
+    setLinkingItemId(itemId);
+    setShowLibrary(true);
+  }, []);
+
+  const handleLibraryLink = useCallback((itemId: string, docTitle: string, docPath?: string) => {
+    addManualEvidence(itemId, docTitle, docPath);
+    setLinkingItemId(null);
+  }, [addManualEvidence]);
+
+  const handleBack = useCallback(() => {
+    setActivePack(null);
+    setActiveTab("evidence");
+    loadPacks();
+  }, [setActivePack, loadPacks]);
+
   const frameworkLabel = framework === "peodp" ? "PEO-DP" : "PEOTRAM";
 
   return (
@@ -430,19 +458,29 @@ export function SmartEvidenceOrganizer({ framework }: Props) {
             Smart Evidence Organizer — {frameworkLabel}
           </h2>
           <p className="text-sm text-muted-foreground">
-            Upload do checklist → IA parseia elementos → Busca evidências → Gera respostas
+            Upload → IA parseia → Busca evidências → Gera respostas • 100% automático
           </p>
         </div>
         {activePack && (
           <div className="flex items-center gap-2">
-            <Button variant="outline" size="sm" onClick={() => { loadPackDetails(activePack.id); }} className="gap-1">
+            <EvidenceExporter pack={activePack} elements={elements} items={items} matches={matches} />
+            <Button
+              variant="outline"
+              size="sm"
+              onClick={() => setShowLibrary(!showLibrary)}
+              className="gap-1"
+            >
+              <Library className="h-3 w-3" />
+              {showLibrary ? "Fechar" : "Biblioteca"}
+            </Button>
+            <Button variant="outline" size="sm" onClick={() => loadPackDetails(activePack.id)} className="gap-1">
               <RefreshCw className="h-3 w-3" /> Atualizar
             </Button>
           </div>
         )}
       </motion.div>
 
-      {/* Upload or Pack List */}
+      {/* Upload or Pack Content */}
       {!activePack ? (
         <motion.div variants={fadeUp} className="space-y-4">
           <UploadPanel
@@ -450,125 +488,114 @@ export function SmartEvidenceOrganizer({ framework }: Props) {
             isLoading={isLoading}
             processingStep={processingStep}
           />
-
-          {packs.length > 0 && (
-            <Card>
-              <CardHeader className="py-3">
-                <CardTitle className="text-sm">Pacotes Anteriores</CardTitle>
-              </CardHeader>
-              <CardContent className="pb-3">
-                <div className="space-y-2">
-                  {packs.map((pack) => (
-                    <div
-                      key={pack.id}
-                      className="flex items-center justify-between p-3 bg-muted/30 rounded-lg cursor-pointer hover:bg-muted/50 transition-colors"
-                      onClick={() => loadPackDetails(pack.id)}
-                    >
-                      <div>
-                        <p className="font-medium text-sm">{pack.title}</p>
-                        <p className="text-xs text-muted-foreground">
-                          {pack.total_elements} elementos • {pack.total_items} itens • {new Date(pack.created_at).toLocaleDateString("pt-BR")}
-                        </p>
-                      </div>
-                      <div className="flex items-center gap-2">
-                        <Badge variant={pack.status === "completed" ? "default" : "secondary"}>
-                          {pack.status === "completed" ? "Concluído" : pack.status}
-                        </Badge>
-                        <span className="font-bold text-sm">{pack.overall_score.toFixed(0)}%</span>
-                      </div>
-                    </div>
-                  ))}
-                </div>
-              </CardContent>
-            </Card>
-          )}
+          <PackHistoryComparison packs={packs} onSelectPack={loadPackDetails} />
         </motion.div>
       ) : (
-        <>
-          {/* Score + KPIs */}
-          <motion.div variants={fadeUp} className="space-y-3">
-            <div className="flex items-center justify-between">
-              <Button variant="ghost" size="sm" onClick={() => { loadPacks(); }} className="gap-1">
-                ← Voltar
-              </Button>
-              <div className="flex items-center gap-2">
-                <span className="text-sm text-muted-foreground">Score Geral:</span>
-                <span className={`text-2xl font-bold ${activePack.overall_score >= 80 ? "text-green-500" : activePack.overall_score >= 50 ? "text-yellow-500" : "text-destructive"}`}>
-                  {activePack.overall_score.toFixed(0)}%
-                </span>
-              </div>
-            </div>
-            <Progress
-              value={activePack.overall_score}
-              className="h-2"
-            />
-            <KPIBar pack={activePack} />
-          </motion.div>
-
-          {/* Controls */}
-          <motion.div variants={fadeUp} className="flex items-center justify-between flex-wrap gap-2">
-            <div className="flex items-center gap-2">
-              <div className="relative">
-                <Search className="absolute left-2.5 top-2.5 h-4 w-4 text-muted-foreground" />
-                <Input
-                  placeholder="Buscar item..."
-                  value={searchTerm}
-                  onChange={(e) => setSearchTerm(e.target.value)}
-                  className="pl-9 w-64"
-                />
-              </div>
-            </div>
-            <div className="flex items-center gap-1 bg-muted rounded-md p-0.5">
-              <Button
-                variant={viewMode === "tree" ? "default" : "ghost"}
-                size="sm"
-                onClick={() => setViewMode("tree")}
-                className="gap-1 h-7"
-              >
-                <FolderTree className="h-3.5 w-3.5" /> Árvore
-              </Button>
-              <Button
-                variant={viewMode === "accordion" ? "default" : "ghost"}
-                size="sm"
-                onClick={() => setViewMode("accordion")}
-                className="gap-1 h-7"
-              >
-                <List className="h-3.5 w-3.5" /> Accordion
-              </Button>
-              <Button
-                variant={viewMode === "kanban" ? "default" : "ghost"}
-                size="sm"
-                onClick={() => setViewMode("kanban")}
-                className="gap-1 h-7"
-              >
-                <LayoutGrid className="h-3.5 w-3.5" /> Kanban
-              </Button>
-            </div>
-          </motion.div>
-
-          {/* Content Views */}
-          <motion.div variants={fadeUp}>
-            {viewMode === "kanban" ? (
-              <KanbanView items={filteredItems} matches={matches} onAddManual={handleAddManual} />
-            ) : (
-              <ScrollArea className="h-[calc(100vh-420px)]">
-                <div className="space-y-3 pr-2">
-                  {elements
-                    .sort((a, b) => a.sort_order - b.sort_order)
-                    .map((element) => (
-                      <ElementFolder
-                        key={element.id}
-                        element={element}
-                        elementItems={filteredItems.filter((i) => i.element_id === element.id)}
-                        matches={matches}
-                        onAddManual={handleAddManual}
-                      />
-                    ))}
+        <div className="flex gap-4">
+          {/* Main Content */}
+          <div className="flex-1 min-w-0 space-y-4">
+            {/* Score + Back */}
+            <motion.div variants={fadeUp} className="space-y-3">
+              <div className="flex items-center justify-between">
+                <Button variant="ghost" size="sm" onClick={handleBack} className="gap-1">
+                  <ArrowLeft className="h-3.5 w-3.5" /> Voltar
+                </Button>
+                <div className="flex items-center gap-2">
+                  <span className="text-sm text-muted-foreground">Score:</span>
+                  <span className={`text-2xl font-bold ${activePack.overall_score >= 80 ? "text-green-500" : activePack.overall_score >= 50 ? "text-yellow-500" : "text-destructive"}`}>
+                    {activePack.overall_score.toFixed(0)}%
+                  </span>
                 </div>
-              </ScrollArea>
-            )}
-          </motion.div>
-        </>
+              </div>
+              <Progress value={activePack.overall_score} className="h-2" />
+              <KPIBar pack={activePack} />
+            </motion.div>
+
+            {/* Tabs: Evidence / Dashboard */}
+            <motion.div variants={fadeUp}>
+              <Tabs value={activeTab} onValueChange={setActiveTab}>
+                <div className="flex items-center justify-between flex-wrap gap-2">
+                  <TabsList>
+                    <TabsTrigger value="evidence" className="gap-1">
+                      <FolderTree className="h-3.5 w-3.5" /> Evidências
+                    </TabsTrigger>
+                    <TabsTrigger value="dashboard" className="gap-1">
+                      <BarChart3 className="h-3.5 w-3.5" /> Dashboard
+                    </TabsTrigger>
+                  </TabsList>
+
+                  {activeTab === "evidence" && (
+                    <div className="flex items-center gap-2">
+                      <div className="relative">
+                        <Search className="absolute left-2.5 top-2.5 h-4 w-4 text-muted-foreground" />
+                        <Input
+                          placeholder="Buscar item..."
+                          value={searchTerm}
+                          onChange={(e) => setSearchTerm(e.target.value)}
+                          className="pl-9 w-56"
+                        />
+                      </div>
+                      <div className="flex items-center gap-0.5 bg-muted rounded-md p-0.5">
+                        <Button variant={viewMode === "tree" ? "default" : "ghost"} size="sm" onClick={() => setViewMode("tree")} className="gap-1 h-7">
+                          <FolderTree className="h-3.5 w-3.5" /> Árvore
+                        </Button>
+                        <Button variant={viewMode === "accordion" ? "default" : "ghost"} size="sm" onClick={() => setViewMode("accordion")} className="gap-1 h-7">
+                          <List className="h-3.5 w-3.5" /> Accordion
+                        </Button>
+                        <Button variant={viewMode === "kanban" ? "default" : "ghost"} size="sm" onClick={() => setViewMode("kanban")} className="gap-1 h-7">
+                          <LayoutGrid className="h-3.5 w-3.5" /> Kanban
+                        </Button>
+                      </div>
+                    </div>
+                  )}
+                </div>
+
+                <TabsContent value="evidence" className="mt-4">
+                  {viewMode === "kanban" ? (
+                    <KanbanView items={filteredItems} matches={matches} onAddManual={handleAddManual} onLinkFromLibrary={handleLinkFromLibrary} />
+                  ) : (
+                    <ScrollArea className="h-[calc(100vh-480px)]">
+                      <div className="space-y-3 pr-2">
+                        {elements
+                          .sort((a, b) => a.sort_order - b.sort_order)
+                          .map((element) => (
+                            <ElementFolder
+                              key={element.id}
+                              element={element}
+                              elementItems={filteredItems.filter((i) => i.element_id === element.id)}
+                              matches={matches}
+                              onAddManual={handleAddManual}
+                              onLinkFromLibrary={handleLinkFromLibrary}
+                            />
+                          ))}
+                      </div>
+                    </ScrollArea>
+                  )}
+                </TabsContent>
+
+                <TabsContent value="dashboard" className="mt-4">
+                  <EvidenceDashboard pack={activePack} elements={elements} items={items} />
+                </TabsContent>
+              </Tabs>
+            </motion.div>
+          </div>
+
+          {/* Document Library Sidebar */}
+          {showLibrary && (
+            <motion.div
+              initial={{ width: 0, opacity: 0 }}
+              animate={{ width: 300, opacity: 1 }}
+              exit={{ width: 0, opacity: 0 }}
+              className="shrink-0"
+            >
+              <DocumentLibrarySidebar
+                onLinkDocument={handleLibraryLink}
+                activeItemId={linkingItemId}
+                onSelectItem={setLinkingItemId}
+              />
+            </motion.div>
+          )}
+        </div>
       )}
 
       <ManualEvidenceDialog
