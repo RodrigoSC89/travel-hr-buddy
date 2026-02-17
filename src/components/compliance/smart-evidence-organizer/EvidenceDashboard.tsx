@@ -182,8 +182,8 @@ export const EvidenceDashboard = memo(({ pack, elements, items }: Props) => {
                   strokeWidth={2}
                   stroke="hsl(var(--background))"
                 >
-                  {pieData.map((entry, index) => (
-                    <Cell key={index} fill={entry.color} />
+                  {pieData.map((entry) => (
+                    <Cell key={entry.name} fill={entry.color} />
                   ))}
                 </Pie>
                 <Tooltip
