@@ -417,10 +417,10 @@ Por favor, tente novamente ou consulte diretamente:
                             {message.role === "assistant" && message.id !== "welcome" && (
                               <div className="flex items-center gap-2 mt-2 pt-2 border-t border-border/50">
                                 <Button size="sm" variant="ghost" className="h-6 px-2" onClick={() => handleRating(message.id, "positive")}>
-                                  <ThumbsUp className={`h-3 w-3 ${message.rating === "positive" ? "text-green-500 fill-green-500" : ""}`} />
+                                  <ThumbsUp className={`h-3 w-3 ${message.rating === "positive" ? "text-success fill-success" : ""}`} />
                                 </Button>
                                 <Button size="sm" variant="ghost" className="h-6 px-2" onClick={() => handleRating(message.id, "negative")}>
-                                  <ThumbsDown className={`h-3 w-3 ${message.rating === "negative" ? "text-red-500 fill-red-500" : ""}`} />
+                                  <ThumbsDown className={`h-3 w-3 ${message.rating === "negative" ? "text-destructive fill-destructive" : ""}`} />
                                 </Button>
                                 <Button size="sm" variant="ghost" className="h-6 px-2" onClick={() => handleCopy(message.content)}>
                                   <Copy className="h-3 w-3" />

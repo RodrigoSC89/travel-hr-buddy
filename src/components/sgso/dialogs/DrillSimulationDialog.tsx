@@ -206,7 +206,7 @@ export const DrillSimulationDialog: React.FC<DrillSimulationDialogProps> = ({
       <DialogContent className="max-w-3xl max-h-[90vh]">
         <DialogHeader>
           <DialogTitle className="flex items-center gap-2 text-xl">
-            <Activity className="h-6 w-6 text-orange-600" />
+            <Activity className="h-6 w-6 text-warning" />
             Simulado: {plan.title}
           </DialogTitle>
           <DialogDescription>
@@ -216,13 +216,13 @@ export const DrillSimulationDialog: React.FC<DrillSimulationDialogProps> = ({
 
         <div className="space-y-4">
           {/* Timer and Controls */}
-          <Card className={`${isRunning ? "border-orange-500 bg-orange-50 dark:bg-orange-950/20" : ""}`}>
+          <Card className={`${isRunning ? "border-warning bg-warning/5" : ""}`}>
             <CardContent className="p-4">
               <div className="flex items-center justify-between">
                 <div className="flex items-center gap-4">
                   <div className="text-center">
                     <p className="text-xs text-muted-foreground">Tempo Decorrido</p>
-                    <p className={`text-4xl font-mono font-bold ${isRunning && !isPaused ? "text-orange-600" : ""}`}>
+                    <p className={`text-4xl font-mono font-bold ${isRunning && !isPaused ? "text-warning" : ""}`}>
                       {formatTime(elapsedTime)}
                     </p>
                   </div>
@@ -235,7 +235,7 @@ export const DrillSimulationDialog: React.FC<DrillSimulationDialogProps> = ({
                 
                 <div className="flex gap-2">
                   {!drillStarted ? (
-                    <Button onClick={handleStartDrill} className="bg-green-600 hover:bg-green-700">
+                    <Button onClick={handleStartDrill} className="bg-success hover:bg-success/90">
                       <Play className="h-4 w-4 mr-2" />
                       Iniciar Simulado
                     </Button>
@@ -279,9 +279,9 @@ export const DrillSimulationDialog: React.FC<DrillSimulationDialogProps> = ({
                   {steps.map((step, idx) => (
                     <div 
                       key={step.id} 
-                      className={`flex items-start gap-3 p-3 rounded-lg border ${
+                       className={`flex items-start gap-3 p-3 rounded-lg border ${
                         step.completed 
-                          ? "bg-green-50 dark:bg-green-950/30 border-green-200" 
+                          ? "bg-success/5 border-success/30" 
                           : "bg-muted/30"
                       }`}
                     >
@@ -292,7 +292,7 @@ export const DrillSimulationDialog: React.FC<DrillSimulationDialogProps> = ({
                       />
                       <div className="flex-1">
                         <div className="flex items-center justify-between">
-                          <p className={`font-medium ${step.completed ? "text-green-700 dark:text-green-400 line-through" : ""}`}>
+                          <p className={`font-medium ${step.completed ? "text-success line-through" : ""}`}>
                             {idx + 1}. {step.title}
                           </p>
                           <Badge variant="outline" className="text-xs">
@@ -323,11 +323,11 @@ export const DrillSimulationDialog: React.FC<DrillSimulationDialogProps> = ({
 
           {/* Summary */}
           {allCompleted && (
-            <Card className="border-green-500 bg-green-50 dark:bg-green-950/30">
+            <Card className="border-success bg-success/5">
               <CardContent className="p-4 flex items-center gap-4">
-                <CheckCircle className="h-10 w-10 text-green-600" />
+                <CheckCircle className="h-10 w-10 text-success" />
                 <div>
-                  <p className="font-bold text-green-700 dark:text-green-400">
+                  <p className="font-bold text-success">
                     Simulado Concluído com Sucesso!
                   </p>
                   <p className="text-sm text-muted-foreground">

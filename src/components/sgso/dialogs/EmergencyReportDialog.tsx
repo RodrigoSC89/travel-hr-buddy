@@ -131,7 +131,7 @@ export const EmergencyReportDialog: React.FC<EmergencyReportDialogProps> = ({
       <DialogContent className="max-w-4xl max-h-[90vh] overflow-y-auto">
         <DialogHeader>
           <DialogTitle className="flex items-center gap-2">
-            <FileText className="h-5 w-5 text-green-500" />
+            <FileText className="h-5 w-5 text-success" />
             Relatório de Emergências e Simulados
           </DialogTitle>
           <DialogDescription>
@@ -156,7 +156,7 @@ export const EmergencyReportDialog: React.FC<EmergencyReportDialogProps> = ({
                 </SelectContent>
               </Select>
             </div>
-            <Badge variant="outline" className="text-green-600">
+            <Badge variant="outline" className="text-success">
               <CheckCircle className="h-3 w-3 mr-1" />
               Conformidade: {REPORT_DATA.summary.complianceRate}%
             </Badge>

@@ -183,7 +183,7 @@ export const AutoEvidenceGenerator = memo(({ framework, pack, items, elements, o
         <Card>
           <CardHeader className="pb-2 pt-4">
             <CardTitle className="text-sm flex items-center gap-2">
-              <AlertTriangle className="h-4 w-4 text-yellow-500" />
+              <AlertTriangle className="h-4 w-4 text-warning" />
               Gaps que Receberão Evidências ({gapItems.length})
             </CardTitle>
           </CardHeader>
@@ -194,7 +194,7 @@ export const AutoEvidenceGenerator = memo(({ framework, pack, items, elements, o
                   const el = elements.find(e => e.id === item.element_id);
                   return (
                     <div key={item.id} className="flex items-center gap-2 p-2 rounded bg-muted/30 text-sm">
-                      <AlertTriangle className="h-3.5 w-3.5 text-yellow-500 shrink-0" />
+                      <AlertTriangle className="h-3.5 w-3.5 text-warning shrink-0" />
                       <span className="font-mono text-xs text-muted-foreground">{el?.element_code || "?"}</span>
                       <span className="truncate">{item.item_number} — {item.item_text}</span>
                       {item.is_critical && <Badge variant="destructive" className="text-[9px] h-4 shrink-0">CRÍTICO</Badge>}

@@ -210,19 +210,19 @@ export const MLValidationIMCA: React.FC = () => {
   };
 
   const getScoreColor = (score: number) => {
-    if (score >= 90) return "text-green-600";
-    if (score >= 75) return "text-blue-600";
-    if (score >= 60) return "text-yellow-600";
-    return "text-red-600";
+    if (score >= 90) return "text-success";
+    if (score >= 75) return "text-info";
+    if (score >= 60) return "text-warning";
+    return "text-destructive";
   };
 
   const getStatusBadge = (status: SectionScore["status"]) => {
     const styles = {
-      excellent: "bg-green-100 text-green-800",
-      good: "bg-blue-100 text-blue-800",
-      acceptable: "bg-yellow-100 text-yellow-800",
-      needs_improvement: "bg-orange-100 text-orange-800",
-      critical: "bg-red-100 text-red-800"
+      excellent: "bg-success/10 text-success",
+      good: "bg-info/10 text-info",
+      acceptable: "bg-warning/10 text-warning",
+      needs_improvement: "bg-warning/20 text-warning",
+      critical: "bg-destructive/10 text-destructive"
     };
     const labels = {
       excellent: "Excelente",
@@ -236,9 +236,9 @@ export const MLValidationIMCA: React.FC = () => {
 
   const getSeverityBadge = (severity: string) => {
     const styles = {
-      high: "bg-red-100 text-red-800",
-      medium: "bg-yellow-100 text-yellow-800",
-      low: "bg-blue-100 text-blue-800"
+      high: "bg-destructive/10 text-destructive",
+      medium: "bg-warning/10 text-warning",
+      low: "bg-info/10 text-info"
     };
     return styles[severity as keyof typeof styles] || styles.low;
   };
@@ -319,7 +319,7 @@ export const MLValidationIMCA: React.FC = () => {
           </CardHeader>
           <CardContent>
             <div className="flex items-center gap-2">
-              <AlertTriangle className="h-5 w-5 text-yellow-600" />
+              <AlertTriangle className="h-5 w-5 text-warning" />
               <span className="text-2xl font-bold">{totalFindings}</span>
             </div>
             <p className="text-sm text-muted-foreground">identificados</p>
@@ -334,11 +334,11 @@ export const MLValidationIMCA: React.FC = () => {
           </CardHeader>
           <CardContent>
             <div className="flex items-center gap-2">
-              <Lightbulb className="h-5 w-5 text-blue-600" />
+              <Lightbulb className="h-5 w-5 text-info" />
               <span className="text-2xl font-bold">{totalRecommendations}</span>
             </div>
             <p className="text-sm text-muted-foreground">
-              <span className="text-red-600 font-medium">{highPriorityCount} alta prioridade</span>
+              <span className="text-destructive font-medium">{highPriorityCount} alta prioridade</span>
             </p>
           </CardContent>
         </Card>
@@ -374,7 +374,7 @@ export const MLValidationIMCA: React.FC = () => {
                   {section.findings.length > 0 && (
                     <div className="space-y-2">
                       <h4 className="text-sm font-medium flex items-center gap-2">
-                        <AlertTriangle className="h-4 w-4 text-yellow-600" />
+                        <AlertTriangle className="h-4 w-4 text-warning" />
                         Achados ({section.findings.length})
                       </h4>
                       {section.findings.slice(0, 2).map((finding) => (
@@ -404,7 +404,7 @@ export const MLValidationIMCA: React.FC = () => {
           <Card>
             <CardHeader>
               <CardTitle className="flex items-center gap-2">
-                <BookOpen className="h-5 w-5 text-blue-600" />
+                <BookOpen className="h-5 w-5 text-info" />
                 Recomendações Baseadas em IMCA
               </CardTitle>
               <CardDescription>
@@ -421,9 +421,9 @@ export const MLValidationIMCA: React.FC = () => {
                 <div 
                   key={rec.id} 
                   className={`p-4 rounded-lg border-l-4 ${
-                    rec.priority === "high" ? "border-l-red-500 bg-red-50" :
-                    rec.priority === "medium" ? "border-l-yellow-500 bg-yellow-50" :
-                    "border-l-blue-500 bg-blue-50"
+                    rec.priority === "high" ? "border-l-destructive bg-destructive/5" :
+                    rec.priority === "medium" ? "border-l-warning bg-warning/5" :
+                    "border-l-info bg-info/5"
                   }`}
                 >
                   <div className="flex items-start justify-between">
@@ -458,7 +458,7 @@ export const MLValidationIMCA: React.FC = () => {
           <Card>
             <CardHeader>
               <CardTitle className="flex items-center gap-2">
-                <Award className="h-5 w-5 text-yellow-600" />
+                <Award className="h-5 w-5 text-warning" />
                 Melhores Práticas da Frota
               </CardTitle>
               <CardDescription>
@@ -475,7 +475,7 @@ export const MLValidationIMCA: React.FC = () => {
                     <div className="flex-1">
                       <div className="flex items-center gap-2 mb-2">
                         <Star className={`h-4 w-4 ${
-                          practice.impact === "high" ? "text-yellow-500" : "text-gray-400"
+                          practice.impact === "high" ? "text-warning" : "text-muted-foreground"
                         }`} />
                         <h4 className="font-medium">{practice.title}</h4>
                         <Badge variant="outline">{practice.category}</Badge>
@@ -489,8 +489,8 @@ export const MLValidationIMCA: React.FC = () => {
                         <div className="text-xs">
                           <span className="text-muted-foreground">Adoção:</span>{" "}
                           <span className={`font-medium ${
-                            practice.adoptionRate >= 80 ? "text-green-600" :
-                            practice.adoptionRate >= 60 ? "text-yellow-600" : "text-red-600"
+                            practice.adoptionRate >= 80 ? "text-success" :
+                            practice.adoptionRate >= 60 ? "text-warning" : "text-destructive"
                           }`}>
                             {practice.adoptionRate}%
                           </span>
@@ -498,8 +498,8 @@ export const MLValidationIMCA: React.FC = () => {
                         <div className="text-xs">
                           <span className="text-muted-foreground">Impacto:</span>{" "}
                           <Badge variant="outline" className={
-                            practice.impact === "high" ? "border-green-500 text-green-700" :
-                            "border-yellow-500 text-yellow-700"
+                            practice.impact === "high" ? "border-success text-success" :
+                            "border-warning text-warning"
                           }>
                             {practice.impact === "high" ? "Alto" : "Médio"}
                           </Badge>
@@ -535,7 +535,7 @@ export const MLValidationIMCA: React.FC = () => {
                 </div>
                 <div>
                   <p className="text-sm text-muted-foreground">Precisão</p>
-                  <p className="font-medium text-green-600">91.2%</p>
+                  <p className="font-medium text-success">91.2%</p>
                 </div>
                 <div>
                   <p className="text-sm text-muted-foreground">Última Atualização</p>

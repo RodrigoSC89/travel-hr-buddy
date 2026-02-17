@@ -209,18 +209,18 @@ export const IncidentForensicsAI: React.FC = () => {
                 <p className="text-sm text-muted-foreground">Incidentes Ativos</p>
                 <p className="text-2xl font-bold">{incidents.filter(i => i.status !== "closed").length}</p>
               </div>
-              <AlertTriangle className="h-8 w-8 text-red-500" />
+              <AlertTriangle className="h-8 w-8 text-destructive" />
             </div>
           </CardContent>
         </Card>
-        <Card className="bg-gradient-to-br from-green-500/10 to-green-600/5">
+        <Card className="bg-gradient-to-br from-success/10 to-success/5">
           <CardContent className="pt-4">
             <div className="flex items-center justify-between">
               <div>
                 <p className="text-sm text-muted-foreground">Analisados</p>
                 <p className="text-2xl font-bold">{incidents.filter(i => i.status === "analyzed" || i.status === "reported").length}</p>
               </div>
-              <CheckCircle className="h-8 w-8 text-green-500" />
+              <CheckCircle className="h-8 w-8 text-success" />
             </div>
           </CardContent>
         </Card>

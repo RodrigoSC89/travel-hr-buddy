@@ -170,12 +170,12 @@ export const TrainingCompliance: React.FC = () => {
         <Card className="bg-gradient-to-br from-destructive/5 to-destructive/10 border-destructive/30">
           <CardContent className="p-6">
             <div className="flex items-center justify-between mb-4">
-              <XCircle className="h-10 w-10 text-red-600" />
-              <Badge className="bg-red-600 text-white font-bold">CRÍTICO</Badge>
+              <XCircle className="h-10 w-10 text-destructive" />
+              <Badge className="bg-destructive text-destructive-foreground font-bold">CRÍTICO</Badge>
             </div>
-            <h3 className="text-sm font-medium text-red-700 mb-1">Treinamentos Expirados</h3>
-            <p className="text-3xl font-bold text-red-900">{expiredCount}</p>
-            <p className="text-xs text-red-600 mt-2">Requer ação imediata</p>
+            <h3 className="text-sm font-medium text-destructive mb-1">Treinamentos Expirados</h3>
+            <p className="text-3xl font-bold text-foreground">{expiredCount}</p>
+            <p className="text-xs text-destructive mt-2">Requer ação imediata</p>
           </CardContent>
         </Card>
 
@@ -347,14 +347,14 @@ export const TrainingCompliance: React.FC = () => {
         <CardContent>
           <div className="grid grid-cols-2 md:grid-cols-4 gap-4">
             <Button 
-              className="bg-green-600 hover:bg-green-700 text-white min-h-[56px] flex-col gap-2"
+              className="bg-success hover:bg-success/90 text-success-foreground min-h-[56px] flex-col gap-2"
               onClick={() => handleCreate("Treinamento")} disabled={isLoading}
             >
               <Award className="h-6 w-6" />
               <span className="font-semibold">Novo Treinamento</span>
             </Button>
             <Button 
-              className="bg-blue-600 hover:bg-blue-700 text-white min-h-[56px] flex-col gap-2"
+              className="bg-info hover:bg-info/90 text-info-foreground min-h-[56px] flex-col gap-2"
               onClick={() => {
                 toast({
                   title: "📊 Gerando Relatório",
@@ -366,7 +366,7 @@ export const TrainingCompliance: React.FC = () => {
               <span className="font-semibold">Relatório</span>
             </Button>
             <Button 
-              className="bg-orange-600 hover:bg-orange-700 text-white min-h-[56px] flex-col gap-2"
+              className="bg-warning hover:bg-warning/90 text-warning-foreground min-h-[56px] flex-col gap-2"
               onClick={() => {
                 toast({
                   title: "⚠️ Certificados Expirados",

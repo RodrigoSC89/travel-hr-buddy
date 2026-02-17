@@ -119,17 +119,17 @@ export const GRCModule: React.FC = () => {
 
   const getStatusColor = (status: string) => {
     switch (status) {
-      case "green": return "text-green-500";
-      case "yellow": return "text-yellow-500";
-      case "red": return "text-red-500";
+      case "green": return "text-success";
+      case "yellow": return "text-warning";
+      case "red": return "text-destructive";
       default: return "text-muted-foreground";
     }
   };
 
   const getComplianceStatusBadge = (status: string) => {
     switch (status) {
-      case "compliant": return <Badge className="bg-green-500">Conforme</Badge>;
-      case "partial": return <Badge className="bg-yellow-500 text-black">Parcial</Badge>;
+      case "compliant": return <Badge className="bg-success">Conforme</Badge>;
+      case "partial": return <Badge className="bg-warning text-warning-foreground">Parcial</Badge>;
       case "non_compliant": return <Badge variant="destructive">Não Conforme</Badge>;
       case "pending": return <Badge variant="outline">Pendente</Badge>;
       default: return <Badge variant="secondary">{status}</Badge>;
@@ -165,33 +165,33 @@ export const GRCModule: React.FC = () => {
             <div className="flex items-center justify-between">
               <div>
                 <p className="text-sm text-muted-foreground">Score Geral de Risco</p>
-                <p className="text-3xl font-bold text-green-500">{overallRiskScore}%</p>
+                <p className="text-3xl font-bold text-success">{overallRiskScore}%</p>
               </div>
-              <Gauge className="h-10 w-10 text-green-500" />
+              <Gauge className="h-10 w-10 text-success" />
             </div>
             <Progress value={overallRiskScore} className="h-2 mt-2" />
           </CardContent>
         </Card>
-        <Card className="bg-gradient-to-br from-blue-500/10 to-blue-600/5">
+        <Card className="bg-gradient-to-br from-info/10 to-info/5">
           <CardContent className="pt-4">
             <div className="flex items-center justify-between">
               <div>
                 <p className="text-sm text-muted-foreground">Compliance Score</p>
-                <p className="text-3xl font-bold text-blue-500">{complianceScore}%</p>
+                <p className="text-3xl font-bold text-info">{complianceScore}%</p>
               </div>
-              <CheckCircle className="h-10 w-10 text-blue-500" />
+              <CheckCircle className="h-10 w-10 text-info" />
             </div>
             <Progress value={complianceScore} className="h-2 mt-2" />
           </CardContent>
         </Card>
-        <Card className="bg-gradient-to-br from-yellow-500/10 to-yellow-600/5">
+        <Card className="bg-gradient-to-br from-warning/10 to-warning/5">
           <CardContent className="pt-4">
             <div className="flex items-center justify-between">
               <div>
                 <p className="text-sm text-muted-foreground">Indicadores em Alerta</p>
-                <p className="text-3xl font-bold text-yellow-500">{riskIndicators.filter(r => r.status !== "green").length}</p>
+                <p className="text-3xl font-bold text-warning">{riskIndicators.filter(r => r.status !== "green").length}</p>
               </div>
-              <AlertTriangle className="h-10 w-10 text-yellow-500" />
+              <AlertTriangle className="h-10 w-10 text-warning" />
             </div>
           </CardContent>
         </Card>
@@ -228,7 +228,7 @@ export const GRCModule: React.FC = () => {
                   {riskIndicators.slice(0, 5).map((indicator) => (
                     <div key={indicator.id} className="flex items-center justify-between p-3 rounded-lg border">
                       <div className="flex items-center gap-3">
-                        <div className={`w-3 h-3 rounded-full ${indicator.status === "green" ? "bg-green-500" : indicator.status === "yellow" ? "bg-yellow-500" : "bg-red-500"}`} />
+                        <div className={`w-3 h-3 rounded-full ${indicator.status === "green" ? "bg-success" : indicator.status === "yellow" ? "bg-warning" : "bg-destructive"}`} />
                         <span className="font-medium">{indicator.name}</span>
                       </div>
                       <div className="flex items-center gap-2">
@@ -236,9 +236,9 @@ export const GRCModule: React.FC = () => {
                           {indicator.currentScore}{indicator.category === "operational" && indicator.name.includes("Uptime") ? "%" : ""}
                         </span>
                         {indicator.trend === "up" ? (
-                          <TrendingUp className="h-4 w-4 text-green-500" />
+                          <TrendingUp className="h-4 w-4 text-success" />
                         ) : indicator.trend === "down" ? (
-                          <TrendingDown className="h-4 w-4 text-red-500" />
+                          <TrendingDown className="h-4 w-4 text-destructive" />
                         ) : (
                           <Activity className="h-4 w-4 text-muted-foreground" />
                         )}
@@ -286,7 +286,7 @@ export const GRCModule: React.FC = () => {
                   <div key={indicator.id} className="p-4 rounded-lg border bg-card">
                     <div className="flex items-center justify-between mb-3">
                       <div className="flex items-center gap-2">
-                        <div className={`w-3 h-3 rounded-full ${indicator.status === "green" ? "bg-green-500" : indicator.status === "yellow" ? "bg-yellow-500" : "bg-red-500"}`} />
+                        <div className={`w-3 h-3 rounded-full ${indicator.status === "green" ? "bg-success" : indicator.status === "yellow" ? "bg-warning" : "bg-destructive"}`} />
                         <span className="font-medium">{indicator.name}</span>
                       </div>
                       <Badge variant="outline">{indicator.category}</Badge>
@@ -301,9 +301,9 @@ export const GRCModule: React.FC = () => {
                       <div className="text-right">
                         <div className="flex items-center gap-1">
                           {indicator.trend === "up" ? (
-                            <TrendingUp className="h-4 w-4 text-green-500" />
+                            <TrendingUp className="h-4 w-4 text-success" />
                           ) : indicator.trend === "down" ? (
-                            <TrendingDown className="h-4 w-4 text-red-500" />
+                            <TrendingDown className="h-4 w-4 text-destructive" />
                           ) : (
                             <Activity className="h-4 w-4 text-muted-foreground" />
                           )}

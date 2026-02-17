@@ -198,7 +198,7 @@ export function CrossFrameworkAuditDashboard() {
           <p className="text-[10px] text-muted-foreground">NCs Total</p>
         </CardContent></Card>
         <Card><CardContent className="pt-4 text-center">
-          <Zap className="h-4 w-4 mx-auto mb-1 text-orange-500" />
+          <Zap className="h-4 w-4 mx-auto mb-1 text-warning" />
           <p className="text-2xl font-bold">{totalGaps}</p>
           <p className="text-[10px] text-muted-foreground">Gaps</p>
         </CardContent></Card>

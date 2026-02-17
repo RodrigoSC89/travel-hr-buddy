@@ -557,10 +557,10 @@ export function ComplianceMapWithGeofencing({
 
   const getStatusBadge = (status: VesselInspection['status']) => {
     const variants: Record<string, string> = {
-      'overdue': 'bg-red-500 text-white',
-      'due-soon': 'bg-orange-500 text-white',
-      'compliant': 'bg-green-500 text-white',
-      'in-progress': 'bg-blue-500 text-white'
+      'overdue': 'bg-destructive text-destructive-foreground',
+      'due-soon': 'bg-warning text-warning-foreground',
+      'compliant': 'bg-success text-success-foreground',
+      'in-progress': 'bg-info text-info-foreground'
     };
     return <Badge className={variants[status]}>{getStatusLabel(status)}</Badge>;
   };
@@ -596,7 +596,7 @@ export function ComplianceMapWithGeofencing({
             Mapa de Inspeções com Geofencing
             {isRealtime && (
               <Badge variant="outline" className="text-xs">
-                <Radio className="h-3 w-3 mr-1 animate-pulse text-green-500" />
+                <Radio className="h-3 w-3 mr-1 animate-pulse text-success" />
                 Tempo Real
               </Badge>
             )}
@@ -653,23 +653,23 @@ export function ComplianceMapWithGeofencing({
         <div className="absolute bottom-4 left-4 bg-background/90 backdrop-blur rounded-lg p-3 shadow-lg">
           <div className="grid grid-cols-2 gap-2 text-xs">
             <div className="flex items-center gap-1">
-              <div className="w-3 h-3 rounded-full bg-red-500" />
+              <div className="w-3 h-3 rounded-full bg-destructive" />
               <span>Vencidas: {stats.overdue}</span>
             </div>
             <div className="flex items-center gap-1">
-              <div className="w-3 h-3 rounded-full bg-orange-500" />
+              <div className="w-3 h-3 rounded-full bg-warning" />
               <span>Próximas: {stats.dueSoon}</span>
             </div>
             <div className="flex items-center gap-1">
-              <div className="w-3 h-3 rounded-full bg-blue-500" />
+              <div className="w-3 h-3 rounded-full bg-info" />
               <span>Em Andamento: {stats.inProgress}</span>
             </div>
             <div className="flex items-center gap-1">
-              <div className="w-3 h-3 rounded-full bg-green-500" />
+              <div className="w-3 h-3 rounded-full bg-success" />
               <span>Conformes: {stats.compliant}</span>
             </div>
             {stats.inGeofence > 0 && (
-              <div className="flex items-center gap-1 col-span-2 text-orange-500 font-medium">
+              <div className="flex items-center gap-1 col-span-2 text-warning font-medium">
                 <Target className="h-3 w-3" />
                 <span>{stats.inGeofence} em zona de inspeção</span>
               </div>
@@ -683,15 +683,15 @@ export function ComplianceMapWithGeofencing({
             <p className="text-xs font-medium mb-2">Zonas de Geofencing</p>
             <div className="space-y-1 text-xs">
               <div className="flex items-center gap-2">
-                <div className="w-3 h-3 rounded-full bg-blue-500/50 border border-blue-500" />
+                <div className="w-3 h-3 rounded-full bg-info/50 border border-info" />
                 <span>Inspeção Obrigatória</span>
               </div>
               <div className="flex items-center gap-2">
-                <div className="w-3 h-3 rounded-full bg-red-500/50 border border-red-500" />
+                <div className="w-3 h-3 rounded-full bg-destructive/50 border border-destructive" />
                 <span>Área Restrita</span>
               </div>
               <div className="flex items-center gap-2">
-                <div className="w-3 h-3 rounded-full bg-orange-500/50 border border-orange-500" />
+                <div className="w-3 h-3 rounded-full bg-warning/50 border border-warning" />
                 <span>Zona de Alerta</span>
               </div>
             </div>

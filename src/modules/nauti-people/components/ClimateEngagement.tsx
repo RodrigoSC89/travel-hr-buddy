@@ -73,29 +73,29 @@ const ClimateEngagement: React.FC = () => {
   const getTrendIcon = (trend: string) => {
     switch (trend) {
       case 'up':
-        return <TrendingUp className="w-4 h-4 text-green-500" />;
+        return <TrendingUp className="w-4 h-4 text-success" />;
       case 'down':
-        return <TrendingDown className="w-4 h-4 text-red-500" />;
+        return <TrendingDown className="w-4 h-4 text-destructive" />;
       default:
-        return <span className="w-4 h-4 text-yellow-500">→</span>;
+        return <span className="w-4 h-4 text-warning">→</span>;
     }
   };
 
   const getScoreColor = (score: number) => {
-    if (score >= 85) return 'text-green-500';
-    if (score >= 70) return 'text-blue-500';
-    if (score >= 50) return 'text-yellow-500';
-    return 'text-red-500';
+    if (score >= 85) return 'text-success';
+    if (score >= 70) return 'text-info';
+    if (score >= 50) return 'text-warning';
+    return 'text-destructive';
   };
 
   const getStatusBadge = (status: string) => {
     switch (status) {
       case 'resolvido':
-        return <Badge className="bg-green-500"><CheckCircle className="w-3 h-3 mr-1" />Resolvido</Badge>;
+        return <Badge className="bg-success"><CheckCircle className="w-3 h-3 mr-1" />Resolvido</Badge>;
       case 'em_analise':
-        return <Badge className="bg-yellow-500"><AlertTriangle className="w-3 h-3 mr-1" />Em Análise</Badge>;
+        return <Badge className="bg-warning"><AlertTriangle className="w-3 h-3 mr-1" />Em Análise</Badge>;
       case 'respondido':
-        return <Badge className="bg-blue-500"><MessageSquare className="w-3 h-3 mr-1" />Respondido</Badge>;
+        return <Badge className="bg-info"><MessageSquare className="w-3 h-3 mr-1" />Respondido</Badge>;
       default:
         return <Badge variant="secondary">{status}</Badge>;
     }
@@ -343,24 +343,24 @@ const ClimateEngagement: React.FC = () => {
             <Card>
               <CardHeader>
                 <CardTitle className="flex items-center gap-2">
-                  <AlertTriangle className="w-5 h-5 text-yellow-500" />
+                  <AlertTriangle className="w-5 h-5 text-warning" />
                   Pontos de Atenção
                 </CardTitle>
               </CardHeader>
               <CardContent className="space-y-3">
-                <div className="p-3 bg-yellow-500/10 border border-yellow-500/30 rounded-lg">
+                <div className="p-3 bg-warning/10 border border-warning/30 rounded-lg">
                   <div className="flex items-center justify-between mb-1">
                     <span className="font-medium text-sm">Equilíbrio Vida-Trabalho</span>
-                    <TrendingDown className="w-4 h-4 text-red-500" />
+                    <TrendingDown className="w-4 h-4 text-destructive" />
                   </div>
                   <p className="text-xs text-muted-foreground">
                     Queda de 8% em relação ao trimestre anterior. Ações recomendadas pela IA.
                   </p>
                 </div>
-                <div className="p-3 bg-yellow-500/10 border border-yellow-500/30 rounded-lg">
+                <div className="p-3 bg-warning/10 border border-warning/30 rounded-lg">
                   <div className="flex items-center justify-between mb-1">
                     <span className="font-medium text-sm">Desenvolvimento</span>
-                    <TrendingDown className="w-4 h-4 text-red-500" />
+                    <TrendingDown className="w-4 h-4 text-destructive" />
                   </div>
                   <p className="text-xs text-muted-foreground">
                     Colaboradores sentem falta de oportunidades de crescimento.
@@ -372,15 +372,15 @@ const ClimateEngagement: React.FC = () => {
             <Card>
               <CardHeader>
                 <CardTitle className="flex items-center gap-2">
-                  <CheckCircle className="w-5 h-5 text-green-500" />
+                  <CheckCircle className="w-5 h-5 text-success" />
                   Destaques Positivos
                 </CardTitle>
               </CardHeader>
               <CardContent className="space-y-3">
-                <div className="p-3 bg-green-500/10 border border-green-500/30 rounded-lg">
+                <div className="p-3 bg-success/10 border border-success/30 rounded-lg">
                   <div className="flex items-center justify-between mb-1">
                     <span className="font-medium text-sm">Ambiente de Trabalho</span>
-                    <TrendingUp className="w-4 h-4 text-green-500" />
+                    <TrendingUp className="w-4 h-4 text-success" />
                   </div>
                   <p className="text-xs text-muted-foreground">
                     Maior score do período. Colaboradores valorizam infraestrutura.

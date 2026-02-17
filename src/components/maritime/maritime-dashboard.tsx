@@ -360,21 +360,21 @@ const OverviewDashboard: React.FC<OverviewDashboardProps> = ({ onNavigate }) => 
             </CardHeader>
             <CardContent>
               <div className="space-y-3">
-                <div className="p-3 bg-green-50 border border-green-200 rounded-lg">
-                  <p className="text-sm font-medium text-green-800 mb-1">Economia Identificada</p>
-                  <p className="text-xs text-green-600">
+                <div className="p-3 bg-success/5 border border-success/30 rounded-lg">
+                  <p className="text-sm font-medium text-success mb-1">Economia Identificada</p>
+                  <p className="text-xs text-success/80">
                     Otimização de rotações pode economizar R$ 45.000 este mês
                   </p>
                 </div>
-                <div className="p-3 bg-purple-50 border border-purple-200 rounded-lg">
-                  <p className="text-sm font-medium text-purple-800 mb-1">Padrão Detectado</p>
-                  <p className="text-xs text-purple-600">
+                <div className="p-3 bg-accent border border-border rounded-lg">
+                  <p className="text-sm font-medium text-accent-foreground mb-1">Padrão Detectado</p>
+                  <p className="text-xs text-muted-foreground">
                     Rotações às quintas-feiras têm 25% menos atrasos
                   </p>
                 </div>
-                <div className="p-3 bg-orange-50 border border-orange-200 rounded-lg">
-                  <p className="text-sm font-medium text-orange-800 mb-1">Previsão de Demanda</p>
-                  <p className="text-xs text-orange-600">
+                <div className="p-3 bg-warning/5 border border-warning/30 rounded-lg">
+                  <p className="text-sm font-medium text-warning mb-1">Previsão de Demanda</p>
+                  <p className="text-xs text-warning/80">
                     +18% necessidade de oficiais nos próximos 90 dias
                   </p>
                 </div>
@@ -397,30 +397,30 @@ const OverviewDashboard: React.FC<OverviewDashboardProps> = ({ onNavigate }) => 
         </CardHeader>
         <CardContent>
           <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-4">
-            <div className="p-4 bg-gradient-to-br from-blue-50 to-cyan-50 border border-blue-200 rounded-lg">
-              <h4 className="font-semibold text-blue-800 mb-2">🧠 IA Preditiva Avançada</h4>
-              <p className="text-sm text-blue-600">
+            <div className="p-4 bg-gradient-to-br from-info/5 to-info/10 border border-info/30 rounded-lg">
+              <h4 className="font-semibold text-info mb-2">🧠 IA Preditiva Avançada</h4>
+              <p className="text-sm text-info/80">
                 Algoritmos proprietários preveem necessidades de pessoal, otimizam escalas e antecipam problemas
               </p>
             </div>
             
-            <div className="p-4 bg-gradient-to-br from-green-50 to-emerald-50 border border-green-200 rounded-lg">
-              <h4 className="font-semibold text-green-800 mb-2">🌐 Compliance Global Automático</h4>
-              <p className="text-sm text-green-600">
+            <div className="p-4 bg-gradient-to-br from-success/5 to-success/10 border border-success/30 rounded-lg">
+              <h4 className="font-semibold text-success mb-2">🌐 Compliance Global Automático</h4>
+              <p className="text-sm text-success/80">
                 Sistema atualiza automaticamente com mudanças regulamentares internacionais (IMO, MLC, STCW)
               </p>
             </div>
             
-            <div className="p-4 bg-gradient-to-br from-purple-50 to-violet-50 border border-purple-200 rounded-lg">
-              <h4 className="font-semibold text-purple-800 mb-2">🩺 Telemedicina Marítima</h4>
-              <p className="text-sm text-purple-600">
+            <div className="p-4 bg-gradient-to-br from-accent to-accent/50 border border-border rounded-lg">
+              <h4 className="font-semibold text-accent-foreground mb-2">🩺 Telemedicina Marítima</h4>
+              <p className="text-sm text-muted-foreground">
                 Consultório médico virtual com IA diagnóstica e conexão com especialistas em terra
               </p>
             </div>
             
-            <div className="p-4 bg-gradient-to-br from-orange-50 to-red-50 border border-orange-200 rounded-lg">
-              <h4 className="font-semibold text-orange-800 mb-2">📡 IoT Marítimo Integrado</h4>
-              <p className="text-sm text-orange-600">
+            <div className="p-4 bg-gradient-to-br from-warning/5 to-warning/10 border border-warning/30 rounded-lg">
+              <h4 className="font-semibold text-warning mb-2">📡 IoT Marítimo Integrado</h4>
+              <p className="text-sm text-warning/80">
                 Sensores inteligentes monitoram embarcações, equipamentos e até sinais vitais da tripulação
               </p>
             </div>

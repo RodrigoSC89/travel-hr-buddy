@@ -21,9 +21,9 @@ import { toast } from "sonner";
 import { quickExport } from "@/lib/export-utils";
 
 const riskColors: Record<string, string> = {
-  low: "bg-emerald-500/20 text-emerald-400 border-emerald-500/30",
-  standard: "bg-amber-500/20 text-amber-400 border-amber-500/30",
-  high: "bg-rose-500/20 text-rose-400 border-rose-500/30",
+  low: "bg-success/20 text-success border-success/30",
+  standard: "bg-warning/20 text-warning border-warning/30",
+  high: "bg-destructive/20 text-destructive border-destructive/30",
 };
 
 function getRiskProfile(deficiencies: number, detained: boolean): string {
@@ -98,7 +98,7 @@ export function PortStateControlHistory() {
         </CardContent></Card>
         <Card className="border-border/50 bg-card/80"><CardContent className="p-4 text-center">
           <p className="text-xs text-muted-foreground">Total Deficiencies</p>
-          <p className="text-3xl font-bold text-amber-400">{totalDeficiencies}</p>
+          <p className="text-3xl font-bold text-warning">{totalDeficiencies}</p>
         </CardContent></Card>
         <Card className="border-border/50 bg-card/80"><CardContent className="p-4 text-center">
           <p className="text-xs text-muted-foreground">Detentions</p>
