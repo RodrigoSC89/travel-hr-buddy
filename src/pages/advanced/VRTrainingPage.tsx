@@ -130,7 +130,7 @@ const VRTrainingPage = () => {
           <p className="text-muted-foreground mt-1">Simulações imersivas para treinamento de emergência - {scenarios.length} cenários disponíveis</p>
         </div>
         <div className="flex items-center gap-3">
-          <Badge variant="outline" className="gap-2 py-1.5"><Brain className="h-4 w-4 text-green-500" />AI Coach Ativo</Badge>
+          <Badge variant="outline" className="gap-2 py-1.5"><Brain className="h-4 w-4 text-success" />AI Coach Ativo</Badge>
           <Button variant="outline" onClick={exportResults}><Download className="h-4 w-4 mr-2" />Exportar</Button>
           <Dialog open={isCreateOpen} onOpenChange={setIsCreateOpen}>
             <DialogTrigger asChild><Button><Plus className="h-4 w-4 mr-2" />Novo Cenário</Button></DialogTrigger>
@@ -180,7 +180,7 @@ const VRTrainingPage = () => {
               <h2 className="text-lg font-semibold">Meu Progresso</h2>
               <div className="grid grid-cols-2 md:grid-cols-4 gap-6">
                 <div><p className="text-sm text-muted-foreground">Cenários</p><p className="text-2xl font-bold">{myProgress.completed}/{myProgress.total}</p></div>
-                <div><p className="text-sm text-muted-foreground">Score Médio</p><p className="text-2xl font-bold text-green-500">{myProgress.avgScore}%</p></div>
+                <div><p className="text-sm text-muted-foreground">Score Médio</p><p className="text-2xl font-bold text-success">{myProgress.avgScore}%</p></div>
                 <div><p className="text-sm text-muted-foreground">Tempo Total</p><p className="text-2xl font-bold">{myProgress.totalTime}</p></div>
                 <div><p className="text-sm text-muted-foreground">Ranking</p><p className="text-2xl font-bold">#{myProgress.rank}</p></div>
               </div>

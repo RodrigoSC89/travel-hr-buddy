@@ -261,10 +261,10 @@ const ComplianceChecklist = () => {
         <Card>
           <CardHeader className="flex flex-row items-center justify-between pb-2">
             <CardTitle className="text-sm font-medium">Avg Score</CardTitle>
-            <Shield className="h-4 w-4 text-green-600" />
+            <Shield className="h-4 w-4 text-success" />
           </CardHeader>
           <CardContent>
-            <div className="text-2xl font-bold text-green-600">{avgScore}%</div>
+            <div className="text-2xl font-bold text-success">{avgScore}%</div>
             <p className="text-xs text-muted-foreground">{compliantCount} compliant</p>
           </CardContent>
         </Card>
@@ -454,7 +454,7 @@ const ComplianceChecklist = () => {
                     {record.recommendations && record.recommendations.length > 0 && (
                       <div>
                         <h4 className="text-sm font-semibold mb-2 flex items-center gap-2">
-                          <CheckCircle className="h-4 w-4 text-green-600" />
+                          <CheckCircle className="h-4 w-4 text-success" />
                           Recommendations ({record.recommendations.length})
                         </h4>
                         <div className="space-y-1">

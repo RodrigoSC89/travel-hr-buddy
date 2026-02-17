@@ -195,14 +195,14 @@ export function ESGCommandCenter() {
                     Dados reais
                   </div>
                 </div>
-                <Factory className="h-8 w-8 text-green-500 opacity-50" />
+                <Factory className="h-8 w-8 text-success opacity-50" />
               </div>
             </CardContent>
           </Card>
         </motion.div>
 
         <motion.div initial={{ opacity: 0, y: 20 }} animate={{ opacity: 1, y: 0 }} transition={{ delay: 0.15 }}>
-          <Card className="border-l-4 border-l-lime-500 hover:shadow-lg transition-all">
+          <Card className="border-l-4 border-l-success hover:shadow-lg transition-all">
             <CardContent className="pt-4">
               <div className="flex items-center justify-between">
                 <div>
@@ -211,17 +211,17 @@ export function ESGCommandCenter() {
                     <div className={`w-10 h-10 rounded-lg ${getCIIBg(fleetRating)} flex items-center justify-center text-white font-bold text-xl`}>
                       {fleetRating}
                     </div>
-                    <TrendingUp className="h-4 w-4 text-green-500" />
+                    <TrendingUp className="h-4 w-4 text-success" />
                   </div>
                 </div>
-                <Gauge className="h-8 w-8 text-lime-500 opacity-50" />
+                <Gauge className="h-8 w-8 text-success opacity-50" />
               </div>
             </CardContent>
           </Card>
         </motion.div>
 
         <motion.div initial={{ opacity: 0, y: 20 }} animate={{ opacity: 1, y: 0 }} transition={{ delay: 0.2 }}>
-          <Card className="border-l-4 border-l-blue-500 hover:shadow-lg transition-all">
+          <Card className="border-l-4 border-l-primary hover:shadow-lg transition-all">
             <CardContent className="pt-4">
               <div className="flex items-center justify-between">
                 <div>
@@ -229,14 +229,14 @@ export function ESGCommandCenter() {
                   <p className="text-2xl font-bold text-success">{stats?.compliantVessels || 0}</p>
                   <p className="text-xs text-muted-foreground">de {stats?.totalVessels || 0} navios</p>
                 </div>
-                <Droplets className="h-8 w-8 text-blue-500 opacity-50" />
+                <Droplets className="h-8 w-8 text-primary opacity-50" />
               </div>
             </CardContent>
           </Card>
         </motion.div>
 
         <motion.div initial={{ opacity: 0, y: 20 }} animate={{ opacity: 1, y: 0 }} transition={{ delay: 0.25 }}>
-          <Card className="border-l-4 border-l-orange-500 hover:shadow-lg transition-all">
+          <Card className="border-l-4 border-l-warning hover:shadow-lg transition-all">
             <CardContent className="pt-4">
               <div className="flex items-center justify-between">
                 <div>
@@ -246,14 +246,14 @@ export function ESGCommandCenter() {
                   </p>
                   <p className="text-xs text-muted-foreground">D/E rating</p>
                 </div>
-                <AlertTriangle className="h-8 w-8 text-orange-500 opacity-50" />
+                <AlertTriangle className="h-8 w-8 text-warning opacity-50" />
               </div>
             </CardContent>
           </Card>
         </motion.div>
 
         <motion.div initial={{ opacity: 0, y: 20 }} animate={{ opacity: 1, y: 0 }} transition={{ delay: 0.3 }}>
-          <Card className="border-l-4 border-l-emerald-500 hover:shadow-lg transition-all">
+          <Card className="border-l-4 border-l-success hover:shadow-lg transition-all">
             <CardContent className="pt-4">
               <div className="flex items-center justify-between">
                 <div>
@@ -261,7 +261,7 @@ export function ESGCommandCenter() {
                    <p className="text-2xl font-bold text-success">{stats?.avgCII?.toFixed(1) || '—'}</p>
                   <Badge className="bg-success/10 text-success text-xs">gCO₂/DWT·nm</Badge>
                 </div>
-                <Zap className="h-8 w-8 text-emerald-500 opacity-50" />
+                <Zap className="h-8 w-8 text-success opacity-50" />
               </div>
             </CardContent>
           </Card>
@@ -453,7 +453,7 @@ export function ESGCommandCenter() {
                   {isChatLoading && (
                     <div className="flex justify-start">
                       <div className="bg-muted p-3 rounded-lg flex items-center gap-2">
-                        <Loader2 className="h-4 w-4 animate-spin text-emerald-500" />
+                        <Loader2 className="h-4 w-4 animate-spin text-success" />
                         <span className="text-sm text-muted-foreground">Analisando...</span>
                       </div>
                     </div>
@@ -491,9 +491,9 @@ function VesselCIICard({ vessel, getCIIBg }: { vessel: VesselCIIData; getCIIBg: 
             {vessel.rating}
           </div>
           {vessel.trend === "improving" ? (
-            <TrendingDown className="h-4 w-4 text-green-500" />
+            <TrendingDown className="h-4 w-4 text-success" />
           ) : vessel.trend === "declining" ? (
-            <TrendingUp className="h-4 w-4 text-red-500" />
+            <TrendingUp className="h-4 w-4 text-destructive" />
           ) : (
             <Activity className="h-4 w-4 text-muted-foreground" />
           )}

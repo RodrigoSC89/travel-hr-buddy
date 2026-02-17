@@ -922,18 +922,18 @@ Este relatório apresenta uma análise abrangente dos principais indicadores de 
 
   const getTrendIcon = (trend: string) => {
     switch (trend) {
-      case "up": return <ArrowUpRight className="h-4 w-4 text-green-500" />;
-      case "down": return <ArrowDownRight className="h-4 w-4 text-red-500" />;
+      case "up": return <ArrowUpRight className="h-4 w-4 text-success" />;
+      case "down": return <ArrowDownRight className="h-4 w-4 text-destructive" />;
       default: return <Activity className="h-4 w-4 text-muted-foreground" />;
     }
   };
 
   const getNotificationIcon = (type: string) => {
     switch (type) {
-      case "success": return <Check className="h-4 w-4 text-green-500" />;
-      case "warning": return <AlertCircle className="h-4 w-4 text-yellow-500" />;
-      case "error": return <AlertCircle className="h-4 w-4 text-red-500" />;
-      default: return <Bell className="h-4 w-4 text-blue-500" />;
+      case "success": return <Check className="h-4 w-4 text-success" />;
+      case "warning": return <AlertCircle className="h-4 w-4 text-warning" />;
+      case "error": return <AlertCircle className="h-4 w-4 text-destructive" />;
+      default: return <Bell className="h-4 w-4 text-primary" />;
     }
   };
 

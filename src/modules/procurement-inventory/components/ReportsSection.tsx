@@ -179,7 +179,7 @@ export default function ReportsSection() {
                 <p className="text-sm text-muted-foreground">Gastos Totais</p>
                 <p className="text-2xl font-bold">R$ {(totalSpending / 1000).toFixed(0)}k</p>
               </div>
-              <DollarSign className="h-8 w-8 text-green-500 opacity-60" />
+              <DollarSign className="h-8 w-8 text-success opacity-60" />
             </div>
           </CardContent>
         </Card>
@@ -190,7 +190,7 @@ export default function ReportsSection() {
                 <p className="text-sm text-muted-foreground">Pedidos</p>
                 <p className="text-2xl font-bold">{totalOrders}</p>
               </div>
-              <Package className="h-8 w-8 text-blue-500 opacity-60" />
+              <Package className="h-8 w-8 text-primary opacity-60" />
             </div>
           </CardContent>
         </Card>
@@ -212,7 +212,7 @@ export default function ReportsSection() {
                 <p className="text-sm text-muted-foreground">Itens em Estoque</p>
                 <p className="text-2xl font-bold">{totalItems}</p>
               </div>
-              <BarChart3 className="h-8 w-8 text-amber-500 opacity-60" />
+              <BarChart3 className="h-8 w-8 text-warning opacity-60" />
             </div>
           </CardContent>
         </Card>
@@ -223,7 +223,7 @@ export default function ReportsSection() {
                 <p className="text-sm text-muted-foreground">Valor Estoque</p>
                 <p className="text-2xl font-bold">R$ {(totalInventoryValue / 1000).toFixed(0)}k</p>
               </div>
-              <TrendingUp className="h-8 w-8 text-purple-500 opacity-60" />
+              <TrendingUp className="h-8 w-8 text-accent-foreground opacity-60" />
             </div>
           </CardContent>
         </Card>

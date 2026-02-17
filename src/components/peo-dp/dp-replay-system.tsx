@@ -396,11 +396,11 @@ export const DPReplaySystem: React.FC = () => {
                   <p className="text-xs text-muted-foreground mt-1">Perda de sensor MRU#1 às 02:30:00 - Fallback automático funcionou corretamente, mas recomenda-se inspeção preventiva.</p>
                 </div>
                 <div className="p-3 rounded-lg border bg-card">
-                  <p className="text-sm font-medium text-yellow-500">⚠️ Padrão Identificado</p>
+                  <p className="text-sm font-medium text-warning">⚠️ Padrão Identificado</p>
                   <p className="text-xs text-muted-foreground mt-1">Corrente excedeu threshold ASOG por 15 minutos. Considerar ajuste de limites ou procedimentos operacionais.</p>
                 </div>
                 <div className="p-3 rounded-lg border bg-card">
-                  <p className="text-sm font-medium text-green-500">✅ Conformidade</p>
+                  <p className="text-sm font-medium text-success">✅ Conformidade</p>
                   <p className="text-xs text-muted-foreground mt-1">Mudança para TAM durante operação crítica seguiu procedimentos corretos conforme DPOM.</p>
                 </div>
               </div>

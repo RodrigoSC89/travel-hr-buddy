@@ -434,7 +434,7 @@ const FleetOperationsCenter: React.FC = () => {
                 {vessels.map((vessel) => (
                   <div key={vessel.id} className="p-3 rounded-lg bg-muted/30">
                     <div className="flex items-center gap-2 mb-1">
-                      <div className={`h-2 w-2 rounded-full ${vessel.status === "operational" || vessel.status === "transit" ? "bg-green-400 animate-pulse" : "bg-yellow-400"}`} />
+                      <div className={`h-2 w-2 rounded-full ${vessel.status === "operational" || vessel.status === "transit" ? "bg-success animate-pulse" : "bg-warning"}`} />
                       <span className="text-sm font-medium text-foreground">{vessel.name}</span>
                     </div>
                     <div className="text-xs text-muted-foreground">

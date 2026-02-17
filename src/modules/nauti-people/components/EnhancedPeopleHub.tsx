@@ -207,8 +207,8 @@ export const EnhancedPeopleHub: React.FC = () => {
         className="flex flex-col md:flex-row md:items-center justify-between gap-4"
       >
         <div className="flex items-center gap-4">
-          <div className="p-3 rounded-2xl bg-gradient-to-br from-violet-500/20 to-purple-500/10 border border-violet-500/20">
-            <Users className="h-8 w-8 text-violet-500" />
+          <div className="p-3 rounded-2xl bg-gradient-to-br from-accent/20 to-accent/10 border border-accent/20">
+            <Users className="h-8 w-8 text-accent-foreground" />
           </div>
           <div>
             <h1 className="text-3xl font-bold">People Hub</h1>

@@ -281,8 +281,8 @@ export function FilterPanel({
               variant={filters.severity.includes(option.value) ? 'default' : 'outline'}
               className={cn(
                 "cursor-pointer",
-                option.value === 'critical' && filters.severity.includes(option.value) && "bg-red-500",
-                option.value === 'major' && filters.severity.includes(option.value) && "bg-orange-500"
+                option.value === 'critical' && filters.severity.includes(option.value) && "bg-destructive",
+                option.value === 'major' && filters.severity.includes(option.value) && "bg-warning"
               )}
               onClick={() => toggleArrayFilter('severity', option.value)}
             >

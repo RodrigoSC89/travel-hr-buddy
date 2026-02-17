@@ -76,24 +76,24 @@ export function ConnectionStatus({ quality, lastCheck }: ConnectionStatusProps) 
     switch (quality) {
     case "excellent":
       return {
-        icon: <Wifi className="h-4 w-4 text-green-500" />,
+        icon: <Wifi className="h-4 w-4 text-success" />,
         text: "Excelente",
-        color: "text-green-600",
-        bgColor: "bg-green-100",
+        color: "text-success",
+        bgColor: "bg-success/10",
       };
     case "good":
       return {
-        icon: <Wifi className="h-4 w-4 text-blue-500" />,
+        icon: <Wifi className="h-4 w-4 text-primary" />,
         text: "Boa",
-        color: "text-blue-600",
-        bgColor: "bg-blue-100",
+        color: "text-primary",
+        bgColor: "bg-primary/10",
       };
     case "poor":
       return {
-        icon: <Wifi className="h-4 w-4 text-yellow-500" />,
+        icon: <Wifi className="h-4 w-4 text-warning" />,
         text: "Ruim",
-        color: "text-yellow-600",
-        bgColor: "bg-yellow-100",
+        color: "text-warning",
+        bgColor: "bg-warning/10",
       };
     case "offline":
       return {
@@ -131,13 +131,13 @@ export function ModuleCard({ moduleKey, module }: ModuleCardProps) {
   const getStatusBadge = (status: ModuleStatus) => {
     switch (status) {
     case "operational":
-      return <Badge className="bg-green-500">Operacional</Badge>;
+      return <Badge className="bg-success">Operacional</Badge>;
     case "degraded":
-      return <Badge className="bg-yellow-500">Degradado</Badge>;
+      return <Badge className="bg-warning">Degradado</Badge>;
     case "offline":
-      return <Badge className="bg-gray-500">Offline</Badge>;
+      return <Badge className="bg-muted">Offline</Badge>;
     case "error":
-      return <Badge className="bg-red-500">Erro</Badge>;
+      return <Badge className="bg-destructive">Erro</Badge>;
     }
   };
 
@@ -168,7 +168,7 @@ export function ModuleCard({ moduleKey, module }: ModuleCardProps) {
           <span className="font-medium">{module.performance}ms</span>
         </div>
         {module.errors > 0 && (
-          <div className="flex items-center gap-2 text-sm text-red-600">
+          <div className="flex items-center gap-2 text-sm text-destructive">
             <AlertCircle className="h-4 w-4" />
             <span>{module.errors} erro(s)</span>
           </div>
@@ -226,7 +226,7 @@ export function CacheStats({ size, capacity, pending, total }: CacheStatsProps) 
             <p className="text-xs text-muted-foreground">Total registros</p>
           </div>
           <div>
-            <p className="text-2xl font-bold text-orange-600">{pending}</p>
+            <p className="text-2xl font-bold text-warning">{pending}</p>
             <p className="text-xs text-muted-foreground">Pendentes</p>
           </div>
         </div>
@@ -253,7 +253,7 @@ export function SyncStatus({ lastSync, isSyncing, onSync }: SyncStatusProps) {
           <button
             onClick={onSync}
             disabled={isSyncing}
-            className="px-3 py-1 text-sm bg-blue-500 text-white rounded hover:bg-blue-600 disabled:opacity-50 disabled:cursor-not-allowed"
+            className="px-3 py-1 text-sm bg-primary text-primary-foreground rounded hover:bg-primary/90 disabled:opacity-50 disabled:cursor-not-allowed"
           >
             {isSyncing ? "Sincronizando..." : "Sincronizar"}
           </button>

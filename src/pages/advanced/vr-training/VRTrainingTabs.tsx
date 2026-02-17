@@ -161,7 +161,7 @@ export function VRTrainingTabs({
                 <div key={achievement.name} className={`p-4 rounded-lg border ${achievement.unlocked ? "bg-primary/5" : "bg-muted/30 opacity-60"}`}>
                   <div className="flex items-center gap-3 mb-2">
                     <span className="text-3xl">{achievement.icon}</span>
-                    <div><p className="font-semibold">{achievement.name}</p>{achievement.unlocked && <CheckCircle className="h-4 w-4 text-green-500" />}</div>
+                    <div><p className="font-semibold">{achievement.name}</p>{achievement.unlocked && <CheckCircle className="h-4 w-4 text-success" />}</div>
                   </div>
                   <p className="text-sm text-muted-foreground">{achievement.description}</p>
                 </div>

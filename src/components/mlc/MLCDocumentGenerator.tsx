@@ -150,7 +150,7 @@ export function MLCDocumentGenerator() {
                           {isGenerating ? "Gerando..." : "Gerar"}
                         </Button>
                       )}
-                      {isGenerated && <CheckCircle className="h-5 w-5 text-green-500" />}
+                      {isGenerated && <CheckCircle className="h-5 w-5 text-success" />}
                     </div>
                   </div>
                 </div>

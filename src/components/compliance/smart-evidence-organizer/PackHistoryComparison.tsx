@@ -24,7 +24,7 @@ export const PackHistoryComparison = memo(({ packs, onSelectPack }: Props) => {
   const getTrend = (current: EvidencePack, previous?: EvidencePack) => {
     if (!previous) return null;
     const diff = current.overall_score - previous.overall_score;
-    if (diff > 2) return { icon: TrendingUp, color: "text-green-500", label: `+${diff.toFixed(0)}%` };
+    if (diff > 2) return { icon: TrendingUp, color: "text-success", label: `+${diff.toFixed(0)}%` };
     if (diff < -2) return { icon: TrendingDown, color: "text-destructive", label: `${diff.toFixed(0)}%` };
     return { icon: Minus, color: "text-muted-foreground", label: "Estável" };
   };
@@ -44,7 +44,7 @@ export const PackHistoryComparison = memo(({ packs, onSelectPack }: Props) => {
           {sortedPacks.map((pack, idx) => {
             const previous = sortedPacks[idx + 1];
             const trend = getTrend(pack, previous);
-            const scoreColor = pack.overall_score >= 80 ? "text-green-500" : pack.overall_score >= 50 ? "text-yellow-500" : "text-destructive";
+            const scoreColor = pack.overall_score >= 80 ? "text-success" : pack.overall_score >= 50 ? "text-warning" : "text-destructive";
 
             return (
               <div
@@ -64,7 +64,7 @@ export const PackHistoryComparison = memo(({ packs, onSelectPack }: Props) => {
                     </span>
                     <span>{pack.total_elements} elem.</span>
                     <span>{pack.total_items} itens</span>
-                    <span className="text-green-500">{pack.matched_items} ✓</span>
+                    <span className="text-success">{pack.matched_items} ✓</span>
                     <span className="text-destructive">{pack.unmatched_items} ✗</span>
                   </div>
                 </div>

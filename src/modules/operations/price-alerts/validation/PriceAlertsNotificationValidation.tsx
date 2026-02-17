@@ -31,7 +31,7 @@ export default function PriceAlertsNotificationValidation() {
           </p>
         </div>
         {allChecked && (
-          <Badge className="bg-green-500 text-white text-lg px-4 py-2">
+          <Badge className="bg-success text-success-foreground text-lg px-4 py-2">
             <CheckCircle2 className="h-5 w-5 mr-2" />
             VALIDADO
           </Badge>

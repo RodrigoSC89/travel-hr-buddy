@@ -311,7 +311,7 @@ export const DPCompetenceHub: React.FC = () => {
                           <h3 className="font-semibold">{member.name}</h3>
                           <p className="text-sm text-muted-foreground">{member.role} - {member.vessel}</p>
                         </div>
-                        {member.mentoringStatus === "mentor" && <Badge className="bg-purple-500"><Star className="w-3 h-3 mr-1" />Mentor</Badge>}
+                        {member.mentoringStatus === "mentor" && <Badge className="bg-accent text-accent-foreground"><Star className="w-3 h-3 mr-1" />Mentor</Badge>}
                       </div>
                       <div className="space-y-1">
                         <div className="flex justify-between text-sm">
@@ -380,7 +380,7 @@ export const DPCompetenceHub: React.FC = () => {
                     member.certifications.map(cert => (
                       <div key={cert.id} className="p-3 rounded-lg border bg-card flex items-center justify-between">
                         <div className="flex items-center gap-3">
-                          <Award className={`h-8 w-8 ${cert.status === "valid" ? "text-green-500" : cert.status === "expiring" ? "text-yellow-500" : "text-red-500"}`} />
+                          <Award className={`h-8 w-8 ${cert.status === "valid" ? "text-success" : cert.status === "expiring" ? "text-warning" : "text-destructive"}`} />
                           <div>
                             <p className="font-medium">{cert.name}</p>
                             <p className="text-sm text-muted-foreground">{member.name} ({member.role})</p>
@@ -403,20 +403,20 @@ export const DPCompetenceHub: React.FC = () => {
           <div className="grid grid-cols-2 gap-6">
             <Card>
               <CardHeader>
-                <CardTitle className="flex items-center gap-2"><Star className="h-5 w-5 text-purple-500" />Mentores</CardTitle>
+                <CardTitle className="flex items-center gap-2"><Star className="h-5 w-5 text-accent-foreground" />Mentores</CardTitle>
               </CardHeader>
               <CardContent>
                 <div className="space-y-3">
                   {crewMembers.filter(m => m.mentoringStatus === "mentor").map(mentor => (
                     <div key={mentor.id} className="p-3 rounded-lg border bg-card flex items-center gap-3">
                       <Avatar>
-                        <AvatarFallback className="bg-purple-500/20 text-purple-500">{mentor.name.split(" ").map(n => n[0]).join("")}</AvatarFallback>
+                        <AvatarFallback className="bg-accent/20 text-accent-foreground">{mentor.name.split(" ").map(n => n[0]).join("")}</AvatarFallback>
                       </Avatar>
                       <div className="flex-1">
                         <p className="font-medium">{mentor.name}</p>
                         <p className="text-sm text-muted-foreground">{mentor.role} - {mentor.dpHours.toLocaleString()}h DP</p>
                       </div>
-                      <Badge className="bg-purple-500">{crewMembers.filter(m => m.mentorId === mentor.id).length} mentees</Badge>
+                      <Badge className="bg-accent text-accent-foreground">{crewMembers.filter(m => m.mentorId === mentor.id).length} mentees</Badge>
                     </div>
                   ))}
                 </div>
