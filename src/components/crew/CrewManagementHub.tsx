@@ -4,6 +4,8 @@
  */
 
 import { useState, useMemo } from "react";
+import { motion } from "framer-motion";
+import { staggerContainer, fadeUp } from "@/lib/animations/motion-variants";
 import { Card, CardContent, CardHeader, CardTitle } from "@/components/ui/card";
 import { Button } from "@/components/ui/button";
 import { Input } from "@/components/ui/input";
@@ -458,17 +460,19 @@ export function CrewManagementHub() {
   };
 
   return (
-    <div className="space-y-6">
+    <motion.div initial="hidden" animate="visible" variants={staggerContainer} className="space-y-6">
       {/* Header */}
-      <div className="flex items-center justify-between">
-        <div>
-          <h2 className="text-2xl font-bold flex items-center gap-2">
-            <Users className="h-6 w-6 text-primary" />
-            Gestão de Tripulação
-          </h2>
-          <p className="text-muted-foreground">
-            Cadastro completo e gerenciamento de tripulantes
-          </p>
+      <motion.div variants={fadeUp} className="flex items-center justify-between">
+        <div className="flex items-center gap-4">
+          <div className="p-3 rounded-xl bg-gradient-to-br from-primary/20 to-primary/5">
+            <Users className="h-8 w-8 text-primary" />
+          </div>
+          <div>
+            <h2 className="text-2xl font-bold">Gestão de Tripulação</h2>
+            <p className="text-muted-foreground">
+              Cadastro completo e gerenciamento de tripulantes
+            </p>
+          </div>
         </div>
         <div className="flex gap-2">
           <Button variant="outline" onClick={exportToCSV}>
@@ -480,10 +484,10 @@ export function CrewManagementHub() {
             Novo Tripulante
           </Button>
         </div>
-      </div>
+      </motion.div>
 
       {/* Stats Cards */}
-      <div className="grid grid-cols-5 gap-4">
+      <motion.div variants={fadeUp} className="grid grid-cols-2 md:grid-cols-5 gap-4">
         <Card>
           <CardContent className="pt-4">
             <div className="text-2xl font-bold">{stats.total}</div>
@@ -514,7 +518,7 @@ export function CrewManagementHub() {
             <p className="text-sm text-muted-foreground">Treinamento</p>
           </CardContent>
         </Card>
-      </div>
+      </motion.div>
 
       {/* Filters */}
       <Card>
@@ -1070,7 +1074,7 @@ export function CrewManagementHub() {
           )}
         </DialogContent>
       </Dialog>
-    </div>
+    </motion.div>
   );
 }
 

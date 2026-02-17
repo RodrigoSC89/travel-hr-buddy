@@ -1,4 +1,6 @@
 import React, { useState, useMemo, useCallback } from "react";
+import { motion } from "framer-motion";
+import { staggerContainer, fadeUp } from "@/lib/animations/motion-variants";
 import { Button } from "@/components/ui/button";
 import {
   DropdownMenu, DropdownMenuContent, DropdownMenuItem,
@@ -116,14 +118,17 @@ export const UserManagementHub: React.FC = () => {
   const hasActiveFilters = !!(searchTerm || roleFilter !== "all" || statusFilter !== "all");
 
   return (
-    <div className="space-y-6">
+    <motion.div initial="hidden" animate="visible" variants={staggerContainer} className="space-y-6">
       {/* Header */}
-      <div className="flex flex-col gap-4 md:flex-row md:items-center md:justify-between">
-        <div>
-          <h2 className="text-3xl font-bold tracking-tight flex items-center gap-2">
-            <Users className="h-8 w-8" />Gestão de Usuários
-          </h2>
-          <p className="text-muted-foreground">Gerencie as configurações e dados da sua organização</p>
+      <motion.div variants={fadeUp} className="flex flex-col gap-4 md:flex-row md:items-center md:justify-between">
+        <div className="flex items-center gap-4">
+          <div className="p-3 rounded-xl bg-gradient-to-br from-primary/20 to-primary/5">
+            <Users className="h-8 w-8 text-primary" />
+          </div>
+          <div>
+            <h2 className="text-3xl font-bold tracking-tight">Gestão de Usuários</h2>
+            <p className="text-muted-foreground">Gerencie as configurações e dados da sua organização</p>
+          </div>
         </div>
         <div className="flex items-center gap-2">
           <DropdownMenu>
@@ -178,7 +183,7 @@ export const UserManagementHub: React.FC = () => {
             <UserPlus className="h-4 w-4 mr-2" />Convidar Usuário
           </Button>
         </div>
-      </div>
+      </motion.div>
 
       <StatsCards stats={stats} />
 
@@ -214,6 +219,6 @@ export const UserManagementHub: React.FC = () => {
       <SettingsDialog open={showSettingsDialog} onOpenChange={setShowSettingsDialog} />
       <EditUserDialog open={showEditDialog} onOpenChange={setShowEditDialog}
         editData={editData} setEditData={setEditData} onSave={handleSaveEdit} />
-    </div>
+    </motion.div>
   );
 };
