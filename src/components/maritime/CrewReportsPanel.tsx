@@ -133,7 +133,7 @@ export const CrewReportsPanel: React.FC<CrewReportsPanelProps> = ({ crewMembers,
         </Card>
         <Card>
           <CardContent className="p-4 text-center">
-            <TrendingUp className="h-8 w-8 mx-auto mb-2 text-purple-600" />
+            <TrendingUp className="h-8 w-8 mx-auto mb-2 text-primary" />
             <div className="text-2xl font-bold">{stats.avgExperience.toFixed(1)}</div>
             <div className="text-sm text-muted-foreground">Média Anos Exp.</div>
           </CardContent>

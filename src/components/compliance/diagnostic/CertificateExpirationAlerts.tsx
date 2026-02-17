@@ -358,14 +358,14 @@ export function CertificateExpirationAlerts() {
                       <div className="flex items-center justify-between">
                         <div className="flex items-center gap-4">
                           <div className={`p-3 rounded-full ${
-                            config.days_before <= 7 ? 'bg-red-100 dark:bg-red-900' :
-                            config.days_before <= 30 ? 'bg-amber-100 dark:bg-amber-900' :
-                            'bg-blue-100 dark:bg-blue-900'
+                            config.days_before <= 7 ? 'bg-destructive/10' :
+                            config.days_before <= 30 ? 'bg-warning/10' :
+                            'bg-info/10'
                           }`}>
                             <Bell className={`h-5 w-5 ${
-                              config.days_before <= 7 ? 'text-red-600' :
-                              config.days_before <= 30 ? 'text-amber-600' :
-                              'text-blue-600'
+                              config.days_before <= 7 ? 'text-destructive' :
+                              config.days_before <= 30 ? 'text-warning' :
+                              'text-info'
                             }`} />
                           </div>
                           <div>
@@ -479,13 +479,13 @@ export function CertificateExpirationAlerts() {
                         <div className="flex items-center justify-between">
                           <div className="flex items-center gap-4">
                             <div className={`p-2 rounded-full ${
-                              alert.status === 'sent' ? 'bg-green-100 dark:bg-green-900' :
-                              alert.status === 'failed' ? 'bg-red-100 dark:bg-red-900' :
-                              'bg-amber-100 dark:bg-amber-900'
+                              alert.status === 'sent' ? 'bg-success/10' :
+                              alert.status === 'failed' ? 'bg-destructive/10' :
+                              'bg-warning/10'
                             }`}>
-                              {alert.status === 'sent' && <CheckCircle2 className="h-4 w-4 text-green-600" />}
-                              {alert.status === 'failed' && <AlertTriangle className="h-4 w-4 text-red-600" />}
-                              {alert.status === 'pending' && <Clock className="h-4 w-4 text-amber-600" />}
+                              {alert.status === 'sent' && <CheckCircle2 className="h-4 w-4 text-success" />}
+                              {alert.status === 'failed' && <AlertTriangle className="h-4 w-4 text-destructive" />}
+                              {alert.status === 'pending' && <Clock className="h-4 w-4 text-warning" />}
                             </div>
                             <div>
                               <p className="font-medium">{alert.holder_name}</p>

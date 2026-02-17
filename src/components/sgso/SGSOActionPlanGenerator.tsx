@@ -251,7 +251,7 @@ export const SGSOActionPlanGenerator: React.FC = () => {
               onClick={handleLoadExample}
               variant="outline"
               disabled={loading}
-              className="border-purple-300 text-purple-700 hover:bg-purple-50"
+              className="border-primary/30 text-primary hover:bg-primary/5"
             >
               <Sparkles className="h-4 w-4 mr-2" />
               Carregar Exemplo
@@ -272,13 +272,13 @@ export const SGSOActionPlanGenerator: React.FC = () => {
       {actionPlan && (
         <div className="space-y-4">
           <h3 className="text-lg font-semibold text-foreground flex items-center gap-2">
-            <Sparkles className="h-5 w-5 text-purple-600" />
+            <Sparkles className="h-5 w-5 text-primary" />
             Plano de Ação Gerado
           </h3>
 
-          <Card className="bg-gradient-to-br from-red-50 to-red-100 border-red-200">
+          <Card className="bg-gradient-to-br from-destructive/5 to-destructive/10 border-destructive/20">
             <CardHeader>
-              <CardTitle className="text-red-700 flex items-center gap-2">
+              <CardTitle className="text-destructive flex items-center gap-2">
                 ✅ Ação Corretiva Imediata
               </CardTitle>
             </CardHeader>
@@ -287,9 +287,9 @@ export const SGSOActionPlanGenerator: React.FC = () => {
             </CardContent>
           </Card>
 
-          <Card className="bg-gradient-to-br from-blue-50 to-blue-100 border-blue-200">
+          <Card className="bg-gradient-to-br from-info/5 to-info/10 border-info/20">
             <CardHeader>
-              <CardTitle className="text-blue-700 flex items-center gap-2">
+              <CardTitle className="text-info flex items-center gap-2">
                 🔁 Ação Preventiva
               </CardTitle>
             </CardHeader>
@@ -298,9 +298,9 @@ export const SGSOActionPlanGenerator: React.FC = () => {
             </CardContent>
           </Card>
 
-          <Card className="bg-gradient-to-br from-purple-50 to-purple-100 border-purple-200">
+          <Card className="bg-gradient-to-br from-primary/5 to-primary/10 border-primary/20">
             <CardHeader>
-              <CardTitle className="text-purple-700 flex items-center gap-2">
+              <CardTitle className="text-primary flex items-center gap-2">
                 🧠 Recomendação da IA
               </CardTitle>
             </CardHeader>

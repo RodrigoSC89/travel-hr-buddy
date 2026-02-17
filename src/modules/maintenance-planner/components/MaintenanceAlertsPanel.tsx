@@ -138,7 +138,7 @@ export const MaintenanceAlertsPanel: React.FC<MaintenanceAlertsPanelProps> = ({
     const colors: Record<string, string> = {
       low: "bg-muted text-muted-foreground",
       medium: "bg-warning/20 text-warning",
-      high: "bg-orange-500/20 text-orange-500",
+      high: "bg-destructive/20 text-destructive",
       critical: "bg-destructive/20 text-destructive",
     };
     return colors[priority] || colors.medium;

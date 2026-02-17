@@ -23,11 +23,11 @@ interface BadgeState {
 }
 
 const TIER_COLORS: Record<string, { bg: string; border: string; text: string; glow: string }> = {
-  bronze: { bg: "bg-amber-900/20", border: "border-amber-700/40", text: "text-amber-600", glow: "" },
-  silver: { bg: "bg-slate-300/10", border: "border-slate-400/40", text: "text-slate-400", glow: "" },
-  gold: { bg: "bg-yellow-500/10", border: "border-yellow-500/40", text: "text-yellow-500", glow: "shadow-yellow-500/20 shadow-md" },
-  platinum: { bg: "bg-cyan-500/10", border: "border-cyan-500/40", text: "text-cyan-400", glow: "shadow-cyan-500/20 shadow-md" },
-  master: { bg: "bg-gradient-to-br from-purple-500/15 to-yellow-500/15", border: "border-purple-500/50", text: "text-purple-400", glow: "shadow-purple-500/30 shadow-lg ring-1 ring-purple-500/20" },
+  bronze: { bg: "bg-warning/20", border: "border-warning/40", text: "text-warning", glow: "" },
+  silver: { bg: "bg-muted/30", border: "border-muted-foreground/40", text: "text-muted-foreground", glow: "" },
+  gold: { bg: "bg-warning/10", border: "border-warning/40", text: "text-warning", glow: "shadow-warning/20 shadow-md" },
+  platinum: { bg: "bg-info/10", border: "border-info/40", text: "text-info", glow: "shadow-info/20 shadow-md" },
+  master: { bg: "bg-gradient-to-br from-primary/15 to-warning/15", border: "border-primary/50", text: "text-primary", glow: "shadow-primary/30 shadow-lg ring-1 ring-primary/20" },
 };
 
 const LEADERBOARD = [
@@ -173,7 +173,7 @@ export function GamificationTabs({ activeTab, setActiveTab, badgeStates }: Gamif
                   <div className="text-center"><div className="text-sm font-bold">{user.xp}</div><div className="text-[10px] text-muted-foreground">XP</div></div>
                   <div className="text-center"><div className="text-sm font-medium">Lv.{user.level}</div><div className="text-[10px] text-muted-foreground">Nível</div></div>
                   <Badge variant="outline" className="gap-1 text-xs"><Award className="h-3 w-3" /> {user.badges}</Badge>
-                  <Badge variant="outline" className="gap-1 text-xs text-orange-500 border-orange-500/30"><Flame className="h-3 w-3" /> {user.streak}d</Badge>
+                  <Badge variant="outline" className="gap-1 text-xs text-warning border-warning/30"><Flame className="h-3 w-3" /> {user.streak}d</Badge>
                 </motion.div>
               ))}
             </div>
@@ -189,10 +189,10 @@ export function GamificationTabs({ activeTab, setActiveTab, badgeStates }: Gamif
             const completed = challenge.progress >= challenge.target;
             return (
               <motion.div key={challenge.id} whileHover={{ scale: 1.01 }}>
-                <Card className={cn(completed && "border-green-500/30 bg-green-500/5")}>
+                <Card className={cn(completed && "border-success/30 bg-success/5")}>
                   <CardContent className="p-5">
                     <div className="flex items-start gap-4">
-                      <div className={cn("p-3 rounded-xl", completed ? "bg-green-500/20" : "bg-muted")}><CIcon className={cn("h-6 w-6", completed ? "text-green-500" : challenge.color)} /></div>
+                      <div className={cn("p-3 rounded-xl", completed ? "bg-success/20" : "bg-muted")}><CIcon className={cn("h-6 w-6", completed ? "text-success" : challenge.color)} /></div>
                       <div className="flex-1">
                         <div className="flex items-center justify-between"><h3 className="font-semibold text-sm">{challenge.title}</h3><Badge variant={completed ? "default" : "outline"} className={cn("text-xs", completed && "bg-green-600")}>{completed ? "✅ Completo" : `+${challenge.xpReward} XP`}</Badge></div>
                         <p className="text-xs text-muted-foreground mt-1">{challenge.description}</p>

@@ -168,20 +168,20 @@ export const EnhancedOperationsCenter: React.FC = () => {
 
   const getStatusColor = (status: string) => {
     switch (status) {
-      case 'underway': return 'bg-green-500/20 text-green-500 border-green-500/30';
-      case 'moored': return 'bg-blue-500/20 text-blue-500 border-blue-500/30';
-      case 'anchored': return 'bg-yellow-500/20 text-yellow-500 border-yellow-500/30';
-      case 'maintenance': return 'bg-orange-500/20 text-orange-500 border-orange-500/30';
-      case 'emergency': return 'bg-red-500/20 text-red-500 border-red-500/30';
+      case 'underway': return 'bg-success/20 text-success border-success/30';
+      case 'moored': return 'bg-info/20 text-info border-info/30';
+      case 'anchored': return 'bg-warning/20 text-warning border-warning/30';
+      case 'maintenance': return 'bg-warning/20 text-warning border-warning/30';
+      case 'emergency': return 'bg-destructive/20 text-destructive border-destructive/30';
       default: return 'bg-muted text-muted-foreground';
     }
   };
 
   const getSeverityColor = (severity: string) => {
     switch (severity) {
-      case 'critical': return 'bg-red-500 text-white';
-      case 'warning': return 'bg-yellow-500 text-black';
-      case 'info': return 'bg-blue-500 text-white';
+      case 'critical': return 'bg-destructive text-destructive-foreground';
+      case 'warning': return 'bg-warning text-warning-foreground';
+      case 'info': return 'bg-info text-info-foreground';
       default: return 'bg-muted';
     }
   };
@@ -212,8 +212,8 @@ export const EnhancedOperationsCenter: React.FC = () => {
         className="flex flex-col md:flex-row md:items-center justify-between gap-4"
       >
         <div className="flex items-center gap-4">
-          <div className="p-3 rounded-2xl bg-gradient-to-br from-cyan-500/20 to-blue-500/10 border border-cyan-500/20">
-            <Navigation className="h-8 w-8 text-cyan-500" />
+          <div className="p-3 rounded-2xl bg-gradient-to-br from-info/20 to-primary/10 border border-info/20">
+            <Navigation className="h-8 w-8 text-info" />
           </div>
           <div>
             <h1 className="text-3xl font-bold">Centro de Operações</h1>

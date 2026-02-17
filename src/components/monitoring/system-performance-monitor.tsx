@@ -237,9 +237,9 @@ const SystemPerformanceMonitor = () => {
 
       {/* Alertas Críticos */}
       {systemMetrics.some(m => m.status === "critical") && (
-        <Alert className="border-red-200 bg-red-50">
-          <AlertTriangle className="h-4 w-4 text-red-600" />
-          <AlertDescription className="text-red-800">
+        <Alert className="border-destructive/30 bg-destructive/5">
+          <AlertTriangle className="h-4 w-4 text-destructive" />
+          <AlertDescription className="text-destructive">
             Atenção: Métricas críticas detectadas. Verifique o uso de recursos imediatamente.
           </AlertDescription>
         </Alert>

@@ -131,10 +131,10 @@ export const HealthMetricsDashboard: React.FC = () => {
     <div className="space-y-6">
       {/* Anomaly Alerts */}
       {anomalies.length > 0 && (
-        <Card className="border-yellow-500">
+        <Card className="border-warning">
           <CardHeader>
             <CardTitle className="flex items-center space-x-2">
-              <AlertCircle className="h-5 w-5 text-yellow-500" />
+              <AlertCircle className="h-5 w-5 text-warning" />
               <span>Health Alerts</span>
             </CardTitle>
           </CardHeader>

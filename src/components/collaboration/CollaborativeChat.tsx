@@ -257,7 +257,7 @@ export function CollaborativeChat() {
           </CardTitle>
           <div className="flex items-center gap-2">
             <Badge variant="outline" className="gap-1">
-              <Circle className="h-2 w-2 fill-green-500 text-green-500" />
+              <Circle className="h-2 w-2 fill-success text-success" />
               {onlineUsers.filter((u) => u.status === "online").length} online
             </Badge>
             <Popover>
@@ -279,9 +279,9 @@ export function CollaborativeChat() {
                       <Circle
                         className={cn(
                           "h-2 w-2",
-                          user.status === "online" && "fill-green-500 text-green-500",
-                          user.status === "away" && "fill-yellow-500 text-yellow-500",
-                          user.status === "busy" && "fill-red-500 text-red-500"
+                          user.status === "online" && "fill-success text-success",
+                          user.status === "away" && "fill-warning text-warning",
+                          user.status === "busy" && "fill-destructive text-destructive"
                         )}
                       />
                     </div>
