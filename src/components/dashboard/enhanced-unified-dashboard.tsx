@@ -43,34 +43,21 @@ const staggerContainer = {
 /* ─── Data Hooks ─── */
 function useDashboardStats() {
   return useQuery({
-    queryKey: ['dashboard-real-stats'],
+    queryKey: ['dashboard-aggregated-kpis'],
     queryFn: async () => {
-      const [vessels, crewOnboard, crewAll, maintPending, maintOverdue, incidents, certs, expenses, audits, docs] = await Promise.all([
-        supabase.from('vessels').select('id, name, vessel_type, status', { count: 'exact' }),
-        supabase.from('crew_members').select('id', { count: 'exact' }).eq('status', 'on_board'),
-        supabase.from('crew_members').select('id, status', { count: 'exact' }),
-        supabase.from('maintenance_tasks').select('id', { count: 'exact' }).eq('status', 'pending'),
-        supabase.from('maintenance_tasks').select('id', { count: 'exact' }).eq('status', 'pending').lt('due_date', new Date().toISOString()),
-        supabase.from('soc_alerts').select('id, title, severity, created_at', { count: 'exact' }).is('resolved_at', null).order('created_at', { ascending: false }).limit(6),
-        supabase.from('crew_certifications').select('id, expiry_date, certification_name, crew_member_id', { count: 'exact' }).lte('expiry_date', new Date(Date.now() + 90 * 86400000).toISOString()).gte('expiry_date', new Date().toISOString()),
-        supabase.from('expenses').select('amount').gte('created_at', new Date(Date.now() - 30 * 86400000).toISOString()),
-        supabase.from('internal_audits').select('id', { count: 'exact' }),
-        supabase.from('ai_documents').select('id', { count: 'exact' }),
+      // Use aggregated RPC for a single round-trip instead of 10+ queries
+      const { data: kpis, error: kpiError } = await supabase.rpc("get_dashboard_kpis");
+
+      // Fetch recent alerts and activities in parallel
+      const [incidents, recentLogs] = await Promise.all([
+        supabase.from('soc_alerts').select('id, title, severity, created_at').is('resolved_at', null).order('created_at', { ascending: false }).limit(6),
+        supabase.from('access_logs').select('id, action, module_accessed, timestamp, user_id').order('timestamp', { ascending: false }).limit(6),
       ]);
 
-      // Fetch recent activities from access_logs
-      const { data: recentLogs } = await supabase
-        .from('access_logs')
-        .select('id, action, module_accessed, timestamp, user_id')
-        .order('timestamp', { ascending: false })
-        .limit(6);
+      const k = (kpis as Record<string, number | string>) ?? {};
 
-      const totalExpenses = (expenses.data ?? []).reduce((s, e) => s + (Number(e.amount) || 0), 0);
-      const crewOnLeave = (crewAll.data ?? []).filter(c => c.status === 'on_leave').length;
-
-      // Build real alerts from open incidents + expiring certs
+      // Build real alerts
       const realAlerts: Array<{ id: string; title: string; type: string; priority: string; module: string }> = [];
-      
       (incidents.data ?? []).forEach(inc => {
         realAlerts.push({
           id: inc.id,
@@ -81,45 +68,38 @@ function useDashboardStats() {
         });
       });
 
-      (certs.data ?? []).slice(0, 3).forEach(cert => {
-        if (!cert.expiry_date) return;
-        const daysLeft = Math.ceil((new Date(cert.expiry_date).getTime() - Date.now()) / 86400000);
-        realAlerts.push({
-          id: cert.id,
-          title: `${cert.certification_name || 'Certificado'} expira em ${daysLeft} dias`,
-          type: daysLeft <= 30 ? 'warning' : 'info',
-          priority: daysLeft <= 30 ? 'high' : 'low',
-          module: 'Certificates',
-        });
-      });
-
-      // Build real activities from access logs
-      const realActivities = (recentLogs ?? []).map(log => {
-        const timeAgo = getTimeAgo(log.timestamp);
-        return {
-          id: log.id,
-          user: log.user_id?.slice(0, 8) || 'System',
-          action: log.action,
-          time: timeAgo,
-          type: log.module_accessed?.toLowerCase() || 'system',
-        };
-      });
+      // Build real activities
+      const realActivities = (recentLogs.data ?? []).map(log => ({
+        id: log.id,
+        user: log.user_id?.slice(0, 8) || 'System',
+        action: log.action,
+        time: getTimeAgo(log.timestamp),
+        type: log.module_accessed?.toLowerCase() || 'system',
+      }));
 
       return {
-        vessels_total: vessels.count ?? 0,
-        vessels_data: vessels.data ?? [],
-        crew_onboard: crewOnboard.count ?? 0,
-        crew_total: crewAll.count ?? 0,
-        crew_on_leave: crewOnLeave,
-        maint_pending: maintPending.count ?? 0,
-        maint_overdue: maintOverdue.count ?? 0,
-        incidents_open: incidents.count ?? 0,
-        certs_expiring: certs.count ?? 0,
-        total_expenses: totalExpenses,
-        audits_count: audits.count ?? 0,
-        docs_count: docs.count ?? 0,
+        vessels_total: Number(k.vessels_total) || 0,
+        vessels_active: Number(k.vessels_active) || 0,
+        vessel_utilization: Number(k.vessel_utilization) || 0,
+        crew_onboard: Number(k.crew_onboard) || 0,
+        crew_total: Number(k.crew_total) || 0,
+        crew_on_leave: Number(k.crew_on_leave) || 0,
+        maint_pending: Number(k.maint_pending) || 0,
+        maint_overdue: Number(k.maint_overdue) || 0,
+        certs_expiring_30: Number(k.certs_expiring_30) || 0,
+        certs_expiring_90: Number(k.certs_expiring_90) || 0,
+        certs_expired: Number(k.certs_expired) || 0,
+        incidents_open: Number(k.incidents_open) || 0,
+        total_expenses: Number(k.expenses_30d) || 0,
+        compliance_score: Number(k.compliance_score) || 100,
+        safety_score: Number(k.safety_score) || 100,
+        audits_count: Number(k.audits_total) || 0,
+        docs_count: Number(k.docs_total) || 0,
+        voyages_active: Number(k.voyages_active) || 0,
+        ncs_open: Number(k.ncs_open) || 0,
         alerts: realAlerts,
         activities: realActivities,
+        vessels_data: [] as Array<{ status: string }>,
       };
     },
     staleTime: 1000 * 60 * 2,
@@ -196,9 +176,9 @@ const EnhancedUnifiedDashboard = () => {
       efficiency: { value: realStats?.maint_overdue === 0 ? 99 : Math.max(70, 100 - (realStats?.maint_overdue ?? 0) * 5), target: 95 },
     },
     operationalMetrics: {
-      vesselUtilization: realStats?.vessels_total ? Math.round((realStats.vessels_data.filter(v => v.status === 'active' || v.status === 'at_sea').length / realStats.vessels_total) * 100) : 0,
-      safetyScore: realStats?.incidents_open === 0 ? 100 : Math.max(80, 100 - (realStats?.incidents_open ?? 0) * 2),
-      complianceRate: realStats?.certs_expiring === 0 ? 100 : Math.max(85, 100 - (realStats?.certs_expiring ?? 0)),
+      vesselUtilization: realStats?.vessel_utilization ?? 0,
+      safetyScore: realStats?.safety_score ?? 100,
+      complianceRate: realStats?.compliance_score ?? 100,
     },
     alerts: realStats?.alerts ?? [],
     recentActivities: realStats?.activities ?? [],
