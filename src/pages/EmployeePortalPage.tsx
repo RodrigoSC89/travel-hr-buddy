@@ -184,7 +184,7 @@ export default function EmployeePortalPage() {
                     </div>
                     <div>
                       <p className="text-muted-foreground">Descontos</p>
-                      <p className="font-medium text-red-500">
+                      <p className="font-medium text-destructive">
                         -{formatCurrency(latestPayslip.inss_deduction + latestPayslip.irrf_deduction + latestPayslip.other_deductions)}
                       </p>
                     </div>
@@ -246,7 +246,7 @@ export default function EmployeePortalPage() {
           <Card>
             <CardHeader className="pb-2">
               <CardTitle className="text-lg flex items-center gap-2">
-                <Bell className="h-5 w-5 text-blue-500" />
+                <Bell className="h-5 w-5 text-primary" />
                 Avisos
               </CardTitle>
             </CardHeader>
@@ -278,7 +278,7 @@ export default function EmployeePortalPage() {
               ) : payslips && payslips.length > 0 ? (
                 payslips.map((p) => (
                   <div key={p.id} className="flex items-center gap-3 p-3 rounded-lg border hover:bg-muted/50 cursor-pointer">
-                    <FileText className="h-5 w-5 text-red-500" />
+                    <FileText className="h-5 w-5 text-destructive" />
                     <div className="flex-1">
                       <p className="text-sm font-medium">
                         Holerite {getMonthName(p.reference_month)} {p.reference_year}
@@ -308,7 +308,7 @@ export default function EmployeePortalPage() {
                 { name: 'Política de Férias', date: '01/01/2026', type: 'PDF' },
               ].map((doc) => (
                 <div key={doc.name} className="flex items-center gap-3 p-3 rounded-lg border hover:bg-muted/50 cursor-pointer">
-                  <FileText className="h-5 w-5 text-blue-500" />
+                  <FileText className="h-5 w-5 text-primary" />
                   <div className="flex-1">
                     <p className="text-sm font-medium">{doc.name}</p>
                     <p className="text-xs text-muted-foreground">{doc.date}</p>

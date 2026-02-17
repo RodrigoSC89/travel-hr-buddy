@@ -33,10 +33,10 @@ interface RegulatoryUpdate {
 }
 
 const REGULATION_SOURCES = [
-  { id: "imo", label: "IMO", icon: Globe, color: "text-blue-500" },
-  { id: "flag", label: "Flag State", icon: Shield, color: "text-emerald-500" },
-  { id: "class", label: "Classification", icon: Ship, color: "text-amber-500" },
-  { id: "pi", label: "P&I Club", icon: FileText, color: "text-purple-500" },
+  { id: "imo", label: "IMO", icon: Globe, color: "text-primary" },
+  { id: "flag", label: "Flag State", icon: Shield, color: "text-success" },
+  { id: "class", label: "Classification", icon: Ship, color: "text-warning" },
+  { id: "pi", label: "P&I Club", icon: FileText, color: "text-accent" },
 ];
 
 export function RegulatoryRadar() {

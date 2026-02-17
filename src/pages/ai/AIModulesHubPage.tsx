@@ -23,7 +23,7 @@ const aiModules = [
     status: 'active',
     route: '/ai/voyage-logistics',
     metrics: { accuracy: '99.5%', savings: '$45k/mês' },
-    color: 'bg-blue-500'
+    color: 'bg-primary'
   },
   {
     id: 'compliance',
@@ -33,7 +33,7 @@ const aiModules = [
     status: 'active',
     route: '/compliance-hub',
     metrics: { score: '98%', audits: '100% ready' },
-    color: 'bg-purple-500'
+    color: 'bg-accent'
   },
   {
     id: 'safety',
@@ -43,7 +43,7 @@ const aiModules = [
     status: 'active',
     route: '/ai/safety-incident',
     metrics: { ltifr: '0.42', reduction: '-25%' },
-    color: 'bg-red-500'
+    color: 'bg-destructive'
   },
   {
     id: 'inventory',
@@ -53,7 +53,7 @@ const aiModules = [
     status: 'active',
     route: '/ai/inventory-spares',
     metrics: { savings: '$125k/ano', fill: '98.5%' },
-    color: 'bg-orange-500'
+    color: 'bg-warning'
   },
   {
     id: 'environmental',
@@ -63,7 +63,7 @@ const aiModules = [
     status: 'active',
     route: '/esg-emissions',
     metrics: { cii: 'Rating B', reduction: '-15%' },
-    color: 'bg-green-500'
+    color: 'bg-success'
   },
   {
     id: 'quality',
@@ -73,7 +73,7 @@ const aiModules = [
     status: 'active',
     route: '/quality-dashboard',
     metrics: { closeRate: '95%', effectiveness: '92%' },
-    color: 'bg-teal-500'
+    color: 'bg-info'
   },
   {
     id: 'contract',
@@ -83,7 +83,7 @@ const aiModules = [
     status: 'active',
     route: '/vessel-contracts',
     metrics: { contracts: '156', risk: 'Low' },
-    color: 'bg-indigo-500'
+    color: 'bg-primary'
   },
   {
     id: 'insurance',
@@ -165,7 +165,7 @@ export default function AIModulesHubPage() {
               <CardTitle className="text-sm font-medium">Total Economia</CardTitle>
             </CardHeader>
             <CardContent>
-              <div className="text-2xl font-bold text-green-600">$750k/ano</div>
+              <div className="text-2xl font-bold text-success">$750k/ano</div>
               <p className="text-xs text-muted-foreground">Via otimização AI</p>
             </CardContent>
           </Card>

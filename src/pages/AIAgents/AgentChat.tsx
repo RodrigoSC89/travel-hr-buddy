@@ -27,16 +27,16 @@ const ICON_MAP: Record<string, React.ElementType> = {
 
 /** Map agent color string to Tailwind classes */
 const COLOR_MAP: Record<string, { bg: string; text: string; border: string; badge: string }> = {
-  blue:    { bg: "bg-blue-500/10",    text: "text-blue-500",    border: "border-blue-500/20",    badge: "bg-blue-500/15 text-blue-700 dark:text-blue-300" },
-  orange:  { bg: "bg-orange-500/10",  text: "text-orange-500",  border: "border-orange-500/20",  badge: "bg-orange-500/15 text-orange-700 dark:text-orange-300" },
-  red:     { bg: "bg-red-500/10",     text: "text-red-500",     border: "border-red-500/20",     badge: "bg-red-500/15 text-red-700 dark:text-red-300" },
-  pink:    { bg: "bg-pink-500/10",    text: "text-pink-500",    border: "border-pink-500/20",    badge: "bg-pink-500/15 text-pink-700 dark:text-pink-300" },
-  green:   { bg: "bg-green-500/10",   text: "text-green-500",   border: "border-green-500/20",   badge: "bg-green-500/15 text-green-700 dark:text-green-300" },
-  cyan:    { bg: "bg-cyan-500/10",    text: "text-cyan-500",    border: "border-cyan-500/20",    badge: "bg-cyan-500/15 text-cyan-700 dark:text-cyan-300" },
-  emerald: { bg: "bg-emerald-500/10", text: "text-emerald-500", border: "border-emerald-500/20", badge: "bg-emerald-500/15 text-emerald-700 dark:text-emerald-300" },
-  purple:  { bg: "bg-purple-500/10",  text: "text-purple-500",  border: "border-purple-500/20",  badge: "bg-purple-500/15 text-purple-700 dark:text-purple-300" },
-  indigo:  { bg: "bg-indigo-500/10",  text: "text-indigo-500",  border: "border-indigo-500/20",  badge: "bg-indigo-500/15 text-indigo-700 dark:text-indigo-300" },
-  teal:    { bg: "bg-teal-500/10",    text: "text-teal-500",    border: "border-teal-500/20",    badge: "bg-teal-500/15 text-teal-700 dark:text-teal-300" },
+  blue:    { bg: "bg-primary/10",     text: "text-primary",     border: "border-primary/20",     badge: "bg-primary/15 text-primary" },
+  orange:  { bg: "bg-warning/10",     text: "text-warning",     border: "border-warning/20",     badge: "bg-warning/15 text-warning" },
+  red:     { bg: "bg-destructive/10", text: "text-destructive", border: "border-destructive/20", badge: "bg-destructive/15 text-destructive" },
+  pink:    { bg: "bg-accent/10",      text: "text-accent",      border: "border-accent/20",      badge: "bg-accent/15 text-accent" },
+  green:   { bg: "bg-success/10",     text: "text-success",     border: "border-success/20",     badge: "bg-success/15 text-success" },
+  cyan:    { bg: "bg-info/10",        text: "text-info",        border: "border-info/20",        badge: "bg-info/15 text-info" },
+  emerald: { bg: "bg-success/10",     text: "text-success",     border: "border-success/20",     badge: "bg-success/15 text-success" },
+  purple:  { bg: "bg-accent/10",      text: "text-accent",      border: "border-accent/20",      badge: "bg-accent/15 text-accent" },
+  indigo:  { bg: "bg-primary/10",     text: "text-primary",     border: "border-primary/20",     badge: "bg-primary/15 text-primary" },
+  teal:    { bg: "bg-info/10",        text: "text-info",        border: "border-info/20",        badge: "bg-info/15 text-info" },
 };
 
 function AgentChat() {

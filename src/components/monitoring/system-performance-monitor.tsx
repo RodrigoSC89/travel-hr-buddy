@@ -262,12 +262,12 @@ const SystemPerformanceMonitor = () => {
                 <CardContent className="p-6">
                   <div className="flex items-center justify-between mb-4">
                     <div className="flex items-center gap-2">
-                      {metric.name.includes("CPU") && <Cpu className="w-5 h-5 text-blue-600" />}
-                      {metric.name.includes("Memory") && <MemoryStick className="w-5 h-5 text-green-600" />}
-                      {metric.name.includes("Disk") && <HardDrive className="w-5 h-5 text-orange-600" />}
-                      {metric.name.includes("Network") && <Wifi className="w-5 h-5 text-purple-600" />}
-                      {metric.name.includes("Connection") && <Globe className="w-5 h-5 text-cyan-600" />}
-                      {metric.name.includes("Database") && <Database className="w-5 h-5 text-red-600" />}
+                      {metric.name.includes("CPU") && <Cpu className="w-5 h-5 text-primary" />}
+                      {metric.name.includes("Memory") && <MemoryStick className="w-5 h-5 text-success" />}
+                      {metric.name.includes("Disk") && <HardDrive className="w-5 h-5 text-warning" />}
+                      {metric.name.includes("Network") && <Wifi className="w-5 h-5 text-accent" />}
+                      {metric.name.includes("Connection") && <Globe className="w-5 h-5 text-info" />}
+                      {metric.name.includes("Database") && <Database className="w-5 h-5 text-destructive" />}
                       <h3 className="font-semibold text-sm">{metric.name}</h3>
                     </div>
                     <div className="flex items-center gap-1">
@@ -354,7 +354,7 @@ const SystemPerformanceMonitor = () => {
               <CardContent>
                 <div className="space-y-4">
                   <div className="text-center">
-                    <p className="text-4xl font-bold text-green-600">68%</p>
+                    <p className="text-4xl font-bold text-success">68%</p>
                     <p className="text-sm text-muted-foreground">8.2 GB / 12 GB</p>
                   </div>
                   <Progress value={68} className="h-3" />

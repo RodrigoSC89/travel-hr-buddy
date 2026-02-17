@@ -235,10 +235,10 @@ const SmartTooltipSystem: React.FC = () => {
 
   const getAssistantIcon = (type: ContextualAssistant["type"]) => {
     switch (type) {
-    case "tip": return <Lightbulb className="w-5 h-5 text-blue-500" />;
-    case "warning": return <AlertTriangle className="w-5 h-5 text-yellow-500" />;
-    case "success": return <CheckCircle className="w-5 h-5 text-green-500" />;
-    case "info": return <Info className="w-5 h-5 text-blue-500" />;
+    case "tip": return <Lightbulb className="w-5 h-5 text-info" />;
+    case "warning": return <AlertTriangle className="w-5 h-5 text-warning" />;
+    case "success": return <CheckCircle className="w-5 h-5 text-success" />;
+    case "info": return <Info className="w-5 h-5 text-info" />;
     default: return <HelpCircle className="w-5 h-5 text-muted-foreground" />;
     }
   };

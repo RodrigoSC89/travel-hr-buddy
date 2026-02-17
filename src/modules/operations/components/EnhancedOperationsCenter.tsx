@@ -236,9 +236,9 @@ export const EnhancedOperationsCenter: React.FC = () => {
       <div className="grid grid-cols-2 md:grid-cols-4 gap-4">
         {[
           { label: 'Total de Embarcações', value: vessels.length, icon: Ship, color: 'text-primary' },
-          { label: 'Em Navegação', value: vessels.filter(v => v.status === 'underway').length, icon: Navigation, color: 'text-green-500' },
-          { label: 'Em Porto', value: vessels.filter(v => v.status === 'moored' || v.status === 'anchored').length, icon: Anchor, color: 'text-blue-500' },
-          { label: 'Alertas Ativos', value: alerts.filter(a => !a.acknowledged).length, icon: AlertTriangle, color: 'text-red-500' },
+          { label: 'Em Navegação', value: vessels.filter(v => v.status === 'underway').length, icon: Navigation, color: 'text-success' },
+          { label: 'Em Porto', value: vessels.filter(v => v.status === 'moored' || v.status === 'anchored').length, icon: Anchor, color: 'text-info' },
+          { label: 'Alertas Ativos', value: alerts.filter(a => !a.acknowledged).length, icon: AlertTriangle, color: 'text-destructive' },
         ].map((stat, index) => (
           <motion.div
             key={stat.label}
@@ -414,7 +414,7 @@ export const EnhancedOperationsCenter: React.FC = () => {
                       </div>
                       <div className="p-3 rounded-lg bg-muted/30">
                         <div className="flex items-center gap-2 mb-1">
-                          <Waves className="h-4 w-4 text-cyan-500" />
+                          <Waves className="h-4 w-4 text-info" />
                           <span className="text-sm text-muted-foreground">Ondas</span>
                         </div>
                         <p className="text-2xl font-bold">{data.waveHeight} m</p>
