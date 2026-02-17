@@ -38,7 +38,7 @@ import { createPDF } from "@/lib/pdf/lazy-pdf";
 
 const getStatusConfig = (s: string) => {
   const map: Record<string, { label: string; color: string; icon: React.ReactNode }> = {
-    active: { label: "Ativo", color: "bg-green-100 text-green-700 border-green-200", icon: <FileCheck className="h-3 w-3" /> },
+    active: { label: "Ativo", color: "bg-success/10 text-success border-success/30", icon: <FileCheck className="h-3 w-3" /> },
     draft: { label: "Rascunho", color: "bg-muted text-muted-foreground border-border", icon: <Edit className="h-3 w-3" /> },
     archived: { label: "Arquivado", color: "bg-muted text-muted-foreground border-border", icon: <Archive className="h-3 w-3" /> },
     expired: { label: "Expirado", color: "bg-destructive/10 text-destructive border-destructive/30", icon: <FileWarning className="h-3 w-3" /> },
@@ -242,7 +242,7 @@ export const WorldClassDocumentCenter: React.FC = () => {
         <div className="grid grid-cols-2 md:grid-cols-4 gap-3">
           {[
             { label: "Total", value: stats.total, icon: <FileText className="h-4 w-4" />, color: "text-primary" },
-            { label: "Ativos", value: stats.active, icon: <FileCheck className="h-4 w-4" />, color: "text-green-500" },
+            { label: "Ativos", value: stats.active, icon: <FileCheck className="h-4 w-4" />, color: "text-success" },
             { label: "Expirados", value: stats.expired, icon: <FileWarning className="h-4 w-4" />, color: "text-destructive" },
             { label: "Certificados", value: stats.certificates, icon: <Shield className="h-4 w-4" />, color: "text-amber-500" },
           ].map((kpi) => (
@@ -477,7 +477,7 @@ export const WorldClassDocumentCenter: React.FC = () => {
 
             {expiredDocs.length === 0 && expiringDocs.length === 0 && (
               <Card className="p-8 text-center">
-                <CheckCircle2 className="h-12 w-12 text-green-500 mx-auto mb-3" />
+                <CheckCircle2 className="h-12 w-12 text-success mx-auto mb-3" />
                 <h3 className="font-semibold">Tudo em dia!</h3>
                 <p className="text-sm text-muted-foreground">Nenhum documento expirando nos próximos 30 dias</p>
               </Card>

@@ -425,9 +425,9 @@ export const MultimodalAIInspection: React.FC = () => {
                       />
                       <span className={cn(
                         "font-bold",
-                        currentInspection.analysis.overallScore >= 80 && "text-green-500",
-                        currentInspection.analysis.overallScore >= 60 && currentInspection.analysis.overallScore < 80 && "text-yellow-500",
-                        currentInspection.analysis.overallScore < 60 && "text-red-500"
+                        currentInspection.analysis.overallScore >= 80 && "text-success",
+                        currentInspection.analysis.overallScore >= 60 && currentInspection.analysis.overallScore < 80 && "text-warning",
+                        currentInspection.analysis.overallScore < 60 && "text-destructive"
                       )}>
                         {currentInspection.analysis.overallScore}%
                       </span>

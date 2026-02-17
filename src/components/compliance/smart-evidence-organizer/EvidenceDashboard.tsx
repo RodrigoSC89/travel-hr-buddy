@@ -124,9 +124,9 @@ export const EvidenceDashboard = memo(({ pack, elements, items }: Props) => {
     return recs;
   }, [items, elements, pack]);
 
-  const scoreColor = pack.overall_score >= 80 ? "text-green-500" : pack.overall_score >= 50 ? "text-yellow-500" : "text-destructive";
+  const scoreColor = pack.overall_score >= 80 ? "text-success" : pack.overall_score >= 50 ? "text-warning" : "text-destructive";
   const readinessLabel = pack.overall_score >= 90 ? "Pronto" : pack.overall_score >= 70 ? "Quase Pronto" : pack.overall_score >= 50 ? "Em Progresso" : "Atenção Urgente";
-  const readinessColor = pack.overall_score >= 90 ? "bg-green-500" : pack.overall_score >= 70 ? "bg-yellow-500" : pack.overall_score >= 50 ? "bg-orange-500" : "bg-destructive";
+  const readinessColor = pack.overall_score >= 90 ? "bg-success" : pack.overall_score >= 70 ? "bg-warning" : pack.overall_score >= 50 ? "bg-warning" : "bg-destructive";
 
   return (
     <div className="space-y-4">
@@ -146,12 +146,12 @@ export const EvidenceDashboard = memo(({ pack, elements, items }: Props) => {
             <Progress value={pack.overall_score} className="mt-3 h-3 w-48 mx-auto" />
             <div className="grid grid-cols-3 gap-3 mt-4">
               <div className="text-center">
-                <CheckCircle2 className="h-4 w-4 text-green-500 mx-auto" />
+                <CheckCircle2 className="h-4 w-4 text-success mx-auto" />
                 <p className="text-lg font-bold">{pack.matched_items}</p>
                 <p className="text-[10px] text-muted-foreground">Encontradas</p>
               </div>
               <div className="text-center">
-                <AlertTriangle className="h-4 w-4 text-yellow-500 mx-auto" />
+                <AlertTriangle className="h-4 w-4 text-warning mx-auto" />
                 <p className="text-lg font-bold">{pack.partial_items}</p>
                 <p className="text-[10px] text-muted-foreground">Parciais</p>
               </div>
@@ -243,7 +243,7 @@ export const EvidenceDashboard = memo(({ pack, elements, items }: Props) => {
                   <ArrowUpCircle className={cn(
                     "h-4 w-4 shrink-0 mt-0.5",
                     rec.priority === "high" ? "text-destructive" :
-                    rec.priority === "medium" ? "text-yellow-500" : "text-green-500"
+                    rec.priority === "medium" ? "text-warning" : "text-success"
                   )} />
                   <div className="flex-1 min-w-0">
                     <p className="text-sm">{rec.text}</p>
@@ -254,7 +254,7 @@ export const EvidenceDashboard = memo(({ pack, elements, items }: Props) => {
                   <Badge variant="outline" className={cn(
                     "text-[9px] shrink-0",
                     rec.priority === "high" ? "border-destructive/50 text-destructive" :
-                    rec.priority === "medium" ? "border-yellow-500/50 text-yellow-600" : "border-green-500/50 text-green-600"
+                    rec.priority === "medium" ? "border-warning/50 text-warning" : "border-success/50 text-success"
                   )}>
                     {rec.priority === "high" ? "ALTA" : rec.priority === "medium" ? "MÉDIA" : "BAIXA"}
                   </Badge>

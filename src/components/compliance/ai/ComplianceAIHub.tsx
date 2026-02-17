@@ -48,7 +48,7 @@ const AI_TOOLS = [
     name: 'Regulatory Intelligence',
     description: 'Monitora e analisa mudanças regulatórias de IMO, ILO, ANVISA e flag states',
     icon: Globe,
-    color: 'text-blue-500',
+    color: 'text-info',
     prompt: 'Analise as últimas mudanças regulatórias marítimas relevantes: 1) Resoluções IMO recentes (MEPC, MSC), 2) Emendas ILO/MLC, 3) Alterações ANVISA para embarcações, 4) Novas circulares de flag states, 5) Requisitos CII/EEXI para eficiência energética. Para cada mudança, indique impacto operacional, prazo de implementação e ações necessárias.',
   },
   {
@@ -56,7 +56,7 @@ const AI_TOOLS = [
     name: 'Auto-NC Resolver',
     description: 'Resolve NCs automaticamente com análise de causa raiz e planos de ação',
     icon: Wrench,
-    color: 'text-orange-500',
+    color: 'text-warning',
     prompt: 'Para as não-conformidades abertas, gere automaticamente: 1) Análise de causa raiz (5 Whys + Ishikawa), 2) Ações corretivas imediatas, 3) Ações preventivas de longo prazo, 4) Responsáveis sugeridos por departamento, 5) Prazos realistas baseados em complexidade, 6) Evidências necessárias para fechamento. Priorize por severidade e risco de reincidência.',
   },
   {

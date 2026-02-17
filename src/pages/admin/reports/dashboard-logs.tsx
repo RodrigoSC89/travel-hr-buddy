@@ -146,8 +146,8 @@ export default function DashboardLogs() {
 
         <div className="grid grid-cols-1 md:grid-cols-3 gap-4">
           <Card><CardContent className="p-4"><div className="text-sm text-muted-foreground">Total</div><div className="text-2xl font-bold">{logs.length}</div></CardContent></Card>
-          <Card><CardContent className="p-4"><div className="text-sm text-muted-foreground">Sucessos</div><div className="text-2xl font-bold text-green-600">{logs.filter(l => l.status === "success").length}</div></CardContent></Card>
-          <Card><CardContent className="p-4"><div className="text-sm text-muted-foreground">Erros</div><div className="text-2xl font-bold text-red-600">{logs.filter(l => l.status === "error").length}</div></CardContent></Card>
+          <Card><CardContent className="p-4"><div className="text-sm text-muted-foreground">Sucessos</div><div className="text-2xl font-bold text-success">{logs.filter(l => l.status === "success").length}</div></CardContent></Card>
+          <Card><CardContent className="p-4"><div className="text-sm text-muted-foreground">Erros</div><div className="text-2xl font-bold text-destructive">{logs.filter(l => l.status === "error").length}</div></CardContent></Card>
         </div>
 
         <Card>
@@ -176,7 +176,7 @@ export default function DashboardLogs() {
                         <td className="p-3 whitespace-nowrap">{format(new Date(log.executed_at), "dd/MM/yyyy HH:mm")}</td>
                         <td className="p-3">
                           <span className={`inline-flex items-center px-2.5 py-0.5 rounded-full text-xs font-medium ${
-                            log.status === "success" ? "bg-green-100 text-green-800" : "bg-red-100 text-red-800"
+                            log.status === "success" ? "bg-success/10 text-success" : "bg-destructive/10 text-destructive"
                           }`}>{log.status}</span>
                         </td>
                         <td className="p-3">{log.email}</td>

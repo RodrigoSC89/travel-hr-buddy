@@ -78,23 +78,23 @@ function mapSGSOToIncident(sgso: SGSOIncident): Incident {
 
 const getSeverityColor = (severity: string) => {
   const colors = {
-    critical: "bg-red-600 text-white border-red-700",
-    high: "bg-orange-600 text-white border-orange-700",
-    medium: "bg-yellow-600 text-white border-yellow-700",
-    low: "bg-blue-600 text-white border-blue-700",
-    negligible: "bg-gray-600 text-white border-gray-700"
+    critical: "bg-destructive text-destructive-foreground border-destructive",
+    high: "bg-warning text-warning-foreground border-warning",
+    medium: "bg-warning/80 text-warning-foreground border-warning/80",
+    low: "bg-info text-info-foreground border-info",
+    negligible: "bg-muted text-muted-foreground border-border"
   };
-  return colors[severity as keyof typeof colors] || "bg-gray-600";
+  return colors[severity as keyof typeof colors] || "bg-muted";
 };
 
 const getStatusColor = (status: string) => {
   const colors = {
-    reported: "bg-yellow-100 text-yellow-800 border-yellow-300",
-    investigating: "bg-blue-100 text-blue-800 border-blue-300",
-    resolved: "bg-green-100 text-green-800 border-green-300",
+    reported: "bg-warning/10 text-warning border-warning/30",
+    investigating: "bg-info/10 text-info border-info/30",
+    resolved: "bg-success/10 text-success border-success/30",
     closed: "bg-secondary text-secondary-foreground border-border"
   };
-  return colors[status as keyof typeof colors] || "bg-gray-100";
+  return colors[status as keyof typeof colors] || "bg-muted";
 };
 
 const getTypeLabel = (type: string) => {
@@ -225,38 +225,38 @@ export const IncidentReporting: React.FC = () => {
     <div className="space-y-6">
       {/* Summary Cards */}
       <div className="grid grid-cols-1 md:grid-cols-4 gap-4">
-        <Card className="bg-gradient-to-br from-red-50 to-red-100 border-red-200">
+        <Card className="bg-gradient-to-br from-destructive/5 to-destructive/10 border-destructive/30">
           <CardContent className="p-6">
             <div className="flex items-center justify-between">
               <div>
-                <p className="text-sm font-medium text-red-700">Críticos</p>
-                <p className="text-3xl font-bold text-red-900">{criticalCount}</p>
+                <p className="text-sm font-medium text-destructive">Críticos</p>
+                <p className="text-3xl font-bold text-destructive">{criticalCount}</p>
               </div>
-              <AlertTriangle className="h-12 w-12 text-red-600 opacity-70" />
+              <AlertTriangle className="h-12 w-12 text-destructive opacity-70" />
             </div>
           </CardContent>
         </Card>
 
-        <Card className="bg-gradient-to-br from-orange-50 to-orange-100 border-orange-200">
+        <Card className="bg-gradient-to-br from-warning/5 to-warning/10 border-warning/30">
           <CardContent className="p-6">
             <div className="flex items-center justify-between">
               <div>
-                <p className="text-sm font-medium text-orange-700">Altos</p>
-                <p className="text-3xl font-bold text-orange-900">{highCount}</p>
+                <p className="text-sm font-medium text-warning">Altos</p>
+                <p className="text-3xl font-bold text-warning">{highCount}</p>
               </div>
-              <Bell className="h-12 w-12 text-orange-600 opacity-70" />
+              <Bell className="h-12 w-12 text-warning opacity-70" />
             </div>
           </CardContent>
         </Card>
 
-        <Card className="bg-gradient-to-br from-blue-50 to-blue-100 border-blue-200">
+        <Card className="bg-gradient-to-br from-info/5 to-info/10 border-info/30">
           <CardContent className="p-6">
             <div className="flex items-center justify-between">
               <div>
-                <p className="text-sm font-medium text-blue-700">Abertos</p>
-                <p className="text-3xl font-bold text-blue-900">{openCount}</p>
+                <p className="text-sm font-medium text-info">Abertos</p>
+                <p className="text-3xl font-bold text-info">{openCount}</p>
               </div>
-              <Clock className="h-12 w-12 text-blue-600 opacity-70" />
+              <Clock className="h-12 w-12 text-info opacity-70" />
             </div>
           </CardContent>
         </Card>
@@ -280,7 +280,7 @@ export const IncidentReporting: React.FC = () => {
           <div className="flex items-center justify-between">
             <div>
               <CardTitle className="flex items-center gap-2 text-2xl">
-                <Bell className="h-6 w-6 text-red-600" />
+                <Bell className="h-6 w-6 text-destructive" />
                 Gestão de Incidentes de Segurança
               </CardTitle>
               <CardDescription className="mt-2">
@@ -297,7 +297,7 @@ export const IncidentReporting: React.FC = () => {
               </Button>
               <Dialog open={newIncidentDialogOpen} onOpenChange={setNewIncidentDialogOpen}>
                 <DialogTrigger asChild>
-                  <Button className="bg-red-600 hover:bg-red-700 text-white font-semibold">
+                  <Button className="bg-destructive hover:bg-destructive/90 text-destructive-foreground font-semibold">
                     <Plus className="h-4 w-4 mr-2" />
                     Novo Incidente
                   </Button>
@@ -305,7 +305,7 @@ export const IncidentReporting: React.FC = () => {
                 <DialogContent className="max-w-lg">
                   <DialogHeader>
                     <DialogTitle className="flex items-center gap-2">
-                      <Bell className="h-5 w-5 text-red-600" />
+                      <Bell className="h-5 w-5 text-destructive" />
                       Registrar Novo Incidente
                     </DialogTitle>
                     <DialogDescription>
@@ -374,7 +374,7 @@ export const IncidentReporting: React.FC = () => {
                         onChange={(e) => setIncidentForm(prev => ({ ...prev, description: e.target.value }))}
                       />
                     </div>
-                    <Button className="w-full bg-red-600 hover:bg-red-700" onClick={handleSubmitIncident}>
+                    <Button className="w-full bg-destructive hover:bg-destructive/90" onClick={handleSubmitIncident}>
                       <Save className="h-4 w-4 mr-2" />
                       Registrar Incidente
                     </Button>
@@ -546,19 +546,19 @@ export const IncidentReporting: React.FC = () => {
                       
                       <div className="flex flex-col items-end gap-2">
                         {incident.status === "reported" && (
-                          <Badge className="bg-yellow-600 text-white">
+                          <Badge className="bg-warning text-warning-foreground">
                             <Clock className="h-3 w-3 mr-1" />
                             Aguardando
                           </Badge>
                         )}
                         {incident.status === "investigating" && (
-                          <Badge className="bg-blue-600 text-white">
+                          <Badge className="bg-info text-info-foreground">
                             <Search className="h-3 w-3 mr-1" />
                             Em Análise
                           </Badge>
                         )}
                         {incident.status === "resolved" && (
-                          <Badge className="bg-green-600 text-white">
+                          <Badge className="bg-success text-success-foreground">
                             <CheckCircle className="h-3 w-3 mr-1" />
                             Resolvido
                           </Badge>

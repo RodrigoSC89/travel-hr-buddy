@@ -171,7 +171,7 @@ export function AILabPlayground() {
               {result ? (
                 <div className="space-y-4">
                   <div className="flex items-center justify-between">
-                    <div className="flex items-center gap-2"><CheckCircle2 className="h-4 w-4 text-green-500" /><span className="text-sm text-muted-foreground">Análise concluída</span></div>
+                    <div className="flex items-center gap-2"><CheckCircle2 className="h-4 w-4 text-success" /><span className="text-sm text-muted-foreground">Análise concluída</span></div>
                     <div className="flex items-center gap-2">
                       <Button variant="outline" size="sm" onClick={copyResult}><Copy className="h-4 w-4 mr-1" />Copiar</Button>
                       <Button variant="outline" size="sm" onClick={downloadResult}><Download className="h-4 w-4 mr-1" />Download</Button>

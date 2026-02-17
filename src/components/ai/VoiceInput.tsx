@@ -175,7 +175,7 @@ export function VoiceInput({
           </>
         )}
         {isListening && (
-          <span className="absolute -top-1 -right-1 h-3 w-3 rounded-full bg-red-500 animate-ping" />
+          <span className="absolute -top-1 -right-1 h-3 w-3 rounded-full bg-destructive animate-ping" />
         )}
       </Button>
       {transcript && isListening && (
