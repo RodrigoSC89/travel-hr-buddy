@@ -30,24 +30,24 @@ export function SystemStatus({ health }: SystemStatusProps) {
     switch (health) {
     case "healthy":
       return {
-        icon: <CheckCircle2 className="h-5 w-5 text-green-500" />,
+        icon: <CheckCircle2 className="h-5 w-5 text-success" />,
         text: "Sistema Operacional",
-        bgColor: "bg-green-50",
-        borderColor: "border-green-200",
+        bgColor: "bg-success/10",
+        borderColor: "border-success/30",
       };
     case "degraded":
       return {
-        icon: <AlertTriangle className="h-5 w-5 text-yellow-500" />,
+        icon: <AlertTriangle className="h-5 w-5 text-warning" />,
         text: "Sistema com Degradação",
-        bgColor: "bg-yellow-50",
-        borderColor: "border-yellow-200",
+        bgColor: "bg-warning/10",
+        borderColor: "border-warning/30",
       };
     case "critical":
       return {
-        icon: <XCircle className="h-5 w-5 text-red-500" />,
+        icon: <XCircle className="h-5 w-5 text-destructive" />,
         text: "Sistema Crítico",
-        bgColor: "bg-red-50",
-        borderColor: "border-red-200",
+        bgColor: "bg-destructive/10",
+        borderColor: "border-destructive/30",
       };
     }
   };

@@ -566,7 +566,7 @@ export function MaintenanceCommandCenter() {
           <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-4">
             {EQUIPMENT.map((equip) => (
               <Card key={equip.id} className={`hover:border-primary/50 transition-colors ${
-                equip.status === "critical" ? "border-red-500/50" : ""
+                equip.status === "critical" ? "border-destructive/50" : ""
               }`}>
                 <CardContent className="p-4">
                   <div className="flex items-start justify-between mb-4">
@@ -620,10 +620,10 @@ export function MaintenanceCommandCenter() {
 
         {/* Tab: Manutenção Preditiva */}
         <TabsContent value="predictive" className="space-y-4">
-          <Card className="bg-gradient-to-r from-violet-500/5 to-purple-500/5 border-violet-500/30">
+          <Card className="bg-gradient-to-r from-accent/5 to-accent/10 border-accent/30">
             <CardHeader>
               <CardTitle className="flex items-center gap-2">
-                <Bot className="h-5 w-5 text-violet-500" />
+                <Bot className="h-5 w-5 text-accent-foreground" />
                 Motor de Manutenção Preditiva
               </CardTitle>
               <CardDescription>
@@ -696,8 +696,8 @@ export function MaintenanceCommandCenter() {
                 <div className="space-y-3">
                   {SPARE_PARTS.map((part) => (
                     <div key={part.id} className={`p-4 rounded-lg border ${
-                      part.status === "critical" ? "border-red-500/50 bg-red-500/5" :
-                      part.status === "low" ? "border-amber-500/50 bg-amber-500/5" :
+                      part.status === "critical" ? "border-destructive/50 bg-destructive/5" :
+                      part.status === "low" ? "border-warning/50 bg-warning/5" :
                       "bg-card"
                     }`}>
                       <div className="flex items-center justify-between">

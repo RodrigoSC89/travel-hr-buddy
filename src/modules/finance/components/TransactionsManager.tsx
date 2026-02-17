@@ -240,7 +240,7 @@ export default function TransactionsManager() {
       case "completed":
         return <Badge className="bg-success/20 text-success"><CheckCircle2 className="h-3 w-3 mr-1" />Concluída</Badge>;
       case "pending":
-        return <Badge className="bg-amber-500/20 text-amber-500"><Clock className="h-3 w-3 mr-1" />Pendente</Badge>;
+        return <Badge className="bg-warning/20 text-warning"><Clock className="h-3 w-3 mr-1" />Pendente</Badge>;
       case "overdue":
         return <Badge className="bg-destructive/20 text-destructive"><AlertTriangle className="h-3 w-3 mr-1" />Vencida</Badge>;
       case "cancelled":

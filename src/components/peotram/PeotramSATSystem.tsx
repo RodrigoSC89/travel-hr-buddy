@@ -141,7 +141,7 @@ export function PeotramSATSystem() {
                         <p className="text-xs text-muted-foreground flex items-center justify-center gap-1"><Wind className="h-3 w-3" /> O₂</p>
                         <p className="font-mono font-bold">{specs.o2_percent}%</p>
                       </div>
-                      <div className="p-2 rounded text-center bg-green-500/10">
+                      <div className="p-2 rounded text-center bg-success/10">
                         <p className="text-xs text-muted-foreground">CO₂</p>
                         <p className="font-mono font-bold">{specs.co2_ppm} ppm</p>
                       </div>

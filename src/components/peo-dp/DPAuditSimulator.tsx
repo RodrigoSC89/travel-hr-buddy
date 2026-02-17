@@ -190,7 +190,7 @@ export function DPAuditSimulator() {
       {AUDIT_QUESTIONS.map((q, idx) => {
         const state = states[q.id];
         return (
-          <Card key={q.id} className={state.answer === "no" ? "border-destructive/30" : state.answer === "partial" ? "border-warning/30" : state.answer === "yes" ? "border-green-500/30" : ""}>
+          <Card key={q.id} className={state.answer === "no" ? "border-destructive/30" : state.answer === "partial" ? "border-warning/30" : state.answer === "yes" ? "border-success/30" : ""}>
             <CardHeader className="pb-2">
               <div className="flex items-start justify-between">
                 <div>

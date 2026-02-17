@@ -88,20 +88,20 @@ export const AIAnalysisComponent: React.FC<AIAnalysisProps> = ({
 
   const getSeverityColor = (severity: string) => {
     switch (severity) {
-    case "critical": return "text-red-600 bg-red-50 border-red-200";
-    case "high": return "text-orange-600 bg-orange-50 border-orange-200";
-    case "medium": return "text-yellow-600 bg-yellow-50 border-yellow-200";
-    case "low": return "text-blue-600 bg-blue-50 border-blue-200";
+    case "critical": return "text-destructive bg-destructive/10 border-destructive/30";
+    case "high": return "text-warning bg-warning/10 border-warning/30";
+    case "medium": return "text-warning bg-warning/10 border-warning/30";
+    case "low": return "text-info bg-info/10 border-info/30";
     default: return "text-muted-foreground bg-muted border-border";
     }
   };
 
   const getRiskLevelColor = (risk: string) => {
     switch (risk) {
-    case "critical": return "text-red-600";
-    case "high": return "text-orange-600";
-    case "medium": return "text-yellow-600";
-    case "low": return "text-green-600";
+    case "critical": return "text-destructive";
+    case "high": return "text-warning";
+    case "medium": return "text-warning";
+    case "low": return "text-success";
     default: return "text-muted-foreground";
     }
   };
@@ -112,7 +112,7 @@ export const AIAnalysisComponent: React.FC<AIAnalysisProps> = ({
       <Card>
         <CardHeader>
           <CardTitle className="flex items-center gap-2">
-            <Brain className="w-5 h-5 text-purple-600" />
+            <Brain className="w-5 h-5 text-accent-foreground" />
             Análise AI do Checklist
           </CardTitle>
           <CardDescription>

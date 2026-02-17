@@ -21,19 +21,19 @@ interface TrustScoreDisplayProps {
 }
 
 const levelColors = {
-  excellent: "bg-green-500",
-  high: "bg-blue-500",
-  medium: "bg-yellow-500",
-  low: "bg-orange-500",
-  very_low: "bg-red-500",
+  excellent: "bg-success",
+  high: "bg-primary",
+  medium: "bg-warning",
+  low: "bg-warning",
+  very_low: "bg-destructive",
 };
 
 const levelTextColors = {
-  excellent: "text-green-700",
-  high: "text-blue-700",
-  medium: "text-yellow-700",
-  low: "text-orange-700",
-  very_low: "text-red-700",
+  excellent: "text-success",
+  high: "text-primary",
+  medium: "text-warning",
+  low: "text-warning",
+  very_low: "text-destructive",
 };
 
 export const TrustScoreDisplay: React.FC<TrustScoreDisplayProps> = ({

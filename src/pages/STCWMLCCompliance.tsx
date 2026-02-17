@@ -85,11 +85,11 @@ Competências STCW cadastradas: ${stats.competencyCount}
               <Loader2 className="h-4 w-4 animate-spin" />
             ) : (
               <>
-                <Badge variant="outline" className="bg-emerald-500/10 text-emerald-600 border-emerald-500/30">
+                <Badge variant="outline" className="bg-success/10 text-success border-success/30">
                   <CheckCircle2 className="h-3 w-3 mr-1" />
                   {stats.stcwCompliance}% STCW
                 </Badge>
-                <Badge variant="outline" className="bg-blue-500/10 text-blue-600 border-blue-500/30">
+                <Badge variant="outline" className="bg-info/10 text-info border-info/30">
                   <Shield className="h-3 w-3 mr-1" />
                   {stats.mlcCompliance}% MLC
                 </Badge>

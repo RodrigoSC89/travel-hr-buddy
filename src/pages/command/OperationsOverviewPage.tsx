@@ -31,7 +31,7 @@ export default function OperationsOverviewPage() {
       case 'Navigating': return 'bg-success/10 text-success border-success/20';
       case 'Port': return 'bg-primary/10 text-primary border-primary/20';
       case 'Anchored': return 'bg-warning/10 text-warning border-warning/20';
-      case 'Drydock': return 'bg-orange-500/10 text-orange-500 border-orange-500/20';
+      case 'Drydock': return 'bg-warning/10 text-warning border-warning/20';
       case 'Emergency': return 'bg-destructive/10 text-destructive border-destructive/20';
       default: return 'bg-muted';
     }
@@ -338,8 +338,8 @@ export default function OperationsOverviewPage() {
                 <p className="text-3xl font-bold text-warning">{kpis?.anchored || 0}</p>
                 <p className="text-sm text-muted-foreground">Fundeados</p>
               </div>
-              <div className="text-center p-4 bg-orange-500/10 rounded-lg">
-                <p className="text-3xl font-bold text-orange-500">{kpis?.maintenance || 0}</p>
+              <div className="text-center p-4 bg-warning/10 rounded-lg">
+                <p className="text-3xl font-bold text-warning">{kpis?.maintenance || 0}</p>
                 <p className="text-sm text-muted-foreground">Manutenção</p>
               </div>
             </div>

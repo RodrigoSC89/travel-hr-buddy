@@ -23,9 +23,9 @@ interface CIIData {
 
 const RATING_COLORS: Record<string, string> = {
   A: "text-success bg-success/10 border-success/30",
-  B: "text-lime-600 bg-lime-500/10 border-lime-500/30",
+  B: "text-success bg-success/10 border-success/30",
   C: "text-warning bg-warning/10 border-warning/30",
-  D: "text-orange-600 bg-orange-500/10 border-orange-500/30",
+  D: "text-warning bg-warning/10 border-warning/30",
   E: "text-destructive bg-destructive/10 border-destructive/30",
 };
 

@@ -380,11 +380,11 @@ const CONTRACT_TYPES = [
                   <div className="space-y-2 mb-3">
                     <div className="flex items-center justify-between text-xs">
                       <span className="text-muted-foreground">Progresso</span>
-                      <span className={daysRemaining <= 30 ? "text-amber-500 font-medium" : ""}>
+                      <span className={daysRemaining <= 30 ? "text-warning font-medium" : ""}>
                         {daysRemaining > 0 ? `${daysRemaining} dias restantes` : "Expirado"}
                       </span>
                     </div>
-                    <Progress value={progress} className={daysRemaining <= 30 ? "[&>div]:bg-amber-500" : ""} />
+                    <Progress value={progress} className={daysRemaining <= 30 ? "[&>div]:bg-warning" : ""} />
                   </div>
 
                   {contract.risk_score !== undefined && (

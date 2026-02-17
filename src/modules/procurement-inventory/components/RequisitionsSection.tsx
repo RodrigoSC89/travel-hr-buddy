@@ -660,8 +660,8 @@ export default function RequisitionsSection({ searchQuery }: RequisitionsSection
               </div>
 
               {selectedRequisition.approvedBy && (
-                <div className="p-3 rounded-lg bg-green-500/10 border border-green-500/20">
-                  <p className="text-sm text-green-600">
+                <div className="p-3 rounded-lg bg-success/10 border border-success/20">
+                  <p className="text-sm text-success">
                     ✓ Aprovada por {selectedRequisition.approvedBy} em {selectedRequisition.approvedAt}
                   </p>
                 </div>
