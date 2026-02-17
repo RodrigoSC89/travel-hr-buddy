@@ -190,14 +190,14 @@ const ComplianceHubEnhanced: React.FC = () => {
       {/* Header - NO motion to prevent flickering */}
       <div className="flex flex-col md:flex-row md:items-center justify-between gap-4">
         <div className="flex items-center gap-4">
-          <div className="p-3 rounded-2xl bg-gradient-to-br from-blue-500/20 to-indigo-500/10 border border-blue-500/20">
-            <Shield className="h-8 w-8 text-blue-500" />
+          <div className="p-3 rounded-2xl bg-gradient-to-br from-primary/20 to-primary/10 border border-primary/20">
+            <Shield className="h-8 w-8 text-primary" />
           </div>
           <div>
             <h1 className="text-3xl font-bold">Centro de Compliance</h1>
             <p className="text-muted-foreground">Gestão de conformidade regulatória marítima</p>
           </div>
-          <Badge className="bg-blue-500/20 text-blue-400 border-blue-500/30">
+          <Badge className="bg-primary/20 text-primary border-primary/30">
             <Sparkles className="h-3 w-3 mr-1" />
             Score: {getOverallScore()}%
           </Badge>
@@ -234,7 +234,7 @@ const ComplianceHubEnhanced: React.FC = () => {
                 <h2 className="text-lg font-medium text-muted-foreground">Score Geral de Compliance</h2>
                 <div className="flex items-baseline gap-2 mt-2">
                   <span className="text-5xl font-bold text-primary">{getOverallScore()}%</span>
-                  <Badge className="bg-green-500">
+                  <Badge className="bg-success text-success-foreground">
                     <TrendingUp className="h-3 w-3 mr-1" />
                     +3% vs mês anterior
                   </Badge>
@@ -242,19 +242,19 @@ const ComplianceHubEnhanced: React.FC = () => {
               </div>
               <div className="grid grid-cols-4 gap-6">
                 <div className="text-center">
-                  <p className="text-3xl font-bold text-green-500">{complianceScores.filter(c => c.status === 'compliant').length}</p>
+                  <p className="text-3xl font-bold text-success">{complianceScores.filter(c => c.status === 'compliant').length}</p>
                   <p className="text-sm text-muted-foreground">Conformes</p>
                 </div>
                 <div className="text-center">
-                  <p className="text-3xl font-bold text-yellow-500">{complianceScores.filter(c => c.status === 'attention').length}</p>
+                  <p className="text-3xl font-bold text-warning">{complianceScores.filter(c => c.status === 'attention').length}</p>
                   <p className="text-sm text-muted-foreground">Atenção</p>
                 </div>
                 <div className="text-center">
-                  <p className="text-3xl font-bold text-red-500">4</p>
+                  <p className="text-3xl font-bold text-destructive">4</p>
                   <p className="text-sm text-muted-foreground">NCs Abertas</p>
                 </div>
                 <div className="text-center">
-                  <p className="text-3xl font-bold text-blue-500">3</p>
+                  <p className="text-3xl font-bold text-info">3</p>
                   <p className="text-sm text-muted-foreground">Auditorias</p>
                 </div>
               </div>
@@ -281,14 +281,14 @@ const ComplianceHubEnhanced: React.FC = () => {
                     <circle
                       cx="32" cy="32" r="28" fill="none" stroke="currentColor" strokeWidth="4"
                       strokeDasharray={`${(cat.score / 100) * 176} 176`}
-                      className={cat.status === 'compliant' ? 'text-green-500' : cat.status === 'attention' ? 'text-yellow-500' : 'text-red-500'}
+                      className={cat.status === 'compliant' ? 'text-success' : cat.status === 'attention' ? 'text-warning' : 'text-destructive'}
                     />
                   </svg>
                   <span className="absolute inset-0 flex items-center justify-center text-lg font-bold">
                     {cat.score}%
                   </span>
                 </div>
-                <Badge variant="outline" className={cat.status === 'compliant' ? 'bg-green-500/10 text-green-500' : 'bg-yellow-500/10 text-yellow-500'}>
+                <Badge variant="outline" className={cat.status === 'compliant' ? 'bg-success/10 text-success' : 'bg-warning/10 text-warning'}>
                   {cat.issues} pendências
                 </Badge>
               </CardContent>
@@ -351,7 +351,7 @@ const ComplianceHubEnhanced: React.FC = () => {
                         className="flex items-center justify-between p-3 rounded-lg bg-muted/30 hover:bg-muted/50"
                       >
                         <div className="flex items-center gap-3">
-                          {item.type === 'audit' ? <ClipboardCheck className="h-4 w-4 text-blue-500" /> : <Award className="h-4 w-4 text-yellow-500" />}
+                          {item.type === 'audit' ? <ClipboardCheck className="h-4 w-4 text-info" /> : <Award className="h-4 w-4 text-warning" />}
                           <div>
                             <p className="font-medium text-sm">{item.title}</p>
                             <p className="text-xs text-muted-foreground">
@@ -397,12 +397,12 @@ const ComplianceHubEnhanced: React.FC = () => {
                         className="flex items-center gap-3 p-3 rounded-lg bg-muted/30"
                       >
                         <div className={`p-2 rounded-lg ${
-                          item.status === 'success' ? 'bg-green-500/10' :
-                          item.status === 'warning' ? 'bg-yellow-500/10' : 'bg-blue-500/10'
+                          item.status === 'success' ? 'bg-success/10' :
+                          item.status === 'warning' ? 'bg-warning/10' : 'bg-info/10'
                         }`}>
-                          {item.status === 'success' ? <CheckCircle className="h-4 w-4 text-green-500" /> :
-                           item.status === 'warning' ? <AlertTriangle className="h-4 w-4 text-yellow-500" /> :
-                           <Clock className="h-4 w-4 text-blue-500" />}
+                          {item.status === 'success' ? <CheckCircle className="h-4 w-4 text-success" /> :
+                           item.status === 'warning' ? <AlertTriangle className="h-4 w-4 text-warning" /> :
+                           <Clock className="h-4 w-4 text-info" />}
                         </div>
                         <div className="flex-1">
                           <p className="font-medium text-sm">{item.action}</p>

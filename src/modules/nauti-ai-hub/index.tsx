@@ -473,7 +473,7 @@ const NautilusAIHub: React.FC = () => {
                           <Button size="sm">Aceitar</Button>
                         </>
                       ) : (
-                        <Badge className={suggestion.status === "accepted" ? "bg-green-500/20 text-green-400" : "bg-red-500/20 text-red-400"}>
+                        <Badge className={suggestion.status === "accepted" ? "bg-success/20 text-success" : "bg-destructive/20 text-destructive"}>
                           {suggestion.status === "accepted" ? (
                             <><CheckCircle className="h-3 w-3 mr-1" />Aceito</>
                           ) : (

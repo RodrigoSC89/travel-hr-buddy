@@ -313,15 +313,15 @@ const OnboardingFlow: React.FC = () => {
                         animate={{ opacity: 1, y: 0 }}
                         transition={{ delay: stepIndex * 0.1 }}
                         className={`p-4 rounded-lg border ${
-                          isCompleted ? 'bg-green-500/5 border-green-500/30' :
-                          isCurrent ? 'bg-blue-500/5 border-blue-500/30' :
+                          isCompleted ? 'bg-success/5 border-success/30' :
+                          isCurrent ? 'bg-primary/5 border-primary/30' :
                           'bg-muted/30'
                         }`}
                       >
                         <div className="flex items-center gap-3 mb-3">
                           <div className={`w-10 h-10 rounded-full flex items-center justify-center ${
-                            isCompleted ? 'bg-green-500 text-white' :
-                            isCurrent ? 'bg-blue-500 text-white' :
+                            isCompleted ? 'bg-success text-success-foreground' :
+                            isCurrent ? 'bg-primary text-primary-foreground' :
                             'bg-muted'
                           }`}>
                             {isCompleted ? (

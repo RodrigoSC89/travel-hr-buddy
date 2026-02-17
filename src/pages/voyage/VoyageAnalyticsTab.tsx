@@ -35,14 +35,14 @@ export function VoyageAnalyticsTab({ voyages, totalFuel }: Props) {
           </div>
           <div className="flex justify-between items-center">
             <span className="text-muted-foreground">Economia IA (12%)</span>
-            <span className="font-bold text-green-500">
+            <span className="font-bold text-success">
               {Math.round(totalFuel * 0.12).toLocaleString()} ton
             </span>
           </div>
           <Separator />
           <div className="flex justify-between items-center">
             <span className="text-muted-foreground">Valor Economizado</span>
-            <span className="font-bold text-green-500">
+            <span className="font-bold text-success">
               R$ {(Math.round(totalFuel * 0.12) * 2800).toLocaleString()}
             </span>
           </div>
@@ -59,15 +59,15 @@ export function VoyageAnalyticsTab({ voyages, totalFuel }: Props) {
         <CardContent className="space-y-4">
           <div className="flex justify-between items-center">
             <span className="text-muted-foreground">Taxa de Pontualidade</span>
-            <Badge className="bg-green-500/10 text-green-500">94%</Badge>
+            <Badge className="bg-success/10 text-success">94%</Badge>
           </div>
           <div className="flex justify-between items-center">
             <span className="text-muted-foreground">Viagens Sem Incidentes</span>
-            <Badge className="bg-green-500/10 text-green-500">98%</Badge>
+            <Badge className="bg-success/10 text-success">98%</Badge>
           </div>
           <div className="flex justify-between items-center">
             <span className="text-muted-foreground">Desvios por Clima</span>
-            <Badge className="bg-amber-500/10 text-amber-500">3 este mês</Badge>
+            <Badge className="bg-warning/10 text-warning">3 este mês</Badge>
           </div>
           <div className="flex justify-between items-center">
             <span className="text-muted-foreground">Otimizações IA Aplicadas</span>
@@ -83,10 +83,10 @@ export function VoyageAnalyticsTab({ voyages, totalFuel }: Props) {
         <CardContent>
           <div className="grid grid-cols-4 gap-4">
             {[
-              { label: "Ativas", status: "active", bg: "bg-green-500/10", color: "text-green-500" },
-              { label: "Planejadas", status: "planned", bg: "bg-blue-500/10", color: "text-blue-500" },
+              { label: "Ativas", status: "active", bg: "bg-success/10", color: "text-success" },
+              { label: "Planejadas", status: "planned", bg: "bg-info/10", color: "text-info" },
               { label: "Concluídas", status: "completed", bg: "bg-muted", color: "text-muted-foreground" },
-              { label: "Canceladas", status: "cancelled", bg: "bg-red-500/10", color: "text-red-500" },
+              { label: "Canceladas", status: "cancelled", bg: "bg-destructive/10", color: "text-destructive" },
             ].map(item => (
               <div key={item.status} className={`text-center p-4 rounded-lg ${item.bg}`}>
                 <div className={`text-3xl font-bold ${item.color}`}>
