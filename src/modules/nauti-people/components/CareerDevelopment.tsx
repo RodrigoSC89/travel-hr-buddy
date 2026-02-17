@@ -347,7 +347,7 @@ const CareerDevelopment: React.FC = () => {
                       </p>
                     </div>
                     <div className="text-right">
-                      <span className="text-orange-500 font-bold">{skill.nivel}%</span>
+                      <span className="text-warning font-bold">{skill.nivel}%</span>
                       <p className="text-xs text-muted-foreground">-{80 - skill.nivel}% gap</p>
                     </div>
                   </div>
@@ -381,9 +381,9 @@ const CareerDevelopment: React.FC = () => {
                   >
                     <div className="flex items-center gap-4">
                       <div className={`w-12 h-12 rounded-full flex items-center justify-center ${
-                        training.match >= 90 ? 'bg-green-500/20 text-green-500' :
-                        training.match >= 80 ? 'bg-blue-500/20 text-blue-500' :
-                        'bg-yellow-500/20 text-yellow-500'
+                        training.match >= 90 ? 'bg-success/20 text-success' :
+                        training.match >= 80 ? 'bg-primary/20 text-primary' :
+                        'bg-warning/20 text-warning'
                       }`}>
                         <Zap className="w-6 h-6" />
                       </div>
@@ -399,9 +399,9 @@ const CareerDevelopment: React.FC = () => {
                     </div>
                     <div className="text-right">
                       <Badge className={
-                        training.match >= 90 ? 'bg-green-500' :
-                        training.match >= 80 ? 'bg-blue-500' :
-                        'bg-yellow-500'
+                        training.match >= 90 ? 'bg-success' :
+                        training.match >= 80 ? 'bg-primary' :
+                        'bg-warning'
                       }>
                         {training.match}% match
                       </Badge>
@@ -506,9 +506,9 @@ const CareerDevelopment: React.FC = () => {
                       <div className="flex items-center gap-2 mb-1">
                         <span className="text-sm text-muted-foreground">Readiness</span>
                         <Badge className={
-                          candidate.readiness >= 80 ? 'bg-green-500' :
-                          candidate.readiness >= 60 ? 'bg-blue-500' :
-                          'bg-yellow-500'
+                          candidate.readiness >= 80 ? 'bg-success' :
+                          candidate.readiness >= 60 ? 'bg-primary' :
+                          'bg-warning'
                         }>
                           {candidate.readiness}%
                         </Badge>

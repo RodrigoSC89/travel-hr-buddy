@@ -165,7 +165,7 @@ export default function EmployeePortalPage() {
                 <>
                   <div className="flex justify-between items-center">
                     <div>
-                      <p className="text-2xl font-bold text-green-500">
+                      <p className="text-2xl font-bold text-success">
                         {formatCurrency(latestPayslip.net_salary)}
                       </p>
                       <p className="text-sm text-muted-foreground">
@@ -201,7 +201,7 @@ export default function EmployeePortalPage() {
                     {latestPayslip.overtime_amount > 0 && (
                       <div>
                         <span>H.E.:</span>
-                        <span className="ml-1 font-medium text-green-600">+{formatCurrency(latestPayslip.overtime_amount)}</span>
+                        <span className="ml-1 font-medium text-success">+{formatCurrency(latestPayslip.overtime_amount)}</span>
                       </div>
                     )}
                   </div>
@@ -218,7 +218,7 @@ export default function EmployeePortalPage() {
           <Card>
             <CardHeader className="pb-2">
               <CardTitle className="text-lg flex items-center gap-2">
-                <Gift className="h-5 w-5 text-amber-500" />
+                <Gift className="h-5 w-5 text-warning" />
                 Meus Benefícios
               </CardTitle>
             </CardHeader>
@@ -365,7 +365,7 @@ export default function EmployeePortalPage() {
           <Card>
             <CardHeader className="pb-2">
               <CardTitle className="text-lg flex items-center gap-2">
-                <TrendingUp className="h-5 w-5 text-green-500" />
+                <TrendingUp className="h-5 w-5 text-success" />
                 Meus OKRs - Q1 2026
               </CardTitle>
             </CardHeader>
@@ -398,7 +398,7 @@ export default function EmployeePortalPage() {
           <Card>
             <CardHeader className="pb-2">
               <CardTitle className="text-lg flex items-center gap-2">
-                <GraduationCap className="h-5 w-5 text-purple-500" />
+                <GraduationCap className="h-5 w-5 text-accent" />
                 Treinamentos Recomendados
               </CardTitle>
             </CardHeader>

@@ -70,9 +70,9 @@ const CrewWellnessAIPage = () => {
   };
 
   const getMoodColor = (score: number) => {
-    if (score >= 80) return "text-green-500";
-    if (score >= 60) return "text-yellow-500";
-    return "text-red-500";
+    if (score >= 80) return "text-success";
+    if (score >= 60) return "text-warning";
+    return "text-destructive";
   };
 
   return (
@@ -81,7 +81,7 @@ const CrewWellnessAIPage = () => {
       <div className="flex items-center justify-between">
         <div>
           <h1 className="text-3xl font-bold flex items-center gap-3">
-            <Heart className="h-8 w-8 text-red-500" />
+            <Heart className="h-8 w-8 text-destructive" />
             Crew Wellness AI
           </h1>
           <p className="text-muted-foreground mt-1">
@@ -90,7 +90,7 @@ const CrewWellnessAIPage = () => {
         </div>
         <div className="flex items-center gap-3">
           <Badge variant="outline" className="gap-2 py-1.5">
-            <Brain className="h-4 w-4 text-green-500" />
+            <Brain className="h-4 w-4 text-success" />
             IA Preditiva Ativa
           </Badge>
           <Button>
@@ -158,9 +158,9 @@ const CrewWellnessAIPage = () => {
                 <p className={`text-xl font-bold ${getMoodColor(metric.score)}`}>{metric.score}%</p>
                 <div className="flex items-center justify-center gap-1 mt-1">
                   <TrendingUp className={`h-3 w-3 ${
-                    metric.trend === "up" ? "text-green-500" :
-                    metric.trend === "down" ? "text-red-500 rotate-180" :
-                    "text-yellow-500"
+                    metric.trend === "up" ? "text-success" :
+                    metric.trend === "down" ? "text-destructive rotate-180" :
+                    "text-warning"
                   }`} />
                   <span className="text-xs text-muted-foreground">
                     {metric.trend === "up" ? "Melhorando" :
@@ -185,7 +185,7 @@ const CrewWellnessAIPage = () => {
           <Card>
             <CardHeader>
               <CardTitle className="flex items-center gap-2">
-                <AlertTriangle className="h-5 w-5 text-yellow-500" />
+                <AlertTriangle className="h-5 w-5 text-warning" />
                 Alertas de Bem-Estar ({crewAlerts.length})
               </CardTitle>
             </CardHeader>
@@ -247,7 +247,7 @@ const CrewWellnessAIPage = () => {
                       {[1,2,3,4,5].map((star) => (
                         <span 
                           key={star}
-                          className={star <= Math.round(surveyResponses.satisfaction) ? "text-yellow-500" : "text-muted"}
+                          className={star <= Math.round(surveyResponses.satisfaction) ? "text-warning" : "text-muted"}
                         >
                           ⭐
                         </span>

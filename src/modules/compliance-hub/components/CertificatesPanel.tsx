@@ -99,8 +99,8 @@ export function CertificatesPanel({
           variant: 'outline' as const,
           label: 'Aguardando Renovação',
           icon: <AlertTriangle className="h-3 w-3" />,
-          color: 'text-orange-500',
-          bgColor: 'bg-orange-500/10',
+          color: 'text-warning',
+          bgColor: 'bg-warning/10',
         };
       default:
         return {
@@ -212,8 +212,8 @@ export function CertificatesPanel({
         <Card>
           <CardContent className="p-4">
             <div className="flex items-center gap-3">
-              <div className="p-2 rounded-lg bg-orange-500/10">
-                <AlertTriangle className="h-5 w-5 text-orange-500" />
+              <div className="p-2 rounded-lg bg-warning/10">
+                <AlertTriangle className="h-5 w-5 text-warning" />
               </div>
               <div>
                 <p className="text-sm text-muted-foreground">Renovação</p>
@@ -350,20 +350,20 @@ export function CertificatesPanel({
                     <div className="pt-2 border-t space-y-2">
                       <div className="flex items-center justify-between text-sm">
                         <span className="text-muted-foreground">Validade</span>
-                        <span className={expiryInfo.daysLeft < 30 ? 'text-red-500' : ''}>
+                        <span className={expiryInfo.daysLeft < 30 ? 'text-destructive' : ''}>
                           {cert.expiryDate}
                         </span>
                       </div>
                       <div className="space-y-1">
                         <div className="flex justify-between text-xs">
                           <span className="text-muted-foreground">Tempo restante</span>
-                          <span className={expiryInfo.daysLeft < 30 ? 'text-red-500' : 'text-muted-foreground'}>
+                          <span className={expiryInfo.daysLeft < 30 ? 'text-destructive' : 'text-muted-foreground'}>
                             {expiryInfo.daysLeft > 0 ? `${expiryInfo.daysLeft} dias` : 'Expirado'}
                           </span>
                         </div>
                         <Progress
                           value={expiryInfo.progress}
-                          className={`h-1.5 ${expiryInfo.daysLeft < 30 ? '[&>div]:bg-red-500' : ''}`}
+                          className={`h-1.5 ${expiryInfo.daysLeft < 30 ? '[&>div]:bg-destructive' : ''}`}
                         />
                       </div>
                     </div>

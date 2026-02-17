@@ -421,9 +421,9 @@ export function PeodpEvidenceGenerator() {
                     open={expandedSections.has("risk")}
                     onOpenChange={() => toggleSection("risk")}
                   >
-                    <CollapsibleTrigger className="flex items-center justify-between w-full p-3 bg-orange-500/10 rounded-lg hover:bg-orange-500/20">
+                    <CollapsibleTrigger className="flex items-center justify-between w-full p-3 bg-warning/10 rounded-lg hover:bg-warning/20">
                       <div className="flex items-center gap-2">
-                        <AlertTriangle className="h-4 w-4 text-orange-600" />
+                        <AlertTriangle className="h-4 w-4 text-warning" />
                         <span className="font-medium">Risco Identificado</span>
                       </div>
                       <ChevronDown className={`h-4 w-4 transition-transform ${expandedSections.has("risk") ? "rotate-180" : ""}`} />
@@ -441,9 +441,9 @@ export function PeodpEvidenceGenerator() {
                   open={expandedSections.has("plan")}
                   onOpenChange={() => toggleSection("plan")}
                 >
-                  <CollapsibleTrigger className="flex items-center justify-between w-full p-3 bg-green-500/10 rounded-lg hover:bg-green-500/20">
+                  <CollapsibleTrigger className="flex items-center justify-between w-full p-3 bg-success/10 rounded-lg hover:bg-success/20">
                     <div className="flex items-center gap-2">
-                      <CheckCircle2 className="h-4 w-4 text-green-600" />
+                      <CheckCircle2 className="h-4 w-4 text-success" />
                       <span className="font-medium">Plano de Ação Corretiva</span>
                     </div>
                     <ChevronDown className={`h-4 w-4 transition-transform ${expandedSections.has("plan") ? "rotate-180" : ""}`} />

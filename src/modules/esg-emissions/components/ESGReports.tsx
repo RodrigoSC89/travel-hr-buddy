@@ -326,10 +326,10 @@ export function ESGReports() {
 
           {/* Quick Actions */}
           <div className="grid grid-cols-1 md:grid-cols-3 gap-4">
-            <Card className="bg-blue-50 dark:bg-blue-950/30 border-blue-200">
+            <Card className="bg-primary/5 dark:bg-primary/10 border-primary/20">
               <CardContent className="p-4">
                 <div className="flex items-center gap-3">
-                  <Globe className="h-8 w-8 text-blue-600" />
+                  <Globe className="h-8 w-8 text-primary" />
                   <div>
                     <p className="font-medium">EU MRV 2024</p>
                     <p className="text-sm text-muted-foreground">Prazo: 30/04/2024</p>
@@ -341,10 +341,10 @@ export function ESGReports() {
               </CardContent>
             </Card>
 
-            <Card className="bg-green-50 dark:bg-green-950/30 border-green-200">
+            <Card className="bg-success/5 dark:bg-success/10 border-success/20">
               <CardContent className="p-4">
                 <div className="flex items-center gap-3">
-                  <BarChart3 className="h-8 w-8 text-green-600" />
+                  <BarChart3 className="h-8 w-8 text-success" />
                   <div>
                     <p className="font-medium">IMO DCS 2024</p>
                     <p className="text-sm text-muted-foreground">Prazo: 31/03/2024</p>
@@ -356,10 +356,10 @@ export function ESGReports() {
               </CardContent>
             </Card>
 
-            <Card className="bg-purple-50 dark:bg-purple-950/30 border-purple-200">
+            <Card className="bg-accent/5 dark:bg-accent/10 border-accent/20">
               <CardContent className="p-4">
                 <div className="flex items-center gap-3">
-                  <FileText className="h-8 w-8 text-purple-600" />
+                  <FileText className="h-8 w-8 text-accent" />
                   <div>
                     <p className="font-medium">GRI Report 2024</p>
                     <p className="text-sm text-muted-foreground">Publicação: Q2/2024</p>

@@ -167,7 +167,7 @@ export default function OpsMegaHub() {
               {/* System Status */}
               <div className="flex items-center gap-3 text-xs text-muted-foreground px-1">
                 <div className="flex items-center gap-1.5">
-                  <Wifi className="h-3.5 w-3.5 text-green-500" />
+                  <Wifi className="h-3.5 w-3.5 text-success" />
                   <span>Online</span>
                 </div>
                 <span>•</span>

@@ -160,9 +160,9 @@ export const CollectiveTabs: React.FC<CollectiveTabsProps> = ({
                   <YAxis />
                   <Tooltip />
                   <Legend />
-                  <Bar dataKey="precision" fill="#8884d8" name="Precision" />
-                  <Bar dataKey="recall" fill="#82ca9d" name="Recall" />
-                  <Bar dataKey="accuracy" fill="#ffc658" name="Accuracy" />
+                  <Bar dataKey="precision" fill="hsl(var(--accent))" name="Precision" />
+                  <Bar dataKey="recall" fill="hsl(var(--success))" name="Recall" />
+                  <Bar dataKey="accuracy" fill="hsl(var(--warning))" name="Accuracy" />
                 </BarChart>
               </ResponsiveContainer>
               <div className="grid gap-4">

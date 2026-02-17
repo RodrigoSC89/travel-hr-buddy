@@ -308,7 +308,7 @@ export default function ContractAnalysisPage() {
               <Card>
                 <CardContent className="pt-4">
                   <div className="flex items-center gap-3">
-                    <div className="p-2 rounded-lg bg-amber-500/10"><AlertTriangle className="h-5 w-5 text-amber-500" /></div>
+                    <div className="p-2 rounded-lg bg-warning/10"><AlertTriangle className="h-5 w-5 text-warning" /></div>
                     <div>
                       <p className="text-sm font-medium">{current.riskClauses.filter(r => r.risk === 'high').length} Críticos</p>
                       <p className="text-xs text-muted-foreground">Riscos</p>
@@ -319,7 +319,7 @@ export default function ContractAnalysisPage() {
               <Card>
                 <CardContent className="pt-4">
                   <div className="flex items-center gap-3">
-                    <div className="p-2 rounded-lg bg-teal-500/10"><TrendingUp className="h-5 w-5 text-teal-500" /></div>
+                    <div className="p-2 rounded-lg bg-info/10"><TrendingUp className="h-5 w-5 text-info" /></div>
                     <div>
                       <p className="text-sm font-medium">{formatCurrency(totalSavings, 'USD')}</p>
                       <p className="text-xs text-muted-foreground">Economia Potencial</p>
@@ -342,7 +342,7 @@ export default function ContractAnalysisPage() {
                 <Card>
                   <CardHeader>
                     <CardTitle className="flex items-center gap-2">
-                      <AlertTriangle className="h-5 w-5 text-amber-500" />
+                      <AlertTriangle className="h-5 w-5 text-warning" />
                       Análise de Cláusulas de Risco
                     </CardTitle>
                     <CardDescription>{current.riskClauses.length} cláusulas identificadas para revisão</CardDescription>
@@ -435,7 +435,7 @@ export default function ContractAnalysisPage() {
               <TabsContent value="opportunities" className="space-y-4">
                 <Card>
                   <CardHeader>
-                    <CardTitle className="flex items-center gap-2"><TrendingUp className="h-5 w-5 text-teal-500" />Oportunidades de Negociação</CardTitle>
+                    <CardTitle className="flex items-center gap-2"><TrendingUp className="h-5 w-5 text-info" />Oportunidades de Negociação</CardTitle>
                     <CardDescription>Economia potencial: {formatCurrency(totalSavings, 'USD')}</CardDescription>
                   </CardHeader>
                   <CardContent>
@@ -444,7 +444,7 @@ export default function ContractAnalysisPage() {
                         <div key={opp.description} className="p-4 border rounded-lg">
                           <div className="flex items-center justify-between">
                             <p className="font-medium">{opp.description}</p>
-                            <Badge className="bg-teal-500/10 text-teal-500">{formatCurrency(opp.potentialSavings, 'USD')}</Badge>
+                            <Badge className="bg-info/10 text-info">{formatCurrency(opp.potentialSavings, 'USD')}</Badge>
                           </div>
                         </div>
                       ))}

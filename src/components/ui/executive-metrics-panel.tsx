@@ -188,9 +188,9 @@ const ExecutiveMetricsPanel = () => {
           <CardContent>
             <ResponsiveContainer width="100%" height={320}>
               <BarChart data={revenueData}>
-                <CartesianGrid strokeDasharray="3 3" stroke="#f1f5f9" />
-                <XAxis dataKey="month" stroke="#64748b" />
-                <YAxis stroke="#64748b" />
+                <CartesianGrid strokeDasharray="3 3" className="stroke-muted" />
+                <XAxis dataKey="month" stroke="hsl(var(--muted-foreground))" />
+                <YAxis stroke="hsl(var(--muted-foreground))" />
                 <Tooltip 
                   contentStyle={{ 
                     backgroundColor: "hsl(var(--card))", 

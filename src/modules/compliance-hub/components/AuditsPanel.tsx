@@ -103,18 +103,18 @@ export function AuditsPanel({
     return (
       <div className="flex items-center gap-2 text-sm">
         {critical > 0 && (
-          <span className="flex items-center gap-1 text-red-500">
+          <span className="flex items-center gap-1 text-destructive">
             <AlertTriangle className="h-3 w-3" />
             {critical}
           </span>
         )}
         {major > 0 && (
-          <span className="flex items-center gap-1 text-orange-500">
+          <span className="flex items-center gap-1 text-warning">
             {major} maior
           </span>
         )}
         {minor > 0 && (
-          <span className="flex items-center gap-1 text-yellow-500">
+          <span className="flex items-center gap-1 text-warning">
             {minor} menor
           </span>
         )}
@@ -191,7 +191,7 @@ export function AuditsPanel({
             <DropdownMenuSeparator />
             <DropdownMenuItem
               onClick={() => onDeleteAudit(audit.id)}
-              className="text-red-500"
+              className="text-destructive"
             >
               <Trash2 className="h-4 w-4 mr-2" />
               Excluir

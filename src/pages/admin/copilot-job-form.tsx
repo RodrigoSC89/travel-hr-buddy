@@ -63,7 +63,7 @@ export default function CopilotJobFormPage() {
           <Card>
             <CardHeader>
               <CardTitle className="flex items-center gap-2">
-                <Lightbulb className="h-5 w-5 text-yellow-500" />
+                <Lightbulb className="h-5 w-5 text-warning" />
                 🎯 Cenários de Exemplo
               </CardTitle>
               <CardDescription>
@@ -146,7 +146,7 @@ function MyMaintenancePage() {
           <Card>
             <CardHeader>
               <CardTitle className="flex items-center gap-2">
-                <Zap className="h-5 w-5 text-yellow-500" />
+                <Zap className="h-5 w-5 text-warning" />
                 ⚡ Como Funciona
               </CardTitle>
             </CardHeader>
@@ -196,7 +196,7 @@ function MyMaintenancePage() {
             <CardContent>
               <div className="space-y-3">
                 <div className="flex gap-3">
-                  <Search className="h-5 w-5 text-blue-500 flex-shrink-0 mt-0.5" />
+                  <Search className="h-5 w-5 text-primary flex-shrink-0 mt-0.5" />
                   <div>
                     <h4 className="font-semibold text-sm">Busca Inteligente</h4>
                     <p className="text-xs text-muted-foreground">
@@ -206,7 +206,7 @@ function MyMaintenancePage() {
                 </div>
 
                 <div className="flex gap-3">
-                  <Copy className="h-5 w-5 text-green-500 flex-shrink-0 mt-0.5" />
+                  <Copy className="h-5 w-5 text-success flex-shrink-0 mt-0.5" />
                   <div>
                     <h4 className="font-semibold text-sm">Auto-preenchimento</h4>
                     <p className="text-xs text-muted-foreground">
@@ -216,7 +216,7 @@ function MyMaintenancePage() {
                 </div>
 
                 <div className="flex gap-3">
-                  <TrendingUp className="h-5 w-5 text-purple-500 flex-shrink-0 mt-0.5" />
+                  <TrendingUp className="h-5 w-5 text-accent flex-shrink-0 mt-0.5" />
                   <div>
                     <h4 className="font-semibold text-sm">Score de Similaridade</h4>
                     <p className="text-xs text-muted-foreground">
@@ -226,7 +226,7 @@ function MyMaintenancePage() {
                 </div>
 
                 <div className="flex gap-3">
-                  <CheckCircle2 className="h-5 w-5 text-orange-500 flex-shrink-0 mt-0.5" />
+                  <CheckCircle2 className="h-5 w-5 text-warning flex-shrink-0 mt-0.5" />
                   <div>
                     <h4 className="font-semibold text-sm">Validação</h4>
                     <p className="text-xs text-muted-foreground">

@@ -403,11 +403,11 @@ export default function PeopleAnalyticsPage() {
                   <YAxis className="text-xs" />
                   <Tooltip contentStyle={{ backgroundColor: 'hsl(var(--card))', border: '1px solid hsl(var(--border))' }} />
                   <Legend />
-                  <Area type="monotone" dataKey="Tecnologia" stackId="1" stroke="#3b82f6" fill="#3b82f6" fillOpacity={0.6} />
-                  <Area type="monotone" dataKey="Operações" stackId="1" stroke="#22c55e" fill="#22c55e" fillOpacity={0.6} />
-                  <Area type="monotone" dataKey="Comercial" stackId="1" stroke="#f59e0b" fill="#f59e0b" fillOpacity={0.6} />
-                  <Area type="monotone" dataKey="Financeiro" stackId="1" stroke="#8b5cf6" fill="#8b5cf6" fillOpacity={0.6} />
-                  <Area type="monotone" dataKey="RH" stackId="1" stroke="#ec4899" fill="#ec4899" fillOpacity={0.6} />
+                  <Area type="monotone" dataKey="Tecnologia" stackId="1" stroke="hsl(var(--primary))" fill="hsl(var(--primary))" fillOpacity={0.6} />
+                  <Area type="monotone" dataKey="Operações" stackId="1" stroke="hsl(var(--success))" fill="hsl(var(--success))" fillOpacity={0.6} />
+                  <Area type="monotone" dataKey="Comercial" stackId="1" stroke="hsl(var(--warning))" fill="hsl(var(--warning))" fillOpacity={0.6} />
+                  <Area type="monotone" dataKey="Financeiro" stackId="1" stroke="hsl(var(--accent))" fill="hsl(var(--accent))" fillOpacity={0.6} />
+                  <Area type="monotone" dataKey="RH" stackId="1" stroke="hsl(var(--secondary))" fill="hsl(var(--secondary))" fillOpacity={0.6} />
                 </AreaChart>
               </ResponsiveContainer>
             </CardContent>
@@ -490,7 +490,7 @@ export default function PeopleAnalyticsPage() {
                   <RePieChart>
                     <Pie data={costBreakdown} cx="50%" cy="50%" innerRadius={60} outerRadius={100} paddingAngle={2} dataKey="value">
                       {costBreakdown.map((entry, index) => (
-                        <Cell key={`cell-${index}`} fill={['#3b82f6', '#22c55e', '#f59e0b', '#8b5cf6', '#6b7280'][index]} />
+                        <Cell key={`cell-${index}`} fill={['hsl(var(--primary))', 'hsl(var(--success))', 'hsl(var(--warning))', 'hsl(var(--accent))', 'hsl(var(--muted-foreground))'][index]} />
                       ))}
                     </Pie>
                     <Tooltip formatter={(value) => `R$ ${Number(value).toLocaleString()}`} />

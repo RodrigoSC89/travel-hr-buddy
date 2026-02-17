@@ -151,7 +151,7 @@ export default function AIModulesHubPage() {
               <Sparkles className="h-4 w-4 mr-2" />
               11 Módulos Ativos
             </Badge>
-            <Badge variant="default" className="text-lg px-4 py-2 bg-green-600">
+            <Badge variant="default" className="text-lg px-4 py-2 bg-success">
               <TrendingUp className="h-4 w-4 mr-2" />
               100% Operacional
             </Badge>

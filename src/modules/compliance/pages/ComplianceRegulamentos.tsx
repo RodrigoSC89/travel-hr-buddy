@@ -343,7 +343,7 @@ export default function ComplianceRegulamentos() {
                     <h3 className="font-semibold text-lg">{reg.name}</h3>
                     {getCategoryBadge(reg.category)}
                     {reg.aiRecommendations > 0 && (
-                      <Badge className="bg-purple-500/20 text-purple-400">
+                      <Badge className="bg-accent/20 text-accent">
                         <Brain className="h-3 w-3 mr-1" />
                         {reg.aiRecommendations} IA
                       </Badge>
