@@ -119,10 +119,10 @@ export function MARPOLCompliancePanel() {
 
   const getStatusBadge = (status: string) => {
     const config: Record<string, { label: string; className: string }> = {
-      compliant: { label: "Conforme", className: "bg-green-500/10 text-green-600 border-green-500/20" },
-      pending: { label: "Pendente", className: "bg-yellow-500/10 text-yellow-600 border-yellow-500/20" },
-      at_risk: { label: "Em Risco", className: "bg-orange-500/10 text-orange-600 border-orange-500/20" },
-      non_compliant: { label: "Não Conforme", className: "bg-red-500/10 text-red-600 border-red-500/20" },
+      compliant: { label: "Conforme", className: "bg-success/10 text-success border-success/20" },
+      pending: { label: "Pendente", className: "bg-warning/10 text-warning border-warning/20" },
+      at_risk: { label: "Em Risco", className: "bg-warning/10 text-warning border-warning/20" },
+      non_compliant: { label: "Não Conforme", className: "bg-destructive/10 text-destructive border-destructive/20" },
     };
     const c = config[status] || config.pending;
     return <Badge className={c.className}>{c.label}</Badge>;
@@ -132,27 +132,27 @@ export function MARPOLCompliancePanel() {
     <div className="space-y-6">
       {/* Summary */}
       <div className="grid grid-cols-2 md:grid-cols-4 gap-4">
-        <Card className="border-l-4 border-l-green-500">
+        <Card className="border-l-4 border-l-success">
           <CardContent className="pt-4">
             <div className="flex items-center justify-between">
-              <div><p className="text-xs text-muted-foreground uppercase">Conformes</p><p className="text-2xl font-bold text-green-600">{compliantCount}/{annexData.length}</p></div>
-              <CheckCircle2 className="h-8 w-8 text-green-500 opacity-50" />
+              <div><p className="text-xs text-muted-foreground uppercase">Conformes</p><p className="text-2xl font-bold text-success">{compliantCount}/{annexData.length}</p></div>
+              <CheckCircle2 className="h-8 w-8 text-success opacity-50" />
             </div>
           </CardContent>
         </Card>
-        <Card className="border-l-4 border-l-yellow-500">
+        <Card className="border-l-4 border-l-warning">
           <CardContent className="pt-4">
             <div className="flex items-center justify-between">
-              <div><p className="text-xs text-muted-foreground uppercase">Pendentes</p><p className="text-2xl font-bold text-yellow-600">{pendingCount}</p></div>
-              <Clock className="h-8 w-8 text-yellow-500 opacity-50" />
+              <div><p className="text-xs text-muted-foreground uppercase">Pendentes</p><p className="text-2xl font-bold text-warning">{pendingCount}</p></div>
+              <Clock className="h-8 w-8 text-warning opacity-50" />
             </div>
           </CardContent>
         </Card>
-        <Card className="border-l-4 border-l-orange-500">
+        <Card className="border-l-4 border-l-warning">
           <CardContent className="pt-4">
             <div className="flex items-center justify-between">
-              <div><p className="text-xs text-muted-foreground uppercase">Em Risco</p><p className="text-2xl font-bold text-orange-600">{atRiskCount}</p></div>
-              <AlertTriangle className="h-8 w-8 text-orange-500 opacity-50" />
+              <div><p className="text-xs text-muted-foreground uppercase">Em Risco</p><p className="text-2xl font-bold text-warning">{atRiskCount}</p></div>
+              <AlertTriangle className="h-8 w-8 text-warning opacity-50" />
             </div>
           </CardContent>
         </Card>
@@ -192,7 +192,7 @@ export function MARPOLCompliancePanel() {
                           >
                             <CardContent className="p-4">
                               <div className="flex items-start gap-3">
-                                <div className={`p-2 rounded-lg ${annex.status === "compliant" ? "bg-green-500/10 text-green-600" : annex.status === "pending" ? "bg-yellow-500/10 text-yellow-600" : "bg-orange-500/10 text-orange-600"}`}>
+                                <div className={`p-2 rounded-lg ${annex.status === "compliant" ? "bg-success/10 text-success" : annex.status === "pending" ? "bg-warning/10 text-warning" : "bg-warning/10 text-warning"}`}>
                                   <Icon className="h-5 w-5" />
                                 </div>
                                 <div className="flex-1">
@@ -238,7 +238,7 @@ export function MARPOLCompliancePanel() {
                           {selectedAnnex.requirements.map((req: any) => (
                             <div key={req.name} className="flex items-center justify-between p-2 rounded-lg bg-muted/50">
                               <span className="text-sm">{req.name}</span>
-                              <Badge className={req.status === "met" ? "bg-green-500/10 text-green-600" : req.status === "pending" ? "bg-yellow-500/10 text-yellow-600" : "bg-red-500/10 text-red-600"}>
+                              <Badge className={req.status === "met" ? "bg-success/10 text-success" : req.status === "pending" ? "bg-warning/10 text-warning" : "bg-destructive/10 text-destructive"}>
                                 {req.status === "met" ? "✓" : "⏳"}
                               </Badge>
                             </div>

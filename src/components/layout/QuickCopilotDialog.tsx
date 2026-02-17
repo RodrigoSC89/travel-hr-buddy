@@ -357,7 +357,7 @@ export function QuickCopilotDialog({ open, onOpenChange }: QuickCopilotDialogPro
             onKeyDown={handleKeyDown}
             placeholder={isListening ? "Escutando..." : "Digite ou fale sua pergunta..."}
             disabled={isLoading}
-            className={cn("flex-1", isListening && "border-red-500")}
+            className={cn("flex-1", isListening && "border-destructive")}
           />
           <Button 
             onClick={() => sendMessage()} 

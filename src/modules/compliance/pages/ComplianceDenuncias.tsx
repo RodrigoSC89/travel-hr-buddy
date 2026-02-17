@@ -326,25 +326,25 @@ export default function ComplianceDenuncias() {
               <Card className="bg-card/50">
                 <CardHeader className="pb-3">
                   <CardTitle className="text-lg flex items-center gap-2">
-                    <Lock className="h-5 w-5 text-emerald-400" />
+                    <Lock className="h-5 w-5 text-success" />
                     Garantias
                   </CardTitle>
                 </CardHeader>
                 <CardContent className="space-y-3 text-sm">
                   <div className="flex items-start gap-2">
-                    <CheckCircle2 className="h-4 w-4 text-emerald-400 mt-0.5" />
+                    <CheckCircle2 className="h-4 w-4 text-success mt-0.5" />
                     <span>Anonimato garantido por criptografia</span>
                   </div>
                   <div className="flex items-start gap-2">
-                    <CheckCircle2 className="h-4 w-4 text-emerald-400 mt-0.5" />
+                    <CheckCircle2 className="h-4 w-4 text-success mt-0.5" />
                     <span>Proteção contra retaliação</span>
                   </div>
                   <div className="flex items-start gap-2">
-                    <CheckCircle2 className="h-4 w-4 text-emerald-400 mt-0.5" />
+                    <CheckCircle2 className="h-4 w-4 text-success mt-0.5" />
                     <span>Análise por comitê independente</span>
                   </div>
                   <div className="flex items-start gap-2">
-                    <CheckCircle2 className="h-4 w-4 text-emerald-400 mt-0.5" />
+                    <CheckCircle2 className="h-4 w-4 text-success mt-0.5" />
                     <span>Conformidade ISO 37002</span>
                   </div>
                 </CardContent>
@@ -361,15 +361,15 @@ export default function ComplianceDenuncias() {
                   </div>
                   <div className="flex justify-between">
                     <span className="text-muted-foreground">Em aberto</span>
-                    <span className="font-semibold text-blue-400">{stats.open}</span>
+                    <span className="font-semibold text-info">{stats.open}</span>
                   </div>
                   <div className="flex justify-between">
                     <span className="text-muted-foreground">Em análise</span>
-                    <span className="font-semibold text-amber-400">{stats.investigating}</span>
+                    <span className="font-semibold text-warning">{stats.investigating}</span>
                   </div>
                   <div className="flex justify-between">
                     <span className="text-muted-foreground">Resolvidas</span>
-                    <span className="font-semibold text-emerald-400">{stats.resolved}</span>
+                    <span className="font-semibold text-success">{stats.resolved}</span>
                   </div>
                 </CardContent>
               </Card>

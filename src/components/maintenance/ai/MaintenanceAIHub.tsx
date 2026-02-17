@@ -205,12 +205,12 @@ export const AutoWorkOrderAI: React.FC = () => {
   };
 
   return (
-    <Card className="border-indigo-500/20">
+    <Card className="border-accent/20">
       <CardHeader>
         <CardTitle className="flex items-center gap-2">
-          <FileText className="h-5 w-5 text-indigo-500" />
+          <FileText className="h-5 w-5 text-accent-foreground" />
           Auto-Geração de Work Orders
-          <Badge className="ml-auto bg-indigo-500/10 text-indigo-500">AutoGen</Badge>
+          <Badge className="ml-auto bg-accent/10 text-accent-foreground">AutoGen</Badge>
         </CardTitle>
       </CardHeader>
       <CardContent className="space-y-4">

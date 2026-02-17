@@ -430,9 +430,9 @@ export function ESGCommandCenter() {
           <Card className="bg-gradient-to-br from-emerald-500/5 to-green-500/5 border-emerald-500/20">
             <CardHeader className="pb-3">
               <CardTitle className="flex items-center gap-2 text-lg">
-                <Bot className="h-5 w-5 text-emerald-500" />
+                <Bot className="h-5 w-5 text-success" />
                 Consultor ESG IA
-                <Badge className="bg-emerald-500/10 text-emerald-600 border-emerald-500/20 ml-auto">
+                <Badge className="bg-success/10 text-success border-success/20 ml-auto">
                   <Sparkles className="h-3 w-3 mr-1" />
                   Live
                 </Badge>
@@ -444,7 +444,7 @@ export function ESGCommandCenter() {
                   {chatHistory.map((msg, i) => (
                     <div key={`esg-chat-${i}`} className={`flex ${msg.role === "user" ? "justify-end" : "justify-start"}`}>
                       <div className={`max-w-[85%] p-3 rounded-lg text-sm ${
-                        msg.role === "user" ? "bg-emerald-500 text-white" : "bg-muted"
+                        msg.role === "user" ? "bg-success text-success-foreground" : "bg-muted"
                       }`}>
                         {msg.content}
                       </div>
@@ -469,7 +469,7 @@ export function ESGCommandCenter() {
                   className="flex-1"
                   disabled={isChatLoading}
                 />
-                <Button size="icon" onClick={handleSendMessage} disabled={isChatLoading} className="bg-emerald-500 hover:bg-emerald-600" aria-label="Enviar mensagem" title="Enviar">
+                <Button size="icon" onClick={handleSendMessage} disabled={isChatLoading} className="bg-success hover:bg-success/90" aria-label="Enviar mensagem" title="Enviar">
                   {isChatLoading ? <Loader2 className="h-4 w-4 animate-spin" /> : <Send className="h-4 w-4" />}
                 </Button>
               </div>

@@ -106,7 +106,7 @@ interface ReportConfig {
   customPrompt?: string;
 }
 
-const CHART_COLORS = ["#3b82f6", "#10b981", "#f59e0b", "#ef4444", "#8b5cf6", "#ec4899", "#06b6d4", "#84cc16"];
+const CHART_COLORS = ["hsl(var(--primary))", "hsl(var(--success))", "hsl(var(--warning))", "hsl(var(--destructive))", "hsl(var(--accent))", "hsl(var(--info))", "hsl(var(--secondary))", "hsl(var(--muted-foreground))"];
 
 const AnalyticsCoreProfessional: React.FC = () => {
   const { toast } = useToast();
@@ -1483,9 +1483,9 @@ Este relatório apresenta uma análise abrangente dos principais indicadores de 
                         contentStyle={{ backgroundColor: "hsl(var(--card))", border: "1px solid hsl(var(--border))" }}
                       />
                       <Legend />
-                      <Bar dataKey="receita" fill="#3b82f6" name="Receita" radius={[4, 4, 0, 0]} />
-                      <Bar dataKey="custos" fill="#ef4444" name="Custos" radius={[4, 4, 0, 0]} />
-                      <Line type="monotone" dataKey="lucro" stroke="#10b981" strokeWidth={3} name="Lucro" dot={{ fill: "#10b981" }} />
+                      <Bar dataKey="receita" fill="hsl(var(--primary))" name="Receita" radius={[4, 4, 0, 0]} />
+                      <Bar dataKey="custos" fill="hsl(var(--destructive))" name="Custos" radius={[4, 4, 0, 0]} />
+                      <Line type="monotone" dataKey="lucro" stroke="hsl(var(--success))" strokeWidth={3} name="Lucro" dot={{ fill: "hsl(var(--success))" }} />
                     </ComposedChart>
                   </ResponsiveContainer>
                 </CardContent>
@@ -1509,7 +1509,7 @@ Este relatório apresenta uma análise abrangente dos principais indicadores de 
                         cy="50%"
                         outerRadius={100}
                         innerRadius={40}
-                        fill="#8884d8"
+                        fill="hsl(var(--primary))"
                         dataKey="value"
                         label={({ name, percent }) => `${name}: ${(percent * 100).toFixed(0)}%`}
                         labelLine={{ stroke: "hsl(var(--muted-foreground))" }}
@@ -1547,9 +1547,9 @@ Este relatório apresenta uma análise abrangente dos principais indicadores de 
                         contentStyle={{ backgroundColor: "hsl(var(--card))", border: "1px solid hsl(var(--border))" }}
                       />
                       <Legend />
-                      <Area type="monotone" dataKey="eficiencia" stroke="#3b82f6" fill="#3b82f6" fillOpacity={0.2} name="Eficiência" />
-                      <Area type="monotone" dataKey="disponibilidade" stroke="#10b981" fill="#10b981" fillOpacity={0.2} name="Disponibilidade" />
-                      <Area type="monotone" dataKey="manutencao" stroke="#f59e0b" fill="#f59e0b" fillOpacity={0.2} name="Manutenção" />
+                      <Area type="monotone" dataKey="eficiencia" stroke="hsl(var(--primary))" fill="hsl(var(--primary))" fillOpacity={0.2} name="Eficiência" />
+                      <Area type="monotone" dataKey="disponibilidade" stroke="hsl(var(--success))" fill="hsl(var(--success))" fillOpacity={0.2} name="Disponibilidade" />
+                      <Area type="monotone" dataKey="manutencao" stroke="hsl(var(--warning))" fill="hsl(var(--warning))" fillOpacity={0.2} name="Manutenção" />
                     </AreaChart>
                   </ResponsiveContainer>
                 </CardContent>

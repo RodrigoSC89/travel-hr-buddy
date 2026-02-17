@@ -488,7 +488,7 @@ export default function CrewAIAnalysis() {
             </div>
           </CardContent>
         </Card>
-        <Card className={criticalCount > 0 ? "border-red-500/50" : ""}>
+        <Card className={criticalCount > 0 ? "border-destructive/50" : ""}>
           <CardContent className="pt-4">
             <div className="flex items-center gap-3">
               <AlertTriangle className={`h-8 w-8 ${criticalCount > 0 ? "text-destructive" : "text-muted-foreground"} opacity-50`} />
