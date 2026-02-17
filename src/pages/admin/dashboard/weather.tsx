@@ -84,7 +84,7 @@ export default function WeatherDashboard() {
 
                 <div className="grid grid-cols-2 gap-3 text-sm">
                   <div className="flex items-center gap-2">
-                    <Droplets className="h-4 w-4 text-blue-500" />
+                    <Droplets className="h-4 w-4 text-info" />
                     <div>
                       <p className="text-muted-foreground">Humidity</p>
                       <p className="font-medium">{weather.humidity}%</p>
@@ -98,14 +98,14 @@ export default function WeatherDashboard() {
                     </div>
                   </div>
                   <div className="flex items-center gap-2">
-                    <Gauge className="h-4 w-4 text-purple-500" />
+                    <Gauge className="h-4 w-4 text-accent-foreground" />
                     <div>
                       <p className="text-muted-foreground">Pressure</p>
                       <p className="font-medium">{weather.pressure} hPa</p>
                     </div>
                   </div>
                   <div className="flex items-center gap-2">
-                    <Eye className="h-4 w-4 text-green-500" />
+                    <Eye className="h-4 w-4 text-success" />
                     <div>
                       <p className="text-muted-foreground">Visibility</p>
                       <p className="font-medium">{(weather.visibility / 1000).toFixed(1)} km</p>
@@ -120,7 +120,7 @@ export default function WeatherDashboard() {
                   </div>
                   {weather.precipitation > 0 && (
                     <div className="flex items-center gap-2">
-                      <CloudRain className="h-4 w-4 text-blue-600" />
+                      <CloudRain className="h-4 w-4 text-info" />
                       <div>
                         <p className="text-muted-foreground">Rain</p>
                         <p className="font-medium">{weather.precipitation.toFixed(1)} mm</p>

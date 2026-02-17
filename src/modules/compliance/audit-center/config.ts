@@ -66,10 +66,10 @@ Format your response as structured JSON with these fields:
 
   // Status colors
   statusColors: {
-    ok: "text-green-600 dark:text-green-400",
-    warning: "text-yellow-600 dark:text-yellow-400",
-    fail: "text-red-600 dark:text-red-400",
-    not_checked: "text-gray-400 dark:text-gray-500"
+    ok: "text-success",
+    warning: "text-warning",
+    fail: "text-destructive",
+    not_checked: "text-muted-foreground"
   },
 
   // Badge variants

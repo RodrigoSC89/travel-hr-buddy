@@ -147,7 +147,7 @@ export const ReportsTabs: React.FC<ReportsTabsProps> = ({
                       <FileText className="h-8 w-8 text-primary opacity-50" />
                     </div>
                     {getGrowthPercentage() && (
-                      <p className={`text-xs mt-2 ${Number(getGrowthPercentage()) >= 0 ? 'text-green-500' : 'text-red-500'}`}>
+                      <p className={`text-xs mt-2 ${Number(getGrowthPercentage()) >= 0 ? 'text-success' : 'text-destructive'}`}>
                         {Number(getGrowthPercentage()) >= 0 ? '+' : ''}{getGrowthPercentage()}% vs mês anterior
                       </p>
                     )}
@@ -160,7 +160,7 @@ export const ReportsTabs: React.FC<ReportsTabsProps> = ({
                         <p className="text-2xl font-bold">{analyticsData?.totalIncidents || 0}</p>
                         <p className="text-sm text-muted-foreground">Total Incidentes</p>
                       </div>
-                      <AlertTriangle className="h-8 w-8 text-orange-500 opacity-50" />
+                      <AlertTriangle className="h-8 w-8 text-warning opacity-50" />
                     </div>
                     <p className="text-xs mt-2 text-muted-foreground">{analyticsData?.incidentsThisMonth || 0} este mês</p>
                   </CardContent>
@@ -172,7 +172,7 @@ export const ReportsTabs: React.FC<ReportsTabsProps> = ({
                         <p className="text-2xl font-bold">{analyticsData?.totalInsights || 0}</p>
                         <p className="text-sm text-muted-foreground">Insights IA</p>
                       </div>
-                      <Sparkles className="h-8 w-8 text-yellow-500 opacity-50" />
+                      <Sparkles className="h-8 w-8 text-warning opacity-50" />
                     </div>
                   </CardContent>
                 </Card>
@@ -183,7 +183,7 @@ export const ReportsTabs: React.FC<ReportsTabsProps> = ({
                         <p className="text-2xl font-bold">{analyticsData?.activeAlerts || 0}</p>
                         <p className="text-sm text-muted-foreground">Alertas Ativos</p>
                       </div>
-                      <AlertCircle className="h-8 w-8 text-red-500 opacity-50" />
+                      <AlertCircle className="h-8 w-8 text-destructive opacity-50" />
                     </div>
                     <p className="text-xs mt-2 text-muted-foreground">de {analyticsData?.totalAlerts || 0} total</p>
                   </CardContent>
@@ -195,7 +195,7 @@ export const ReportsTabs: React.FC<ReportsTabsProps> = ({
                         <p className="text-2xl font-bold">{analyticsData?.totalReports || 0}</p>
                         <p className="text-sm text-muted-foreground">Total Relatórios</p>
                       </div>
-                      <Activity className="h-8 w-8 text-blue-500 opacity-50" />
+                      <Activity className="h-8 w-8 text-info opacity-50" />
                     </div>
                   </CardContent>
                 </Card>
@@ -216,17 +216,17 @@ export const ReportsTabs: React.FC<ReportsTabsProps> = ({
                   <span className="text-xs text-muted-foreground">Análise inteligente</span>
                 </Button>
                 <Button variant="outline" className="h-auto py-4 flex flex-col items-center gap-2" onClick={() => onTabChange("incidents")}>
-                  <AlertTriangle className="h-6 w-6 text-orange-500" />
+                  <AlertTriangle className="h-6 w-6 text-warning" />
                   <span className="font-medium">Ver Incidentes DP</span>
                   <span className="text-xs text-muted-foreground">Base de conhecimento</span>
                 </Button>
                 <Button variant="outline" className="h-auto py-4 flex flex-col items-center gap-2" onClick={() => onTabChange("dashboard")}>
-                  <BarChart3 className="h-6 w-6 text-blue-500" />
+                  <BarChart3 className="h-6 w-6 text-info" />
                   <span className="font-medium">Dashboard</span>
                   <span className="text-xs text-muted-foreground">Processamento docs</span>
                 </Button>
                 <Button variant="outline" className="h-auto py-4 flex flex-col items-center gap-2" onClick={() => onTabChange("analytics")}>
-                  <TrendingUp className="h-6 w-6 text-green-500" />
+                  <TrendingUp className="h-6 w-6 text-success" />
                   <span className="font-medium">Analytics</span>
                   <span className="text-xs text-muted-foreground">Métricas detalhadas</span>
                 </Button>
@@ -268,13 +268,13 @@ export const ReportsTabs: React.FC<ReportsTabsProps> = ({
                   <p className="text-2xl font-bold">{analyticsData?.totalIncidents || 0}</p>
                   <p className="text-sm text-muted-foreground">Incidentes Analisados</p>
                 </div>
-                <div className="text-center p-4 bg-blue-500/10 rounded-lg">
-                  <Brain className="h-8 w-8 mx-auto mb-2 text-blue-500" />
+                <div className="text-center p-4 bg-info/10 rounded-lg">
+                  <Brain className="h-8 w-8 mx-auto mb-2 text-info" />
                   <p className="text-2xl font-bold">{analyticsData?.totalInsights || 0}</p>
                   <p className="text-sm text-muted-foreground">Insights IA</p>
                 </div>
-                <div className="text-center p-4 bg-purple-500/10 rounded-lg">
-                  <Calendar className="h-8 w-8 mx-auto mb-2 text-purple-500" />
+                <div className="text-center p-4 bg-accent/10 rounded-lg">
+                  <Calendar className="h-8 w-8 mx-auto mb-2 text-accent-foreground" />
                   <p className="text-2xl font-bold">{analyticsData?.reportsThisMonth || 0}</p>
                   <p className="text-sm text-muted-foreground">Este Mês</p>
                 </div>
@@ -301,7 +301,7 @@ export const ReportsTabs: React.FC<ReportsTabsProps> = ({
             <div className="flex items-center justify-between">
               <div>
                 <CardTitle className="flex items-center gap-2">
-                  <AlertTriangle className="h-5 w-5 text-orange-500" />
+                  <AlertTriangle className="h-5 w-5 text-warning" />
                   DP Incident Intelligence Feed
                 </CardTitle>
                 <CardDescription>Base de conhecimento de incidentes DP com análise por IA</CardDescription>
@@ -334,7 +334,7 @@ export const ReportsTabs: React.FC<ReportsTabsProps> = ({
                       <FileText className="h-8 w-8 text-primary opacity-50" />
                     </div>
                     {getGrowthPercentage() && (
-                      <p className={`text-xs mt-2 ${Number(getGrowthPercentage()) >= 0 ? 'text-green-500' : 'text-red-500'}`}>
+                      <p className={`text-xs mt-2 ${Number(getGrowthPercentage()) >= 0 ? 'text-success' : 'text-destructive'}`}>
                         {Number(getGrowthPercentage()) >= 0 ? '+' : ''}{getGrowthPercentage()}% vs mês anterior
                       </p>
                     )}
@@ -347,7 +347,7 @@ export const ReportsTabs: React.FC<ReportsTabsProps> = ({
                         <p className="text-2xl font-bold">{analyticsData?.totalInsights || 0}</p>
                         <p className="text-sm text-muted-foreground">Insights Gerados</p>
                       </div>
-                      <Sparkles className="h-8 w-8 text-yellow-500 opacity-50" />
+                      <Sparkles className="h-8 w-8 text-warning opacity-50" />
                     </div>
                   </CardContent>
                 </Card>
@@ -358,7 +358,7 @@ export const ReportsTabs: React.FC<ReportsTabsProps> = ({
                         <p className="text-2xl font-bold">{analyticsData?.activeAlerts || 0}</p>
                         <p className="text-sm text-muted-foreground">Alertas Ativos</p>
                       </div>
-                      <AlertCircle className="h-8 w-8 text-orange-500 opacity-50" />
+                      <AlertCircle className="h-8 w-8 text-warning opacity-50" />
                     </div>
                     <p className="text-xs mt-2 text-muted-foreground">de {analyticsData?.totalAlerts || 0} alertas totais</p>
                   </CardContent>
@@ -370,7 +370,7 @@ export const ReportsTabs: React.FC<ReportsTabsProps> = ({
                         <p className="text-2xl font-bold">{analyticsData?.totalReports || 0}</p>
                         <p className="text-sm text-muted-foreground">Total de Relatórios</p>
                       </div>
-                      <Activity className="h-8 w-8 text-blue-500 opacity-50" />
+                      <Activity className="h-8 w-8 text-info opacity-50" />
                     </div>
                   </CardContent>
                 </Card>

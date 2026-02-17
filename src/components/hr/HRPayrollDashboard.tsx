@@ -137,8 +137,8 @@ export function HRPayrollDashboard() {
         <Card>
           <CardContent className="p-4">
             <div className="flex items-center gap-3">
-              <div className="p-2 bg-blue-500/20 rounded-lg">
-                <Users className="h-5 w-5 text-blue-500" />
+              <div className="p-2 bg-info/20 rounded-lg">
+                <Users className="h-5 w-5 text-info" />
               </div>
               <div>
                 <p className="text-2xl font-bold">{totalCount}</p>
@@ -151,8 +151,8 @@ export function HRPayrollDashboard() {
         <Card>
           <CardContent className="p-4">
             <div className="flex items-center gap-3">
-              <div className="p-2 bg-green-500/20 rounded-lg">
-                <DollarSign className="h-5 w-5 text-green-500" />
+              <div className="p-2 bg-success/20 rounded-lg">
+                <DollarSign className="h-5 w-5 text-success" />
               </div>
               <div>
                 <p className="text-2xl font-bold">
@@ -167,8 +167,8 @@ export function HRPayrollDashboard() {
         <Card>
           <CardContent className="p-4">
             <div className="flex items-center gap-3">
-              <div className="p-2 bg-amber-500/20 rounded-lg">
-                <TrendingUp className="h-5 w-5 text-amber-500" />
+              <div className="p-2 bg-warning/20 rounded-lg">
+                <TrendingUp className="h-5 w-5 text-warning" />
               </div>
               <div>
                 <p className="text-2xl font-bold">
@@ -183,8 +183,8 @@ export function HRPayrollDashboard() {
         <Card>
           <CardContent className="p-4">
             <div className="flex items-center gap-3">
-              <div className="p-2 bg-purple-500/20 rounded-lg">
-                <Calculator className="h-5 w-5 text-purple-500" />
+              <div className="p-2 bg-accent/20 rounded-lg">
+                <Calculator className="h-5 w-5 text-accent-foreground" />
               </div>
               <div>
                 <p className="text-2xl font-bold">
@@ -216,14 +216,14 @@ export function HRPayrollDashboard() {
             <Progress value={(processedCount / totalCount) * 100} />
             
             <div className="grid grid-cols-3 gap-4 pt-4">
-              <div className="text-center p-3 bg-green-500/10 rounded-lg">
-                <CheckCircle2 className="h-5 w-5 text-green-500 mx-auto mb-1" />
-                <p className="text-lg font-bold text-green-500">{processedCount}</p>
+              <div className="text-center p-3 bg-success/10 rounded-lg">
+                <CheckCircle2 className="h-5 w-5 text-success mx-auto mb-1" />
+                <p className="text-lg font-bold text-success">{processedCount}</p>
                 <p className="text-xs text-muted-foreground">Calculados</p>
               </div>
-              <div className="text-center p-3 bg-amber-500/10 rounded-lg">
-                <AlertTriangle className="h-5 w-5 text-amber-500 mx-auto mb-1" />
-                <p className="text-lg font-bold text-amber-500">{anomalies.length}</p>
+              <div className="text-center p-3 bg-warning/10 rounded-lg">
+                <AlertTriangle className="h-5 w-5 text-warning mx-auto mb-1" />
+                <p className="text-lg font-bold text-warning">{anomalies.length}</p>
                 <p className="text-xs text-muted-foreground">Com Anomalias</p>
               </div>
               <div className="text-center p-3 bg-muted rounded-lg">
@@ -238,9 +238,9 @@ export function HRPayrollDashboard() {
 
       {/* AI Anomalies */}
       {anomalies.length > 0 && (
-        <Card className="border-amber-500/30">
+        <Card className="border-warning/30">
           <CardHeader>
-            <CardTitle className="flex items-center gap-2 text-amber-500">
+            <CardTitle className="flex items-center gap-2 text-warning">
               <AlertTriangle className="h-5 w-5" />
               Anomalias Detectadas pela IA
             </CardTitle>
@@ -248,7 +248,7 @@ export function HRPayrollDashboard() {
           </CardHeader>
           <CardContent className="space-y-3">
             {anomalies.map((anomaly) => (
-              <div key={`${anomaly.employee}-${anomaly.issue}`} className="flex items-center justify-between p-3 rounded-lg border border-amber-500/20 bg-amber-500/5">
+              <div key={`${anomaly.employee}-${anomaly.issue}`} className="flex items-center justify-between p-3 rounded-lg border border-warning/20 bg-warning/5">
                 <div>
                   <p className="font-medium">{anomaly.employee}</p>
                   <p className="text-sm text-muted-foreground">{anomaly.issue}</p>

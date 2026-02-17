@@ -178,22 +178,22 @@ const TIER_STYLES: Record<string, { bg: string; border: string; text: string; gl
     glow: "",
   },
   gold: {
-    bg: "bg-yellow-500/10",
-    border: "border-yellow-500/40",
-    text: "text-yellow-500",
-    glow: "shadow-yellow-500/20 shadow-md",
+    bg: "bg-warning/10",
+    border: "border-warning/40",
+    text: "text-warning",
+    glow: "shadow-warning/20 shadow-md",
   },
   platinum: {
-    bg: "bg-cyan-500/10",
-    border: "border-cyan-500/40",
-    text: "text-cyan-400",
-    glow: "shadow-cyan-500/20 shadow-md",
+    bg: "bg-info/10",
+    border: "border-info/40",
+    text: "text-info",
+    glow: "shadow-info/20 shadow-md",
   },
   master: {
-    bg: "bg-gradient-to-br from-purple-500/15 to-yellow-500/15",
-    border: "border-purple-500/50",
-    text: "text-purple-400",
-    glow: "shadow-purple-500/30 shadow-lg ring-1 ring-purple-500/20",
+    bg: "bg-gradient-to-br from-accent/15 to-warning/15",
+    border: "border-accent/50",
+    text: "text-accent-foreground",
+    glow: "shadow-accent/30 shadow-lg ring-1 ring-accent/20",
   },
 };
 
@@ -274,7 +274,7 @@ export function BadgeGamificationSystem({ userProgress }: Props) {
             <Badge variant="secondary" className="text-xs">
               {earnedCount}/{BADGE_DEFINITIONS.length} badges
             </Badge>
-            <Badge className="bg-purple-500/20 text-purple-400 border-purple-500/30 text-xs">
+            <Badge className="bg-accent/20 text-accent-foreground border-accent/30 text-xs">
               {totalXP} XP
             </Badge>
           </div>
@@ -325,7 +325,7 @@ export function BadgeGamificationSystem({ userProgress }: Props) {
                         </div>
                       )}
                       {badge.earned && (
-                        <CheckCircle2 className="absolute -top-1 -right-1 h-4 w-4 text-green-500 bg-background rounded-full" />
+                        <CheckCircle2 className="absolute -top-1 -right-1 h-4 w-4 text-success bg-background rounded-full" />
                       )}
                       {!badge.earned && (
                         <Lock className="absolute -top-1 -right-1 h-3.5 w-3.5 text-muted-foreground bg-background rounded-full p-0.5" />
@@ -345,7 +345,7 @@ export function BadgeGamificationSystem({ userProgress }: Props) {
                         Critério: {badge.criteria}
                       </p>
                       {badge.earned ? (
-                        <p className="text-[10px] text-green-500 font-medium">
+                        <p className="text-[10px] text-success font-medium">
                           ✅ Conquistado! +{badge.xpReward} XP
                         </p>
                       ) : (
