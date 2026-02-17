@@ -408,6 +408,7 @@ export function SmartEvidenceOrganizer({ framework }: Props) {
   const [viewMode, setViewMode] = useState<ViewMode>("tree");
   const [activeTab, setActiveTab] = useState("evidence");
   const [searchTerm, setSearchTerm] = useState("");
+  const [statusFilter, setStatusFilter] = useState<string>("all");
   const [manualDialogOpen, setManualDialogOpen] = useState(false);
   const [manualItemId, setManualItemId] = useState<string | null>(null);
   const [showLibrary, setShowLibrary] = useState(false);
@@ -416,12 +417,21 @@ export function SmartEvidenceOrganizer({ framework }: Props) {
   useEffect(() => { loadPacks(); }, [loadPacks]);
 
   const filteredItems = useMemo(() => {
-    if (!searchTerm) return items;
-    const lower = searchTerm.toLowerCase();
-    return items.filter(
-      (i) => i.item_text.toLowerCase().includes(lower) || i.item_number.includes(lower)
-    );
-  }, [items, searchTerm]);
+    let result = items;
+    if (statusFilter !== "all") {
+      result = result.filter(i => {
+        if (statusFilter === "gaps") return i.evidence_status === "not_found" || i.evidence_status === "pending";
+        return i.evidence_status === statusFilter;
+      });
+    }
+    if (searchTerm) {
+      const lower = searchTerm.toLowerCase();
+      result = result.filter(
+        (i) => i.item_text.toLowerCase().includes(lower) || i.item_number.includes(lower)
+      );
+    }
+    return result;
+  }, [items, searchTerm, statusFilter]);
 
   const handleAddManual = useCallback((itemId: string) => {
     setManualItemId(itemId);
@@ -539,14 +549,33 @@ export function SmartEvidenceOrganizer({ framework }: Props) {
                   </TabsList>
 
                   {activeTab === "evidence" && (
-                    <div className="flex items-center gap-2">
+                    <div className="flex items-center gap-2 flex-wrap">
+                      {/* Status Filter */}
+                      <div className="flex items-center gap-0.5 bg-muted rounded-md p-0.5">
+                        {[
+                          { key: "all", label: "Todos", count: items.length },
+                          { key: "found", label: "✅", count: items.filter(i => i.evidence_status === "found").length },
+                          { key: "partial", label: "⚠️", count: items.filter(i => i.evidence_status === "partial").length },
+                          { key: "gaps", label: "❌", count: items.filter(i => i.evidence_status === "not_found" || i.evidence_status === "pending").length },
+                        ].map(f => (
+                          <Button
+                            key={f.key}
+                            variant={statusFilter === f.key ? "default" : "ghost"}
+                            size="sm"
+                            onClick={() => setStatusFilter(f.key)}
+                            className="gap-1 h-7 text-xs"
+                          >
+                            {f.label} <span className="text-[10px] opacity-70">{f.count}</span>
+                          </Button>
+                        ))}
+                      </div>
                       <div className="relative">
                         <Search className="absolute left-2.5 top-2.5 h-4 w-4 text-muted-foreground" />
                         <Input
                           placeholder="Buscar item..."
                           value={searchTerm}
                           onChange={(e) => setSearchTerm(e.target.value)}
-                          className="pl-9 w-56"
+                          className="pl-9 w-48"
                         />
                       </div>
                       <div className="flex items-center gap-0.5 bg-muted rounded-md p-0.5">

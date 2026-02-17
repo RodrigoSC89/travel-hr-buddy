@@ -27,27 +27,71 @@ export const EvidenceExporter = memo(({ pack, elements, items, matches }: Props)
     try {
       const doc = new jsPDF({ orientation: "portrait", unit: "mm", format: "a4" });
       const pageWidth = doc.internal.pageSize.getWidth();
+      const pageHeight = doc.internal.pageSize.getHeight();
 
-      // Header
+      // === COVER PAGE ===
+      doc.setFillColor(10, 25, 47);
+      doc.rect(0, 0, pageWidth, pageHeight, "F");
+
+      // Accent line
+      doc.setFillColor(0, 180, 216);
+      doc.rect(14, 80, 60, 3, "F");
+
+      doc.setTextColor(255);
+      doc.setFontSize(28);
+      doc.setFont("helvetica", "bold");
+      doc.text("RELATÓRIO DE", 14, 100);
+      doc.text("EVIDÊNCIAS", 14, 115);
+
+      doc.setFontSize(14);
+      doc.setFont("helvetica", "normal");
+      doc.setTextColor(180, 200, 220);
+      doc.text(`Framework: ${pack.framework.toUpperCase()}`, 14, 130);
+      doc.text(`Pacote: ${pack.title}`, 14, 140);
+
+      // Score circle
+      const scoreX = pageWidth - 50;
+      const scoreY = 110;
+      doc.setFillColor(0, 180, 216);
+      doc.circle(scoreX, scoreY, 25, "F");
+      doc.setTextColor(255);
+      doc.setFontSize(32);
+      doc.setFont("helvetica", "bold");
+      doc.text(`${pack.overall_score.toFixed(0)}%`, scoreX, scoreY + 4, { align: "center" });
+      doc.setFontSize(8);
+      doc.text("SCORE", scoreX, scoreY + 12, { align: "center" });
+
+      // Summary stats on cover
+      doc.setTextColor(180, 200, 220);
+      doc.setFontSize(10);
+      doc.setFont("helvetica", "normal");
+      const statsY = 170;
+      doc.text(`Elementos: ${pack.total_elements}`, 14, statsY);
+      doc.text(`Itens: ${pack.total_items}`, 14, statsY + 8);
+      doc.text(`Encontradas: ${pack.matched_items}`, 14, statsY + 16);
+      doc.text(`Parciais: ${pack.partial_items}`, 14, statsY + 24);
+      doc.text(`Gaps: ${pack.unmatched_items}`, 14, statsY + 32);
+
+      // Footer
+      doc.setFontSize(8);
+      doc.setTextColor(100, 120, 140);
+      doc.text(`Gerado em: ${new Date().toLocaleDateString("pt-BR")} ${new Date().toLocaleTimeString("pt-BR")}`, 14, pageHeight - 20);
+      doc.text("Nautilus One — Maritime Compliance Platform", 14, pageHeight - 14);
+
+      // === PAGE 2: EXECUTIVE SUMMARY ===
+      doc.addPage();
       doc.setFillColor(10, 25, 47);
       doc.rect(0, 0, pageWidth, 40, "F");
       doc.setTextColor(255);
       doc.setFontSize(18);
       doc.setFont("helvetica", "bold");
-      doc.text("RELATÓRIO DE EVIDÊNCIAS DE AUDITORIA", pageWidth / 2, 16, { align: "center" });
-      doc.setFontSize(11);
-      doc.setFont("helvetica", "normal");
-      doc.text(`${pack.framework.toUpperCase()} — ${pack.title}`, pageWidth / 2, 25, { align: "center" });
+      doc.text("RESUMO EXECUTIVO", pageWidth / 2, 20, { align: "center" });
       doc.setFontSize(9);
-      doc.text(`Gerado em: ${new Date().toLocaleDateString("pt-BR")} | Score: ${pack.overall_score.toFixed(0)}%`, pageWidth / 2, 33, { align: "center" });
+      doc.setFont("helvetica", "normal");
+      doc.text(`${pack.framework.toUpperCase()} — ${pack.title}`, pageWidth / 2, 30, { align: "center" });
 
-      // Summary
       doc.setTextColor(0);
       let y = 50;
-      doc.setFontSize(14);
-      doc.setFont("helvetica", "bold");
-      doc.text("1. RESUMO EXECUTIVO", 14, y);
-      y += 8;
 
       const summaryData = [
         ["Total de Elementos", String(pack.total_elements)],
