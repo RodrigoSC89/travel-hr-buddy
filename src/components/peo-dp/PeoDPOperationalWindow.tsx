@@ -43,8 +43,8 @@ const ICON_MAP: Record<string, React.ElementType> = {
 };
 
 const statusConfig: Record<string, { label: string; color: string }> = {
-  online: { label: "Online", color: "bg-green-500" },
-  standby: { label: "Standby", color: "bg-blue-500" },
+  online: { label: "Online", color: "bg-success" },
+  standby: { label: "Standby", color: "bg-info" },
   offline: { label: "Offline", color: "bg-muted" },
   fault: { label: "Falha", color: "bg-destructive" },
 };

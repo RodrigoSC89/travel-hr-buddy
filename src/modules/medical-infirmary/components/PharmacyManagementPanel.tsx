@@ -245,7 +245,7 @@ export default function PharmacyManagementPanel() {
               const daysUntilExpiry = differenceInDays(new Date(med.expiryDate), new Date());
               return (
                 <motion.div key={med.id} initial={{ opacity: 0, y: 20 }} animate={{ opacity: 1, y: 0 }} exit={{ opacity: 0, scale: 0.9 }} transition={{ delay: index * 0.03 }}>
-                  <Card className={`hover:border-primary/50 transition-all cursor-pointer ${status === "expired" ? "border-destructive/50 bg-destructive/5" : status === "expiring-soon" || status === "low-stock" ? "border-amber-500/50" : ""}`} onClick={() => { setSelectedMed(med); setShowDispenseDialog(true); }}>
+                  <Card className={`hover:border-primary/50 transition-all cursor-pointer ${status === "expired" ? "border-destructive/50 bg-destructive/5" : status === "expiring-soon" || status === "low-stock" ? "border-warning/50" : ""}`} onClick={() => { setSelectedMed(med); setShowDispenseDialog(true); }}>
                     <CardContent className="p-4">
                       <div className="flex items-start justify-between mb-3">
                         <div className="flex items-center gap-3">

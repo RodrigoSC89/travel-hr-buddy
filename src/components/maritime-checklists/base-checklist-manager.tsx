@@ -238,7 +238,7 @@ export const BaseChecklistManager: React.FC<BaseChecklistManagerProps> = ({
             </div>
           ) : error ? (
             <div className="text-center py-8">
-              <p className="text-red-500">{error}</p>
+              <p className="text-destructive">{error}</p>
             </div>
           ) : (
             <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-4">

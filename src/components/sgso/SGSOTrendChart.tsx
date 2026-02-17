@@ -179,37 +179,37 @@ export function SGSOTrendChart({ data: customData }: SGSOTrendChartProps = {}) {
               <Line
                 type="monotone"
                 dataKey="baixo"
-                stroke="#10B981"
+                stroke="hsl(var(--success))"
                 strokeWidth={2}
                 name="Baixo"
-                dot={{ fill: "#10B981", r: 4 }}
+                dot={{ fill: "hsl(var(--success))", r: 4 }}
                 activeDot={{ r: 6 }}
               />
               <Line
                 type="monotone"
                 dataKey="moderado"
-                stroke="#FBBF24"
+                stroke="hsl(var(--warning))"
                 strokeWidth={2}
                 name="Moderado"
-                dot={{ fill: "#FBBF24", r: 4 }}
+                dot={{ fill: "hsl(var(--warning))", r: 4 }}
                 activeDot={{ r: 6 }}
               />
               <Line
                 type="monotone"
                 dataKey="alto"
-                stroke="#EF4444"
+                stroke="hsl(var(--destructive))"
                 strokeWidth={2}
                 name="Alto"
-                dot={{ fill: "#EF4444", r: 4 }}
+                dot={{ fill: "hsl(var(--destructive))", r: 4 }}
                 activeDot={{ r: 6 }}
               />
               <Line
                 type="monotone"
                 dataKey="crítico"
-                stroke="#991B1B"
+                stroke="hsl(var(--destructive))"
                 strokeWidth={2}
                 name="Crítico"
-                dot={{ fill: "#991B1B", r: 4 }}
+                dot={{ fill: "hsl(var(--destructive))", r: 4 }}
                 activeDot={{ r: 6 }}
               />
             </LineChart>

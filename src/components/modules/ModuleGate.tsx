@@ -55,7 +55,7 @@ export function ModuleGate({
           <Lock className="h-8 w-8 text-primary" />
         </div>
         <CardTitle className="flex items-center justify-center gap-2">
-          <Sparkles className="h-5 w-5 text-yellow-500" />
+          <Sparkles className="h-5 w-5 text-warning" />
           Módulo Bloqueado
         </CardTitle>
         <CardDescription>

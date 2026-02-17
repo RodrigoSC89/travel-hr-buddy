@@ -99,10 +99,10 @@ const expiryByMonth = [
 ];
 
 const statusDistribution = [
-  { name: "Válidos", value: 65, color: "#22c55e" },
-  { name: "Expirando", value: 20, color: "#f59e0b" },
-  { name: "Críticos", value: 10, color: "#ef4444" },
-  { name: "Expirados", value: 5, color: "#6b7280" },
+  { name: "Válidos", value: 65, color: "hsl(var(--success))" },
+  { name: "Expirando", value: 20, color: "hsl(var(--warning))" },
+  { name: "Críticos", value: 10, color: "hsl(var(--destructive))" },
+  { name: "Expirados", value: 5, color: "hsl(var(--muted-foreground))" },
 ];
 
 function getDaysUntilExpiry(expiryDate: string): number {

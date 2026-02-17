@@ -234,9 +234,9 @@ export const PredictiveMaintenanceRevolution: React.FC = () => {
         <CardContent className="space-y-4">
           {predictions.map((prediction) => (
             <Card key={prediction.id} className="border-l-4" style={{
-              borderLeftColor: prediction.priority === "critical" ? "#ef4444" : 
-                prediction.priority === "high" ? "#f97316" :
-                  prediction.priority === "medium" ? "#eab308" : "#22c55e"
+              borderLeftColor: prediction.priority === "critical" ? "hsl(var(--destructive))" : 
+                prediction.priority === "high" ? "hsl(var(--warning))" :
+                  prediction.priority === "medium" ? "hsl(var(--warning))" : "hsl(var(--success))"
             }}>
               <CardContent className="p-4">
                 <div className="flex items-start justify-between mb-4">

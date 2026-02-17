@@ -130,57 +130,57 @@ const CareerDevelopment: React.FC = () => {
   ];
 
   const getSkillColor = (nivel: number) => {
-    if (nivel >= 80) return 'bg-green-500';
-    if (nivel >= 60) return 'bg-blue-500';
-    if (nivel >= 40) return 'bg-yellow-500';
-    return 'bg-orange-500';
+    if (nivel >= 80) return 'bg-success';
+    if (nivel >= 60) return 'bg-primary';
+    if (nivel >= 40) return 'bg-warning';
+    return 'bg-destructive';
   };
 
   return (
     <div className="space-y-6">
       {/* Header Stats */}
       <div className="grid grid-cols-2 md:grid-cols-4 gap-4">
-        <Card className="bg-gradient-to-br from-blue-500/10 to-blue-600/5 border-blue-500/20">
+        <Card className="bg-gradient-to-br from-primary/10 to-primary/5 border-primary/20">
           <CardContent className="p-4">
             <div className="flex items-center justify-between">
               <div>
                 <p className="text-2xl font-bold">Nível 3</p>
                 <p className="text-sm text-muted-foreground">Engenheiro Pleno</p>
               </div>
-              <Award className="w-8 h-8 text-blue-500" />
+              <Award className="w-8 h-8 text-primary" />
             </div>
           </CardContent>
         </Card>
-        <Card className="bg-gradient-to-br from-green-500/10 to-green-600/5 border-green-500/20">
+        <Card className="bg-gradient-to-br from-success/10 to-success/5 border-success/20">
           <CardContent className="p-4">
             <div className="flex items-center justify-between">
               <div>
                 <p className="text-2xl font-bold">68%</p>
                 <p className="text-sm text-muted-foreground">Progresso Carreira</p>
               </div>
-              <TrendingUp className="w-8 h-8 text-green-500" />
+              <TrendingUp className="w-8 h-8 text-success" />
             </div>
           </CardContent>
         </Card>
-        <Card className="bg-gradient-to-br from-purple-500/10 to-purple-600/5 border-purple-500/20">
+        <Card className="bg-gradient-to-br from-accent/10 to-accent/5 border-accent/20">
           <CardContent className="p-4">
             <div className="flex items-center justify-between">
               <div>
                 <p className="text-2xl font-bold">12</p>
                 <p className="text-sm text-muted-foreground">Competências</p>
               </div>
-              <Star className="w-8 h-8 text-purple-500" />
+              <Star className="w-8 h-8 text-accent" />
             </div>
           </CardContent>
         </Card>
-        <Card className="bg-gradient-to-br from-orange-500/10 to-orange-600/5 border-orange-500/20">
+        <Card className="bg-gradient-to-br from-warning/10 to-warning/5 border-warning/20">
           <CardContent className="p-4">
             <div className="flex items-center justify-between">
               <div>
                 <p className="text-2xl font-bold">5</p>
                 <p className="text-sm text-muted-foreground">Certificações</p>
               </div>
-              <GraduationCap className="w-8 h-8 text-orange-500" />
+              <GraduationCap className="w-8 h-8 text-warning" />
             </div>
           </CardContent>
         </Card>
@@ -234,9 +234,9 @@ const CareerDevelopment: React.FC = () => {
                         animate={{ scale: 1 }}
                         transition={{ delay: index * 0.1 }}
                         className={`w-12 h-12 rounded-full flex items-center justify-center z-10 ${
-                          level.status === 'completed' ? 'bg-green-500 text-white' :
+                          level.status === 'completed' ? 'bg-success text-success-foreground' :
                           level.status === 'current' ? 'bg-primary text-primary-foreground ring-4 ring-primary/30' :
-                          level.status === 'next' ? 'bg-blue-500/20 border-2 border-blue-500 text-blue-500' :
+                          level.status === 'next' ? 'bg-primary/20 border-2 border-primary text-primary' :
                           'bg-muted text-muted-foreground'
                         }`}
                       >
@@ -256,7 +256,7 @@ const CareerDevelopment: React.FC = () => {
                       )}
                       {index < careerLevels.length - 1 && (
                         <div className={`absolute top-6 left-12 w-full h-0.5 ${
-                          level.status === 'completed' ? 'bg-green-500' : 'bg-muted'
+                          level.status === 'completed' ? 'bg-success' : 'bg-muted'
                         }`} style={{ width: 'calc(100% - 48px)' }} />
                       )}
                     </div>
@@ -273,9 +273,9 @@ const CareerDevelopment: React.FC = () => {
                 </div>
 
                 {/* Next Step */}
-                <div className="mt-6 p-4 bg-blue-500/10 border border-blue-500/30 rounded-lg">
+                <div className="mt-6 p-4 bg-primary/10 border border-primary/30 rounded-lg">
                   <div className="flex items-center gap-2 mb-2">
-                    <ArrowUp className="w-4 h-4 text-blue-500" />
+                    <ArrowUp className="w-4 h-4 text-primary" />
                     <span className="font-medium">Próximo Passo: {careerPath.proximoPasso}</span>
                   </div>
                   <p className="text-sm text-muted-foreground mb-3">
@@ -329,10 +329,10 @@ const CareerDevelopment: React.FC = () => {
           </Card>
 
           {/* Gap Analysis */}
-          <Card className="bg-gradient-to-r from-orange-500/5 to-red-500/5 border-orange-500/20">
+          <Card className="bg-gradient-to-r from-warning/5 to-destructive/5 border-warning/20">
             <CardHeader>
               <CardTitle className="flex items-center gap-2">
-                <Target className="w-5 h-5 text-orange-500" />
+                <Target className="w-5 h-5 text-warning" />
                 Gaps Identificados
               </CardTitle>
             </CardHeader>

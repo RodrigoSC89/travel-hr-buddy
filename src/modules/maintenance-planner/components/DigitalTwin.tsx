@@ -188,7 +188,7 @@ const SystemCard = ({ system }: { system: SystemStatus }) => {
         <div className="space-y-2">
           <div className="flex items-center justify-between text-xs">
             <span className="text-muted-foreground">Health</span>
-            <span className={system.health < 80 ? "text-yellow-500" : "text-green-500"}>
+            <span className={system.health < 80 ? "text-warning" : "text-success"}>
               {system.health}%
             </span>
           </div>
@@ -197,31 +197,31 @@ const SystemCard = ({ system }: { system: SystemStatus }) => {
           <div className="grid grid-cols-2 gap-2 mt-2 text-xs">
             {system.temperature && (
               <div className="flex items-center gap-1">
-                <Thermometer className="h-3 w-3 text-red-400" />
+                <Thermometer className="h-3 w-3 text-destructive" />
                 <span>{system.temperature.toFixed(1)}°C</span>
               </div>
             )}
             {system.rpm && (
               <div className="flex items-center gap-1">
-                <Gauge className="h-3 w-3 text-blue-400" />
+                <Gauge className="h-3 w-3 text-info" />
                 <span>{system.rpm.toFixed(0)} RPM</span>
               </div>
             )}
             {system.voltage && (
               <div className="flex items-center gap-1">
-                <Zap className="h-3 w-3 text-yellow-400" />
+                <Zap className="h-3 w-3 text-warning" />
                 <span>{system.voltage.toFixed(0)}V</span>
               </div>
             )}
             {system.pressure && (
               <div className="flex items-center gap-1">
-                <Activity className="h-3 w-3 text-purple-400" />
+                <Activity className="h-3 w-3 text-accent" />
                 <span>{system.pressure.toFixed(0)} bar</span>
               </div>
             )}
             {system.fuelRate && (
               <div className="flex items-center gap-1">
-                <Fuel className="h-3 w-3 text-orange-400" />
+                <Fuel className="h-3 w-3 text-warning" />
                 <span>{system.fuelRate.toFixed(0)} L/h</span>
               </div>
             )}

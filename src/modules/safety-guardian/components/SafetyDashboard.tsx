@@ -364,9 +364,9 @@ export const SafetyDashboard: React.FC = () => {
                       border: '1px solid hsl(var(--border))' 
                     }} 
                   />
-                  <Line type="monotone" dataKey="incidents" stroke="#ef4444" strokeWidth={2} name="Incidentes" />
-                  <Line type="monotone" dataKey="nearMiss" stroke="#f59e0b" strokeWidth={2} name="Near Miss" />
-                  <Line type="monotone" dataKey="unsafe" stroke="#3b82f6" strokeWidth={2} name="Cond. Inseguras" />
+                  <Line type="monotone" dataKey="incidents" stroke="hsl(var(--destructive))" strokeWidth={2} name="Incidentes" />
+                  <Line type="monotone" dataKey="nearMiss" stroke="hsl(var(--warning))" strokeWidth={2} name="Near Miss" />
+                  <Line type="monotone" dataKey="unsafe" stroke="hsl(var(--info))" strokeWidth={2} name="Cond. Inseguras" />
                 </LineChart>
               </ResponsiveContainer>
             </div>
