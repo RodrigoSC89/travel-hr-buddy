@@ -63,6 +63,19 @@ export function useRealtimeAlerts() {
           }
         }
       )
+      // Certificate expiry alerts
+      .on(
+        "postgres_changes",
+        { event: "UPDATE", schema: "public", table: "crew_certifications" },
+        (payload) => {
+          const cert = payload.new as Record<string, unknown>;
+          if (cert.status === "expired") {
+            toast.error(`📜 Certificado expirado: ${cert.certificate_type}`, {
+              duration: 10000,
+            });
+          }
+        }
+      )
       .subscribe((status) => {
         if (status === "SUBSCRIBED") {
           logger.info("Realtime alerts channel active");

@@ -352,6 +352,9 @@ export const NoonReportAnalyticsPage = lazy(() => import("@/pages/NoonReportAnal
 export const PSCHistoryPage = lazy(() => import("@/pages/PSCHistoryPage"));
 export const StowagePlanPage = lazy(() => import("@/pages/StowagePlanPage"));
 
+// Role Management (Admin only)
+export const RoleManagementPage = lazy(() => import("@/pages/admin/RoleManagementPage"));
+
 // AdminRoute (lazy-loaded RoleGuard)
 export const AdminRoute = lazy(() => import('@/components/auth/RoleGuard').then(mod => ({
   default: ({ children }: { children: React.ReactNode }) => (

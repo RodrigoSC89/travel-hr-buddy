@@ -394,6 +394,7 @@ export const AppRoutes = () => (
       <Route path="/admin/checklists" element={<Suspense fallback={<RouteFallback />}><Pages.AdminRoute><Pages.MaritimeCommandCenter /></Pages.AdminRoute></Suspense>} />
       <Route path="/admin/checklists/dashboard" element={<Suspense fallback={<RouteFallback />}><Pages.AdminRoute><Pages.AdminChecklistsDashboard /></Pages.AdminRoute></Suspense>} />
       <Route path="/admin/api-tester" element={<Suspense fallback={<RouteFallback />}><Pages.AdminRoute><Pages.AdminApiTester /></Pages.AdminRoute></Suspense>} />
+      <Route path="/admin/roles" element={<Suspense fallback={<RouteFallback />}><Pages.AdminRoute><Pages.RoleManagementPage /></Pages.AdminRoute></Suspense>} />
       
       {/* ======== NEW: CEO Dashboard & AI Predictive ======== */}
       <Route path="/ceo-dashboard" element={<Navigate to="/command?tab=ceo" replace />} />
