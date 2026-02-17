@@ -1510,3 +1510,7 @@ comment = "Multi-module audit simulator (ISM/MLC/ISPS/DP/PEOTRAM) — surpasses 
 [functions.get-market-tce-benchmark]
 verify_jwt = false
 comment = "TCE market benchmark by vessel type with percentile analysis — exclusive Nauti One"
+
+[functions.smart-evidence-organizer]
+verify_jwt = false
+comment = "AI-powered checklist parser + evidence matcher for PEO-DP and PEOTRAM audits"
