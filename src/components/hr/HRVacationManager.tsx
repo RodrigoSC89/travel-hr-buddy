@@ -105,11 +105,11 @@ export function HRVacationManager() {
                   </div>
 
                   <div className={`p-3 rounded-lg flex-1 ${
-                    request.aiRecommendation.approved ? 'bg-green-500/10' : 'bg-amber-500/10'
+                    request.aiRecommendation.approved ? 'bg-success/10' : 'bg-warning/10'
                   }`}>
                     <div className="flex items-center gap-2 mb-1">
                       <Brain className={`h-4 w-4 ${
-                        request.aiRecommendation.approved ? 'text-green-500' : 'text-amber-500'
+                        request.aiRecommendation.approved ? 'text-success' : 'text-warning'
                       }`} />
                       <span className="text-sm font-medium">
                         {request.aiRecommendation.approved ? 'IA Recomenda Aprovar' : 'IA Alerta'}
@@ -134,11 +134,11 @@ export function HRVacationManager() {
         </TabsContent>
 
         <TabsContent value="expiring" className="space-y-4 mt-4">
-          <Card className="border-amber-500/30 bg-amber-500/5">
+          <Card className="border-warning/30 bg-warning/5">
             <CardContent className="p-4">
               <div className="flex items-center gap-2 mb-2">
-                <AlertTriangle className="h-5 w-5 text-amber-500" />
-                <span className="font-medium text-amber-500">
+                <AlertTriangle className="h-5 w-5 text-warning" />
+                <span className="font-medium text-warning">
                   {expiringVacations.length} colaboradores com férias próximas de vencer
                 </span>
               </div>
@@ -150,8 +150,8 @@ export function HRVacationManager() {
 
           {expiringVacations.map((vacation) => (
             <Card key={vacation.id} className={
-              vacation.daysToExpiry <= 30 ? 'border-red-500/30' : 
-              vacation.daysToExpiry <= 60 ? 'border-amber-500/30' : ''
+              vacation.daysToExpiry <= 30 ? 'border-destructive/30' : 
+              vacation.daysToExpiry <= 60 ? 'border-warning/30' : ''
             }>
               <CardContent className="p-4">
                 <div className="flex flex-col md:flex-row md:items-center gap-4">

@@ -177,9 +177,9 @@ export function getDeadlineFromPriority(priority: Priority): Date {
  */
 export function getRiskLevelColor(level: RiskLevel): string {
   const colorMap: Record<RiskLevel, string> = {
-    Alto: "text-red-600",
-    Médio: "text-yellow-600",
-    Baixo: "text-gray-600",
+    Alto: "text-destructive",
+    Médio: "text-warning",
+    Baixo: "text-muted-foreground",
   };
   return colorMap[level];
 }
@@ -189,10 +189,10 @@ export function getRiskLevelColor(level: RiskLevel): string {
  */
 export function getPriorityColor(priority: Priority): string {
   const colorMap: Record<Priority, string> = {
-    Crítico: "bg-red-600",
-    Alto: "bg-orange-600",
-    Médio: "bg-yellow-600",
-    Baixo: "bg-blue-600",
+    Crítico: "bg-destructive",
+    Alto: "bg-warning",
+    Médio: "bg-warning/70",
+    Baixo: "bg-info",
   };
   return colorMap[priority];
 }

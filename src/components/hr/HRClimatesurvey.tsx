@@ -119,7 +119,7 @@ export function HRClimateSurvey() {
             <ThumbsUp className="h-4 w-4 text-muted-foreground" />
           </CardHeader>
           <CardContent>
-            <div className="text-2xl font-bold text-green-500">+{overallENPS}</div>
+            <div className="text-2xl font-bold text-success">+{overallENPS}</div>
             <p className="text-xs text-muted-foreground">+5 vs mês anterior</p>
           </CardContent>
         </Card>
@@ -152,7 +152,7 @@ export function HRClimateSurvey() {
             <AlertTriangle className="h-4 w-4 text-muted-foreground" />
           </CardHeader>
           <CardContent>
-            <div className="text-2xl font-bold text-yellow-500">3</div>
+            <div className="text-2xl font-bold text-warning">3</div>
             <p className="text-xs text-muted-foreground">Precisam de ação</p>
           </CardContent>
         </Card>
@@ -199,31 +199,31 @@ export function HRClimateSurvey() {
                       onClick={() => handleAnswer("negative")}
                       className={`p-6 rounded-2xl transition-all hover:scale-110 ${
                         answers[currentQuestion] === "negative" 
-                          ? "bg-red-500/20 ring-2 ring-red-500" 
+                          ? "bg-destructive/20 ring-2 ring-destructive" 
                           : "bg-muted hover:bg-muted/80"
                       }`}
                     >
-                      <Frown className="h-12 w-12 text-red-500" />
+                      <Frown className="h-12 w-12 text-destructive" />
                     </button>
                     <button
                       onClick={() => handleAnswer("neutral")}
                       className={`p-6 rounded-2xl transition-all hover:scale-110 ${
                         answers[currentQuestion] === "neutral" 
-                          ? "bg-yellow-500/20 ring-2 ring-yellow-500" 
+                          ? "bg-warning/20 ring-2 ring-warning" 
                           : "bg-muted hover:bg-muted/80"
                       }`}
                     >
-                      <Meh className="h-12 w-12 text-yellow-500" />
+                      <Meh className="h-12 w-12 text-warning" />
                     </button>
                     <button
                       onClick={() => handleAnswer("positive")}
                       className={`p-6 rounded-2xl transition-all hover:scale-110 ${
                         answers[currentQuestion] === "positive" 
-                          ? "bg-green-500/20 ring-2 ring-green-500" 
+                          ? "bg-success/20 ring-2 ring-success" 
                           : "bg-muted hover:bg-muted/80"
                       }`}
                     >
-                      <Smile className="h-12 w-12 text-green-500" />
+                      <Smile className="h-12 w-12 text-success" />
                     </button>
                   </div>
                 </div>
@@ -257,13 +257,13 @@ export function HRClimateSurvey() {
                       <p className="text-sm font-medium">{pulse.question}</p>
                       <div className="flex items-center gap-1">
                         {pulse.trend === "up" ? (
-                          <TrendingUp className="h-4 w-4 text-green-500" />
+                          <TrendingUp className="h-4 w-4 text-success" />
                         ) : pulse.trend === "down" ? (
-                          <TrendingDown className="h-4 w-4 text-red-500" />
+                          <TrendingDown className="h-4 w-4 text-destructive" />
                         ) : null}
                         <span className={`text-xs ${
-                          pulse.change > 0 ? "text-green-500" :
-                          pulse.change < 0 ? "text-red-500" :
+                          pulse.change > 0 ? "text-success" :
+                          pulse.change < 0 ? "text-destructive" :
                           "text-muted-foreground"
                         }`}>
                           {pulse.change > 0 ? "+" : ""}{pulse.change}%
@@ -273,15 +273,15 @@ export function HRClimateSurvey() {
                     
                     <div className="flex gap-1 h-4 rounded-full overflow-hidden">
                       <div 
-                        className="bg-green-500 transition-all"
+                        className="bg-success transition-all"
                         style={{ width: `${pulse.responses.positive}%` }}
                       />
                       <div 
-                        className="bg-yellow-500 transition-all"
+                        className="bg-warning transition-all"
                         style={{ width: `${pulse.responses.neutral}%` }}
                       />
                       <div 
-                        className="bg-red-500 transition-all"
+                        className="bg-destructive transition-all"
                         style={{ width: `${pulse.responses.negative}%` }}
                       />
                     </div>
@@ -325,9 +325,9 @@ export function HRClimateSurvey() {
                     <div className="w-12 text-right font-bold">{dept.score}</div>
                     <div className="w-8">
                       {dept.trend === "up" ? (
-                        <TrendingUp className="h-4 w-4 text-green-500" />
+                        <TrendingUp className="h-4 w-4 text-success" />
                       ) : dept.trend === "down" ? (
-                        <TrendingDown className="h-4 w-4 text-red-500" />
+                        <TrendingDown className="h-4 w-4 text-destructive" />
                       ) : (
                         <div className="h-4 w-4" />
                       )}
@@ -365,10 +365,10 @@ export function HRClimateSurvey() {
                       <div
                         key={`heat-${row.tema}-${i}`}
                         className={`py-2 text-center rounded ${
-                          score >= 80 ? "bg-green-500/30 text-green-700" :
-                          score >= 70 ? "bg-blue-500/30 text-blue-700" :
-                          score >= 60 ? "bg-yellow-500/30 text-yellow-700" :
-                          "bg-red-500/30 text-red-700"
+                          score >= 80 ? "bg-success/30 text-success" :
+                          score >= 70 ? "bg-info/30 text-info" :
+                          score >= 60 ? "bg-warning/30 text-warning" :
+                          "bg-destructive/30 text-destructive"
                         }`}
                       >
                         {score}
@@ -382,11 +382,11 @@ export function HRClimateSurvey() {
         </TabsContent>
 
         <TabsContent value="insights" className="space-y-4 mt-4">
-          <Card className="bg-gradient-to-r from-purple-500/10 to-blue-500/10 border-purple-500/20">
+          <Card className="bg-gradient-to-r from-accent/10 to-info/10 border-accent/20">
             <CardHeader>
               <div className="flex items-center gap-3">
-                <div className="p-2 bg-purple-500/20 rounded-lg">
-                  <Brain className="h-6 w-6 text-purple-500" />
+                <div className="p-2 bg-accent/20 rounded-lg">
+                  <Brain className="h-6 w-6 text-accent-foreground" />
                 </div>
                 <div>
                   <CardTitle>Análise de IA - Clima Organizacional</CardTitle>
@@ -398,8 +398,8 @@ export function HRClimateSurvey() {
               <div className="grid gap-4 md:grid-cols-2">
                 <div className="p-4 bg-background rounded-lg">
                   <div className="flex items-center gap-2 mb-2">
-                    <AlertTriangle className="h-5 w-5 text-red-500" />
-                    <span className="font-semibold text-red-500">Ponto Crítico</span>
+                    <AlertTriangle className="h-5 w-5 text-destructive" />
+                    <span className="font-semibold text-destructive">Ponto Crítico</span>
                   </div>
                   <p className="text-sm">
                     <strong>Financeiro</strong> apresenta queda de 12 pontos em reconhecimento. 
@@ -412,8 +412,8 @@ export function HRClimateSurvey() {
 
                 <div className="p-4 bg-background rounded-lg">
                   <div className="flex items-center gap-2 mb-2">
-                    <TrendingUp className="h-5 w-5 text-green-500" />
-                    <span className="font-semibold text-green-500">Destaque Positivo</span>
+                    <TrendingUp className="h-5 w-5 text-success" />
+                    <span className="font-semibold text-success">Destaque Positivo</span>
                   </div>
                   <p className="text-sm">
                     <strong>RH</strong> atingiu 92 pontos em colaboração - maior score da história. 
@@ -423,8 +423,8 @@ export function HRClimateSurvey() {
 
                 <div className="p-4 bg-background rounded-lg">
                   <div className="flex items-center gap-2 mb-2">
-                    <MessageSquare className="h-5 w-5 text-blue-500" />
-                    <span className="font-semibold text-blue-500">Tema Emergente</span>
+                    <MessageSquare className="h-5 w-5 text-info" />
+                    <span className="font-semibold text-info">Tema Emergente</span>
                   </div>
                   <p className="text-sm">
                     15% dos comentários mencionam "home office" e "flexibilidade". 
@@ -434,8 +434,8 @@ export function HRClimateSurvey() {
 
                 <div className="p-4 bg-background rounded-lg">
                   <div className="flex items-center gap-2 mb-2">
-                    <Sparkles className="h-5 w-5 text-purple-500" />
-                    <span className="font-semibold text-purple-500">Recomendação IA</span>
+                    <Sparkles className="h-5 w-5 text-accent-foreground" />
+                    <span className="font-semibold text-accent-foreground">Recomendação IA</span>
                   </div>
                   <p className="text-sm">
                     Baseado nos padrões, sugiro reunião 1-on-1 entre CEO e time Financeiro 
@@ -453,21 +453,21 @@ export function HRClimateSurvey() {
                       <span>Positivo</span>
                       <span>58%</span>
                     </div>
-                    <Progress value={58} className="h-2 bg-muted [&>div]:bg-green-500" />
+                    <Progress value={58} className="h-2 bg-muted [&>div]:bg-success" />
                   </div>
                   <div className="flex-1">
                     <div className="flex justify-between text-sm mb-1">
                       <span>Neutro</span>
                       <span>28%</span>
                     </div>
-                    <Progress value={28} className="h-2 bg-muted [&>div]:bg-yellow-500" />
+                    <Progress value={28} className="h-2 bg-muted [&>div]:bg-warning" />
                   </div>
                   <div className="flex-1">
                     <div className="flex justify-between text-sm mb-1">
                       <span>Negativo</span>
                       <span>14%</span>
                     </div>
-                    <Progress value={14} className="h-2 bg-muted [&>div]:bg-red-500" />
+                    <Progress value={14} className="h-2 bg-muted [&>div]:bg-destructive" />
                   </div>
                 </div>
               </div>
@@ -487,9 +487,9 @@ export function HRClimateSurvey() {
                     <span className="text-xs font-medium">{score}</span>
                     <div 
                       className={`w-full rounded-t transition-all ${
-                        score >= 70 ? "bg-green-500" :
-                        score >= 50 ? "bg-blue-500" :
-                        "bg-yellow-500"
+                        score >= 70 ? "bg-success" :
+                        score >= 50 ? "bg-info" :
+                        "bg-warning"
                       }`}
                       style={{ height: `${(score / 100) * 150}px` }}
                     />

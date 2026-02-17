@@ -205,7 +205,7 @@ export function HRAdmissionPipeline() {
                         <div className={`w-3 h-3 rounded-full ${stage.color}`} />
                         <span className="text-sm font-medium">{stage.label}</span>
                         {admission.status === 'validating' && (
-                          <Brain className="h-4 w-4 text-amber-500 animate-pulse" />
+                          <Brain className="h-4 w-4 text-warning animate-pulse" />
                         )}
                         {admission.ai_validation_score && (
                           <Badge variant="outline" className="text-xs">

@@ -137,9 +137,9 @@ export const EmployeeManagement = () => {
 
   const getStatusColor = (status: Employee["status"]) => {
     switch (status) {
-    case "active": return "bg-green-100 text-green-800 border-green-200";
-    case "vacation": return "bg-yellow-100 text-yellow-800 border-yellow-200";
-    case "travel": return "bg-blue-100 text-blue-800 border-blue-200";
+    case "active": return "bg-success/10 text-success border-success/20";
+    case "vacation": return "bg-warning/10 text-warning border-warning/20";
+    case "travel": return "bg-info/10 text-info border-info/20";
     case "inactive": return "bg-secondary text-secondary-foreground border-border";
     default: return "bg-secondary text-secondary-foreground border-border";
     }
@@ -308,7 +308,7 @@ export const EmployeeManagement = () => {
                           </div>
                         )}
                         <div className="flex items-center gap-2">
-                          <Award className="w-4 h-4 text-blue-500" />
+                          <Award className="w-4 h-4 text-info" />
                           <span className="text-muted-foreground">{employee.certifications.length} cert.</span>
                         </div>
                       </div>
