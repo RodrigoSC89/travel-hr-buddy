@@ -4,6 +4,8 @@
  * Refactored: sub-components in src/pages/calendar/
  */
 import React, { useState, useMemo } from 'react';
+import { motion } from 'framer-motion';
+import { staggerContainer, fadeUp } from '@/lib/animations/motion-variants';
 import { Calendar as CalendarIcon, Plus, Download, RefreshCw, Loader2, AlertTriangle, ListFilter } from 'lucide-react';
 import { Button } from '@/components/ui/button';
 import { Card } from '@/components/ui/card';
@@ -99,18 +101,23 @@ const CalendarView: React.FC = () => {
 
   return (
     <TooltipProvider>
-      <div className="container mx-auto p-6 space-y-6">
-        <div className="flex flex-col md:flex-row md:items-center md:justify-between gap-4">
-          <div>
-            <h1 className="text-3xl font-bold flex items-center gap-2"><CalendarIcon className="h-8 w-8 text-primary" />Calendário de Tarefas</h1>
-            <p className="text-muted-foreground mt-1">Visualização mensal das tarefas agendadas</p>
+      <motion.div initial="hidden" animate="visible" variants={staggerContainer} className="container mx-auto p-6 space-y-6">
+        <motion.div variants={fadeUp} className="flex flex-col md:flex-row md:items-center md:justify-between gap-4">
+          <div className="flex items-center gap-4">
+            <div className="p-3 rounded-xl bg-gradient-to-br from-primary/20 to-primary/5">
+              <CalendarIcon className="h-8 w-8 text-primary" />
+            </div>
+            <div>
+              <h1 className="text-3xl font-bold">Calendário de Tarefas</h1>
+              <p className="text-muted-foreground mt-1">Visualização mensal das tarefas agendadas</p>
+            </div>
           </div>
           <div className="flex items-center gap-2 flex-wrap">
             <Button onClick={() => { setNewTask(prev => ({ ...prev, due_date: '' })); setCreateDialogOpen(true); }} className="gap-2"><Plus className="h-4 w-4" />Nova Tarefa</Button>
             <Button variant="outline" size="sm" onClick={handleExportCSV} className="gap-2"><Download className="h-4 w-4" />Exportar</Button>
             <Button variant="outline" size="sm" onClick={() => refetch()} className="gap-2"><RefreshCw className="h-4 w-4" />Atualizar</Button>
           </div>
-        </div>
+        </motion.div>
 
         <div className="grid grid-cols-2 md:grid-cols-5 gap-3">
           <Card className="p-3"><div className="flex items-center justify-between"><span className="text-sm text-muted-foreground">Total</span><Badge variant="secondary">{stats.total}</Badge></div></Card>
@@ -135,7 +142,7 @@ const CalendarView: React.FC = () => {
         <CreateTaskDialog open={createDialogOpen} onOpenChange={setCreateDialogOpen} newTask={newTask} setNewTask={setNewTask} onSubmit={handleCreateTask} isPending={createTask.isPending} />
         <EditTaskDialog task={editingTask} onClose={() => setEditingTask(null)} onSubmit={handleEditTask} onChange={setEditingTask} isPending={updateTask.isPending} />
         <DeleteTaskDialog task={deleteConfirmTask} onClose={() => setDeleteConfirmTask(null)} onSubmit={handleDeleteTask} isPending={deleteTask.isPending} />
-      </div>
+      </motion.div>
     </TooltipProvider>
   );
 };
