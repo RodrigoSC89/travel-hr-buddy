@@ -288,15 +288,15 @@ export function HRClimateSurvey() {
 
                     <div className="flex justify-between text-xs text-muted-foreground">
                       <span className="flex items-center gap-1">
-                        <Smile className="h-3 w-3 text-green-500" />
+                        <Smile className="h-3 w-3 text-success" />
                         {pulse.responses.positive}%
                       </span>
                       <span className="flex items-center gap-1">
-                        <Meh className="h-3 w-3 text-yellow-500" />
+                        <Meh className="h-3 w-3 text-warning" />
                         {pulse.responses.neutral}%
                       </span>
                       <span className="flex items-center gap-1">
-                        <Frown className="h-3 w-3 text-red-500" />
+                        <Frown className="h-3 w-3 text-destructive" />
                         {pulse.responses.negative}%
                       </span>
                     </div>

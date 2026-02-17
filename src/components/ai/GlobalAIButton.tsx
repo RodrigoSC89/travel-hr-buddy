@@ -186,9 +186,9 @@ export function GlobalAIButton({ className, defaultModule = 'command' }: GlobalA
           className="w-80 p-0 mb-2"
           sideOffset={8}
         >
-          <div className="p-4 border-b bg-gradient-to-r from-purple-500/10 to-blue-500/10">
+          <div className="p-4 border-b bg-gradient-to-r from-accent/10 to-primary/10">
             <div className="flex items-center gap-2 mb-3">
-              <Sparkles className="h-5 w-5 text-purple-500" />
+              <Sparkles className="h-5 w-5 text-accent-foreground" />
               <span className="font-semibold">Nautilus AI Hub</span>
             </div>
             

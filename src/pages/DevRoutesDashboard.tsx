@@ -114,7 +114,7 @@ export default function DevRoutesDashboard() {
       <div className="min-h-screen flex items-center justify-center bg-background">
         <Card className="max-w-md">
           <CardContent className="p-8 text-center">
-            <AlertTriangle className="h-12 w-12 mx-auto mb-4 text-amber-500" />
+            <AlertTriangle className="h-12 w-12 mx-auto mb-4 text-warning" />
             <h2 className="text-xl font-bold mb-2">Acesso Restrito</h2>
             <p className="text-muted-foreground">
               Este dashboard só está disponível em modo de desenvolvimento.
@@ -398,7 +398,7 @@ export default function DevRoutesDashboard() {
           </Card>
           <Card>
             <CardContent className="p-4 text-center">
-              <div className="text-2xl font-bold text-amber-500">{corrections.length}</div>
+              <div className="text-2xl font-bold text-warning">{corrections.length}</div>
               <div className="text-xs text-muted-foreground">Correções Mapeadas</div>
             </CardContent>
           </Card>
@@ -412,7 +412,7 @@ export default function DevRoutesDashboard() {
           </Card>
           <Card>
             <CardContent className="p-4 text-center">
-              <div className="text-2xl font-bold text-purple-500">
+              <div className="text-2xl font-bold text-accent-foreground">
                 {Object.keys(ROUTE_CATEGORIES).length}
               </div>
               <div className="text-xs text-muted-foreground">Categorias</div>

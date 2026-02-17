@@ -329,7 +329,7 @@ const VesselVisualization = ({ telemetry }: { telemetry: TelemetryData }) => {
       {/* DP Status */}
       <div className="absolute top-4 right-4 bg-background/80 rounded-lg p-2 backdrop-blur">
         <div className="flex items-center gap-2">
-          <Anchor className={`h-4 w-4 ${telemetry.dp.status === "active" ? "text-green-500" : "text-muted-foreground"}`} />
+          <Anchor className={`h-4 w-4 ${telemetry.dp.status === "active" ? "text-success" : "text-muted-foreground"}`} />
           <span className="text-sm">DP {telemetry.dp.mode}</span>
           <Badge variant={telemetry.dp.alertLevel <= 1 ? "outline" : "destructive"} className="text-xs">
             AL{telemetry.dp.alertLevel}
@@ -402,7 +402,7 @@ export default function DigitalTwin() {
           >
             {isLive ? (
               <>
-                <CircleDot className="h-4 w-4 mr-1 animate-pulse text-red-500" />
+                <CircleDot className="h-4 w-4 mr-1 animate-pulse text-destructive" />
                 LIVE
               </>
             ) : (
@@ -430,7 +430,7 @@ export default function DigitalTwin() {
             </div>
             <div className="mt-2 flex flex-wrap gap-2">
               {criticalSystems.map(sys => (
-                <Badge key={sys.id} variant="outline" className="text-yellow-600">
+                <Badge key={sys.id} variant="outline" className="text-warning">
                   {sys.name}
                 </Badge>
               ))}
@@ -503,7 +503,7 @@ export default function DigitalTwin() {
         <Card>
           <CardContent className="p-3">
             <div className="flex items-center gap-2">
-              <Battery className="h-4 w-4 text-green-500" />
+              <Battery className="h-4 w-4 text-success" />
               <div>
                 <p className="text-xs text-muted-foreground">Consumo Total</p>
                 <p className="text-lg font-semibold">
@@ -516,7 +516,7 @@ export default function DigitalTwin() {
         <Card>
           <CardContent className="p-3">
             <div className="flex items-center gap-2">
-              <Zap className="h-4 w-4 text-yellow-500" />
+              <Zap className="h-4 w-4 text-warning" />
               <div>
                 <p className="text-xs text-muted-foreground">Carga Elétrica</p>
                 <p className="text-lg font-semibold">
@@ -529,7 +529,7 @@ export default function DigitalTwin() {
         <Card>
           <CardContent className="p-3">
             <div className="flex items-center gap-2">
-              <Anchor className="h-4 w-4 text-blue-500" />
+              <Anchor className="h-4 w-4 text-primary" />
               <div>
                 <p className="text-xs text-muted-foreground">DP Utilização</p>
                 <p className="text-lg font-semibold">
@@ -542,7 +542,7 @@ export default function DigitalTwin() {
         <Card>
           <CardContent className="p-3">
             <div className="flex items-center gap-2">
-              <Waves className="h-4 w-4 text-cyan-500" />
+              <Waves className="h-4 w-4 text-info" />
               <div>
                 <p className="text-xs text-muted-foreground">Sea State</p>
                 <p className="text-lg font-semibold">{telemetry.environment.seaState}</p>

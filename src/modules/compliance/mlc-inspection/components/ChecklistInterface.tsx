@@ -116,8 +116,8 @@ export function ChecklistInterface({ inspectionId, onUpdate }: ChecklistInterfac
                         <CardTitle className="text-base">{item.category}</CardTitle>
                         {existingFinding && (
                           existingFinding.compliance ? 
-                            <CheckCircle2 className="h-5 w-5 text-green-500" /> : 
-                            <AlertCircle className="h-5 w-5 text-red-500" />
+                            <CheckCircle2 className="h-5 w-5 text-success" /> : 
+                            <AlertCircle className="h-5 w-5 text-destructive" />
                         )}
                       </div>
                       <CardDescription className="mt-1">{item.description}</CardDescription>

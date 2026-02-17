@@ -154,12 +154,12 @@ export const EvidenceValidityTimeline = memo(({ items, matches, elements }: Prop
             <p className="text-xl font-bold text-destructive">{stats.expired}</p>
           </CardContent>
         </Card>
-        <Card className="border-l-4 border-l-yellow-500">
+        <Card className="border-l-4 border-l-warning">
           <CardContent className="py-3 px-3">
             <div className="flex items-center gap-1.5 text-xs text-muted-foreground mb-1">
-              <AlertTriangle className="h-3.5 w-3.5 text-yellow-500" /> Expirando
+              <AlertTriangle className="h-3.5 w-3.5 text-warning" /> Expirando
             </div>
-            <p className="text-xl font-bold text-yellow-500">{stats.expiringSoon}</p>
+            <p className="text-xl font-bold text-warning">{stats.expiringSoon}</p>
           </CardContent>
         </Card>
         <Card className="border-l-4 border-l-success">

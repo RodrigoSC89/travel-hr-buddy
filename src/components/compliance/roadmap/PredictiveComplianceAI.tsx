@@ -479,7 +479,7 @@ export function PredictiveComplianceAI() {
                   <Line 
                     type="monotone" 
                     dataKey="predicted" 
-                    stroke="#22c55e" 
+                    stroke="hsl(var(--success))" 
                     strokeDasharray="5 5"
                     name="Previsão IA"
                   />

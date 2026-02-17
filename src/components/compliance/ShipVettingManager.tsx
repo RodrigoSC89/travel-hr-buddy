@@ -143,15 +143,15 @@ export function ShipVettingManager() {
       <div className="grid grid-cols-2 md:grid-cols-4 gap-4">
         <Card className="border-border/50 bg-card/80"><CardContent className="p-4 text-center">
           <p className="text-xs text-muted-foreground">Fleet Avg Score</p>
-          <p className="text-3xl font-bold text-emerald-400">{avgScore}</p>
+          <p className="text-3xl font-bold text-success">{avgScore}</p>
         </CardContent></Card>
         <Card className="border-border/50 bg-card/80"><CardContent className="p-4 text-center">
           <p className="text-xs text-muted-foreground">Total Inspections</p>
-          <p className="text-3xl font-bold text-cyan-400">{records.length}</p>
+          <p className="text-3xl font-bold text-info">{records.length}</p>
         </CardContent></Card>
         <Card className="border-border/50 bg-card/80"><CardContent className="p-4 text-center">
           <p className="text-xs text-muted-foreground">Open Findings</p>
-          <p className="text-3xl font-bold text-amber-400">{records.reduce((s: number, r: any) => s + (r.observations_count || 0), 0)}</p>
+          <p className="text-3xl font-bold text-warning">{records.reduce((s: number, r: any) => s + (r.observations_count || 0), 0)}</p>
         </CardContent></Card>
         <Card className="border-border/50 bg-card/80"><CardContent className="p-4 text-center">
           <p className="text-xs text-muted-foreground">Scheduled</p>
@@ -160,7 +160,7 @@ export function ShipVettingManager() {
       </div>
 
       {isLoading ? (
-        <div className="flex items-center justify-center py-12"><Loader2 className="h-8 w-8 animate-spin text-emerald-400" /></div>
+        <div className="flex items-center justify-center py-12"><Loader2 className="h-8 w-8 animate-spin text-success" /></div>
       ) : (
         <Tabs value={tab} onValueChange={setTab}>
           <TabsList className="bg-muted/30">
@@ -180,7 +180,7 @@ export function ShipVettingManager() {
                   <div className="flex items-start justify-between">
                     <div>
                       <div className="flex items-center gap-2 mb-1">
-                        <Ship className="h-4 w-4 text-cyan-400" />
+                        <Ship className="h-4 w-4 text-info" />
                         <span className="font-semibold">{rec.vessel_name}</span>
                         <Badge variant="outline">{rec.inspection_type}</Badge>
                         <Badge variant="outline" className={statusColors[rec.status] || ""}>
@@ -233,8 +233,8 @@ export function ShipVettingManager() {
                           {[0,1,2,3,4].map(j => (
                             <td key={j} className="text-center p-2">
                               {records.some((r: any) => r.vessel_name === vessel && r.status === "completed") ? 
-                                <CheckCircle2 className="h-5 w-5 text-emerald-400 mx-auto" /> : 
-                                <Clock className="h-5 w-5 text-amber-400 mx-auto" />
+                                <CheckCircle2 className="h-5 w-5 text-success mx-auto" /> : 
+                                <Clock className="h-5 w-5 text-warning mx-auto" />
                               }
                             </td>
                           ))}

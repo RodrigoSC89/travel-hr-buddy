@@ -120,11 +120,11 @@ export const CarbonTrackingPanel: React.FC = () => {
 
   const getCIIBadge = (rating: string) => {
     const colors: Record<string, string> = {
-      A: "bg-green-500",
-      B: "bg-lime-500",
-      C: "bg-yellow-500",
-      D: "bg-orange-500",
-      E: "bg-red-500"
+      A: "bg-success",
+      B: "bg-success/80",
+      C: "bg-warning",
+      D: "bg-warning/80",
+      E: "bg-destructive"
     };
     return <Badge className={`${colors[rating]} text-white`}>{rating}</Badge>;
   };
@@ -494,7 +494,7 @@ export const CarbonTrackingPanel: React.FC = () => {
                 <div className="space-y-4">
                   <div className="p-4 border rounded-lg">
                     <div className="flex items-center gap-2 mb-2">
-                      <Badge className="bg-blue-500">IMO DCS</Badge>
+                      <Badge className="bg-info text-info-foreground">IMO DCS</Badge>
                       <span className="font-medium">IMO Data Collection System</span>
                     </div>
                     <p className="text-sm text-muted-foreground">
@@ -504,7 +504,7 @@ export const CarbonTrackingPanel: React.FC = () => {
 
                   <div className="p-4 border rounded-lg">
                     <div className="flex items-center gap-2 mb-2">
-                      <Badge className="bg-green-500">EU MRV</Badge>
+                      <Badge className="bg-success text-success-foreground">EU MRV</Badge>
                       <span className="font-medium">EU Monitoring, Reporting & Verification</span>
                     </div>
                     <p className="text-sm text-muted-foreground">
@@ -516,7 +516,7 @@ export const CarbonTrackingPanel: React.FC = () => {
                 <div className="space-y-4">
                   <div className="p-4 border rounded-lg">
                     <div className="flex items-center gap-2 mb-2">
-                      <Badge className="bg-purple-500">GHG Protocol</Badge>
+                      <Badge className="bg-accent text-accent-foreground">GHG Protocol</Badge>
                       <span className="font-medium">Corporate Standard</span>
                     </div>
                     <p className="text-sm text-muted-foreground">
@@ -526,7 +526,7 @@ export const CarbonTrackingPanel: React.FC = () => {
 
                   <div className="p-4 border rounded-lg">
                     <div className="flex items-center gap-2 mb-2">
-                      <Badge className="bg-amber-500">CII Rating</Badge>
+                      <Badge className="bg-warning text-warning-foreground">CII Rating</Badge>
                       <span className="font-medium">Carbon Intensity Indicator</span>
                     </div>
                     <p className="text-sm text-muted-foreground">

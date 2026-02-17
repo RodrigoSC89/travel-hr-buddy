@@ -268,9 +268,9 @@ const AdvancedReportsSystem = () => {
                       <YAxis />
                       <Tooltip />
                       <Legend />
-                      <Area type="monotone" dataKey="revenue" stackId="1" stroke="#10b981" fill="#10b981" fillOpacity={0.6} />
-                      <Area type="monotone" dataKey="expenses" stackId="2" stroke="#ef4444" fill="#ef4444" fillOpacity={0.6} />
-                      <Line type="monotone" dataKey="profit" stroke="#3b82f6" strokeWidth={3} />
+                      <Area type="monotone" dataKey="revenue" stackId="1" stroke="hsl(var(--success))" fill="hsl(var(--success))" fillOpacity={0.6} />
+                      <Area type="monotone" dataKey="expenses" stackId="2" stroke="hsl(var(--destructive))" fill="hsl(var(--destructive))" fillOpacity={0.6} />
+                      <Line type="monotone" dataKey="profit" stroke="hsl(var(--primary))" strokeWidth={3} />
                     </AreaChart>
                   </ResponsiveContainer>
                 </CardContent>
@@ -291,8 +291,8 @@ const AdvancedReportsSystem = () => {
                       <YAxis />
                       <Tooltip />
                       <Legend />
-                      <Bar dataKey="target" fill="#e5e7eb" name="Meta" />
-                      <Bar dataKey="actual" fill="#3b82f6" name="Realizado" />
+                      <Bar dataKey="target" fill="hsl(var(--muted))" name="Meta" />
+                      <Bar dataKey="actual" fill="hsl(var(--primary))" name="Realizado" />
                     </BarChart>
                   </ResponsiveContainer>
                 </CardContent>

@@ -182,7 +182,7 @@ export function ASOGStatusDisplay({
               <Button 
                 size="sm" 
                 variant={data.status === "green" ? "default" : "outline"}
-                className={data.status === "green" ? "bg-green-500 hover:bg-green-600 text-white" : ""}
+                className={data.status === "green" ? "bg-success hover:bg-success/90 text-success-foreground" : ""}
                 onClick={() => onStatusChange?.("green")}
               >
                 <CheckCircle className="h-4 w-4 mr-1" /> Normal
@@ -190,7 +190,7 @@ export function ASOGStatusDisplay({
               <Button 
                 size="sm" 
                 variant={data.status === "blue" ? "default" : "outline"}
-                className={data.status === "blue" ? "bg-blue-500 hover:bg-blue-600 text-white" : ""}
+                className={data.status === "blue" ? "bg-info hover:bg-info/90 text-info-foreground" : ""}
                 onClick={() => onStatusChange?.("blue")}
               >
                 <Info className="h-4 w-4 mr-1" /> Advisory
@@ -198,7 +198,7 @@ export function ASOGStatusDisplay({
               <Button 
                 size="sm" 
                 variant={data.status === "yellow" ? "default" : "outline"}
-                className={data.status === "yellow" ? "bg-yellow-500 hover:bg-yellow-600 text-white" : ""}
+                className={data.status === "yellow" ? "bg-warning hover:bg-warning/90 text-warning-foreground" : ""}
                 onClick={() => onStatusChange?.("yellow")}
               >
                 <AlertTriangle className="h-4 w-4 mr-1" /> Degradado
@@ -206,7 +206,7 @@ export function ASOGStatusDisplay({
               <Button 
                 size="sm" 
                 variant={data.status === "red" ? "default" : "outline"}
-                className={data.status === "red" ? "bg-red-500 hover:bg-red-600 text-white" : ""}
+                className={data.status === "red" ? "bg-destructive hover:bg-destructive/90 text-destructive-foreground" : ""}
                 onClick={() => onStatusChange?.("red")}
               >
                 <XCircle className="h-4 w-4 mr-1" /> Emergência

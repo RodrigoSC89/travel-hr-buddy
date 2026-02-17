@@ -189,7 +189,7 @@ const VRTrainingPage = () => {
                 <Progress value={myProgress.progressToBadge} className="h-2" />
               </div>
             </div>
-            <div className="hidden md:flex items-center gap-2"><Award className="h-16 w-16 text-yellow-500" /></div>
+            <div className="hidden md:flex items-center gap-2"><Award className="h-16 w-16 text-warning" /></div>
           </div>
         </CardContent>
       </Card>

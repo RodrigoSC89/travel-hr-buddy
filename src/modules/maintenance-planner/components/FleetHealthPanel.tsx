@@ -70,7 +70,7 @@ export const FleetHealthPanel: React.FC<FleetHealthPanelProps> = ({
                 <p className="text-sm text-muted-foreground">MTBF</p>
                 <p className="text-2xl font-bold">{kpis.mtbf}</p>
               </div>
-              <TrendingUp className="h-8 w-8 text-green-500 opacity-50" />
+              <TrendingUp className="h-8 w-8 text-success opacity-50" />
             </div>
             <p className="text-xs text-muted-foreground mt-1">Tempo médio entre falhas</p>
           </CardContent>
@@ -80,9 +80,9 @@ export const FleetHealthPanel: React.FC<FleetHealthPanelProps> = ({
             <div className="flex items-center justify-between">
               <div>
                 <p className="text-sm text-muted-foreground">Jobs Críticos</p>
-                <p className="text-2xl font-bold text-red-500">{kpis.jobsCriticos}</p>
+                <p className="text-2xl font-bold text-destructive">{kpis.jobsCriticos}</p>
               </div>
-              <AlertTriangle className="h-8 w-8 text-red-500 opacity-50" />
+              <AlertTriangle className="h-8 w-8 text-destructive opacity-50" />
             </div>
             <p className="text-xs text-muted-foreground mt-1">Requerem atenção imediata</p>
           </CardContent>
@@ -94,7 +94,7 @@ export const FleetHealthPanel: React.FC<FleetHealthPanelProps> = ({
                 <p className="text-sm text-muted-foreground">Conformidade</p>
                 <p className="text-2xl font-bold">{kpis.taxaConformidade}%</p>
               </div>
-              <CheckCircle className="h-8 w-8 text-green-500 opacity-50" />
+              <CheckCircle className="h-8 w-8 text-success opacity-50" />
             </div>
             <Progress value={kpis.taxaConformidade} className="mt-2 h-1" />
           </CardContent>
