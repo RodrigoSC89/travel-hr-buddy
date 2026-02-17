@@ -18,6 +18,7 @@ export const DevRoutesDashboard = lazy(() => import("@/pages/DevRoutesDashboard"
 export const Billing = lazy(() => import("@/pages/Settings"));
 export const BillingPortal = lazy(() => import("@/pages/Settings"));
 export const OnboardingDashboard = lazy(() => import("@/pages/OnboardingDashboard"));
+export const TenantOnboardingWizard = lazy(() => import("@/pages/TenantOnboardingWizardPage"));
 export const InteractiveOnboarding = lazy(() => import("@/pages/InteractiveOnboarding"));
 export const AnalyticsFeedback = lazy(() => import("@/pages/AnalyticsFeedback"));
 
