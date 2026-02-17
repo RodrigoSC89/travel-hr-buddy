@@ -42,10 +42,10 @@ export const leaderboard = [
 
 export function getDifficultyColor(difficulty: string) {
   switch (difficulty) {
-    case "beginner": return "bg-green-500";
-    case "intermediate": return "bg-yellow-500";
-    case "advanced": return "bg-orange-500";
-    case "expert": return "bg-red-500";
+    case "beginner": return "bg-success";
+    case "intermediate": return "bg-warning";
+    case "advanced": return "bg-warning";
+    case "expert": return "bg-destructive";
     default: return "bg-muted";
   }
 }

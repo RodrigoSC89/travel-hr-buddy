@@ -163,21 +163,21 @@ export default function SimilarExamplesDemo() {
           </CardHeader>
           <CardContent>
             <div className="space-y-4">
-              <div className="border-l-4 border-blue-500 pl-4">
+              <div className="border-l-4 border-primary pl-4">
                 <h4 className="font-semibold">Cenário 1: Problema no Gerador</h4>
                 <p className="text-sm text-muted-foreground">
                   Digite &quot;Gerador com ruído&quot; e veja casos similares de falhas em geradores
                 </p>
               </div>
               
-              <div className="border-l-4 border-green-500 pl-4">
+              <div className="border-l-4 border-success pl-4">
                 <h4 className="font-semibold">Cenário 2: Manutenção Preventiva</h4>
                 <p className="text-sm text-muted-foreground">
                   Digite &quot;Bomba hidráulica vibração&quot; para encontrar casos de manutenção preventiva
                 </p>
               </div>
               
-              <div className="border-l-4 border-orange-500 pl-4">
+              <div className="border-l-4 border-warning pl-4">
                 <h4 className="font-semibold">Cenário 3: Falha Crítica</h4>
                 <p className="text-sm text-muted-foreground">
                   Digite &quot;Válvula de segurança&quot; para ver ações urgentes tomadas em casos similares

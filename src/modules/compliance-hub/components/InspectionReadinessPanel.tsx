@@ -30,10 +30,10 @@ interface ChecklistItem {
 }
 
 const inspectionTypes = [
-  { id: "psc", name: "PSC", icon: Ship, color: "text-blue-500", description: "Port State Control" },
-  { id: "flag", name: "Flag State", icon: Shield, color: "text-green-500", description: "Bandeira" },
-  { id: "ovid", name: "OVID", icon: Anchor, color: "text-purple-500", description: "Oil Companies" },
-  { id: "cdi", name: "CDI", icon: Clipboard, color: "text-orange-500", description: "Chemical Distribution" },
+  { id: "psc", name: "PSC", icon: Ship, color: "text-primary", description: "Port State Control" },
+  { id: "flag", name: "Flag State", icon: Shield, color: "text-success", description: "Bandeira" },
+  { id: "ovid", name: "OVID", icon: Anchor, color: "text-accent-foreground", description: "Oil Companies" },
+  { id: "cdi", name: "CDI", icon: Clipboard, color: "text-warning", description: "Chemical Distribution" },
 ];
 
 const fallbackChecklist: ChecklistItem[] = [

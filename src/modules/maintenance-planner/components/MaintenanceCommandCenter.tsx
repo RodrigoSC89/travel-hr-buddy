@@ -486,7 +486,7 @@ export function MaintenanceCommandCenter() {
                 
                 <div className="p-4 rounded-lg bg-card">
                   <div className="flex items-center gap-2 mb-2">
-                    <Package className="h-4 w-4 text-blue-500" />
+                    <Package className="h-4 w-4 text-primary" />
                     <span className="font-medium text-sm">Estoque</span>
                   </div>
                   <p className="text-sm text-muted-foreground">

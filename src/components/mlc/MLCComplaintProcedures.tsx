@@ -160,7 +160,7 @@ export function MLCComplaintProcedures() {
             {ESCALATION_LABELS.map((label, idx) => (
               <React.Fragment key={idx}>
                 <div className={`flex-1 text-center p-2 rounded text-xs font-medium ${
-                  idx === 0 ? "bg-primary/10 text-primary" : idx === 1 ? "bg-warning/10 text-warning" : idx === 2 ? "bg-orange-500/10 text-orange-600" : "bg-destructive/10 text-destructive"
+                  idx === 0 ? "bg-primary/10 text-primary" : idx === 1 ? "bg-warning/10 text-warning" : idx === 2 ? "bg-warning/20 text-warning" : "bg-destructive/10 text-destructive"
                 }`}>
                   <p className="font-bold">Nível {idx + 1}</p><p>{label}</p>
                 </div>

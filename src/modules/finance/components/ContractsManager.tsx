@@ -339,8 +339,8 @@ const CONTRACT_TYPES = [
               transition={{ delay: index * 0.05 }}
             >
               <Card className={`hover:border-primary/50 transition-all cursor-pointer ${
-                contract.status === "renewal" ? "border-blue-500/30" :
-                daysRemaining <= 30 && daysRemaining > 0 ? "border-amber-500/30" : ""
+                contract.status === "renewal" ? "border-primary/30" :
+                daysRemaining <= 30 && daysRemaining > 0 ? "border-warning/30" : ""
               }`} onClick={() => { setSelectedContract(contract); setShowDetails(true); }}>
                 <CardContent className="pt-4">
                   <div className="flex items-start justify-between mb-3">

@@ -175,7 +175,7 @@ export default function SuppliersSection({ searchQuery }: SuppliersSectionProps)
             key={supplier.id} 
             className={`cursor-pointer hover:shadow-lg transition-shadow ${
               supplier.status === "suspended" ? "opacity-60" : ""
-            } ${supplier.status === "preferred" ? "border-amber-500/50" : ""}`}
+            } ${supplier.status === "preferred" ? "border-warning/50" : ""}`}
             onClick={() => {
               setSelectedSupplier(supplier);
               setShowDetails(true);

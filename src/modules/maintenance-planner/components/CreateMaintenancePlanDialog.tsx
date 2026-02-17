@@ -32,10 +32,10 @@ const equipmentList = [
 ];
 
 const maintenanceTypes = [
-  { value: "preventive", label: "Preventiva", color: "bg-blue-500" },
-  { value: "corrective", label: "Corretiva", color: "bg-orange-500" },
-  { value: "predictive", label: "Preditiva", color: "bg-purple-500" },
-  { value: "inspection", label: "Inspeção", color: "bg-green-500" },
+  { value: "preventive", label: "Preventiva", color: "bg-primary" },
+  { value: "corrective", label: "Corretiva", color: "bg-warning" },
+  { value: "predictive", label: "Preditiva", color: "bg-accent" },
+  { value: "inspection", label: "Inspeção", color: "bg-success" },
 ];
 
 const priorityLevels = [

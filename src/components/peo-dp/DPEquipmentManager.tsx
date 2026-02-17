@@ -21,11 +21,11 @@ const SYSTEM_TYPES = [
 ];
 
 const STATUS_CONFIG = {
-  operational: { label: "Operacional", color: "bg-green-500", icon: CheckCircle, badge: "default" as const },
-  degraded: { label: "Degradado", color: "bg-amber-500", icon: AlertTriangle, badge: "secondary" as const },
-  failed: { label: "Falha", color: "bg-red-500", icon: XCircle, badge: "destructive" as const },
-  maintenance: { label: "Manutenção", color: "bg-blue-500", icon: Wrench, badge: "outline" as const },
-  critical: { label: "Crítico", color: "bg-red-700", icon: XCircle, badge: "destructive" as const },
+  operational: { label: "Operacional", color: "bg-success", icon: CheckCircle, badge: "default" as const },
+  degraded: { label: "Degradado", color: "bg-warning", icon: AlertTriangle, badge: "secondary" as const },
+  failed: { label: "Falha", color: "bg-destructive", icon: XCircle, badge: "destructive" as const },
+  maintenance: { label: "Manutenção", color: "bg-primary", icon: Wrench, badge: "outline" as const },
+  critical: { label: "Crítico", color: "bg-destructive", icon: XCircle, badge: "destructive" as const },
 };
 
 export function DPEquipmentManager() {

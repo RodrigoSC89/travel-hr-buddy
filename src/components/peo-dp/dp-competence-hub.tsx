@@ -179,12 +179,12 @@ export const DPCompetenceHub: React.FC = () => {
       {(expiringCerts.length > 0 || overdueTrainings.length > 0) && (
         <div className="grid grid-cols-2 gap-4">
           {expiringCerts.length > 0 && (
-            <Card className="border-yellow-500/50 bg-yellow-500/5">
+            <Card className="border-warning/50 bg-warning/5">
               <CardContent className="pt-4">
                 <div className="flex items-center gap-3">
-                  <AlertTriangle className="h-8 w-8 text-yellow-500" />
+                  <AlertTriangle className="h-8 w-8 text-warning" />
                   <div>
-                    <p className="font-medium text-yellow-600">Certificações Vencendo/Expiradas</p>
+                    <p className="font-medium text-warning">Certificações Vencendo/Expiradas</p>
                     <p className="text-sm text-muted-foreground">{expiringCerts.length} certificações precisam de atenção</p>
                   </div>
                 </div>
@@ -192,12 +192,12 @@ export const DPCompetenceHub: React.FC = () => {
             </Card>
           )}
           {overdueTrainings.length > 0 && (
-            <Card className="border-red-500/50 bg-red-500/5">
+            <Card className="border-destructive/50 bg-destructive/5">
               <CardContent className="pt-4">
                 <div className="flex items-center gap-3">
-                  <AlertTriangle className="h-8 w-8 text-red-500" />
+                  <AlertTriangle className="h-8 w-8 text-destructive" />
                   <div>
-                    <p className="font-medium text-red-600">Treinamentos Atrasados</p>
+                    <p className="font-medium text-destructive">Treinamentos Atrasados</p>
                     <p className="text-sm text-muted-foreground">{overdueTrainings.length} treinamentos em atraso</p>
                   </div>
                 </div>
@@ -322,12 +322,12 @@ export const DPCompetenceHub: React.FC = () => {
                       </div>
                       <div className="flex items-center justify-between">
                         <div className="flex gap-2">
-                          <Badge variant="outline" className={member.cpdScore >= 80 ? "border-green-500 text-green-500" : member.cpdScore >= 60 ? "border-yellow-500 text-yellow-500" : "border-red-500 text-red-500"}>
+                          <Badge variant="outline" className={member.cpdScore >= 80 ? "border-success text-success" : member.cpdScore >= 60 ? "border-warning text-warning" : "border-destructive text-destructive"}>
                             CPD: {member.cpdScore}%
                           </Badge>
                           <Badge variant="outline">{member.certifications.length} Certs</Badge>
                         </div>
-                        {member.certifications.some(c => c.status !== "valid") && <AlertTriangle className="h-4 w-4 text-yellow-500" />}
+                        {member.certifications.some(c => c.status !== "valid") && <AlertTriangle className="h-4 w-4 text-warning" />}
                       </div>
                     </div>
                   </div>

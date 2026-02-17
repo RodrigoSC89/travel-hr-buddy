@@ -261,9 +261,9 @@ export const EvidenceManager: React.FC<EvidenceManagerProps> = ({
             size="sm"
             onClick={recording ? stopRecording : startRecording}
             disabled={uploading}
-            className={recording ? "bg-red-50 border-red-200" : ""}
+            className={recording ? "bg-destructive/10 border-destructive/30" : ""}
           >
-            <Mic className={`w-4 h-4 mr-2 ${recording ? "text-red-500" : ""}`} />
+            <Mic className={`w-4 h-4 mr-2 ${recording ? "text-destructive" : ""}`} />
             {recording ? "Parar" : "Gravar"}
           </Button>
 

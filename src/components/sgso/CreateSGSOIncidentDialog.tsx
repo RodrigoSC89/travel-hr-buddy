@@ -162,7 +162,7 @@ export const CreateSGSOIncidentDialog: FC<CreateSGSOIncidentDialogProps> = ({
       <DialogContent className="sm:max-w-[500px]">
         <DialogHeader>
           <DialogTitle className="flex items-center gap-2">
-            <AlertTriangle className="h-5 w-5 text-orange-500" />
+            <AlertTriangle className="h-5 w-5 text-warning" />
             Novo Incidente SGSO
           </DialogTitle>
         </DialogHeader>

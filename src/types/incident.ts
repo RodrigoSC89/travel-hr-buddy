@@ -41,8 +41,8 @@ export interface DPIncident {
 
 // Risk level colors for UI
 export const RISK_LEVEL_COLORS = {
-  baixo: { bg: "bg-green-100", text: "text-green-800", badge: "bg-green-600", icon: "🟢" },
-  moderado: { bg: "bg-yellow-100", text: "text-yellow-800", badge: "bg-yellow-600", icon: "🟡" },
-  alto: { bg: "bg-orange-100", text: "text-orange-800", badge: "bg-orange-600", icon: "🟠" },
-  crítico: { bg: "bg-red-100", text: "text-red-800", badge: "bg-red-600", icon: "🔴" },
+  baixo: { bg: "bg-success/10", text: "text-success", badge: "bg-success", icon: "🟢" },
+  moderado: { bg: "bg-warning/10", text: "text-warning", badge: "bg-warning", icon: "🟡" },
+  alto: { bg: "bg-warning/20", text: "text-warning", badge: "bg-warning", icon: "🟠" },
+  crítico: { bg: "bg-destructive/10", text: "text-destructive", badge: "bg-destructive", icon: "🔴" },
 } as const;

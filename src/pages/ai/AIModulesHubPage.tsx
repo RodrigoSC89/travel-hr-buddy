@@ -93,7 +93,7 @@ const aiModules = [
     status: 'active',
     route: '/finance-command',
     metrics: { policies: '24', claims: '3 open' },
-    color: 'bg-pink-500'
+    color: 'bg-destructive'
   },
   {
     id: 'crewing',
@@ -103,7 +103,7 @@ const aiModules = [
     status: 'active',
     route: '/payroll',
     metrics: { crew: '450', compliance: '100%' },
-    color: 'bg-cyan-500'
+    color: 'bg-info'
   },
   {
     id: 'reporting',
@@ -113,7 +113,7 @@ const aiModules = [
     status: 'active',
     route: '/analytics-command',
     metrics: { reports: '50+', kpis: '120' },
-    color: 'bg-amber-500'
+    color: 'bg-warning'
   },
   {
     id: 'mobile',
@@ -123,7 +123,7 @@ const aiModules = [
     status: 'active',
     route: '/settings',
     metrics: { offline: '100%', sync: 'Real-time' },
-    color: 'bg-slate-500'
+    color: 'bg-muted-foreground'
   }
 ];
 

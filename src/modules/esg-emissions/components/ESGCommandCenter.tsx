@@ -400,10 +400,10 @@ export function ESGCommandCenter() {
         {/* Right Column - AI Chat */}
         <div className="space-y-6">
           {/* Fleet Summary */}
-          <Card className="bg-gradient-to-br from-green-500/5 to-emerald-500/5 border-green-500/20">
+          <Card className="bg-gradient-to-br from-success/5 to-success/5 border-success/20">
             <CardHeader className="pb-3">
               <CardTitle className="flex items-center gap-2 text-lg">
-                <Award className="h-5 w-5 text-green-500" />
+                <Award className="h-5 w-5 text-success" />
                 Resumo da Frota
               </CardTitle>
             </CardHeader>
@@ -427,7 +427,7 @@ export function ESGCommandCenter() {
           </Card>
 
           {/* AI Consultant */}
-          <Card className="bg-gradient-to-br from-emerald-500/5 to-green-500/5 border-emerald-500/20">
+          <Card className="bg-gradient-to-br from-success/5 to-success/5 border-success/20">
             <CardHeader className="pb-3">
               <CardTitle className="flex items-center gap-2 text-lg">
                 <Bot className="h-5 w-5 text-success" />

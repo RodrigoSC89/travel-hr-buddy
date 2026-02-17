@@ -471,7 +471,7 @@ export default function CertificateExpiryPanel() {
                 <DialogTitle className="flex items-center gap-3">
                   <div className={cn(
                     "h-10 w-10 rounded-lg flex items-center justify-center",
-                    selectedCertificate.holderType === "crew" ? "bg-primary/10" : "bg-purple-500/10"
+                    selectedCertificate.holderType === "crew" ? "bg-primary/10" : "bg-accent/10"
                   )}>
                     {selectedCertificate.holderType === "crew" ? (
                       <User className="h-5 w-5 text-primary" />

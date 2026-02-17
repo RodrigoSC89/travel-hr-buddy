@@ -165,7 +165,7 @@ export const OfflineChecklist: React.FC<OfflineChecklistProps> = ({
                     }`}
                   >
                     {item.text}
-                    {item.required && <span className="text-red-500 ml-1">*</span>}
+                    {item.required && <span className="text-destructive ml-1">*</span>}
                   </label>
                   
                   {/* Notes section */}

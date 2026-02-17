@@ -153,14 +153,14 @@
              </p>
            </CardContent>
          </Card>
-         <Card className="bg-gradient-to-br from-purple-500/10 to-purple-500/5">
+         <Card className="bg-gradient-to-br from-accent/10 to-accent/5">
            <CardContent className="p-4">
              <div className="flex items-center justify-between">
                <div>
                  <p className="text-sm text-muted-foreground">Economia Potencial</p>
-                 <p className="text-2xl font-bold text-purple-600">R$ {potentialSavings.toLocaleString()}</p>
+                 <p className="text-2xl font-bold text-accent-foreground">R$ {potentialSavings.toLocaleString()}</p>
                </div>
-               <Sparkles className="h-8 w-8 text-purple-500 opacity-50" />
+               <Sparkles className="h-8 w-8 text-accent-foreground opacity-50" />
              </div>
              <p className="text-xs text-muted-foreground mt-2">Identificada por IA</p>
            </CardContent>

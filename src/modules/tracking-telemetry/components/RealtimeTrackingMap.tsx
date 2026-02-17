@@ -282,8 +282,8 @@ export default function RealtimeTrackingMap() {
                   >
                     <div className="relative">
                       <Ship className={`h-8 w-8 ${
-                        vessel.status === "underway" ? "text-green-400" :
-                        vessel.status === "moored" ? "text-purple-400" : "text-blue-400"
+                        vessel.status === "underway" ? "text-success" :
+                        vessel.status === "moored" ? "text-accent-foreground" : "text-primary"
                       }`} />
                       {selectedVessel?.id === vessel.id && (
                         <motion.div
