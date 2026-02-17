@@ -297,7 +297,7 @@ const GlobalSearch: React.FC<GlobalSearchProps> = ({ isOpen, onOpenChange }) => 
                               {result.title}
                             </h3>
                             {result.metadata?.popular && (
-                              <Star className="w-4 h-4 text-yellow-500 fill-current" />
+                              <Star className="w-4 h-4 text-warning fill-current" />
                             )}
                           </div>
                           

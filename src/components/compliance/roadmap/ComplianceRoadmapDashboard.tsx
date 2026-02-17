@@ -701,7 +701,7 @@ export function ComplianceRoadmapDashboard() {
                       </div>
                     </div>
                     {abaixoMeta && (
-                      <div className="mt-3 p-2 bg-orange-500/10 rounded text-xs text-orange-600">
+                      <div className="mt-3 p-2 bg-warning/10 rounded text-xs text-warning">
                         ⚠️ {Math.abs(dept.score - dept.meta)}% abaixo da meta
                       </div>
                     )}
@@ -748,33 +748,33 @@ export function ComplianceRoadmapDashboard() {
               </CardHeader>
               <CardContent>
                 <div className="space-y-4">
-                  <div className="flex items-center justify-between p-4 rounded-lg bg-red-500/10 border border-red-500/30">
+                  <div className="flex items-center justify-between p-4 rounded-lg bg-destructive/10 border border-destructive/30">
                     <div className="flex items-center gap-3">
-                      <AlertCircle className="h-5 w-5 text-red-500" />
+                      <AlertCircle className="h-5 w-5 text-destructive" />
                       <div>
-                        <p className="font-medium text-red-600">RISCO CRÍTICO (90% confiança)</p>
+                        <p className="font-medium text-destructive">RISCO CRÍTICO (90% confiança)</p>
                         <p className="text-sm text-muted-foreground">3 certificados NR-10 vencem em 15 dias</p>
                       </div>
                     </div>
                     <Button size="sm" variant="destructive">Ação Urgente</Button>
                   </div>
                   
-                  <div className="flex items-center justify-between p-4 rounded-lg bg-orange-500/10 border border-orange-500/30">
+                  <div className="flex items-center justify-between p-4 rounded-lg bg-warning/10 border border-warning/30">
                     <div className="flex items-center gap-3">
-                      <AlertTriangle className="h-5 w-5 text-orange-500" />
+                      <AlertTriangle className="h-5 w-5 text-warning" />
                       <div>
-                        <p className="font-medium text-orange-600">RISCO ALTO (75% confiança)</p>
+                        <p className="font-medium text-warning">RISCO ALTO (75% confiança)</p>
                         <p className="text-sm text-muted-foreground">Dept. Manutenção pode falhar auditoria</p>
                       </div>
                     </div>
                     <Button size="sm" variant="outline">Ver Detalhes</Button>
                   </div>
                   
-                  <div className="flex items-center justify-between p-4 rounded-lg bg-yellow-500/10 border border-yellow-500/30">
+                  <div className="flex items-center justify-between p-4 rounded-lg bg-warning/10 border border-warning/30">
                     <div className="flex items-center gap-3">
-                      <Clock className="h-5 w-5 text-yellow-500" />
+                      <Clock className="h-5 w-5 text-warning" />
                       <div>
-                        <p className="font-medium text-yellow-600">RISCO MÉDIO (65% confiança)</p>
+                        <p className="font-medium text-warning">RISCO MÉDIO (65% confiança)</p>
                         <p className="text-sm text-muted-foreground">5 treinamentos próximos a vencer</p>
                       </div>
                     </div>

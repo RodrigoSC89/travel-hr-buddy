@@ -147,7 +147,7 @@ export function PortOperationsModule() {
                 <p className="text-sm text-muted-foreground">Em Andamento</p>
                 <p className="text-2xl font-bold">{stats.inProgress}</p>
               </div>
-              <Ship className="h-8 w-8 text-emerald-400" />
+              <Ship className="h-8 w-8 text-success" />
             </div>
           </CardContent>
         </Card>
@@ -258,10 +258,10 @@ export function PortOperationsModule() {
                       <p className="text-xs text-muted-foreground">Equipes</p>
                     </div>
                     <div>
-                      <p className={cn(
+                     <p className={cn(
                         "text-lg font-bold",
-                        operation.efficiency >= 90 ? 'text-emerald-400' :
-                        operation.efficiency >= 80 ? 'text-amber-400' : 'text-destructive'
+                        operation.efficiency >= 90 ? 'text-success' :
+                        operation.efficiency >= 80 ? 'text-warning' : 'text-destructive'
                       )}>
                         {operation.efficiency > 0 ? `${operation.efficiency}%` : '-'}
                       </p>
@@ -272,7 +272,7 @@ export function PortOperationsModule() {
                   {/* Times */}
                   <div className="text-sm space-y-1">
                     <div className="flex items-center gap-2">
-                      <Timer className="h-4 w-4 text-emerald-400" />
+                      <Timer className="h-4 w-4 text-success" />
                       <span className="text-muted-foreground">ETA:</span>
                       <span>{new Date(operation.eta).toLocaleString('pt-BR', { dateStyle: 'short', timeStyle: 'short' })}</span>
                     </div>
@@ -320,7 +320,7 @@ export function PortOperationsModule() {
             </div>
             <div className="p-4 bg-background/50 rounded-lg border border-border/50">
               <h4 className="font-medium mb-2 flex items-center gap-2">
-                <TrendingUp className="h-4 w-4 text-emerald-400" />
+                <TrendingUp className="h-4 w-4 text-success" />
                 Otimização Sugerida
               </h4>
               <p className="text-sm text-muted-foreground">

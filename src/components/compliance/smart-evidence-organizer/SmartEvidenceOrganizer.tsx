@@ -66,8 +66,8 @@ const KPIBar = memo(({ pack }: { pack: any }) => {
   const stats = [
     { label: "Elementos", value: pack.total_elements, icon: FolderOpen, color: "text-primary" },
     { label: "Itens", value: pack.total_items, icon: FileCheck, color: "text-foreground" },
-    { label: "Encontradas", value: pack.matched_items, icon: CheckCircle2, color: "text-green-500" },
-    { label: "Parciais", value: pack.partial_items, icon: AlertTriangle, color: "text-yellow-500" },
+    { label: "Encontradas", value: pack.matched_items, icon: CheckCircle2, color: "text-success" },
+    { label: "Parciais", value: pack.partial_items, icon: AlertTriangle, color: "text-warning" },
     { label: "Não Encontradas", value: pack.unmatched_items, icon: XCircle, color: "text-destructive" },
   ];
   return (
@@ -206,8 +206,8 @@ const EvidenceItemRow = memo(({ item, itemMatches, onAddManual, onLinkFromLibrar
               )}
 
               {item.ai_suggestion && (
-                <div className="bg-yellow-500/5 border border-yellow-500/20 rounded-md p-3">
-                  <div className="flex items-center gap-1 text-xs font-medium text-yellow-600 mb-1">
+                <div className="bg-warning/5 border border-warning/20 rounded-md p-3">
+                  <div className="flex items-center gap-1 text-xs font-medium text-warning mb-1">
                     <AlertTriangle className="h-3 w-3" /> Sugestão de Evidência
                   </div>
                   <p className="text-sm">{item.ai_suggestion}</p>
@@ -219,7 +219,7 @@ const EvidenceItemRow = memo(({ item, itemMatches, onAddManual, onLinkFromLibrar
                   <p className="text-xs font-medium text-muted-foreground">Evidências Vinculadas:</p>
                   {itemMatches.map((m) => (
                     <div key={m.id} className="flex items-center gap-2 bg-muted/30 rounded p-2 text-sm">
-                      <FileCheck className="h-4 w-4 text-green-500 shrink-0" />
+                      <FileCheck className="h-4 w-4 text-success shrink-0" />
                       <span className="flex-1 truncate">{m.document_title}</span>
                       {m.match_confidence && (
                         <Badge variant="outline" className="text-[10px]">{m.match_confidence}%</Badge>
@@ -256,12 +256,12 @@ function ElementFolder({ element, elementItems, matches, onAddManual, onLinkFrom
   onLinkFromLibrary: (itemId: string) => void;
 }) {
   const [isOpen, setIsOpen] = useState(false);
-  const scoreColor = element.compliance_score >= 80 ? "text-green-500" : element.compliance_score >= 50 ? "text-yellow-500" : "text-destructive";
+  const scoreColor = element.compliance_score >= 80 ? "text-success" : element.compliance_score >= 50 ? "text-warning" : "text-destructive";
 
   return (
     <Collapsible open={isOpen} onOpenChange={setIsOpen}>
       <CollapsibleTrigger className="w-full">
-        <Card className={`border-l-4 ${element.compliance_score >= 80 ? "border-l-green-500" : element.compliance_score >= 50 ? "border-l-yellow-500" : "border-l-destructive"} hover:bg-muted/30 transition-colors`}>
+        <Card className={`border-l-4 ${element.compliance_score >= 80 ? "border-l-success" : element.compliance_score >= 50 ? "border-l-warning" : "border-l-destructive"} hover:bg-muted/30 transition-colors`}>
           <CardContent className="py-3 px-4">
             <div className="flex items-center justify-between">
               <div className="flex items-center gap-3">
@@ -531,7 +531,7 @@ export function SmartEvidenceOrganizer({ framework }: Props) {
                 </Button>
                 <div className="flex items-center gap-2">
                   <span className="text-sm text-muted-foreground">Score:</span>
-                  <span className={`text-2xl font-bold ${activePack.overall_score >= 80 ? "text-green-500" : activePack.overall_score >= 50 ? "text-yellow-500" : "text-destructive"}`}>
+                  <span className={`text-2xl font-bold ${activePack.overall_score >= 80 ? "text-success" : activePack.overall_score >= 50 ? "text-warning" : "text-destructive"}`}>
                     {activePack.overall_score.toFixed(0)}%
                   </span>
                 </div>
