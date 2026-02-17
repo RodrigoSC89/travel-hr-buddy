@@ -56,7 +56,7 @@ interface PredictionSummary {
   preventedDowntime: number;
 }
 
-const COLORS = ["#ef4444", "#f97316", "#eab308", "#22c55e"];
+const COLORS = ["hsl(var(--destructive))", "hsl(var(--warning))", "hsl(var(--warning))", "hsl(var(--success))"];
 
 export function Predictive30_60_90() {
   const [predictions, setPredictions] = useState<PredictionItem[]>([]);
@@ -277,8 +277,8 @@ export function Predictive30_60_90() {
                   <YAxis yAxisId="right" orientation="right" />
                   <Tooltip />
                   <Legend />
-                  <Bar yAxisId="left" dataKey="predictions" name="Previsões" fill="#8b5cf6" />
-                  <Bar yAxisId="right" dataKey="cost" name="Custo (R$ mil)" fill="#22c55e" />
+                  <Bar yAxisId="left" dataKey="predictions" name="Previsões" fill="hsl(var(--primary))" />
+                  <Bar yAxisId="right" dataKey="cost" name="Custo (R$ mil)" fill="hsl(var(--success))" />
                 </BarChart>
               </ResponsiveContainer>
             </div>

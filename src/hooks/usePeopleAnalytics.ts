@@ -43,14 +43,14 @@ interface HeadcountTrend {
 }
 
 const DEPARTMENT_COLORS: Record<string, string> = {
-  'Tecnologia': '#3b82f6',
-  'Operações': '#22c55e',
-  'Comercial': '#f59e0b',
-  'Financeiro': '#8b5cf6',
-  'RH': '#ec4899',
-  'Marketing': '#06b6d4',
-  'Jurídico': '#84cc16',
-  'Outros': '#6b7280',
+  'Tecnologia': 'hsl(var(--info))',
+  'Operações': 'hsl(var(--success))',
+  'Comercial': 'hsl(var(--warning))',
+  'Financeiro': 'hsl(var(--primary))',
+  'RH': 'hsl(var(--accent-foreground))',
+  'Marketing': 'hsl(var(--info))',
+  'Jurídico': 'hsl(var(--success))',
+  'Outros': 'hsl(var(--muted-foreground))',
 };
 
 export function useEmployeeStats() {

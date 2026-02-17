@@ -81,8 +81,8 @@ export const MetricasPanel = () => {
   const totalEmbarcacoes = metricsEmbarcacao.length;
 
   const riskColors: Record<string, string> = {
-    "Crítico": "#ef4444", "Alto": "#f97316", "Médio": "#eab308",
-    "Baixo": "#22c55e", "Negligenciável": "#06b6d4", "Não Classificado": "#6b7280"
+    "Crítico": "hsl(var(--destructive))", "Alto": "hsl(var(--warning))", "Médio": "hsl(var(--warning))",
+    "Baixo": "hsl(var(--success))", "Negligenciável": "hsl(var(--info))", "Não Classificado": "hsl(var(--muted-foreground))"
   };
 
   const pieData = metricsRisco.map(item => ({
@@ -177,8 +177,8 @@ export const MetricasPanel = () => {
                   <YAxis />
                   <Tooltip />
                   <Legend />
-                  <Line type="monotone" dataKey="auditorias" stroke="#3b82f6" name="Total Auditorias" />
-                  <Line type="monotone" dataKey="falhas" stroke="#ef4444" name="Falhas Críticas" />
+                  <Line type="monotone" dataKey="auditorias" stroke="hsl(var(--primary))" name="Total Auditorias" />
+                  <Line type="monotone" dataKey="falhas" stroke="hsl(var(--destructive))" name="Falhas Críticas" />
                 </LineChart>
               </ResponsiveContainer>
             </div>

@@ -211,7 +211,7 @@ export function CompanyFinancialDashboard() {
                     {procurementItems.filter(p => p.status === "pending").length} itens
                   </p>
                 </div>
-                <Package className="h-8 w-8 text-amber-500 opacity-80" />
+                <Package className="h-8 w-8 text-warning opacity-80" />
               </div>
             </CardContent>
           </Card>

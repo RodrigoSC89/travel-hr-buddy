@@ -165,14 +165,14 @@ const CATEGORY_ANALYSIS: CategoryAnalysis[] = [
   { category: 'Infraestrutura', value: 8, recurrence: 10 }
 ];
 
-const RISK_COLORS = {
-  critical: '#ef4444',
-  high: '#f97316',
-  medium: '#eab308',
-  low: '#3b82f6'
+const RISK_COLORS: Record<string, string> = {
+  critical: 'hsl(var(--destructive))',
+  high: 'hsl(var(--warning))',
+  medium: 'hsl(var(--warning))',
+  low: 'hsl(var(--info))'
 };
 
-const PIE_COLORS = ['#8b5cf6', '#06b6d4', '#10b981', '#f59e0b', '#ef4444'];
+const PIE_COLORS = ['hsl(var(--primary))', 'hsl(var(--info))', 'hsl(var(--success))', 'hsl(var(--warning))', 'hsl(var(--destructive))'];
 
 export function PredictiveComplianceAI() {
   const [predictions, setPredictions] = useState<Prediction[]>(PREDICTIONS);
@@ -285,7 +285,7 @@ export function PredictiveComplianceAI() {
                     cx="64"
                     cy="64"
                     r="56"
-                    stroke={overallRisk > 70 ? '#ef4444' : overallRisk > 50 ? '#f97316' : '#22c55e'}
+                    stroke={overallRisk > 70 ? 'hsl(var(--destructive))' : overallRisk > 50 ? 'hsl(var(--warning))' : 'hsl(var(--success))'}
                     strokeWidth="12"
                     fill="none"
                     strokeDasharray={`${(overallRisk / 100) * 352} 352`}

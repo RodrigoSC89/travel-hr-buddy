@@ -93,7 +93,7 @@ export function SGSOTabs() {
             <div className="space-y-4">
               <div className="rounded-lg border p-4"><h3 className="font-semibold mb-2">17 Práticas ANP</h3><p className="text-sm text-muted-foreground">Sistema configurado para monitorar compliance com a Resolução ANP 43/2007.</p></div>
               <div className="rounded-lg border p-4"><h3 className="font-semibold mb-2">Auditorias IMCA</h3><p className="text-sm text-muted-foreground">Auditorias são classificadas por nível de risco e rastreadas por embarcação.</p></div>
-              <div className="rounded-lg border p-4 bg-blue-50/50 dark:bg-blue-950/20">
+              <div className="rounded-lg border p-4 bg-info/5">
                 <div className="flex items-center justify-between mb-2"><h3 className="font-semibold">Histórico de Auditorias SGSO</h3><Link to="/admin/sgso/history"><Button variant="outline" size="sm"><History className="mr-2 h-4 w-4" />Ver Histórico</Button></Link></div>
                 <p className="text-sm text-muted-foreground">Acesse o histórico completo de auditorias SGSO.</p>
               </div>
@@ -108,16 +108,16 @@ export function SGSOTabs() {
           <CardContent>
             <div className="space-y-4">
               <div className="rounded-lg border p-4"><div className="flex items-center gap-3 mb-2"><FileCheck className="h-5 w-5 text-primary" /><h3 className="font-semibold">Exportação CSV</h3></div><p className="text-sm text-muted-foreground">Disponível na aba "Métricas Operacionais".</p></div>
-              <div className="rounded-lg border p-4 bg-green-50/50 dark:bg-green-950/20">
+              <div className="rounded-lg border p-4 bg-success/5">
                 <div className="flex items-center justify-between mb-2">
-                  <div className="flex items-center gap-3"><FileCheck className="h-5 w-5 text-green-600" /><h3 className="font-semibold">Exportação PDF</h3><Badge variant="default" className="bg-green-600">Ativo</Badge></div>
+                  <div className="flex items-center gap-3"><FileCheck className="h-5 w-5 text-success" /><h3 className="font-semibold">Exportação PDF</h3><Badge variant="default" className="bg-success">Ativo</Badge></div>
                   <Button onClick={handleExportPDF} disabled={isExportingPDF} size="sm">{isExportingPDF ? <Loader2 className="mr-2 h-4 w-4 animate-spin" /> : <Download className="mr-2 h-4 w-4" />}{isExportingPDF ? "Gerando..." : "Exportar PDF"}</Button>
                 </div>
                 <p className="text-sm text-muted-foreground">Exportação de relatórios completos em PDF.</p>
               </div>
-              <div className="rounded-lg border p-4 bg-blue-50/50 dark:bg-blue-950/20">
+              <div className="rounded-lg border p-4 bg-info/5">
                 <div className="flex items-center justify-between mb-2">
-                  <div className="flex items-center gap-3"><Mail className="h-5 w-5 text-blue-600" /><h3 className="font-semibold">Envio Automático por Email</h3><Badge variant="default" className="bg-blue-600">Ativo</Badge></div>
+                  <div className="flex items-center gap-3"><Mail className="h-5 w-5 text-info" /><h3 className="font-semibold">Envio Automático por Email</h3><Badge variant="default" className="bg-info">Ativo</Badge></div>
                   <Button onClick={handleScheduleEmail} disabled={isSchedulingEmail} variant="outline" size="sm">{isSchedulingEmail ? <Loader2 className="mr-2 h-4 w-4 animate-spin" /> : <Mail className="mr-2 h-4 w-4" />}{isSchedulingEmail ? "Configurando..." : "Configurar Agenda"}</Button>
                 </div>
                 <p className="text-sm text-muted-foreground">Configuração para envio automático de relatórios mensais.</p>

@@ -110,10 +110,10 @@ export function Patch604Validation() {
 
         {optimizations.length > 0 && (
           <>
-            <Card className="bg-gradient-to-br from-green-500/10 to-blue-500/10">
+            <Card className="bg-gradient-to-br from-success/10 to-info/10">
               <CardContent className="pt-6 text-center">
                 <div className="text-3xl font-bold flex items-center justify-center gap-2">
-                  <TrendingUp className="h-8 w-8 text-green-500" />
+                  <TrendingUp className="h-8 w-8 text-success" />
                   +{avgImprovement}%
                 </div>
                 <div className="text-sm text-muted-foreground mt-1">
@@ -124,11 +124,11 @@ export function Patch604Validation() {
 
             <div className="space-y-3">
               {optimizations.map(opt => (
-                <Card key={opt.id} className="border-l-4 border-l-green-500">
+                <Card key={opt.id} className="border-l-4 border-l-success">
                   <CardContent className="pt-4 space-y-3">
                     <div className="flex items-center justify-between">
                       <h3 className="font-semibold">{opt.tactic}</h3>
-                      <Badge className="bg-green-500">
+                      <Badge className="bg-success">
                         +{(opt.improvement * 100).toFixed(0)}%
                       </Badge>
                     </div>
@@ -137,25 +137,25 @@ export function Patch604Validation() {
                       <div>
                         <div className="text-muted-foreground text-xs mb-1">Efficiency</div>
                         <div className="flex items-center gap-1">
-                          <span className="text-red-500">{(opt.before.efficiency * 100).toFixed(0)}%</span>
+                          <span className="text-destructive">{(opt.before.efficiency * 100).toFixed(0)}%</span>
                           <ArrowRight className="h-3 w-3" />
-                          <span className="text-green-500 font-semibold">{(opt.after.efficiency * 100).toFixed(0)}%</span>
+                          <span className="text-success font-semibold">{(opt.after.efficiency * 100).toFixed(0)}%</span>
                         </div>
                       </div>
                       <div>
                         <div className="text-muted-foreground text-xs mb-1">Risk</div>
                         <div className="flex items-center gap-1">
-                          <span className="text-red-500">{(opt.before.riskScore * 100).toFixed(0)}%</span>
+                          <span className="text-destructive">{(opt.before.riskScore * 100).toFixed(0)}%</span>
                           <ArrowRight className="h-3 w-3" />
-                          <span className="text-green-500 font-semibold">{(opt.after.riskScore * 100).toFixed(0)}%</span>
+                          <span className="text-success font-semibold">{(opt.after.riskScore * 100).toFixed(0)}%</span>
                         </div>
                       </div>
                       <div>
                         <div className="text-muted-foreground text-xs mb-1">Time (min)</div>
                         <div className="flex items-center gap-1">
-                          <span className="text-red-500">{opt.before.completionTime}</span>
+                          <span className="text-destructive">{opt.before.completionTime}</span>
                           <ArrowRight className="h-3 w-3" />
-                          <span className="text-green-500 font-semibold">{opt.after.completionTime}</span>
+                          <span className="text-success font-semibold">{opt.after.completionTime}</span>
                         </div>
                       </div>
                     </div>

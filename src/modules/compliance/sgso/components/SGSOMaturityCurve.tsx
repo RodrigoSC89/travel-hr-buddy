@@ -16,19 +16,19 @@ import { useSGSOMaturityData } from "@/hooks/useSGSOMaturityData";
 
 // Maturity levels
 const MATURITY_LEVELS = [
-  { level: 1, name: "Inicial", description: "Processos ad hoc, não padronizados", color: "bg-red-500" },
-  { level: 2, name: "Gerenciado", description: "Processos planejados e executados", color: "bg-orange-500" },
-  { level: 3, name: "Definido", description: "Processos padronizados e documentados", color: "bg-yellow-500" },
-  { level: 4, name: "Mensurado", description: "Processos medidos e controlados", color: "bg-blue-500" },
-  { level: 5, name: "Otimizado", description: "Melhoria contínua implementada", color: "bg-green-500" },
+  { level: 1, name: "Inicial", description: "Processos ad hoc, não padronizados", color: "bg-destructive" },
+  { level: 2, name: "Gerenciado", description: "Processos planejados e executados", color: "bg-warning" },
+  { level: 3, name: "Definido", description: "Processos padronizados e documentados", color: "bg-warning" },
+  { level: 4, name: "Mensurado", description: "Processos medidos e controlados", color: "bg-info" },
+  { level: 5, name: "Otimizado", description: "Melhoria contínua implementada", color: "bg-success" },
 ];
 
 // PDCA phases
 const PDCA_PHASES = [
-  { id: "plan", name: "Plan (Planejar)", icon: Target, color: "text-blue-500", bgColor: "bg-blue-500/10" },
-  { id: "do", name: "Do (Executar)", icon: ArrowRight, color: "text-green-500", bgColor: "bg-green-500/10" },
-  { id: "check", name: "Check (Verificar)", icon: CheckCircle2, color: "text-yellow-500", bgColor: "bg-yellow-500/10" },
-  { id: "act", name: "Act (Agir)", icon: RotateCcw, color: "text-purple-500", bgColor: "bg-purple-500/10" },
+  { id: "plan", name: "Plan (Planejar)", icon: Target, color: "text-info", bgColor: "bg-info/10" },
+  { id: "do", name: "Do (Executar)", icon: ArrowRight, color: "text-success", bgColor: "bg-success/10" },
+  { id: "check", name: "Check (Verificar)", icon: CheckCircle2, color: "text-warning", bgColor: "bg-warning/10" },
+  { id: "act", name: "Act (Agir)", icon: RotateCcw, color: "text-accent-foreground", bgColor: "bg-accent/10" },
 ];
 
 export const SGSOMaturityCurve: React.FC = () => {
@@ -37,9 +37,9 @@ export const SGSOMaturityCurve: React.FC = () => {
   const getTrendIcon = (trend: string) => {
     switch (trend) {
     case "up":
-      return <TrendingUp className="h-4 w-4 text-green-500" />;
+      return <TrendingUp className="h-4 w-4 text-success" />;
     case "down":
-      return <TrendingUp className="h-4 w-4 text-red-500 rotate-180" />;
+      return <TrendingUp className="h-4 w-4 text-destructive rotate-180" />;
     default:
       return <ArrowRight className="h-4 w-4 text-muted-foreground" />;
     }
@@ -64,7 +64,7 @@ export const SGSOMaturityCurve: React.FC = () => {
 
   if (error) {
     return (
-      <div className="text-center py-8 text-red-500">
+      <div className="text-center py-8 text-destructive">
         <AlertCircle className="h-8 w-8 mx-auto mb-2" />
         <p>Erro ao carregar dados: {error.message}</p>
       </div>
@@ -241,13 +241,13 @@ export const SGSOMaturityCurve: React.FC = () => {
           </Card>
           <Card>
             <CardContent className="pt-4">
-              <div className="text-2xl font-bold text-red-500">{stats.nonConformitiesCount}</div>
+              <div className="text-2xl font-bold text-destructive">{stats.nonConformitiesCount}</div>
               <div className="text-sm text-muted-foreground">Não Conformidades</div>
             </CardContent>
           </Card>
           <Card>
             <CardContent className="pt-4">
-              <div className="text-2xl font-bold text-green-500">
+              <div className="text-2xl font-bold text-success">
                 {maturityData.filter(p => p.currentLevel >= p.targetLevel).length}
               </div>
               <div className="text-sm text-muted-foreground">Metas Atingidas</div>

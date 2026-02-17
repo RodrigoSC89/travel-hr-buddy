@@ -471,7 +471,7 @@ export default function AcademyDashboard() {
                   suggestion.priority === "high"
                     ? "bg-destructive/10 border border-destructive/20"
                     : suggestion.priority === "medium"
-                    ? "bg-amber-500/10 border border-amber-500/20"
+                    ? "bg-warning/10 border border-warning/20"
                     : "bg-muted/50 border border-border"
                 }`}
               >
