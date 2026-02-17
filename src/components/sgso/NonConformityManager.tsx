@@ -399,7 +399,7 @@ export const NonConformityManager: React.FC = () => {
               <span className="font-semibold">Vencendo</span>
             </Button>
             <Button
-              className="bg-green-600 hover:bg-green-700 text-white min-h-[56px] flex-col gap-2"
+              className="bg-success hover:bg-success/90 text-success-foreground min-h-[56px] flex-col gap-2"
               onClick={() => showInfo("Estatísticas", "Abrindo painel de estatísticas de NCs")}
               disabled={isLoading}
             >

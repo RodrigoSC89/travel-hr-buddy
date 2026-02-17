@@ -302,7 +302,7 @@ export const RealTimeRouteOptimizer: React.FC = () => {
                       </div>
                       <div className="flex justify-between">
                         <span className="text-muted-foreground">Combustível:</span>
-                        <span className="font-medium text-green-600">
+                        <span className="font-medium text-success">
                           {opt.optimizedRoute.fuelConsumption}L
                         </span>
                       </div>
@@ -318,35 +318,35 @@ export const RealTimeRouteOptimizer: React.FC = () => {
 
                 {/* Savings */}
                 <div className="grid grid-cols-4 gap-3">
-                  <div className="text-center p-3 bg-green-50 dark:bg-green-950 rounded-lg">
+                  <div className="text-center p-3 bg-success/5 rounded-lg">
                     <div className="flex items-center justify-center gap-1 mb-1">
-                      <Fuel className="h-4 w-4 text-green-600" />
+                      <Fuel className="h-4 w-4 text-success" />
                     </div>
-                    <div className="text-xl font-bold text-green-600">
+                    <div className="text-xl font-bold text-success">
                       {opt.savings.fuel}%
                     </div>
                     <div className="text-xs text-muted-foreground">Combustível</div>
                   </div>
-                  <div className="text-center p-3 bg-blue-50 dark:bg-blue-950 rounded-lg">
+                  <div className="text-center p-3 bg-info/5 rounded-lg">
                     <div className="flex items-center justify-center gap-1 mb-1">
-                      <Clock className="h-4 w-4 text-blue-600" />
+                      <Clock className="h-4 w-4 text-info" />
                     </div>
-                    <div className="text-xl font-bold text-blue-600">
+                    <div className="text-xl font-bold text-info">
                       {opt.savings.time > 0 ? "+" : ""}{opt.savings.time}h
                     </div>
                     <div className="text-xs text-muted-foreground">Tempo</div>
                   </div>
-                  <div className="text-center p-3 bg-green-50 dark:bg-green-950 rounded-lg">
+                  <div className="text-center p-3 bg-success/5 rounded-lg">
                     <div className="flex items-center justify-center gap-1 mb-1">
-                      <TrendingDown className="h-4 w-4 text-green-600" />
+                      <TrendingDown className="h-4 w-4 text-success" />
                     </div>
-                    <div className="text-xl font-bold text-green-600">
+                    <div className="text-xl font-bold text-success">
                       R$ {(opt.savings.cost / 1000).toFixed(1)}k
                     </div>
                     <div className="text-xs text-muted-foreground">Economia</div>
                   </div>
-                  <div className="text-center p-3 bg-green-50 dark:bg-green-950 rounded-lg">
-                    <div className="text-xl font-bold text-green-600">
+                  <div className="text-center p-3 bg-success/5 rounded-lg">
+                    <div className="text-xl font-bold text-success">
                       {opt.savings.co2}kg
                     </div>
                     <div className="text-xs text-muted-foreground">CO₂ Evitado</div>

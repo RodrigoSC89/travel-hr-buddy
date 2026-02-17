@@ -57,11 +57,11 @@ export const MaintenanceTimelineView: React.FC = () => {
   const getTaskIcon = (status?: string | null) => {
     switch (status) {
     case "completed":
-      return <CheckCircle className="h-5 w-5 text-green-500" />;
+      return <CheckCircle className="h-5 w-5 text-success" />;
     case "overdue":
-      return <AlertCircle className="h-5 w-5 text-red-500" />;
+      return <AlertCircle className="h-5 w-5 text-destructive" />;
     default:
-      return <Clock className="h-5 w-5 text-blue-500" />;
+      return <Clock className="h-5 w-5 text-info" />;
     }
   };
 
@@ -76,11 +76,11 @@ export const MaintenanceTimelineView: React.FC = () => {
 
   const getPriorityColor = (priority?: string | null) => {
     switch (priority) {
-    case "urgent": case "critical": return "bg-red-500";
-    case "high": return "bg-orange-500";
-    case "medium": return "bg-yellow-500";
-    case "low": return "bg-green-500";
-    default: return "bg-gray-500";
+    case "urgent": case "critical": return "bg-destructive";
+    case "high": return "bg-warning";
+    case "medium": return "bg-warning/70";
+    case "low": return "bg-success";
+    default: return "bg-muted-foreground";
     }
   };
 

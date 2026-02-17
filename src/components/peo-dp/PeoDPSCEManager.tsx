@@ -35,7 +35,7 @@ const statusConfig: Record<string, { label: string; color: string }> = {
   verified: { label: "Verificado", color: "bg-success/10 text-success border-success/30" },
   due_soon: { label: "Próximo", color: "bg-warning/10 text-warning border-warning/30" },
   overdue: { label: "Vencido", color: "bg-destructive/10 text-destructive border-destructive/30" },
-  degraded: { label: "Degradado", color: "bg-orange-500/10 text-orange-400 border-orange-500/30" },
+  degraded: { label: "Degradado", color: "bg-warning/10 text-warning border-warning/30" },
 };
 
 const dynamicFrom = supabase.from as Function;

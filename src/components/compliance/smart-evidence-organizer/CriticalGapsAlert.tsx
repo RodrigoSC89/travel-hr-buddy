@@ -69,7 +69,7 @@ export const CriticalGapsAlert = memo(({ items, elements, overallScore, onRematc
     <Card className={cn(
       "border-2",
       severity === "critical" ? "border-destructive/50 bg-destructive/5" :
-      severity === "warning" ? "border-yellow-500/50 bg-yellow-500/5" :
+      severity === "warning" ? "border-warning/50 bg-warning/5" :
       "border-primary/30 bg-primary/5"
     )}>
       <CardHeader className="pb-2 pt-4">
@@ -78,9 +78,9 @@ export const CriticalGapsAlert = memo(({ items, elements, overallScore, onRematc
             {severity === "critical" ? (
               <ShieldAlert className="h-5 w-5 text-destructive animate-pulse" />
             ) : (
-              <Bell className="h-5 w-5 text-yellow-500" />
+              <Bell className="h-5 w-5 text-warning" />
             )}
-            <span className={severity === "critical" ? "text-destructive" : "text-yellow-600"}>
+            <span className={severity === "critical" ? "text-destructive" : "text-warning"}>
               {severity === "critical"
                 ? `⚠️ ${criticalGaps.length} Gaps CRÍTICOS Detectados`
                 : `${allGaps.length} Gaps Detectados`}
@@ -120,9 +120,9 @@ export const CriticalGapsAlert = memo(({ items, elements, overallScore, onRematc
               </div>
             </div>
             <div className="flex items-center gap-2 p-2 bg-background rounded">
-              <AlertTriangle className="h-4 w-4 text-yellow-500" />
+              <AlertTriangle className="h-4 w-4 text-warning" />
               <div>
-                <p className="text-lg font-bold text-yellow-500">{partialItems.length}</p>
+                <p className="text-lg font-bold text-warning">{partialItems.length}</p>
                 <p className="text-[10px] text-muted-foreground">Parciais</p>
               </div>
             </div>

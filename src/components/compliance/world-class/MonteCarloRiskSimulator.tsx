@@ -121,7 +121,7 @@ export function MonteCarloRiskSimulator() {
   const riskColors = {
     low: "text-success",
     medium: "text-warning",
-    high: "text-orange-500",
+    high: "text-warning",
     critical: "text-destructive",
   };
 
