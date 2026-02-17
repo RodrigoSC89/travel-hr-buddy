@@ -18,6 +18,7 @@ import {
 import { supabase } from "@/integrations/supabase/client";
 import { useQuery, useMutation, useQueryClient } from "@tanstack/react-query";
 import { toast } from "sonner";
+import { quickExport } from "@/lib/export-utils";
 
 const typeConfig: Record<string, { label: string; icon: any; color: string }> = {
   hot_work: { label: "Hot Work", icon: Flame, color: "text-warning" },
@@ -119,7 +120,7 @@ export function PermitToWork() {
           <p className="text-muted-foreground">Digital permit management • ISM/ISPS compliant</p>
         </div>
         <div className="flex gap-2">
-          <Button variant="outline" size="sm" onClick={() => toast.success("PTW report exported")}>
+          <Button variant="outline" size="sm" onClick={() => quickExport(permits.map((p: any) => ({ Permit: p.permit_number, Type: p.permit_type, Location: p.location, Status: p.status, Requested: p.requested_by_name, Authorized: p.authorized_by_name, Start: p.start_time, End: p.end_time })), "Permit to Work Report")}>
             <Download className="h-4 w-4 mr-1" /> Export
           </Button>
           <Dialog open={showNewDialog} onOpenChange={setShowNewDialog}>

@@ -21,6 +21,7 @@ import {
 import { supabase } from "@/integrations/supabase/client";
 import { useQuery, useMutation, useQueryClient } from "@tanstack/react-query";
 import { toast } from "sonner";
+import { quickExport } from "@/lib/export-utils";
 
 const statusColors: Record<string, string> = {
   scheduled: "bg-primary/20 text-primary border-primary/30",
@@ -100,7 +101,7 @@ export function ShipVettingManager() {
           <p className="text-muted-foreground">SIRE 2.0, CDI, RightShip GHG rating tracking</p>
         </div>
         <div className="flex gap-2">
-          <Button variant="outline" size="sm" onClick={() => toast.success("Vetting report exported")}>
+          <Button variant="outline" size="sm" onClick={() => quickExport(records.map((r: any) => ({ Vessel: r.vessel_name, Type: r.inspection_type, Port: r.port, Date: r.inspection_date, Inspector: r.inspector_name, Score: r.overall_score, Findings: r.observations_count, Status: r.status })), "Ship Vetting Report")}>
             <Download className="h-4 w-4 mr-1" /> Export
           </Button>
           <Dialog open={showNewDialog} onOpenChange={setShowNewDialog}>

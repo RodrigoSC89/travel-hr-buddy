@@ -13,6 +13,7 @@ import {
 } from "lucide-react";
 import { AreaChart, Area, XAxis, YAxis, CartesianGrid, Tooltip, ResponsiveContainer, BarChart, Bar } from "recharts";
 import { toast } from "sonner";
+import { quickExport } from "@/lib/export-utils";
 
 const fuelTrend = [
   { day: "Feb 01", hfo: 28.5, mdo: 3.2, speed: 12.1 },
@@ -46,7 +47,7 @@ export function NoonReportAnalytics() {
           </h1>
           <p className="text-muted-foreground">Vessel performance intelligence • vs Cloud Fleet Manager</p>
         </div>
-        <Button variant="outline" size="sm" onClick={() => toast.success("Report exported")}>
+        <Button variant="outline" size="sm" onClick={() => quickExport(fuelTrend, "Noon Report Analytics")}>
           <Download className="h-4 w-4 mr-1" /> Export
         </Button>
       </div>

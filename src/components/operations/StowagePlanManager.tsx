@@ -14,7 +14,7 @@ import {
   Package, Ship, Layers, AlertTriangle, CheckCircle2,
   Download, Gauge, BarChart3, Plus, ArrowUpDown
 } from "lucide-react";
-import { toast } from "sonner";
+import { quickExport } from "@/lib/export-utils";
 
 interface CargoHold {
   id: string;
@@ -66,7 +66,7 @@ export function StowagePlanManager() {
           <p className="text-muted-foreground">Cargo planning & stability • IMSBC/IMDG compliant • vs NAPA/CargoMax</p>
         </div>
         <div className="flex gap-2">
-          <Button variant="outline" size="sm" onClick={() => toast.success("Stowage plan exported")}>
+          <Button variant="outline" size="sm" onClick={() => quickExport(holds.map(h => ({ Hold: h.name, Cargo: h.cargoType, Loaded_mt: h.loaded, Capacity_mt: h.capacity, Utilization: `${((h.loaded / h.capacity) * 100).toFixed(1)}%`, HAZMAT: h.hazmat ? "Yes" : "No", IMDG: h.imdgClass || "N/A" })), "Stowage Plan")}>
             <Download className="h-4 w-4 mr-1" /> Export
           </Button>
           <Button size="sm" className="bg-warning hover:bg-warning/90 text-warning-foreground">

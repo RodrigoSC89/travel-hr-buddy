@@ -21,6 +21,7 @@ import {
 import { supabase } from "@/integrations/supabase/client";
 import { useQuery, useMutation, useQueryClient } from "@tanstack/react-query";
 import { toast } from "sonner";
+import { quickExport } from "@/lib/export-utils";
 
 const statusConfig: Record<string, { label: string; color: string }> = {
   planning: { label: "Planning", color: "bg-info/20 text-info border-info/30" },
@@ -113,7 +114,7 @@ export function CrewChangeManager() {
           <p className="text-muted-foreground">End-to-end crew rotation coordination • Real-time tracking</p>
         </div>
         <div className="flex gap-2">
-          <Button variant="outline" size="sm" onClick={() => toast.success("Crew change report exported")}>
+          <Button variant="outline" size="sm" onClick={() => quickExport(changes.map((c: any) => ({ Vessel: c.vessel_name, Port: c.port, Date: c.planned_date, SignOn: c.sign_on_count, SignOff: c.sign_off_count, Status: c.status, Readiness: `${c.readiness_percent || 0}%` })), "Crew Change Report")}>
             <Download className="h-4 w-4 mr-1" /> Export
           </Button>
           <Dialog open={showNewDialog} onOpenChange={setShowNewDialog}>

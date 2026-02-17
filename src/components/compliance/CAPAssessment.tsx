@@ -18,6 +18,7 @@ import {
   Camera, FileText, BarChart3, Wrench, Target, Anchor
 } from "lucide-react";
 import { toast } from "sonner";
+import { quickExport } from "@/lib/export-utils";
 
 interface CAPInspection {
   id: string;
@@ -134,7 +135,7 @@ export function CAPAssessment() {
               <SelectItem value="MV Pacific Guardian">MV Pacific Guardian</SelectItem>
             </SelectContent>
           </Select>
-          <Button variant="outline" onClick={() => toast.success("CAP report exported")}><FileText className="h-4 w-4 mr-2" />Export</Button>
+          <Button variant="outline" onClick={() => quickExport(inspection.areas.flatMap(a => a.subAreas.map(s => ({ Area: a.name, SubArea: s.name, Rating: s.rating, Condition: s.condition, Findings: s.findings, Photos: s.photos }))), "CAP Assessment")}><FileText className="h-4 w-4 mr-2" />Export</Button>
         </div>
       </div>
 
@@ -234,10 +235,10 @@ export function CAPAssessment() {
                   <div className="flex-1">
                     <p className="text-sm">{rec}</p>
                     <div className="flex gap-2 mt-2">
-                      <Button size="sm" variant="outline" onClick={() => toast.success("Work order created")}>
+                      <Button size="sm" variant="outline" onClick={async () => { try { const { error } = await (await import("@/integrations/supabase/client")).supabase.from("maintenance_tasks").insert({ title: `CAP: ${rec.slice(0, 80)}`, priority: "medium", status: "pending", component_name: "CAP Recommendation" }); if (error) throw error; toast.success("Work order created in Maintenance"); } catch { toast.error("Erro ao criar work order"); } }}>
                         <Wrench className="h-3 w-3 mr-1" />Create Work Order
                       </Button>
-                      <Button size="sm" variant="ghost" onClick={() => toast.success("Acknowledged")}>
+                      <Button size="sm" variant="ghost" onClick={() => toast.success("Acknowledged — recommendation noted")}>
                         <CheckCircle2 className="h-3 w-3 mr-1" />Acknowledge
                       </Button>
                     </div>
