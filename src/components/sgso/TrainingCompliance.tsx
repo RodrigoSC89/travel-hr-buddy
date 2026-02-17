@@ -60,19 +60,19 @@ const getStatusConfig = (status: string) => {
   const configs = {
     valid: { 
       icon: CheckCircle, 
-      color: "bg-green-600 text-white", 
+      color: "bg-success text-success-foreground", 
       label: "Válido",
       badgeVariant: "default" as const
     },
     expiring_soon: { 
       icon: AlertTriangle, 
-      color: "bg-yellow-600 text-white", 
+      color: "bg-warning text-warning-foreground", 
       label: "Expirando",
       badgeVariant: "default" as const
     },
     expired: { 
       icon: XCircle, 
-      color: "bg-red-600 text-white", 
+      color: "bg-destructive text-destructive-foreground", 
       label: "Expirado",
       badgeVariant: "destructive" as const
     },
@@ -143,31 +143,31 @@ export const TrainingCompliance: React.FC = () => {
     <div className="space-y-6">
       {/* Summary Cards */}
       <div className="grid grid-cols-1 md:grid-cols-4 gap-4">
-        <Card className="bg-gradient-to-br from-green-50 to-green-100 border-green-200">
+        <Card className="bg-gradient-to-br from-success/5 to-success/10 border-success/30">
           <CardContent className="p-6">
             <div className="flex items-center justify-between mb-4">
-              <CheckCircle className="h-10 w-10 text-green-600" />
-              <Badge className="bg-green-600 text-white font-bold">VÁLIDOS</Badge>
+              <CheckCircle className="h-10 w-10 text-success" />
+              <Badge className="bg-success text-success-foreground font-bold">VÁLIDOS</Badge>
             </div>
-            <h3 className="text-sm font-medium text-green-700 mb-1">Treinamentos Válidos</h3>
-            <p className="text-3xl font-bold text-green-900">{validCount}</p>
-            <p className="text-xs text-green-600 mt-2">Certificações em dia</p>
+            <h3 className="text-sm font-medium text-success mb-1">Treinamentos Válidos</h3>
+            <p className="text-3xl font-bold text-foreground">{validCount}</p>
+            <p className="text-xs text-success mt-2">Certificações em dia</p>
           </CardContent>
         </Card>
 
-        <Card className="bg-gradient-to-br from-yellow-50 to-yellow-100 border-yellow-200">
+        <Card className="bg-gradient-to-br from-warning/5 to-warning/10 border-warning/30">
           <CardContent className="p-6">
             <div className="flex items-center justify-between mb-4">
-              <AlertTriangle className="h-10 w-10 text-yellow-600" />
-              <Badge className="bg-yellow-600 text-white font-bold">ATENÇÃO</Badge>
+              <AlertTriangle className="h-10 w-10 text-warning" />
+              <Badge className="bg-warning text-warning-foreground font-bold">ATENÇÃO</Badge>
             </div>
-            <h3 className="text-sm font-medium text-yellow-700 mb-1">Expirando em Breve</h3>
-            <p className="text-3xl font-bold text-yellow-900">{expiringCount}</p>
-            <p className="text-xs text-yellow-600 mt-2">Próximos 60 dias</p>
+            <h3 className="text-sm font-medium text-warning mb-1">Expirando em Breve</h3>
+            <p className="text-3xl font-bold text-foreground">{expiringCount}</p>
+            <p className="text-xs text-warning mt-2">Próximos 60 dias</p>
           </CardContent>
         </Card>
 
-        <Card className="bg-gradient-to-br from-red-50 to-red-100 border-red-200">
+        <Card className="bg-gradient-to-br from-destructive/5 to-destructive/10 border-destructive/30">
           <CardContent className="p-6">
             <div className="flex items-center justify-between mb-4">
               <XCircle className="h-10 w-10 text-red-600" />

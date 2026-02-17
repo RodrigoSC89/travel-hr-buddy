@@ -184,9 +184,9 @@ export function BehavioralEvolutionDashboard() {
 
   const getTrendColor = (trend: string) => {
     switch (trend) {
-    case "improving": return "text-green-600";
-    case "degrading": return "text-red-600";
-    default: return "text-blue-600";
+    case "improving": return "text-success";
+    case "degrading": return "text-destructive";
+    default: return "text-info";
     }
   };
 
@@ -298,8 +298,8 @@ export function BehavioralEvolutionDashboard() {
         <CardContent>
           <div className="grid gap-4 md:grid-cols-3">
             <div className="flex items-center gap-4 p-4 border rounded-lg">
-              <div className="bg-blue-100 p-3 rounded-full">
-                <Zap className="h-6 w-6 text-blue-600" />
+              <div className="bg-info/10 p-3 rounded-full">
+                <Zap className="h-6 w-6 text-info" />
               </div>
               <div>
                 <p className="font-semibold">Mutation Detection</p>
@@ -307,8 +307,8 @@ export function BehavioralEvolutionDashboard() {
               </div>
             </div>
             <div className="flex items-center gap-4 p-4 border rounded-lg">
-              <div className="bg-green-100 p-3 rounded-full">
-                <CheckCircle className="h-6 w-6 text-green-600" />
+              <div className="bg-success/10 p-3 rounded-full">
+                <CheckCircle className="h-6 w-6 text-success" />
               </div>
               <div>
                 <p className="font-semibold">Tactical Monitoring</p>
@@ -316,8 +316,8 @@ export function BehavioralEvolutionDashboard() {
               </div>
             </div>
             <div className="flex items-center gap-4 p-4 border rounded-lg">
-              <div className="bg-purple-100 p-3 rounded-full">
-                <Activity className="h-6 w-6 text-purple-600" />
+              <div className="bg-accent p-3 rounded-full">
+                <Activity className="h-6 w-6 text-accent-foreground" />
               </div>
               <div>
                 <p className="font-semibold">Fallback System</p>
@@ -355,11 +355,11 @@ export function BehavioralEvolutionDashboard() {
                     {evolution.strategic_alignment.toFixed(1)}%
                   </span>
                   {evolution.strategic_alignment >= 80 ? (
-                    <CheckCircle className="h-5 w-5 text-green-600" />
+                    <CheckCircle className="h-5 w-5 text-success" />
                   ) : evolution.strategic_alignment >= 60 ? (
-                    <Activity className="h-5 w-5 text-blue-600" />
+                    <Activity className="h-5 w-5 text-info" />
                   ) : (
-                    <AlertTriangle className="h-5 w-5 text-yellow-600" />
+                    <AlertTriangle className="h-5 w-5 text-warning" />
                   )}
                 </div>
               </div>

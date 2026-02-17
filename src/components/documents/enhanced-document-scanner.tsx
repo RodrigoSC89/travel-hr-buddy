@@ -514,11 +514,11 @@ export const EnhancedDocumentScanner: React.FC = () => {
                     <div className="flex items-center gap-2 mt-1">
                       <Badge variant="outline">{selectedResult.confidence}%</Badge>
                       {selectedResult.confidence >= 90 ? (
-                        <CheckCircle className="h-4 w-4 text-green-500" />
+                        <CheckCircle className="h-4 w-4 text-success" />
                       ) : selectedResult.confidence >= 70 ? (
-                        <AlertCircle className="h-4 w-4 text-yellow-500" />
+                        <AlertCircle className="h-4 w-4 text-warning" />
                       ) : (
-                        <X className="h-4 w-4 text-red-500" />
+                        <X className="h-4 w-4 text-destructive" />
                       )}
                     </div>
                   </div>

@@ -472,14 +472,14 @@ export function RealTimeComplianceDashboard() {
             <div className="space-y-3">
               {VESSELS_STATUS.map((vessel) => (
                 <div key={vessel.name} className={`p-3 rounded-lg flex items-center justify-between ${
-                  vessel.status === 'critical' ? 'bg-red-50 dark:bg-red-950/20 border border-red-200' :
-                  vessel.status === 'attention' ? 'bg-amber-50 dark:bg-amber-950/20 border border-amber-200' :
-                  'bg-green-50 dark:bg-green-950/20 border border-green-200'
+                  vessel.status === 'critical' ? 'bg-destructive/10 border border-destructive/30' :
+                  vessel.status === 'attention' ? 'bg-warning/10 border border-warning/30' :
+                  'bg-success/10 border border-success/30'
                 }`}>
                   <div className="flex items-center gap-3">
                     <Ship className={`h-5 w-5 ${
-                      vessel.status === 'critical' ? 'text-red-600' :
-                      vessel.status === 'attention' ? 'text-amber-600' : 'text-green-600'
+                      vessel.status === 'critical' ? 'text-destructive' :
+                      vessel.status === 'attention' ? 'text-warning' : 'text-success'
                     }`} />
                     <div>
                       <p className="font-medium">{vessel.name}</p>

@@ -220,9 +220,9 @@ export function PeoDPFMEAAnalysis() {
       </div>
 
       {/* Info Banner */}
-      <Card className="bg-gradient-to-r from-amber-500/5 to-amber-600/10 border-amber-500/20">
+      <Card className="bg-gradient-to-r from-warning/5 to-warning/10 border-warning/20">
         <CardContent className="py-3">
-          <p className="text-xs font-semibold text-amber-700 dark:text-amber-400">⚡ FMECA como item de excelência (PEO-DP 2026, item 1.10.1):</p>
+          <p className="text-xs font-semibold text-warning">⚡ FMECA como item de excelência (PEO-DP 2026, item 1.10.1):</p>
           <p className="text-xs text-muted-foreground mt-1">14 colunas obrigatórias: Sistema • Subsistema • Componente • Função • Modo de Falha • Causa • Efeitos Locais • Efeitos Globais • Tipo Detecção • Capacidade Detecção • Frequência • Severidade • NPR • Ações/Recomendações</p>
         </CardContent>
       </Card>

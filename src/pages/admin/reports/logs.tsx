@@ -538,10 +538,10 @@ export default function RestoreReportLogsPage() {
                         {log.error_details && (
                           <div className="pl-8">
                             <details className="text-sm">
-                              <summary className="cursor-pointer text-red-600 font-medium">
+                              <summary className="cursor-pointer text-destructive font-medium">
                                 Detalhes do Erro
                               </summary>
-                              <pre className="mt-2 p-3 bg-red-50 rounded text-xs overflow-x-auto">
+                              <pre className="mt-2 p-3 bg-destructive/10 rounded text-xs overflow-x-auto">
                                 {log.error_details}
                               </pre>
                             </details>
@@ -574,7 +574,7 @@ export default function RestoreReportLogsPage() {
         {/* Public View Indicator */}
         {isPublic && (
           <div className="text-center py-4">
-            <div className="inline-flex items-center gap-2 px-4 py-2 bg-blue-50 border border-blue-200 rounded-full text-sm text-blue-700">
+            <div className="inline-flex items-center gap-2 px-4 py-2 bg-info/10 border border-info/30 rounded-full text-sm text-info">
               <Eye className="w-4 h-4" />
               <span className="font-medium">Modo Somente Leitura (Visualização Pública)</span>
             </div>

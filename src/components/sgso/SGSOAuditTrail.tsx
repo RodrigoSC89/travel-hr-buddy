@@ -419,11 +419,11 @@ export const SGSOAuditTrail: React.FC = () => {
   };
 
   const getMaturityLevel = (score: number): { level: string; color: string } => {
-    if (score >= 90) return { level: 'Excelência', color: 'text-green-600' };
-    if (score >= 75) return { level: 'Maduro', color: 'text-blue-600' };
-    if (score >= 60) return { level: 'Em Desenvolvimento', color: 'text-yellow-600' };
-    if (score >= 40) return { level: 'Inicial', color: 'text-orange-600' };
-    return { level: 'Crítico', color: 'text-red-600' };
+    if (score >= 90) return { level: 'Excelência', color: 'text-success' };
+    if (score >= 75) return { level: 'Maduro', color: 'text-info' };
+    if (score >= 60) return { level: 'Em Desenvolvimento', color: 'text-warning' };
+    if (score >= 40) return { level: 'Inicial', color: 'text-warning' };
+    return { level: 'Crítico', color: 'text-destructive' };
   };
 
   const practicesByCategory = {

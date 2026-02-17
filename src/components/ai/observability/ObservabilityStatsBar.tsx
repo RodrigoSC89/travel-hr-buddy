@@ -27,22 +27,22 @@ export const ObservabilityStatsBar: React.FC<ObservabilityStatsBarProps> = ({ st
         <p className="text-2xl font-bold">{stats.totalAgents}</p>
       </CardContent>
     </Card>
-    <Card className="border-green-500/50">
+    <Card className="border-success/50">
       <CardContent className="pt-4">
         <p className="text-sm text-muted-foreground">Executando</p>
-        <p className="text-2xl font-bold text-green-600">{stats.running}</p>
+        <p className="text-2xl font-bold text-success">{stats.running}</p>
       </CardContent>
     </Card>
-    <Card className="border-yellow-500/50">
+    <Card className="border-warning/50">
       <CardContent className="pt-4">
         <p className="text-sm text-muted-foreground">Pausados</p>
-        <p className="text-2xl font-bold text-yellow-600">{stats.paused}</p>
+        <p className="text-2xl font-bold text-warning">{stats.paused}</p>
       </CardContent>
     </Card>
-    <Card className="border-red-500/50">
+    <Card className="border-destructive/50">
       <CardContent className="pt-4">
         <p className="text-sm text-muted-foreground">Com Erro</p>
-        <p className="text-2xl font-bold text-red-600">{stats.errors}</p>
+        <p className="text-2xl font-bold text-destructive">{stats.errors}</p>
       </CardContent>
     </Card>
     <Card>
