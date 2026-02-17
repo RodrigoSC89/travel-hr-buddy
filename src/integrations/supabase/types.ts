@@ -4076,6 +4076,293 @@ export type Database = {
         }
         Relationships: []
       }
+      audit_evidence_elements: {
+        Row: {
+          compliance_score: number | null
+          created_at: string
+          element_code: string | null
+          element_description: string | null
+          element_name: string
+          element_number: number
+          id: string
+          matched_count: number | null
+          metadata: Json | null
+          pack_id: string
+          partial_count: number | null
+          sort_order: number | null
+          total_items: number | null
+          unmatched_count: number | null
+          updated_at: string
+        }
+        Insert: {
+          compliance_score?: number | null
+          created_at?: string
+          element_code?: string | null
+          element_description?: string | null
+          element_name: string
+          element_number: number
+          id?: string
+          matched_count?: number | null
+          metadata?: Json | null
+          pack_id: string
+          partial_count?: number | null
+          sort_order?: number | null
+          total_items?: number | null
+          unmatched_count?: number | null
+          updated_at?: string
+        }
+        Update: {
+          compliance_score?: number | null
+          created_at?: string
+          element_code?: string | null
+          element_description?: string | null
+          element_name?: string
+          element_number?: number
+          id?: string
+          matched_count?: number | null
+          metadata?: Json | null
+          pack_id?: string
+          partial_count?: number | null
+          sort_order?: number | null
+          total_items?: number | null
+          unmatched_count?: number | null
+          updated_at?: string
+        }
+        Relationships: [
+          {
+            foreignKeyName: "audit_evidence_elements_pack_id_fkey"
+            columns: ["pack_id"]
+            isOneToOne: false
+            referencedRelation: "audit_evidence_packs"
+            referencedColumns: ["id"]
+          },
+        ]
+      }
+      audit_evidence_items: {
+        Row: {
+          ai_confidence: number | null
+          ai_response: string | null
+          ai_suggestion: string | null
+          created_at: string
+          element_id: string
+          evidence_status: string
+          id: string
+          is_critical: boolean | null
+          item_code: string | null
+          item_number: string
+          item_text: string
+          metadata: Json | null
+          pack_id: string
+          requirement_description: string | null
+          sort_order: number | null
+          updated_at: string
+        }
+        Insert: {
+          ai_confidence?: number | null
+          ai_response?: string | null
+          ai_suggestion?: string | null
+          created_at?: string
+          element_id: string
+          evidence_status?: string
+          id?: string
+          is_critical?: boolean | null
+          item_code?: string | null
+          item_number: string
+          item_text: string
+          metadata?: Json | null
+          pack_id: string
+          requirement_description?: string | null
+          sort_order?: number | null
+          updated_at?: string
+        }
+        Update: {
+          ai_confidence?: number | null
+          ai_response?: string | null
+          ai_suggestion?: string | null
+          created_at?: string
+          element_id?: string
+          evidence_status?: string
+          id?: string
+          is_critical?: boolean | null
+          item_code?: string | null
+          item_number?: string
+          item_text?: string
+          metadata?: Json | null
+          pack_id?: string
+          requirement_description?: string | null
+          sort_order?: number | null
+          updated_at?: string
+        }
+        Relationships: [
+          {
+            foreignKeyName: "audit_evidence_items_element_id_fkey"
+            columns: ["element_id"]
+            isOneToOne: false
+            referencedRelation: "audit_evidence_elements"
+            referencedColumns: ["id"]
+          },
+          {
+            foreignKeyName: "audit_evidence_items_pack_id_fkey"
+            columns: ["pack_id"]
+            isOneToOne: false
+            referencedRelation: "audit_evidence_packs"
+            referencedColumns: ["id"]
+          },
+        ]
+      }
+      audit_evidence_matches: {
+        Row: {
+          created_at: string
+          document_id: string | null
+          document_path: string | null
+          document_title: string | null
+          document_type: string | null
+          id: string
+          is_accepted: boolean | null
+          item_id: string
+          match_confidence: number | null
+          match_reason: string | null
+          match_source: string
+          metadata: Json | null
+          pack_id: string
+        }
+        Insert: {
+          created_at?: string
+          document_id?: string | null
+          document_path?: string | null
+          document_title?: string | null
+          document_type?: string | null
+          id?: string
+          is_accepted?: boolean | null
+          item_id: string
+          match_confidence?: number | null
+          match_reason?: string | null
+          match_source?: string
+          metadata?: Json | null
+          pack_id: string
+        }
+        Update: {
+          created_at?: string
+          document_id?: string | null
+          document_path?: string | null
+          document_title?: string | null
+          document_type?: string | null
+          id?: string
+          is_accepted?: boolean | null
+          item_id?: string
+          match_confidence?: number | null
+          match_reason?: string | null
+          match_source?: string
+          metadata?: Json | null
+          pack_id?: string
+        }
+        Relationships: [
+          {
+            foreignKeyName: "audit_evidence_matches_item_id_fkey"
+            columns: ["item_id"]
+            isOneToOne: false
+            referencedRelation: "audit_evidence_items"
+            referencedColumns: ["id"]
+          },
+          {
+            foreignKeyName: "audit_evidence_matches_pack_id_fkey"
+            columns: ["pack_id"]
+            isOneToOne: false
+            referencedRelation: "audit_evidence_packs"
+            referencedColumns: ["id"]
+          },
+        ]
+      }
+      audit_evidence_packs: {
+        Row: {
+          ai_processing_log: Json | null
+          created_at: string
+          created_by: string
+          description: string | null
+          framework: string
+          id: string
+          matched_items: number | null
+          metadata: Json | null
+          organization_id: string | null
+          overall_score: number | null
+          partial_items: number | null
+          source_file_name: string | null
+          source_file_path: string | null
+          source_file_type: string | null
+          status: string
+          title: string
+          total_elements: number | null
+          total_items: number | null
+          unmatched_items: number | null
+          updated_at: string
+          vessel_id: string | null
+          year: number
+        }
+        Insert: {
+          ai_processing_log?: Json | null
+          created_at?: string
+          created_by: string
+          description?: string | null
+          framework: string
+          id?: string
+          matched_items?: number | null
+          metadata?: Json | null
+          organization_id?: string | null
+          overall_score?: number | null
+          partial_items?: number | null
+          source_file_name?: string | null
+          source_file_path?: string | null
+          source_file_type?: string | null
+          status?: string
+          title: string
+          total_elements?: number | null
+          total_items?: number | null
+          unmatched_items?: number | null
+          updated_at?: string
+          vessel_id?: string | null
+          year?: number
+        }
+        Update: {
+          ai_processing_log?: Json | null
+          created_at?: string
+          created_by?: string
+          description?: string | null
+          framework?: string
+          id?: string
+          matched_items?: number | null
+          metadata?: Json | null
+          organization_id?: string | null
+          overall_score?: number | null
+          partial_items?: number | null
+          source_file_name?: string | null
+          source_file_path?: string | null
+          source_file_type?: string | null
+          status?: string
+          title?: string
+          total_elements?: number | null
+          total_items?: number | null
+          unmatched_items?: number | null
+          updated_at?: string
+          vessel_id?: string | null
+          year?: number
+        }
+        Relationships: [
+          {
+            foreignKeyName: "audit_evidence_packs_organization_id_fkey"
+            columns: ["organization_id"]
+            isOneToOne: false
+            referencedRelation: "organizations"
+            referencedColumns: ["id"]
+          },
+          {
+            foreignKeyName: "audit_evidence_packs_vessel_id_fkey"
+            columns: ["vessel_id"]
+            isOneToOne: false
+            referencedRelation: "vessels"
+            referencedColumns: ["id"]
+          },
+        ]
+      }
       audit_log: {
         Row: {
           action: string

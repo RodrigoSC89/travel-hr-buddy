@@ -1,5 +1,6 @@
 import React, { lazy, Suspense } from "react";
 import { Tabs, TabsContent, TabsList, TabsTrigger } from "@/components/ui/tabs";
+import { SmartEvidenceOrganizer } from "@/components/compliance/smart-evidence-organizer";
 import { ModulePageWrapper } from "@/components/ui/module-page-wrapper";
 import { ModuleHeader } from "@/components/ui/module-header";
 import ModuleActionButton from "@/components/ui/module-action-button";
@@ -31,7 +32,7 @@ import {
   Shield, Anchor, Target, Brain, TrendingUp,
   CheckCircle, RefreshCw, Download, Settings, Activity,
   BarChart3, ClipboardCheck, AlertTriangle, FileText, Calculator, BookOpen, Zap, Grid3X3, Layers,
-  Wrench, Crosshair, AlertCircle
+  Wrench, Crosshair, AlertCircle, FolderTree
 } from "lucide-react";
 
 const ComplianceInterviewSimulator = lazy(() => import('@/components/compliance/ai/ComplianceInterviewSimulator').then(m => ({ default: m.ComplianceInterviewSimulator })));
@@ -83,6 +84,7 @@ const PEODP = () => {
           <TabsTrigger value="incidents" className="gap-1.5"><AlertCircle className="h-3.5 w-3.5" /> CIRAS</TabsTrigger>
           <TabsTrigger value="interview" className="gap-1.5"><Brain className="h-3.5 w-3.5" /> Entrevista IA</TabsTrigger>
           <TabsTrigger value="checklist-ia" className="gap-1.5"><Zap className="h-3.5 w-3.5" /> Checklist IA</TabsTrigger>
+          <TabsTrigger value="evidence-organizer" className="gap-1.5"><FolderTree className="h-3.5 w-3.5" /> Organizador IA</TabsTrigger>
         </TabsList>
 
         <TabsContent value="plan"><div id="peo-dp-plan"><PeoDpManager /></div></TabsContent>
@@ -118,6 +120,9 @@ const PEODP = () => {
             <ComplianceAutoChecklistGenerator moduleId="peo-dp" moduleName="PEO-DP" />
           </TabsContent>
         </Suspense>
+        <TabsContent value="evidence-organizer">
+          <SmartEvidenceOrganizer framework="peodp" />
+        </TabsContent>
       </Tabs>
 
       <ModuleActionButton

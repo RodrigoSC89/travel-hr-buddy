@@ -3,6 +3,7 @@
  * 13 Elements ANP/Petrobras with full audit lifecycle
  */
 import React, { useState, useMemo, lazy, Suspense } from "react";
+import { SmartEvidenceOrganizer } from "@/components/compliance/smart-evidence-organizer";
 import { Card, CardContent, CardHeader, CardTitle, CardDescription } from "@/components/ui/card";
 import { Badge } from "@/components/ui/badge";
 import { Button } from "@/components/ui/button";
@@ -49,7 +50,7 @@ import {
   Shield, Target, FileCheck, AlertTriangle, TrendingUp, CheckCircle,
   RefreshCw, Download, BarChart3, Activity, ClipboardCheck,
   Brain, Zap, Mic, Wand2, FileText, Save, History, Award, Lightbulb, GitBranch,
-  Waves, Users, Fuel,
+  Waves, Users, Fuel, FolderTree,
 } from "lucide-react";
 
 const PEOTRAMPage = () => {
@@ -153,6 +154,7 @@ const PEOTRAMPage = () => {
           <TabsTrigger value="sat-system" className="gap-1.5"><Waves className="h-3.5 w-3.5" /> Sistema SAT</TabsTrigger>
           <TabsTrigger value="divers" className="gap-1.5"><Users className="h-3.5 w-3.5" /> Mergulhadores</TabsTrigger>
           <TabsTrigger value="gas" className="gap-1.5"><Fuel className="h-3.5 w-3.5" /> Gestão Gases</TabsTrigger>
+          <TabsTrigger value="evidence-organizer" className="gap-1.5"><FolderTree className="h-3.5 w-3.5" /> Organizador IA</TabsTrigger>
         </TabsList>
 
         {/* ============ OVERVIEW ============ */}
@@ -381,6 +383,9 @@ const PEOTRAMPage = () => {
             <ComplianceAutoChecklistGenerator moduleId="peotram" moduleName="PEOTRAM" />
           </TabsContent>
         </Suspense>
+        <TabsContent value="evidence-organizer">
+          <SmartEvidenceOrganizer framework="peotram" />
+        </TabsContent>
       </Tabs>
 
       <ModuleActionButton
