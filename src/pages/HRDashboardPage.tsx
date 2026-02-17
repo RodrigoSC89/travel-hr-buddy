@@ -2,6 +2,8 @@
  * HR Dashboard - Refactored
  */
 import { useState } from 'react';
+import { motion } from 'framer-motion';
+import { staggerContainer, fadeUp } from '@/lib/animations/motion-variants';
 import { Card, CardContent } from '@/components/ui/card';
 import { Tabs, TabsContent, TabsList, TabsTrigger } from '@/components/ui/tabs';
 import { Button } from '@/components/ui/button';
@@ -38,8 +40,8 @@ export default function HRDashboardPage() {
   };
 
   return (
-    <div className="space-y-6">
-      <div className="flex flex-col md:flex-row justify-between items-start md:items-center gap-4">
+    <motion.div initial="hidden" animate="visible" variants={staggerContainer} className="space-y-6">
+      <motion.div variants={fadeUp} className="flex flex-col md:flex-row justify-between items-start md:items-center gap-4">
         <div>
           <h1 className="text-2xl md:text-3xl font-bold tracking-tight">Gestão de RH</h1>
           <p className="text-muted-foreground">Sistema integrado de Recursos Humanos com Inteligência Artificial</p>
@@ -48,14 +50,14 @@ export default function HRDashboardPage() {
           <Button variant="outline" className="gap-2"><MessageSquare className="h-4 w-4" /><span className="hidden sm:inline">Chat IA</span></Button>
           <Button className="gap-2"><UserPlus className="h-4 w-4" /><span className="hidden sm:inline">Nova Admissão</span></Button>
         </div>
-      </div>
+      </motion.div>
 
-      <div className="flex items-center gap-2 text-sm text-muted-foreground">
+      <motion.div variants={fadeUp} className="flex items-center gap-2 text-sm text-muted-foreground">
         <Database className="h-4 w-4" />
         <span>{statsLoading ? 'Carregando dados...' : 'Dados em tempo real do Supabase'}</span>
-      </div>
+      </motion.div>
 
-      <HRStatsCards statsLoading={statsLoading} displayStats={displayStats} />
+      <motion.div variants={fadeUp}><HRStatsCards statsLoading={statsLoading} displayStats={displayStats} /></motion.div>
 
       {displayStats.expiringCertificates > 0 && (
         <Card className="border-warning/30 bg-warning/5">
@@ -86,7 +88,7 @@ export default function HRDashboardPage() {
         </Card>
       )}
 
-      <Tabs value={activeTab} onValueChange={setActiveTab} className="space-y-4">
+      <motion.div variants={fadeUp}><Tabs value={activeTab} onValueChange={setActiveTab} className="space-y-4">
         <div className="flex flex-col gap-4">
           <ScrollArea className="w-full">
             <TabsList className="inline-flex h-10 items-center justify-start gap-1 rounded-md bg-muted p-1 text-muted-foreground w-max">
@@ -121,9 +123,9 @@ export default function HRDashboardPage() {
         <TabsContent value="okrs"><HROKRsManager /></TabsContent>
         <TabsContent value="benefits"><HRBenefitsManager /></TabsContent>
         <TabsContent value="climate"><HRClimateSurvey /></TabsContent>
-      </Tabs>
+      </Tabs></motion.div>
 
       <HRChatbot />
-    </div>
+    </motion.div>
   );
 }

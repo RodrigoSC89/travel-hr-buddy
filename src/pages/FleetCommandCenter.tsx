@@ -5,6 +5,8 @@
  */
 
 import React, { useState, useEffect, useCallback } from "react";
+import { motion } from "framer-motion";
+import { staggerContainer, fadeUp } from "@/lib/animations/motion-variants";
 import { Button } from "@/components/ui/button";
 import { Dialog, DialogContent, DialogDescription, DialogFooter, DialogHeader, DialogTitle, DialogTrigger } from "@/components/ui/dialog";
 import { Input } from "@/components/ui/input";
@@ -177,9 +179,9 @@ export default function FleetCommandCenter() {
   const avgFuel = totalVessels > 0 ? (vessels.reduce((acc, v) => acc + (v.fuel || 0), 0) / totalVessels).toFixed(1) : "0";
 
   return (
-    <div className="min-h-screen bg-gradient-to-br from-background via-background to-muted/20 p-6 space-y-6">
+    <motion.div initial="hidden" animate="visible" variants={staggerContainer} className="min-h-screen bg-gradient-to-br from-background via-background to-muted/20 p-6 space-y-6">
       {/* Header */}
-      <div className="flex items-center justify-between">
+      <motion.div variants={fadeUp} className="flex items-center justify-between">
         <div className="flex items-center gap-4">
           <div className="p-3 rounded-xl bg-gradient-to-br from-primary/20 to-primary/5">
             <Ship className="h-8 w-8 text-primary" />
@@ -230,41 +232,43 @@ export default function FleetCommandCenter() {
             </DialogContent>
           </Dialog>
         </div>
-      </div>
+      </motion.div>
 
       {/* KPIs */}
-      <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-4 gap-4">
+      <motion.div variants={fadeUp} className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-4 gap-4">
         <KPICard title="Total de Embarcações" value={totalVessels} icon={Ship} color="primary" delay={0} />
         <KPICard title="Em Operação" value={operationalVessels} icon={CheckCircle} color="primary" change={8.3} trend="operacional" delay={0.1} />
         <KPICard title="Eficiência Média" value={avgEfficiency} suffix="%" icon={Gauge} color="primary" change={5.2} trend="performance" delay={0.2} />
         <KPICard title="Combustível Médio" value={avgFuel} suffix="%" icon={Fuel} color="primary" change={-3.5} trend="consumo" delay={0.3} />
-      </div>
+      </motion.div>
 
       {/* Main Content */}
-      <Tabs value={activeTab} onValueChange={setActiveTab} className="space-y-4">
-        <TabsList className="grid w-full grid-cols-6">
-          <TabsTrigger value="overview">Visão Geral</TabsTrigger>
-          <TabsTrigger value="tracking">Rastreamento</TabsTrigger>
-          <TabsTrigger value="vessels">Embarcações</TabsTrigger>
-          <TabsTrigger value="maintenance">Manutenção</TabsTrigger>
-          <TabsTrigger value="fuel">Combustível</TabsTrigger>
-          <TabsTrigger value="analytics">Analytics</TabsTrigger>
-        </TabsList>
+      <motion.div variants={fadeUp}>
+        <Tabs value={activeTab} onValueChange={setActiveTab} className="space-y-4">
+          <TabsList className="grid w-full grid-cols-6">
+            <TabsTrigger value="overview">Visão Geral</TabsTrigger>
+            <TabsTrigger value="tracking">Rastreamento</TabsTrigger>
+            <TabsTrigger value="vessels">Embarcações</TabsTrigger>
+            <TabsTrigger value="maintenance">Manutenção</TabsTrigger>
+            <TabsTrigger value="fuel">Combustível</TabsTrigger>
+            <TabsTrigger value="analytics">Analytics</TabsTrigger>
+          </TabsList>
 
-        <FleetTabs
-          vessels={vessels}
-          maintenance={maintenance}
-          fuelTrend={fuelTrend}
-          performanceMetrics={performanceMetrics}
-          selectedVessel={selectedVessel}
-          loading={loading}
-          onSelectVessel={setSelectedVessel}
-          onShowAddDialog={() => setShowAddDialog(true)}
-          onToast={toast}
-        />
-      </Tabs>
+          <FleetTabs
+            vessels={vessels}
+            maintenance={maintenance}
+            fuelTrend={fuelTrend}
+            performanceMetrics={performanceMetrics}
+            selectedVessel={selectedVessel}
+            loading={loading}
+            onSelectVessel={setSelectedVessel}
+            onShowAddDialog={() => setShowAddDialog(true)}
+            onToast={toast}
+          />
+        </Tabs>
+      </motion.div>
 
       <CreateMissionDialog open={showMissionDialog} onOpenChange={setShowMissionDialog} />
-    </div>
+    </motion.div>
   );
 }

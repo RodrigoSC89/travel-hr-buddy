@@ -4,6 +4,8 @@
  * Surpasses: Veson, AMOS, DNV, Compas, RightShip, Kongsberg
  */
 import { useState } from "react";
+import { motion } from "framer-motion";
+import { staggerContainer, fadeUp } from "@/lib/animations/motion-variants";
 import { useQuery } from "@tanstack/react-query";
 import { supabase } from "@/integrations/supabase/client";
 import { Card, CardContent, CardHeader, CardTitle } from "@/components/ui/card";
@@ -68,9 +70,9 @@ export default function WorldClassDashboard() {
   const tce = voyageTCE ?? 15000;
 
   return (
-    <div className="container mx-auto p-6 space-y-6">
+    <motion.div initial="hidden" animate="visible" variants={staggerContainer} className="container mx-auto p-6 space-y-6">
       {/* Header */}
-      <div className="flex flex-col sm:flex-row justify-between items-start sm:items-center gap-4">
+      <motion.div variants={fadeUp} className="flex flex-col sm:flex-row justify-between items-start sm:items-center gap-4">
         <div>
           <h1 className="text-2xl font-bold flex items-center gap-2">
             <Trophy className="h-6 w-6 text-primary" />
@@ -97,9 +99,10 @@ export default function WorldClassDashboard() {
             ))}
           </SelectContent>
         </Select>
-      </div>
+      </motion.div>
 
-      <Tabs defaultValue="overview" className="space-y-4">
+      <motion.div variants={fadeUp}>
+        <Tabs defaultValue="overview" className="space-y-4">
         <TabsList className="flex-wrap">
           <TabsTrigger value="overview" className="gap-1">
             <BarChart3 className="h-3 w-3" /> Overview
@@ -190,7 +193,8 @@ export default function WorldClassDashboard() {
         <TabsContent value="crew" className="space-y-4">
           <FleetSTCWDashboard />
         </TabsContent>
-      </Tabs>
-    </div>
+        </Tabs>
+      </motion.div>
+    </motion.div>
   );
 }

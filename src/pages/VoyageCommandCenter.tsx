@@ -5,6 +5,8 @@
  */
 
 import React, { useState, useMemo } from "react";
+import { motion } from "framer-motion";
+import { staggerContainer, fadeUp } from "@/lib/animations/motion-variants";
 import { Button } from "@/components/ui/button";
 import { Badge } from "@/components/ui/badge";
 import { Tabs, TabsContent, TabsList, TabsTrigger } from "@/components/ui/tabs";
@@ -160,9 +162,9 @@ export default function VoyageCommandCenter() {
   };
 
   return (
-    <div className="space-y-6 p-6">
+    <motion.div initial="hidden" animate="visible" variants={staggerContainer} className="space-y-6 p-6">
       {/* Header */}
-      <div className="flex items-center justify-between">
+      <motion.div variants={fadeUp} className="flex items-center justify-between">
         <div className="flex items-center gap-3">
           <div className="p-3 rounded-xl bg-gradient-to-br from-blue-500 to-cyan-600 text-white">
             <Compass className="h-8 w-8" />
@@ -179,11 +181,11 @@ export default function VoyageCommandCenter() {
           <Button variant="outline" onClick={handleExportVoyages}><Download className="h-4 w-4 mr-2" />Exportar</Button>
           <Button onClick={() => setCreateDialogOpen(true)}><Plus className="h-4 w-4 mr-2" />Nova Viagem</Button>
         </div>
-      </div>
+      </motion.div>
 
-      <VoyageStatsBar stats={stats} />
+      <motion.div variants={fadeUp}><VoyageStatsBar stats={stats} /></motion.div>
 
-      <Tabs value={activeTab} onValueChange={setActiveTab} className="space-y-4">
+      <motion.div variants={fadeUp}><Tabs value={activeTab} onValueChange={setActiveTab} className="space-y-4">
         <TabsList className="grid w-full grid-cols-6">
           <TabsTrigger value="overview">Visão Geral</TabsTrigger>
           <TabsTrigger value="voyages">Viagens</TabsTrigger>
@@ -211,10 +213,10 @@ export default function VoyageCommandCenter() {
         <TabsContent value="routes">
           <VoyageRoutesTab ports={ports} />
         </TabsContent>
-      </Tabs>
+      </Tabs></motion.div>
 
       <CreateVoyageDialog open={createDialogOpen} onOpenChange={setCreateDialogOpen} ports={ports} newVoyage={newVoyage} onNewVoyageChange={setNewVoyage} onCreate={handleCreateVoyage} />
       <VoyageDetailsDialog open={detailsDialogOpen} onOpenChange={setDetailsDialogOpen} voyage={selectedVoyage} onOptimize={handleOptimizeRoute} />
-    </div>
+    </motion.div>
   );
 }

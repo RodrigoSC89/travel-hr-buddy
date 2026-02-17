@@ -3,6 +3,8 @@
  * World-class competitive intelligence for maritime fleet management
  */
 import React, { useState } from "react";
+import { motion } from "framer-motion";
+import { staggerContainer, fadeUp } from "@/lib/animations/motion-variants";
 import { Card, CardContent, CardHeader, CardTitle } from "@/components/ui/card";
 import { Badge } from "@/components/ui/badge";
 import { Tabs, TabsContent, TabsList, TabsTrigger } from "@/components/ui/tabs";
@@ -80,8 +82,8 @@ export default function FleetBenchmarkingPage() {
   }));
 
   return (
-    <div className="space-y-4 py-4">
-      <div>
+    <motion.div initial="hidden" animate="visible" variants={staggerContainer} className="space-y-4 py-4">
+      <motion.div variants={fadeUp}>
         <h1 className="text-2xl font-bold flex items-center gap-2">
           <Trophy className="h-6 w-6 text-warning" />
           Fleet Benchmarking
@@ -90,10 +92,10 @@ export default function FleetBenchmarkingPage() {
         <p className="text-sm text-muted-foreground mt-1">
           Ranking e comparação de KPIs entre embarcações • Benchmarking da indústria
         </p>
-      </div>
+      </motion.div>
 
       {/* Fleet Ranking */}
-      <div className="grid gap-3">
+      <motion.div variants={fadeUp} className="grid gap-3">
         {VESSELS.sort((a, b) => b.overallScore - a.overallScore).map((vessel, idx) => (
           <Card
             key={vessel.id}
@@ -134,9 +136,9 @@ export default function FleetBenchmarkingPage() {
             </CardContent>
           </Card>
         ))}
-      </div>
+      </motion.div>
 
-      <Tabs defaultValue="radar">
+      <motion.div variants={fadeUp}><Tabs defaultValue="radar">
         <TabsList>
           <TabsTrigger value="radar">Radar</TabsTrigger>
           <TabsTrigger value="comparison">Comparação</TabsTrigger>
@@ -253,7 +255,7 @@ export default function FleetBenchmarkingPage() {
             </Card>
           </div>
         </TabsContent>
-      </Tabs>
-    </div>
+      </Tabs></motion.div>
+    </motion.div>
   );
 }
