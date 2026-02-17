@@ -40,19 +40,19 @@ export function HROKRsManager() {
 
   const getStatusIcon = (status: string) => {
     switch (status) {
-      case "achieved": return <CheckCircle2 className="h-4 w-4 text-green-500" />;
-      case "on_track": return <TrendingUp className="h-4 w-4 text-blue-500" />;
-      case "at_risk": return <AlertTriangle className="h-4 w-4 text-yellow-500" />;
-      case "behind": return <TrendingDown className="h-4 w-4 text-red-500" />;
+      case "achieved": return <CheckCircle2 className="h-4 w-4 text-success" />;
+      case "on_track": return <TrendingUp className="h-4 w-4 text-info" />;
+      case "at_risk": return <AlertTriangle className="h-4 w-4 text-warning" />;
+      case "behind": return <TrendingDown className="h-4 w-4 text-destructive" />;
       default: return null;
     }
   };
 
   const getStatusBadge = (status: string) => {
     switch (status) {
-      case "achieved": return <Badge className="bg-green-500">Atingido</Badge>;
-      case "on_track": return <Badge className="bg-blue-500">No Prazo</Badge>;
-      case "at_risk": return <Badge className="bg-yellow-500 text-yellow-950">Em Risco</Badge>;
+      case "achieved": return <Badge className="bg-success">Atingido</Badge>;
+      case "on_track": return <Badge className="bg-info">No Prazo</Badge>;
+      case "at_risk": return <Badge className="bg-warning text-warning-foreground">Em Risco</Badge>;
       case "behind": return <Badge variant="destructive">Atrasado</Badge>;
       default: return null;
     }
@@ -196,7 +196,7 @@ export function HROKRsManager() {
             <TrendingUp className="h-4 w-4 text-muted-foreground" />
           </CardHeader>
           <CardContent>
-            <div className="text-2xl font-bold text-blue-500">67%</div>
+            <div className="text-2xl font-bold text-info">67%</div>
             <Progress value={67} className="mt-2 h-2" />
           </CardContent>
         </Card>

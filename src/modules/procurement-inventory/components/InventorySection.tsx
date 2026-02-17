@@ -215,14 +215,14 @@ export default function InventorySection({ searchQuery }: InventorySectionProps)
             </div>
           </CardContent>
         </Card>
-        <Card className="border-amber-500/50">
+        <Card className="border-warning/50">
           <CardContent className="p-4">
             <div className="flex items-center justify-between">
               <div>
                 <p className="text-sm text-muted-foreground">Estoque Baixo</p>
-                <p className="text-2xl font-bold text-amber-600">{lowItems}</p>
+                <p className="text-2xl font-bold text-warning">{lowItems}</p>
               </div>
-              <TrendingDown className="h-8 w-8 text-amber-500 opacity-60" />
+              <TrendingDown className="h-8 w-8 text-warning opacity-60" />
             </div>
           </CardContent>
         </Card>

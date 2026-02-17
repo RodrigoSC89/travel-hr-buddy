@@ -32,7 +32,7 @@ export const InfoCard: FC<InfoCardProps> = ({
     case "error":
       return "border-destructive/50 bg-destructive/5";
     case "info":
-      return "border-blue-500/50 bg-blue-500/5";
+      return "border-info/50 bg-info/5";
     default:
       return "border-border bg-card";
     }

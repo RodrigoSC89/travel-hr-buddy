@@ -23,31 +23,31 @@ interface InlineFeedbackProps {
 const feedbackConfig = {
   success: {
     icon: Check,
-    bg: 'bg-green-500/10',
-    border: 'border-green-500/20',
-    text: 'text-green-600 dark:text-green-400',
-    iconBg: 'bg-green-500/20'
+    bg: 'bg-success/10',
+    border: 'border-success/20',
+    text: 'text-success',
+    iconBg: 'bg-success/20'
   },
   error: {
     icon: X,
-    bg: 'bg-red-500/10',
-    border: 'border-red-500/20',
-    text: 'text-red-600 dark:text-red-400',
-    iconBg: 'bg-red-500/20'
+    bg: 'bg-destructive/10',
+    border: 'border-destructive/20',
+    text: 'text-destructive',
+    iconBg: 'bg-destructive/20'
   },
   warning: {
     icon: AlertTriangle,
-    bg: 'bg-yellow-500/10',
-    border: 'border-yellow-500/20',
-    text: 'text-yellow-600 dark:text-yellow-400',
-    iconBg: 'bg-yellow-500/20'
+    bg: 'bg-warning/10',
+    border: 'border-warning/20',
+    text: 'text-warning',
+    iconBg: 'bg-warning/20'
   },
   info: {
     icon: Info,
-    bg: 'bg-blue-500/10',
-    border: 'border-blue-500/20',
-    text: 'text-blue-600 dark:text-blue-400',
-    iconBg: 'bg-blue-500/20'
+    bg: 'bg-info/10',
+    border: 'border-info/20',
+    text: 'text-info',
+    iconBg: 'bg-info/20'
   },
   loading: {
     icon: Loader2,
@@ -154,14 +154,14 @@ export const SaveIndicator: React.FC<SaveIndicatorProps> = ({
           initial={{ opacity: 0, scale: 0.8 }}
           animate={{ opacity: 1, scale: 1 }}
           exit={{ opacity: 0 }}
-          className="flex items-center gap-1 text-green-600"
+          className="flex items-center gap-1 text-success"
         >
           <Check className="h-4 w-4" />
           <span>Salvo</span>
         </motion.div>
       )}
       {status === 'error' && (
-        <div className="flex items-center gap-1 text-red-600">
+        <div className="flex items-center gap-1 text-destructive">
           <AlertTriangle className="h-4 w-4" />
           <span>Erro ao salvar</span>
         </div>
@@ -191,7 +191,7 @@ export const CharacterCounter: React.FC<CharacterCounterProps> = ({
   return (
     <span className={cn(
       "text-xs",
-      isError ? "text-red-500" : isWarning ? "text-yellow-500" : "text-muted-foreground",
+      isError ? "text-destructive" : isWarning ? "text-warning" : "text-muted-foreground",
       className
     )}>
       {current}/{max}
@@ -235,7 +235,7 @@ export const FieldFeedback: React.FC<FieldFeedbackProps> = ({
           initial={{ opacity: 0, y: -5 }}
           animate={{ opacity: 1, y: 0 }}
           exit={{ opacity: 0, y: -5 }}
-          className="text-sm text-green-600 mt-1 flex items-center gap-1"
+          className="text-sm text-success mt-1 flex items-center gap-1"
         >
           <Check className="h-3 w-3" />
           {success}
@@ -286,25 +286,25 @@ export const ActionResult: React.FC<ActionResultProps> = ({
       className={cn(
         "rounded-lg p-4 border",
         isSuccess 
-          ? "bg-green-500/10 border-green-500/20" 
-          : "bg-red-500/10 border-red-500/20"
+          ? "bg-success/10 border-success/20" 
+          : "bg-destructive/10 border-destructive/20"
       )}
     >
       <div className="flex items-start gap-3">
         <div className={cn(
           "rounded-full p-1",
-          isSuccess ? "bg-green-500/20" : "bg-red-500/20"
+          isSuccess ? "bg-success/20" : "bg-destructive/20"
         )}>
           {isSuccess ? (
-            <Check className="h-5 w-5 text-green-600" />
+            <Check className="h-5 w-5 text-success" />
           ) : (
-            <X className="h-5 w-5 text-red-600" />
+            <X className="h-5 w-5 text-destructive" />
           )}
         </div>
         <div className="flex-1">
           <h4 className={cn(
             "font-medium",
-            isSuccess ? "text-green-700 dark:text-green-400" : "text-red-700 dark:text-red-400"
+            isSuccess ? "text-success" : "text-destructive"
           )}>
             {title}
           </h4>
@@ -318,7 +318,7 @@ export const ActionResult: React.FC<ActionResultProps> = ({
               onClick={action.onClick}
               className={cn(
                 "text-sm font-medium mt-2 underline underline-offset-4",
-                isSuccess ? "text-green-600" : "text-red-600"
+                isSuccess ? "text-success" : "text-destructive"
               )}
             >
               {action.label}

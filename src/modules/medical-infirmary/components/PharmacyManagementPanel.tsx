@@ -249,10 +249,10 @@ export default function PharmacyManagementPanel() {
                     <CardContent className="p-4">
                       <div className="flex items-start justify-between mb-3">
                         <div className="flex items-center gap-3">
-                          <div className={`p-2 rounded-lg ${med.controlledSubstance ? "bg-purple-500/10" : "bg-primary/10"}`}><Pill className={`h-5 w-5 ${med.controlledSubstance ? "text-purple-500" : "text-primary"}`} /></div>
+                          <div className={`p-2 rounded-lg ${med.controlledSubstance ? "bg-primary/10" : "bg-primary/10"}`}><Pill className={`h-5 w-5 ${med.controlledSubstance ? "text-primary" : "text-primary"}`} /></div>
                           <div><h4 className="font-medium text-sm">{med.name}</h4><p className="text-xs text-muted-foreground">{med.genericName}</p></div>
                         </div>
-                        {med.controlledSubstance && <Badge variant="secondary" className="bg-purple-500/10 text-purple-600 text-xs"><ShieldCheck className="h-3 w-3 mr-1" />Controlado</Badge>}
+                        {med.controlledSubstance && <Badge variant="secondary" className="bg-primary/10 text-primary text-xs"><ShieldCheck className="h-3 w-3 mr-1" />Controlado</Badge>}
                       </div>
                       <div className="space-y-3">
                         <div>
