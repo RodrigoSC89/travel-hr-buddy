@@ -34,13 +34,13 @@ const useVoiceCommands = (_opts?: Record<string, unknown>) => ({ isListening: fa
 const VoiceAssistantWithHotword = (_props: Record<string, unknown>) => null;
 
 const tabsConfig = [
-  { id: "visao-geral", label: "Visão Geral", icon: LayoutDashboard, path: "/central-comando/visao-geral" },
-  { id: "operacoes", label: "Operações", icon: Activity, path: "/central-comando/operacoes" },
-  { id: "executivo", label: "Executivo", icon: TrendingUp, path: "/central-comando/executivo" },
-  { id: "ia", label: "IA", icon: Brain, path: "/central-comando/ia" },
-  { id: "resiliencia", label: "Resiliência", icon: Shield, path: "/central-comando/resiliencia" },
-  { id: "alertas", label: "Alertas", icon: Bell, path: "/central-comando/alertas" },
-  { id: "config", label: "Config", icon: Settings, path: "/central-comando/config" },
+  { id: "visao-geral", label: "Visão Geral", icon: LayoutDashboard, path: "/command" },
+  { id: "operacoes", label: "Operações", icon: Activity, path: "/command?tab=operations" },
+  { id: "executivo", label: "Executivo", icon: TrendingUp, path: "/command?tab=executive" },
+  { id: "ia", label: "IA", icon: Brain, path: "/ai" },
+  { id: "resiliencia", label: "Resiliência", icon: Shield, path: "/command?tab=resilience" },
+  { id: "alertas", label: "Alertas", icon: Bell, path: "/command?tab=alerts" },
+  { id: "config", label: "Config", icon: Settings, path: "/command?tab=config" },
 ];
 
 const sectionMap: Record<string, React.LazyExoticComponent<React.ComponentType>> = {

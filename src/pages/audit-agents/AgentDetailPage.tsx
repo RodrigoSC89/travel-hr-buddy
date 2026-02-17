@@ -188,7 +188,7 @@ Faça sua pergunta sobre compliance, auditoria ou regulamentações!`);
   return (
     <div className="space-y-4 p-2 md:p-6">
       <Breadcrumbs items={[
-        { label: "Central de Comando", href: "/central-comando" },
+        { label: "Central de Comando", href: "/command" },
         { label: "Agentes de Auditoria", href: "/audit-agents" },
         { label: agent.name, current: true }
       ]} />

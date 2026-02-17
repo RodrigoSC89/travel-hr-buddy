@@ -162,8 +162,8 @@ export function GuidedTour({ autoStart = false }: GuidedTourProps) {
   }, []);
 
   const startCommandCenterTour = useCallback(() => {
-    if (location.pathname !== "/central-comando/visao-geral") {
-      navigate("/central-comando/visao-geral");
+    if (location.pathname !== "/command") {
+      navigate("/command");
       setTimeout(() => startTour(COMMAND_CENTER_STEPS), 500);
     } else {
       startTour(COMMAND_CENTER_STEPS);
@@ -171,8 +171,8 @@ export function GuidedTour({ autoStart = false }: GuidedTourProps) {
   }, [location.pathname, navigate, startTour]);
 
   const startIATour = useCallback(() => {
-    if (!location.pathname.includes("/central-comando")) {
-      navigate("/central-comando/ia");
+    if (!location.pathname.includes("/command") && !location.pathname.includes("/ai")) {
+      navigate("/ai");
       setTimeout(() => startTour(IA_TAB_STEPS), 500);
     } else {
       startTour(IA_TAB_STEPS);

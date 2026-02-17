@@ -216,10 +216,10 @@ export default function CommandMegaHub() {
               <div className="grid grid-cols-2 sm:grid-cols-3 lg:grid-cols-6 gap-3">
                 {[
                   { label: 'Nova Viagem', icon: Plus, color: 'text-primary', bg: 'bg-primary/10', onClick: () => navigate('/ops?tab=voyage') },
-                  { label: 'Tripulação', icon: Users, color: 'text-blue-500', bg: 'bg-blue-500/10', onClick: () => navigate('/workbench?section=people') },
-                  { label: 'Manutenção', icon: Wrench, color: 'text-orange-500', bg: 'bg-orange-500/10', onClick: () => navigate('/maintenance') },
-                  { label: 'Documentos', icon: FileText, color: 'text-emerald-500', bg: 'bg-emerald-500/10', onClick: () => navigate('/workbench?section=docs') },
-                  { label: 'Compliance', icon: Shield, color: 'text-violet-500', bg: 'bg-violet-500/10', onClick: () => navigate('/compliance') },
+                  { label: 'Tripulação', icon: Users, color: 'text-info', bg: 'bg-info/10', onClick: () => navigate('/workbench?section=people') },
+                  { label: 'Manutenção', icon: Wrench, color: 'text-warning', bg: 'bg-warning/10', onClick: () => navigate('/maintenance') },
+                  { label: 'Documentos', icon: FileText, color: 'text-success', bg: 'bg-success/10', onClick: () => navigate('/workbench?section=docs') },
+                  { label: 'Compliance', icon: Shield, color: 'text-accent', bg: 'bg-accent/10', onClick: () => navigate('/compliance') },
                   { label: 'Alertas', icon: AlertTriangle, color: 'text-destructive', bg: 'bg-destructive/10', onClick: () => setSearchParams({ tab: 'alerts' }) },
                 ].map((action) => (
                   <button

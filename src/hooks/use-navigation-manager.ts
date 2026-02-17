@@ -74,7 +74,7 @@ export const useNavigationManager = () => {
   };
 
   const navigateHome = () => {
-    navigateTo("/central-comando", { replace: true, skipValidation: true });
+    navigateTo("/command", { replace: true, skipValidation: true });
   };
 
   /**

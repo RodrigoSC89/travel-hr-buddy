@@ -127,7 +127,7 @@ export function LegacyRedirect({ from }: { from: string }) {
   const to = LEGACY_ROUTES[from];
   
   if (!to) {
-    return <Navigate to="/central-comando" replace />;
+    return <Navigate to="/command" replace />;
   }
   
   // Preserve existing query params
