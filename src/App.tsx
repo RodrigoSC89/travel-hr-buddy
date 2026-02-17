@@ -9,6 +9,7 @@
 import * as React from "react";
 import { Suspense, useEffect } from "react";
 import { BrowserRouter as Router } from "react-router-dom";
+import { SkipToContent } from "@/components/ui/SkipToContent";
 import { QueryClientProvider, QueryClient } from "@tanstack/react-query";
 import { Toaster, toast } from "sonner";
 import { AuthProvider } from "./contexts/AuthContext";
@@ -84,6 +85,7 @@ function App() {
             <Router>
               <TooltipProvider>
                 <LazyLoadErrorBoundary>
+                  <SkipToContent />
                   <main id="main-content" role="main">
                     <Suspense fallback={<AppLoader />}>
                       <AppRoutes />
