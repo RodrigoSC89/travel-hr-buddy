@@ -199,7 +199,7 @@ export function TelemetriaTabs({
           <CardContent>
             {alerts.length === 0 ? (
               <div className="text-center py-12 text-muted-foreground">
-                <CheckCircle2 className="h-12 w-12 mx-auto mb-4 text-green-500" />
+                <CheckCircle2 className="h-12 w-12 mx-auto mb-4 text-success" />
                 <p>Nenhum alerta ativo no momento</p>
               </div>
             ) : (

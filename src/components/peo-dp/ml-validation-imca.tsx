@@ -252,12 +252,12 @@ export const MLValidationIMCA: React.FC = () => {
   return (
     <div className="space-y-6">
       {/* Header */}
-      <Card className="border-2 border-purple-200 bg-gradient-to-r from-purple-50 to-indigo-50">
+      <Card className="border-2 border-primary/30 bg-gradient-to-r from-primary/5 to-accent/5">
         <CardHeader>
           <div className="flex items-center justify-between">
             <div className="flex items-center gap-3">
-              <div className="p-3 rounded-lg bg-purple-600/10">
-                <Brain className="h-6 w-6 text-purple-600" />
+              <div className="p-3 rounded-lg bg-primary/10">
+                <Brain className="h-6 w-6 text-primary" />
               </div>
               <div>
                 <CardTitle className="text-2xl">Validação ML + Recomendações IMCA</CardTitle>
@@ -269,7 +269,7 @@ export const MLValidationIMCA: React.FC = () => {
             <Button 
               onClick={runMLValidation}
               disabled={isAnalyzing}
-              className="bg-purple-600 hover:bg-purple-700"
+              className="bg-primary hover:bg-primary/90"
             >
               {isAnalyzing ? (
                 <>
@@ -516,10 +516,10 @@ export const MLValidationIMCA: React.FC = () => {
           </Card>
 
           {/* ML Model Info */}
-          <Card className="border-2 border-purple-200 bg-purple-50/50">
+          <Card className="border-2 border-primary/30 bg-primary/5">
             <CardHeader>
               <CardTitle className="text-lg flex items-center gap-2">
-                <Brain className="h-5 w-5 text-purple-600" />
+                <Brain className="h-5 w-5 text-primary" />
                 Modelo de Validação
               </CardTitle>
             </CardHeader>

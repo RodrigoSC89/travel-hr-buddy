@@ -41,10 +41,10 @@ export default function SGSOReportPage() {
 
   const getRiskColor = (level: string): string => {
     const levelLower = level.toLowerCase();
-    if (levelLower === "crítico") return "text-red-900 bg-red-100";
-    if (levelLower === "alto") return "text-orange-900 bg-orange-100";
-    if (levelLower === "médio") return "text-yellow-900 bg-yellow-100";
-    return "text-green-900 bg-green-100";
+    if (levelLower === "crítico") return "text-destructive bg-destructive/10";
+    if (levelLower === "alto") return "text-warning bg-warning/10";
+    if (levelLower === "médio") return "text-warning bg-warning/10";
+    return "text-success bg-success/10";
   };
 
   const stats = {
@@ -118,25 +118,25 @@ export default function SGSOReportPage() {
         <div className="mb-8">
           <h2 className="text-2xl font-semibold text-foreground mb-4">📊 Resumo Estatístico</h2>
           <div className="grid grid-cols-2 md:grid-cols-5 gap-4">
-            <div className="bg-blue-50 p-4 rounded-lg border border-blue-200">
-              <p className="text-sm text-blue-700 font-medium">Total</p>
-              <p className="text-2xl font-bold text-blue-900">{stats.total}</p>
+            <div className="bg-info/10 p-4 rounded-lg border border-info/30">
+              <p className="text-sm text-info font-medium">Total</p>
+              <p className="text-2xl font-bold text-foreground">{stats.total}</p>
             </div>
-            <div className="bg-red-50 p-4 rounded-lg border border-red-200">
-              <p className="text-sm text-red-700 font-medium">Crítico</p>
-              <p className="text-2xl font-bold text-red-900">{stats.critico}</p>
+            <div className="bg-destructive/10 p-4 rounded-lg border border-destructive/30">
+              <p className="text-sm text-destructive font-medium">Crítico</p>
+              <p className="text-2xl font-bold text-destructive">{stats.critico}</p>
             </div>
-            <div className="bg-orange-50 p-4 rounded-lg border border-orange-200">
-              <p className="text-sm text-orange-700 font-medium">Alto</p>
-              <p className="text-2xl font-bold text-orange-900">{stats.alto}</p>
+            <div className="bg-warning/10 p-4 rounded-lg border border-warning/30">
+              <p className="text-sm text-warning font-medium">Alto</p>
+              <p className="text-2xl font-bold text-warning">{stats.alto}</p>
             </div>
-            <div className="bg-yellow-50 p-4 rounded-lg border border-yellow-200">
-              <p className="text-sm text-yellow-700 font-medium">Médio</p>
-              <p className="text-2xl font-bold text-yellow-900">{stats.medio}</p>
+            <div className="bg-warning/10 p-4 rounded-lg border border-warning/30">
+              <p className="text-sm text-warning font-medium">Médio</p>
+              <p className="text-2xl font-bold text-warning">{stats.medio}</p>
             </div>
-            <div className="bg-green-50 p-4 rounded-lg border border-green-200">
-              <p className="text-sm text-green-700 font-medium">Baixo</p>
-              <p className="text-2xl font-bold text-green-900">{stats.baixo}</p>
+            <div className="bg-success/10 p-4 rounded-lg border border-success/30">
+              <p className="text-sm text-success font-medium">Baixo</p>
+              <p className="text-2xl font-bold text-success">{stats.baixo}</p>
             </div>
           </div>
         </div>

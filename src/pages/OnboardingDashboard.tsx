@@ -265,7 +265,7 @@ export default function OnboardingDashboard() {
             <Progress value={progress} className="h-3" />
             <div className="mt-4 flex items-center gap-4 text-sm">
               <div className="flex items-center gap-1">
-                <CheckCircle2 className="h-4 w-4 text-green-500" />
+                <CheckCircle2 className="h-4 w-4 text-success" />
                 <span>{requiredCompleted}/{requiredSteps.length} obrigatórias</span>
               </div>
               <div className="flex items-center gap-1">
@@ -314,7 +314,7 @@ export default function OnboardingDashboard() {
                       <div
                         key={step.id}
                         className={`flex items-center justify-between p-4 rounded-lg border transition-colors ${
-                          isCompleted ? 'bg-green-50 border-green-200 dark:bg-green-900/20 dark:border-green-800' : 'hover:bg-muted/50'
+                          isCompleted ? 'bg-success/10 border-success/30 dark:bg-success/10 dark:border-success/30' : 'hover:bg-muted/50'
                         }`}
                       >
                         <div className="flex items-center gap-4">
@@ -323,7 +323,7 @@ export default function OnboardingDashboard() {
                             className="flex-shrink-0"
                           >
                             {isCompleted ? (
-                              <CheckCircle2 className="h-6 w-6 text-green-500" />
+                              <CheckCircle2 className="h-6 w-6 text-success" />
                             ) : (
                               <Circle className="h-6 w-6 text-muted-foreground hover:text-primary" />
                             )}
@@ -509,9 +509,9 @@ export default function OnboardingDashboard() {
         )}
 
         {progress === 100 && (
-          <Card className="bg-green-50 border-green-200 dark:bg-green-900/20 dark:border-green-800">
+          <Card className="bg-success/10 border-success/30 dark:bg-success/10 dark:border-success/30">
             <CardContent className="py-8 text-center">
-              <CheckCircle2 className="h-16 w-16 mx-auto text-green-500 mb-4" />
+              <CheckCircle2 className="h-16 w-16 mx-auto text-success mb-4" />
               <h2 className="text-2xl font-bold mb-2">🎉 Configuração Concluída!</h2>
               <p className="text-muted-foreground mb-6">
                 Seu sistema está pronto para uso. Explore todos os módulos do Nauti One.

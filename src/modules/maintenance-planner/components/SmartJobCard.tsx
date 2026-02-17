@@ -110,7 +110,7 @@ export const SmartJobCard: React.FC<SmartJobCardProps> = ({
 
   return (
     <>
-      <Card className={`border-l-4 ${getStatusColor(job.status)} ${isOverdue ? "border-red-500 bg-red-50 dark:bg-red-950/20" : ""}`}>
+      <Card className={`border-l-4 ${getStatusColor(job.status)} ${isOverdue ? "border-destructive bg-destructive/5 dark:bg-destructive/10" : ""}`}>
         <CardContent className="p-4">
           {/* Header */}
           <div className="flex items-start justify-between mb-3">
@@ -171,7 +171,7 @@ export const SmartJobCard: React.FC<SmartJobCardProps> = ({
           <div className="flex items-center gap-4 mb-3 text-sm">
             <div className="flex items-center gap-1">
               <Calendar className="h-4 w-4 text-muted-foreground" />
-              <span className={isOverdue ? "text-red-500 font-medium" : isUrgent ? "text-yellow-500" : ""}>
+              <span className={isOverdue ? "text-destructive font-medium" : isUrgent ? "text-warning" : ""}>
                 {isOverdue ? "Vencido" : `${job.prazo_dias} dias restantes`}
               </span>
             </div>
@@ -243,7 +243,7 @@ export const SmartJobCard: React.FC<SmartJobCardProps> = ({
             rows={4}
           />
           {isUrgent && (
-            <div className="flex items-center gap-2 text-yellow-600 text-sm">
+            <div className="flex items-center gap-2 text-warning text-sm">
               <AlertTriangle className="h-4 w-4" />
               Este job está próximo do vencimento. Considere os riscos.
             </div>
