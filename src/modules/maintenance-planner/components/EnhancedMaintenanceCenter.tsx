@@ -126,7 +126,7 @@ export const EnhancedMaintenanceCenter: React.FC = () => {
           trend: 'up',
           trendValue: 8.5,
           icon: <Timer className="h-5 w-5" />,
-          color: 'text-green-500'
+          color: 'text-success'
         },
         {
           id: 'mttr',
@@ -136,7 +136,7 @@ export const EnhancedMaintenanceCenter: React.FC = () => {
           trend: 'down',
           trendValue: 12.3,
           icon: <Wrench className="h-5 w-5" />,
-          color: 'text-blue-500'
+          color: 'text-info'
         },
         {
           id: 'uptime',
@@ -156,7 +156,7 @@ export const EnhancedMaintenanceCenter: React.FC = () => {
           trend: 'down',
           trendValue: 25,
           icon: <FileText className="h-5 w-5" />,
-          color: 'text-yellow-500'
+          color: 'text-warning'
         }
       ]);
 
@@ -339,18 +339,18 @@ export const EnhancedMaintenanceCenter: React.FC = () => {
       case 'operational':
       case 'completed':
       case 'ok':
-        return 'bg-green-500/20 text-green-500 border-green-500/30';
+        return 'bg-success/20 text-success border-success/30';
       case 'degraded':
       case 'in_progress':
       case 'low':
-        return 'bg-yellow-500/20 text-yellow-500 border-yellow-500/30';
+        return 'bg-warning/20 text-warning border-warning/30';
       case 'critical':
       case 'overdue':
       case 'out_of_stock':
-        return 'bg-red-500/20 text-red-500 border-red-500/30';
+        return 'bg-destructive/20 text-destructive border-destructive/30';
       case 'pending':
       case 'on_hold':
-        return 'bg-blue-500/20 text-blue-500 border-blue-500/30';
+        return 'bg-info/20 text-info border-info/30';
       case 'offline':
         return 'bg-muted text-muted-foreground border-border';
       default:
@@ -360,10 +360,10 @@ export const EnhancedMaintenanceCenter: React.FC = () => {
 
   const getPriorityColor = (priority: string) => {
     switch (priority) {
-      case 'critical': return 'bg-red-500 text-white';
-      case 'high': return 'bg-orange-500 text-white';
-      case 'medium': return 'bg-yellow-500 text-black';
-      case 'low': return 'bg-green-500 text-white';
+      case 'critical': return 'bg-destructive text-destructive-foreground';
+      case 'high': return 'bg-warning text-warning-foreground';
+      case 'medium': return 'bg-warning/80 text-foreground';
+      case 'low': return 'bg-success text-success-foreground';
       default: return 'bg-muted';
     }
   };
@@ -413,8 +413,8 @@ export const EnhancedMaintenanceCenter: React.FC = () => {
         className="flex flex-col md:flex-row md:items-center justify-between gap-4"
       >
         <div className="flex items-center gap-4">
-          <div className="p-3 rounded-2xl bg-gradient-to-br from-orange-500/20 to-red-500/10 border border-orange-500/20">
-            <Wrench className="h-8 w-8 text-orange-500" />
+          <div className="p-3 rounded-2xl bg-gradient-to-br from-warning/20 to-destructive/10 border border-warning/20">
+            <Wrench className="h-8 w-8 text-warning" />
           </div>
           <div>
             <h1 className="text-3xl font-bold">Centro de Manutenção</h1>
@@ -463,11 +463,11 @@ export const EnhancedMaintenanceCenter: React.FC = () => {
                 </div>
                 <div className="flex items-center gap-1 mt-2">
                   {kpi.trend === 'up' ? (
-                    <TrendingUp className="h-4 w-4 text-green-500" />
+                    <TrendingUp className="h-4 w-4 text-success" />
                   ) : (
-                    <TrendingDown className="h-4 w-4 text-green-500" />
+                    <TrendingDown className="h-4 w-4 text-success" />
                   )}
-                  <span className="text-sm text-green-500">
+                  <span className="text-sm text-success">
                     {kpi.trendValue}%
                   </span>
                   <span className="text-xs text-muted-foreground">vs mês anterior</span>

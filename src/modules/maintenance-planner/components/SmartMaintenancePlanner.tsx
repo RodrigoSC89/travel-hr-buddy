@@ -233,15 +233,15 @@ export default function SmartMaintenancePlanner() {
         </motion.div>
 
         <motion.div initial={{ opacity: 0, y: 20 }} animate={{ opacity: 1, y: 0 }} transition={{ delay: 0.4 }}>
-          <Card className="bg-gradient-to-br from-emerald-500/10 to-emerald-600/5 border-emerald-500/30">
+          <Card className="bg-gradient-to-br from-success/10 to-success/5 border-success/30">
             <CardContent className="p-4">
               <div className="flex items-center justify-between">
                 <div>
                   <p className="text-xs text-muted-foreground">Compliance PMS</p>
-                  <p className="text-2xl font-bold text-emerald-600">{stats.compliance}%</p>
+                  <p className="text-2xl font-bold text-success">{stats.compliance}%</p>
                   <Progress value={stats.compliance} className="h-1.5 mt-1" />
                 </div>
-                <Target className="h-8 w-8 text-emerald-500 opacity-60" />
+                <Target className="h-8 w-8 text-success opacity-60" />
               </div>
             </CardContent>
           </Card>

@@ -176,7 +176,7 @@ export const MaintenanceTasksTable: React.FC<MaintenanceTasksTableProps> = ({ on
       },
       in_progress: { 
         label: "Em Andamento", 
-        className: "bg-blue-500/20 text-blue-500",
+        className: "bg-info/20 text-info",
         icon: <Play className="h-3 w-3 mr-1" />
       },
       completed: { 
@@ -206,10 +206,10 @@ export const MaintenanceTasksTable: React.FC<MaintenanceTasksTableProps> = ({ on
 
   const getTypeBadge = (type: string) => {
     const configs: Record<string, { label: string; className: string }> = {
-      preventive: { label: "Preventiva", className: "bg-blue-500/20 text-blue-500" },
-      corrective: { label: "Corretiva", className: "bg-orange-500/20 text-orange-500" },
-      predictive: { label: "Preditiva", className: "bg-purple-500/20 text-purple-500" },
-      inspection: { label: "Inspeção", className: "bg-green-500/20 text-green-500" },
+      preventive: { label: "Preventiva", className: "bg-info/20 text-info" },
+      corrective: { label: "Corretiva", className: "bg-warning/20 text-warning" },
+      predictive: { label: "Preditiva", className: "bg-accent/20 text-accent-foreground" },
+      inspection: { label: "Inspeção", className: "bg-success/20 text-success" },
     };
     const config = configs[type] || configs.preventive;
     return <Badge className={config.className} variant="secondary">{config.label}</Badge>;
@@ -219,7 +219,7 @@ export const MaintenanceTasksTable: React.FC<MaintenanceTasksTableProps> = ({ on
     const configs: Record<string, { label: string; className: string }> = {
       low: { label: "Baixa", className: "bg-muted text-muted-foreground" },
       medium: { label: "Média", className: "bg-warning/20 text-warning" },
-      high: { label: "Alta", className: "bg-orange-500/20 text-orange-500" },
+      high: { label: "Alta", className: "bg-warning/20 text-warning" },
       critical: { label: "Crítica", className: "bg-destructive/20 text-destructive" },
     };
     const config = configs[priority] || configs.medium;

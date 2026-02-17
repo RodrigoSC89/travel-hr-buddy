@@ -133,12 +133,12 @@ export const ClockInWidget: React.FC<ClockInWidgetProps> = ({
       <CardHeader className="text-center pb-2">
         <div className="flex items-center justify-center gap-2 mb-2">
           {isOnline ? (
-            <Badge variant="outline" className="gap-1 text-green-600 border-green-200 bg-green-50">
+            <Badge variant="outline" className="gap-1 text-success border-success/20 bg-success/10">
               <Wifi className="h-3 w-3" />
               Online
             </Badge>
           ) : (
-            <Badge variant="outline" className="gap-1 text-amber-600 border-amber-200 bg-amber-50">
+            <Badge variant="outline" className="gap-1 text-warning border-warning/20 bg-warning/10">
               <WifiOff className="h-3 w-3" />
               Offline
             </Badge>
@@ -173,25 +173,25 @@ export const ClockInWidget: React.FC<ClockInWidgetProps> = ({
           <div className="grid grid-cols-4 gap-2 p-3 bg-muted/50 rounded-lg text-center text-sm">
             <div>
               <p className="text-muted-foreground text-xs">Entrada</p>
-              <p className={cn('font-medium', todayRecord.clock_in ? 'text-green-600' : 'text-muted-foreground')}>
+              <p className={cn('font-medium', todayRecord.clock_in ? 'text-success' : 'text-muted-foreground')}>
                 {todayRecord.clock_in || '--:--'}
               </p>
             </div>
             <div>
               <p className="text-muted-foreground text-xs">Almoço</p>
-              <p className={cn('font-medium', todayRecord.lunch_out ? 'text-amber-600' : 'text-muted-foreground')}>
+              <p className={cn('font-medium', todayRecord.lunch_out ? 'text-warning' : 'text-muted-foreground')}>
                 {todayRecord.lunch_out || '--:--'}
               </p>
             </div>
             <div>
               <p className="text-muted-foreground text-xs">Retorno</p>
-              <p className={cn('font-medium', todayRecord.lunch_in ? 'text-amber-600' : 'text-muted-foreground')}>
+              <p className={cn('font-medium', todayRecord.lunch_in ? 'text-warning' : 'text-muted-foreground')}>
                 {todayRecord.lunch_in || '--:--'}
               </p>
             </div>
             <div>
               <p className="text-muted-foreground text-xs">Saída</p>
-              <p className={cn('font-medium', todayRecord.clock_out ? 'text-red-600' : 'text-muted-foreground')}>
+              <p className={cn('font-medium', todayRecord.clock_out ? 'text-destructive' : 'text-muted-foreground')}>
                 {todayRecord.clock_out || '--:--'}
               </p>
             </div>
@@ -242,7 +242,7 @@ export const ClockInWidget: React.FC<ClockInWidgetProps> = ({
                         initial={{ scale: 0 }}
                         animate={{ scale: 1 }}
                       >
-                        <CheckCircle className="h-5 w-5 text-green-500" />
+                        <CheckCircle className="h-5 w-5 text-success" />
                       </motion.div>
                     ) : (
                       <motion.div
