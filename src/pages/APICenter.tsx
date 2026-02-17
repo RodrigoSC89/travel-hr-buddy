@@ -281,7 +281,7 @@ export default function APICenter() {
                 <span className="text-muted-foreground flex items-center gap-1">
                   <Clock className="h-3 w-3" /> Latência
                 </span>
-                <span className={api.latency > 500 ? "text-amber-400" : "text-foreground"}>{api.latency}ms</span>
+                <span className={api.latency > 500 ? "text-warning" : "text-foreground"}>{api.latency}ms</span>
               </div>
               {api.quota.limit > 0 && (
                 <div className="space-y-1">

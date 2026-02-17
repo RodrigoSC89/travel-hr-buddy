@@ -185,11 +185,11 @@ Sou seu assistente especializado em **Sistema de Gestão de Segurança Operacion
     if (!typeConfig) return null;
     
     const colors: Record<string, string> = {
-      query: "bg-blue-600",
-      generate_evidence: "bg-green-600",
-      audit_checklist: "bg-purple-600",
-      nc_action_plan: "bg-orange-600",
-      incident_investigation: "bg-red-600"
+      query: "bg-primary",
+      generate_evidence: "bg-success",
+      audit_checklist: "bg-accent",
+      nc_action_plan: "bg-warning",
+      incident_investigation: "bg-destructive"
     };
     
     return (

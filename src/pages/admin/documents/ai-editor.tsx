@@ -326,7 +326,7 @@ export default function DocumentAIEditorPage() {
                 </>
               ) : savedDocumentId ? (
                 <>
-                  <Save className="w-4 h-4 mr-2 text-green-400" /> Salvo no Supabase
+                  <Save className="w-4 h-4 mr-2 text-success" /> Salvo no Supabase
                 </>
               ) : (
                 <>

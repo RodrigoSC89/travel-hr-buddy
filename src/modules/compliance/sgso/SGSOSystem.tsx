@@ -75,7 +75,7 @@ export default function SGSOSystem() {
         <Card>
           <CardHeader className="flex flex-row items-center justify-between pb-2">
             <CardTitle className="text-sm font-medium">Planos Ativos</CardTitle>
-            <Shield className="h-4 w-4 text-green-500" />
+            <Shield className="h-4 w-4 text-success" />
           </CardHeader>
           <CardContent>
             <div className="text-2xl font-bold">{stats.activePlans}</div>
@@ -93,7 +93,7 @@ export default function SGSOSystem() {
         <Card>
           <CardHeader className="flex flex-row items-center justify-between pb-2">
             <CardTitle className="text-sm font-medium">Ações Pendentes</CardTitle>
-            <Activity className="h-4 w-4 text-yellow-500" />
+            <Activity className="h-4 w-4 text-warning" />
           </CardHeader>
           <CardContent>
             <div className="text-2xl font-bold">{stats.pendingActions}</div>

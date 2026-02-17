@@ -153,8 +153,8 @@ export const SystemMonitoringDashboard: React.FC = () => {
                     <h4 className="font-medium text-sm text-muted-foreground">{metric.title}</h4>
                     <p className="text-2xl font-bold">{metric.value}</p>
                     <p className={`text-sm flex items-center gap-1 ${
-                      metric.trend === "up" ? "text-green-600" : 
-                        metric.trend === "down" ? "text-red-600" : "text-muted-foreground"
+                      metric.trend === "up" ? "text-success" : 
+                        metric.trend === "down" ? "text-destructive" : "text-muted-foreground"
                     }`}>
                       {metric.change} vs mês anterior
                     </p>
@@ -216,19 +216,19 @@ export const SystemMonitoringDashboard: React.FC = () => {
           <div className="mt-6 grid grid-cols-2 md:grid-cols-4 gap-4 text-center">
             <div>
               <p className="text-sm text-muted-foreground">Performance</p>
-              <p className="text-xl font-semibold text-green-600">Excelente</p>
+              <p className="text-xl font-semibold text-success">Excelente</p>
             </div>
             <div>
               <p className="text-sm text-muted-foreground">Disponibilidade</p>
-              <p className="text-xl font-semibold text-blue-600">99.2%</p>
+              <p className="text-xl font-semibold text-primary">99.2%</p>
             </div>
             <div>
               <p className="text-sm text-muted-foreground">Segurança</p>
-              <p className="text-xl font-semibold text-purple-600">Máxima</p>
+              <p className="text-xl font-semibold text-accent-foreground">Máxima</p>
             </div>
             <div>
               <p className="text-sm text-muted-foreground">Eficiência</p>
-              <p className="text-xl font-semibold text-orange-600">94.8%</p>
+              <p className="text-xl font-semibold text-warning">94.8%</p>
             </div>
           </div>
         </CardContent>

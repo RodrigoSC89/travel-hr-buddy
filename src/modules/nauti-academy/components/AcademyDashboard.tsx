@@ -392,7 +392,7 @@ export default function AcademyDashboard() {
               <div>
                 <p className="text-sm text-muted-foreground">Tripulantes Ativos</p>
                 <p className="text-2xl font-bold">{crewMembers.length || 487}</p>
-                <p className="text-xs text-green-600">↑ {stats.crewTrained} treinados</p>
+                <p className="text-xs text-success">↑ {stats.crewTrained} treinados</p>
               </div>
               <Users className="h-8 w-8 text-primary opacity-80" />
             </div>
@@ -582,7 +582,7 @@ export default function AcademyDashboard() {
                     <div className="flex items-center gap-4 text-sm text-muted-foreground">
                       <div className="flex items-center gap-1"><Clock className="h-4 w-4" />{course.duration_hours}h</div>
                       <div className="flex items-center gap-1"><Users className="h-4 w-4" />{course.enrolledCount}</div>
-                      <div className="flex items-center gap-1"><Star className="h-4 w-4 fill-amber-400 text-amber-400" />{course.rating?.toFixed(1)}</div>
+                      <div className="flex items-center gap-1"><Star className="h-4 w-4 fill-warning text-warning" />{course.rating?.toFixed(1)}</div>
                     </div>
                     {progress ? (
                       <div className="space-y-2">
@@ -771,7 +771,7 @@ export default function AcademyDashboard() {
                   <Clock className="h-5 w-5 text-warning" />
                   <span className="font-medium">Vencendo em 60 dias</span>
                 </div>
-                <p className="text-2xl font-bold text-amber-600">15</p>
+                <p className="text-2xl font-bold text-warning">15</p>
                 <p className="text-sm text-muted-foreground">certificações</p>
               </CardContent>
             </Card>
@@ -863,7 +863,7 @@ export default function AcademyDashboard() {
                     <p className="font-medium">{item.month}</p>
                     <div className="text-right">
                       <p className="font-bold">{item.completed} cursos</p>
-                      <p className="text-sm text-green-600">{item.trend}</p>
+                      <p className="text-sm text-success">{item.trend}</p>
                     </div>
                   </div>
                 ))}

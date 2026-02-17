@@ -155,7 +155,7 @@ export function Patch605Validation() {
               <Card>
                 <CardContent className="pt-6 text-center">
                   <div className="text-2xl font-bold flex items-center justify-center gap-1">
-                    <TrendingUp className="h-5 w-5 text-green-500" />
+                    <TrendingUp className="h-5 w-5 text-success" />
                     +{improvementRate}%
                   </div>
                   <div className="text-sm text-muted-foreground">Improvement</div>
@@ -174,17 +174,17 @@ export function Patch605Validation() {
                         <span className="font-medium">{event.decision}</span>
                       </div>
                       {event.feedback === "positive" ? (
-                        <ThumbsUp className="h-4 w-4 text-green-500" />
+                        <ThumbsUp className="h-4 w-4 text-success" />
                       ) : (
-                        <ThumbsDown className="h-4 w-4 text-red-500" />
+                        <ThumbsDown className="h-4 w-4 text-destructive" />
                       )}
                     </div>
                     <div className="grid grid-cols-3 gap-2 text-xs">
                       <div>
                         <span className="text-muted-foreground">Weight:</span>{" "}
-                        <span className="line-through text-red-500">{event.initialWeight.toFixed(2)}</span>
+                        <span className="line-through text-destructive">{event.initialWeight.toFixed(2)}</span>
                         {" → "}
-                        <span className="text-green-500 font-semibold">{event.adjustedWeight.toFixed(2)}</span>
+                        <span className="text-success font-semibold">{event.adjustedWeight.toFixed(2)}</span>
                       </div>
                       <div>
                         <span className="text-muted-foreground">Accuracy:</span>{" "}
