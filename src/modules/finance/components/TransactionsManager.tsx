@@ -353,14 +353,14 @@ export default function TransactionsManager() {
             </div>
           </CardContent>
         </Card>
-        <Card className="border-l-4 border-l-amber-500">
+        <Card className="border-l-4 border-l-warning">
           <CardContent className="pt-4">
             <div className="flex items-center justify-between">
               <div>
                 <p className="text-xs text-muted-foreground">Pendentes</p>
-                <p className="text-2xl font-bold text-amber-500">{totals.pending}</p>
+                <p className="text-2xl font-bold text-warning">{totals.pending}</p>
               </div>
-              <Clock className="h-8 w-8 text-amber-500 opacity-60" />
+              <Clock className="h-8 w-8 text-warning opacity-60" />
             </div>
           </CardContent>
         </Card>

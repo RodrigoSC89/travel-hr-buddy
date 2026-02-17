@@ -150,8 +150,8 @@ export const AIAuditPanel: React.FC = () => {
         <Card>
           <CardContent className="pt-6">
             <div className="flex items-center gap-3">
-              <div className="p-2 rounded-lg bg-purple-500/20">
-                <CheckCircle className="h-5 w-5 text-purple-500" />
+              <div className="p-2 rounded-lg bg-accent/20">
+                <CheckCircle className="h-5 w-5 text-accent-foreground" />
               </div>
               <div>
                 <p className="text-2xl font-bold">{(stats.approvalRate).toFixed(0)}%</p>
@@ -243,7 +243,7 @@ export const AIAuditPanel: React.FC = () => {
                         )}
                         {getConfidenceBadge(log.confidence_score)}
                         {log.rag_enabled && (
-                          <Badge className="bg-purple-500/20 text-purple-600">RAG</Badge>
+                          <Badge className="bg-accent/20 text-accent-foreground">RAG</Badge>
                         )}
                         {log.requires_approval && (
                           log.approval_decision === 'approved' ? (

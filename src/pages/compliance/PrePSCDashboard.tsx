@@ -109,10 +109,10 @@ export default function PrePSCDashboard() {
         <Card>
           <CardHeader className="flex flex-row items-center justify-between pb-2">
             <CardTitle className="text-sm font-medium">Critical Items</CardTitle>
-            <AlertTriangle className="h-4 w-4 text-red-600" />
+            <AlertTriangle className="h-4 w-4 text-destructive" />
           </CardHeader>
           <CardContent>
-            <div className="text-2xl font-bold text-red-600">{stats.criticalItems}</div>
+            <div className="text-2xl font-bold text-destructive">{stats.criticalItems}</div>
             <p className="text-xs text-muted-foreground mt-1">
               Require immediate action
             </p>
@@ -122,10 +122,10 @@ export default function PrePSCDashboard() {
         <Card>
           <CardHeader className="flex flex-row items-center justify-between pb-2">
             <CardTitle className="text-sm font-medium">Readiness Status</CardTitle>
-            <Shield className="h-4 w-4 text-green-600" />
+            <Shield className="h-4 w-4 text-success" />
           </CardHeader>
           <CardContent>
-            <div className="text-2xl font-bold text-green-600">
+            <div className="text-2xl font-bold text-success">
               {stats.criticalItems === 0 ? "Ready" : "Not Ready"}
             </div>
             <p className="text-xs text-muted-foreground mt-1">

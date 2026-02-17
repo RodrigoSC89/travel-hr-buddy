@@ -522,10 +522,10 @@ export const EnhancedMaintenanceCenter: React.FC = () => {
               <CardContent>
                 <div className="space-y-4">
                   {[
-                    { status: 'in_progress', label: 'Em Andamento', count: workOrders.filter(wo => wo.status === 'in_progress').length, color: 'bg-blue-500' },
-                    { status: 'pending', label: 'Pendentes', count: workOrders.filter(wo => wo.status === 'pending').length, color: 'bg-yellow-500' },
-                    { status: 'completed', label: 'Concluídas', count: workOrders.filter(wo => wo.status === 'completed').length, color: 'bg-green-500' },
-                    { status: 'overdue', label: 'Atrasadas', count: workOrders.filter(wo => wo.status === 'overdue').length, color: 'bg-red-500' },
+                    { status: 'in_progress', label: 'Em Andamento', count: workOrders.filter(wo => wo.status === 'in_progress').length, color: 'bg-primary' },
+                    { status: 'pending', label: 'Pendentes', count: workOrders.filter(wo => wo.status === 'pending').length, color: 'bg-warning' },
+                    { status: 'completed', label: 'Concluídas', count: workOrders.filter(wo => wo.status === 'completed').length, color: 'bg-success' },
+                    { status: 'overdue', label: 'Atrasadas', count: workOrders.filter(wo => wo.status === 'overdue').length, color: 'bg-destructive' },
                   ].map((item) => (
                     <div key={item.status} className="flex items-center gap-4">
                       <div className={`w-3 h-3 rounded-full ${item.color}`} />
@@ -721,13 +721,13 @@ export const EnhancedMaintenanceCenter: React.FC = () => {
                         <Progress 
                           value={eq.healthScore} 
                           className={`flex-1 h-2 ${
-                            eq.healthScore < 60 ? '[&>div]:bg-red-500' : 
-                            eq.healthScore < 80 ? '[&>div]:bg-yellow-500' : ''
+                            eq.healthScore < 60 ? '[&>div]:bg-destructive' : 
+                            eq.healthScore < 80 ? '[&>div]:bg-warning' : ''
                           }`}
                         />
                         <span className={`font-bold ${
-                          eq.healthScore >= 80 ? 'text-green-500' : 
-                          eq.healthScore >= 60 ? 'text-yellow-500' : 'text-red-500'
+                          eq.healthScore >= 80 ? 'text-success' : 
+                          eq.healthScore >= 60 ? 'text-warning' : 'text-destructive'
                         }`}>
                           {eq.healthScore}%
                         </span>
@@ -748,7 +748,7 @@ export const EnhancedMaintenanceCenter: React.FC = () => {
                     </div>
                     <div>
                       <p className="text-sm text-muted-foreground">Risco de Falha</p>
-                      <Badge className={eq.riskProbability > 50 ? 'bg-red-500' : eq.riskProbability > 25 ? 'bg-yellow-500' : 'bg-green-500'}>
+                      <Badge className={eq.riskProbability > 50 ? 'bg-destructive' : eq.riskProbability > 25 ? 'bg-warning' : 'bg-success'}>
                         {eq.riskProbability}%
                       </Badge>
                     </div>

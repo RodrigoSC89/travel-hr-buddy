@@ -201,43 +201,43 @@ export const AutoEvidenceBuilder: React.FC = () => {
       </div>
 
       <div className="grid grid-cols-5 gap-4">
-        <Card className="bg-gradient-to-br from-blue-500/10 to-blue-600/5">
+        <Card className="bg-gradient-to-br from-primary/10 to-primary/5">
           <CardContent className="pt-4">
             <div className="flex items-center justify-between">
               <div><p className="text-sm text-muted-foreground">Pacotes</p><p className="text-2xl font-bold">{packages.length}</p></div>
-              <FolderOpen className="h-8 w-8 text-blue-500" />
+              <FolderOpen className="h-8 w-8 text-primary" />
             </div>
           </CardContent>
         </Card>
-        <Card className="bg-gradient-to-br from-green-500/10 to-green-600/5">
+        <Card className="bg-gradient-to-br from-success/10 to-success/5">
           <CardContent className="pt-4">
             <div className="flex items-center justify-between">
               <div><p className="text-sm text-muted-foreground">Prontos</p><p className="text-2xl font-bold">{packages.filter(p => p.status === "ready").length}</p></div>
-              <CheckCircle className="h-8 w-8 text-green-500" />
+              <CheckCircle className="h-8 w-8 text-success" />
             </div>
           </CardContent>
         </Card>
-        <Card className="bg-gradient-to-br from-purple-500/10 to-purple-600/5">
+        <Card className="bg-gradient-to-br from-accent/10 to-accent/5">
           <CardContent className="pt-4">
             <div className="flex items-center justify-between">
               <div><p className="text-sm text-muted-foreground">Evidências</p><p className="text-2xl font-bold">{evidenceItems.length}</p></div>
-              <FileText className="h-8 w-8 text-purple-500" />
+              <FileText className="h-8 w-8 text-accent-foreground" />
             </div>
           </CardContent>
         </Card>
-        <Card className="bg-gradient-to-br from-yellow-500/10 to-yellow-600/5">
+        <Card className="bg-gradient-to-br from-warning/10 to-warning/5">
           <CardContent className="pt-4">
             <div className="flex items-center justify-between">
               <div><p className="text-sm text-muted-foreground">Pendentes</p><p className="text-2xl font-bold">{evidenceItems.filter(e => e.status === "pending").length}</p></div>
-              <Clock className="h-8 w-8 text-yellow-500" />
+              <Clock className="h-8 w-8 text-warning" />
             </div>
           </CardContent>
         </Card>
-        <Card className="bg-gradient-to-br from-red-500/10 to-red-600/5">
+        <Card className="bg-gradient-to-br from-destructive/10 to-destructive/5">
           <CardContent className="pt-4">
             <div className="flex items-center justify-between">
               <div><p className="text-sm text-muted-foreground">Faltantes</p><p className="text-2xl font-bold">{evidenceItems.filter(e => e.status === "missing").length}</p></div>
-              <AlertTriangle className="h-8 w-8 text-red-500" />
+              <AlertTriangle className="h-8 w-8 text-destructive" />
             </div>
           </CardContent>
         </Card>
@@ -266,7 +266,7 @@ export const AutoEvidenceBuilder: React.FC = () => {
                     <div className="space-y-1">
                       <div className="flex justify-between text-sm">
                         <span>Completude</span>
-                        <span className={`font-medium ${pkg.completeness === 100 ? "text-green-500" : pkg.completeness >= 70 ? "text-yellow-500" : "text-red-500"}`}>{pkg.completeness}%</span>
+                        <span className={`font-medium ${pkg.completeness === 100 ? "text-success" : pkg.completeness >= 70 ? "text-warning" : "text-destructive"}`}>{pkg.completeness}%</span>
                       </div>
                       <Progress value={pkg.completeness} className="h-2" />
                     </div>

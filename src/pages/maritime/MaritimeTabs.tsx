@@ -132,7 +132,7 @@ export function MaritimeTabs({ stats, crewMembers, vessels, userId, onTabChange,
           <Card>
             <CardHeader>
               <CardTitle className="flex items-center gap-2">
-                <ClipboardList className="h-5 w-5 text-cyan-500" />
+                <ClipboardList className="h-5 w-5 text-info" />
                 Checklists Operacionais
               </CardTitle>
               <CardDescription>Inspeções e verificações marítimas</CardDescription>

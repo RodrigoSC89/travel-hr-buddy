@@ -128,22 +128,22 @@ export const SystemHealthMonitor: React.FC = () => {
   }, []);
 
   const getStatusColor = (value: number) => {
-    if (value < 50) return "text-green-600";
-    if (value < 80) return "text-yellow-600";
-    return "text-red-600";
+    if (value < 50) return "text-success";
+    if (value < 80) return "text-warning";
+    return "text-destructive";
   };
 
   const getProgressColor = (value: number) => {
-    if (value < 50) return "bg-green-500";
-    if (value < 80) return "bg-yellow-500";
-    return "bg-red-500";
+    if (value < 50) return "bg-success";
+    if (value < 80) return "bg-warning";
+    return "bg-destructive";
   };
 
   const getAlertIcon = (type: string) => {
     switch (type) {
-    case "error": return <AlertTriangle className="w-4 h-4 text-red-500" />;
-    case "warning": return <AlertTriangle className="w-4 h-4 text-yellow-500" />;
-    default: return <CheckCircle className="w-4 h-4 text-blue-500" />;
+    case "error": return <AlertTriangle className="w-4 h-4 text-destructive" />;
+    case "warning": return <AlertTriangle className="w-4 h-4 text-warning" />;
+    default: return <CheckCircle className="w-4 h-4 text-primary" />;
     }
   };
 
@@ -180,7 +180,7 @@ export const SystemHealthMonitor: React.FC = () => {
         </div>
         <div className="flex items-center gap-2">
           <Badge variant="outline" className="flex items-center gap-1">
-            <div className="w-2 h-2 bg-green-500 rounded-full animate-pulse" />
+            <div className="w-2 h-2 bg-success rounded-full animate-pulse" />
             Online
           </Badge>
           <span className="text-sm text-muted-foreground">
@@ -311,7 +311,7 @@ export const SystemHealthMonitor: React.FC = () => {
             </CardTitle>
           </CardHeader>
           <CardContent>
-            <div className={`text-2xl font-bold ${metrics.responseTime > 400 ? "text-red-600" : metrics.responseTime > 200 ? "text-yellow-600" : "text-green-600"}`}>
+            <div className={`text-2xl font-bold ${metrics.responseTime > 400 ? "text-destructive" : metrics.responseTime > 200 ? "text-warning" : "text-success"}`}>
               {metrics.responseTime}ms
             </div>
             <p className="text-xs text-muted-foreground mt-1">

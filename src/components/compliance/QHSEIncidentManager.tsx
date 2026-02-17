@@ -107,9 +107,9 @@ export function QHSEIncidentManager() {
       <motion.div className="grid grid-cols-2 md:grid-cols-5 gap-4" variants={staggerContainer}>
         {[
           { label: 'Total', value: totalIncidents, icon: ShieldAlert, color: 'text-primary' },
-          { label: 'Quase Acidentes', value: nearMisses, icon: Activity, color: 'text-blue-400' },
-          { label: 'Em Aberto', value: openIncidents, icon: AlertTriangle, color: 'text-yellow-400' },
-          { label: 'Resolvidos', value: resolvedIncidents, icon: CheckCircle, color: 'text-green-400' },
+          { label: 'Quase Acidentes', value: nearMisses, icon: Activity, color: 'text-info' },
+          { label: 'Em Aberto', value: openIncidents, icon: AlertTriangle, color: 'text-warning' },
+          { label: 'Resolvidos', value: resolvedIncidents, icon: CheckCircle, color: 'text-success' },
           { label: 'LTIR', value: ltir, icon: TrendingDown, color: 'text-primary' },
         ].map(kpi => (
           <motion.div key={kpi.label} variants={kpiCard}><Card><CardContent className="p-4 flex items-center gap-3">

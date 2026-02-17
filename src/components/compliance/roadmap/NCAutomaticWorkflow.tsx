@@ -305,7 +305,7 @@ export function NCAutomaticWorkflow() {
   const getDaysRemaining = (dueDate: string) => {
     const days = differenceInDays(new Date(dueDate), new Date());
     if (days < 0) return <span className="text-destructive font-bold">Atrasado {Math.abs(days)}d</span>;
-    if (days <= 3) return <span className="text-orange-500 font-semibold">{days}d restantes</span>;
+    if (days <= 3) return <span className="text-warning font-semibold">{days}d restantes</span>;
     return <span className="text-muted-foreground">{days}d restantes</span>;
   };
 

@@ -236,7 +236,7 @@ function MyMaintenancePage() {
                 </div>
 
                 <div className="flex gap-3">
-                  <Save className="h-5 w-5 text-pink-500 flex-shrink-0 mt-0.5" />
+                  <Save className="h-5 w-5 text-accent-foreground flex-shrink-0 mt-0.5" />
                   <div>
                     <h4 className="font-semibold text-sm">Integração Fácil</h4>
                     <p className="text-xs text-muted-foreground">

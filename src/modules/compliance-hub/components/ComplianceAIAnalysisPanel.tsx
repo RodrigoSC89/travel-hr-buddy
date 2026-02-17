@@ -260,7 +260,7 @@ export function ComplianceAIAnalysisPanel({
                 <div className="space-y-1">
                   {audit.recommendations.map((rec) => (
                     <div key={rec} className="flex items-start gap-2 text-xs">
-                      <Lightbulb className="h-3 w-3 text-yellow-500 mt-0.5 flex-shrink-0" />
+                      <Lightbulb className="h-3 w-3 text-warning mt-0.5 flex-shrink-0" />
                       <span className="text-muted-foreground">{rec}</span>
                     </div>
                   ))}

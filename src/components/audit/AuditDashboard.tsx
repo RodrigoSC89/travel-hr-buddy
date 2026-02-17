@@ -329,11 +329,11 @@ export function AuditDashboard() {
                   <p className="text-sm text-muted-foreground">RLS Policies</p>
                 </div>
                 <div className="p-4 border rounded-lg text-center">
-                  <p className="text-3xl font-bold text-blue-500">289</p>
+                  <p className="text-3xl font-bold text-primary">289</p>
                   <p className="text-sm text-muted-foreground">Edge Functions</p>
                 </div>
                 <div className="p-4 border rounded-lg text-center">
-                  <p className="text-3xl font-bold text-purple-500">7</p>
+                  <p className="text-3xl font-bold text-accent-foreground">7</p>
                   <p className="text-sm text-muted-foreground">Agentes IA</p>
                 </div>
               </div>
