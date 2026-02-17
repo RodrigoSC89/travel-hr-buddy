@@ -239,12 +239,12 @@ export const OVIDFinalizeInspection: React.FC<OVIDFinalizeInspectionProps> = ({
   };
 
   return (
-    <Card className={isFinalized ? 'border-green-500/50 bg-green-50/50 dark:bg-green-950/20' : ''}>
+    <Card className={isFinalized ? 'border-success/50 bg-success/5' : ''}>
       <CardHeader>
         <CardTitle className="flex items-center gap-2">
           {isFinalized ? (
             <>
-              <Lock className="w-5 h-5 text-green-500" />
+              <Lock className="w-5 h-5 text-success" />
               Inspeção Finalizada
             </>
           ) : (
@@ -280,8 +280,8 @@ export const OVIDFinalizeInspection: React.FC<OVIDFinalizeInspectionProps> = ({
           </div>
           <div className="p-3 rounded-lg bg-muted/50 text-center">
             <div className={`text-2xl font-bold ${
-              inspection.compliance_score >= 85 ? 'text-green-500' : 
-              inspection.compliance_score >= 70 ? 'text-yellow-500' : 'text-red-500'
+              inspection.compliance_score >= 85 ? 'text-success' : 
+              inspection.compliance_score >= 70 ? 'text-warning' : 'text-destructive'
             }`}>
               {inspection.compliance_score}%
             </div>
@@ -300,12 +300,12 @@ export const OVIDFinalizeInspection: React.FC<OVIDFinalizeInspectionProps> = ({
 
         {/* Status badges */}
         <div className="flex flex-wrap gap-2">
-          <Badge variant="outline" className="bg-green-50 dark:bg-green-950">
-            <CheckCircle className="w-3 h-3 mr-1 text-green-500" />
+          <Badge variant="outline" className="bg-success/10">
+            <CheckCircle className="w-3 h-3 mr-1 text-success" />
             {inspection.compliant_count} Conforme
           </Badge>
-          <Badge variant="outline" className="bg-red-50 dark:bg-red-950">
-            <XCircle className="w-3 h-3 mr-1 text-red-500" />
+          <Badge variant="outline" className="bg-destructive/10">
+            <XCircle className="w-3 h-3 mr-1 text-destructive" />
             {inspection.non_compliant_count} Não Conforme
           </Badge>
           <Badge variant="outline">
@@ -356,8 +356,8 @@ export const OVIDFinalizeInspection: React.FC<OVIDFinalizeInspectionProps> = ({
                   <p className="font-medium">{inspection.vessel_name}</p>
                   <p className="text-sm text-muted-foreground">IMO: {inspection.imo_number}</p>
                   <div className="flex gap-4 text-sm">
-                    <span className="text-green-500">{inspection.compliant_count} Conforme</span>
-                    <span className="text-red-500">{inspection.non_compliant_count} Não Conforme</span>
+                    <span className="text-success">{inspection.compliant_count} Conforme</span>
+                    <span className="text-destructive">{inspection.non_compliant_count} Não Conforme</span>
                     <span className="font-bold">Score: {inspection.compliance_score}%</span>
                   </div>
                 </div>

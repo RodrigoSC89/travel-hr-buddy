@@ -386,9 +386,9 @@ export default function FleetTelemetryModule() {
                         <div className="flex items-start gap-3">
                           <AlertTriangle className={`h-5 w-5 mt-0.5 ${
                             alert.severity === "critical" ? "text-destructive" :
-                              alert.severity === "high" ? "text-orange-500" :
-                                alert.severity === "medium" ? "text-yellow-500" :
-                                  "text-blue-500"
+                              alert.severity === "high" ? "text-warning" :
+                                alert.severity === "medium" ? "text-warning" :
+                                  "text-info"
                           }`} />
                           <div>
                             <div className="flex items-center gap-2 mb-2">

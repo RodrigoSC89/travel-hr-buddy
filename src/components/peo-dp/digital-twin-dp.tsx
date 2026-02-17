@@ -113,9 +113,9 @@ export const DigitalTwinDP: React.FC = () => {
   };
 
   const getHealthColor = (score: number) => {
-    if (score >= 90) return "text-green-500";
-    if (score >= 70) return "text-yellow-500";
-    return "text-red-500";
+    if (score >= 90) return "text-success";
+    if (score >= 70) return "text-warning";
+    return "text-destructive";
   };
 
   const getCategoryIcon = (category: string) => {
@@ -153,47 +153,47 @@ export const DigitalTwinDP: React.FC = () => {
 
       {/* Quick Stats */}
       <div className="grid grid-cols-4 gap-4">
-        <Card className="bg-gradient-to-br from-green-500/10 to-green-600/5">
+        <Card className="bg-gradient-to-br from-success/10 to-success/5">
           <CardContent className="pt-4">
             <div className="flex items-center justify-between">
               <div>
                 <p className="text-sm text-muted-foreground">Saúde Geral</p>
                 <p className="text-2xl font-bold">91%</p>
               </div>
-              <Activity className="h-8 w-8 text-green-500" />
+              <Activity className="h-8 w-8 text-success" />
             </div>
           </CardContent>
         </Card>
-        <Card className="bg-gradient-to-br from-blue-500/10 to-blue-600/5">
+        <Card className="bg-gradient-to-br from-info/10 to-info/5">
           <CardContent className="pt-4">
             <div className="flex items-center justify-between">
               <div>
                 <p className="text-sm text-muted-foreground">Simulações Hoje</p>
                 <p className="text-2xl font-bold">12</p>
               </div>
-              <Play className="h-8 w-8 text-blue-500" />
+              <Play className="h-8 w-8 text-info" />
             </div>
           </CardContent>
         </Card>
-        <Card className="bg-gradient-to-br from-yellow-500/10 to-yellow-600/5">
+        <Card className="bg-gradient-to-br from-warning/10 to-warning/5">
           <CardContent className="pt-4">
             <div className="flex items-center justify-between">
               <div>
                 <p className="text-sm text-muted-foreground">Alertas Preditivos</p>
                 <p className="text-2xl font-bold">3</p>
               </div>
-              <AlertTriangle className="h-8 w-8 text-yellow-500" />
+              <AlertTriangle className="h-8 w-8 text-warning" />
             </div>
           </CardContent>
         </Card>
-        <Card className="bg-gradient-to-br from-purple-500/10 to-purple-600/5">
+        <Card className="bg-gradient-to-br from-accent/10 to-accent/5">
           <CardContent className="pt-4">
             <div className="flex items-center justify-between">
               <div>
                 <p className="text-sm text-muted-foreground">Desvio Real/Sim</p>
                 <p className="text-2xl font-bold">2.3%</p>
               </div>
-              <TrendingUp className="h-8 w-8 text-purple-500" />
+              <TrendingUp className="h-8 w-8 text-accent-foreground" />
             </div>
           </CardContent>
         </Card>
@@ -231,7 +231,7 @@ export const DigitalTwinDP: React.FC = () => {
                         <Badge variant={scenario.type === "failure" ? "destructive" : scenario.type === "stress" ? "default" : "secondary"}>
                           {scenario.type === "failure" ? "Falha" : scenario.type === "stress" ? "Stress" : scenario.type === "training" ? "Treinamento" : "Validação"}
                         </Badge>
-                        <Badge variant="outline" className={scenario.difficulty === "hard" ? "border-red-500 text-red-500" : scenario.difficulty === "medium" ? "border-yellow-500 text-yellow-500" : "border-green-500 text-green-500"}>
+                        <Badge variant="outline" className={scenario.difficulty === "hard" ? "border-destructive text-destructive" : scenario.difficulty === "medium" ? "border-warning text-warning" : "border-success text-success"}>
                           {scenario.difficulty === "hard" ? "Difícil" : scenario.difficulty === "medium" ? "Médio" : "Fácil"}
                         </Badge>
                       </div>
@@ -337,7 +337,7 @@ export const DigitalTwinDP: React.FC = () => {
                         {component.hoursToFailure && (
                           <div className="text-right">
                             <p className="text-xs text-muted-foreground">Previsão de falha</p>
-                            <p className={`font-medium ${component.hoursToFailure < 1000 ? "text-red-500" : "text-green-500"}`}>
+                            <p className={`font-medium ${component.hoursToFailure < 1000 ? "text-destructive" : "text-success"}`}>
                               {component.hoursToFailure}h
                             </p>
                           </div>
@@ -349,8 +349,8 @@ export const DigitalTwinDP: React.FC = () => {
                       </div>
                     </div>
                     {component.predictedFailure && (
-                      <div className="mt-3 p-2 bg-yellow-500/10 rounded border border-yellow-500/20">
-                        <p className="text-sm text-yellow-600 flex items-center gap-2">
+                      <div className="mt-3 p-2 bg-warning/10 rounded border border-warning/20">
+                        <p className="text-sm text-warning flex items-center gap-2">
                           <AlertTriangle className="h-4 w-4" />
                           Falha prevista: {component.predictedFailure}
                         </p>

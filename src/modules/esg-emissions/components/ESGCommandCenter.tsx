@@ -139,13 +139,13 @@ export function ESGCommandCenter() {
       {/* Command Header */}
       <div className="flex items-center justify-between">
         <div className="flex items-center gap-3">
-          <div className="p-3 bg-gradient-to-br from-green-500 to-emerald-600 rounded-xl shadow-lg">
+          <div className="p-3 bg-gradient-to-br from-success to-success/80 rounded-xl shadow-lg">
             <Leaf className="h-7 w-7 text-white" />
           </div>
           <div>
             <h2 className="text-2xl font-bold flex items-center gap-2">
               ESG Command Center
-              <Badge className="bg-gradient-to-r from-green-500 to-emerald-500">
+              <Badge className="bg-gradient-to-r from-success to-success/80">
                 <Sparkles className="h-3 w-3 mr-1" />
                 LIVE DATA
               </Badge>
@@ -190,7 +190,7 @@ export function ESGCommandCenter() {
                   <p className="text-2xl font-bold">
                     {stats?.totalCO2 ? `${(stats.totalCO2 / 1000).toFixed(1)}k t` : '—'}
                   </p>
-                  <div className="flex items-center text-xs text-green-600">
+                   <div className="flex items-center text-xs text-success">
                     <ArrowDownRight className="h-3 w-3 mr-1" />
                     Dados reais
                   </div>
@@ -226,7 +226,7 @@ export function ESGCommandCenter() {
               <div className="flex items-center justify-between">
                 <div>
                   <p className="text-xs text-muted-foreground uppercase tracking-wide">Conformes</p>
-                  <p className="text-2xl font-bold text-green-600">{stats?.compliantVessels || 0}</p>
+                  <p className="text-2xl font-bold text-success">{stats?.compliantVessels || 0}</p>
                   <p className="text-xs text-muted-foreground">de {stats?.totalVessels || 0} navios</p>
                 </div>
                 <Droplets className="h-8 w-8 text-blue-500 opacity-50" />
@@ -241,7 +241,7 @@ export function ESGCommandCenter() {
               <div className="flex items-center justify-between">
                 <div>
                   <p className="text-xs text-muted-foreground uppercase tracking-wide">Em Risco</p>
-                  <p className="text-2xl font-bold text-orange-600">
+                  <p className="text-2xl font-bold text-warning">
                     {(stats?.warningVessels || 0) + (stats?.nonCompliantVessels || 0)}
                   </p>
                   <p className="text-xs text-muted-foreground">D/E rating</p>
@@ -258,8 +258,8 @@ export function ESGCommandCenter() {
               <div className="flex items-center justify-between">
                 <div>
                   <p className="text-xs text-muted-foreground uppercase tracking-wide">CII Médio</p>
-                  <p className="text-2xl font-bold text-emerald-600">{stats?.avgCII?.toFixed(1) || '—'}</p>
-                  <Badge className="bg-green-500/10 text-green-600 text-xs">gCO₂/DWT·nm</Badge>
+                   <p className="text-2xl font-bold text-success">{stats?.avgCII?.toFixed(1) || '—'}</p>
+                  <Badge className="bg-success/10 text-success text-xs">gCO₂/DWT·nm</Badge>
                 </div>
                 <Zap className="h-8 w-8 text-emerald-500 opacity-50" />
               </div>
@@ -274,7 +274,7 @@ export function ESGCommandCenter() {
                 <div>
                   <p className="text-xs text-muted-foreground uppercase tracking-wide">Embarcações</p>
                   <p className="text-2xl font-bold">{stats?.totalVessels || 0}</p>
-                  <div className="flex items-center text-xs text-green-600">
+                  <div className="flex items-center text-xs text-success">
                     <TrendingUp className="h-3 w-3 mr-1" />
                     Monitoradas
                   </div>
@@ -369,8 +369,8 @@ export function ESGCommandCenter() {
                   <XAxis dataKey="name" className="text-xs" />
                   <YAxis className="text-xs" />
                   <Tooltip contentStyle={{ backgroundColor: "hsl(var(--background))", border: "1px solid hsl(var(--border))", borderRadius: "8px" }} />
-                  <Area type="monotone" dataKey="attained" stroke="#22c55e" fillOpacity={1} fill="url(#colorCII)" name="CII Real" />
-                  <Line type="monotone" dataKey="required" stroke="#ef4444" strokeDasharray="5 5" name="CII Requerido" />
+                  <Area type="monotone" dataKey="attained" stroke="hsl(var(--success))" fillOpacity={1} fill="url(#colorCII)" name="CII Real" />
+                  <Line type="monotone" dataKey="required" stroke="hsl(var(--destructive))" strokeDasharray="5 5" name="CII Requerido" />
                 </AreaChart>
               </ResponsiveContainer>
             </CardContent>
@@ -390,7 +390,7 @@ export function ESGCommandCenter() {
                   <PolarGrid strokeDasharray="3 3" />
                   <PolarAngleAxis dataKey="subject" className="text-xs" />
                   <PolarRadiusAxis angle={30} domain={[0, 100]} className="text-xs" />
-                  <Radar name="Performance" dataKey="A" stroke="#22c55e" fill="#22c55e" fillOpacity={0.5} />
+                  <Radar name="Performance" dataKey="A" stroke="hsl(var(--success))" fill="hsl(var(--success))" fillOpacity={0.5} />
                 </RadarChart>
               </ResponsiveContainer>
             </CardContent>

@@ -179,8 +179,8 @@ export function WeatherRoutingEngine() {
             {mockRoutes.map(route => (
               <Card
                 key={route.id}
-                className={`cursor-pointer transition-all border-border/50 bg-card/80 backdrop-blur hover:border-cyan-500/50 ${
-                  selectedRoute === route.id ? "ring-2 ring-cyan-500/50 border-cyan-500/50" : ""
+                className={`cursor-pointer transition-all border-border/50 bg-card/80 backdrop-blur hover:border-info/50 ${
+                  selectedRoute === route.id ? "ring-2 ring-info/50 border-info/50" : ""
                 }`}
                 onClick={() => setSelectedRoute(route.id)}
               >

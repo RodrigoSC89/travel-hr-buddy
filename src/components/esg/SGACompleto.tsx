@@ -76,7 +76,7 @@ const MARPOL_ANNEXES = [
   { id: "VI", title: "Emissões", description: "Prevenção da poluição do ar", icon: Wind }
 ];
 
-const COLORS = ["#ef4444", "#f97316", "#eab308", "#22c55e", "#3b82f6", "#8b5cf6"];
+const COLORS = ["hsl(var(--destructive))", "hsl(var(--warning))", "hsl(var(--warning))", "hsl(var(--success))", "hsl(var(--info))", "hsl(var(--primary))"];
 
 export function SGACompleto() {
   const [activeTab, setActiveTab] = useState("overview");
@@ -233,7 +233,7 @@ export function SGACompleto() {
         <Card>
           <CardContent className="pt-4">
             <div className="flex items-center gap-2">
-              <Flame className="h-5 w-5 text-orange-500" />
+              <Flame className="h-5 w-5 text-warning" />
               <div>
                 <p className="text-2xl font-bold">1,479</p>
                 <p className="text-xs text-muted-foreground">Ton CO₂ (YTD)</p>
@@ -244,7 +244,7 @@ export function SGACompleto() {
         <Card>
           <CardContent className="pt-4">
             <div className="flex items-center gap-2">
-              <Trash2 className="h-5 w-5 text-green-500" />
+              <Trash2 className="h-5 w-5 text-success" />
               <div>
                 <p className="text-2xl font-bold">98%</p>
                 <p className="text-xs text-muted-foreground">Resíduos conformes</p>
@@ -255,7 +255,7 @@ export function SGACompleto() {
         <Card>
           <CardContent className="pt-4">
             <div className="flex items-center gap-2">
-              <Waves className="h-5 w-5 text-blue-500" />
+              <Waves className="h-5 w-5 text-info" />
               <div>
                 <p className="text-2xl font-bold">100%</p>
                 <p className="text-xs text-muted-foreground">BWM Compliant</p>
@@ -266,7 +266,7 @@ export function SGACompleto() {
         <Card>
           <CardContent className="pt-4">
             <div className="flex items-center gap-2">
-              <TrendingDown className="h-5 w-5 text-green-500" />
+              <TrendingDown className="h-5 w-5 text-success" />
               <div>
                 <p className="text-2xl font-bold">-8%</p>
                 <p className="text-xs text-muted-foreground">vs Ano anterior</p>
@@ -350,9 +350,9 @@ export function SGACompleto() {
                       <YAxis />
                       <Tooltip />
                       <Legend />
-                      <Area type="monotone" dataKey="co2" name="CO₂" stackId="1" stroke="#ef4444" fill="#ef444440" />
-                      <Area type="monotone" dataKey="nox" name="NOx" stackId="2" stroke="#f97316" fill="#f9731640" />
-                      <Area type="monotone" dataKey="sox" name="SOx" stackId="3" stroke="#eab308" fill="#eab30840" />
+                      <Area type="monotone" dataKey="co2" name="CO₂" stackId="1" stroke="hsl(var(--destructive))" fill="hsl(var(--destructive) / 0.25)" />
+                      <Area type="monotone" dataKey="nox" name="NOx" stackId="2" stroke="hsl(var(--warning))" fill="hsl(var(--warning) / 0.25)" />
+                      <Area type="monotone" dataKey="sox" name="SOx" stackId="3" stroke="hsl(var(--info))" fill="hsl(var(--info) / 0.25)" />
                     </AreaChart>
                   </ResponsiveContainer>
                 </div>
@@ -382,7 +382,7 @@ export function SGACompleto() {
                   <CardContent>
                     <p className="text-xs text-muted-foreground mb-3">{annex.description}</p>
                     <div className="flex items-center justify-between">
-                      <Badge className="bg-green-500/20 text-green-500">
+                      <Badge className="bg-success/20 text-success">
                         <CheckCircle className="h-3 w-3 mr-1" />
                         Conforme
                       </Badge>
@@ -427,7 +427,7 @@ export function SGACompleto() {
                           </div>
                         </div>
                         <div className="text-right">
-                          <Badge className="bg-green-500/20 text-green-500">{record.disposalMethod}</Badge>
+                          <Badge className="bg-success/20 text-success">{record.disposalMethod}</Badge>
                           <p className="text-xs text-muted-foreground mt-1">{record.certificate}</p>
                         </div>
                       </div>

@@ -160,7 +160,7 @@ export const GRCModule: React.FC = () => {
 
       {/* Main KPIs */}
       <div className="grid grid-cols-4 gap-4">
-        <Card className="bg-gradient-to-br from-green-500/10 to-green-600/5">
+        <Card className="bg-gradient-to-br from-success/10 to-success/5">
           <CardContent className="pt-4">
             <div className="flex items-center justify-between">
               <div>
@@ -195,14 +195,14 @@ export const GRCModule: React.FC = () => {
             </div>
           </CardContent>
         </Card>
-        <Card className="bg-gradient-to-br from-purple-500/10 to-purple-600/5">
+        <Card className="bg-gradient-to-br from-accent/10 to-accent/5">
           <CardContent className="pt-4">
             <div className="flex items-center justify-between">
               <div>
                 <p className="text-sm text-muted-foreground">Auditorias Pendentes</p>
-                <p className="text-3xl font-bold text-purple-500">{complianceItems.filter(c => c.status === "pending").length}</p>
+                <p className="text-3xl font-bold text-accent-foreground">{complianceItems.filter(c => c.status === "pending").length}</p>
               </div>
-              <Clock className="h-10 w-10 text-purple-500" />
+              <Clock className="h-10 w-10 text-accent-foreground" />
             </div>
           </CardContent>
         </Card>

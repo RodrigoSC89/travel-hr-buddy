@@ -69,7 +69,7 @@ export function VoyageOverviewTab({ voyages, weather, weatherLoading }: Props) {
           <CardContent className="space-y-3">
             {voyages.flatMap(v => v.aiRecommendations || []).slice(0, 5).map((rec) => (
               <div key={rec} className="flex items-start gap-2 p-3 bg-muted/30 rounded-lg">
-                <CheckCircle2 className="h-4 w-4 text-green-500 mt-0.5 shrink-0" />
+                <CheckCircle2 className="h-4 w-4 text-success mt-0.5 shrink-0" />
                 <p className="text-sm">{rec}</p>
               </div>
             ))}
