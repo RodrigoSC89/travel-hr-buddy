@@ -16,8 +16,10 @@ import { toast } from "sonner";
 import type { EvidenceItem, EvidenceElement, EvidencePack } from "./types";
 import { cn } from "@/lib/utils";
 
+import type { ComplianceFramework } from "./SmartEvidenceOrganizer";
+
 interface Props {
-  framework: "peodp" | "peotram";
+  framework: ComplianceFramework;
   pack: EvidencePack;
   items: EvidenceItem[];
   elements: EvidenceElement[];

@@ -3,6 +3,7 @@ import { useState, Suspense, lazy } from 'react';
 import { ModulePageWrapper } from '@/components/ui/module-page-wrapper';
 import { ModuleHeader } from '@/components/ui/module-header';
 import { Shield, Brain, Scale, Globe, Sparkles, Search, MessageSquare, Zap, ClipboardCheck, FileSearch, Clock, Heart, Users, Calculator, FileText, AlertTriangle, Home, Plane, UtensilsCrossed, DollarSign, ShieldCheck, Building2, BarChart3, Crosshair, FileDown } from 'lucide-react';
+import { SmartEvidenceOrganizer } from '@/components/compliance/smart-evidence-organizer';
 import { MLCInspectionDashboardV2 } from '@/components/mlc/MLCInspectionDashboardV2';
 import { MLCWelfareScoring } from '@/components/mlc/MLCWelfareScoring';
 import { MLCDMLCChecklist } from '@/components/mlc/MLCDMLCChecklist';
@@ -100,6 +101,7 @@ const MLCInspection: FC = () => {
           <TabsTrigger value="photo-ai" className="gap-1"><Brain className="h-3 w-3" />Foto IA</TabsTrigger>
           <TabsTrigger value="psc-risk" className="gap-1"><Globe className="h-3 w-3" />Risco PSC</TabsTrigger>
           <TabsTrigger value="reg-tracker" className="gap-1"><Globe className="h-3 w-3" />Regulatório</TabsTrigger>
+          <TabsTrigger value="evidence-organizer" className="gap-1"><Brain className="h-3 w-3" />Organizador IA</TabsTrigger>
         </TabsList>
 
         <TabsContent value="dashboard"><MLCInspectionDashboardV2 /></TabsContent>
@@ -133,6 +135,10 @@ const MLCInspection: FC = () => {
           <TabsContent value="photo-ai"><CompliancePhotoEvidenceAI moduleId="mlc" moduleName="MLC 2006" /></TabsContent>
           <TabsContent value="psc-risk"><CompliancePSCRiskPredictor moduleId="mlc" moduleName="MLC 2006" /></TabsContent>
         </Suspense>
+
+        <TabsContent value="evidence-organizer">
+          <SmartEvidenceOrganizer framework="mlc" />
+        </TabsContent>
       </Tabs>
     </ModulePageWrapper>
   );
