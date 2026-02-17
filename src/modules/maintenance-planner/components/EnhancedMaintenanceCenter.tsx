@@ -574,9 +574,9 @@ export const EnhancedMaintenanceCenter: React.FC = () => {
 
           {/* Critical Alerts */}
           {predictions.filter(p => p.failureProbability >= 70).length > 0 && (
-            <Card className="border-red-500/50 bg-red-500/5">
+            <Card className="border-destructive/50 bg-destructive/5">
               <CardHeader className="pb-2">
-                <CardTitle className="flex items-center gap-2 text-red-500">
+                <CardTitle className="flex items-center gap-2 text-destructive">
                   <AlertTriangle className="h-5 w-5" />
                   Alertas Críticos
                 </CardTitle>
@@ -584,9 +584,9 @@ export const EnhancedMaintenanceCenter: React.FC = () => {
               <CardContent>
                 <div className="space-y-3">
                   {predictions.filter(p => p.failureProbability >= 70).map((pred) => (
-                    <div key={pred.id} className="flex items-center justify-between p-3 rounded-lg bg-red-500/10">
+                    <div key={pred.id} className="flex items-center justify-between p-3 rounded-lg bg-destructive/10">
                       <div className="flex items-center gap-3">
-                        <AlertCircle className="h-5 w-5 text-red-500" />
+                        <AlertCircle className="h-5 w-5 text-destructive" />
                         <div>
                           <p className="font-medium">{pred.equipment}</p>
                           <p className="text-sm text-muted-foreground">{pred.vessel}</p>
@@ -773,17 +773,17 @@ export const EnhancedMaintenanceCenter: React.FC = () => {
 
           <div className="grid gap-4">
             {predictions.map((pred) => (
-              <Card key={pred.id} className={`${pred.failureProbability >= 70 ? 'border-red-500/50' : pred.failureProbability >= 40 ? 'border-yellow-500/50' : ''}`}>
+              <Card key={pred.id} className={`${pred.failureProbability >= 70 ? 'border-destructive/50' : pred.failureProbability >= 40 ? 'border-warning/50' : ''}`}>
                 <CardContent className="p-4">
                   <div className="flex items-start justify-between">
                     <div className="flex items-start gap-4">
                       <div className={`p-3 rounded-lg ${
-                        pred.failureProbability >= 70 ? 'bg-red-500/10' :
-                        pred.failureProbability >= 40 ? 'bg-yellow-500/10' : 'bg-green-500/10'
+                        pred.failureProbability >= 70 ? 'bg-destructive/10' :
+                        pred.failureProbability >= 40 ? 'bg-warning/10' : 'bg-success/10'
                       }`}>
                         <Brain className={`h-6 w-6 ${
-                          pred.failureProbability >= 70 ? 'text-red-500' :
-                          pred.failureProbability >= 40 ? 'text-yellow-500' : 'text-green-500'
+                          pred.failureProbability >= 70 ? 'text-destructive' :
+                          pred.failureProbability >= 40 ? 'text-warning' : 'text-success'
                         }`} />
                       </div>
                       <div>

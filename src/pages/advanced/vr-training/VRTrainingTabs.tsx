@@ -33,7 +33,7 @@ interface VRTrainingTabsProps {
 
 function getStatusBadge(status: string) {
   switch (status) {
-    case "published": return <Badge className="bg-green-500">Publicado</Badge>;
+    case "published": return <Badge className="bg-success">Publicado</Badge>;
     case "draft": return <Badge variant="outline">Rascunho</Badge>;
     case "archived": return <Badge variant="secondary">Arquivado</Badge>;
     default: return null;
@@ -99,7 +99,7 @@ export function VRTrainingTabs({
                       <div className="grid grid-cols-3 gap-2 text-center text-sm mb-4">
                         <div><Clock className="h-4 w-4 mx-auto mb-1 text-muted-foreground" /><span>{scenario.duration}</span></div>
                         <div><Users className="h-4 w-4 mx-auto mb-1 text-muted-foreground" /><span>{scenario.completions}</span></div>
-                        <div><Star className="h-4 w-4 mx-auto mb-1 text-yellow-500" /><span>{scenario.avgScore}%</span></div>
+                        <div><Star className="h-4 w-4 mx-auto mb-1 text-warning" /><span>{scenario.avgScore}%</span></div>
                       </div>
                       <div className="flex gap-2">
                         <Button className="flex-1" variant="outline" size="sm" onClick={() => onStartSession(scenario)} disabled={activeSession !== null || scenario.status !== "published"}>
@@ -124,14 +124,14 @@ export function VRTrainingTabs({
       <TabsContent value="leaderboard">
         <Card>
           <CardHeader>
-            <CardTitle className="flex items-center gap-2"><Trophy className="h-5 w-5 text-yellow-500" />Ranking Global</CardTitle>
+            <CardTitle className="flex items-center gap-2"><Trophy className="h-5 w-5 text-warning" />Ranking Global</CardTitle>
           </CardHeader>
           <CardContent>
             <div className="space-y-3">
               {leaderboard.map((user) => (
-                <div key={user.rank} className={`flex items-center justify-between p-4 rounded-lg ${user.rank <= 3 ? "bg-gradient-to-r from-yellow-500/10 to-transparent" : "bg-muted/30"}`}>
+                <div key={user.rank} className={`flex items-center justify-between p-4 rounded-lg ${user.rank <= 3 ? "bg-gradient-to-r from-warning/10 to-transparent" : "bg-muted/30"}`}>
                   <div className="flex items-center gap-4">
-                    <div className={`w-10 h-10 rounded-full flex items-center justify-center font-bold ${user.rank === 1 ? "bg-yellow-500 text-yellow-950" : user.rank === 2 ? "bg-muted text-foreground" : user.rank === 3 ? "bg-orange-400 text-orange-950" : "bg-muted text-muted-foreground"}`}>{user.rank}</div>
+                    <div className={`w-10 h-10 rounded-full flex items-center justify-center font-bold ${user.rank === 1 ? "bg-warning text-warning-foreground" : user.rank === 2 ? "bg-muted text-foreground" : user.rank === 3 ? "bg-warning/70 text-warning-foreground" : "bg-muted text-muted-foreground"}`}>{user.rank}</div>
                     <div><p className="font-semibold">{user.name}</p><p className="text-sm text-muted-foreground">{user.scenarios} cenários completados</p></div>
                   </div>
                   <div className="flex items-center gap-4">

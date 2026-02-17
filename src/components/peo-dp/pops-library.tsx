@@ -174,9 +174,9 @@ export const POPsLibrary: React.FC = () => {
 
   const getStatusBadge = (status: string) => {
     switch (status) {
-      case "active": return <Badge className="bg-green-500">Ativo</Badge>;
+      case "active": return <Badge className="bg-success">Ativo</Badge>;
       case "draft": return <Badge variant="secondary">Rascunho</Badge>;
-      case "review": return <Badge className="bg-yellow-500 text-black">Em Revisão</Badge>;
+      case "review": return <Badge className="bg-warning text-warning-foreground">Em Revisão</Badge>;
       default: return <Badge variant="outline">Arquivado</Badge>;
     }
   };
@@ -249,25 +249,25 @@ export const POPsLibrary: React.FC = () => {
             </div>
           </CardContent>
         </Card>
-        <Card className="bg-green-500/5">
+        <Card className="bg-success/5">
           <CardContent className="pt-4">
             <div className="flex items-center justify-between">
               <div>
                 <p className="text-sm text-muted-foreground">Ativos</p>
-                <p className="text-2xl font-bold text-green-600">{pops.filter(p => p.status === "active").length}</p>
+                <p className="text-2xl font-bold text-success">{pops.filter(p => p.status === "active").length}</p>
               </div>
-              <CheckCircle className="h-8 w-8 text-green-500" />
+              <CheckCircle className="h-8 w-8 text-success" />
             </div>
           </CardContent>
         </Card>
-        <Card className="bg-yellow-500/5">
+        <Card className="bg-warning/5">
           <CardContent className="pt-4">
             <div className="flex items-center justify-between">
               <div>
                 <p className="text-sm text-muted-foreground">Em Revisão</p>
-                <p className="text-2xl font-bold text-yellow-600">{pops.filter(p => p.status === "review").length}</p>
+                <p className="text-2xl font-bold text-warning">{pops.filter(p => p.status === "review").length}</p>
               </div>
-              <AlertTriangle className="h-8 w-8 text-yellow-500" />
+              <AlertTriangle className="h-8 w-8 text-warning" />
             </div>
           </CardContent>
         </Card>
@@ -278,7 +278,7 @@ export const POPsLibrary: React.FC = () => {
                 <p className="text-sm text-muted-foreground">Favoritos</p>
                 <p className="text-2xl font-bold">{favorites.length}</p>
               </div>
-              <Star className="h-8 w-8 text-yellow-500" />
+              <Star className="h-8 w-8 text-warning" />
             </div>
           </CardContent>
         </Card>
@@ -307,7 +307,7 @@ export const POPsLibrary: React.FC = () => {
                       size="sm"
                       onClick={(e) => { e.stopPropagation(); toggleFavorite(pop.id); }}
                     >
-                      {pop.isFavorite ? <Star className="h-4 w-4 text-yellow-500 fill-yellow-500" /> : <StarOff className="h-4 w-4" />}
+                      {pop.isFavorite ? <Star className="h-4 w-4 text-warning fill-warning" /> : <StarOff className="h-4 w-4" />}
                     </Button>
                   </div>
                   <CardTitle className="text-lg">{pop.title}</CardTitle>
@@ -341,11 +341,11 @@ export const POPsLibrary: React.FC = () => {
         <TabsContent value="favorites">
           <div className="grid grid-cols-2 gap-4">
             {favorites.map(pop => (
-              <Card key={pop.id} className="hover:shadow-lg transition-all cursor-pointer border-yellow-500/30" onClick={() => handleViewPOP(pop)}>
+              <Card key={pop.id} className="hover:shadow-lg transition-all cursor-pointer border-warning/30" onClick={() => handleViewPOP(pop)}>
                 <CardHeader className="pb-2">
                   <div className="flex items-start justify-between">
                     <Badge variant="outline" className="font-mono text-xs">{pop.code}</Badge>
-                    <Star className="h-4 w-4 text-yellow-500 fill-yellow-500" />
+                    <Star className="h-4 w-4 text-warning fill-warning" />
                   </div>
                   <CardTitle className="text-lg">{pop.title}</CardTitle>
                 </CardHeader>

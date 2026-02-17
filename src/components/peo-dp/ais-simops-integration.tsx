@@ -327,8 +327,8 @@ export const AISSimopsIntegration: React.FC = () => {
               </div>
 
               {/* Guard zone rings */}
-              <div className="absolute top-1/2 left-1/2 transform -translate-x-1/2 -translate-y-1/2 w-48 h-48 rounded-full border-2 border-dashed border-yellow-500/50" />
-              <div className="absolute top-1/2 left-1/2 transform -translate-x-1/2 -translate-y-1/2 w-80 h-80 rounded-full border border-dashed border-blue-500/30" />
+              <div className="absolute top-1/2 left-1/2 transform -translate-x-1/2 -translate-y-1/2 w-48 h-48 rounded-full border-2 border-dashed border-warning/50" />
+              <div className="absolute top-1/2 left-1/2 transform -translate-x-1/2 -translate-y-1/2 w-80 h-80 rounded-full border border-dashed border-primary/30" />
 
               {/* AIS vessels */}
               {vessels.map((vessel, i) => {

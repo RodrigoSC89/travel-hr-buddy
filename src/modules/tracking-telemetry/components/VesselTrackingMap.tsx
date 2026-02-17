@@ -344,14 +344,14 @@ export default function VesselTrackingMap() {
           </CardContent>
         </Card>
 
-        <Card className="border-l-4 border-l-cyan-500">
+        <Card className="border-l-4 border-l-info">
           <CardContent className="p-4">
             <div className="flex items-center justify-between">
               <div>
                 <p className="text-xs text-muted-foreground">Atracado</p>
-                <p className="text-2xl font-bold text-cyan-600">{stats.moored}</p>
+                <p className="text-2xl font-bold text-info">{stats.moored}</p>
               </div>
-              <MapPin className="h-8 w-8 text-cyan-500 opacity-60" />
+              <MapPin className="h-8 w-8 text-info opacity-60" />
             </div>
           </CardContent>
         </Card>

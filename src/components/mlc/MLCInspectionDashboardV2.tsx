@@ -732,7 +732,7 @@ export const MLCInspectionDashboardV2: React.FC = () => {
                         if (!foundItem) return null;
 
                         return (
-                          <Card key={itemId} className="border-red-500/50">
+                          <Card key={itemId} className="border-destructive/50">
                             <CardContent className="py-4">
                               <div className="flex items-start justify-between">
                                 <div>

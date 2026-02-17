@@ -55,7 +55,7 @@ export default function CopilotJobFormExample() {
           <CardContent>
             <div className="grid grid-cols-1 md:grid-cols-2 gap-4">
               <div className="flex gap-3 p-4 border rounded-lg">
-                <Search className="h-5 w-5 text-blue-500 flex-shrink-0 mt-1" />
+                <Search className="h-5 w-5 text-primary flex-shrink-0 mt-1" />
                 <div>
                   <h4 className="font-semibold">Busca Inteligente</h4>
                   <p className="text-sm text-muted-foreground">
@@ -65,7 +65,7 @@ export default function CopilotJobFormExample() {
               </div>
 
               <div className="flex gap-3 p-4 border rounded-lg">
-                <Copy className="h-5 w-5 text-green-500 flex-shrink-0 mt-1" />
+                <Copy className="h-5 w-5 text-success flex-shrink-0 mt-1" />
                 <div>
                   <h4 className="font-semibold">Auto-preenchimento</h4>
                   <p className="text-sm text-muted-foreground">
@@ -75,7 +75,7 @@ export default function CopilotJobFormExample() {
               </div>
 
               <div className="flex gap-3 p-4 border rounded-lg">
-                <CheckCircle2 className="h-5 w-5 text-purple-500 flex-shrink-0 mt-1" />
+                <CheckCircle2 className="h-5 w-5 text-accent flex-shrink-0 mt-1" />
                 <div>
                   <h4 className="font-semibold">Validação</h4>
                   <p className="text-sm text-muted-foreground">
@@ -85,7 +85,7 @@ export default function CopilotJobFormExample() {
               </div>
 
               <div className="flex gap-3 p-4 border rounded-lg">
-                <Save className="h-5 w-5 text-orange-500 flex-shrink-0 mt-1" />
+                <Save className="h-5 w-5 text-warning flex-shrink-0 mt-1" />
                 <div>
                   <h4 className="font-semibold">Integração Fácil</h4>
                   <p className="text-sm text-muted-foreground">
@@ -156,7 +156,7 @@ function MyMaintenancePage() {
           </CardHeader>
           <CardContent>
             <div className="space-y-4">
-              <div className="border-l-4 border-blue-500 pl-4 py-2">
+              <div className="border-l-4 border-primary pl-4 py-2">
                 <h4 className="font-semibold">Cenário 1: Problema no Gerador</h4>
                 <p className="text-sm text-muted-foreground mt-1">
                   <strong>Componente:</strong> Gerador Diesel STBD
@@ -166,7 +166,7 @@ function MyMaintenancePage() {
                 </p>
               </div>
               
-              <div className="border-l-4 border-green-500 pl-4 py-2">
+              <div className="border-l-4 border-success pl-4 py-2">
                 <h4 className="font-semibold">Cenário 2: Manutenção Preventiva</h4>
                 <p className="text-sm text-muted-foreground mt-1">
                   <strong>Componente:</strong> Bomba Hidráulica Principal
@@ -176,7 +176,7 @@ function MyMaintenancePage() {
                 </p>
               </div>
               
-              <div className="border-l-4 border-orange-500 pl-4 py-2">
+              <div className="border-l-4 border-warning pl-4 py-2">
                 <h4 className="font-semibold">Cenário 3: Falha Crítica</h4>
                 <p className="text-sm text-muted-foreground mt-1">
                   <strong>Componente:</strong> Válvula de Segurança Principal

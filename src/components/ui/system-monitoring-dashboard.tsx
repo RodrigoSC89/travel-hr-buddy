@@ -57,9 +57,9 @@ export const SystemMonitoringDashboard: React.FC = () => {
 
   const getStatusColor = (status: "online" | "warning" | "offline") => {
     switch (status) {
-    case "online": return "text-green-600 bg-green-100";
-    case "warning": return "text-yellow-600 bg-yellow-100";
-    case "offline": return "text-red-600 bg-red-100";
+    case "online": return "text-success bg-success/10";
+    case "warning": return "text-warning bg-warning/10";
+    case "offline": return "text-destructive bg-destructive/10";
     }
   };
 

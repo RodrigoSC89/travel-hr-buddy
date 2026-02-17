@@ -313,7 +313,7 @@ export function CertificateExpirationAlerts() {
                             {getStatusBadge(cert)}
                             
                             {cert.alert_sent && (
-                              <Badge variant="outline" className="text-xs text-green-600 border-green-300">
+                              <Badge variant="outline" className="text-xs text-success border-success/30">
                                 <Bell className="h-3 w-3 mr-1" />
                                 Alerta enviado
                               </Badge>

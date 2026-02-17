@@ -40,7 +40,7 @@ export default function InsuranceClaimsAIPage() {
         <div className="flex items-center justify-between">
           <div>
             <h1 className="text-3xl font-bold flex items-center gap-3">
-              <Heart className="h-8 w-8 text-red-500" />
+              <Heart className="h-8 w-8 text-destructive" />
               Insurance & Claims AI
             </h1>
             <p className="text-muted-foreground">
@@ -71,9 +71,9 @@ export default function InsuranceClaimsAIPage() {
               <div className="flex items-center justify-between">
                 <div>
                   <p className="text-sm text-muted-foreground">Sinistros em Aberto</p>
-                  <p className="text-3xl font-bold text-amber-500">4</p>
-                </div>
-                <Clock className="h-8 w-8 text-amber-500" />
+                   <p className="text-3xl font-bold text-warning">4</p>
+                 </div>
+                 <Clock className="h-8 w-8 text-warning" />
               </div>
             </CardContent>
           </Card>
@@ -82,9 +82,9 @@ export default function InsuranceClaimsAIPage() {
               <div className="flex items-center justify-between">
                 <div>
                   <p className="text-sm text-muted-foreground">Valor Recuperado (YTD)</p>
-                  <p className="text-3xl font-bold text-emerald-500">$890K</p>
-                </div>
-                <DollarSign className="h-8 w-8 text-emerald-500" />
+                   <p className="text-3xl font-bold text-success">$890K</p>
+                 </div>
+                 <DollarSign className="h-8 w-8 text-success" />
               </div>
             </CardContent>
           </Card>
@@ -95,7 +95,7 @@ export default function InsuranceClaimsAIPage() {
                   <p className="text-sm text-muted-foreground">Taxa Aprovação</p>
                   <p className="text-3xl font-bold">94%</p>
                 </div>
-                <CheckCircle className="h-8 w-8 text-emerald-500" />
+                <CheckCircle className="h-8 w-8 text-success" />
               </div>
             </CardContent>
           </Card>
@@ -116,10 +116,10 @@ export default function InsuranceClaimsAIPage() {
                 >
                   <div className="flex items-center gap-4">
                     <div className={`p-2 rounded-lg ${
-                      policy.status === 'active' ? 'bg-emerald-500/10' : 'bg-red-500/10'
+                      policy.status === 'active' ? 'bg-success/10' : 'bg-destructive/10'
                     }`}>
                       <Shield className={`h-5 w-5 ${
-                        policy.status === 'active' ? 'text-emerald-500' : 'text-red-500'
+                        policy.status === 'active' ? 'text-success' : 'text-destructive'
                       }`} />
                     </div>
                     <div>
@@ -157,15 +157,15 @@ export default function InsuranceClaimsAIPage() {
                 >
                   <div className="flex items-center gap-4">
                     <div className={`p-2 rounded-lg ${
-                      claim.status === 'paid' ? 'bg-emerald-500/10' : 
-                      claim.status === 'approved' ? 'bg-blue-500/10' : 'bg-amber-500/10'
+                      claim.status === 'paid' ? 'bg-success/10' : 
+                      claim.status === 'approved' ? 'bg-primary/10' : 'bg-warning/10'
                     }`}>
                       {claim.status === 'paid' ? (
-                        <CheckCircle className="h-5 w-5 text-emerald-500" />
+                        <CheckCircle className="h-5 w-5 text-success" />
                       ) : claim.status === 'approved' ? (
-                        <CheckCircle className="h-5 w-5 text-blue-500" />
+                        <CheckCircle className="h-5 w-5 text-primary" />
                       ) : (
-                        <Clock className="h-5 w-5 text-amber-500" />
+                        <Clock className="h-5 w-5 text-warning" />
                       )}
                     </div>
                     <div>
@@ -202,9 +202,9 @@ export default function InsuranceClaimsAIPage() {
             </CardTitle>
           </CardHeader>
           <CardContent>
-            <div className="p-4 rounded-lg border bg-amber-500/5 border-amber-500/30">
+            <div className="p-4 rounded-lg border bg-warning/5 border-warning/30">
               <div className="flex items-center gap-2 mb-2">
-                <AlertTriangle className="h-4 w-4 text-amber-500" />
+                <AlertTriangle className="h-4 w-4 text-warning" />
                 <span className="font-medium">Alerta de Cobertura</span>
               </div>
               <p className="text-sm text-muted-foreground">

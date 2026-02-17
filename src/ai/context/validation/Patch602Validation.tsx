@@ -118,7 +118,7 @@ export function Patch602Validation() {
             <div key={layer.level}>
               <Card className={
                 layer.status === "active" ? "border-primary" :
-                  layer.status === "transitioning" ? "border-yellow-500" :
+                  layer.status === "transitioning" ? "border-warning" :
                     ""
               }>
                 <CardContent className="pt-4">
@@ -132,7 +132,7 @@ export function Patch602Validation() {
                         {layer.level}
                       </Badge>
                       {layer.status === "active" && (
-                        <Activity className="h-4 w-4 text-green-500 animate-pulse" />
+                        <Activity className="h-4 w-4 text-success animate-pulse" />
                       )}
                     </div>
                     <Badge variant="outline">

@@ -243,7 +243,7 @@ ${result.deadline_suggestion}
         <Card>
           <CardHeader>
             <CardTitle className="text-lg flex items-center gap-2">
-              <AlertTriangle className="h-5 w-5 text-orange-500" />
+              <AlertTriangle className="h-5 w-5 text-warning" />
               Dados da Não Conformidade
             </CardTitle>
             <CardDescription>
@@ -325,7 +325,7 @@ ${result.deadline_suggestion}
                       <SelectItem key={item.id} value={item.id}>
                         <div className="flex items-center gap-2">
                           <span>{item.id}</span>
-                          {item.critical && <Star className="h-3 w-3 text-orange-500 fill-orange-500" />}
+                          {item.critical && <Star className="h-3 w-3 text-warning fill-warning" />}
                         </div>
                       </SelectItem>
                     ))}
@@ -497,7 +497,7 @@ ${result.deadline_suggestion}
                   {/* MLC Standard */}
                   <div className="space-y-2">
                     <Label className="flex items-center gap-2">
-                      <Globe className="h-4 w-4 text-cyan-500" />
+                      <Globe className="h-4 w-4 text-info" />
                       Standard MLC
                     </Label>
                     <div className="bg-muted p-3 rounded-lg text-sm">
