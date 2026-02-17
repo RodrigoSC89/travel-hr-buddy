@@ -4076,6 +4076,84 @@ export type Database = {
         }
         Relationships: []
       }
+      audit_evidence_assignments: {
+        Row: {
+          assigned_by: string
+          assigned_by_name: string | null
+          assigned_to: string
+          assigned_to_name: string | null
+          created_at: string
+          due_date: string | null
+          id: string
+          item_id: string
+          notes: string | null
+          pack_id: string
+          status: string | null
+          updated_at: string
+        }
+        Insert: {
+          assigned_by: string
+          assigned_by_name?: string | null
+          assigned_to: string
+          assigned_to_name?: string | null
+          created_at?: string
+          due_date?: string | null
+          id?: string
+          item_id: string
+          notes?: string | null
+          pack_id: string
+          status?: string | null
+          updated_at?: string
+        }
+        Update: {
+          assigned_by?: string
+          assigned_by_name?: string | null
+          assigned_to?: string
+          assigned_to_name?: string | null
+          created_at?: string
+          due_date?: string | null
+          id?: string
+          item_id?: string
+          notes?: string | null
+          pack_id?: string
+          status?: string | null
+          updated_at?: string
+        }
+        Relationships: []
+      }
+      audit_evidence_comments: {
+        Row: {
+          comment_text: string
+          comment_type: string | null
+          created_at: string
+          id: string
+          item_id: string
+          pack_id: string
+          user_id: string
+          user_name: string | null
+        }
+        Insert: {
+          comment_text: string
+          comment_type?: string | null
+          created_at?: string
+          id?: string
+          item_id: string
+          pack_id: string
+          user_id: string
+          user_name?: string | null
+        }
+        Update: {
+          comment_text?: string
+          comment_type?: string | null
+          created_at?: string
+          id?: string
+          item_id?: string
+          pack_id?: string
+          user_id?: string
+          user_name?: string | null
+        }
+        Relationships: []
+      }
       audit_evidence_elements: {
         Row: {
           compliance_score: number | null
@@ -4362,6 +4440,66 @@ export type Database = {
             referencedColumns: ["id"]
           },
         ]
+      }
+      audit_interview_sessions: {
+        Row: {
+          ai_final_assessment: string | null
+          completed_at: string | null
+          correct_answers: number | null
+          created_at: string
+          duration_seconds: number | null
+          framework: string
+          id: string
+          interview_log: Json | null
+          overall_score: number | null
+          pack_id: string | null
+          partial_answers: number | null
+          session_type: string | null
+          status: string | null
+          target_element_id: string | null
+          total_questions: number | null
+          user_id: string
+          wrong_answers: number | null
+        }
+        Insert: {
+          ai_final_assessment?: string | null
+          completed_at?: string | null
+          correct_answers?: number | null
+          created_at?: string
+          duration_seconds?: number | null
+          framework: string
+          id?: string
+          interview_log?: Json | null
+          overall_score?: number | null
+          pack_id?: string | null
+          partial_answers?: number | null
+          session_type?: string | null
+          status?: string | null
+          target_element_id?: string | null
+          total_questions?: number | null
+          user_id: string
+          wrong_answers?: number | null
+        }
+        Update: {
+          ai_final_assessment?: string | null
+          completed_at?: string | null
+          correct_answers?: number | null
+          created_at?: string
+          duration_seconds?: number | null
+          framework?: string
+          id?: string
+          interview_log?: Json | null
+          overall_score?: number | null
+          pack_id?: string | null
+          partial_answers?: number | null
+          session_type?: string | null
+          status?: string | null
+          target_element_id?: string | null
+          total_questions?: number | null
+          user_id?: string
+          wrong_answers?: number | null
+        }
+        Relationships: []
       }
       audit_log: {
         Row: {

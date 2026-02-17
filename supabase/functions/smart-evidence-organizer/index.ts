@@ -109,12 +109,18 @@ Elemento 13: NC/AC (não-conformidades, ações corretivas, follow-up)`,
 };
 
 interface ParseRequest {
-  action: "parse_checklist" | "match_evidence" | "generate_responses" | "rematch_gaps";
+  action: "parse_checklist" | "match_evidence" | "generate_responses" | "rematch_gaps" | "interview_start" | "interview_answer" | "generate_evidence_docs";
   pack_id?: string;
   framework: string;
   checklist_text?: string;
   vessel_id?: string;
   user_id?: string;
+  session_id?: string;
+  answer?: string;
+  conversation_history?: any[];
+  session_type?: string;
+  target_element_id?: string;
+  gap_items?: any[];
 }
 
 serve(async (req) => {
@@ -133,6 +139,12 @@ serve(async (req) => {
       return await generateResponses(supabase, body);
     } else if (action === "rematch_gaps") {
       return await rematchGaps(supabase, body);
+    } else if (action === "interview_start") {
+      return await interviewStart(supabase, body);
+    } else if (action === "interview_answer") {
+      return await interviewAnswer(supabase, body);
+    } else if (action === "generate_evidence_docs") {
+      return await generateEvidenceDocs(supabase, body);
     }
 
     return new Response(JSON.stringify({ error: "Invalid action" }), {
@@ -929,4 +941,203 @@ ${prompts.responseContext}`;
     JSON.stringify({ success: true, gaps_processed: gapItems.length, improved: improvedCount, new_score: Math.round(overallScore * 100) / 100 }),
     { headers: { ...corsHeaders, "Content-Type": "application/json" } }
   );
+}
+
+// ─── Interview Simulator ─────────────────────────────────────
+async function interviewStart(supabase: any, body: ParseRequest) {
+  const { framework, pack_id, session_type, user_id, target_element_id } = body;
+  if (!user_id || !framework) {
+    return new Response(JSON.stringify({ error: "Missing required fields" }), {
+      status: 400, headers: { ...corsHeaders, "Content-Type": "application/json" },
+    });
+  }
+
+  const prompts = getFrameworkPrompts(framework);
+  const questionCount = session_type === "full" ? 20 : session_type === "element" ? 10 : 5;
+
+  const aiResponse = await fetch("https://ai.gateway.lovable.dev/v1/chat/completions", {
+    method: "POST",
+    headers: { Authorization: `Bearer ${LOVABLE_API_KEY}`, "Content-Type": "application/json" },
+    body: JSON.stringify({
+      model: "google/gemini-3-flash-preview",
+      messages: [
+        { role: "system", content: `${prompts.systemPrompt}\n\nVocê é um auditor ${framework.toUpperCase()} extremamente rigoroso conduzindo uma entrevista de auditoria presencial. Faça perguntas técnicas detalhadas sobre procedimentos, registros, certificados e conformidade. Comece com a primeira pergunta diretamente, sem introduções.` },
+        { role: "user", content: `Inicie uma entrevista de auditoria ${framework.toUpperCase()} com ${questionCount} perguntas. ${session_type === "element" && target_element_id ? "Foque em um elemento específico." : "Cubra os elementos mais críticos."}. Faça apenas a PRIMEIRA pergunta agora.` },
+      ],
+    }),
+  });
+
+  if (!aiResponse.ok) throw new Error(`AI error: ${aiResponse.status}`);
+  const aiData = await aiResponse.json();
+  const firstQuestion = aiData.choices?.[0]?.message?.content || "Descreva o sistema de gestão de segurança implementado a bordo.";
+
+  const { data: session } = await supabase.from("audit_interview_sessions").insert({
+    pack_id, framework, user_id, session_type: session_type || "quick",
+    target_element_id, status: "active",
+    interview_log: [{ role: "auditor", content: firstQuestion }],
+  }).select("id").single();
+
+  return new Response(JSON.stringify({ success: true, session_id: session?.id, first_question: firstQuestion }), {
+    headers: { ...corsHeaders, "Content-Type": "application/json" },
+  });
+}
+
+async function interviewAnswer(supabase: any, body: ParseRequest) {
+  const { session_id, answer, framework, conversation_history } = body;
+  if (!session_id || !answer) {
+    return new Response(JSON.stringify({ error: "Missing fields" }), {
+      status: 400, headers: { ...corsHeaders, "Content-Type": "application/json" },
+    });
+  }
+
+  const prompts = getFrameworkPrompts(framework || "peodp");
+
+  const { data: session } = await supabase.from("audit_interview_sessions")
+    .select("*").eq("id", session_id).single();
+  if (!session) throw new Error("Session not found");
+
+  const maxQuestions = session.session_type === "full" ? 20 : session.session_type === "element" ? 10 : 5;
+  const currentCount = session.total_questions + 1;
+  const isLast = currentCount >= maxQuestions;
+
+  const aiResponse = await fetch("https://ai.gateway.lovable.dev/v1/chat/completions", {
+    method: "POST",
+    headers: { Authorization: `Bearer ${LOVABLE_API_KEY}`, "Content-Type": "application/json" },
+    body: JSON.stringify({
+      model: "google/gemini-3-flash-preview",
+      messages: [
+        { role: "system", content: `${prompts.systemPrompt}\n\nVocê é um auditor avaliando respostas. Avalie a resposta do auditado e faça a próxima pergunta.` },
+        ...(conversation_history || []),
+        { role: "user", content: answer },
+      ],
+      tools: [{
+        type: "function",
+        function: {
+          name: "evaluate_and_continue",
+          description: "Evaluate the answer and provide next question",
+          parameters: {
+            type: "object",
+            properties: {
+              evaluation: {
+                type: "object",
+                properties: {
+                  score: { type: "string", enum: ["correct", "partial", "incorrect"] },
+                  feedback: { type: "string" },
+                  norm_reference: { type: "string" },
+                },
+                required: ["score", "feedback"],
+              },
+              next_question: { type: "string", description: isLast ? "Leave empty" : "Next audit question" },
+              final_assessment: { type: "string", description: isLast ? "Final assessment summary" : "Leave empty" },
+            },
+            required: ["evaluation"],
+          },
+        },
+      }],
+      tool_choice: { type: "function", function: { name: "evaluate_and_continue" } },
+    }),
+  });
+
+  if (!aiResponse.ok) throw new Error(`AI error: ${aiResponse.status}`);
+  const aiData = await aiResponse.json();
+  const toolCall = aiData.choices?.[0]?.message?.tool_calls?.[0];
+  const result = toolCall ? JSON.parse(toolCall.function.arguments) : { evaluation: { score: "partial", feedback: "Resposta avaliada." } };
+
+  const correct = session.correct_answers + (result.evaluation.score === "correct" ? 1 : 0);
+  const partial = session.partial_answers + (result.evaluation.score === "partial" ? 1 : 0);
+  const wrong = session.wrong_answers + (result.evaluation.score === "incorrect" ? 1 : 0);
+  const total = currentCount;
+  const overallScore = total > 0 ? ((correct + partial * 0.5) / total) * 100 : 0;
+
+  await supabase.from("audit_interview_sessions").update({
+    total_questions: total, correct_answers: correct, partial_answers: partial, wrong_answers: wrong,
+    overall_score: Math.round(overallScore * 100) / 100,
+    status: isLast ? "completed" : "active",
+    completed_at: isLast ? new Date().toISOString() : null,
+    ai_final_assessment: result.final_assessment || null,
+  }).eq("id", session_id);
+
+  return new Response(JSON.stringify({
+    evaluation: result.evaluation,
+    next_question: isLast ? null : result.next_question,
+    is_completed: isLast,
+    final_assessment: result.final_assessment || null,
+    stats: { total, correct, partial, wrong },
+  }), { headers: { ...corsHeaders, "Content-Type": "application/json" } });
+}
+
+// ─── Auto Evidence Document Generator ─────────────────────────
+async function generateEvidenceDocs(supabase: any, body: ParseRequest) {
+  const { pack_id, framework, gap_items } = body;
+  if (!pack_id || !gap_items?.length) {
+    return new Response(JSON.stringify({ error: "Missing fields" }), {
+      status: 400, headers: { ...corsHeaders, "Content-Type": "application/json" },
+    });
+  }
+
+  const prompts = getFrameworkPrompts(framework || "peodp");
+
+  const aiResponse = await fetch("https://ai.gateway.lovable.dev/v1/chat/completions", {
+    method: "POST",
+    headers: { Authorization: `Bearer ${LOVABLE_API_KEY}`, "Content-Type": "application/json" },
+    body: JSON.stringify({
+      model: "google/gemini-3-flash-preview",
+      messages: [
+        { role: "system", content: `${prompts.systemPrompt}\n\nVocê é um especialista em documentação marítima. Gere documentos PROFISSIONAIS e COMPLETOS que possam ser usados como evidência de auditoria. Cada documento deve ter formato profissional com cabeçalho, objetivo, escopo, procedimento detalhado e registros.` },
+        { role: "user", content: `Gere documentos de evidência para os seguintes gaps de auditoria ${(framework || "peodp").toUpperCase()}:\n\n${gap_items.map((item: any, idx: number) => `[${idx}] ${item.element_code} - ${item.item_number}: ${item.item_text}${item.requirement_description ? ` (Req: ${item.requirement_description})` : ""}${item.is_critical ? " [CRÍTICO]" : ""}`).join("\n")}` },
+      ],
+      tools: [{
+        type: "function",
+        function: {
+          name: "generate_documents",
+          description: "Generate professional audit evidence documents",
+          parameters: {
+            type: "object",
+            properties: {
+              documents: {
+                type: "array",
+                items: {
+                  type: "object",
+                  properties: {
+                    item_index: { type: "number" },
+                    doc_type: { type: "string", description: "procedure, record, declaration, certificate, checklist, manual" },
+                    title: { type: "string" },
+                    content: { type: "string", description: "Full professional document content" },
+                    norm_reference: { type: "string" },
+                  },
+                  required: ["item_index", "doc_type", "title", "content"],
+                },
+              },
+            },
+            required: ["documents"],
+          },
+        },
+      }],
+      tool_choice: { type: "function", function: { name: "generate_documents" } },
+    }),
+  });
+
+  if (!aiResponse.ok) throw new Error(`AI error: ${aiResponse.status}`);
+  const aiData = await aiResponse.json();
+  const toolCall = aiData.choices?.[0]?.message?.tool_calls?.[0];
+  if (!toolCall) throw new Error("AI did not return structured data");
+
+  const result = JSON.parse(toolCall.function.arguments);
+  const documents = (result.documents || []).map((doc: any) => {
+    const item = gap_items[doc.item_index];
+    return {
+      itemId: item?.id,
+      itemNumber: item?.item_number,
+      itemText: item?.item_text,
+      elementCode: item?.element_code || "?",
+      docType: doc.doc_type,
+      title: doc.title,
+      content: doc.content,
+      normReference: doc.norm_reference || "",
+    };
+  }).filter((d: any) => d.itemId);
+
+  return new Response(JSON.stringify({ success: true, documents }), {
+    headers: { ...corsHeaders, "Content-Type": "application/json" },
+  });
 }
