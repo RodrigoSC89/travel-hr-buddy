@@ -22,8 +22,8 @@ import { cn } from "@/lib/utils";
 
 const getStatusColor = (status: string) => {
   const colors: Record<string, string> = {
-    "fit": "bg-emerald-500", "restricted": "bg-amber-500",
-    "unfit": "bg-red-500", "pending": "bg-blue-500"
+    "fit": "bg-success", "restricted": "bg-warning",
+    "unfit": "bg-destructive", "pending": "bg-info"
   };
   return colors[status] || "bg-muted";
 };
@@ -54,43 +54,43 @@ export default function MedicalDashboard() {
     <div className="space-y-6">
       {/* KPIs */}
       <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-4 gap-4">
-        <Card className="bg-gradient-to-br from-emerald-500/10 to-emerald-600/5 border-emerald-500/20">
+        <Card className="bg-gradient-to-br from-success/10 to-success/5 border-success/20">
           <CardContent className="p-6">
             <div className="flex items-center justify-between">
               <div>
                 <p className="text-sm text-muted-foreground">Tripulantes Aptos</p>
-                <p className="text-3xl font-bold text-emerald-600">{stats.fitCount}/{stats.totalCrew}</p>
-                <p className="text-xs text-emerald-600 mt-1">
+                <p className="text-3xl font-bold text-success">{stats.fitCount}/{stats.totalCrew}</p>
+                <p className="text-xs text-success mt-1">
                   {stats.totalCrew > 0 ? ((stats.fitCount / stats.totalCrew) * 100).toFixed(0) : 0}% da tripulação
                 </p>
               </div>
-              <div className="p-3 bg-emerald-500/20 rounded-xl"><Heart className="h-6 w-6 text-emerald-600" /></div>
+              <div className="p-3 bg-success/20 rounded-xl"><Heart className="h-6 w-6 text-success" /></div>
             </div>
           </CardContent>
         </Card>
 
-        <Card className={cn(stats.restrictedCount > 0 && "border-amber-500/50")}>
+        <Card className={cn(stats.restrictedCount > 0 && "border-warning/50")}>
           <CardContent className="p-6">
             <div className="flex items-center justify-between">
               <div>
                 <p className="text-sm text-muted-foreground">Restrição Médica</p>
-                <p className={cn("text-3xl font-bold", stats.restrictedCount > 0 ? "text-amber-600" : "text-muted-foreground")}>{stats.restrictedCount}</p>
-                <p className="text-xs text-amber-600 mt-1">Requer acompanhamento</p>
+                <p className={cn("text-3xl font-bold", stats.restrictedCount > 0 ? "text-warning" : "text-muted-foreground")}>{stats.restrictedCount}</p>
+                <p className="text-xs text-warning mt-1">Requer acompanhamento</p>
               </div>
-              <div className="p-3 bg-amber-500/20 rounded-xl"><Activity className="h-6 w-6 text-amber-600" /></div>
+              <div className="p-3 bg-warning/20 rounded-xl"><Activity className="h-6 w-6 text-warning" /></div>
             </div>
           </CardContent>
         </Card>
 
-        <Card className={cn(stats.expiringCerts > 0 && "border-amber-500/50")}>
+        <Card className={cn(stats.expiringCerts > 0 && "border-warning/50")}>
           <CardContent className="p-6">
             <div className="flex items-center justify-between">
               <div>
                 <p className="text-sm text-muted-foreground">Cert. Vencendo</p>
-                <p className={cn("text-3xl font-bold", stats.expiringCerts > 0 ? "text-amber-600" : "text-muted-foreground")}>{stats.expiringCerts}</p>
+                <p className={cn("text-3xl font-bold", stats.expiringCerts > 0 ? "text-warning" : "text-muted-foreground")}>{stats.expiringCerts}</p>
                 <p className="text-xs text-muted-foreground mt-1">Próximos 90 dias</p>
               </div>
-              <div className="p-3 bg-amber-500/20 rounded-xl"><FileText className="h-6 w-6 text-amber-600" /></div>
+              <div className="p-3 bg-warning/20 rounded-xl"><FileText className="h-6 w-6 text-warning" /></div>
             </div>
           </CardContent>
         </Card>
@@ -113,12 +113,12 @@ export default function MedicalDashboard() {
 
       {/* Alert banner */}
       {(stats.restrictedCount > 0 || stats.expiringCerts > 0) && (
-        <Card className="border-amber-500/50 bg-amber-500/5">
+        <Card className="border-warning/50 bg-warning/5">
           <CardContent className="p-4">
             <div className="flex items-center gap-3">
-              <Bell className="h-5 w-5 text-amber-600" />
+              <Bell className="h-5 w-5 text-warning" />
               <div className="flex-1">
-                <p className="font-medium text-amber-600">Atenção Requerida</p>
+                <p className="font-medium text-warning">Atenção Requerida</p>
                 <p className="text-sm text-muted-foreground">
                   {stats.restrictedCount} tripulante(s) com restrição médica e {stats.expiringCerts} certificação(ões) próximas do vencimento
                 </p>
@@ -172,8 +172,8 @@ export default function MedicalDashboard() {
                         </div>
                         <Progress value={fitPercent} className="h-2" />
                         <div className="flex gap-4 mt-3 text-sm">
-                          <span className="flex items-center gap-1"><div className="w-2 h-2 rounded-full bg-emerald-500" />Aptos: {vesselCrew.filter(c => c.medicalStatus === "fit").length}</span>
-                          <span className="flex items-center gap-1"><div className="w-2 h-2 rounded-full bg-amber-500" />Restrição: {vesselCrew.filter(c => c.medicalStatus === "restricted").length}</span>
+                          <span className="flex items-center gap-1"><div className="w-2 h-2 rounded-full bg-success" />Aptos: {vesselCrew.filter(c => c.medicalStatus === "fit").length}</span>
+                          <span className="flex items-center gap-1"><div className="w-2 h-2 rounded-full bg-warning" />Restrição: {vesselCrew.filter(c => c.medicalStatus === "restricted").length}</span>
                         </div>
                       </div>
                     );
@@ -199,7 +199,7 @@ export default function MedicalDashboard() {
                     </div>
                   ))}
                   {crew.flatMap(c => c.certifications.filter(cert => cert.status !== "valid")).length === 0 && (
-                    <div className="text-center py-4"><CheckCircle2 className="h-8 w-8 text-emerald-500 mx-auto mb-2" /><p className="text-sm text-muted-foreground">Todas certificações em dia</p></div>
+                    <div className="text-center py-4"><CheckCircle2 className="h-8 w-8 text-success mx-auto mb-2" /><p className="text-sm text-muted-foreground">Todas certificações em dia</p></div>
                   )}
                 </div>
               </CardContent>
@@ -275,8 +275,8 @@ export default function MedicalDashboard() {
                 {medications.map((med) => (
                   <div key={med.id} className="flex items-center justify-between p-4 rounded-lg border hover:bg-accent/50 transition-colors">
                     <div className="flex items-center gap-4">
-                      <div className={cn("p-2 rounded-lg", med.controlled ? "bg-red-500/20" : "bg-blue-500/20")}>
-                        <Pill className={cn("h-4 w-4", med.controlled ? "text-red-600" : "text-blue-600")} />
+                      <div className={cn("p-2 rounded-lg", med.controlled ? "bg-destructive/20" : "bg-info/20")}>
+                        <Pill className={cn("h-4 w-4", med.controlled ? "text-destructive" : "text-info")} />
                       </div>
                       <div>
                         <div className="flex items-center gap-2">
@@ -289,7 +289,7 @@ export default function MedicalDashboard() {
                     <div className="flex items-center gap-6 text-sm">
                       <div className="text-right">
                         <span className="text-muted-foreground">Estoque</span>
-                        <p className={cn("font-bold", med.quantity <= med.minStock ? "text-destructive" : "text-emerald-600")}>{med.quantity}</p>
+                        <p className={cn("font-bold", med.quantity <= med.minStock ? "text-destructive" : "text-success")}>{med.quantity}</p>
                       </div>
                       <div className="text-right">
                         <span className="text-muted-foreground">Mín.</span>

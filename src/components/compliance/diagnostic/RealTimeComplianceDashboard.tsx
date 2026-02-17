@@ -107,11 +107,11 @@ const TREND_DATA = [
 ];
 
 const NC_BY_CATEGORY = [
-  { name: 'Documentação', value: 35, color: '#3b82f6' },
-  { name: 'Treinamento', value: 25, color: '#f59e0b' },
-  { name: 'Equipamentos', value: 20, color: '#10b981' },
-  { name: 'Procedimentos', value: 12, color: '#8b5cf6' },
-  { name: 'Outros', value: 8, color: '#6b7280' }
+  { name: 'Documentação', value: 35, color: 'hsl(var(--info))' },
+  { name: 'Treinamento', value: 25, color: 'hsl(var(--warning))' },
+  { name: 'Equipamentos', value: 20, color: 'hsl(var(--success))' },
+  { name: 'Procedimentos', value: 12, color: 'hsl(var(--accent))' },
+  { name: 'Outros', value: 8, color: 'hsl(var(--muted-foreground))' }
 ];
 
 const RADAR_DATA = [
@@ -396,9 +396,9 @@ export function RealTimeComplianceDashboard() {
                 <XAxis dataKey="month" />
                 <YAxis domain={[60, 100]} />
                 <Tooltip />
-                <Area type="monotone" dataKey="peotram" stackId="1" stroke="#3b82f6" fill="#3b82f6" fillOpacity={0.3} name="PEOTRAM" />
-                <Area type="monotone" dataKey="peoDP" stackId="2" stroke="#10b981" fill="#10b981" fillOpacity={0.3} name="PEO-DP" />
-                <Area type="monotone" dataKey="mlc" stackId="3" stroke="#f59e0b" fill="#f59e0b" fillOpacity={0.3} name="MLC" />
+                <Area type="monotone" dataKey="peotram" stackId="1" stroke="hsl(var(--info))" fill="hsl(var(--info))" fillOpacity={0.3} name="PEOTRAM" />
+                <Area type="monotone" dataKey="peoDP" stackId="2" stroke="hsl(var(--success))" fill="hsl(var(--success))" fillOpacity={0.3} name="PEO-DP" />
+                <Area type="monotone" dataKey="mlc" stackId="3" stroke="hsl(var(--warning))" fill="hsl(var(--warning))" fillOpacity={0.3} name="MLC" />
               </AreaChart>
             </ResponsiveContainer>
           </CardContent>

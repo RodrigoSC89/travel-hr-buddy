@@ -171,7 +171,7 @@ export function TestimonialsSection() {
               <MagneticCard>
                 <Card className="h-full">
                   <CardContent className="pt-5">
-                    <div className="flex gap-0.5 mb-3">{Array.from({ length: item.rating }).map((_, i) => <Star key={`star-${item.rating}-${i}`} className="h-4 w-4 fill-yellow-400 text-yellow-400" />)}</div>
+                    <div className="flex gap-0.5 mb-3">{Array.from({ length: item.rating }).map((_, i) => <Star key={`star-${item.rating}-${i}`} className="h-4 w-4 fill-warning text-warning" />)}</div>
                     <p className="text-sm text-muted-foreground mb-5 italic leading-relaxed">"{item.content}"</p>
                     <div><div className="font-semibold text-sm">{item.name}</div><div className="text-xs text-muted-foreground">{item.role} • {item.company}</div></div>
                   </CardContent>

@@ -42,28 +42,28 @@ export interface WeatherCondition {
 
 export const getStatusColor = (status: string) => {
   const colors: Record<string, string> = {
-    planned: "bg-blue-500/10 text-blue-600",
-    active: "bg-green-500/10 text-green-600",
+    planned: "bg-info/10 text-info",
+    active: "bg-success/10 text-success",
     completed: "bg-muted text-muted-foreground",
-    cancelled: "bg-red-500/10 text-red-600"
+    cancelled: "bg-destructive/10 text-destructive"
   };
   return colors[status] || colors.planned;
 };
 
 export const getWeatherColor = (risk: string) => {
   const colors: Record<string, string> = {
-    low: "text-green-500",
-    medium: "text-amber-500",
-    high: "text-red-500"
+    low: "text-success",
+    medium: "text-warning",
+    high: "text-destructive"
   };
   return colors[risk] || colors.medium;
 };
 
 export const getWeatherBgColor = (risk: string) => {
   const colors: Record<string, string> = {
-    low: "bg-green-500/10",
-    medium: "bg-amber-500/10",
-    high: "bg-red-500/10"
+    low: "bg-success/10",
+    medium: "bg-warning/10",
+    high: "bg-destructive/10"
   };
   return colors[risk] || colors.medium;
 };

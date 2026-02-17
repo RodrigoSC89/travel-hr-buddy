@@ -294,7 +294,7 @@ export default function DocumentsAIPage() {
               </>
             ) : (
               <>
-                <Sparkles className="w-4 h-4 mr-2 text-yellow-400" /> Gerar com IA
+                <Sparkles className="w-4 h-4 mr-2 text-warning" /> Gerar com IA
               </>
             )}
           </Button>
@@ -302,7 +302,7 @@ export default function DocumentsAIPage() {
       </Card>
 
       {generated && (
-        <Card className="border border-green-600">
+        <Card className="border border-success">
           <CardContent className="p-4 space-y-4">
             <div>
               <h2 className="text-lg font-semibold mb-2">
@@ -323,7 +323,7 @@ export default function DocumentsAIPage() {
                   </>
                 ) : savedDocumentId ? (
                   <>
-                    <Save className="w-4 h-4 mr-2 text-green-400" /> Salvo no Supabase
+                    <Save className="w-4 h-4 mr-2 text-success" /> Salvo no Supabase
                   </>
                 ) : (
                   <>

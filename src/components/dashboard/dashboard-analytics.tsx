@@ -103,7 +103,7 @@ const DashboardCharts: React.FC<{ profile: string }> = ({ profile }) => {
 
   const { performanceData, distributionData, comparisonData } = getChartData();
 
-  const COLORS = ["#22c55e", "#f59e0b", "#ef4444", "#3b82f6", "#8b5cf6"];
+  const COLORS = ["hsl(var(--success))", "hsl(var(--warning))", "hsl(var(--destructive))", "hsl(var(--info))", "hsl(var(--accent))"];
 
   return (
     <div className="grid grid-cols-1 lg:grid-cols-2 xl:grid-cols-3 gap-6">

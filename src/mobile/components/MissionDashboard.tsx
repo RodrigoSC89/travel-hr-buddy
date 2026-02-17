@@ -28,10 +28,10 @@ export const MissionDashboardComponent: React.FC<MissionDashboardProps> = ({
 }) => {
   const getStatusColor = (status: string) => {
     switch (status) {
-    case "active": return "bg-green-500";
-    case "completed": return "bg-blue-500";
-    case "pending": return "bg-yellow-500";
-    default: return "bg-gray-500";
+    case "active": return "bg-success";
+    case "completed": return "bg-info";
+    case "pending": return "bg-warning";
+    default: return "bg-muted-foreground";
     }
   };
 
@@ -80,10 +80,10 @@ export const MissionDashboardComponent: React.FC<MissionDashboardProps> = ({
             <span className="text-muted-foreground">Overall Progress</span>
             <span className="font-semibold">{Math.round(mission.progress)}%</span>
           </div>
-          <div className="w-full h-3 bg-gray-200 rounded-full overflow-hidden">
+          <div className="w-full h-3 bg-muted rounded-full overflow-hidden">
             <div
               className={`h-full transition-all duration-500 ${
-                mission.progress === 100 ? "bg-green-500" : "bg-blue-500"
+                mission.progress === 100 ? "bg-success" : "bg-primary"
               }`}
               style={{ width: `${mission.progress}%` }}
             />
@@ -93,23 +93,23 @@ export const MissionDashboardComponent: React.FC<MissionDashboardProps> = ({
         {/* Stats Grid */}
         <div className="grid grid-cols-2 gap-4">
           {/* Checklists */}
-          <div className="p-3 bg-blue-50 rounded-lg border border-blue-200">
+          <div className="p-3 bg-info/10 rounded-lg border border-info/20">
             <div className="flex items-center gap-2 mb-1">
-              <CheckCircle className="h-4 w-4 text-blue-600" />
-              <span className="text-xs text-blue-600 font-medium">Checklists</span>
+              <CheckCircle className="h-4 w-4 text-info" />
+              <span className="text-xs text-info font-medium">Checklists</span>
             </div>
-            <div className="text-2xl font-bold text-blue-900">
+            <div className="text-2xl font-bold text-foreground">
               {mission.checklistsCompleted}/{mission.checklistsTotal}
             </div>
           </div>
 
           {/* Critical Items */}
-          <div className="p-3 bg-red-50 rounded-lg border border-red-200">
+          <div className="p-3 bg-destructive/10 rounded-lg border border-destructive/20">
             <div className="flex items-center gap-2 mb-1">
-              <AlertTriangle className="h-4 w-4 text-red-600" />
-              <span className="text-xs text-red-600 font-medium">Critical</span>
+              <AlertTriangle className="h-4 w-4 text-destructive" />
+              <span className="text-xs text-destructive font-medium">Critical</span>
             </div>
-            <div className="text-2xl font-bold text-red-900">
+            <div className="text-2xl font-bold text-foreground">
               {mission.criticalItems}
             </div>
           </div>
@@ -117,14 +117,14 @@ export const MissionDashboardComponent: React.FC<MissionDashboardProps> = ({
 
         {/* Estimated Completion */}
         {mission.estimatedCompletion && (
-          <div className="flex items-center justify-between p-3 bg-green-50 rounded-lg border border-green-200">
+          <div className="flex items-center justify-between p-3 bg-success/10 rounded-lg border border-success/20">
             <div className="flex items-center gap-2">
-              <TrendingUp className="h-4 w-4 text-green-600" />
-              <span className="text-sm text-green-700 font-medium">
+              <TrendingUp className="h-4 w-4 text-success" />
+              <span className="text-sm text-success font-medium">
                 Est. Completion
               </span>
             </div>
-            <span className="text-sm font-semibold text-green-900">
+            <span className="text-sm font-semibold text-foreground">
               {mission.estimatedCompletion}
             </span>
           </div>

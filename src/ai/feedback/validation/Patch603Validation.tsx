@@ -79,9 +79,9 @@ export function Patch603Validation() {
 
   const getChannelColor = (channel: string) => {
     switch (channel) {
-    case "voice": return "text-blue-500";
-    case "text": return "text-green-500";
-    case "click": return "text-purple-500";
+    case "voice": return "text-info";
+    case "text": return "text-success";
+    case "click": return "text-accent-foreground";
     }
   };
 
