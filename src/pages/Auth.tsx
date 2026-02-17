@@ -85,8 +85,6 @@ const Auth: React.FC = () => {
     defaultValues: { email: "" }
   });
 
-  const systemStats = null;
-
   // Cleanup corrupted tokens on mount
   useEffect(() => {
     const cleanup = async () => {
@@ -430,21 +428,21 @@ const Auth: React.FC = () => {
           transition={{ duration: 8, repeat: Infinity, ease: "linear" }}
         />
 
-        {/* Floating particles */}
-        {[...Array(18)].map((_, i) => (
+      {/* Floating particles - reduced for performance */}
+        {[...Array(8)].map((_, i) => (
           <motion.div
             key={`p-${i}`}
             className="absolute rounded-full"
             style={{
-              left: `${5 + i * 5}%`,
-              top: `${8 + (i % 5) * 18}%`,
-              width: i % 4 === 0 ? 3 : i % 3 === 0 ? 2 : 1,
-              height: i % 4 === 0 ? 3 : i % 3 === 0 ? 2 : 1,
+              left: `${10 + i * 10}%`,
+              top: `${10 + (i % 4) * 22}%`,
+              width: i % 3 === 0 ? 3 : 2,
+              height: i % 3 === 0 ? 3 : 2,
               background: i % 3 === 0 ? 'hsla(190, 95%, 70%, 0.8)' : i % 2 === 0 ? 'hsla(214, 84%, 65%, 0.5)' : 'hsla(0, 0%, 100%, 0.25)',
-              boxShadow: i % 4 === 0 ? '0 0 10px 2px hsla(190, 95%, 60%, 0.3)' : 'none',
+              boxShadow: i % 3 === 0 ? '0 0 10px 2px hsla(190, 95%, 60%, 0.3)' : 'none',
             }}
-            animate={{ y: [0, -(35 + i * 4), 0], x: [0, (i % 2 === 0 ? 18 : -18), 0], opacity: [0, 0.8, 0], scale: [0.3, 1.2, 0.3] }}
-            transition={{ duration: 4 + i * 0.4, repeat: Infinity, delay: i * 0.5, ease: "easeInOut" }}
+            animate={{ y: [0, -(30 + i * 5), 0], opacity: [0, 0.7, 0] }}
+            transition={{ duration: 5 + i * 0.6, repeat: Infinity, delay: i * 0.8, ease: "easeInOut" }}
           />
         ))}
         
@@ -896,7 +894,12 @@ const Auth: React.FC = () => {
           </Card>
 
           {/* About System CTA */}
-          <div className="text-center mt-4">
+          <motion.div 
+            className="text-center mt-4"
+            initial={{ opacity: 0 }}
+            animate={{ opacity: 1 }}
+            transition={{ delay: 1.2 }}
+          >
             <Button
               variant="outline"
               className="w-full max-w-md border-[hsla(190,95%,50%,0.15)] hover:border-[hsla(190,95%,50%,0.35)] hover:shadow-[0_0_25px_hsla(190,95%,50%,0.08)] transition-all duration-300"
@@ -906,11 +909,11 @@ const Auth: React.FC = () => {
               <Compass className="mr-2 h-4 w-4" />
               Conheça o Sistema Nauti One
             </Button>
-          </div>
+          </motion.div>
 
           {/* Footer */}
           <p className="text-center text-xs mt-4" style={{ color: 'hsla(210,30%,50%,0.4)' }}>
-            © {new Date().getFullYear()} Nauti One. Todos os direitos reservados.
+            © {new Date().getFullYear()} Nauti One • Maritime Operations Platform
           </p>
         </motion.div>
       </motion.div>

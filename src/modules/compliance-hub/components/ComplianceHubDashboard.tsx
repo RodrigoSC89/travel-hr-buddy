@@ -3,9 +3,10 @@
  * Dashboard principal do módulo de conformidade com IA integrada
  */
 
-import React, { useState, useEffect } from 'react';
+import React, { useState, useEffect, useCallback, memo } from 'react';
+import { motion, AnimatePresence } from 'framer-motion';
 import { Tabs, TabsContent, TabsList, TabsTrigger } from '@/components/ui/tabs';
-import { Shield, FileCheck, Award, Brain, Settings, GraduationCap } from 'lucide-react';
+import { Shield, FileCheck, Award, Brain, Settings, GraduationCap, RefreshCw } from 'lucide-react';
 import { ComplianceKPICards } from './ComplianceKPICards';
 import { ComplianceAlertsPanel } from './ComplianceAlertsPanel';
 import { ComplianceAIAnalysisPanel } from './ComplianceAIAnalysisPanel';
@@ -22,6 +23,15 @@ import { Button } from '@/components/ui/button';
 import { Badge } from '@/components/ui/badge';
 import { Progress } from '@/components/ui/progress';
 import { toast } from 'sonner';
+
+const fadeUp = {
+  hidden: { opacity: 0, y: 20 },
+  visible: { opacity: 1, y: 0, transition: { duration: 0.4, ease: [0.25, 0.46, 0.45, 0.94] } },
+};
+
+const stagger = {
+  visible: { transition: { staggerChildren: 0.06 } },
+};
 
 const defaultFilters: ComplianceFilters = {
   search: '',
@@ -111,11 +121,10 @@ export function ComplianceHubDashboard() {
     { id: 'marpol', name: 'MARPOL' },
   ];
 
-  const handleCreateAudit = async () => {
-    toast.success('Auditoria criada com sucesso');
+  const handleCreateAudit = useCallback(async () => {
     toast.success('Auditoria criada com sucesso');
     setShowCreateAudit(false);
-  };
+  }, []);
 
   const handleSaveSettings = async (newSettings: ComplianceSettings) => {
     setSettings(newSettings);
@@ -127,11 +136,16 @@ export function ComplianceHubDashboard() {
   };
 
   return (
-    <div className="container mx-auto p-6 space-y-6">
+    <motion.div
+      className="container mx-auto p-6 space-y-6"
+      initial="hidden"
+      animate="visible"
+      variants={stagger}
+    >
       {/* Header */}
-      <div className="flex items-center justify-between">
+      <motion.div variants={fadeUp} className="flex items-center justify-between">
         <div className="flex items-center gap-3">
-          <div className="p-3 rounded-xl bg-primary/10">
+          <div className="p-3 rounded-xl bg-primary/10 shadow-[0_0_20px_hsla(var(--primary)/0.15)]">
             <Shield className="h-8 w-8 text-primary" />
           </div>
           <div>
@@ -144,17 +158,20 @@ export function ComplianceHubDashboard() {
             <Settings className="h-4 w-4 mr-2" />
             Configurações
           </Button>
-          <Button size="sm" onClick={() => setShowCreateAudit(true)}>
+          <Button size="sm" onClick={() => setShowCreateAudit(true)} className="shadow-[0_0_15px_hsla(var(--primary)/0.2)]">
             <FileCheck className="h-4 w-4 mr-2" />
             Nova Auditoria
           </Button>
         </div>
-      </div>
+      </motion.div>
 
       {/* KPIs */}
-      <ComplianceKPICards kpis={kpis} />
+      <motion.div variants={fadeUp}>
+        <ComplianceKPICards kpis={kpis} />
+      </motion.div>
 
       {/* Main Content Tabs */}
+      <motion.div variants={fadeUp}>
       <Tabs defaultValue="overview" className="space-y-4">
         <TabsList className="grid w-full grid-cols-5">
           <TabsTrigger value="overview"><Shield className="h-4 w-4 mr-2" />Visão Geral</TabsTrigger>
@@ -299,6 +316,7 @@ export function ComplianceHubDashboard() {
           />
         </TabsContent>
       </Tabs>
+      </motion.div>
 
       {/* Dialogs */}
       <CreateAuditDialog
@@ -314,7 +332,7 @@ export function ComplianceHubDashboard() {
         settings={settings}
         onSaveSettings={handleSaveSettings}
       />
-    </div>
+    </motion.div>
   );
 }
 
