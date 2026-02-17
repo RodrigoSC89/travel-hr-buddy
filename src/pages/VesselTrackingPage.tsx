@@ -1,22 +1,21 @@
-/**
- * Vessel Tracking Page
- * Real-time AIS vessel positions with interactive map
- */
-
 import React, { useState } from 'react';
 import { VesselTrackingMap } from '@/components/fleet/VesselTrackingMap';
+import { motion } from "framer-motion";
+import { staggerContainer, fadeUp } from "@/lib/animations/motion-variants";
 
 export default function VesselTrackingPage() {
   return (
-    <div className="p-6 space-y-6">
-      <div>
+    <motion.div initial="hidden" animate="visible" variants={staggerContainer} className="p-6 space-y-6">
+      <motion.div variants={fadeUp}>
         <h1 className="text-3xl font-bold">Rastreamento de Embarcações</h1>
         <p className="text-muted-foreground mt-1">
           Posições AIS em tempo real com dados do MarineTraffic
         </p>
-      </div>
+      </motion.div>
       
-      <VesselTrackingMap autoRefresh refreshInterval={60000} />
-    </div>
+      <motion.div variants={fadeUp}>
+        <VesselTrackingMap autoRefresh refreshInterval={60000} />
+      </motion.div>
+    </motion.div>
   );
 }

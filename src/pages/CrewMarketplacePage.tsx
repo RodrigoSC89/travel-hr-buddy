@@ -10,11 +10,12 @@ import { Button } from "@/components/ui/button";
 import { Badge } from "@/components/ui/badge";
 import { Input } from "@/components/ui/input";
 import { Select, SelectContent, SelectItem, SelectTrigger, SelectValue } from "@/components/ui/select";
-import { Progress } from "@/components/ui/progress";
 import { ScrollArea } from "@/components/ui/scroll-area";
-import { Loader2, Users, Globe, Search, Star, Anchor, Award, Bot, TrendingUp, MapPin, Calendar, Filter, UserCheck } from "lucide-react";
+import { Loader2, Users, Globe, Search, Star, Award, Bot, TrendingUp, Filter, UserCheck } from "lucide-react";
 import { supabase } from "@/integrations/supabase/client";
 import { toast } from "sonner";
+import { motion } from "framer-motion";
+import { staggerContainer, fadeUp } from "@/lib/animations/motion-variants";
 
 interface CrewCandidate {
   id: string;
@@ -148,73 +149,79 @@ Forneça: pontos fortes, riscos, recomendação de embarque e compatibilidade co
   };
 
   return (
-    <div className="container mx-auto p-6 space-y-6 max-w-7xl">
-      <Card className="border-primary/20 bg-gradient-to-r from-primary/5 to-transparent">
-        <CardHeader>
-          <CardTitle className="flex items-center gap-2 text-xl">
-            <Globe className="h-6 w-6 text-primary" />
-            Global Crew Marketplace — Pool de Talentos Marítimos
-          </CardTitle>
-          <CardDescription>
-            Marketplace global com matching inteligente por IA. Encontre e contrate tripulantes qualificados com verificação automática de STCW, MLC e competências.
-          </CardDescription>
-        </CardHeader>
-      </Card>
+    <motion.div initial="hidden" animate="visible" variants={staggerContainer} className="container mx-auto p-6 space-y-6 max-w-7xl">
+      <motion.div variants={fadeUp}>
+        <Card className="border-primary/20 bg-gradient-to-r from-primary/5 to-transparent">
+          <CardHeader>
+            <CardTitle className="flex items-center gap-2 text-xl">
+              <Globe className="h-6 w-6 text-primary" />
+              Global Crew Marketplace — Pool de Talentos Marítimos
+            </CardTitle>
+            <CardDescription>
+              Marketplace global com matching inteligente por IA. Encontre e contrate tripulantes qualificados com verificação automática de STCW, MLC e competências.
+            </CardDescription>
+          </CardHeader>
+        </Card>
+      </motion.div>
 
       {/* KPIs */}
-      <div className="grid grid-cols-2 md:grid-cols-4 gap-4">
+      <motion.div variants={staggerContainer} className="grid grid-cols-2 md:grid-cols-4 gap-4">
         {[
           { label: "Pool Total", value: topStats.total, icon: Users },
           { label: "Disponíveis Agora", value: topStats.available, icon: UserCheck },
           { label: "STCW Válido", value: `${topStats.stcwValid}`, icon: Award },
           { label: "Match Score Médio", value: `${topStats.avgScore}%`, icon: TrendingUp },
         ].map(kpi => (
-          <Card key={kpi.label}>
-            <CardContent className="p-4">
-              <div className="flex items-center justify-between">
-                <div>
-                  <p className="text-xs text-muted-foreground">{kpi.label}</p>
-                  <p className="text-2xl font-bold">{kpi.value}</p>
+          <motion.div key={kpi.label} variants={fadeUp}>
+            <Card>
+              <CardContent className="p-4">
+                <div className="flex items-center justify-between">
+                  <div>
+                    <p className="text-xs text-muted-foreground">{kpi.label}</p>
+                    <p className="text-2xl font-bold">{kpi.value}</p>
+                  </div>
+                  <kpi.icon className="h-6 w-6 text-muted-foreground" />
                 </div>
-                <kpi.icon className="h-6 w-6 text-muted-foreground" />
-              </div>
-            </CardContent>
-          </Card>
+              </CardContent>
+            </Card>
+          </motion.div>
         ))}
-      </div>
+      </motion.div>
 
       {/* Filters */}
-      <Card>
-        <CardContent className="pt-6">
-          <div className="flex flex-wrap gap-3">
-            <div className="flex-1 min-w-[200px] relative">
-              <Search className="absolute left-3 top-1/2 -translate-y-1/2 h-4 w-4 text-muted-foreground" />
-              <Input value={searchQuery} onChange={e => setSearchQuery(e.target.value)} placeholder="Buscar nome, posto, nacionalidade..." className="pl-10" />
+      <motion.div variants={fadeUp}>
+        <Card>
+          <CardContent className="pt-6">
+            <div className="flex flex-wrap gap-3">
+              <div className="flex-1 min-w-[200px] relative">
+                <Search className="absolute left-3 top-1/2 -translate-y-1/2 h-4 w-4 text-muted-foreground" />
+                <Input value={searchQuery} onChange={e => setSearchQuery(e.target.value)} placeholder="Buscar nome, posto, nacionalidade..." className="pl-10" />
+              </div>
+              <Select value={rankFilter} onValueChange={setRankFilter}>
+                <SelectTrigger className="w-48"><SelectValue placeholder="Posto" /></SelectTrigger>
+                <SelectContent>
+                  <SelectItem value="all">Todos os Postos</SelectItem>
+                  {RANKS.map(r => <SelectItem key={r} value={r}>{r}</SelectItem>)}
+                </SelectContent>
+              </Select>
+              <Select value={vesselFilter} onValueChange={setVesselFilter}>
+                <SelectTrigger className="w-48"><SelectValue placeholder="Tipo de Embarcação" /></SelectTrigger>
+                <SelectContent>
+                  <SelectItem value="all">Todos os Tipos</SelectItem>
+                  {VESSEL_TYPES.map(v => <SelectItem key={v} value={v}>{v}</SelectItem>)}
+                </SelectContent>
+              </Select>
+              <Button variant="outline" onClick={() => { setSearchQuery(""); setRankFilter(""); setVesselFilter(""); }}>
+                <Filter className="h-4 w-4 mr-1" /> Limpar
+              </Button>
             </div>
-            <Select value={rankFilter} onValueChange={setRankFilter}>
-              <SelectTrigger className="w-48"><SelectValue placeholder="Posto" /></SelectTrigger>
-              <SelectContent>
-                <SelectItem value="all">Todos os Postos</SelectItem>
-                {RANKS.map(r => <SelectItem key={r} value={r}>{r}</SelectItem>)}
-              </SelectContent>
-            </Select>
-            <Select value={vesselFilter} onValueChange={setVesselFilter}>
-              <SelectTrigger className="w-48"><SelectValue placeholder="Tipo de Embarcação" /></SelectTrigger>
-              <SelectContent>
-                <SelectItem value="all">Todos os Tipos</SelectItem>
-                {VESSEL_TYPES.map(v => <SelectItem key={v} value={v}>{v}</SelectItem>)}
-              </SelectContent>
-            </Select>
-            <Button variant="outline" onClick={() => { setSearchQuery(""); setRankFilter(""); setVesselFilter(""); }}>
-              <Filter className="h-4 w-4 mr-1" /> Limpar
-            </Button>
-          </div>
-        </CardContent>
-      </Card>
+          </CardContent>
+        </Card>
+      </motion.div>
 
       <div className="grid grid-cols-1 lg:grid-cols-3 gap-6">
         {/* Candidate List */}
-        <div className="lg:col-span-2">
+        <motion.div variants={fadeUp} className="lg:col-span-2">
           <Card>
             <CardHeader>
               <CardTitle className="text-base">{filteredCandidates.length} Candidatos</CardTitle>
@@ -261,57 +268,59 @@ Forneça: pontos fortes, riscos, recomendação de embarque e compatibilidade co
               </ScrollArea>
             </CardContent>
           </Card>
-        </div>
+        </motion.div>
 
         {/* Detail Panel */}
-        <Card className="h-fit">
-          <CardHeader>
-            <CardTitle className="text-base flex items-center gap-2">
-              <Bot className="h-4 w-4" />
-              Análise do Candidato
-            </CardTitle>
-          </CardHeader>
-          <CardContent>
-            {selectedCandidate ? (
-              <div className="space-y-4">
-                <div className="text-center p-4 border rounded-lg">
-                  <p className="text-lg font-bold">{selectedCandidate.name}</p>
-                  <p className="text-muted-foreground">{selectedCandidate.rank}</p>
-                  <div className="flex items-center justify-center gap-1 mt-2">
-                    {Array.from({ length: 5 }).map((_, i) => (
-                      <Star key={`star-${i}`} className={`h-4 w-4 ${i < Math.floor(selectedCandidate.rating) ? "text-warning fill-warning" : "text-muted-foreground/30"}`} />
-                    ))}
-                    <span className="ml-1 text-sm">{selectedCandidate.rating.toFixed(1)}</span>
+        <motion.div variants={fadeUp}>
+          <Card className="h-fit">
+            <CardHeader>
+              <CardTitle className="text-base flex items-center gap-2">
+                <Bot className="h-4 w-4" />
+                Análise do Candidato
+              </CardTitle>
+            </CardHeader>
+            <CardContent>
+              {selectedCandidate ? (
+                <div className="space-y-4">
+                  <div className="text-center p-4 border rounded-lg">
+                    <p className="text-lg font-bold">{selectedCandidate.name}</p>
+                    <p className="text-muted-foreground">{selectedCandidate.rank}</p>
+                    <div className="flex items-center justify-center gap-1 mt-2">
+                      {Array.from({ length: 5 }).map((_, i) => (
+                        <Star key={`star-${i}`} className={`h-4 w-4 ${i < Math.floor(selectedCandidate.rating) ? "text-warning fill-warning" : "text-muted-foreground/30"}`} />
+                      ))}
+                      <span className="ml-1 text-sm">{selectedCandidate.rating.toFixed(1)}</span>
+                    </div>
                   </div>
+
+                  <div className="grid grid-cols-2 gap-2 text-sm">
+                    <div className="p-2 border rounded"><p className="text-xs text-muted-foreground">Experiência</p><p className="font-medium">{selectedCandidate.experience_years} anos</p></div>
+                    <div className="p-2 border rounded"><p className="text-xs text-muted-foreground">Match</p><p className="font-medium">{selectedCandidate.match_score}%</p></div>
+                    <div className="p-2 border rounded"><p className="text-xs text-muted-foreground">Disponível</p><p className="font-medium">{selectedCandidate.availability}</p></div>
+                    <div className="p-2 border rounded"><p className="text-xs text-muted-foreground">Último Navio</p><p className="font-medium">{selectedCandidate.last_vessel_type}</p></div>
+                  </div>
+
+                  <Button onClick={() => handleAIMatch(selectedCandidate)} disabled={isMatchingAI} className="w-full gap-2">
+                    {isMatchingAI ? <Loader2 className="h-4 w-4 animate-spin" /> : <Bot className="h-4 w-4" />}
+                    {isMatchingAI ? "Analisando..." : "Análise IA Completa"}
+                  </Button>
+
+                  {aiRecommendation && (
+                    <ScrollArea className="h-[250px]">
+                      <div className="p-3 border rounded-lg bg-muted/30 text-sm whitespace-pre-wrap">{aiRecommendation}</div>
+                    </ScrollArea>
+                  )}
                 </div>
-
-                <div className="grid grid-cols-2 gap-2 text-sm">
-                  <div className="p-2 border rounded"><p className="text-xs text-muted-foreground">Experiência</p><p className="font-medium">{selectedCandidate.experience_years} anos</p></div>
-                  <div className="p-2 border rounded"><p className="text-xs text-muted-foreground">Match</p><p className="font-medium">{selectedCandidate.match_score}%</p></div>
-                  <div className="p-2 border rounded"><p className="text-xs text-muted-foreground">Disponível</p><p className="font-medium">{selectedCandidate.availability}</p></div>
-                  <div className="p-2 border rounded"><p className="text-xs text-muted-foreground">Último Navio</p><p className="font-medium">{selectedCandidate.last_vessel_type}</p></div>
+              ) : (
+                <div className="text-center py-12 text-muted-foreground">
+                  <Users className="h-10 w-10 mx-auto mb-3 opacity-30" />
+                  <p className="text-sm">Selecione um candidato</p>
                 </div>
-
-                <Button onClick={() => handleAIMatch(selectedCandidate)} disabled={isMatchingAI} className="w-full gap-2">
-                  {isMatchingAI ? <Loader2 className="h-4 w-4 animate-spin" /> : <Bot className="h-4 w-4" />}
-                  {isMatchingAI ? "Analisando..." : "Análise IA Completa"}
-                </Button>
-
-                {aiRecommendation && (
-                  <ScrollArea className="h-[250px]">
-                    <div className="p-3 border rounded-lg bg-muted/30 text-sm whitespace-pre-wrap">{aiRecommendation}</div>
-                  </ScrollArea>
-                )}
-              </div>
-            ) : (
-              <div className="text-center py-12 text-muted-foreground">
-                <Users className="h-10 w-10 mx-auto mb-3 opacity-30" />
-                <p className="text-sm">Selecione um candidato</p>
-              </div>
-            )}
-          </CardContent>
-        </Card>
+              )}
+            </CardContent>
+          </Card>
+        </motion.div>
       </div>
-    </div>
+    </motion.div>
   );
 }
