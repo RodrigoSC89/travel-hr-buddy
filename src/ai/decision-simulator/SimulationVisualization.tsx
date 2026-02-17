@@ -33,23 +33,23 @@ export const SimulationVisualization: React.FC<SimulationVisualizationProps> = (
   const getStatusColor = (status: string) => {
     switch (status) {
     case "completed":
-      return "bg-green-500";
+      return "bg-success";
     case "running":
-      return "bg-blue-500";
+      return "bg-primary";
     case "failed":
-      return "bg-red-500";
+      return "bg-destructive";
     case "cancelled":
-      return "bg-gray-500";
+      return "bg-muted-foreground";
     default:
-      return "bg-yellow-500";
+      return "bg-warning";
     }
   };
 
   const getRiskColor = (risk: number) => {
-    if (risk <= 30) return "text-green-600";
-    if (risk <= 60) return "text-yellow-600";
-    if (risk <= 85) return "text-orange-600";
-    return "text-red-600";
+    if (risk <= 30) return "text-success";
+    if (risk <= 60) return "text-warning";
+    if (risk <= 85) return "text-warning";
+    return "text-destructive";
   };
 
   const formatCurrency = (value: number) => {

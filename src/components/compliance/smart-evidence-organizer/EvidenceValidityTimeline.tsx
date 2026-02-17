@@ -212,28 +212,28 @@ export const EvidenceValidityTimeline = memo(({ items, matches, elements }: Prop
                   entry.status === "expiring_soon" ? AlertTriangle :
                   entry.status === "valid" ? CheckCircle2 : Clock;
                 const statusColor = entry.status === "expired" ? "text-destructive" :
-                  entry.status === "expiring_soon" ? "text-yellow-500" :
-                  entry.status === "valid" ? "text-green-500" : "text-muted-foreground";
+                  entry.status === "expiring_soon" ? "text-warning" :
+                  entry.status === "valid" ? "text-success" : "text-muted-foreground";
 
                 return (
                   <div key={`${entry.itemId}-${idx}`} className="relative">
                     {/* Dot on timeline */}
                     <div className={cn("absolute -left-6 top-2 h-4 w-4 rounded-full border-2 bg-background flex items-center justify-center",
                       entry.status === "expired" ? "border-destructive" :
-                      entry.status === "expiring_soon" ? "border-yellow-500" :
-                      entry.status === "valid" ? "border-green-500" : "border-muted-foreground"
+                      entry.status === "expiring_soon" ? "border-warning" :
+                      entry.status === "valid" ? "border-success" : "border-muted-foreground"
                     )}>
                       <div className={cn("h-2 w-2 rounded-full",
                         entry.status === "expired" ? "bg-destructive" :
-                        entry.status === "expiring_soon" ? "bg-yellow-500" :
-                        entry.status === "valid" ? "bg-green-500" : "bg-muted-foreground"
+                        entry.status === "expiring_soon" ? "bg-warning" :
+                        entry.status === "valid" ? "bg-success" : "bg-muted-foreground"
                       )} />
                     </div>
 
                     <div className={cn(
                       "p-3 rounded-lg border transition-colors",
                       entry.status === "expired" ? "bg-destructive/5 border-destructive/20" :
-                      entry.status === "expiring_soon" ? "bg-yellow-500/5 border-yellow-500/20" :
+                      entry.status === "expiring_soon" ? "bg-warning/5 border-warning/20" :
                       "bg-muted/30 border-border"
                     )}>
                       <div className="flex items-center justify-between gap-2 flex-wrap">

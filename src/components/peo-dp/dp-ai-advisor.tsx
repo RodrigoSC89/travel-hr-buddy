@@ -313,8 +313,8 @@ export const DPAIAdvisor: React.FC = () => {
                     <div key={message.id} className={`flex ${message.role === "user" ? "justify-end" : "justify-start"}`}>
                       <div className={`max-w-[80%] ${message.role === "user" ? "order-2" : ""}`}>
                         <div className={`flex items-start gap-2 ${message.role === "user" ? "flex-row-reverse" : ""}`}>
-                          <div className={`p-2 rounded-full ${message.role === "user" ? "bg-primary" : "bg-purple-500/20"}`}>
-                            {message.role === "user" ? <User className="h-4 w-4 text-primary-foreground" /> : <Bot className="h-4 w-4 text-purple-500" />}
+                          <div className={`p-2 rounded-full ${message.role === "user" ? "bg-primary" : "bg-accent/20"}`}>
+                            {message.role === "user" ? <User className="h-4 w-4 text-primary-foreground" /> : <Bot className="h-4 w-4 text-accent" />}
                           </div>
                           <div className={`p-3 rounded-lg ${message.role === "user" ? "bg-primary text-primary-foreground" : "bg-muted"}`}>
                             <div className="prose prose-sm dark:prose-invert max-w-none" dangerouslySetInnerHTML={createSimpleSafeHTML(message.content)} />

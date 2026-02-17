@@ -802,13 +802,13 @@ export const EnhancedSettingsHub: React.FC = () => {
                         className="opacity-0 group-hover:opacity-100 transition-opacity"
                       >
                         <Bookmark 
-                          className={`w-3 h-3 ${isFavorite ? "fill-yellow-400 text-yellow-400" : "text-muted-foreground"}`} 
+                          className={`w-3 h-3 ${isFavorite ? "fill-warning text-warning" : "text-muted-foreground"}`} 
                         />
                       </button>
                     </div>
                     <span className="text-xs text-muted-foreground hidden lg:block">{tab.description}</span>
                     {hasChanges && (
-                      <div className="absolute top-1 right-1 w-2 h-2 bg-yellow-500 rounded-full animate-pulse"></div>
+                      <div className="absolute top-1 right-1 w-2 h-2 bg-warning rounded-full animate-pulse"></div>
                     )}
                   </TabsTrigger>
                 );
@@ -818,9 +818,9 @@ export const EnhancedSettingsHub: React.FC = () => {
 
           {/* Smart Contextual Alerts */}
           {activeTab === "security" && settingsHealth < 80 && (
-            <Alert className="border-amber-200 bg-amber-50 dark:bg-amber-900/20">
-              <AlertTriangle className="h-4 w-4 text-amber-600" />
-              <AlertDescription className="text-amber-800 dark:text-amber-200">
+            <Alert className="border-warning/30 bg-warning/5">
+              <AlertTriangle className="h-4 w-4 text-warning" />
+              <AlertDescription className="text-warning-foreground">
                 <strong>Atenção:</strong> Sua configuração de segurança precisa de melhorias. 
                 Considere ativar 2FA e revisar políticas de senha.
               </AlertDescription>
@@ -828,9 +828,9 @@ export const EnhancedSettingsHub: React.FC = () => {
           )}
 
           {autoSave && hasChanges && (
-            <Alert className="border-blue-200 bg-blue-50 dark:bg-blue-900/20">
-              <Zap className="h-4 w-4 text-blue-600" />
-              <AlertDescription className="text-blue-800 dark:text-blue-200">
+            <Alert className="border-info/30 bg-info/5">
+              <Zap className="h-4 w-4 text-info" />
+              <AlertDescription className="text-foreground">
                 <strong>Auto-save ativo:</strong> Suas alterações serão salvas automaticamente em alguns segundos.
               </AlertDescription>
             </Alert>

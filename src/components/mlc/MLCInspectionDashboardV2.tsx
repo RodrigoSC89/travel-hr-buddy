@@ -558,7 +558,7 @@ export const MLCInspectionDashboardV2: React.FC = () => {
                             ) : (
                               <ChevronRight className="h-5 w-5" />
                             )}
-                            <Badge className="bg-blue-500">Título {title.number}</Badge>
+                            <Badge className="bg-primary">Título {title.number}</Badge>
                             <CardTitle className="text-base">{title.title}</CardTitle>
                           </div>
                           <div className="flex items-center gap-2">
@@ -612,9 +612,9 @@ export const MLCInspectionDashboardV2: React.FC = () => {
                                         key={item.id}
                                         className={`p-3 rounded-lg border ${
                                           answer?.status === 'non-compliant' 
-                                            ? 'border-red-500/50 bg-red-500/5' 
+                                            ? 'border-destructive/50 bg-destructive/5' 
                                             : answer?.status === 'compliant'
-                                            ? 'border-green-500/50 bg-green-500/5'
+                                            ? 'border-success/50 bg-success/5'
                                             : ''
                                         }`}
                                       >
@@ -645,7 +645,7 @@ export const MLCInspectionDashboardV2: React.FC = () => {
                                             <Button
                                               size="sm"
                                               variant={answer?.status === 'compliant' ? 'default' : 'outline'}
-                                              className={answer?.status === 'compliant' ? 'bg-green-500 hover:bg-green-600' : ''}
+                                              className={answer?.status === 'compliant' ? 'bg-success hover:bg-success/90' : ''}
                                               onClick={() => handleAnswerChange(item.id, 'compliant')}
                                             >
                                               <CheckCircle className="h-4 w-4" />

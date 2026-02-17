@@ -21,8 +21,8 @@ import { useQuery, useQueryClient } from "@tanstack/react-query";
 
 function StatusBadge({ status }: { status: string }) {
   const variants: Record<string, { label: string; className: string }> = {
-    compliant: { label: "Conforme", className: "bg-emerald-500/10 text-emerald-600 border-emerald-500/20" },
-    attention: { label: "Atenção", className: "bg-amber-500/10 text-amber-600 border-amber-500/20" },
+    compliant: { label: "Conforme", className: "bg-success/10 text-success border-success/20" },
+    attention: { label: "Atenção", className: "bg-warning/10 text-warning border-warning/20" },
     critical: { label: "Crítico", className: "bg-destructive/10 text-destructive border-destructive/20" },
   };
   const variant = variants[status] || variants.attention;
@@ -32,7 +32,7 @@ function StatusBadge({ status }: { status: string }) {
 function SeverityBadge({ severity }: { severity: string }) {
   const variants: Record<string, { label: string; className: string }> = {
     major: { label: "Major", className: "bg-destructive/10 text-destructive border-destructive/20" },
-    minor: { label: "Minor", className: "bg-amber-500/10 text-amber-600 border-amber-500/20" },
+    minor: { label: "Minor", className: "bg-warning/10 text-warning border-warning/20" },
     observation: { label: "Observação", className: "bg-muted text-muted-foreground" },
   };
   const variant = variants[severity] || variants.minor;
@@ -163,15 +163,15 @@ export default function ComplianceCommandDashboard() {
       {/* Overall Score + Regulation Scores */}
       <div className="grid grid-cols-2 md:grid-cols-7 gap-4">
         <motion.div initial={{ opacity: 0, y: 20 }} animate={{ opacity: 1, y: 0 }} className="md:col-span-2">
-          <Card className="border-l-4 border-l-emerald-500 h-full">
+          <Card className="border-l-4 border-l-success h-full">
             <CardContent className="p-4 flex flex-col justify-center h-full">
               <div className="flex items-center justify-between">
                 <div>
                   <p className="text-xs text-muted-foreground">Score Geral</p>
-                  <p className={`text-4xl font-bold ${overall >= 90 ? "text-emerald-500" : overall >= 70 ? "text-amber-500" : "text-destructive"}`}>{overall}%</p>
+                  <p className={`text-4xl font-bold ${overall >= 90 ? "text-success" : overall >= 70 ? "text-warning" : "text-destructive"}`}>{overall}%</p>
                   <p className="text-xs text-muted-foreground">{complianceData?.items.length || 0} itens avaliados</p>
                 </div>
-                <Shield className="h-12 w-12 text-emerald-500 opacity-60" />
+                <Shield className="h-12 w-12 text-success opacity-60" />
               </div>
             </CardContent>
           </Card>
@@ -179,10 +179,10 @@ export default function ComplianceCommandDashboard() {
 
         {regulationScores.slice(0, 5).map((reg, idx) => (
           <motion.div key={reg.name} initial={{ opacity: 0, y: 20 }} animate={{ opacity: 1, y: 0 }} transition={{ delay: 0.1 * (idx + 1) }}>
-            <Card className={`border-l-4 ${reg.score >= 95 ? "border-l-emerald-500" : reg.score >= 90 ? "border-l-primary" : "border-l-amber-500"} hover:shadow-lg transition-shadow cursor-pointer`}>
+            <Card className={`border-l-4 ${reg.score >= 95 ? "border-l-success" : reg.score >= 90 ? "border-l-primary" : "border-l-warning"} hover:shadow-lg transition-shadow cursor-pointer`}>
               <CardContent className="p-4">
                 <p className="text-xs text-muted-foreground uppercase">{reg.name}</p>
-                <p className={`text-2xl font-bold ${reg.score >= 95 ? "text-emerald-500" : reg.score >= 90 ? "text-primary" : "text-amber-500"}`}>{reg.score}%</p>
+                <p className={`text-2xl font-bold ${reg.score >= 95 ? "text-success" : reg.score >= 90 ? "text-primary" : "text-warning"}`}>{reg.score}%</p>
                 <Progress value={reg.score} className="h-1.5 mt-2" />
               </CardContent>
             </Card>
@@ -218,15 +218,15 @@ export default function ComplianceCommandDashboard() {
         </div>
 
         {/* AI Insights */}
-        <Card className="border-purple-500/20 bg-gradient-to-br from-purple-500/5 to-transparent">
-          <CardHeader className="pb-3"><CardTitle className="flex items-center gap-2"><Sparkles className="h-5 w-5 text-purple-500" />Insights IA Compliance</CardTitle></CardHeader>
+        <Card className="border-accent/20 bg-gradient-to-br from-accent/5 to-transparent">
+          <CardHeader className="pb-3"><CardTitle className="flex items-center gap-2"><Sparkles className="h-5 w-5 text-accent" />Insights IA Compliance</CardTitle></CardHeader>
           <CardContent>
             <ScrollArea className="h-[240px]">
               <div className="space-y-3">
                 {aiFindings.length === 0 ? <p className="text-sm text-muted-foreground text-center py-4">Nenhum insight de compliance disponível</p> : aiFindings.map((finding) => (
-                  <motion.div key={finding.id} initial={{ opacity: 0, x: -10 }} animate={{ opacity: 1, x: 0 }} className={`p-3 rounded-lg border ${finding.priority === "high" ? "border-destructive/50 bg-destructive/5" : finding.priority === "warning" ? "border-amber-500/50 bg-amber-500/5" : "border-primary/50 bg-primary/5"}`}>
+                  <motion.div key={finding.id} initial={{ opacity: 0, x: -10 }} animate={{ opacity: 1, x: 0 }} className={`p-3 rounded-lg border ${finding.priority === "high" ? "border-destructive/50 bg-destructive/5" : finding.priority === "warning" ? "border-warning/50 bg-warning/5" : "border-primary/50 bg-primary/5"}`}>
                     <div className="flex items-start gap-2">
-                      <Brain className={`h-4 w-4 mt-0.5 ${finding.priority === "high" ? "text-destructive" : finding.priority === "warning" ? "text-amber-500" : "text-primary"}`} />
+                      <Brain className={`h-4 w-4 mt-0.5 ${finding.priority === "high" ? "text-destructive" : finding.priority === "warning" ? "text-warning" : "text-primary"}`} />
                       <div className="flex-1">
                         <p className="text-sm">{finding.message}</p>
                         <Button variant="ghost" size="sm" className="mt-2 h-7 text-xs gap-1 p-0">{finding.action}<ArrowRight className="h-3 w-3" /></Button>
@@ -273,10 +273,10 @@ export default function ComplianceCommandDashboard() {
         </Card>
 
         {/* Non-Conformities */}
-        <Card className="border-amber-500/20">
+        <Card className="border-warning/20">
           <CardHeader className="pb-3">
             <div className="flex items-center justify-between">
-              <CardTitle className="flex items-center gap-2"><AlertTriangle className="h-5 w-5 text-amber-500" />Não Conformidades Abertas</CardTitle>
+              <CardTitle className="flex items-center gap-2"><AlertTriangle className="h-5 w-5 text-warning" />Não Conformidades Abertas</CardTitle>
               <Badge variant="destructive">{nonConformities.filter(nc => nc.status === "open").length} abertas</Badge>
             </div>
           </CardHeader>
@@ -284,7 +284,7 @@ export default function ComplianceCommandDashboard() {
             <ScrollArea className="h-[280px]">
               <div className="space-y-3">
                 {nonConformities.length === 0 ? <p className="text-sm text-muted-foreground text-center py-4">Nenhuma NC aberta — excelente! ✅</p> : nonConformities.map((nc, idx) => (
-                  <motion.div key={nc.id} initial={{ opacity: 0, y: 10 }} animate={{ opacity: 1, y: 0 }} transition={{ delay: idx * 0.1 }} className={`p-3 rounded-lg border ${nc.severity === "major" ? "border-destructive/30 bg-destructive/5" : "border-amber-500/30 bg-amber-500/5"}`}>
+                  <motion.div key={nc.id} initial={{ opacity: 0, y: 10 }} animate={{ opacity: 1, y: 0 }} transition={{ delay: idx * 0.1 }} className={`p-3 rounded-lg border ${nc.severity === "major" ? "border-destructive/30 bg-destructive/5" : "border-warning/30 bg-warning/5"}`}>
                     <div className="flex items-center justify-between mb-2">
                       <Badge variant="outline" className="text-xs">{nc.code}</Badge>
                       <SeverityBadge severity={nc.severity} />

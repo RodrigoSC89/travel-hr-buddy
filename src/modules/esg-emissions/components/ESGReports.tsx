@@ -146,54 +146,54 @@ export function ESGReports() {
     <div className="space-y-6">
       {/* KPIs */}
       <div className="grid grid-cols-1 md:grid-cols-4 gap-4">
-        <Card className="border-l-4 border-l-blue-500">
+        <Card className="border-l-4 border-l-primary">
           <CardContent className="p-4">
             <div className="flex items-center justify-between">
               <div>
                 <p className="text-sm text-muted-foreground">Total Relatórios</p>
                 <p className="text-2xl font-bold">{reports.length}</p>
-                <p className="text-xs text-blue-600">Gerados este ano</p>
+                <p className="text-xs text-primary">Gerados este ano</p>
               </div>
-              <FileText className="h-8 w-8 text-blue-500 opacity-80" />
+              <FileText className="h-8 w-8 text-primary opacity-80" />
             </div>
           </CardContent>
         </Card>
 
-        <Card className="border-l-4 border-l-amber-500">
+        <Card className="border-l-4 border-l-warning">
           <CardContent className="p-4">
             <div className="flex items-center justify-between">
               <div>
                 <p className="text-sm text-muted-foreground">Rascunhos</p>
                 <p className="text-2xl font-bold">{draftCount}</p>
-                <p className="text-xs text-amber-600">Aguardando revisão</p>
+                <p className="text-xs text-warning">Aguardando revisão</p>
               </div>
-              <Clock className="h-8 w-8 text-amber-500 opacity-80" />
+              <Clock className="h-8 w-8 text-warning opacity-80" />
             </div>
           </CardContent>
         </Card>
 
-        <Card className="border-l-4 border-l-purple-500">
+        <Card className="border-l-4 border-l-accent">
           <CardContent className="p-4">
             <div className="flex items-center justify-between">
               <div>
                 <p className="text-sm text-muted-foreground">Finalizados</p>
                 <p className="text-2xl font-bold">{finalCount}</p>
-                <p className="text-xs text-purple-600">Prontos para envio</p>
+                <p className="text-xs text-accent-foreground">Prontos para envio</p>
               </div>
-              <CheckCircle className="h-8 w-8 text-purple-500 opacity-80" />
+              <CheckCircle className="h-8 w-8 text-accent opacity-80" />
             </div>
           </CardContent>
         </Card>
 
-        <Card className="border-l-4 border-l-green-500">
+        <Card className="border-l-4 border-l-success">
           <CardContent className="p-4">
             <div className="flex items-center justify-between">
               <div>
                 <p className="text-sm text-muted-foreground">Submetidos</p>
                 <p className="text-2xl font-bold">{submittedCount}</p>
-                <p className="text-xs text-green-600">Enviados às autoridades</p>
+                <p className="text-xs text-success">Enviados às autoridades</p>
               </div>
-              <Send className="h-8 w-8 text-green-500 opacity-80" />
+              <Send className="h-8 w-8 text-success opacity-80" />
             </div>
           </CardContent>
         </Card>
@@ -234,9 +234,9 @@ export function ESGReports() {
                         <div className="flex items-start gap-3">
                           <div className="p-2 rounded-lg bg-muted">
                             {template.format === "xlsx" ? (
-                              <FileSpreadsheet className="h-5 w-5 text-green-600" />
+                              <FileSpreadsheet className="h-5 w-5 text-success" />
                             ) : (
-                              <FileText className="h-5 w-5 text-red-600" />
+                              <FileText className="h-5 w-5 text-destructive" />
                             )}
                           </div>
                           <div className="flex-1">
@@ -400,9 +400,9 @@ export function ESGReports() {
                       <TableCell className="font-medium">
                         <div className="flex items-center gap-2">
                           {report.format === "xlsx" ? (
-                            <FileSpreadsheet className="h-4 w-4 text-green-600" />
+                            <FileSpreadsheet className="h-4 w-4 text-success" />
                           ) : (
-                            <FileText className="h-4 w-4 text-red-600" />
+                            <FileText className="h-4 w-4 text-destructive" />
                           )}
                           {report.name}
                         </div>
@@ -416,7 +416,7 @@ export function ESGReports() {
                       <TableCell>
                         <Badge 
                           variant={report.status === "submitted" ? "default" : report.status === "final" ? "secondary" : "outline"}
-                          className={report.status === "submitted" ? "bg-green-600" : ""}
+                          className={report.status === "submitted" ? "bg-success" : ""}
                         >
                           {report.status === "submitted" && <CheckCircle className="h-3 w-3 mr-1" />}
                           {report.status === "draft" && <Clock className="h-3 w-3 mr-1" />}
@@ -439,12 +439,12 @@ export function ESGReports() {
                           </Button>
                           {report.status === "draft" && (
                             <Button variant="ghost" size="sm" onClick={() => handleFinalize(report.id)}>
-                              <CheckCircle className="h-4 w-4 text-purple-600" />
+                              <CheckCircle className="h-4 w-4 text-accent" />
                             </Button>
                           )}
                           {report.status === "final" && (
                             <Button variant="ghost" size="sm" onClick={() => handleSubmit(report.id)}>
-                              <Send className="h-4 w-4 text-green-600" />
+                              <Send className="h-4 w-4 text-success" />
                             </Button>
                           )}
                         </div>
@@ -478,8 +478,8 @@ export function ESGReports() {
                 ].map((schedule) => (
                   <div key={schedule.name} className="flex items-center justify-between p-4 border rounded-lg">
                     <div className="flex items-center gap-4">
-                      <div className={`p-2 rounded-lg ${schedule.enabled ? "bg-green-100 dark:bg-green-900" : "bg-muted"}`}>
-                        <FileText className={`h-5 w-5 ${schedule.enabled ? "text-green-600" : "text-muted-foreground"}`} />
+                      <div className={`p-2 rounded-lg ${schedule.enabled ? "bg-success/10" : "bg-muted"}`}>
+                        <FileText className={`h-5 w-5 ${schedule.enabled ? "text-success" : "text-muted-foreground"}`} />
                       </div>
                       <div>
                         <p className="font-medium">{schedule.name}</p>

@@ -92,7 +92,7 @@ export function MLCDocumentGenerator() {
         </Card>
         <Card>
           <CardContent className="pt-4 pb-3 text-center">
-            <p className="text-2xl font-bold text-green-600">{generated.size}</p>
+            <p className="text-2xl font-bold text-success">{generated.size}</p>
             <p className="text-xs text-muted-foreground">Gerados</p>
           </CardContent>
         </Card>
@@ -120,7 +120,7 @@ export function MLCDocumentGenerator() {
           const isPackage = doc.id === "psc_evidence_pack";
 
           return (
-            <Card key={doc.id} className={`transition-all ${isPackage ? "md:col-span-2 border-primary/30 bg-primary/5" : ""} ${isGenerated ? "border-green-500/30" : ""}`}>
+            <Card key={doc.id} className={`transition-all ${isPackage ? "md:col-span-2 border-primary/30 bg-primary/5" : ""} ${isGenerated ? "border-success/30" : ""}`}>
               <CardContent className="pt-4 pb-3">
                 <div className="flex items-start gap-3">
                   <span className="text-2xl">{doc.icon}</span>
@@ -135,11 +135,11 @@ export function MLCDocumentGenerator() {
                       <span className="text-xs text-muted-foreground flex items-center gap-1">
                         <Clock className="h-3 w-3" /> {doc.estimatedTime}
                       </span>
-                      <span className="text-xs text-green-600 font-medium">⏱️ Economiza {doc.timeSaved}</span>
+                      <span className="text-xs text-success font-medium">⏱️ Economiza {doc.timeSaved}</span>
                     </div>
                     <div className="flex gap-2">
                       {isGenerated ? (
-                        <Button size="sm" variant="outline" className="gap-1 text-green-600 border-green-500"
+                        <Button size="sm" variant="outline" className="gap-1 text-success border-success"
                           onClick={() => handleDownload(doc.id)}>
                           <Download className="h-3.5 w-3.5" /> Download
                         </Button>

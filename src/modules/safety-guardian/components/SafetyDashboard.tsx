@@ -418,10 +418,10 @@ export const SafetyDashboard: React.FC = () => {
       </div>
 
       {/* AI Alerts */}
-      <Card className="border-purple-200 bg-gradient-to-br from-purple-50 to-indigo-50">
+      <Card className="border-accent/20 bg-gradient-to-br from-accent/5 to-accent/10">
         <CardHeader>
           <CardTitle className="flex items-center gap-2">
-            <Brain className="h-5 w-5 text-purple-600" />
+            <Brain className="h-5 w-5 text-accent" />
             Alertas IA - Safety Guardian
           </CardTitle>
           <CardDescription>Análise preditiva e recomendações baseadas em IA</CardDescription>

@@ -94,12 +94,12 @@ export function MLCPSCSimulator() {
   if (completed && result) {
     return (
       <div className="space-y-4">
-        <Card className={`border-2 ${result.detained ? "border-red-500/50 bg-red-500/5" : "border-green-500/50 bg-green-500/5"}`}>
+        <Card className={`border-2 ${result.detained ? "border-destructive/50 bg-destructive/5" : "border-success/50 bg-success/5"}`}>
           <CardContent className="py-8 text-center space-y-4">
             {result.detained ? (
-              <><XCircle className="h-16 w-16 mx-auto text-red-500" /><h3 className="text-2xl font-bold text-red-600">🚨 DETENÇÃO PROVÁVEL</h3></>
+              <><XCircle className="h-16 w-16 mx-auto text-destructive" /><h3 className="text-2xl font-bold text-destructive">🚨 DETENÇÃO PROVÁVEL</h3></>
             ) : (
-              <><CheckCircle className="h-16 w-16 mx-auto text-green-500" /><h3 className="text-2xl font-bold text-green-600">✅ INSPEÇÃO APROVADA</h3></>
+              <><CheckCircle className="h-16 w-16 mx-auto text-success" /><h3 className="text-2xl font-bold text-success">✅ INSPEÇÃO APROVADA</h3></>
             )}
             <p className="text-5xl font-bold">{result.score}<span className="text-lg text-muted-foreground">/100</span></p>
             {result.parisRouRegime && (
@@ -169,7 +169,7 @@ export function MLCPSCSimulator() {
       {PSC_QUESTIONS.map((q, idx) => {
         const state = states[q.id];
         return (
-          <Card key={q.id} className={state.answer === "no" ? "border-destructive/30" : state.answer === "yes" ? "border-green-500/30" : ""}>
+          <Card key={q.id} className={state.answer === "no" ? "border-destructive/30" : state.answer === "yes" ? "border-success/30" : ""}>
             <CardHeader className="pb-2">
               <CardTitle className="text-sm flex items-center gap-2">
                 <span className="text-muted-foreground">#{idx + 1}</span> {q.question}
