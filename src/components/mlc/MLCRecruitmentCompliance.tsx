@@ -42,7 +42,7 @@ interface ChecklistItem {
 const statusConfig: Record<string, { label: string; color: string }> = {
   approved: { label: "Aprovada", color: "bg-success/10 text-success border-success/30" },
   conditional: { label: "Condicional", color: "bg-warning/10 text-warning border-warning/30" },
-  under_review: { label: "Em Análise", color: "bg-blue-500/10 text-blue-400 border-blue-500/30" },
+  under_review: { label: "Em Análise", color: "bg-info/10 text-info border-info/30" },
   blacklisted: { label: "Bloqueada", color: "bg-destructive/10 text-destructive border-destructive/30" },
 };
 

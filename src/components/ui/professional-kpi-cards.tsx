@@ -167,12 +167,12 @@ const ProfessionalKPICards = () => {
                   </h3>
                   <div className="flex items-center gap-1">
                     {kpi.trend === "up" ? (
-                      <TrendingUp className="w-4 h-4 text-green-300" />
+                      <TrendingUp className="w-4 h-4 text-success" />
                     ) : (
-                      <TrendingDown className="w-4 h-4 text-red-300" />
+                      <TrendingDown className="w-4 h-4 text-destructive" />
                     )}
                     <span className={`text-sm font-bold ${
-                      kpi.trend === "up" ? "text-green-300" : "text-red-300"
+                      kpi.trend === "up" ? "text-success" : "text-destructive"
                     }`}>
                       {kpi.change}
                     </span>

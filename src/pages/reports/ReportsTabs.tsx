@@ -258,13 +258,13 @@ export const ReportsTabs: React.FC<ReportsTabsProps> = ({
             </CardHeader>
             <CardContent>
               <div className="grid grid-cols-1 md:grid-cols-4 gap-6">
-                <div className="text-center p-4 bg-green-500/10 rounded-lg">
-                  <CheckCircle className="h-8 w-8 mx-auto mb-2 text-green-500" />
+                <div className="text-center p-4 bg-success/10 rounded-lg">
+                  <CheckCircle className="h-8 w-8 mx-auto mb-2 text-success" />
                   <p className="text-2xl font-bold">{analyticsData?.totalReports || 0}</p>
                   <p className="text-sm text-muted-foreground">Relatórios Gerados</p>
                 </div>
-                <div className="text-center p-4 bg-orange-500/10 rounded-lg">
-                  <AlertTriangle className="h-8 w-8 mx-auto mb-2 text-orange-500" />
+                <div className="text-center p-4 bg-warning/10 rounded-lg">
+                  <AlertTriangle className="h-8 w-8 mx-auto mb-2 text-warning" />
                   <p className="text-2xl font-bold">{analyticsData?.totalIncidents || 0}</p>
                   <p className="text-sm text-muted-foreground">Incidentes Analisados</p>
                 </div>
@@ -402,18 +402,18 @@ export const ReportsTabs: React.FC<ReportsTabsProps> = ({
             </CardHeader>
             <CardContent>
               <div className="grid grid-cols-1 md:grid-cols-3 gap-6">
-                <div className="text-center p-4 bg-green-500/10 rounded-lg">
-                  <CheckCircle className="h-8 w-8 mx-auto mb-2 text-green-500" />
+                <div className="text-center p-4 bg-success/10 rounded-lg">
+                  <CheckCircle className="h-8 w-8 mx-auto mb-2 text-success" />
                   <p className="text-2xl font-bold">{analyticsData?.totalReports || 0}</p>
                   <p className="text-sm text-muted-foreground">Relatórios Gerados</p>
                 </div>
-                <div className="text-center p-4 bg-blue-500/10 rounded-lg">
-                  <Brain className="h-8 w-8 mx-auto mb-2 text-blue-500" />
+                <div className="text-center p-4 bg-info/10 rounded-lg">
+                  <Brain className="h-8 w-8 mx-auto mb-2 text-info" />
                   <p className="text-2xl font-bold">{analyticsData?.totalInsights || 0}</p>
                   <p className="text-sm text-muted-foreground">Insights IA</p>
                 </div>
-                <div className="text-center p-4 bg-purple-500/10 rounded-lg">
-                  <Calendar className="h-8 w-8 mx-auto mb-2 text-purple-500" />
+                <div className="text-center p-4 bg-accent/10 rounded-lg">
+                  <Calendar className="h-8 w-8 mx-auto mb-2 text-accent" />
                   <p className="text-2xl font-bold">{analyticsData?.reportsThisMonth || 0}</p>
                   <p className="text-sm text-muted-foreground">Este Mês</p>
                 </div>
