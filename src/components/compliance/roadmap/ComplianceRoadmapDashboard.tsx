@@ -833,7 +833,7 @@ export function ComplianceRoadmapDashboard() {
                           <td className="p-2 text-center font-bold">{item.peso}</td>
                           <td className="p-2 text-xs">
                             {item.diasAteVencimento !== undefined && (
-                              <span className={item.diasAteVencimento < 0 ? 'text-red-500' : item.diasAteVencimento <= 30 ? 'text-yellow-500' : ''}>
+                              <span className={item.diasAteVencimento < 0 ? 'text-destructive' : item.diasAteVencimento <= 30 ? 'text-warning' : ''}>
                                 {item.diasAteVencimento < 0 ? `${Math.abs(item.diasAteVencimento)}d atrasado` : `${item.diasAteVencimento}d`}
                               </span>
                             )}
@@ -854,7 +854,7 @@ export function ComplianceRoadmapDashboard() {
         <DialogContent className="max-w-2xl">
           <DialogHeader>
             <DialogTitle className="flex items-center gap-2">
-              <AlertTriangle className="h-5 w-5 text-orange-500" />
+              <AlertTriangle className="h-5 w-5 text-warning" />
               {selectedNC?.ncId} - Detalhes da NC
             </DialogTitle>
           </DialogHeader>

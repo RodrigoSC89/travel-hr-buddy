@@ -152,7 +152,7 @@ function FleetStatusContent() {
         <Card>
           <CardHeader className="pb-2">
             <CardTitle className="text-sm flex items-center gap-2">
-              <Thermometer className="h-4 w-4 text-orange-500" />
+              <Thermometer className="h-4 w-4 text-warning" />
               Temperatura Média
             </CardTitle>
           </CardHeader>

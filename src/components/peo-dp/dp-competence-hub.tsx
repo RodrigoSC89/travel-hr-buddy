@@ -216,40 +216,40 @@ export const DPCompetenceHub: React.FC = () => {
                 <p className="text-sm text-muted-foreground">Total Tripulantes</p>
                 <p className="text-2xl font-bold">{crewMembers.length}</p>
               </div>
-              <Users className="h-8 w-8 text-blue-500" />
+              <Users className="h-8 w-8 text-primary" />
             </div>
           </CardContent>
         </Card>
-        <Card className="bg-gradient-to-br from-green-500/10 to-green-600/5">
+        <Card className="bg-gradient-to-br from-success/10 to-success/5">
           <CardContent className="pt-4">
             <div className="flex items-center justify-between">
               <div>
                 <p className="text-sm text-muted-foreground">Score CPD Médio</p>
                 <p className="text-2xl font-bold">{Math.round(crewMembers.reduce((acc, m) => acc + m.cpdScore, 0) / crewMembers.length)}%</p>
               </div>
-              <Target className="h-8 w-8 text-green-500" />
+              <Target className="h-8 w-8 text-success" />
             </div>
           </CardContent>
         </Card>
-        <Card className="bg-gradient-to-br from-purple-500/10 to-purple-600/5">
+        <Card className="bg-gradient-to-br from-accent/10 to-accent/5">
           <CardContent className="pt-4">
             <div className="flex items-center justify-between">
               <div>
                 <p className="text-sm text-muted-foreground">Mentores Ativos</p>
                 <p className="text-2xl font-bold">{crewMembers.filter(m => m.mentoringStatus === "mentor").length}</p>
               </div>
-              <Star className="h-8 w-8 text-purple-500" />
+              <Star className="h-8 w-8 text-accent-foreground" />
             </div>
           </CardContent>
         </Card>
-        <Card className="bg-gradient-to-br from-yellow-500/10 to-yellow-600/5">
+        <Card className="bg-gradient-to-br from-warning/10 to-warning/5">
           <CardContent className="pt-4">
             <div className="flex items-center justify-between">
               <div>
                 <p className="text-sm text-muted-foreground">Avaliações Disponíveis</p>
                 <p className="text-2xl font-bold">{assessments.length}</p>
               </div>
-              <BookOpen className="h-8 w-8 text-yellow-500" />
+              <BookOpen className="h-8 w-8 text-warning" />
             </div>
           </CardContent>
         </Card>
@@ -433,7 +433,7 @@ export const DPCompetenceHub: React.FC = () => {
                     return (
                       <div key={mentee.id} className="p-3 rounded-lg border bg-card flex items-center gap-3">
                         <Avatar>
-                          <AvatarFallback className="bg-blue-500/20 text-blue-500">{mentee.name.split(" ").map(n => n[0]).join("")}</AvatarFallback>
+                          <AvatarFallback className="bg-primary/20 text-primary">{mentee.name.split(" ").map(n => n[0]).join("")}</AvatarFallback>
                         </Avatar>
                         <div className="flex-1">
                           <p className="font-medium">{mentee.name}</p>

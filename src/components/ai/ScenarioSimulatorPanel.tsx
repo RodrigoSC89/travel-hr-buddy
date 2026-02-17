@@ -248,7 +248,7 @@ export function ScenarioSimulatorPanel() {
               <div className="space-y-2">
                 <div className="flex items-center justify-between">
                   <label className="text-sm flex items-center gap-2">
-                    <Ship className="h-4 w-4 text-cyan-500" />
+                    <Ship className="h-4 w-4 text-info" />
                     Redução de Velocidade
                   </label>
                   <span className="text-sm font-mono">{parameters.speedAdjustment}%</span>

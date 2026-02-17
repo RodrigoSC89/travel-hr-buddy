@@ -208,7 +208,7 @@ export default function IoTWearablesDashboardPage() {
                         <div className={`h-3 w-3 rounded-full ${c.alertLevel === "critical" ? "bg-destructive animate-pulse" : c.alertLevel === "warning" ? "bg-warning" : "bg-success"}`} />
                       </div>
                       <div className="flex gap-3 mt-1 text-xs text-muted-foreground">
-                        <span className="flex items-center gap-1"><Heart className="h-3 w-3 text-red-400" />{c.heartRate}</span>
+                        <span className="flex items-center gap-1"><Heart className="h-3 w-3 text-destructive" />{c.heartRate}</span>
                         <span className="flex items-center gap-1"><Brain className="h-3 w-3" />{c.fatigueScore}%</span>
                         <span className="flex items-center gap-1"><MapPin className="h-3 w-3" />{c.location}</span>
                       </div>
@@ -232,22 +232,22 @@ export default function IoTWearablesDashboardPage() {
                 <CardContent>
                   <div className="grid grid-cols-2 md:grid-cols-4 gap-3">
                     <div className="p-3 border rounded-lg text-center">
-                      <Heart className="h-5 w-5 mx-auto text-red-500 mb-1" />
+                      <Heart className="h-5 w-5 mx-auto text-destructive mb-1" />
                       <p className="text-2xl font-bold">{selected.heartRate}</p>
                       <p className="text-xs text-muted-foreground">bpm</p>
                     </div>
                     <div className="p-3 border rounded-lg text-center">
-                      <Thermometer className="h-5 w-5 mx-auto text-orange-500 mb-1" />
+                      <Thermometer className="h-5 w-5 mx-auto text-warning mb-1" />
                       <p className="text-2xl font-bold">{selected.temperature.toFixed(1)}</p>
                       <p className="text-xs text-muted-foreground">°C</p>
                     </div>
                     <div className="p-3 border rounded-lg text-center">
-                      <Wind className="h-5 w-5 mx-auto text-blue-500 mb-1" />
+                      <Wind className="h-5 w-5 mx-auto text-info mb-1" />
                       <p className="text-2xl font-bold">{selected.oxygenSat}</p>
                       <p className="text-xs text-muted-foreground">SpO2 %</p>
                     </div>
                     <div className="p-3 border rounded-lg text-center">
-                      <Moon className="h-5 w-5 mx-auto text-indigo-500 mb-1" />
+                      <Moon className="h-5 w-5 mx-auto text-primary mb-1" />
                       <p className="text-2xl font-bold">{selected.sleepHours.toFixed(1)}</p>
                       <p className="text-xs text-muted-foreground">horas sono</p>
                     </div>

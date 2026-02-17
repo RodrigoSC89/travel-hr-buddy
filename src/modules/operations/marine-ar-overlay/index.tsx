@@ -179,9 +179,9 @@ const MarineAROverlay = () => {
 
         // Marker color based on status
         const color = 
-          marker.status === "critical" ? "#ef4444" :
-            marker.status === "warning" ? "#f59e0b" :
-              "#22c55e";
+          marker.status === "critical" ? "hsl(0, 84%, 60%)" :
+            marker.status === "warning" ? "hsl(38, 92%, 50%)" :
+              "hsl(142, 71%, 45%)";
 
         // Draw marker point
         ctx.beginPath();

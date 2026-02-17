@@ -103,7 +103,7 @@ function PeopleDashboard() {
                 <p className="text-xs text-muted-foreground">Bem-Estar</p>
                 <p className="text-2xl font-bold">8.5</p>
               </div>
-              <Heart className="h-8 w-8 text-rose-500 opacity-60" />
+              <Heart className="h-8 w-8 text-destructive opacity-60" />
             </div>
           </CardContent>
         </Card>

@@ -215,15 +215,15 @@ Sou seu assistente especializado em **Sistema de Gestão de Segurança Operacion
               </p>
             </div>
             <div className="flex gap-2 flex-wrap">
-              <Badge className="bg-green-600 text-white">
+              <Badge className="bg-success text-success-foreground">
                 <CheckCircle className="h-3 w-3 mr-1" />
                 LLM Ativa
               </Badge>
-              <Badge className="bg-blue-600 text-white">
+              <Badge className="bg-info text-info-foreground">
                 <Shield className="h-3 w-3 mr-1" />
                 Citação Normativa
               </Badge>
-              <Badge className="bg-purple-600 text-white">
+              <Badge className="bg-accent text-accent-foreground">
                 <Sparkles className="h-3 w-3 mr-1" />
                 Geração de Evidências
               </Badge>
@@ -239,7 +239,7 @@ Sou seu assistente especializado em **Sistema de Gestão de Segurança Operacion
             <div className="flex items-center justify-between flex-wrap gap-2">
               <div>
                 <CardTitle className="flex items-center gap-2">
-                  <Sparkles className="h-5 w-5 text-yellow-500" />
+                  <Sparkles className="h-5 w-5 text-warning" />
                   Consulta SGSO com IA
                 </CardTitle>
                 <CardDescription>

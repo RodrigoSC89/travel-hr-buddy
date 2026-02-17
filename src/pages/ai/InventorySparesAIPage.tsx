@@ -115,13 +115,13 @@ export default function InventorySparesAIPage() {
               <p className="text-xs text-muted-foreground">Inventário</p>
             </CardContent>
           </Card>
-          <Card className="bg-red-50 dark:bg-red-950">
+          <Card className="bg-destructive/5 dark:bg-destructive/10">
             <CardHeader className="pb-2">
-              <CardTitle className="text-sm font-medium text-red-700">Críticos Baixos</CardTitle>
+              <CardTitle className="text-sm font-medium text-destructive">Críticos Baixos</CardTitle>
             </CardHeader>
             <CardContent>
-              <div className="text-2xl font-bold text-red-600">7</div>
-              <p className="text-xs text-red-600">Reposição urgente</p>
+              <div className="text-2xl font-bold text-destructive">7</div>
+              <p className="text-xs text-destructive">Reposição urgente</p>
             </CardContent>
           </Card>
           <Card>
@@ -138,7 +138,7 @@ export default function InventorySparesAIPage() {
               <CardTitle className="text-sm font-medium">Fill Rate</CardTitle>
             </CardHeader>
             <CardContent>
-              <div className="text-2xl font-bold text-green-600">98.5%</div>
+              <div className="text-2xl font-bold text-success">98.5%</div>
               <p className="text-xs text-muted-foreground">Disponibilidade</p>
             </CardContent>
           </Card>

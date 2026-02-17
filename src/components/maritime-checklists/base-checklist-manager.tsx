@@ -142,22 +142,22 @@ export const BaseChecklistManager: React.FC<BaseChecklistManagerProps> = ({
 
   const getStatusColor = (status: string) => {
     switch (status) {
-    case "completed": return "bg-green-500";
-    case "in_progress": return "bg-blue-500";
-    case "pending_review": return "bg-yellow-500";
-    case "draft": return "bg-gray-500";
-    case "rejected": return "bg-red-500";
-    default: return "bg-gray-500";
+    case "completed": return "bg-success";
+    case "in_progress": return "bg-info";
+    case "pending_review": return "bg-warning";
+    case "draft": return "bg-muted";
+    case "rejected": return "bg-destructive";
+    default: return "bg-muted";
     }
   };
 
   const getPriorityColor = (priority: string) => {
     switch (priority) {
-    case "critical": return "bg-red-500";
-    case "high": return "bg-orange-500";
-    case "medium": return "bg-yellow-500";
-    case "low": return "bg-green-500";
-    default: return "bg-gray-500";
+    case "critical": return "bg-destructive";
+    case "high": return "bg-warning";
+    case "medium": return "bg-warning/70";
+    case "low": return "bg-success";
+    default: return "bg-muted";
     }
   };
 

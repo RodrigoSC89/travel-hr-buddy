@@ -314,9 +314,9 @@ export default function TelemedicineConsult() {
             <div className="flex items-center justify-between">
               <div>
                 <p className="text-xs text-muted-foreground">Satisfação</p>
-                <p className="text-2xl font-bold text-purple-600">98%</p>
+                <p className="text-2xl font-bold text-accent-foreground">98%</p>
               </div>
-              <Star className="h-8 w-8 text-purple-500 opacity-60" />
+              <Star className="h-8 w-8 text-accent-foreground opacity-60" />
             </div>
           </CardContent>
         </Card>

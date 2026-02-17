@@ -233,7 +233,7 @@ export const SGSOActionPlanGenerator: React.FC = () => {
             <Button
               onClick={handleGenerate}
               disabled={loading}
-              className="bg-purple-600 hover:bg-purple-700 text-white flex-1 min-w-[200px]"
+              className="bg-primary hover:bg-primary/90 text-primary-foreground flex-1 min-w-[200px]"
             >
               {loading ? (
                 <>

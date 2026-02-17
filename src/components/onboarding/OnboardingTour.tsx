@@ -87,7 +87,7 @@ const DEFAULT_STEPS: TourStep[] = [
     id: 'complete',
     title: 'Pronto para começar! 🎉',
     description: 'Você completou o tour! Explore cada módulo para descobrir todas as funcionalidades.',
-    icon: <Check className="h-8 w-8 text-green-500" />,
+    icon: <Check className="h-8 w-8 text-success" />,
     position: 'center',
   },
 ];

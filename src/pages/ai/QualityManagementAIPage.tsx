@@ -54,9 +54,9 @@ export default function QualityManagementAIPage() {
               <div className="flex items-center justify-between">
                 <div>
                   <p className="text-sm text-muted-foreground">NCRs Abertas</p>
-                  <p className="text-3xl font-bold text-amber-500">5</p>
+                  <p className="text-3xl font-bold text-warning">5</p>
                 </div>
-                <AlertTriangle className="h-8 w-8 text-amber-500" />
+                <AlertTriangle className="h-8 w-8 text-warning" />
               </div>
             </CardContent>
           </Card>
@@ -65,9 +65,9 @@ export default function QualityManagementAIPage() {
               <div className="flex items-center justify-between">
                 <div>
                   <p className="text-sm text-muted-foreground">CAPAs em Andamento</p>
-                  <p className="text-3xl font-bold text-blue-500">12</p>
+                  <p className="text-3xl font-bold text-primary">12</p>
                 </div>
-                <Clock className="h-8 w-8 text-blue-500" />
+                <Clock className="h-8 w-8 text-primary" />
               </div>
             </CardContent>
           </Card>

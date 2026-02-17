@@ -401,7 +401,7 @@ ${s.name} (${s.probability}% probabilidade):
                     <ul className="text-xs space-y-1">
                       {scenario.risks.map((risk) => (
                         <li key={risk} className="flex items-start gap-2">
-                          <AlertTriangle className="h-3 w-3 mt-0.5 text-yellow-500" />
+                          <AlertTriangle className="h-3 w-3 mt-0.5 text-warning" />
                           {risk}
                         </li>
                       ))}

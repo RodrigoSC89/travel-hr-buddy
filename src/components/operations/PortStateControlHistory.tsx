@@ -94,7 +94,7 @@ export function PortStateControlHistory() {
       <div className="grid grid-cols-2 md:grid-cols-5 gap-4">
         <Card className="border-border/50 bg-card/80"><CardContent className="p-4 text-center">
           <p className="text-xs text-muted-foreground">Inspections</p>
-          <p className="text-3xl font-bold text-cyan-400">{totalInspections}</p>
+          <p className="text-3xl font-bold text-info">{totalInspections}</p>
         </CardContent></Card>
         <Card className="border-border/50 bg-card/80"><CardContent className="p-4 text-center">
           <p className="text-xs text-muted-foreground">Total Deficiencies</p>
@@ -102,7 +102,7 @@ export function PortStateControlHistory() {
         </CardContent></Card>
         <Card className="border-border/50 bg-card/80"><CardContent className="p-4 text-center">
           <p className="text-xs text-muted-foreground">Detentions</p>
-          <p className="text-3xl font-bold text-rose-400">{detentions}</p>
+          <p className="text-3xl font-bold text-destructive">{detentions}</p>
         </CardContent></Card>
         <Card className="border-border/50 bg-card/80"><CardContent className="p-4 text-center">
           <p className="text-xs text-muted-foreground">Detention Rate</p>
@@ -110,7 +110,7 @@ export function PortStateControlHistory() {
         </CardContent></Card>
         <Card className="border-border/50 bg-card/80"><CardContent className="p-4 text-center">
           <p className="text-xs text-muted-foreground">Avg Def/Inspection</p>
-          <p className="text-3xl font-bold text-cyan-400">{avgDefPerInspection}</p>
+          <p className="text-3xl font-bold text-info">{avgDefPerInspection}</p>
         </CardContent></Card>
       </div>
 
@@ -131,7 +131,7 @@ export function PortStateControlHistory() {
                   <div className="flex items-center justify-between">
                     <div>
                       <div className="flex items-center gap-2 mb-1">
-                        <Ship className="h-4 w-4 text-cyan-400" />
+                        <Ship className="h-4 w-4 text-info" />
                         <span className="font-semibold">{rec.vessels?.name || "Vessel"}</span>
                         {rec.detention && <Badge variant="destructive" className="text-xs">DETAINED</Badge>}
                         <Badge variant="outline" className={riskColors[risk]}>{risk}</Badge>
@@ -176,7 +176,7 @@ export function PortStateControlHistory() {
                     <CardContent className="p-4">
                       <div className="flex items-center justify-between mb-2">
                         <span className="font-semibold flex items-center gap-2">
-                          <Ship className="h-4 w-4 text-cyan-400" />{v.name}
+                          <Ship className="h-4 w-4 text-info" />{v.name}
                         </span>
                         <Badge variant="outline" className={riskColors[risk]}>{risk} risk</Badge>
                       </div>

@@ -183,7 +183,7 @@ export default function TravelCommandPremium() {
           { icon: <Plane className="h-5 w-5" />, label: 'Viagens Ativas', value: metrics.active, color: 'text-success', gradient: 'from-success/5' },
           { icon: <DollarSign className="h-5 w-5" />, label: 'Orçamento', value: `R$ ${(metrics.totalBudget / 1000).toFixed(0)}k`, color: 'text-primary', gradient: 'from-primary/5' },
           { icon: <CreditCard className="h-5 w-5" />, label: 'Despesas', value: `R$ ${(metrics.totalExpenses / 1000).toFixed(0)}k`, color: 'text-destructive', gradient: 'from-destructive/5' },
-          { icon: <FileText className="h-5 w-5" />, label: 'Reemb. Pendentes', value: metrics.pendingExpenses, color: 'text-amber-500', gradient: 'from-amber-500/5' },
+          { icon: <FileText className="h-5 w-5" />, label: 'Reemb. Pendentes', value: metrics.pendingExpenses, color: 'text-warning', gradient: 'from-warning/5' },
         ].map((kpi, i) => (
           <motion.div key={kpi.label} initial={{ opacity: 0, y: 20 }} animate={{ opacity: 1, y: 0 }} transition={{ delay: i * 0.05 }}>
             <Card className="relative overflow-hidden hover:shadow-md transition-shadow">

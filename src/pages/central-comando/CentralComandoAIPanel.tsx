@@ -28,7 +28,7 @@ export const CentralComandoAIPanel: React.FC<CentralComandoAIPanelProps> = ({
           <div className="p-4 border-b">
             <div className="flex items-center justify-between">
               <div className="flex items-center gap-2">
-                <Brain className="h-5 w-5 text-purple-500" />
+                <Brain className="h-5 w-5 text-accent-foreground" />
                 <h3 className="font-semibold">Assistente IA</h3>
               </div>
               <div className="flex items-center gap-2">

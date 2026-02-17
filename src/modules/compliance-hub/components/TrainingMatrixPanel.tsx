@@ -294,7 +294,7 @@ export function TrainingMatrixPanel({
                           <TooltipProvider>
                             <Tooltip>
                               <TooltipTrigger>
-                                <AlertTriangle className="h-4 w-4 text-orange-500" />
+                                <AlertTriangle className="h-4 w-4 text-warning" />
                               </TooltipTrigger>
                               <TooltipContent>Treinamento Obrigatório</TooltipContent>
                             </Tooltip>

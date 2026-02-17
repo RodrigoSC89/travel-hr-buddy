@@ -7,70 +7,70 @@ import type { AuditAgent } from "./types";
 export const AUDIT_AGENTS: AuditAgent[] = [
   {
     id: "peotram", name: "Agente PEOTRAM", shortName: "PEOTRAM", icon: Shield,
-    color: "text-orange-500", bgColor: "from-orange-500/20 to-yellow-500/20",
+    color: "text-warning", bgColor: "from-warning/20 to-warning/10",
     description: "Programa de Excelência Operacional Petrobras - 13 Elementos",
     capabilities: ["Auditoria dos 13 elementos", "Geração de evidências", "Análise de não conformidades", "Planos de ação corretiva", "Relatórios para ANP"],
     compliance: ["PEOTRAM", "ANP", "NORMAM"], status: "active", lastActivity: "Auditou Elemento 6 - Manutenção"
   },
   {
     id: "peodp", name: "Agente PEO-DP", shortName: "PEO-DP", icon: Navigation,
-    color: "text-blue-500", bgColor: "from-blue-500/20 to-cyan-500/20",
+    color: "text-primary", bgColor: "from-primary/20 to-info/20",
     description: "Posicionamento Dinâmico - NORMAM-101 & IMCA M 117",
     capabilities: ["Verificação DP Classe 2/3", "Checklist IMCA M 117", "Análise FMEA/FMECA", "Requisitos NORMAM-101", "Relatórios de conformidade DP"],
     compliance: ["NORMAM-101", "IMCA M 117", "IMO MSC"], status: "active", lastActivity: "Validou checklist DP Classe 3"
   },
   {
     id: "sgso", name: "Agente SGSO", shortName: "SGSO", icon: FileCheck,
-    color: "text-green-500", bgColor: "from-green-500/20 to-emerald-500/20",
+    color: "text-success", bgColor: "from-success/20 to-success/10",
     description: "Sistema de Gestão de Segurança Operacional - ANP",
     capabilities: ["17 Práticas obrigatórias", "Dossiê ANP", "Tratamento de NCs", "CAPAs automáticas", "Indicadores SGSO"],
     compliance: ["Resolução ANP 43/2007", "API RP 75"], status: "active", lastActivity: "Gerou dossiê ANP completo"
   },
   {
     id: "mlc", name: "Agente MLC 2006", shortName: "MLC", icon: Scale,
-    color: "text-purple-500", bgColor: "from-purple-500/20 to-pink-500/20",
+    color: "text-accent-foreground", bgColor: "from-accent/20 to-accent/10",
     description: "Maritime Labour Convention - Direitos dos Marítimos",
     capabilities: ["5 Títulos MLC", "Inspeção de conformidade", "Contratos SEA", "Horas de descanso", "Condições de trabalho"],
     compliance: ["MLC 2006", "ILO", "Flag State"], status: "active", lastActivity: "Verificou SEA de 45 tripulantes"
   },
   {
     id: "ism", name: "Agente ISM Code", shortName: "ISM", icon: ClipboardCheck,
-    color: "text-red-500", bgColor: "from-red-500/20 to-orange-500/20",
+    color: "text-destructive", bgColor: "from-destructive/20 to-warning/20",
     description: "International Safety Management Code",
     capabilities: ["SMS - Safety Management System", "Auditoria DOC/SMC", "Gestão de emergências", "Controle operacional", "Melhoria contínua"],
     compliance: ["ISM Code", "SOLAS Cap IX", "IMO"], status: "active", lastActivity: "Revisou SMS completo"
   },
   {
     id: "isps", name: "Agente ISPS Code", shortName: "ISPS", icon: AlertTriangle,
-    color: "text-amber-500", bgColor: "from-amber-500/20 to-red-500/20",
+    color: "text-warning", bgColor: "from-warning/20 to-destructive/20",
     description: "International Ship and Port Facility Security Code",
     capabilities: ["SSP - Ship Security Plan", "Níveis de segurança 1/2/3", "Drills de segurança", "Avaliação de ameaças", "Certificado ISSC"],
     compliance: ["ISPS Code", "SOLAS Cap XI-2", "MARSEC"], status: "idle", lastActivity: "Validou drill ISPS nível 2"
   },
   {
     id: "marpol", name: "Agente MARPOL", shortName: "MARPOL", icon: Droplet,
-    color: "text-cyan-500", bgColor: "from-cyan-500/20 to-blue-500/20",
+    color: "text-info", bgColor: "from-info/20 to-primary/20",
     description: "Marine Pollution Prevention - Anexos I-VI",
     capabilities: ["IOPP Certificate", "ORB - Oil Record Book", "Gestão de resíduos", "Emissões SOx/NOx", "Ballast Water"],
     compliance: ["MARPOL 73/78", "BWM Convention"], status: "active", lastActivity: "Verificou ORB Part I"
   },
   {
     id: "solas", name: "Agente SOLAS", shortName: "SOLAS", icon: Ship,
-    color: "text-indigo-500", bgColor: "from-indigo-500/20 to-purple-500/20",
+    color: "text-primary", bgColor: "from-primary/20 to-accent/20",
     description: "Safety of Life at Sea - Segurança da Vida Humana",
     capabilities: ["LSA - Life Saving Appliances", "FFE - Fire Fighting", "Navegação segura", "Estabilidade", "Certificados estatutários"],
     compliance: ["SOLAS 1974", "IMO Resolutions"], status: "active", lastActivity: "Auditou equipamentos salvatagem"
   },
   {
     id: "stcw", name: "Agente STCW", shortName: "STCW", icon: Users,
-    color: "text-teal-500", bgColor: "from-teal-500/20 to-green-500/20",
+    color: "text-info", bgColor: "from-info/20 to-success/20",
     description: "Standards of Training, Certification and Watchkeeping",
     capabilities: ["Certificação de tripulantes", "Competência mínima", "Horas de descanso", "Treinamentos obrigatórios", "Qualificação DP"],
     compliance: ["STCW 1978/2010", "Manila Amendments"], status: "active", lastActivity: "Validou matriz STCW da tripulação"
   },
   {
     id: "esg", name: "Agente ESG Marítimo", shortName: "ESG", icon: Leaf,
-    color: "text-lime-500", bgColor: "from-green-600/20 to-lime-500/20",
+    color: "text-success", bgColor: "from-success/20 to-success/10",
     description: "Environmental, Social and Governance para operações marítimas",
     capabilities: ["Carbon footprint", "CII Rating", "EEXI compliance", "Diversidade tripulação", "Relatórios GRI"],
     compliance: ["IMO 2050", "EU MRV", "GHG Strategy"], status: "active", lastActivity: "Calculou CII Rating"

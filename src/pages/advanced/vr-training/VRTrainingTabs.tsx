@@ -177,8 +177,8 @@ export function VRTrainingTabs({
           <CardContent>
             <div className="grid grid-cols-1 md:grid-cols-3 gap-6">
               <Card><CardContent className="pt-6"><div className="text-center"><Target className="h-10 w-10 text-primary mx-auto mb-2" /><p className="text-3xl font-bold">{scenarios.reduce((acc, s) => acc + s.completions, 0)}</p><p className="text-sm text-muted-foreground">Total de Completions</p></div></CardContent></Card>
-              <Card><CardContent className="pt-6"><div className="text-center"><Star className="h-10 w-10 text-yellow-500 mx-auto mb-2" /><p className="text-3xl font-bold">{Math.round(scenarios.reduce((acc, s) => acc + s.avgScore, 0) / scenarios.length)}%</p><p className="text-sm text-muted-foreground">Score Médio Global</p></div></CardContent></Card>
-              <Card><CardContent className="pt-6"><div className="text-center"><Trophy className="h-10 w-10 text-amber-500 mx-auto mb-2" /><p className="text-3xl font-bold">{scenarios.filter(s => s.status === "published").length}</p><p className="text-sm text-muted-foreground">Cenários Publicados</p></div></CardContent></Card>
+              <Card><CardContent className="pt-6"><div className="text-center"><Star className="h-10 w-10 text-warning mx-auto mb-2" /><p className="text-3xl font-bold">{Math.round(scenarios.reduce((acc, s) => acc + s.avgScore, 0) / scenarios.length)}%</p><p className="text-sm text-muted-foreground">Score Médio Global</p></div></CardContent></Card>
+              <Card><CardContent className="pt-6"><div className="text-center"><Trophy className="h-10 w-10 text-warning mx-auto mb-2" /><p className="text-3xl font-bold">{scenarios.filter(s => s.status === "published").length}</p><p className="text-sm text-muted-foreground">Cenários Publicados</p></div></CardContent></Card>
             </div>
           </CardContent>
         </Card>

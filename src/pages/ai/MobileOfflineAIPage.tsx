@@ -75,7 +75,7 @@ export default function MobileOfflineAIPage() {
                   <p className="text-sm text-muted-foreground">Última Sync</p>
                   <p className="text-3xl font-bold">2min</p>
                 </div>
-                <RefreshCw className="h-8 w-8 text-blue-500" />
+                <RefreshCw className="h-8 w-8 text-info" />
               </div>
             </CardContent>
           </Card>
@@ -86,7 +86,7 @@ export default function MobileOfflineAIPage() {
                   <p className="text-sm text-muted-foreground">Dispositivos</p>
                   <p className="text-3xl font-bold">24</p>
                 </div>
-                <Smartphone className="h-8 w-8 text-amber-500" />
+                <Smartphone className="h-8 w-8 text-warning" />
               </div>
             </CardContent>
           </Card>
@@ -110,9 +110,9 @@ export default function MobileOfflineAIPage() {
                 <div className="flex items-center justify-between mb-2">
                   <div className="flex items-center gap-2">
                     {module.synced === 100 ? (
-                      <CheckCircle className="h-4 w-4 text-emerald-500" />
+                      <CheckCircle className="h-4 w-4 text-success" />
                     ) : (
-                      <AlertTriangle className="h-4 w-4 text-amber-500" />
+                      <AlertTriangle className="h-4 w-4 text-warning" />
                     )}
                     <span className="font-medium">{module.name}</span>
                   </div>

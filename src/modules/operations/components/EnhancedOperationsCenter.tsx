@@ -386,28 +386,28 @@ export const EnhancedOperationsCenter: React.FC = () => {
                       </div>
                       <div className="p-3 rounded-lg bg-muted/30">
                         <div className="flex items-center gap-2 mb-1">
-                          <Thermometer className="h-4 w-4 text-orange-500" />
+                          <Thermometer className="h-4 w-4 text-warning" />
                           <span className="text-sm text-muted-foreground">Temp. Motor</span>
                         </div>
                         <p className="text-2xl font-bold">{data.engineTemp}°C</p>
                       </div>
                       <div className="p-3 rounded-lg bg-muted/30">
                         <div className="flex items-center gap-2 mb-1">
-                          <Fuel className="h-4 w-4 text-yellow-500" />
+                          <Fuel className="h-4 w-4 text-warning" />
                           <span className="text-sm text-muted-foreground">Consumo</span>
                         </div>
                         <p className="text-2xl font-bold">{data.fuelConsumption} t/h</p>
                       </div>
                       <div className="p-3 rounded-lg bg-muted/30">
                         <div className="flex items-center gap-2 mb-1">
-                          <Navigation className="h-4 w-4 text-green-500" />
+                          <Navigation className="h-4 w-4 text-success" />
                           <span className="text-sm text-muted-foreground">Velocidade</span>
                         </div>
                         <p className="text-2xl font-bold">{data.speed} nós</p>
                       </div>
                       <div className="p-3 rounded-lg bg-muted/30">
                         <div className="flex items-center gap-2 mb-1">
-                          <Wind className="h-4 w-4 text-blue-500" />
+                          <Wind className="h-4 w-4 text-info" />
                           <span className="text-sm text-muted-foreground">Vento</span>
                         </div>
                         <p className="text-2xl font-bold">{data.windSpeed} kt</p>
@@ -445,7 +445,7 @@ export const EnhancedOperationsCenter: React.FC = () => {
                         <div className="flex items-center gap-2">
                           <h4 className="font-medium">{alert.message}</h4>
                           {alert.acknowledged && (
-                            <CheckCircle className="h-4 w-4 text-green-500" />
+                            <CheckCircle className="h-4 w-4 text-success" />
                           )}
                         </div>
                         <div className="flex items-center gap-4 mt-1 text-sm text-muted-foreground">
