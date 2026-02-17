@@ -151,7 +151,22 @@ export default function CrewRotationMatrix() {
           <Button variant="outline" size="icon" onClick={() => refetch()} aria-label="Refresh">
             <RefreshCw className="h-4 w-4" />
           </Button>
-          <Button variant="outline" size="sm" onClick={() => toast.success('Matrix exported')}>
+          <Button variant="outline" size="sm" onClick={() => {
+            const csvData = filtered.map(r => ({
+              Name: r.name, Rank: r.rank, Vessel: r.vessel,
+              DaysOnboard: r.daysOnboard, MaxDays: r.maxDays,
+              ReliefStatus: r.reliefStatus, Embark: r.embarkDate.slice(0, 10), Disembark: r.disembarkDate.slice(0, 10),
+            }));
+            const headers = Object.keys(csvData[0] || {}).join(',');
+            const rows = csvData.map(r => Object.values(r).join(','));
+            const csv = [headers, ...rows].join('\n');
+            const blob = new Blob([csv], { type: 'text/csv' });
+            const url = URL.createObjectURL(blob);
+            const a = document.createElement('a');
+            a.href = url; a.download = `crew-rotation-matrix-${new Date().toISOString().slice(0,10)}.csv`;
+            a.click(); URL.revokeObjectURL(url);
+            toast.success('Rotation matrix exported as CSV');
+          }}>
             <Download className="h-4 w-4 mr-1" /> Export
           </Button>
         </div>

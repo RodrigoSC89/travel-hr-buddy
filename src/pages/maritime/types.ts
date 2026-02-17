@@ -48,7 +48,7 @@ export const getStatusLabel = (status: string) => {
   }
 };
 
-export const DEMO_CREW_MEMBERS = (vesselIds: (string | undefined)[]): CrewMember[] => [
+export const FALLBACK_CREW_MEMBERS = (vesselIds: (string | undefined)[]): CrewMember[] => [
   {
     id: "1", full_name: "João Silva", position: "Comandante", rank: "Capitão",
     nationality: "Brasileiro", passport_number: "BR123456789", phone: "+55 11 99999-9999",

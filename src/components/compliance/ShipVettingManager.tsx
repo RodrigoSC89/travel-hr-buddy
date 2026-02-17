@@ -227,8 +227,8 @@ export function ShipVettingManager() {
                       </tr>
                     </thead>
                     <tbody>
-                      {([...new Set(records.map((r: any) => r.vessel_name))] as string[]).slice(0, 6).map((vessel: string, i: number) => (
-                        <tr key={i} className="border-b border-border/20">
+                      {([...new Set(records.map((r: any) => r.vessel_name))] as string[]).slice(0, 6).map((vessel: string) => (
+                        <tr key={vessel} className="border-b border-border/20">
                           <td className="p-2 font-medium">{vessel}</td>
                           {[0,1,2,3,4].map(j => (
                             <td key={j} className="text-center p-2">

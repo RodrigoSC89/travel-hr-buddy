@@ -610,7 +610,7 @@ export function MARPOLTabs({
                     <h4 className="font-semibold">{tank.name}</h4>
                     <div className="flex items-center gap-2">
                       <StatusBadge status={tank.status} />
-                      <Button size="icon" variant="ghost" className="h-7 w-7" onClick={() => openEditTank(tank)}>
+                      <Button size="icon" variant="ghost" className="h-7 w-7" aria-label="Editar tanque" onClick={() => openEditTank(tank)}>
                         <Pencil className="h-3.5 w-3.5" />
                       </Button>
                     </div>
