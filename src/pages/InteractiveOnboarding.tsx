@@ -44,7 +44,7 @@ const MODULES = [
     name: 'Central de Comando',
     description: 'Visão 360° de toda a operação em tempo real',
     icon: Navigation,
-    route: '/central-comando/visao-geral',
+    route: '/command',
     color: 'from-primary to-info',
     features: ['Dashboard em tempo real', 'KPIs operacionais', 'Alertas críticos'],
     estimatedTime: '2 min',
@@ -132,7 +132,7 @@ const QUICK_ACTIONS = [
     title: 'Conhecer a IA',
     description: 'Converse com o assistente Nauti',
     icon: MessageSquare,
-    route: '/central-comando/ia',
+    route: '/ai',
     priority: 4,
   },
 ];
@@ -259,7 +259,7 @@ export default function InteractiveOnboarding() {
                   <Button
                     size="lg"
                     variant="outline"
-                    onClick={() => navigate('/central-comando/visao-geral')}
+                    onClick={() => navigate('/command')}
                   >
                     Pular Tour
                   </Button>
@@ -294,7 +294,7 @@ export default function InteractiveOnboarding() {
             </div>
             <Button
               variant="outline"
-              onClick={() => navigate('/central-comando/visao-geral')}
+              onClick={() => navigate('/command')}
             >
               Ir para Dashboard
             </Button>
@@ -486,7 +486,7 @@ export default function InteractiveOnboarding() {
                 </p>
                 <Button
                   size="lg"
-                  onClick={() => navigate('/central-comando/visao-geral')}
+                  onClick={() => navigate('/command')}
                   className="gap-2"
                 >
                   <Rocket className="h-5 w-5" />

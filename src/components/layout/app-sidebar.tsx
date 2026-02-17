@@ -223,9 +223,12 @@ export function AppSidebar({ activeItem, onItemChange }: AppSidebarProps) {
   const renderNavItem = (item: SidebarRoute & { groupTitle?: string }, showPin = true) => {
     const active = isItemActive(item.path);
     return (
-      <button
+      <div
         key={item.path}
+        role="button"
+        tabIndex={0}
         onClick={() => handleItemClick(item.path)}
+        onKeyDown={(e) => { if (e.key === 'Enter' || e.key === ' ') { e.preventDefault(); handleItemClick(item.path); } }}
         className={cn(
           "relative flex h-9 w-full min-w-0 items-center gap-2.5 rounded-lg px-2.5 text-sm transition-all duration-200",
           "text-sidebar-foreground/80 outline-none ring-sidebar-ring",
@@ -272,7 +275,7 @@ export function AppSidebar({ activeItem, onItemChange }: AppSidebarProps) {
             <Star className={cn("h-3 w-3", isPinned(item.path) && "fill-current")} />
           </button>
         )}
-      </button>
+      </div>
     );
   };
 

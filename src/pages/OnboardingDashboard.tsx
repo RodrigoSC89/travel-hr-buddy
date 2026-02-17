@@ -516,7 +516,7 @@ export default function OnboardingDashboard() {
               <p className="text-muted-foreground mb-6">
                 Seu sistema está pronto para uso. Explore todos os módulos do Nauti One.
               </p>
-              <Button size="lg" onClick={() => navigate('/central-comando/visao-geral')}>
+              <Button size="lg" onClick={() => navigate('/command')}>
                 Ir para o Command Center
                 <ArrowRight className="h-5 w-5 ml-2" />
               </Button>
