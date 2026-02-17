@@ -54,9 +54,9 @@ export function PresenceAvatars({
   };
   
   const statusColors = {
-    online: 'bg-green-500',
-    away: 'bg-yellow-500',
-    busy: 'bg-red-500',
+    online: 'bg-success',
+    away: 'bg-warning',
+    busy: 'bg-destructive',
   };
   
   return (
@@ -161,7 +161,7 @@ export function PresenceIndicator({ className }: { className?: string }) {
   
   return (
     <div className={cn('flex items-center gap-1.5', className)}>
-      <span className="h-2 w-2 rounded-full bg-green-500" />
+      <span className="h-2 w-2 rounded-full bg-success" />
       <span className="text-xs text-muted-foreground">
         {users.length > 0 ? `${users.length + 1} online` : 'Online'}
       </span>
