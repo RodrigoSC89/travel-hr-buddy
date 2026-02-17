@@ -143,7 +143,7 @@ export const LaunchCelebration: React.FC = () => {
                     transition={{ repeat: Infinity, duration: 2 }}
                     className="absolute -top-2 -right-2"
                   >
-                    <PartyPopper className="h-8 w-8 text-amber-500" />
+                    <PartyPopper className="h-8 w-8 text-warning" />
                   </motion.div>
                 </div>
               </motion.div>

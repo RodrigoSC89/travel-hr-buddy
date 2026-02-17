@@ -120,7 +120,7 @@ export const SGSOIncidentsList: React.FC = () => {
       <CardHeader>
         <div className="flex items-center justify-between flex-wrap gap-4">
           <div className="flex items-center gap-3">
-            <AlertTriangle className="h-6 w-6 text-orange-500" />
+            <AlertTriangle className="h-6 w-6 text-warning" />
             <CardTitle>Incidentes SGSO</CardTitle>
             <Badge variant="outline">{stats.total} registros</Badge>
           </div>

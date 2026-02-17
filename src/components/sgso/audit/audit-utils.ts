@@ -64,17 +64,17 @@ export function calculateCompliancePercentage(results: AuditResult[]): number {
 export const statusConfig = {
   compliant: {
     label: "Conforme",
-    color: "bg-green-100 text-green-800",
+    color: "bg-success/10 text-success",
     icon: "CheckCircle",
   },
   non_compliant: {
     label: "Não Conforme",
-    color: "bg-red-100 text-red-800",
+    color: "bg-destructive/10 text-destructive",
     icon: "XCircle",
   },
   partial: {
     label: "Parcialmente Conforme",
-    color: "bg-yellow-100 text-yellow-800",
+    color: "bg-warning/10 text-warning",
     icon: "AlertTriangle",
   },
   not_applicable: {

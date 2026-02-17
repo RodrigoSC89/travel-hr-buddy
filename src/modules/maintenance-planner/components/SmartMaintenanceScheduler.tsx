@@ -166,11 +166,11 @@ export default function SmartMaintenanceScheduler() {
             </div>
           </CardContent>
         </Card>
-        <Card className="bg-gradient-to-br from-amber-500/10 to-amber-600/5">
+        <Card className="bg-gradient-to-br from-warning/10 to-warning/5">
           <CardContent className="p-4">
             <div className="flex items-center justify-between">
               <div><p className="text-sm text-muted-foreground">Previsões IA</p><p className="text-2xl font-bold">{predictions.length}</p></div>
-              <Brain className="h-8 w-8 text-amber-500" />
+              <Brain className="h-8 w-8 text-warning" />
             </div>
           </CardContent>
         </Card>

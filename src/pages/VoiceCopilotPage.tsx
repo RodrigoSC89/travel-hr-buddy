@@ -235,13 +235,13 @@ export default function VoiceCopilotPage() {
                         <div
                           className={cn(
                             "w-8 h-8 rounded-full flex items-center justify-center flex-shrink-0",
-                            msg.role === "user" ? "bg-primary/20" : "bg-emerald-500/20"
+                            msg.role === "user" ? "bg-primary/20" : "bg-success/20"
                           )}
                         >
                           {msg.role === "user" ? (
                             <Mic className="h-4 w-4 text-primary" />
                           ) : (
-                            <Brain className="h-4 w-4 text-emerald-400" />
+                            <Brain className="h-4 w-4 text-success" />
                           )}
                         </div>
                         <div
@@ -263,8 +263,8 @@ export default function VoiceCopilotPage() {
                     ))}
                     {isProcessing && (
                       <div className="flex gap-3">
-                        <div className="w-8 h-8 rounded-full bg-emerald-500/20 flex items-center justify-center">
-                          <Loader2 className="h-4 w-4 text-emerald-400 animate-spin" />
+                        <div className="w-8 h-8 rounded-full bg-success/20 flex items-center justify-center">
+                          <Loader2 className="h-4 w-4 text-success animate-spin" />
                         </div>
                         <div className="bg-muted rounded-xl px-4 py-3">
                           <div className="flex gap-1">

@@ -207,9 +207,9 @@ export default function ComplianceRegulamentos() {
   };
 
   const getComplianceColor = (level: number) => {
-    if (level >= 90) return "text-emerald-400";
-    if (level >= 70) return "text-amber-400";
-    return "text-red-400";
+    if (level >= 90) return "text-success";
+    if (level >= 70) return "text-warning";
+    return "text-destructive";
   };
 
   return (
