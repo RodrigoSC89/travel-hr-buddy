@@ -88,17 +88,17 @@ const AccessibleDataTable: React.FC<AccessibleDataTableProps> = ({
     const configs = {
       high: { 
         label: "Alta", 
-        className: "bg-red-100 text-red-800 border-red-200",
+        className: "bg-destructive/10 text-destructive border-destructive/20",
         sortOrder: 3 
       },
       medium: { 
         label: "Média", 
-        className: "bg-amber-100 text-amber-800 border-amber-200",
+        className: "bg-warning/10 text-warning border-warning/20",
         sortOrder: 2 
       },
       low: { 
         label: "Baixa", 
-        className: "bg-green-100 text-green-800 border-green-200",
+        className: "bg-success/10 text-success border-success/20",
         sortOrder: 1 
       }
     };

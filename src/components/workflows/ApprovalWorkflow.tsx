@@ -202,10 +202,10 @@ export default function ApprovalWorkflow() {
                           </div>
                         </div>
                         <div className="flex gap-1 shrink-0">
-                          <Button size="sm" variant="ghost" className="h-7 w-7 p-0 text-green-500 hover:text-green-600" onClick={(e) => { e.stopPropagation(); setSelectedItem(item); setActionDialog("approve"); }}>
+                          <Button size="sm" variant="ghost" className="h-7 w-7 p-0 text-success hover:text-success/80" onClick={(e) => { e.stopPropagation(); setSelectedItem(item); setActionDialog("approve"); }}>
                             <CheckCircle className="h-4 w-4" />
                           </Button>
-                          <Button size="sm" variant="ghost" className="h-7 w-7 p-0 text-red-500 hover:text-red-600" onClick={(e) => { e.stopPropagation(); setSelectedItem(item); setActionDialog("reject"); }}>
+                          <Button size="sm" variant="ghost" className="h-7 w-7 p-0 text-destructive hover:text-destructive/80" onClick={(e) => { e.stopPropagation(); setSelectedItem(item); setActionDialog("reject"); }}>
                             <XCircle className="h-4 w-4" />
                           </Button>
                         </div>
@@ -219,7 +219,7 @@ export default function ApprovalWorkflow() {
           {pendingCount === 0 && (
             <Card className="border-dashed">
               <CardContent className="p-8 text-center">
-                <CheckCircle className="h-8 w-8 mx-auto text-green-500 mb-2" />
+                <CheckCircle className="h-8 w-8 mx-auto text-success mb-2" />
                 <p className="text-sm font-medium">Todas as aprovações em dia</p>
                 <p className="text-xs text-muted-foreground">Nenhuma pendência no momento</p>
               </CardContent>

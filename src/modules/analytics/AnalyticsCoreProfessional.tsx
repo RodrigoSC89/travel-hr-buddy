@@ -953,10 +953,10 @@ Este relatório apresenta uma análise abrangente dos principais indicadores de 
 
   const getInsightTypeBadge = (type: string) => {
     const config: Record<string, { label: string; color: string }> = {
-      prediction: { label: "Previsão", color: "bg-blue-500/10 text-blue-500" },
-      recommendation: { label: "Recomendação", color: "bg-green-500/10 text-green-500" },
-      alert: { label: "Alerta", color: "bg-red-500/10 text-red-500" },
-      trend: { label: "Tendência", color: "bg-purple-500/10 text-purple-500" }
+      prediction: { label: "Previsão", color: "bg-primary/10 text-primary" },
+      recommendation: { label: "Recomendação", color: "bg-success/10 text-success" },
+      alert: { label: "Alerta", color: "bg-destructive/10 text-destructive" },
+      trend: { label: "Tendência", color: "bg-accent/10 text-accent" }
     };
     const { label, color } = config[type] || { label: type, color: "bg-muted text-muted-foreground" };
     return <Badge className={`${color} border-0`}>{label}</Badge>;
@@ -1659,9 +1659,9 @@ Este relatório apresenta uma análise abrangente dos principais indicadores de 
                             <div className="flex items-start justify-between gap-4">
                               <div className="flex items-start gap-3">
                                 <div className={`p-2 rounded-full ${
-                                  notification.type === 'success' ? 'bg-green-500/10' :
-                                  notification.type === 'warning' ? 'bg-yellow-500/10' :
-                                  notification.type === 'error' ? 'bg-red-500/10' : 'bg-blue-500/10'
+                                  notification.type === 'success' ? 'bg-success/10' :
+                                  notification.type === 'warning' ? 'bg-warning/10' :
+                                  notification.type === 'error' ? 'bg-destructive/10' : 'bg-primary/10'
                                 }`}>
                                   {getNotificationIcon(notification.type)}
                                 </div>
@@ -1767,7 +1767,7 @@ Este relatório apresenta uma análise abrangente dos principais indicadores de 
                         key={insight.id}
                         initial={{ opacity: 0, scale: 0.95 }}
                         animate={{ opacity: 1, scale: 1 }}
-                        className={`p-4 border rounded-lg space-y-3 hover:shadow-md transition-shadow ${insight.applied ? 'bg-green-500/5 border-green-500/20' : ''}`}
+                        className={`p-4 border rounded-lg space-y-3 hover:shadow-md transition-shadow ${insight.applied ? 'bg-success/5 border-success/20' : ''}`}
                       >
                         <div className="flex items-start justify-between gap-2">
                           <div className="flex items-center gap-2 flex-wrap">
@@ -1787,7 +1787,7 @@ Este relatório apresenta uma análise abrangente dos principais indicadores de 
                               <Badge variant="secondary" className="text-xs">Acionável</Badge>
                             )}
                             {insight.applied && (
-                              <Badge variant="default" className="text-xs bg-green-500">
+                              <Badge variant="default" className="text-xs bg-success">
                                 <Check className="h-3 w-3 mr-1" />
                                 Aplicado
                               </Badge>
@@ -1836,8 +1836,8 @@ Este relatório apresenta uma análise abrangente dos principais indicadores de 
                     onClick={exportToCSV}
                   >
                     <CardContent className="pt-6 text-center">
-                      <div className="p-4 bg-green-500/10 rounded-full w-fit mx-auto mb-4 group-hover:bg-green-500/20 transition-colors">
-                        <Download className="h-10 w-10 text-green-500" />
+                      <div className="p-4 bg-success/10 rounded-full w-fit mx-auto mb-4 group-hover:bg-success/20 transition-colors">
+                        <Download className="h-10 w-10 text-success" />
                       </div>
                       <h3 className="font-semibold text-lg">Exportar CSV</h3>
                       <p className="text-sm text-muted-foreground mt-1">
@@ -1851,11 +1851,11 @@ Este relatório apresenta uma análise abrangente dos principais indicadores de 
                     onClick={!isExportingPDF ? exportToPDF : undefined}
                   >
                     <CardContent className="pt-6 text-center">
-                      <div className="p-4 bg-red-500/10 rounded-full w-fit mx-auto mb-4 group-hover:bg-red-500/20 transition-colors">
+                      <div className="p-4 bg-destructive/10 rounded-full w-fit mx-auto mb-4 group-hover:bg-destructive/20 transition-colors">
                         {isExportingPDF ? (
-                          <Loader2 className="h-10 w-10 text-red-500 animate-spin" />
+                          <Loader2 className="h-10 w-10 text-destructive animate-spin" />
                         ) : (
-                          <FileDown className="h-10 w-10 text-red-500" />
+                          <FileDown className="h-10 w-10 text-destructive" />
                         )}
                       </div>
                       <h3 className="font-semibold text-lg">Relatório PDF</h3>
@@ -1870,11 +1870,11 @@ Este relatório apresenta uma análise abrangente dos principais indicadores de 
                     onClick={!isGeneratingInsights ? generateAIInsights : undefined}
                   >
                     <CardContent className="pt-6 text-center">
-                      <div className="p-4 bg-purple-500/10 rounded-full w-fit mx-auto mb-4 group-hover:bg-purple-500/20 transition-colors">
+                      <div className="p-4 bg-accent/10 rounded-full w-fit mx-auto mb-4 group-hover:bg-accent/20 transition-colors">
                         {isGeneratingInsights ? (
-                          <Loader2 className="h-10 w-10 text-purple-500 animate-spin" />
+                          <Loader2 className="h-10 w-10 text-accent animate-spin" />
                         ) : (
-                          <Brain className="h-10 w-10 text-purple-500" />
+                          <Brain className="h-10 w-10 text-accent" />
                         )}
                       </div>
                       <h3 className="font-semibold text-lg">Análise com IA</h3>

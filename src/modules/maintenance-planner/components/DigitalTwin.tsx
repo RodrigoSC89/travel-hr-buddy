@@ -155,11 +155,11 @@ const generateTelemetry = (): TelemetryData => {
 const SystemCard = ({ system }: { system: SystemStatus }) => {
   const getStatusColor = (status: string) => {
     switch (status) {
-      case "operational": return "bg-green-500";
-      case "warning": return "bg-yellow-500";
-      case "critical": return "bg-red-500";
-      case "offline": return "bg-gray-500";
-      default: return "bg-gray-500";
+      case "operational": return "bg-success";
+      case "warning": return "bg-warning";
+      case "critical": return "bg-destructive";
+      case "offline": return "bg-muted-foreground";
+      default: return "bg-muted-foreground";
     }
   };
 
@@ -301,9 +301,9 @@ const VesselVisualization = ({ telemetry }: { telemetry: TelemetryData }) => {
               <div
                 key={sys.id}
                 className={`w-3 h-3 rounded-full ${
-                  sys.status === "operational" ? "bg-green-500" :
-                  sys.status === "warning" ? "bg-yellow-500 animate-pulse" :
-                  "bg-red-500 animate-pulse"
+                  sys.status === "operational" ? "bg-success" :
+                  sys.status === "warning" ? "bg-warning animate-pulse" :
+                  "bg-destructive animate-pulse"
                 }`}
                 title={sys.name}
               />

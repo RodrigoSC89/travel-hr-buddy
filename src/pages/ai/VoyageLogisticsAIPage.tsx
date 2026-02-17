@@ -255,7 +255,7 @@ export default function VoyageLogisticsAIPage() {
                     {portCalls.map((call) => (
                       <div key={`${call.port}-${call.vessel}-${call.arrival}`} className="flex items-center justify-between p-4 border rounded-lg">
                         <div className="flex items-center gap-4">
-                          <Anchor className="h-8 w-8 text-blue-500" />
+                          <Anchor className="h-8 w-8 text-primary" />
                           <div>
                             <p className="font-medium">{call.port}</p>
                             <p className="text-sm text-muted-foreground">{call.vessel}</p>

@@ -144,11 +144,11 @@ export const FunctionalReportsDashboard: React.FC = () => {
   const getStatusIcon = (status: Report["status"]) => {
     switch (status) {
     case "completed":
-      return <CheckCircle className="h-4 w-4 text-green-600" />;
+      return <CheckCircle className="h-4 w-4 text-success" />;
     case "generating":
-      return <RefreshCw className="h-4 w-4 text-blue-600 animate-spin" />;
+      return <RefreshCw className="h-4 w-4 text-primary animate-spin" />;
     case "failed":
-      return <AlertCircle className="h-4 w-4 text-red-600" />;
+      return <AlertCircle className="h-4 w-4 text-destructive" />;
     }
   };
 
@@ -289,7 +289,7 @@ export const FunctionalReportsDashboard: React.FC = () => {
               <div className="grid gap-4 md:grid-cols-4">
                 <div className="space-y-2">
                   <div className="flex items-center gap-2">
-                    <FileText className="h-4 w-4 text-blue-500" />
+                    <FileText className="h-4 w-4 text-primary" />
                     <span className="text-sm font-medium">Total de Relatórios</span>
                   </div>
                   <p className="text-2xl font-bold">24</p>
@@ -298,7 +298,7 @@ export const FunctionalReportsDashboard: React.FC = () => {
                 
                 <div className="space-y-2">
                   <div className="flex items-center gap-2">
-                    <TrendingUp className="h-4 w-4 text-green-500" />
+                    <TrendingUp className="h-4 w-4 text-success" />
                     <span className="text-sm font-medium">Concluídos</span>
                   </div>
                   <p className="text-2xl font-bold">22</p>
@@ -307,7 +307,7 @@ export const FunctionalReportsDashboard: React.FC = () => {
                 
                 <div className="space-y-2">
                   <div className="flex items-center gap-2">
-                    <Clock className="h-4 w-4 text-orange-500" />
+                    <Clock className="h-4 w-4 text-warning" />
                     <span className="text-sm font-medium">Tempo Médio</span>
                   </div>
                   <p className="text-2xl font-bold">2.4min</p>
@@ -316,7 +316,7 @@ export const FunctionalReportsDashboard: React.FC = () => {
                 
                 <div className="space-y-2">
                   <div className="flex items-center gap-2">
-                    <BarChart3 className="h-4 w-4 text-purple-500" />
+                    <BarChart3 className="h-4 w-4 text-accent" />
                     <span className="text-sm font-medium">Mais Popular</span>
                   </div>
                   <p className="text-lg font-bold">Analytics</p>

@@ -533,7 +533,7 @@ export default function PeopleAnalyticsPage() {
             <div className="space-y-2">
               <p className="text-sm text-muted-foreground">Turnover Previsto</p>
               <p className="text-3xl font-bold">2.1%</p>
-              <p className="text-sm text-amber-500 flex items-center gap-1">
+              <p className="text-sm text-warning flex items-center gap-1">
                 <ArrowUpRight className="h-4 w-4" />+0.3% vs atual
               </p>
             </div>
@@ -547,7 +547,7 @@ export default function PeopleAnalyticsPage() {
             <div className="space-y-2">
               <p className="text-sm text-muted-foreground">Custo Total RH</p>
               <p className="text-3xl font-bold">R$ 3.1M</p>
-              <p className="text-sm text-amber-500 flex items-center gap-1">
+              <p className="text-sm text-warning flex items-center gap-1">
                 <ArrowUpRight className="h-4 w-4" />+5% vs atual
               </p>
             </div>

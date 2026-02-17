@@ -127,7 +127,7 @@ export default function MaritimeCommandCenter() {
           ].map((tab) => (
             <TabsTrigger key={tab.value} value={tab.value} className={`flex items-center gap-1.5 text-xs ${tab.sparkle ? 'bg-gradient-to-r from-blue-500/10 to-cyan-500/10' : ''}`}>
               <tab.icon className="h-3.5 w-3.5" />{tab.label}
-              {tab.sparkle && <Sparkles className="h-3 w-3 text-blue-500" />}
+              {tab.sparkle && <Sparkles className="h-3 w-3 text-primary" />}
             </TabsTrigger>
           ))}
         </TabsList>

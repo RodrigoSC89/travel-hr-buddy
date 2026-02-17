@@ -169,7 +169,7 @@ export default function RealtimeTrackingMap() {
         <Card>
           <CardContent className="p-4">
             <div className="flex items-center gap-3">
-              <Navigation className="h-8 w-8 text-green-500" />
+              <Navigation className="h-8 w-8 text-success" />
               <div>
                 <p className="text-2xl font-bold">{vessels.filter((v) => v.status === "underway").length}</p>
                 <p className="text-xs text-muted-foreground">Navegando</p>
@@ -180,7 +180,7 @@ export default function RealtimeTrackingMap() {
         <Card>
           <CardContent className="p-4">
             <div className="flex items-center gap-3">
-              <Anchor className="h-8 w-8 text-blue-500" />
+              <Anchor className="h-8 w-8 text-primary" />
               <div>
                 <p className="text-2xl font-bold">{vessels.filter((v) => v.status === "moored" || v.status === "anchored").length}</p>
                 <p className="text-xs text-muted-foreground">Em Porto</p>
@@ -191,7 +191,7 @@ export default function RealtimeTrackingMap() {
         <Card>
           <CardContent className="p-4">
             <div className="flex items-center gap-3">
-              <Satellite className="h-8 w-8 text-purple-500" />
+              <Satellite className="h-8 w-8 text-accent" />
               <div>
                 <p className="text-2xl font-bold">
                   {vessels.length > 0
@@ -206,7 +206,7 @@ export default function RealtimeTrackingMap() {
         <Card>
           <CardContent className="p-4">
             <div className="flex items-center gap-3">
-              <AlertTriangle className="h-8 w-8 text-amber-500" />
+              <AlertTriangle className="h-8 w-8 text-warning" />
               <div>
                 <p className="text-2xl font-bold">{alerts.length}</p>
                 <p className="text-xs text-muted-foreground">Alertas Ativos</p>
@@ -341,7 +341,7 @@ export default function RealtimeTrackingMap() {
                           <span>{vessel.flag}</span>
                           <span className="font-medium text-sm">{vessel.name}</span>
                         </div>
-                        <Signal className={`h-3 w-3 ${vessel.signalQuality > 90 ? "text-green-500" : vessel.signalQuality > 70 ? "text-amber-500" : "text-red-500"}`} />
+                        <Signal className={`h-3 w-3 ${vessel.signalQuality > 90 ? "text-success" : vessel.signalQuality > 70 ? "text-warning" : "text-destructive"}`} />
                       </div>
                       <div className="flex items-center justify-between mt-1 text-xs text-muted-foreground">
                         <span>{vessel.speed} kn</span>

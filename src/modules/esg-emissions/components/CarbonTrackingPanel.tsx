@@ -366,9 +366,9 @@ export const CarbonTrackingPanel: React.FC = () => {
                       <TableCell className="text-center">{getCIIBadge(record.cii_rating)}</TableCell>
                       <TableCell className="text-center">
                         {record.verified ? (
-                          <CheckCircle2 className="h-5 w-5 text-green-500 mx-auto" />
+                          <CheckCircle2 className="h-5 w-5 text-success mx-auto" />
                         ) : (
-                          <Clock className="h-5 w-5 text-yellow-500 mx-auto" />
+                          <Clock className="h-5 w-5 text-warning mx-auto" />
                         )}
                       </TableCell>
                       <TableCell>
@@ -469,9 +469,9 @@ export const CarbonTrackingPanel: React.FC = () => {
                       <TableCell className="text-center">{fuel.tier}</TableCell>
                       <TableCell className="text-center">
                         {parseFloat(fuel.sulfur) <= 0.1 ? (
-                          <CheckCircle2 className="h-5 w-5 text-green-500 mx-auto" />
+                          <CheckCircle2 className="h-5 w-5 text-success mx-auto" />
                         ) : (
-                          <AlertTriangle className="h-5 w-5 text-yellow-500 mx-auto" />
+                          <AlertTriangle className="h-5 w-5 text-warning mx-auto" />
                         )}
                       </TableCell>
                     </TableRow>

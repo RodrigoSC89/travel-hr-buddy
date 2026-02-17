@@ -405,9 +405,9 @@ export default function AcademyDashboard() {
               <div>
                 <p className="text-sm text-muted-foreground">Taxa de Conclusão</p>
                 <p className="text-2xl font-bold">{stats.avgProgress}%</p>
-                <p className="text-xs text-green-600">↑ 3.2% vs mês anterior</p>
+                <p className="text-xs text-success">↑ 3.2% vs mês anterior</p>
               </div>
-              <CheckCircle2 className="h-8 w-8 text-green-500 opacity-80" />
+              <CheckCircle2 className="h-8 w-8 text-success opacity-80" />
             </div>
           </CardContent>
         </Card>
@@ -418,9 +418,9 @@ export default function AcademyDashboard() {
               <div>
                 <p className="text-sm text-muted-foreground">Certificações Vencendo</p>
                 <p className="text-2xl font-bold">23</p>
-                <p className="text-xs text-amber-600">Próximos 90 dias</p>
+                <p className="text-xs text-warning">Próximos 90 dias</p>
               </div>
-              <AlertTriangle className="h-8 w-8 text-amber-500 opacity-80" />
+              <AlertTriangle className="h-8 w-8 text-warning opacity-80" />
             </div>
           </CardContent>
         </Card>
@@ -431,9 +431,9 @@ export default function AcademyDashboard() {
               <div>
                 <p className="text-sm text-muted-foreground">Cursos Ativos</p>
                 <p className="text-2xl font-bold">{stats.totalCourses}</p>
-                <p className="text-xs text-purple-600">{stats.certificatesEarned} certificados</p>
+                <p className="text-xs text-accent">{stats.certificatesEarned} certificados</p>
               </div>
-              <GraduationCap className="h-8 w-8 text-purple-500 opacity-80" />
+              <GraduationCap className="h-8 w-8 text-accent opacity-80" />
             </div>
           </CardContent>
         </Card>
@@ -476,7 +476,7 @@ export default function AcademyDashboard() {
                 }`}
               >
                 {suggestion.type === "gap" && <AlertTriangle className="h-5 w-5 text-destructive" />}
-                {suggestion.type === "recommendation" && <Target className="h-5 w-5 text-amber-500" />}
+                {suggestion.type === "recommendation" && <Target className="h-5 w-5 text-warning" />}
                 {suggestion.type === "optimization" && <TrendingUp className="h-5 w-5 text-muted-foreground" />}
                 <span className="flex-1 text-sm">{suggestion.message}</span>
                 <Button size="sm" variant="outline" onClick={() => handleSuggestionAction(suggestion.type)}>
@@ -768,7 +768,7 @@ export default function AcademyDashboard() {
             <Card className="border-l-4 border-l-amber-500">
               <CardContent className="p-4">
                 <div className="flex items-center gap-2 mb-2">
-                  <Clock className="h-5 w-5 text-amber-500" />
+                  <Clock className="h-5 w-5 text-warning" />
                   <span className="font-medium">Vencendo em 60 dias</span>
                 </div>
                 <p className="text-2xl font-bold text-amber-600">15</p>
@@ -1152,12 +1152,12 @@ export default function AcademyDashboard() {
                 <p className="text-xs text-muted-foreground">Duração</p>
               </div>
               <div className="p-3 bg-muted/50 rounded-lg text-center">
-                <Users className="h-5 w-5 mx-auto mb-1 text-blue-500" />
+                <Users className="h-5 w-5 mx-auto mb-1 text-primary" />
                 <p className="text-lg font-bold">{selectedCourse?.enrolledCount}</p>
                 <p className="text-xs text-muted-foreground">Inscritos</p>
               </div>
               <div className="p-3 bg-muted/50 rounded-lg text-center">
-                <Award className="h-5 w-5 mx-auto mb-1 text-yellow-500" />
+                <Award className="h-5 w-5 mx-auto mb-1 text-warning" />
                 <p className="text-lg font-bold">⭐ {selectedCourse?.rating?.toFixed(1)}</p>
                 <p className="text-xs text-muted-foreground">Avaliação</p>
               </div>

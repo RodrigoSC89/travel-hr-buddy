@@ -343,9 +343,9 @@ export function AppSidebar({ activeItem, onItemChange }: AppSidebarProps) {
             </span>
             <span className="flex items-center gap-1 text-[10px]">
               {isOnline ? (
-                <><Wifi className="h-3 w-3 text-green-500" /><span className="text-green-500">Online</span></>
+                <><Wifi className="h-3 w-3 text-success" /><span className="text-success">Online</span></>
               ) : (
-                <><WifiOff className="h-3 w-3 text-amber-500" /><span className="text-amber-500">Offline</span></>
+                <><WifiOff className="h-3 w-3 text-warning" /><span className="text-warning">Offline</span></>
               )}
             </span>
           </div>
