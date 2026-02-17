@@ -193,8 +193,8 @@ export const AuditTrailViewer: React.FC = () => {
 
               return (
                 <Card key={log.id} className="border-l-4" style={{
-                  borderLeftColor: log.result === "success" ? "#22c55e" : 
-                    log.result === "failure" || log.result === "denied" ? "#ef4444" : "#eab308"
+                  borderLeftColor: log.result === "success" ? "hsl(var(--success))" : 
+                    log.result === "failure" || log.result === "denied" ? "hsl(var(--destructive))" : "hsl(var(--warning))"
                 }}>
                   <CardContent className="p-4">
                     <div className="flex items-start justify-between gap-4">

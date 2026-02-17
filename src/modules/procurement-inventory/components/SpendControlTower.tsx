@@ -35,12 +35,12 @@
  }
  
  const spendCategories: SpendCategory[] = [
-   { name: "Combustível", amount: 2450000, budget: 2800000, change: -5.2, color: "bg-blue-500" },
-   { name: "Manutenção", amount: 890000, budget: 1000000, change: 12.3, color: "bg-orange-500" },
-   { name: "Tripulação", amount: 1200000, budget: 1200000, change: 0, color: "bg-green-500" },
-   { name: "Provisões", amount: 180000, budget: 200000, change: -8.1, color: "bg-purple-500" },
-   { name: "Peças/Spare Parts", amount: 450000, budget: 400000, change: 15.7, color: "bg-red-500" },
-   { name: "Serviços", amount: 320000, budget: 350000, change: -2.4, color: "bg-cyan-500" },
+   { name: "Combustível", amount: 2450000, budget: 2800000, change: -5.2, color: "bg-primary" },
+   { name: "Manutenção", amount: 890000, budget: 1000000, change: 12.3, color: "bg-warning" },
+   { name: "Tripulação", amount: 1200000, budget: 1200000, change: 0, color: "bg-success" },
+   { name: "Provisões", amount: 180000, budget: 200000, change: -8.1, color: "bg-accent" },
+   { name: "Peças/Spare Parts", amount: 450000, budget: 400000, change: 15.7, color: "bg-destructive" },
+   { name: "Serviços", amount: 320000, budget: 350000, change: -2.4, color: "bg-info" },
  ];
  
  const anomalies: SpendAnomaly[] = [
@@ -240,10 +240,10 @@
                      <Badge variant="destructive" className="mt-1">+{anomaly.deviation.toFixed(1)}%</Badge>
                    </div>
                  </div>
-                 <div className="p-3 rounded-lg bg-purple-500/10 border border-purple-500/20">
+                 <div className="p-3 rounded-lg bg-accent/10 border border-accent/20">
                    <div className="flex items-center gap-2 mb-1">
-                     <Sparkles className="h-4 w-4 text-purple-500" />
-                     <span className="text-xs font-medium text-purple-600 dark:text-purple-400">Recomendação IA</span>
+                     <Sparkles className="h-4 w-4 text-accent-foreground" />
+                     <span className="text-xs font-medium text-accent-foreground">Recomendação IA</span>
                    </div>
                    <p className="text-sm">{anomaly.aiRecommendation}</p>
                  </div>

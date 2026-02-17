@@ -25,8 +25,8 @@ const ROLES: { value: UserRole; label: string; icon: typeof Shield; color: strin
   { value: "officer", label: "Oficial", icon: Shield, color: "bg-muted text-muted-foreground" },
   { value: "crew_member", label: "Tripulante", icon: Users, color: "bg-muted text-muted-foreground" },
   { value: "employee", label: "Funcionário", icon: Users, color: "bg-muted text-muted-foreground" },
-  { value: "finance", label: "Financeiro", icon: Briefcase, color: "bg-emerald-500/10 text-emerald-700" },
-  { value: "auditor", label: "Auditor", icon: Shield, color: "bg-violet-500/10 text-violet-700" },
+  { value: "finance", label: "Financeiro", icon: Briefcase, color: "bg-success/10 text-success" },
+  { value: "auditor", label: "Auditor", icon: Shield, color: "bg-accent/10 text-accent-foreground" },
 ];
 
 interface UserWithRole {

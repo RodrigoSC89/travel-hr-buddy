@@ -48,7 +48,7 @@ function AgentCard({ agent }: { agent: AgentContext }) {
             <div className={cn("p-2.5 rounded-lg", colors.bg)}>
               <IconComponent className={cn("h-6 w-6", colors.text)} />
             </div>
-            <Badge variant="outline" className="text-[10px] bg-green-500/10 text-green-600 border-green-500/20">
+            <Badge variant="outline" className="text-[10px] bg-success/10 text-success border-success/20">
               Online
             </Badge>
           </div>
@@ -103,7 +103,7 @@ export default function AIAgentDirectory() {
             </p>
           </div>
         </div>
-        <Badge variant="outline" className="bg-green-500/10 text-green-600 border-green-500/20">
+        <Badge variant="outline" className="bg-success/10 text-success border-success/20">
           {agents.length} Online
         </Badge>
       </div>

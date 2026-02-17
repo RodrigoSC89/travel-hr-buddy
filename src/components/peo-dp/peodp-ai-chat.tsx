@@ -313,8 +313,8 @@ Por favor, tente novamente ou consulte diretamente:
     <div className="space-y-4">
       <div className="flex items-center justify-between">
         <div className="flex items-center gap-3">
-          <div className="p-2 bg-gradient-to-br from-blue-500/20 to-purple-500/20 rounded-lg">
-            <Brain className="h-6 w-6 text-blue-500" />
+          <div className="p-2 bg-gradient-to-br from-primary/20 to-accent/20 rounded-lg">
+            <Brain className="h-6 w-6 text-primary" />
           </div>
           <div>
             <h3 className="font-semibold flex items-center gap-2">
@@ -396,8 +396,8 @@ Por favor, tente novamente ou consulte diretamente:
                     <div key={message.id} className={`flex ${message.role === "user" ? "justify-end" : "justify-start"}`}>
                       <div className={`max-w-[85%] ${message.role === "user" ? "order-2" : ""}`}>
                         <div className={`flex items-start gap-2 ${message.role === "user" ? "flex-row-reverse" : ""}`}>
-                          <div className={`p-2 rounded-full shrink-0 ${message.role === "user" ? "bg-primary" : "bg-blue-500/20"}`}>
-                            {message.role === "user" ? <User className="h-4 w-4 text-primary-foreground" /> : <Bot className="h-4 w-4 text-blue-500" />}
+                          <div className={`p-2 rounded-full shrink-0 ${message.role === "user" ? "bg-primary" : "bg-primary/20"}`}>
+                            {message.role === "user" ? <User className="h-4 w-4 text-primary-foreground" /> : <Bot className="h-4 w-4 text-primary" />}
                           </div>
                           <div className={`p-3 rounded-lg ${message.role === "user" ? "bg-primary text-primary-foreground" : "bg-muted"}`}>
                           <div 
@@ -438,7 +438,7 @@ Por favor, tente novamente ou consulte diretamente:
                   {isLoading && (
                     <div className="flex justify-start">
                       <div className="flex items-center gap-2 p-3 rounded-lg bg-muted">
-                        <RefreshCw className="h-4 w-4 animate-spin text-blue-500" />
+                        <RefreshCw className="h-4 w-4 animate-spin text-primary" />
                         <span className="text-sm">Consultando base de conhecimento PEO-DP...</span>
                       </div>
                     </div>

@@ -468,14 +468,14 @@ export default function InventorySection({ searchQuery }: InventorySectionProps)
               const items = inventory.filter(i => i.location.startsWith(loc));
               const hasAlerts = items.some(i => i.status === "critical" || i.status === "low");
               return (
-                <Card key={loc} className={hasAlerts ? "border-amber-500/50" : ""}>
+                <Card key={loc} className={hasAlerts ? "border-warning/50" : ""}>
                   <CardHeader className="pb-2">
                     <CardTitle className="flex items-center justify-between text-lg">
                       <span className="flex items-center gap-2">
                         <Warehouse className="h-5 w-5" />
                         Setor {loc}
                       </span>
-                      {hasAlerts && <AlertTriangle className="h-4 w-4 text-amber-500" />}
+                      {hasAlerts && <AlertTriangle className="h-4 w-4 text-warning" />}
                     </CardTitle>
                   </CardHeader>
                   <CardContent>

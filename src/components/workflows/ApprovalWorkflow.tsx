@@ -35,11 +35,11 @@ interface ApprovalItem {
 }
 
 const TYPE_CONFIG = {
-  purchase_order: { icon: <FileText className="h-4 w-4" />, label: "Ordem de Compra", color: "bg-blue-500" },
-  travel: { icon: <Ship className="h-4 w-4" />, label: "Viagem", color: "bg-purple-500" },
-  expense: { icon: <DollarSign className="h-4 w-4" />, label: "Despesa", color: "bg-green-500" },
-  leave: { icon: <User className="h-4 w-4" />, label: "Licença", color: "bg-amber-500" },
-  maintenance: { icon: <AlertTriangle className="h-4 w-4" />, label: "Manutenção", color: "bg-red-500" },
+  purchase_order: { icon: <FileText className="h-4 w-4" />, label: "Ordem de Compra", color: "bg-primary" },
+  travel: { icon: <Ship className="h-4 w-4" />, label: "Viagem", color: "bg-accent" },
+  expense: { icon: <DollarSign className="h-4 w-4" />, label: "Despesa", color: "bg-success" },
+  leave: { icon: <User className="h-4 w-4" />, label: "Licença", color: "bg-warning" },
+  maintenance: { icon: <AlertTriangle className="h-4 w-4" />, label: "Manutenção", color: "bg-destructive" },
 };
 
 const APPROVAL_THRESHOLDS = [

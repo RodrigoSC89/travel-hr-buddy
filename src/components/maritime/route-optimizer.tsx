@@ -354,27 +354,27 @@ export const RealTimeRouteOptimizer: React.FC = () => {
                 </div>
 
                 {/* Weather Conditions */}
-                <div className="flex items-center gap-4 p-3 bg-blue-50 dark:bg-blue-950 rounded-lg">
+                <div className="flex items-center gap-4 p-3 bg-info/10 rounded-lg">
                   <div className="flex items-center gap-2">
-                    <Wind className="h-4 w-4 text-blue-600" />
+                    <Wind className="h-4 w-4 text-info" />
                     <span className="text-sm">{opt.weatherConditions.windSpeed} nós</span>
                   </div>
                   <div className="flex items-center gap-2">
-                    <Waves className="h-4 w-4 text-blue-600" />
+                    <Waves className="h-4 w-4 text-info" />
                     <span className="text-sm">{opt.weatherConditions.waveHeight}m</span>
                   </div>
                   <div className="flex items-center gap-2">
-                    <AlertTriangle className="h-4 w-4 text-blue-600" />
+                    <AlertTriangle className="h-4 w-4 text-info" />
                     <span className="text-sm">Vis: {opt.weatherConditions.visibility}nm</span>
                   </div>
                 </div>
 
                 {/* Recommendation */}
-                <div className="bg-blue-50 dark:bg-blue-950 p-3 rounded-lg">
-                  <div className="text-sm font-medium text-blue-900 dark:text-blue-100 mb-1">
+                <div className="bg-info/10 p-3 rounded-lg">
+                  <div className="text-sm font-medium text-info mb-1">
                     Recomendação
                   </div>
-                  <div className="text-sm text-blue-700 dark:text-blue-300">
+                  <div className="text-sm text-info/80">
                     {opt.recommendation}
                   </div>
                 </div>
