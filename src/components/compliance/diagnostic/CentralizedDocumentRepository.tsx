@@ -394,7 +394,7 @@ export function CentralizedDocumentRepository() {
                   <Card 
                     key={doc.id} 
                     className={`cursor-pointer hover:bg-muted/50 transition-colors ${
-                      doc.status === 'outdated' ? 'border-amber-300' : ''
+                      doc.status === 'outdated' ? 'border-warning/50' : ''
                     }`}
                     onClick={() => setSelectedDoc(doc)}
                   >

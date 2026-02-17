@@ -115,7 +115,7 @@ const CircuitCard: React.FC<CircuitCardProps> = ({
           <div className="flex items-center gap-1">
             <AlertTriangle className="h-3 w-3 text-muted-foreground" />
             <span className="text-muted-foreground">Falhas:</span>
-            <span className={failures > 0 ? 'text-red-500' : ''}>
+            <span className={failures > 0 ? 'text-destructive' : ''}>
               {failures}/{totalFailures}
             </span>
           </div>
@@ -176,7 +176,7 @@ export const CircuitBreakerDashboard: React.FC = () => {
         <Card>
           <CardContent className="pt-4">
             <div className="flex items-center gap-2">
-              <CheckCircle className="h-5 w-5 text-green-500" />
+              <CheckCircle className="h-5 w-5 text-success" />
               <div>
                 <p className="text-2xl font-bold">
                   {circuits.filter(c => c.metrics.state === 'CLOSED').length}
@@ -189,7 +189,7 @@ export const CircuitBreakerDashboard: React.FC = () => {
         <Card>
           <CardContent className="pt-4">
             <div className="flex items-center gap-2">
-              <AlertTriangle className="h-5 w-5 text-yellow-500" />
+              <AlertTriangle className="h-5 w-5 text-warning" />
               <div>
                 <p className="text-2xl font-bold">
                   {circuits.filter(c => c.metrics.state === 'HALF_OPEN').length}
@@ -202,7 +202,7 @@ export const CircuitBreakerDashboard: React.FC = () => {
         <Card>
           <CardContent className="pt-4">
             <div className="flex items-center gap-2">
-              <ShieldAlert className="h-5 w-5 text-red-500" />
+              <ShieldAlert className="h-5 w-5 text-destructive" />
               <div>
                 <p className="text-2xl font-bold">
                   {circuits.filter(c => c.metrics.state === 'OPEN').length}

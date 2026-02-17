@@ -120,8 +120,8 @@ export function PremiumModuleShell({
                     <Badge 
                       variant="secondary" 
                       className={`gap-1 ${
-                        aiStatus === "active" ? "bg-emerald-500/10 text-emerald-600" :
-                        aiStatus === "learning" ? "bg-amber-500/10 text-amber-600" :
+                        aiStatus === "active" ? "bg-success/10 text-success" :
+                        aiStatus === "learning" ? "bg-warning/10 text-warning" :
                         "bg-muted text-muted-foreground"
                       }`}
                     >

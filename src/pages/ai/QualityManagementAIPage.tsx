@@ -110,15 +110,15 @@ export default function QualityManagementAIPage() {
                 >
                   <div className="flex items-center gap-4">
                     <div className={`p-2 rounded-lg ${
-                      ncr.status === 'closed' ? 'bg-emerald-500/10' : 
-                      ncr.status === 'in_progress' ? 'bg-blue-500/10' : 'bg-amber-500/10'
+                      ncr.status === 'closed' ? 'bg-success/10' : 
+                      ncr.status === 'in_progress' ? 'bg-primary/10' : 'bg-warning/10'
                     }`}>
                       {ncr.status === 'closed' ? (
-                        <CheckCircle className="h-5 w-5 text-emerald-500" />
+                        <CheckCircle className="h-5 w-5 text-success" />
                       ) : ncr.status === 'in_progress' ? (
-                        <Clock className="h-5 w-5 text-blue-500" />
+                        <Clock className="h-5 w-5 text-primary" />
                       ) : (
-                        <AlertTriangle className="h-5 w-5 text-amber-500" />
+                        <AlertTriangle className="h-5 w-5 text-warning" />
                       )}
                     </div>
                     <div>

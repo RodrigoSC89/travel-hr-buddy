@@ -481,7 +481,7 @@ export const OrganizationSetupWizard: React.FC = () => {
                     isActive
                       ? "border-primary bg-primary/5"
                       : isCompleted
-                        ? "border-green-200 bg-green-50"
+                        ? "border-success/30 bg-success/5"
                         : "border-border"
                   }`}
                 >
@@ -491,7 +491,7 @@ export const OrganizationSetupWizard: React.FC = () => {
                         isActive
                           ? "bg-primary text-primary-foreground"
                           : isCompleted
-                            ? "bg-green-500 text-azure-50"
+                            ? "bg-success text-success-foreground"
                             : "bg-muted text-muted-foreground"
                       }`}
                     >

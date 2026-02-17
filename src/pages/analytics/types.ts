@@ -49,7 +49,7 @@ export interface FleetMetrics {
   environmental_score: number;
 }
 
-export const CHART_COLORS = ["#3b82f6", "#10b981", "#f59e0b", "#ef4444", "#8b5cf6", "#ec4899", "#06b6d4", "#84cc16"];
+export const CHART_COLORS = ["hsl(var(--primary))", "hsl(var(--success))", "hsl(var(--warning))", "hsl(var(--destructive))", "hsl(var(--accent))", "hsl(var(--secondary))", "hsl(var(--info))", "hsl(var(--chart-5))"];
 
 export const REVENUE_DATA = [
   { month: "Jan", receita: 45000, custos: 28000, lucro: 17000 },
@@ -95,9 +95,9 @@ export const MAINTENANCE_DATA = [
 ];
 
 export const RISK_DATA = [
-  { name: "Baixo Risco", value: 65, color: "#10b981" },
-  { name: "Médio Risco", value: 25, color: "#f59e0b" },
-  { name: "Alto Risco", value: 10, color: "#ef4444" },
+  { name: "Baixo Risco", value: 65, color: "hsl(var(--success))" },
+  { name: "Médio Risco", value: 25, color: "hsl(var(--warning))" },
+  { name: "Alto Risco", value: 10, color: "hsl(var(--destructive))" },
 ];
 
 export const MODEL_ACCURACY = {
