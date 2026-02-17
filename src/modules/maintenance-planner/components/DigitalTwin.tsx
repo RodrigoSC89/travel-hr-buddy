@@ -420,10 +420,10 @@ export default function DigitalTwin() {
 
       {/* Alerts */}
       {criticalSystems.length > 0 && (
-        <Card className="border-yellow-500/50 bg-yellow-500/5">
+        <Card className="border-warning/50 bg-warning/5">
           <CardContent className="p-3">
             <div className="flex items-center gap-2">
-              <AlertTriangle className="h-4 w-4 text-yellow-500" />
+              <AlertTriangle className="h-4 w-4 text-warning" />
               <span className="text-sm font-medium">
                 {criticalSystems.length} sistema(s) requerem atenção
               </span>

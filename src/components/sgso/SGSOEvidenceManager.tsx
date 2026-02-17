@@ -669,32 +669,32 @@ export const SGSOEvidenceManager: React.FC = () => {
 
       {/* Summary Stats */}
       <div className="grid grid-cols-2 md:grid-cols-4 gap-4">
-        <Card className="bg-gradient-to-br from-green-50 to-green-100 dark:from-green-950/30 dark:to-green-900/20 border-green-200">
+        <Card className="bg-gradient-to-br from-success/10 to-success/5 border-success/20">
           <CardContent className="p-4 text-center">
-            <CheckCircle className="h-8 w-8 text-green-600 mx-auto mb-2" />
-            <p className="text-2xl font-bold text-green-700">{evidences.filter(e => e.compliance_status === 'compliant').length}</p>
-            <p className="text-sm text-green-600">Conformes</p>
+            <CheckCircle className="h-8 w-8 text-success mx-auto mb-2" />
+            <p className="text-2xl font-bold text-success">{evidences.filter(e => e.compliance_status === 'compliant').length}</p>
+            <p className="text-sm text-success">Conformes</p>
           </CardContent>
         </Card>
-        <Card className="bg-gradient-to-br from-yellow-50 to-yellow-100 dark:from-yellow-950/30 dark:to-yellow-900/20 border-yellow-200">
+        <Card className="bg-gradient-to-br from-warning/10 to-warning/5 border-warning/20">
           <CardContent className="p-4 text-center">
-            <AlertCircle className="h-8 w-8 text-yellow-600 mx-auto mb-2" />
-            <p className="text-2xl font-bold text-yellow-700">{evidences.filter(e => e.compliance_status === 'partial').length}</p>
-            <p className="text-sm text-yellow-600">Parciais</p>
+            <AlertCircle className="h-8 w-8 text-warning mx-auto mb-2" />
+            <p className="text-2xl font-bold text-warning">{evidences.filter(e => e.compliance_status === 'partial').length}</p>
+            <p className="text-sm text-warning">Parciais</p>
           </CardContent>
         </Card>
-        <Card className="bg-gradient-to-br from-red-50 to-red-100 dark:from-red-950/30 dark:to-red-900/20 border-red-200">
+        <Card className="bg-gradient-to-br from-destructive/10 to-destructive/5 border-destructive/20">
           <CardContent className="p-4 text-center">
-            <XCircle className="h-8 w-8 text-red-600 mx-auto mb-2" />
-            <p className="text-2xl font-bold text-red-700">{evidences.filter(e => e.compliance_status === 'non_compliant').length}</p>
-            <p className="text-sm text-red-600">Não Conformes</p>
+            <XCircle className="h-8 w-8 text-destructive mx-auto mb-2" />
+            <p className="text-2xl font-bold text-destructive">{evidences.filter(e => e.compliance_status === 'non_compliant').length}</p>
+            <p className="text-sm text-destructive">Não Conformes</p>
           </CardContent>
         </Card>
-        <Card className="bg-gradient-to-br from-blue-50 to-blue-100 dark:from-blue-950/30 dark:to-blue-900/20 border-blue-200">
+        <Card className="bg-gradient-to-br from-info/10 to-info/5 border-info/20">
           <CardContent className="p-4 text-center">
-            <ScanLine className="h-8 w-8 text-blue-600 mx-auto mb-2" />
-            <p className="text-2xl font-bold text-blue-700">{evidences.filter(e => e.ocr_text).length}</p>
-            <p className="text-sm text-blue-600">Com OCR</p>
+            <ScanLine className="h-8 w-8 text-info mx-auto mb-2" />
+            <p className="text-2xl font-bold text-info">{evidences.filter(e => e.ocr_text).length}</p>
+            <p className="text-sm text-info">Com OCR</p>
           </CardContent>
         </Card>
       </div>

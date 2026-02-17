@@ -306,7 +306,7 @@ export const PeoDPOperationalWindow: React.FC = () => {
               return (
                 <div key={type} className={`p-4 rounded-lg border text-center ${hasFaultInType ? "border-destructive/40 bg-destructive/5" : "bg-muted/30"}`}>
                   <p className="text-xs text-muted-foreground mb-1">{type}</p>
-                  <p className={`text-2xl font-bold ${hasFaultInType ? "text-destructive" : "text-green-500"}`}>{online}/{total}</p>
+                  <p className={`text-2xl font-bold ${hasFaultInType ? "text-destructive" : "text-success"}`}>{online}/{total}</p>
                   <p className="text-[10px] text-muted-foreground">
                     {hasFaultInType ? "⚠️ Redundância degradada" : "✅ Redundância OK"}
                   </p>

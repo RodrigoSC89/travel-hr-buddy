@@ -172,16 +172,16 @@ export const PackDiffComparison = memo(({ packs, onLoadPackElements }: Props) =>
             <Card className="bg-muted/30">
               <CardContent className="pt-3 pb-2 px-3 text-center">
                 <p className="text-[10px] text-muted-foreground">Δ Score</p>
-                <p className={cn("text-2xl font-bold", summary.scoreDiff > 0 ? "text-green-500" : summary.scoreDiff < 0 ? "text-destructive" : "text-muted-foreground")}>
+                <p className={cn("text-2xl font-bold", summary.scoreDiff > 0 ? "text-success" : summary.scoreDiff < 0 ? "text-destructive" : "text-muted-foreground")}>
                   {summary.scoreDiff > 0 ? "+" : ""}{summary.scoreDiff.toFixed(1)}%
                 </p>
-                {summary.scoreDiff > 0 ? <TrendingUp className="h-4 w-4 text-green-500 mx-auto" /> : summary.scoreDiff < 0 ? <TrendingDown className="h-4 w-4 text-destructive mx-auto" /> : <Minus className="h-4 w-4 text-muted-foreground mx-auto" />}
+                {summary.scoreDiff > 0 ? <TrendingUp className="h-4 w-4 text-success mx-auto" /> : summary.scoreDiff < 0 ? <TrendingDown className="h-4 w-4 text-destructive mx-auto" /> : <Minus className="h-4 w-4 text-muted-foreground mx-auto" />}
               </CardContent>
             </Card>
             <Card className="bg-muted/30">
               <CardContent className="pt-3 pb-2 px-3 text-center">
                 <p className="text-[10px] text-muted-foreground">Δ Encontradas</p>
-                <p className={cn("text-2xl font-bold", summary.matchedDiff > 0 ? "text-green-500" : "text-muted-foreground")}>
+                <p className={cn("text-2xl font-bold", summary.matchedDiff > 0 ? "text-success" : "text-muted-foreground")}>
                   {summary.matchedDiff > 0 ? "+" : ""}{summary.matchedDiff}
                 </p>
               </CardContent>
@@ -189,7 +189,7 @@ export const PackDiffComparison = memo(({ packs, onLoadPackElements }: Props) =>
             <Card className="bg-muted/30">
               <CardContent className="pt-3 pb-2 px-3 text-center">
                 <p className="text-[10px] text-muted-foreground">Δ Gaps</p>
-                <p className={cn("text-2xl font-bold", summary.unmatchedDiff < 0 ? "text-green-500" : summary.unmatchedDiff > 0 ? "text-destructive" : "text-muted-foreground")}>
+                <p className={cn("text-2xl font-bold", summary.unmatchedDiff < 0 ? "text-success" : summary.unmatchedDiff > 0 ? "text-destructive" : "text-muted-foreground")}>
                   {summary.unmatchedDiff > 0 ? "+" : ""}{summary.unmatchedDiff}
                 </p>
               </CardContent>
@@ -198,8 +198,8 @@ export const PackDiffComparison = memo(({ packs, onLoadPackElements }: Props) =>
               <CardContent className="pt-3 pb-2 px-3 text-center">
                 <p className="text-[10px] text-muted-foreground">Melhorados</p>
                 <div className="flex items-center justify-center gap-1">
-                  <Award className="h-4 w-4 text-green-500" />
-                  <p className="text-2xl font-bold text-green-500">{summary.improved}</p>
+                  <Award className="h-4 w-4 text-success" />
+                  <p className="text-2xl font-bold text-success">{summary.improved}</p>
                 </div>
               </CardContent>
             </Card>
@@ -247,7 +247,7 @@ export const PackDiffComparison = memo(({ packs, onLoadPackElements }: Props) =>
                 .map(d => (
                 <div key={d.name} className="flex items-center gap-3 p-2 bg-muted/20 rounded text-sm">
                   {d.diff > 5 ? (
-                    <TrendingUp className="h-3.5 w-3.5 text-green-500 shrink-0" />
+                    <TrendingUp className="h-3.5 w-3.5 text-success shrink-0" />
                   ) : d.diff < -5 ? (
                     <TrendingDown className="h-3.5 w-3.5 text-destructive shrink-0" />
                   ) : (

@@ -166,7 +166,7 @@ export default function HRChatbotPage() {
           </p>
         </div>
         <Badge variant="secondary" className="h-fit gap-2">
-          <span className="h-2 w-2 rounded-full bg-green-500 animate-pulse" />
+          <span className="h-2 w-2 rounded-full bg-success animate-pulse" />
           Online - Powered by AI
         </Badge>
       </div>

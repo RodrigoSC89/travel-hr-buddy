@@ -58,8 +58,8 @@ export function MLCComplianceByTitle() {
   const criticalCount = titles.reduce((acc, t) => acc + t.items.filter(i => i.status === "critical").length, 0);
   const criticalNCs = mlcData?.criticalNonConformities || [];
 
-  const scoreColor = (score: number) => score >= 90 ? "text-green-600" : score >= 70 ? "text-amber-600" : "text-red-600";
-  const progressColor = (score: number) => score >= 90 ? "bg-green-500" : score >= 70 ? "bg-amber-500" : "bg-red-500";
+  const scoreColor = (score: number) => score >= 90 ? "text-success" : score >= 70 ? "text-warning" : "text-destructive";
+  const progressColor = (score: number) => score >= 90 ? "bg-success" : score >= 70 ? "bg-warning" : "bg-destructive";
 
   return (
     <div className="space-y-4">
@@ -113,8 +113,8 @@ export function MLCComplianceByTitle() {
               {isExpanded && title.items.length > 0 && (
                 <div className="space-y-2 pt-2 border-t" onClick={e => e.stopPropagation()}>
                   {title.items.map((item, i) => (
-                    <div key={`${title.key}-item-${item.name.slice(0, 10)}-${i}`} className={`flex items-start gap-2 p-2 rounded text-sm ${item.status === "critical" ? "bg-destructive/10" : item.status === "warning" ? "bg-warning/10" : "bg-green-500/5"}`}>
-                      {item.status === "ok" && <CheckCircle className="h-4 w-4 text-green-500 mt-0.5 shrink-0" />}
+                    <div key={`${title.key}-item-${item.name.slice(0, 10)}-${i}`} className={`flex items-start gap-2 p-2 rounded text-sm ${item.status === "critical" ? "bg-destructive/10" : item.status === "warning" ? "bg-warning/10" : "bg-success/5"}`}>
+                      {item.status === "ok" && <CheckCircle className="h-4 w-4 text-success mt-0.5 shrink-0" />}
                       {item.status === "warning" && <AlertTriangle className="h-4 w-4 text-warning mt-0.5 shrink-0" />}
                       {item.status === "critical" && <AlertTriangle className="h-4 w-4 text-destructive mt-0.5 shrink-0" />}
                       <div>

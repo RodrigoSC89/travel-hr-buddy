@@ -34,7 +34,7 @@ export const CacheIndicator: React.FC<{ isFromCache: boolean; className?: string
     <span
       className={`inline-flex items-center gap-1 text-xs text-muted-foreground bg-muted/50 px-2 py-0.5 rounded-full ${className || ''}`}
     >
-      <span className="w-1.5 h-1.5 rounded-full bg-amber-500" />
+      <span className="w-1.5 h-1.5 rounded-full bg-warning" />
       Dados em cache
     </span>
   );

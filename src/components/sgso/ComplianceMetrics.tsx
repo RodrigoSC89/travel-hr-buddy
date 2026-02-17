@@ -217,7 +217,7 @@ export const ComplianceMetrics: React.FC = () => {
                   labelLine={false}
                   label={({ name, value }) => `${name}: ${value}`}
                   outerRadius={100}
-                  fill="#8884d8"
+                  fill="hsl(var(--primary))"
                   dataKey="value"
                 >
                   {incidentStats.map((entry) => (
@@ -249,7 +249,7 @@ export const ComplianceMetrics: React.FC = () => {
                   labelLine={false}
                   label={({ category, value }) => `${category}: ${value}%`}
                   outerRadius={100}
-                  fill="#8884d8"
+                  fill="hsl(var(--primary))"
                   dataKey="value"
                 >
                   {auditResults.map((entry) => (

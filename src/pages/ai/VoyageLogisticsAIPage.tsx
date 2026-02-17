@@ -292,7 +292,7 @@ export default function VoyageLogisticsAIPage() {
               </CardHeader>
               <CardContent>
                 <div className="grid grid-cols-1 md:grid-cols-3 gap-4">
-                  <Card className="bg-green-50 dark:bg-green-950">
+                  <Card className="bg-success/10">
                     <CardContent className="pt-4">
                       <div className="flex items-center gap-2">
                         <CheckCircle className="h-5 w-5 text-success" />
@@ -302,7 +302,7 @@ export default function VoyageLogisticsAIPage() {
                       <p className="text-sm text-muted-foreground">containers</p>
                     </CardContent>
                   </Card>
-                  <Card className="bg-yellow-50 dark:bg-yellow-950">
+                  <Card className="bg-warning/10">
                     <CardContent className="pt-4">
                       <div className="flex items-center gap-2">
                         <Clock className="h-5 w-5 text-warning" />
@@ -312,7 +312,7 @@ export default function VoyageLogisticsAIPage() {
                       <p className="text-sm text-muted-foreground">containers</p>
                     </CardContent>
                   </Card>
-                  <Card className="bg-red-50 dark:bg-red-950">
+                  <Card className="bg-destructive/10">
                     <CardContent className="pt-4">
                       <div className="flex items-center gap-2">
                         <AlertTriangle className="h-5 w-5 text-destructive" />
@@ -396,13 +396,13 @@ export default function VoyageLogisticsAIPage() {
                   <Card>
                     <CardContent className="pt-4">
                       <p className="text-sm font-medium">Demurrage Pendente</p>
-                      <p className="text-2xl font-bold text-orange-600">$45,000</p>
+                      <p className="text-2xl font-bold text-warning">$45,000</p>
                     </CardContent>
                   </Card>
                   <Card>
                     <CardContent className="pt-4">
                       <p className="text-sm font-medium">Despatch Earned</p>
-                      <p className="text-2xl font-bold text-green-600">$12,000</p>
+                      <p className="text-2xl font-bold text-success">$12,000</p>
                     </CardContent>
                   </Card>
                 </div>

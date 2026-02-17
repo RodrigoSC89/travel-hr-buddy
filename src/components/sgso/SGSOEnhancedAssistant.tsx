@@ -202,10 +202,10 @@ Sou seu assistente especializado em **Sistema de Gestão de Segurança Operacion
   return (
     <div className="space-y-6">
       {/* Header */}
-      <Card className="bg-gradient-to-br from-red-50 to-orange-50 dark:from-red-950/30 dark:to-orange-950/30 border-red-200 dark:border-red-800">
+      <Card className="bg-gradient-to-br from-destructive/10 to-warning/10 border-destructive/20">
         <CardContent className="p-6">
           <div className="flex items-center gap-4 flex-wrap">
-            <div className="p-4 bg-gradient-to-br from-red-600 to-orange-600 rounded-xl shadow-lg">
+            <div className="p-4 bg-gradient-to-br from-destructive to-warning rounded-xl shadow-lg">
               <Brain className="h-8 w-8 text-white" />
             </div>
             <div className="flex-1 min-w-[200px]">

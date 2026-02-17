@@ -324,25 +324,25 @@ export default function RestoreDashboard() {
 
       {summary && (
         <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 gap-4">
-          <Card className="bg-gradient-to-br from-blue-50 to-blue-100 dark:from-blue-900/20 dark:to-blue-800/20 border-blue-200 dark:border-blue-800">
-            <CardHeader className="pb-3"><CardTitle className="text-sm font-medium text-blue-700 dark:text-blue-300">Total de Restaurações</CardTitle></CardHeader>
+          <Card className="bg-gradient-to-br from-primary/10 to-primary/5 border-primary/20">
+            <CardHeader className="pb-3"><CardTitle className="text-sm font-medium text-primary">Total de Restaurações</CardTitle></CardHeader>
             <CardContent>
-              <div className="text-3xl font-bold text-blue-900 dark:text-blue-100">{summary.total}</div>
-              <p className="text-xs text-blue-600 dark:text-blue-400 mt-1">Todas as restaurações registradas</p>
+              <div className="text-3xl font-bold text-foreground">{summary.total}</div>
+              <p className="text-xs text-muted-foreground mt-1">Todas as restaurações registradas</p>
             </CardContent>
           </Card>
-          <Card className="bg-gradient-to-br from-green-50 to-green-100 dark:from-green-900/20 dark:to-green-800/20 border-green-200 dark:border-green-800">
-            <CardHeader className="pb-3"><CardTitle className="text-sm font-medium text-green-700 dark:text-green-300">Documentos Únicos</CardTitle></CardHeader>
+          <Card className="bg-gradient-to-br from-success/10 to-success/5 border-success/20">
+            <CardHeader className="pb-3"><CardTitle className="text-sm font-medium text-success">Documentos Únicos</CardTitle></CardHeader>
             <CardContent>
-              <div className="text-3xl font-bold text-green-900 dark:text-green-100">{summary.unique_docs}</div>
-              <p className="text-xs text-green-600 dark:text-green-400 mt-1">Documentos diferentes restaurados</p>
+              <div className="text-3xl font-bold text-foreground">{summary.unique_docs}</div>
+              <p className="text-xs text-muted-foreground mt-1">Documentos diferentes restaurados</p>
             </CardContent>
           </Card>
-          <Card className="bg-gradient-to-br from-purple-50 to-purple-100 dark:from-purple-900/20 dark:to-purple-800/20 border-purple-200 dark:border-purple-800">
-            <CardHeader className="pb-3"><CardTitle className="text-sm font-medium text-purple-700 dark:text-purple-300">Média por Dia</CardTitle></CardHeader>
+          <Card className="bg-gradient-to-br from-accent/10 to-accent/5 border-accent/20">
+            <CardHeader className="pb-3"><CardTitle className="text-sm font-medium text-accent-foreground">Média por Dia</CardTitle></CardHeader>
             <CardContent>
-              <div className="text-3xl font-bold text-purple-900 dark:text-purple-100">{summary.avg_per_day.toFixed(1)}</div>
-              <p className="text-xs text-purple-600 dark:text-purple-400 mt-1">Restaurações por dia</p>
+              <div className="text-3xl font-bold text-foreground">{summary.avg_per_day.toFixed(1)}</div>
+              <p className="text-xs text-muted-foreground mt-1">Restaurações por dia</p>
             </CardContent>
           </Card>
         </div>

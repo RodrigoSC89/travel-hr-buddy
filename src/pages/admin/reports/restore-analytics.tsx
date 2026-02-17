@@ -153,7 +153,7 @@ export default function RestoreAnalyticsPage() {
                 <XAxis dataKey="name" />
                 <YAxis allowDecimals={false} />
                 <Tooltip />
-                <Bar dataKey="restaurações" fill="#3b82f6" name="Restaurações por dia" />
+                <Bar dataKey="restaurações" fill="hsl(var(--primary))" name="Restaurações por dia" />
               </BarChart>
             </ResponsiveContainer>
           ) : (
