@@ -2,7 +2,9 @@
  * Class Survey Tracker - World-Class (vs DNV ShipManager)
  * Full CRUD with Supabase, export, real data
  */
-import React, { useState, useMemo } from 'react';
+import React, { useState, useMemo, useCallback } from 'react';
+import { motion } from "framer-motion";
+import { staggerContainer, fadeUp, kpiCard } from "@/lib/animations/motion-variants";
 import { useQuery, useMutation, useQueryClient } from '@tanstack/react-query';
 import { supabase } from '@/integrations/supabase/client';
 import { Card, CardContent, CardHeader, CardTitle } from '@/components/ui/card';
@@ -228,7 +230,7 @@ export default function ClassSurveyTracker() {
   }
 
   return (
-    <div className="space-y-6">
+    <motion.div className="space-y-6" initial="hidden" animate="visible" variants={staggerContainer}>
       <div className="flex flex-col sm:flex-row items-start sm:items-center justify-between gap-4">
         <div>
           <h2 className="text-2xl font-bold flex items-center gap-2"><Shield className="h-6 w-6 text-primary" /> Class Survey Tracker</h2>
@@ -457,6 +459,6 @@ export default function ClassSurveyTracker() {
           })} isPending={updateSurvey.isPending} isEdit />
         </DialogContent>
       </Dialog>
-    </div>
+    </motion.div>
   );
 }

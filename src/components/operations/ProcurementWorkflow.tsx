@@ -2,7 +2,9 @@
  * Procurement Workflow Manager - vs AMOS/TM Master
  * Complete RFQ → PO → Invoice → Delivery pipeline
  */
-import { useState } from "react";
+import { useState, useMemo, useCallback } from "react";
+import { motion } from "framer-motion";
+import { staggerContainer, kpiCard } from "@/lib/animations/motion-variants";
 import { Card, CardContent, CardHeader, CardTitle } from "@/components/ui/card";
 import { Tabs, TabsContent, TabsList, TabsTrigger } from "@/components/ui/tabs";
 import { Button } from "@/components/ui/button";
@@ -155,7 +157,7 @@ export function ProcurementWorkflow() {
   };
 
   return (
-    <div className="space-y-6 p-4 md:p-6">
+    <motion.div className="space-y-6 p-4 md:p-6" initial="hidden" animate="visible" variants={staggerContainer}>
       {/* Header */}
       <div className="flex items-center justify-between">
         <div>
@@ -370,7 +372,7 @@ export function ProcurementWorkflow() {
           </div>
         </TabsContent>
       </Tabs>
-    </div>
+    </motion.div>
   );
 }
 

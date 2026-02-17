@@ -3,7 +3,9 @@
  * End-to-end crew change coordination with travel, documentation, and handover
  * INTEGRATED: Real Supabase backend
  */
-import { useState } from "react";
+import { useState, useMemo, useCallback } from "react";
+import { motion } from "framer-motion";
+import { staggerContainer, fadeUp, kpiCard } from "@/lib/animations/motion-variants";
 import { Card, CardContent, CardHeader, CardTitle } from "@/components/ui/card";
 import { Badge } from "@/components/ui/badge";
 import { Button } from "@/components/ui/button";
@@ -101,7 +103,7 @@ export function CrewChangeManager() {
   const getTasksForChange = (changeId: string) => tasks.filter((t: any) => t.crew_change_id === changeId);
 
   return (
-    <div className="space-y-6 p-4 md:p-6">
+    <motion.div className="space-y-6 p-4 md:p-6" initial="hidden" animate="visible" variants={staggerContainer}>
       <div className="flex items-center justify-between">
         <div>
           <h1 className="text-2xl font-bold flex items-center gap-2">
@@ -141,24 +143,24 @@ export function CrewChangeManager() {
       </div>
 
       {/* KPIs */}
-      <div className="grid grid-cols-2 md:grid-cols-4 gap-4">
-        <Card className="border-border/50 bg-card/80"><CardContent className="p-4 text-center">
+      <motion.div className="grid grid-cols-2 md:grid-cols-4 gap-4" variants={staggerContainer}>
+        <motion.div variants={kpiCard}><Card className="border-border/50 bg-card/80"><CardContent className="p-4 text-center">
           <p className="text-xs text-muted-foreground">Planned Changes</p>
           <p className="text-3xl font-bold text-info">{changes.length}</p>
-        </CardContent></Card>
-        <Card className="border-border/50 bg-card/80"><CardContent className="p-4 text-center">
+        </CardContent></Card></motion.div>
+        <motion.div variants={kpiCard}><Card className="border-border/50 bg-card/80"><CardContent className="p-4 text-center">
           <p className="text-xs text-muted-foreground">Sign-On / Sign-Off</p>
           <p className="text-3xl font-bold">{totalOnSigners}<span className="text-muted-foreground text-lg">/{totalOffSigners}</span></p>
-        </CardContent></Card>
-        <Card className="border-border/50 bg-card/80"><CardContent className="p-4 text-center">
+        </CardContent></Card></motion.div>
+        <motion.div variants={kpiCard}><Card className="border-border/50 bg-card/80"><CardContent className="p-4 text-center">
           <p className="text-xs text-muted-foreground">Avg Readiness</p>
           <p className="text-3xl font-bold text-warning">{avgReadiness}%</p>
-        </CardContent></Card>
-        <Card className="border-border/50 bg-card/80"><CardContent className="p-4 text-center">
+        </CardContent></Card></motion.div>
+        <motion.div variants={kpiCard}><Card className="border-border/50 bg-card/80"><CardContent className="p-4 text-center">
           <p className="text-xs text-muted-foreground">Total Records</p>
           <p className="text-lg font-bold text-success">{changes.length} crew changes</p>
-        </CardContent></Card>
-      </div>
+        </CardContent></Card></motion.div>
+      </motion.div>
 
       {isLoading ? (
         <div className="flex items-center justify-center py-12"><Loader2 className="h-8 w-8 animate-spin text-info" /></div>
@@ -239,6 +241,6 @@ export function CrewChangeManager() {
           </TabsContent>
         </Tabs>
       )}
-    </div>
+    </motion.div>
   );
 }

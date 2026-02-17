@@ -2,7 +2,9 @@
  * Crew Planning Matrix - vs Compas/Stena
  * Vessel × Rank planning grid with gap analysis
  */
-import { useState } from "react";
+import { useState, useMemo, useCallback } from "react";
+import { motion } from "framer-motion";
+import { staggerContainer, fadeUp, kpiCard } from "@/lib/animations/motion-variants";
 import { Card, CardContent, CardHeader, CardTitle } from "@/components/ui/card";
 import { Tabs, TabsContent, TabsList, TabsTrigger } from "@/components/ui/tabs";
 import { Button } from "@/components/ui/button";
@@ -95,13 +97,15 @@ export function CrewPlanningMatrix() {
   const [activeTab, setActiveTab] = useState("matrix");
   const [vesselFilter, setVesselFilter] = useState("all");
 
-  const totalRequired = VESSELS.flatMap(v => v.slots).reduce((s, sl) => s + sl.required, 0);
-  const totalAssigned = VESSELS.flatMap(v => v.slots).reduce((s, sl) => s + sl.assigned, 0);
-  const reliefDue = VESSELS.flatMap(v => v.slots.flatMap(s => s.crew)).filter(c => c.status === "relief_due").length;
-  const gaps = totalRequired - totalAssigned;
+  const totalRequired = useMemo(() => VESSELS.flatMap(v => v.slots).reduce((s, sl) => s + sl.required, 0), []);
+  const totalAssigned = useMemo(() => VESSELS.flatMap(v => v.slots).reduce((s, sl) => s + sl.assigned, 0), []);
+  const reliefDue = useMemo(() => VESSELS.flatMap(v => v.slots.flatMap(s => s.crew)).filter(c => c.status === "relief_due").length, []);
+  const gaps = useMemo(() => totalRequired - totalAssigned, [totalRequired, totalAssigned]);
+
+  const handleGenerateRelief = useCallback(() => toast.success("Relief plan generated for next 90 days"), []);
 
   return (
-    <div className="space-y-6 p-4 md:p-6">
+    <motion.div className="space-y-6 p-4 md:p-6" initial="hidden" animate="visible" variants={staggerContainer}>
       <div className="flex items-center justify-between">
         <div>
           <h1 className="text-2xl font-bold text-foreground flex items-center gap-2">
@@ -110,19 +114,19 @@ export function CrewPlanningMatrix() {
           </h1>
           <p className="text-muted-foreground">Vessel × Rank grid • Tour tracking • Relief planning • STCW compliance</p>
         </div>
-        <Button onClick={() => toast.success("Relief plan generated for next 90 days")}>
+        <Button onClick={handleGenerateRelief}>
           <Calendar className="h-4 w-4 mr-2" />Generate Relief Plan
         </Button>
       </div>
 
       {/* KPIs */}
-      <div className="grid grid-cols-2 md:grid-cols-5 gap-4">
-        <Card><CardContent className="p-4 text-center"><Users className="h-5 w-5 mx-auto text-primary mb-1" /><p className="text-2xl font-bold">{totalAssigned}/{totalRequired}</p><p className="text-xs text-muted-foreground">Manning Level</p></CardContent></Card>
-        <Card><CardContent className="p-4 text-center"><CheckCircle2 className="h-5 w-5 mx-auto text-success mb-1" /><p className="text-2xl font-bold">{Math.round((totalAssigned / totalRequired) * 100)}%</p><p className="text-xs text-muted-foreground">Fill Rate</p></CardContent></Card>
-        <Card><CardContent className="p-4 text-center"><AlertTriangle className="h-5 w-5 mx-auto text-destructive mb-1" /><p className="text-2xl font-bold">{gaps}</p><p className="text-xs text-muted-foreground">Open Positions</p></CardContent></Card>
-        <Card><CardContent className="p-4 text-center"><Clock className="h-5 w-5 mx-auto text-warning mb-1" /><p className="text-2xl font-bold">{reliefDue}</p><p className="text-xs text-muted-foreground">Relief Due</p></CardContent></Card>
-        <Card><CardContent className="p-4 text-center"><Ship className="h-5 w-5 mx-auto text-primary mb-1" /><p className="text-2xl font-bold">{VESSELS.length}</p><p className="text-xs text-muted-foreground">Vessels</p></CardContent></Card>
-      </div>
+      <motion.div className="grid grid-cols-2 md:grid-cols-5 gap-4" variants={staggerContainer}>
+        <motion.div variants={kpiCard}><Card><CardContent className="p-4 text-center"><Users className="h-5 w-5 mx-auto text-primary mb-1" /><p className="text-2xl font-bold">{totalAssigned}/{totalRequired}</p><p className="text-xs text-muted-foreground">Manning Level</p></CardContent></Card></motion.div>
+        <motion.div variants={kpiCard}><Card><CardContent className="p-4 text-center"><CheckCircle2 className="h-5 w-5 mx-auto text-success mb-1" /><p className="text-2xl font-bold">{Math.round((totalAssigned / totalRequired) * 100)}%</p><p className="text-xs text-muted-foreground">Fill Rate</p></CardContent></Card></motion.div>
+        <motion.div variants={kpiCard}><Card><CardContent className="p-4 text-center"><AlertTriangle className="h-5 w-5 mx-auto text-destructive mb-1" /><p className="text-2xl font-bold">{gaps}</p><p className="text-xs text-muted-foreground">Open Positions</p></CardContent></Card></motion.div>
+        <motion.div variants={kpiCard}><Card><CardContent className="p-4 text-center"><Clock className="h-5 w-5 mx-auto text-warning mb-1" /><p className="text-2xl font-bold">{reliefDue}</p><p className="text-xs text-muted-foreground">Relief Due</p></CardContent></Card></motion.div>
+        <motion.div variants={kpiCard}><Card><CardContent className="p-4 text-center"><Ship className="h-5 w-5 mx-auto text-primary mb-1" /><p className="text-2xl font-bold">{VESSELS.length}</p><p className="text-xs text-muted-foreground">Vessels</p></CardContent></Card></motion.div>
+      </motion.div>
 
       <Tabs value={activeTab} onValueChange={setActiveTab}>
         <TabsList className="grid w-full grid-cols-4">
@@ -270,7 +274,7 @@ export function CrewPlanningMatrix() {
           </div>
         </TabsContent>
       </Tabs>
-    </div>
+    </motion.div>
   );
 }
 

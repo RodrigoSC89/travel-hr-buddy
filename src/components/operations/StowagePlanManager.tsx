@@ -2,7 +2,9 @@
  * Stowage Plan Manager - vs NAPA / CargoMax / StormGeo
  * Visual cargo stowage planning with stability calculations
  */
-import { useState } from "react";
+import { useState, useMemo } from "react";
+import { motion } from "framer-motion";
+import { staggerContainer, fadeUp, kpiCard } from "@/lib/animations/motion-variants";
 import { Card, CardContent, CardHeader, CardTitle } from "@/components/ui/card";
 import { Badge } from "@/components/ui/badge";
 import { Button } from "@/components/ui/button";
@@ -54,7 +56,7 @@ export function StowagePlanManager() {
   const utilization = ((totalLoaded / totalCapacity) * 100).toFixed(1);
 
   return (
-    <div className="space-y-6 p-4 md:p-6">
+    <motion.div className="space-y-6 p-4 md:p-6" initial="hidden" animate="visible" variants={staggerContainer}>
       <div className="flex items-center justify-between">
         <div>
           <h1 className="text-2xl font-bold flex items-center gap-2">
@@ -235,6 +237,6 @@ export function StowagePlanManager() {
           </Card>
         </TabsContent>
       </Tabs>
-    </div>
+    </motion.div>
   );
 }

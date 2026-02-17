@@ -2,7 +2,9 @@
  * Port State Control History - vs Equasis / Paris MoU THETIS
  * Fleet PSC inspection history, detention tracking, and risk profiling
  */
-import { useState } from "react";
+import { useState, useMemo, useCallback } from "react";
+import { motion } from "framer-motion";
+import { staggerContainer, fadeUp, kpiCard } from "@/lib/animations/motion-variants";
 import { Card, CardContent, CardHeader, CardTitle } from "@/components/ui/card";
 import { Badge } from "@/components/ui/badge";
 import { Button } from "@/components/ui/button";
@@ -60,8 +62,10 @@ export function PortStateControlHistory() {
   const detentions = mockRecords.filter(r => r.detained).length;
   const detentionRate = ((detentions / totalInspections) * 100).toFixed(1);
 
+  const handleExport = useCallback(() => toast.success("PSC history exported"), []);
+
   return (
-    <div className="space-y-6 p-4 md:p-6">
+    <motion.div className="space-y-6 p-4 md:p-6" initial="hidden" animate="visible" variants={staggerContainer}>
       <div className="flex items-center justify-between">
         <div>
           <h1 className="text-2xl font-bold flex items-center gap-2">
@@ -70,7 +74,7 @@ export function PortStateControlHistory() {
           </h1>
           <p className="text-muted-foreground">Fleet PSC performance tracker • Paris/Tokyo MoU, USCG • vs Equasis/THETIS</p>
         </div>
-        <Button variant="outline" size="sm" onClick={() => toast.success("PSC history exported")}>
+        <Button variant="outline" size="sm" onClick={handleExport}>
           <Download className="h-4 w-4 mr-1" /> Export
         </Button>
       </div>
@@ -182,6 +186,6 @@ export function PortStateControlHistory() {
           </div>
         </TabsContent>
       </Tabs>
-    </div>
+    </motion.div>
   );
 }

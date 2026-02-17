@@ -2,7 +2,9 @@
  * Crew Document Vault - vs Compas E-CMS / Adonis
  * Centralized seafarer document management with expiry tracking
  */
-import { useState } from "react";
+import { useState, useMemo } from "react";
+import { motion } from "framer-motion";
+import { staggerContainer, fadeUp, kpiCard } from "@/lib/animations/motion-variants";
 import { Card, CardContent, CardHeader, CardTitle } from "@/components/ui/card";
 import { Badge } from "@/components/ui/badge";
 import { Button } from "@/components/ui/button";
@@ -72,7 +74,7 @@ export function CrewDocumentVault() {
   ) || [];
 
   return (
-    <div className="space-y-6">
+    <motion.div className="space-y-6" initial="hidden" animate="visible" variants={staggerContainer}>
       <div className="flex items-center justify-between">
         <div>
           <h1 className="text-2xl font-bold flex items-center gap-2">
@@ -88,7 +90,7 @@ export function CrewDocumentVault() {
       </div>
 
       {/* KPIs */}
-      <div className="grid grid-cols-2 md:grid-cols-5 gap-4">
+      <motion.div className="grid grid-cols-2 md:grid-cols-5 gap-4" variants={staggerContainer}>
         {[
           { icon: FileText, label: "Total Documents", value: totalCerts, color: "text-primary" },
           { icon: CheckCircle, label: "Valid", value: valid.length, color: "text-success" },
@@ -96,15 +98,15 @@ export function CrewDocumentVault() {
           { icon: AlertTriangle, label: "Expiring ≤90d", value: expiringIn90.length, color: "text-warning" },
           { icon: XCircle, label: "Expired", value: expired.length, color: "text-destructive" },
         ].map((kpi, i) => (
-          <Card key={i} className="border-border/50 bg-card/80 backdrop-blur">
+          <motion.div key={i} variants={kpiCard}><Card className="border-border/50 bg-card/80 backdrop-blur">
             <CardContent className="pt-4 text-center">
               <kpi.icon className={`h-5 w-5 mx-auto mb-1 ${kpi.color}`} />
               <p className="text-xs text-muted-foreground">{kpi.label}</p>
               <p className="text-xl font-bold">{kpi.value}</p>
             </CardContent>
-          </Card>
+          </Card></motion.div>
         ))}
-      </div>
+      </motion.div>
 
       {/* Compliance Bar */}
       <Card className="border-border/50 bg-card/80 backdrop-blur">
@@ -246,6 +248,6 @@ export function CrewDocumentVault() {
           </Card>
         </TabsContent>
       </Tabs>
-    </div>
+    </motion.div>
   );
 }

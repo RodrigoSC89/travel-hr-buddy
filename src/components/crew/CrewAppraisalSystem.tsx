@@ -2,7 +2,9 @@
  * Crew Appraisal & Performance Review System
  * BEATS: Compas/Stena (Crew Appraisals, KPIs, 360° Feedback)
  */
-import React, { useState } from 'react';
+import React, { useState, useMemo, useCallback, memo } from 'react';
+import { motion } from "framer-motion";
+import { staggerContainer, fadeUp, kpiCard } from "@/lib/animations/motion-variants";
 import { useQuery, useMutation, useQueryClient } from '@tanstack/react-query';
 import { supabase } from '@/integrations/supabase/client';
 import { Card, CardContent } from '@/components/ui/card';
@@ -100,20 +102,20 @@ export function CrewAppraisalSystem() {
   const weightedPreview = COMPETENCIES.reduce((sum, comp) => sum + (scores[comp.id] * comp.weight), 0);
 
   return (
-    <div className="space-y-6">
-      <div className="grid grid-cols-2 md:grid-cols-4 gap-4">
+    <motion.div className="space-y-6" initial="hidden" animate="visible" variants={staggerContainer}>
+      <motion.div className="grid grid-cols-2 md:grid-cols-4 gap-4" variants={staggerContainer}>
         {[
           { label: 'Total Avaliações', value: appraisals.length, icon: ClipboardList, color: 'text-primary' },
           { label: 'Score Médio', value: `${overallAvg.toFixed(0)}%`, icon: BarChart3, color: 'text-info' },
           { label: 'Excelentes (≥80%)', value: excellentCount, icon: Award, color: 'text-success' },
           { label: 'Atenção (<60%)', value: needsImprovementCount, icon: AlertTriangle, color: 'text-warning' },
         ].map(kpi => (
-          <Card key={kpi.label}><CardContent className="p-4 flex items-center gap-3">
+          <motion.div key={kpi.label} variants={kpiCard}><Card><CardContent className="p-4 flex items-center gap-3">
             <kpi.icon className={`h-8 w-8 ${kpi.color}`} />
             <div><p className="text-xs text-muted-foreground">{kpi.label}</p><p className="text-xl font-bold">{kpi.value}</p></div>
-          </CardContent></Card>
+          </CardContent></Card></motion.div>
         ))}
-      </div>
+      </motion.div>
 
       <div className="flex items-center justify-between">
         <h3 className="text-lg font-semibold">Histórico de Avaliações</h3>
@@ -194,6 +196,6 @@ export function CrewAppraisalSystem() {
           </div>
         </DialogContent>
       </Dialog>
-    </div>
+    </motion.div>
   );
 }
