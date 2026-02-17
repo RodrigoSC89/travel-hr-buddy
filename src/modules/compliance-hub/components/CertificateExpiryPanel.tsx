@@ -476,7 +476,7 @@ export default function CertificateExpiryPanel() {
                     {selectedCertificate.holderType === "crew" ? (
                       <User className="h-5 w-5 text-primary" />
                     ) : (
-                      <Ship className="h-5 w-5 text-purple-500" />
+                      <Ship className="h-5 w-5 text-accent-foreground" />
                     )}
                   </div>
                   <div>

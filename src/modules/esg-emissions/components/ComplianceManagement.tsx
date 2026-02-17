@@ -112,7 +112,7 @@ export function ComplianceManagement() {
     <div className="space-y-6">
       {/* KPIs */}
       <div className="grid grid-cols-1 md:grid-cols-5 gap-4">
-        <Card className="border-l-4 border-l-green-500">
+        <Card className="border-l-4 border-l-success">
           <CardContent className="p-4">
             <div className="flex items-center justify-between">
               <div>
@@ -120,59 +120,59 @@ export function ComplianceManagement() {
                 <p className="text-2xl font-bold">{complianceRate}%</p>
                 <Progress value={complianceRate} className="mt-2 h-2" />
               </div>
-              <Shield className="h-8 w-8 text-green-500 opacity-80" />
+              <Shield className="h-8 w-8 text-success opacity-80" />
             </div>
           </CardContent>
         </Card>
 
-        <Card className="border-l-4 border-l-green-500">
+        <Card className="border-l-4 border-l-success">
           <CardContent className="p-4">
             <div className="flex items-center justify-between">
               <div>
                 <p className="text-sm text-muted-foreground">Conforme</p>
                 <p className="text-2xl font-bold">{compliantCount}</p>
-                <p className="text-xs text-green-600">Requisitos atendidos</p>
+                <p className="text-xs text-success">Requisitos atendidos</p>
               </div>
-              <CheckCircle className="h-8 w-8 text-green-500 opacity-80" />
+              <CheckCircle className="h-8 w-8 text-success opacity-80" />
             </div>
           </CardContent>
         </Card>
 
-        <Card className="border-l-4 border-l-amber-500">
+        <Card className="border-l-4 border-l-warning">
           <CardContent className="p-4">
             <div className="flex items-center justify-between">
               <div>
                 <p className="text-sm text-muted-foreground">Em Alerta</p>
                 <p className="text-2xl font-bold">{warningCount}</p>
-                <p className="text-xs text-amber-600">Atenção requerida</p>
+                <p className="text-xs text-warning">Atenção requerida</p>
               </div>
-              <AlertTriangle className="h-8 w-8 text-amber-500 opacity-80" />
+              <AlertTriangle className="h-8 w-8 text-warning opacity-80" />
             </div>
           </CardContent>
         </Card>
 
-        <Card className="border-l-4 border-l-blue-500">
+        <Card className="border-l-4 border-l-info">
           <CardContent className="p-4">
             <div className="flex items-center justify-between">
               <div>
                 <p className="text-sm text-muted-foreground">Pendentes</p>
                 <p className="text-2xl font-bold">{pendingCount}</p>
-                <p className="text-xs text-blue-600">Em implementação</p>
+                <p className="text-xs text-info">Em implementação</p>
               </div>
-              <Clock className="h-8 w-8 text-blue-500 opacity-80" />
+              <Clock className="h-8 w-8 text-info opacity-80" />
             </div>
           </CardContent>
         </Card>
 
-        <Card className="border-l-4 border-l-red-500">
+        <Card className="border-l-4 border-l-destructive">
           <CardContent className="p-4">
             <div className="flex items-center justify-between">
               <div>
                 <p className="text-sm text-muted-foreground">Não Conforme</p>
                 <p className="text-2xl font-bold">{nonCompliantCount}</p>
-                <p className="text-xs text-red-600">Ação imediata</p>
+                <p className="text-xs text-destructive">Ação imediata</p>
               </div>
-              <AlertCircle className="h-8 w-8 text-red-500 opacity-80" />
+              <AlertCircle className="h-8 w-8 text-destructive opacity-80" />
             </div>
           </CardContent>
         </Card>
@@ -393,7 +393,7 @@ export function ComplianceManagement() {
                     <div className="flex-1">
                       <p className="font-medium">{item.title}</p>
                     </div>
-                    <Badge variant={item.status === "warning" ? "secondary" : "outline"} className={item.status === "warning" ? "bg-amber-500" : ""}>
+                    <Badge variant={item.status === "warning" ? "secondary" : "outline"} className={item.status === "warning" ? "bg-warning text-warning-foreground" : ""}>
                       {item.status === "warning" ? "Atenção" : "Programado"}
                     </Badge>
                   </div>

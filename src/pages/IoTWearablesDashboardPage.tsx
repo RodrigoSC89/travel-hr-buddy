@@ -137,7 +137,7 @@ export default function IoTWearablesDashboardPage() {
         {[
           { label: "Tripulantes", value: crew.length, icon: Users, color: "text-primary" },
           { label: "Em Serviço", value: onDuty, icon: Activity, color: "text-success" },
-          { label: "FC Média", value: `${avgHR} bpm`, icon: Heart, color: "text-red-500" },
+          { label: "FC Média", value: `${avgHR} bpm`, icon: Heart, color: "text-destructive" },
           { label: "Fadiga Média", value: `${avgFatigue}%`, icon: Brain, color: avgFatigue > 60 ? "text-warning" : "text-success" },
           { label: "Alertas", value: alerts.length, icon: AlertTriangle, color: alerts.length > 0 ? "text-destructive" : "text-success" },
         ].map(kpi => (

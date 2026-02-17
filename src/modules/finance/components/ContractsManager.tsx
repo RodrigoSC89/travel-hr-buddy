@@ -199,7 +199,7 @@ const CONTRACT_TYPES = [
 
   const getRiskColor = (score: number) => {
     if (score <= 20) return "text-success";
-    if (score <= 50) return "text-amber-500";
+    if (score <= 50) return "text-warning";
     return "text-destructive";
   };
 
@@ -238,14 +238,14 @@ const CONTRACT_TYPES = [
             </div>
           </CardContent>
         </Card>
-        <Card className="border-l-4 border-l-amber-500">
+        <Card className="border-l-4 border-l-warning">
           <CardContent className="pt-4">
             <div className="flex items-center justify-between">
               <div>
                 <p className="text-xs text-muted-foreground">Pendentes</p>
-                <p className="text-2xl font-bold text-amber-500">{stats.pending}</p>
+                <p className="text-2xl font-bold text-warning">{stats.pending}</p>
               </div>
-              <Clock className="h-8 w-8 text-amber-500 opacity-60" />
+              <Clock className="h-8 w-8 text-warning opacity-60" />
             </div>
           </CardContent>
         </Card>
@@ -260,14 +260,14 @@ const CONTRACT_TYPES = [
             </div>
           </CardContent>
         </Card>
-        <Card className="border-l-4 border-l-emerald-500">
+        <Card className="border-l-4 border-l-success">
           <CardContent className="pt-4">
             <div className="flex items-center justify-between">
               <div>
                 <p className="text-xs text-muted-foreground">Valor Total</p>
                 <p className="text-2xl font-bold">R$ {(stats.totalValue / 1000000).toFixed(1)}M</p>
               </div>
-              <DollarSign className="h-8 w-8 text-emerald-500 opacity-60" />
+              <DollarSign className="h-8 w-8 text-success opacity-60" />
             </div>
           </CardContent>
         </Card>

@@ -162,12 +162,12 @@ export const EvidenceValidityTimeline = memo(({ items, matches, elements }: Prop
             <p className="text-xl font-bold text-yellow-500">{stats.expiringSoon}</p>
           </CardContent>
         </Card>
-        <Card className="border-l-4 border-l-green-500">
+        <Card className="border-l-4 border-l-success">
           <CardContent className="py-3 px-3">
             <div className="flex items-center gap-1.5 text-xs text-muted-foreground mb-1">
-              <CheckCircle2 className="h-3.5 w-3.5 text-green-500" /> Válidos
+              <CheckCircle2 className="h-3.5 w-3.5 text-success" /> Válidos
             </div>
-            <p className="text-xl font-bold text-green-500">{stats.valid}</p>
+            <p className="text-xl font-bold text-success">{stats.valid}</p>
           </CardContent>
         </Card>
         <Card className="border-l-4 border-l-muted-foreground">
@@ -180,13 +180,13 @@ export const EvidenceValidityTimeline = memo(({ items, matches, elements }: Prop
         </Card>
         <Card className={cn(
           "border-l-4",
-          impactScore >= 80 ? "border-l-green-500" : impactScore >= 50 ? "border-l-yellow-500" : "border-l-destructive"
+          impactScore >= 80 ? "border-l-success" : impactScore >= 50 ? "border-l-warning" : "border-l-destructive"
         )}>
           <CardContent className="py-3 px-3">
             <div className="flex items-center gap-1.5 text-xs text-muted-foreground mb-1">
               <Shield className="h-3.5 w-3.5" /> Score Validade
             </div>
-            <p className={cn("text-xl font-bold", impactScore >= 80 ? "text-green-500" : impactScore >= 50 ? "text-yellow-500" : "text-destructive")}>
+            <p className={cn("text-xl font-bold", impactScore >= 80 ? "text-success" : impactScore >= 50 ? "text-warning" : "text-destructive")}>
               {impactScore}%
             </p>
           </CardContent>

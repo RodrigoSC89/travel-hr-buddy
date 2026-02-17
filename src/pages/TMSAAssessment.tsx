@@ -137,7 +137,7 @@ const TMSAAssessment: FC = () => {
                 <Target className="h-4 w-4 text-muted-foreground" />
               </CardHeader>
               <CardContent>
-                <div className="text-2xl font-bold text-green-600">{overallLevel}</div>
+                <div className="text-2xl font-bold text-success">{overallLevel}</div>
                 <p className="text-xs text-muted-foreground">of 4.0 maximum</p>
                 <Progress value={overallLevel / 4 * 100} className="mt-2" />
               </CardContent>
@@ -148,7 +148,7 @@ const TMSAAssessment: FC = () => {
                 <CheckCircle2 className="h-4 w-4 text-success" />
               </CardHeader>
               <CardContent>
-                <div className="text-2xl font-bold text-green-600">{level4Count} / 13</div>
+                <div className="text-2xl font-bold text-success">{level4Count} / 13</div>
                 <p className="text-xs text-muted-foreground">Best practice achieved</p>
               </CardContent>
             </Card>

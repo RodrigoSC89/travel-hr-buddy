@@ -294,7 +294,7 @@ export default function DevRoutesDashboard() {
                                 title="Copiar"
                               >
                                 {copiedRoute === route ? (
-                                  <Check className="h-3 w-3 text-green-500" />
+                                  <Check className="h-3 w-3 text-success" />
                                 ) : (
                                   <Copy className="h-3 w-3" />
                                 )}
@@ -328,7 +328,7 @@ export default function DevRoutesDashboard() {
                         onClick={() => handleNavigate(route)}
                       >
                         {testResults[route] ? (
-                          <CheckCircle2 className="h-4 w-4 text-green-500 shrink-0" />
+                          <CheckCircle2 className="h-4 w-4 text-success shrink-0" />
                         ) : (
                           <MapPin className="h-4 w-4 text-muted-foreground shrink-0" />
                         )}
@@ -361,15 +361,15 @@ export default function DevRoutesDashboard() {
                       >
                         <div className="flex-1">
                           <div className="flex items-center gap-2">
-                            <XCircle className="h-4 w-4 text-red-500" />
-                            <code className="text-xs text-red-600 line-through">{oldRoute}</code>
+                            <XCircle className="h-4 w-4 text-destructive" />
+                            <code className="text-xs text-destructive line-through">{oldRoute}</code>
                           </div>
                         </div>
                         <span className="text-muted-foreground">→</span>
                         <div className="flex-1">
                           <div className="flex items-center gap-2">
-                            <CheckCircle2 className="h-4 w-4 text-green-500" />
-                            <code className="text-xs text-green-600">{newRoute}</code>
+                            <CheckCircle2 className="h-4 w-4 text-success" />
+                            <code className="text-xs text-success">{newRoute}</code>
                           </div>
                         </div>
                         <Button
@@ -404,7 +404,7 @@ export default function DevRoutesDashboard() {
           </Card>
           <Card>
             <CardContent className="p-4 text-center">
-              <div className="text-2xl font-bold text-green-500">
+              <div className="text-2xl font-bold text-success">
                 {Object.keys(testResults).length}
               </div>
               <div className="text-xs text-muted-foreground">Rotas Testadas</div>

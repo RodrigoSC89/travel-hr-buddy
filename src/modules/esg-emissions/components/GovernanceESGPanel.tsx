@@ -318,22 +318,22 @@ export const GovernanceESGPanel: React.FC = () => {
         <CardContent>
           <div className="grid grid-cols-2 md:grid-cols-4 gap-4">
             <div className="p-4 border rounded-lg text-center">
-              <CheckCircle2 className="h-8 w-8 text-green-500 mx-auto mb-2" />
+              <CheckCircle2 className="h-8 w-8 text-success mx-auto mb-2" />
               <p className="font-medium">Código de Conduta</p>
               <p className="text-sm text-muted-foreground">Atualizado 2024</p>
             </div>
             <div className="p-4 border rounded-lg text-center">
-              <CheckCircle2 className="h-8 w-8 text-green-500 mx-auto mb-2" />
+              <CheckCircle2 className="h-8 w-8 text-success mx-auto mb-2" />
               <p className="font-medium">Política Anticorrupção</p>
               <p className="text-sm text-muted-foreground">Ativa</p>
             </div>
             <div className="p-4 border rounded-lg text-center">
-              <CheckCircle2 className="h-8 w-8 text-green-500 mx-auto mb-2" />
+              <CheckCircle2 className="h-8 w-8 text-success mx-auto mb-2" />
               <p className="font-medium">Canal de Denúncias</p>
               <p className="text-sm text-muted-foreground">Anônimo</p>
             </div>
             <div className="p-4 border rounded-lg text-center">
-              <CheckCircle2 className="h-8 w-8 text-green-500 mx-auto mb-2" />
+              <CheckCircle2 className="h-8 w-8 text-success mx-auto mb-2" />
               <p className="font-medium">LGPD/GDPR</p>
               <p className="text-sm text-muted-foreground">Compliant</p>
             </div>

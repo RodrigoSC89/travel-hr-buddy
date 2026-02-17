@@ -150,7 +150,7 @@ export class LazyLoadErrorBoundary extends Component<Props, State> {
       if (this.state.isChunkError) {
         return (
           <div className="flex flex-col items-center justify-center min-h-screen bg-background p-4">
-            <AlertTriangle className="h-12 w-12 text-amber-500 mb-4" />
+            <AlertTriangle className="h-12 w-12 text-warning mb-4" />
             <h2 className="text-xl font-semibold mb-2">Atualização Necessária</h2>
             <p className="text-muted-foreground text-center mb-6 max-w-md">
               Uma nova versão do Nauti One está disponível. 

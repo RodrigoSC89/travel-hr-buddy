@@ -7,10 +7,10 @@ interface BudgetOverviewProps {
 
 export function BudgetOverview({ period }: BudgetOverviewProps) {
   const budgets = [
-    { category: "Combustível", allocated: 50000, spent: 32000, color: "bg-blue-500" },
-    { category: "Manutenção", allocated: 30000, spent: 28000, color: "bg-orange-500" },
-    { category: "Salários", allocated: 120000, spent: 120000, color: "bg-green-500" },
-    { category: "Operações", allocated: 40000, spent: 25000, color: "bg-purple-500" },
+    { category: "Combustível", allocated: 50000, spent: 32000, color: "bg-primary" },
+    { category: "Manutenção", allocated: 30000, spent: 28000, color: "bg-warning" },
+    { category: "Salários", allocated: 120000, spent: 120000, color: "bg-success" },
+    { category: "Operações", allocated: 40000, spent: 25000, color: "bg-accent" },
   ];
 
   return (

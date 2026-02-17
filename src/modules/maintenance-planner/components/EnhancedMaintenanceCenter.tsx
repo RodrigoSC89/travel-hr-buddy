@@ -559,8 +559,8 @@ export const EnhancedMaintenanceCenter: React.FC = () => {
                       </div>
                       <div className="text-right">
                         <span className={`text-lg font-bold ${
-                          eq.healthScore >= 80 ? 'text-green-500' : 
-                          eq.healthScore >= 60 ? 'text-yellow-500' : 'text-red-500'
+                          eq.healthScore >= 80 ? 'text-success' : 
+                          eq.healthScore >= 60 ? 'text-warning' : 'text-destructive'
                         }`}>
                           {eq.healthScore}%
                         </span>
@@ -806,8 +806,8 @@ export const EnhancedMaintenanceCenter: React.FC = () => {
                     </div>
                     <div className="text-right">
                       <div className={`text-3xl font-bold ${
-                        pred.failureProbability >= 70 ? 'text-red-500' :
-                        pred.failureProbability >= 40 ? 'text-yellow-500' : 'text-green-500'
+                        pred.failureProbability >= 70 ? 'text-destructive' :
+                        pred.failureProbability >= 40 ? 'text-warning' : 'text-success'
                       }`}>
                         {pred.failureProbability}%
                       </div>
@@ -858,7 +858,7 @@ export const EnhancedMaintenanceCenter: React.FC = () => {
                       <td className="p-3 font-mono text-sm">{part.partNumber}</td>
                       <td className="p-3">{part.category}</td>
                       <td className="p-3">
-                        <span className={part.quantity <= part.minStock ? 'text-red-500 font-bold' : ''}>
+                        <span className={part.quantity <= part.minStock ? 'text-destructive font-bold' : ''}>
                           {part.quantity}
                         </span>
                       </td>

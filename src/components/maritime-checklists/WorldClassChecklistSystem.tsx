@@ -310,12 +310,12 @@ export const WorldClassChecklistSystem: React.FC = () => {
         <div className="grid grid-cols-2 md:grid-cols-4 lg:grid-cols-8 gap-3">
           {[
             { label: "Total", value: stats.total, icon: <ClipboardCheck className="h-4 w-4" />, color: "text-primary" },
-            { label: "Em Andamento", value: stats.active, icon: <Play className="h-4 w-4" />, color: "text-blue-500" },
+            { label: "Em Andamento", value: stats.active, icon: <Play className="h-4 w-4" />, color: "text-info" },
             { label: "Rascunho", value: stats.draft, icon: <Edit className="h-4 w-4" />, color: "text-muted-foreground" },
-            { label: "Concluídos", value: stats.completed, icon: <CheckCircle2 className="h-4 w-4" />, color: "text-green-500" },
-            { label: "Conclusão Média", value: `${stats.avgCompletion}%`, icon: <Gauge className="h-4 w-4" />, color: stats.avgCompletion >= 75 ? "text-green-500" : "text-amber-500" },
+            { label: "Concluídos", value: stats.completed, icon: <CheckCircle2 className="h-4 w-4" />, color: "text-success" },
+            { label: "Conclusão Média", value: `${stats.avgCompletion}%`, icon: <Gauge className="h-4 w-4" />, color: stats.avgCompletion >= 75 ? "text-success" : "text-warning" },
             { label: "Itens Totais", value: stats.totalItems, icon: <CheckSquare className="h-4 w-4" />, color: "text-primary" },
-            { label: "Itens Feitos", value: stats.completedItems, icon: <CheckCircle2 className="h-4 w-4" />, color: "text-green-500" },
+            { label: "Itens Feitos", value: stats.completedItems, icon: <CheckCircle2 className="h-4 w-4" />, color: "text-success" },
             { label: "Críticos Pend.", value: stats.criticalPending, icon: <AlertTriangle className="h-4 w-4" />, color: "text-destructive" },
           ].map((kpi) => (
             <Card key={kpi.label} className="p-3">
@@ -563,8 +563,8 @@ export const WorldClassChecklistSystem: React.FC = () => {
                 <CardContent className="space-y-3">
                   {[
                     { label: "Rascunho", count: stats.draft, color: "text-muted-foreground" },
-                    { label: "Em Andamento", count: stats.active, color: "text-blue-500" },
-                    { label: "Concluídos", count: stats.completed, color: "text-green-500" },
+                    { label: "Em Andamento", count: stats.active, color: "text-info" },
+                    { label: "Concluídos", count: stats.completed, color: "text-success" },
                   ].map(s => (
                     <div key={s.label}>
                       <div className="flex justify-between text-sm mb-1">
@@ -681,7 +681,7 @@ export const WorldClassChecklistSystem: React.FC = () => {
                     >
                       <div className="flex items-start gap-3">
                         {item.completed ?
-                          <CheckCircle2 className="h-5 w-5 text-green-500 mt-0.5 shrink-0" /> :
+                          <CheckCircle2 className="h-5 w-5 text-success mt-0.5 shrink-0" /> :
                           <Square className="h-5 w-5 text-muted-foreground mt-0.5 shrink-0" />
                         }
                         <div className="flex-1">

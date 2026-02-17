@@ -346,7 +346,7 @@ export const SafetyDashboard: React.FC = () => {
         <Card className="lg:col-span-2">
           <CardHeader>
             <CardTitle className="flex items-center gap-2">
-              <TrendingDown className="h-5 w-5 text-green-600" />
+              <TrendingDown className="h-5 w-5 text-success" />
               Tendência de Ocorrências
             </CardTitle>
             <CardDescription>Incidentes, Near Misses e Condições Inseguras</CardDescription>
@@ -435,8 +435,8 @@ export const SafetyDashboard: React.FC = () => {
               <div className="flex items-start justify-between">
                 <div className="flex items-start gap-3">
                   <Sparkles className={`h-5 w-5 mt-0.5 ${
-                    alert.severity === "high" ? "text-red-600" :
-                    alert.severity === "medium" ? "text-yellow-600" : "text-green-600"
+                    alert.severity === "high" ? "text-destructive" :
+                    alert.severity === "medium" ? "text-warning" : "text-success"
                   }`} />
                   <div>
                     <h4 className="font-semibold">{alert.title}</h4>

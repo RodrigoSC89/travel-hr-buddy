@@ -407,7 +407,7 @@ export const DigitalTwinDP: React.FC = () => {
                     <span className="font-bold">4.1 MW</span>
                   </div>
                   <Progress value={68} className="h-2" />
-                  <p className="text-xs text-green-500 mt-1">-2.4% vs real</p>
+                  <p className="text-xs text-success mt-1">-2.4% vs real</p>
                 </div>
                 <div className="p-4 bg-muted/50 rounded-lg">
                   <div className="flex justify-between mb-2">
@@ -415,7 +415,7 @@ export const DigitalTwinDP: React.FC = () => {
                     <span className="font-bold">62%</span>
                   </div>
                   <Progress value={62} className="h-2" />
-                  <p className="text-xs text-green-500 mt-1">-4.6% vs real</p>
+                  <p className="text-xs text-success mt-1">-4.6% vs real</p>
                 </div>
                 <div className="p-4 bg-muted/50 rounded-lg">
                   <div className="flex justify-between mb-2">
@@ -423,7 +423,7 @@ export const DigitalTwinDP: React.FC = () => {
                     <span className="font-bold">±0.7m</span>
                   </div>
                   <Progress value={95} className="h-2" />
-                  <p className="text-xs text-green-500 mt-1">+3.3% vs real</p>
+                  <p className="text-xs text-success mt-1">+3.3% vs real</p>
                 </div>
               </CardContent>
             </Card>

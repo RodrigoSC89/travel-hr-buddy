@@ -122,7 +122,7 @@ export function Patch601Validation() {
               <Card>
                 <CardContent className="pt-6">
                   <div className="text-2xl font-bold flex items-center gap-1">
-                    <TrendingUp className="h-5 w-5 text-green-500" />
+                    <TrendingUp className="h-5 w-5 text-success" />
                     {avgEfficiency}%
                   </div>
                   <div className="text-sm text-muted-foreground">Avg Efficiency</div>
@@ -144,11 +144,11 @@ export function Patch601Validation() {
                         </div>
                         <div className="flex gap-3 text-xs">
                           <span className="flex items-center gap-1">
-                            <CheckCircle2 className="h-3 w-3 text-green-500" />
+                            <CheckCircle2 className="h-3 w-3 text-success" />
                             Confidence: {(step.confidence * 100).toFixed(0)}%
                           </span>
                           <span className="flex items-center gap-1">
-                            <TrendingUp className="h-3 w-3 text-blue-500" />
+                            <TrendingUp className="h-3 w-3 text-primary" />
                             Efficiency: {(step.efficiency * 100).toFixed(0)}%
                           </span>
                         </div>

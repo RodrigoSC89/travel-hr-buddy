@@ -102,7 +102,7 @@ export function DPIncidentsCIRAS() {
       <div className="grid grid-cols-2 md:grid-cols-4 gap-3">
         <Card><CardContent className="pt-4 pb-3 text-center"><p className="text-2xl font-bold">{stats.total}</p><p className="text-xs text-muted-foreground">Total Incidentes</p></CardContent></Card>
         <Card className={stats.open > 0 ? "border-warning/50 bg-warning/5" : ""}><CardContent className="pt-4 pb-3 text-center"><p className="text-2xl font-bold text-warning">{stats.open}</p><p className="text-xs text-muted-foreground">Em Aberto</p></CardContent></Card>
-        <Card><CardContent className="pt-4 pb-3 text-center"><p className="text-2xl font-bold text-green-600">{stats.reported}</p><p className="text-xs text-muted-foreground">Reportados CIRAS</p></CardContent></Card>
+        <Card><CardContent className="pt-4 pb-3 text-center"><p className="text-2xl font-bold text-success">{stats.reported}</p><p className="text-xs text-muted-foreground">Reportados CIRAS</p></CardContent></Card>
         <Card className={stats.unreported > 0 ? "border-destructive/50 bg-destructive/5" : ""}><CardContent className="pt-4 pb-3 text-center"><p className="text-2xl font-bold text-destructive">{stats.unreported}</p><p className="text-xs text-muted-foreground">⚠️ Pendente CIRAS</p></CardContent></Card>
       </div>
 
