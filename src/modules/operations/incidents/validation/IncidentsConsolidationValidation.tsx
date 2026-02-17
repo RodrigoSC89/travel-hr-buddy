@@ -137,9 +137,9 @@ export default function IncidentsConsolidationValidation() {
         </CardContent>
       </Card>
 
-      <Card className="border-green-500/50 bg-green-500/5">
+      <Card className="border-success/50 bg-success/5">
         <CardHeader>
-          <CardTitle className="text-green-700 dark:text-green-400">
+          <CardTitle className="text-success">
             Critério de Aprovação
           </CardTitle>
         </CardHeader>

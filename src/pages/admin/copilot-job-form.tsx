@@ -72,7 +72,7 @@ export default function CopilotJobFormPage() {
             </CardHeader>
             <CardContent>
               <div className="space-y-4">
-                <div className="border-l-4 border-blue-500 pl-4 py-2 bg-blue-50/50 rounded-r">
+                <div className="border-l-4 border-info pl-4 py-2 bg-info/5 rounded-r">
                   <h4 className="font-semibold">Cenário 1: Problema no Gerador</h4>
                   <p className="text-sm text-muted-foreground mt-1">
                     <strong>Componente:</strong> Gerador Diesel STBD
@@ -82,7 +82,7 @@ export default function CopilotJobFormPage() {
                   </p>
                 </div>
                 
-                <div className="border-l-4 border-green-500 pl-4 py-2 bg-green-50/50 rounded-r">
+                <div className="border-l-4 border-success pl-4 py-2 bg-success/5 rounded-r">
                   <h4 className="font-semibold">Cenário 2: Manutenção Preventiva</h4>
                   <p className="text-sm text-muted-foreground mt-1">
                     <strong>Componente:</strong> Bomba Hidráulica Principal
@@ -92,7 +92,7 @@ export default function CopilotJobFormPage() {
                   </p>
                 </div>
                 
-                <div className="border-l-4 border-orange-500 pl-4 py-2 bg-orange-50/50 rounded-r">
+                <div className="border-l-4 border-destructive pl-4 py-2 bg-destructive/5 rounded-r">
                   <h4 className="font-semibold">Cenário 3: Falha Crítica</h4>
                   <p className="text-sm text-muted-foreground mt-1">
                     <strong>Componente:</strong> Válvula de Segurança Principal
@@ -249,7 +249,7 @@ function MyMaintenancePage() {
           </Card>
 
           {/* Technical Info */}
-          <Card className="bg-gray-50 border-dashed">
+          <Card className="bg-muted border-dashed">
             <CardHeader>
               <CardTitle className="text-sm flex items-center gap-2">
                 🔧 Detalhes Técnicos

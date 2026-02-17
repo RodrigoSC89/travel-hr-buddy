@@ -91,8 +91,8 @@ const SubseaOperations: React.FC = () => {
       {/* Header */}
       <div className="flex items-center justify-between">
         <div className="flex items-center gap-3">
-          <div className="p-3 rounded-xl bg-gradient-to-br from-cyan-500/20 to-blue-600/20 border border-cyan-500/30">
-            <Waves className="h-8 w-8 text-cyan-400" />
+          <div className="p-3 rounded-xl bg-gradient-to-br from-info/20 to-primary/20 border border-info/30">
+            <Waves className="h-8 w-8 text-info" />
           </div>
           <div>
             <h1 className="text-2xl font-bold text-foreground">Subsea Operations</h1>

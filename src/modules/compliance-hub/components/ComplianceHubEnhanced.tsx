@@ -445,12 +445,12 @@ const ComplianceHubEnhanced: React.FC = () => {
                   >
                     <div className="flex items-center gap-4 flex-1">
                       <div className={`p-2 rounded-lg ${
-                        audit.status === 'completed' ? 'bg-green-500/10' :
-                        audit.status === 'overdue' ? 'bg-red-500/10' : 'bg-blue-500/10'
+                        audit.status === 'completed' ? 'bg-success/10' :
+                        audit.status === 'overdue' ? 'bg-destructive/10' : 'bg-info/10'
                       }`}>
                         <ClipboardCheck className={`h-5 w-5 ${
-                          audit.status === 'completed' ? 'text-green-500' :
-                          audit.status === 'overdue' ? 'text-red-500' : 'text-blue-500'
+                          audit.status === 'completed' ? 'text-success' :
+                          audit.status === 'overdue' ? 'text-destructive' : 'text-info'
                         }`} />
                       </div>
                       <div className="flex-1">
@@ -513,18 +513,18 @@ const ComplianceHubEnhanced: React.FC = () => {
                     initial={{ opacity: 0, y: 10 }}
                     animate={{ opacity: 1, y: 0 }}
                     className={`flex items-center justify-between p-4 border rounded-lg ${
-                      cert.status === 'expired' ? 'border-red-500/50 bg-red-500/5' :
-                      cert.status === 'expiring' ? 'border-yellow-500/50 bg-yellow-500/5' : ''
+                      cert.status === 'expired' ? 'border-destructive/50 bg-destructive/5' :
+                      cert.status === 'expiring' ? 'border-warning/50 bg-warning/5' : ''
                     }`}
                   >
                     <div className="flex items-center gap-4">
                       <div className={`p-2 rounded-lg ${
-                        cert.type === 'vessel' ? 'bg-blue-500/10' :
-                        cert.type === 'crew' ? 'bg-purple-500/10' : 'bg-green-500/10'
+                        cert.type === 'vessel' ? 'bg-info/10' :
+                        cert.type === 'crew' ? 'bg-primary/10' : 'bg-success/10'
                       }`}>
-                        {cert.type === 'vessel' ? <Ship className="h-5 w-5 text-blue-500" /> :
-                         cert.type === 'crew' ? <Users className="h-5 w-5 text-purple-500" /> :
-                         <Building2 className="h-5 w-5 text-green-500" />}
+                        {cert.type === 'vessel' ? <Ship className="h-5 w-5 text-info" /> :
+                         cert.type === 'crew' ? <Users className="h-5 w-5 text-primary" /> :
+                         <Building2 className="h-5 w-5 text-success" />}
                       </div>
                       <div>
                         <p className="font-medium">{cert.name}</p>
@@ -581,8 +581,8 @@ const ComplianceHubEnhanced: React.FC = () => {
                   >
                     <div className="flex items-center gap-4">
                       <div className={`p-2 rounded-lg ${
-                        nc.severity === 'critical' ? 'bg-red-500' :
-                        nc.severity === 'major' ? 'bg-orange-500' : 'bg-yellow-500'
+                        nc.severity === 'critical' ? 'bg-destructive' :
+                        nc.severity === 'major' ? 'bg-warning' : 'bg-warning/70'
                       }`}>
                         <AlertTriangle className="h-5 w-5 text-white" />
                       </div>

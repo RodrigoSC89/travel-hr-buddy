@@ -308,8 +308,8 @@ export default function ComplianceDenuncias() {
                     </div>
                   </div>
 
-                  <div className="flex items-center gap-2 p-3 bg-purple-500/10 border border-purple-500/30 rounded-lg">
-                    <Brain className="h-5 w-5 text-purple-400" />
+                  <div className="flex items-center gap-2 p-3 bg-primary/10 border border-primary/30 rounded-lg">
+                    <Brain className="h-5 w-5 text-primary" />
                     <span className="text-sm">IA irá classificar e priorizar automaticamente sua denúncia</span>
                   </div>
 

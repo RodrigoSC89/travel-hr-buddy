@@ -143,7 +143,7 @@ const ExecutiveMetricsPanel = () => {
                       <div className="text-sm text-muted-foreground">{metric.title}</div>
                     </div>
                     <div className={`flex items-center gap-1 px-2 py-1 rounded-full text-xs font-medium ${
-                      metric.trend === "up" ? "text-green-700 bg-green-100" : "text-red-700 bg-red-100"
+                      metric.trend === "up" ? "text-success bg-success/10" : "text-destructive bg-destructive/10"
                     }`}>
                       {metric.trend === "up" ? <ArrowUpRight className="w-3 h-3" /> : <ArrowDownRight className="w-3 h-3" />}
                       {metric.change}
@@ -202,9 +202,9 @@ const ExecutiveMetricsPanel = () => {
                     name === "revenue" ? "Receita" : name === "forecast" ? "Previsão" : "Despesas"
                   ]}
                 />
-                <Bar dataKey="revenue" fill="#3b82f6" name="Receita" radius={[4, 4, 0, 0]} />
-                <Bar dataKey="forecast" fill="#93c5fd" name="Previsão" radius={[4, 4, 0, 0]} />
-                <Bar dataKey="expenses" fill="#f87171" name="Despesas" radius={[4, 4, 0, 0]} />
+                <Bar dataKey="revenue" fill="hsl(var(--primary))" name="Receita" radius={[4, 4, 0, 0]} />
+                <Bar dataKey="forecast" fill="hsl(var(--info))" name="Previsão" radius={[4, 4, 0, 0]} />
+                <Bar dataKey="expenses" fill="hsl(var(--destructive))" name="Despesas" radius={[4, 4, 0, 0]} />
               </BarChart>
             </ResponsiveContainer>
           </CardContent>
@@ -266,20 +266,20 @@ const ExecutiveMetricsPanel = () => {
           <div className="grid grid-cols-1 md:grid-cols-3 gap-6">
             <div className="space-y-4">
               <div className="flex items-center gap-2">
-                <CheckCircle className="w-5 h-5 text-green-600" />
-                <span className="font-semibold text-green-700">Pontos Fortes</span>
+                <CheckCircle className="w-5 h-5 text-success" />
+                <span className="font-semibold text-success">Pontos Fortes</span>
               </div>
               <ul className="space-y-2 text-sm">
                 <li className="flex items-start gap-2">
-                  <div className="w-1.5 h-1.5 bg-green-500 rounded-full mt-2 flex-shrink-0" />
+                  <div className="w-1.5 h-1.5 bg-success rounded-full mt-2 flex-shrink-0" />
                   Performance financeira 12.5% acima da meta
                 </li>
                 <li className="flex items-start gap-2">
-                  <div className="w-1.5 h-1.5 bg-green-500 rounded-full mt-2 flex-shrink-0" />
+                  <div className="w-1.5 h-1.5 bg-success rounded-full mt-2 flex-shrink-0" />
                   Score de segurança líder do setor (98.5%)
                 </li>
                 <li className="flex items-start gap-2">
-                  <div className="w-1.5 h-1.5 bg-green-500 rounded-full mt-2 flex-shrink-0" />
+                  <div className="w-1.5 h-1.5 bg-success rounded-full mt-2 flex-shrink-0" />
                   100% compliance em auditorias
                 </li>
               </ul>
@@ -287,20 +287,20 @@ const ExecutiveMetricsPanel = () => {
             
             <div className="space-y-4">
               <div className="flex items-center gap-2">
-                <AlertTriangle className="w-5 h-5 text-orange-600" />
-                <span className="font-semibold text-orange-700">Áreas de Atenção</span>
+                <AlertTriangle className="w-5 h-5 text-warning" />
+                <span className="font-semibold text-warning">Áreas de Atenção</span>
               </div>
               <ul className="space-y-2 text-sm">
                 <li className="flex items-start gap-2">
-                  <div className="w-1.5 h-1.5 bg-orange-500 rounded-full mt-2 flex-shrink-0" />
+                  <div className="w-1.5 h-1.5 bg-warning rounded-full mt-2 flex-shrink-0" />
                   Utilização da frota 2.7% abaixo da meta
                 </li>
                 <li className="flex items-start gap-2">
-                  <div className="w-1.5 h-1.5 bg-orange-500 rounded-full mt-2 flex-shrink-0" />
+                  <div className="w-1.5 h-1.5 bg-warning rounded-full mt-2 flex-shrink-0" />
                   Margem operacional em queda (-1.2%)
                 </li>
                 <li className="flex items-start gap-2">
-                  <div className="w-1.5 h-1.5 bg-orange-500 rounded-full mt-2 flex-shrink-0" />
+                  <div className="w-1.5 h-1.5 bg-warning rounded-full mt-2 flex-shrink-0" />
                   Necessário otimizar rotas de navegação
                 </li>
               </ul>
@@ -308,20 +308,20 @@ const ExecutiveMetricsPanel = () => {
             
             <div className="space-y-4">
               <div className="flex items-center gap-2">
-                <Target className="w-5 h-5 text-blue-600" />
-                <span className="font-semibold text-blue-700">Recomendações</span>
+                <Target className="w-5 h-5 text-info" />
+                <span className="font-semibold text-info">Recomendações</span>
               </div>
               <ul className="space-y-2 text-sm">
                 <li className="flex items-start gap-2">
-                  <div className="w-1.5 h-1.5 bg-blue-500 rounded-full mt-2 flex-shrink-0" />
+                  <div className="w-1.5 h-1.5 bg-info rounded-full mt-2 flex-shrink-0" />
                   Implementar IA para otimização de rotas
                 </li>
                 <li className="flex items-start gap-2">
-                  <div className="w-1.5 h-1.5 bg-blue-500 rounded-full mt-2 flex-shrink-0" />
+                  <div className="w-1.5 h-1.5 bg-info rounded-full mt-2 flex-shrink-0" />
                   Revisar contratos de manutenção
                 </li>
                 <li className="flex items-start gap-2">
-                  <div className="w-1.5 h-1.5 bg-blue-500 rounded-full mt-2 flex-shrink-0" />
+                  <div className="w-1.5 h-1.5 bg-info rounded-full mt-2 flex-shrink-0" />
                   Expandir capacidade da frota em 15%
                 </li>
               </ul>

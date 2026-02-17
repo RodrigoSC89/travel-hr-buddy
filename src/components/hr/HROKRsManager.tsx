@@ -207,7 +207,7 @@ export function HROKRsManager() {
             <AlertTriangle className="h-4 w-4 text-muted-foreground" />
           </CardHeader>
           <CardContent>
-            <div className="text-2xl font-bold text-yellow-500">6</div>
+            <div className="text-2xl font-bold text-warning">6</div>
             <p className="text-xs text-muted-foreground">Precisam de atenção</p>
           </CardContent>
         </Card>
@@ -218,18 +218,18 @@ export function HROKRsManager() {
             <CheckCircle2 className="h-4 w-4 text-muted-foreground" />
           </CardHeader>
           <CardContent>
-            <div className="text-2xl font-bold text-green-500">4</div>
+            <div className="text-2xl font-bold text-success">4</div>
             <p className="text-xs text-muted-foreground">16.7% do total</p>
           </CardContent>
         </Card>
       </div>
 
       {/* AI Insights */}
-      <Card className="bg-gradient-to-r from-purple-500/10 to-blue-500/10 border-purple-500/20">
+      <Card className="bg-gradient-to-r from-primary/10 to-accent/10 border-primary/20">
         <CardContent className="p-4">
           <div className="flex items-center gap-3 mb-3">
-            <div className="p-2 bg-purple-500/20 rounded-lg">
-              <Brain className="h-5 w-5 text-purple-500" />
+            <div className="p-2 bg-primary/20 rounded-lg">
+              <Brain className="h-5 w-5 text-primary" />
             </div>
             <div>
               <h3 className="font-semibold">Insights da IA</h3>
@@ -239,7 +239,7 @@ export function HROKRsManager() {
           <div className="grid gap-3 md:grid-cols-3">
             <div className="p-3 bg-background rounded-lg">
               <div className="flex items-center gap-2 mb-1">
-                <AlertTriangle className="h-4 w-4 text-yellow-500" />
+                <AlertTriangle className="h-4 w-4 text-warning" />
                 <span className="font-medium text-sm">Atenção Necessária</span>
               </div>
               <p className="text-xs text-muted-foreground">
@@ -248,7 +248,7 @@ export function HROKRsManager() {
             </div>
             <div className="p-3 bg-background rounded-lg">
               <div className="flex items-center gap-2 mb-1">
-                <TrendingUp className="h-4 w-4 text-green-500" />
+                <TrendingUp className="h-4 w-4 text-success" />
                 <span className="font-medium text-sm">Tendência Positiva</span>
               </div>
               <p className="text-xs text-muted-foreground">
@@ -257,7 +257,7 @@ export function HROKRsManager() {
             </div>
             <div className="p-3 bg-background rounded-lg">
               <div className="flex items-center gap-2 mb-1">
-                <Sparkles className="h-4 w-4 text-purple-500" />
+                <Sparkles className="h-4 w-4 text-primary" />
                 <span className="font-medium text-sm">Sugestão</span>
               </div>
               <p className="text-xs text-muted-foreground">
