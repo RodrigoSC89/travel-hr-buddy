@@ -255,7 +255,7 @@ export const WorkflowTabs: React.FC<WorkflowTabsProps> = ({
                     <div className="flex items-center gap-3 mb-2">
                       <h4 className="font-medium">{rule.rule_name}</h4>
                       <Badge variant="outline">{rule.trigger_type}</Badge>
-                      <Badge className={rule.is_active ? "bg-green-500/10 text-green-600" : "bg-muted text-muted-foreground"}>
+                      <Badge className={rule.is_active ? "bg-success/10 text-success" : "bg-muted text-muted-foreground"}>
                         {rule.is_active ? "Ativa" : "Inativa"}
                       </Badge>
                     </div>
@@ -284,7 +284,7 @@ export const WorkflowTabs: React.FC<WorkflowTabsProps> = ({
         <Card>
           <CardHeader>
             <CardTitle className="flex items-center gap-2">
-              <Lightbulb className="h-5 w-5 text-yellow-500" />
+              <Lightbulb className="h-5 w-5 text-warning" />
               Como Funcionam as Sugestões de IA
             </CardTitle>
           </CardHeader>
@@ -295,19 +295,19 @@ export const WorkflowTabs: React.FC<WorkflowTabsProps> = ({
             </p>
             <ul className="mt-3 space-y-2 text-sm">
               <li className="flex items-center gap-2">
-                <span className="w-2 h-2 rounded-full bg-blue-500" />
+                <span className="w-2 h-2 rounded-full bg-info" />
                 Criação de novas tarefas para resolver problemas identificados
               </li>
               <li className="flex items-center gap-2">
-                <span className="w-2 h-2 rounded-full bg-yellow-500" />
+                <span className="w-2 h-2 rounded-full bg-warning" />
                 Ajustes de prazo baseados em análise de histórico
               </li>
               <li className="flex items-center gap-2">
-                <span className="w-2 h-2 rounded-full bg-green-500" />
+                <span className="w-2 h-2 rounded-full bg-success" />
                 Reatribuição de responsáveis para maior eficiência
               </li>
               <li className="flex items-center gap-2">
-                <span className="w-2 h-2 rounded-full bg-red-500" />
+                <span className="w-2 h-2 rounded-full bg-destructive" />
                 Escalação de problemas críticos
               </li>
             </ul>
@@ -393,7 +393,7 @@ export const WorkflowTabs: React.FC<WorkflowTabsProps> = ({
                   <p className="font-medium">{item.cat}</p>
                   <div className="text-right">
                     <p className="font-bold">{item.exec}</p>
-                    <p className={`text-sm ${item.trend.startsWith("+") ? "text-green-600" : "text-red-600"}`}>
+                    <p className={`text-sm ${item.trend.startsWith("+") ? "text-success" : "text-destructive"}`}>
                       {item.trend}
                     </p>
                   </div>

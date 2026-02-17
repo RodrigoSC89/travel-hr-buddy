@@ -285,19 +285,19 @@ const CargoPlanningPage = () => {
                       <span className="font-medium">{point.location}</span>
                       <div className="flex items-center gap-2">
                         <span className={`font-bold ${
-                          point.stress >= 90 ? "text-red-500" :
-                          point.stress >= 80 ? "text-yellow-500" : "text-green-500"
+                          point.stress >= 90 ? "text-destructive" :
+                          point.stress >= 80 ? "text-warning" : "text-success"
                         }`}>{point.stress}%</span>
                         {point.status === "warning" && (
-                          <AlertTriangle className="h-4 w-4 text-yellow-500" />
+                          <AlertTriangle className="h-4 w-4 text-warning" />
                         )}
                       </div>
                     </div>
                     <Progress 
                       value={point.stress} 
                       className={`h-3 ${
-                        point.stress >= 90 ? "[&>div]:bg-red-500" :
-                        point.stress >= 80 ? "[&>div]:bg-yellow-500" : ""
+                        point.stress >= 90 ? "[&>div]:bg-destructive" :
+                        point.stress >= 80 ? "[&>div]:bg-warning" : ""
                       }`}
                     />
                   </div>
@@ -305,9 +305,9 @@ const CargoPlanningPage = () => {
               </div>
               
               {stressPoints.some(p => p.status === "warning") && (
-                <div className="mt-4 p-4 bg-yellow-500/10 rounded-lg">
+                <div className="mt-4 p-4 bg-warning/10 rounded-lg">
                   <div className="flex items-center gap-2">
-                    <AlertTriangle className="h-5 w-5 text-yellow-500" />
+                    <AlertTriangle className="h-5 w-5 text-warning" />
                     <span className="font-medium">Atenção: Stress elevado em Frame 85-90</span>
                   </div>
                   <p className="text-sm text-muted-foreground mt-1">

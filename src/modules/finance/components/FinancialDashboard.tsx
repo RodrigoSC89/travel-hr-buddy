@@ -464,7 +464,7 @@ export default function FinancialDashboard() {
             <Card>
               <CardHeader className="flex flex-row items-center justify-between">
                 <div>
-                  <CardTitle className="text-red-600">Contas a Pagar</CardTitle>
+                  <CardTitle className="text-destructive">Contas a Pagar</CardTitle>
                   <CardDescription>Faturas de fornecedores</CardDescription>
                 </div>
                 <Button size="sm" variant="outline">
@@ -490,7 +490,7 @@ export default function FinancialDashboard() {
                       </div>
                       <div className="flex items-center justify-between text-sm">
                         <span className="text-muted-foreground">{inv.number}</span>
-                        <span className="font-bold text-red-600">{formatCurrency(inv.amount, inv.currency)}</span>
+                        <span className="font-bold text-destructive">{formatCurrency(inv.amount, inv.currency)}</span>
                       </div>
                       <div className="flex items-center justify-between mt-2">
                         <div className="flex items-center gap-1 text-xs text-muted-foreground">
@@ -548,7 +548,7 @@ export default function FinancialDashboard() {
                         className={cn(
                           "h-3",
                           isOverBudget && "[&>div]:bg-destructive",
-                          isNearLimit && "[&>div]:bg-amber-500"
+                          isNearLimit && "[&>div]:bg-warning"
                         )}
                       />
                     </div>

@@ -207,10 +207,10 @@ export default function SGSOAudits() {
 
   const getScoreColor = (score: number | null) => {
     if (score === null) return "text-muted-foreground";
-    if (score >= 90) return "text-green-600";
-    if (score >= 70) return "text-yellow-600";
-    if (score >= 50) return "text-orange-600";
-    return "text-red-600";
+    if (score >= 90) return "text-success";
+    if (score >= 70) return "text-warning";
+    if (score >= 50) return "text-warning";
+    return "text-destructive";
   };
 
   if (loading) {

@@ -132,13 +132,13 @@ export const SGSOIncidentsList: React.FC = () => {
 
         {/* Stats Summary */}
         <div className="flex gap-4 mt-4 flex-wrap">
-          <Badge className="bg-red-100 text-red-800 dark:bg-red-900 dark:text-red-200">
+          <Badge className="bg-destructive/10 text-destructive border border-destructive/30">
             {stats.open} Abertos
           </Badge>
-          <Badge className="bg-red-600 text-white">
+          <Badge className="bg-destructive text-destructive-foreground">
             {stats.critical} Críticos
           </Badge>
-          <Badge className="bg-orange-600 text-white">
+          <Badge className="bg-warning text-warning-foreground">
             {stats.high} Altos
           </Badge>
         </div>

@@ -360,7 +360,7 @@ export default function AssistantLogsPage() {
                 <label className="text-sm font-medium flex items-center gap-2">
                   <User className="w-4 h-4" />
                   E-mail do Usuário
-                  <span className="text-xs bg-green-100 text-green-700 px-2 py-0.5 rounded-full font-semibold">
+                  <span className="text-xs bg-success/10 text-success px-2 py-0.5 rounded-full font-semibold">
                     NEW!
                   </span>
                 </label>
@@ -386,7 +386,7 @@ export default function AssistantLogsPage() {
             {loading ? (
               <div className="flex items-center justify-center p-12">
                 <div className="text-center">
-                  <div className="animate-spin rounded-full h-8 w-8 border-b-2 border-blue-600 mx-auto"></div>
+                  <div className="animate-spin rounded-full h-8 w-8 border-b-2 border-primary mx-auto"></div>
                   <p className="mt-4 text-muted-foreground">Carregando histórico...</p>
                 </div>
               </div>
@@ -405,7 +405,7 @@ export default function AssistantLogsPage() {
               <ScrollArea className="h-[600px]">
                 <div className="p-4 space-y-4">
                   {currentLogs.map((log) => (
-                    <Card key={log.id} className="border-l-4 border-l-blue-500">
+                    <Card key={log.id} className="border-l-4 border-l-primary">
                       <CardContent className="p-4 space-y-3">
                         <div className="flex items-start justify-between">
                           <div className="flex items-center gap-2 text-xs text-muted-foreground">
@@ -421,7 +421,7 @@ export default function AssistantLogsPage() {
                         
                         {/* User Question */}
                         <div className="flex gap-3">
-                          <div className="w-8 h-8 rounded-full flex items-center justify-center flex-shrink-0 bg-blue-100 text-blue-600">
+                          <div className="w-8 h-8 rounded-full flex items-center justify-center flex-shrink-0 bg-primary/10 text-primary">
                             <User className="w-4 h-4" />
                           </div>
                           <div className="flex-1">
@@ -432,7 +432,7 @@ export default function AssistantLogsPage() {
 
                         {/* Assistant Answer */}
                         <div className="flex gap-3">
-                          <div className="w-8 h-8 rounded-full flex items-center justify-center flex-shrink-0 bg-purple-100 text-purple-600">
+                          <div className="w-8 h-8 rounded-full flex items-center justify-center flex-shrink-0 bg-accent/10 text-accent">
                             <Bot className="w-4 h-4" />
                           </div>
                           <div className="flex-1">

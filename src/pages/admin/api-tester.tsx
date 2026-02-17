@@ -181,11 +181,11 @@ const APITester = () => {
   const getStatusIcon = (status: string) => {
     switch (status) {
     case "loading":
-      return <Loader2 className="h-5 w-5 animate-spin text-blue-600" />;
+      return <Loader2 className="h-5 w-5 animate-spin text-info" />;
     case "success":
-      return <CheckCircle className="h-5 w-5 text-green-600" />;
+      return <CheckCircle className="h-5 w-5 text-success" />;
     case "error":
-      return <XCircle className="h-5 w-5 text-red-600" />;
+      return <XCircle className="h-5 w-5 text-destructive" />;
     default:
       return <AlertCircle className="h-5 w-5 text-muted-foreground" />;
     }
@@ -195,19 +195,19 @@ const APITester = () => {
     switch (status) {
     case "loading":
       return (
-        <Badge variant="outline" className="bg-blue-50 text-blue-700 border-blue-300">
+        <Badge variant="outline" className="bg-info/10 text-info border-info/30">
             Testing...
         </Badge>
       );
     case "success":
       return (
-        <Badge variant="default" className="bg-green-600 text-white">
+        <Badge variant="default" className="bg-success text-success-foreground">
             ✅ Success
         </Badge>
       );
     case "error":
       return (
-        <Badge variant="destructive" className="bg-red-600 text-white">
+        <Badge variant="destructive">
             ❌ Failed
         </Badge>
       );
@@ -257,7 +257,7 @@ const APITester = () => {
                 <CardTitle className="text-sm font-medium">Success Rate</CardTitle>
               </CardHeader>
               <CardContent>
-                <div className="text-2xl font-bold text-green-600">
+                <div className="text-2xl font-bold text-success">
                   {totalCount > 0 ? Math.round((successCount / totalCount) * 100) : 0}%
                 </div>
                 <p className="text-xs text-muted-foreground">APIs responding</p>

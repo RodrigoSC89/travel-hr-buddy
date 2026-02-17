@@ -104,18 +104,18 @@ const DigitalTwin3DPage = () => {
 
   const getStatusColor = (status: string) => {
     switch (status) {
-      case "operational": return "bg-green-500";
-      case "warning": return "bg-yellow-500";
-      case "critical": return "bg-red-500";
-      default: return "bg-gray-500";
+      case "operational": return "bg-success";
+      case "warning": return "bg-warning";
+      case "critical": return "bg-destructive";
+      default: return "bg-muted-foreground";
     }
   };
 
   const getSensorStatusColor = (status: string) => {
     switch (status) {
-      case "normal": return "text-green-500";
-      case "warning": return "text-yellow-500";
-      case "critical": return "text-red-500";
+      case "normal": return "text-success";
+      case "warning": return "text-warning";
+      case "critical": return "text-destructive";
       default: return "text-muted-foreground";
     }
   };
@@ -135,7 +135,7 @@ const DigitalTwin3DPage = () => {
         </div>
         <div className="flex items-center gap-3">
           <Badge variant="outline" className="gap-2 py-1.5">
-            <Radio className="h-4 w-4 animate-pulse text-green-500" />
+            <Radio className="h-4 w-4 animate-pulse text-success" />
             45 Sensores Ativos
           </Badge>
           <Button variant="outline" size="sm">
@@ -168,12 +168,12 @@ const DigitalTwin3DPage = () => {
                   <div className="flex items-center justify-between">
                     <div className="flex items-center gap-3">
                       <div className={`p-2 rounded-lg ${
-                        system.status === "operational" ? "bg-green-500/10" :
-                        system.status === "warning" ? "bg-yellow-500/10" : "bg-red-500/10"
+                        system.status === "operational" ? "bg-success/10" :
+                        system.status === "warning" ? "bg-warning/10" : "bg-destructive/10"
                       }`}>
                         <system.icon className={`h-5 w-5 ${
-                          system.status === "operational" ? "text-green-500" :
-                          system.status === "warning" ? "text-yellow-500" : "text-red-500"
+                          system.status === "operational" ? "text-success" :
+                          system.status === "warning" ? "text-warning" : "text-destructive"
                         }`} />
                       </div>
                       <CardTitle className="text-base">{system.name}</CardTitle>
@@ -211,7 +211,7 @@ const DigitalTwin3DPage = () => {
           <Card>
             <CardHeader>
               <CardTitle className="flex items-center gap-2">
-                <AlertTriangle className="h-5 w-5 text-yellow-500" />
+                <AlertTriangle className="h-5 w-5 text-warning" />
                 Alertas Ativos ({activeAlerts.length})
               </CardTitle>
             </CardHeader>
@@ -221,14 +221,14 @@ const DigitalTwin3DPage = () => {
                   <div 
                     key={alert.id}
                     className={`flex items-center justify-between p-3 rounded-lg ${
-                      alert.severity === "warning" ? "bg-yellow-500/10" :
-                      alert.severity === "critical" ? "bg-red-500/10" : "bg-blue-500/10"
+                      alert.severity === "warning" ? "bg-warning/10" :
+                      alert.severity === "critical" ? "bg-destructive/10" : "bg-info/10"
                     }`}
                   >
                     <div className="flex items-center gap-3">
                       <AlertTriangle className={`h-4 w-4 ${
-                        alert.severity === "warning" ? "text-yellow-500" :
-                        alert.severity === "critical" ? "text-red-500" : "text-blue-500"
+                        alert.severity === "warning" ? "text-warning" :
+                        alert.severity === "critical" ? "text-destructive" : "text-info"
                       }`} />
                       <span className="font-medium">{alert.message}</span>
                     </div>
