@@ -138,7 +138,7 @@ export default function AuditSchedulePanel() {
           <CardContent className="p-4">
             <div className="flex items-center justify-between">
               <div><p className="text-sm text-muted-foreground">Próximas</p><p className="text-2xl font-bold">{upcomingAudits.length}</p></div>
-              <Clock className="h-8 w-8 text-amber-500" />
+              <Clock className="h-8 w-8 text-warning" />
             </div>
           </CardContent>
         </Card>
@@ -150,11 +150,11 @@ export default function AuditSchedulePanel() {
             </div>
           </CardContent>
         </Card>
-        <Card className="bg-gradient-to-br from-purple-500/10 to-purple-600/5">
+        <Card className="bg-gradient-to-br from-primary/10 to-primary/5">
           <CardContent className="p-4">
             <div className="flex items-center justify-between">
               <div><p className="text-sm text-muted-foreground">Total</p><p className="text-2xl font-bold">{audits.length}</p></div>
-              <Shield className="h-8 w-8 text-purple-500" />
+              <Shield className="h-8 w-8 text-primary" />
             </div>
           </CardContent>
         </Card>
@@ -236,7 +236,7 @@ export default function AuditSchedulePanel() {
                       {dayAudits.length > 0 && (
                         <div className="flex flex-wrap gap-0.5 mt-1 justify-center">
                           {dayAudits.slice(0, 2).map((a) => (
-                            <div key={a.id} className={`h-1.5 w-1.5 rounded-full ${a.type === "ism" ? "bg-blue-500" : a.type === "sire" ? "bg-amber-500" : a.type === "psc" ? "bg-red-500" : "bg-green-500"}`} />
+                            <div key={a.id} className={`h-1.5 w-1.5 rounded-full ${a.type === "ism" ? "bg-info" : a.type === "sire" ? "bg-warning" : a.type === "psc" ? "bg-destructive" : "bg-success"}`} />
                           ))}
                         </div>
                       )}

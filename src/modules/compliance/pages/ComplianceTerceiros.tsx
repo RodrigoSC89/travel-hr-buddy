@@ -314,31 +314,31 @@ export default function ComplianceTerceiros() {
             <div className="text-xs text-muted-foreground">Total Terceiros</div>
           </CardContent>
         </Card>
-        <Card className="bg-emerald-500/10 border-emerald-500/30">
+        <Card className="bg-success/10 border-success/30">
           <CardContent className="p-4 text-center">
-            <CheckCircle2 className="h-6 w-6 mx-auto text-emerald-400 mb-2" />
-            <div className="text-2xl font-bold text-emerald-400">{stats.approved}</div>
+            <CheckCircle2 className="h-6 w-6 mx-auto text-success mb-2" />
+            <div className="text-2xl font-bold text-success">{stats.approved}</div>
             <div className="text-xs text-muted-foreground">Aprovados</div>
           </CardContent>
         </Card>
-        <Card className="bg-amber-500/10 border-amber-500/30">
+        <Card className="bg-warning/10 border-warning/30">
           <CardContent className="p-4 text-center">
-            <Clock className="h-6 w-6 mx-auto text-amber-400 mb-2" />
-            <div className="text-2xl font-bold text-amber-400">{stats.pending}</div>
+            <Clock className="h-6 w-6 mx-auto text-warning mb-2" />
+            <div className="text-2xl font-bold text-warning">{stats.pending}</div>
             <div className="text-xs text-muted-foreground">Pendentes</div>
           </CardContent>
         </Card>
-        <Card className="bg-red-500/10 border-red-500/30">
+        <Card className="bg-destructive/10 border-destructive/30">
           <CardContent className="p-4 text-center">
-            <Ban className="h-6 w-6 mx-auto text-red-400 mb-2" />
-            <div className="text-2xl font-bold text-red-400">{stats.blocked}</div>
+            <Ban className="h-6 w-6 mx-auto text-destructive mb-2" />
+            <div className="text-2xl font-bold text-destructive">{stats.blocked}</div>
             <div className="text-xs text-muted-foreground">Bloqueados</div>
           </CardContent>
         </Card>
-        <Card className="bg-blue-500/10 border-blue-500/30">
+        <Card className="bg-info/10 border-info/30">
           <CardContent className="p-4 text-center">
-            <TrendingUp className="h-6 w-6 mx-auto text-blue-400 mb-2" />
-            <div className="text-2xl font-bold text-blue-400">{stats.avgScore}%</div>
+            <TrendingUp className="h-6 w-6 mx-auto text-info mb-2" />
+            <div className="text-2xl font-bold text-info">{stats.avgScore}%</div>
             <div className="text-xs text-muted-foreground">Score Médio</div>
           </CardContent>
         </Card>

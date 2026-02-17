@@ -1,6 +1,5 @@
 /**
  * PATCH 187.0 - Mobile Missions Screen
- * 
  * Mission management and tracking for mobile app
  */
 
@@ -10,15 +9,7 @@ import { Button } from "@/components/ui/button";
 import { Badge } from "@/components/ui/badge";
 import { Progress } from "@/components/ui/progress";
 import { ScrollArea } from "@/components/ui/scroll-area";
-import {
-  Target,
-  Clock,
-  CheckCircle2,
-  XCircle,
-  AlertCircle,
-  MapPin,
-  Users,
-} from "lucide-react";
+import { Target, Clock, CheckCircle2, XCircle, AlertCircle, MapPin, Users } from "lucide-react";
 import { structuredLogger } from "@/lib/logger/structured-logger";
 
 interface Mission {
@@ -83,13 +74,13 @@ export const MobileMissions: React.FC = () => {
   const getStatusIcon = (status: Mission["status"]) => {
     switch (status) {
     case "active":
-      return <Clock className="h-4 w-4 text-blue-500" />;
+      return <Clock className="h-4 w-4 text-info" />;
     case "completed":
-      return <CheckCircle2 className="h-4 w-4 text-green-500" />;
+      return <CheckCircle2 className="h-4 w-4 text-success" />;
     case "failed":
-      return <XCircle className="h-4 w-4 text-red-500" />;
+      return <XCircle className="h-4 w-4 text-destructive" />;
     case "pending":
-      return <AlertCircle className="h-4 w-4 text-yellow-500" />;
+      return <AlertCircle className="h-4 w-4 text-warning" />;
     }
   };
 
@@ -100,71 +91,37 @@ export const MobileMissions: React.FC = () => {
       failed: "destructive",
       pending: "secondary",
     } as const;
-
-    const labels = {
-      active: "Em andamento",
-      completed: "Concluída",
-      failed: "Falhou",
-      pending: "Pendente",
-    };
-
-    return (
-      <Badge variant={variants[status]}>
-        {labels[status]}
-      </Badge>
-    );
+    const labels = { active: "Em andamento", completed: "Concluída", failed: "Falhou", pending: "Pendente" };
+    return <Badge variant={variants[status]}>{labels[status]}</Badge>;
   };
 
   const getPriorityColor = (priority: Mission["priority"]) => {
     switch (priority) {
     case "high":
-      return "text-red-500";
+      return "text-destructive";
     case "medium":
-      return "text-yellow-500";
+      return "text-warning";
     case "low":
-      return "text-green-500";
+      return "text-success";
     }
   };
 
   return (
     <div className="p-4 space-y-4 pb-20">
-      {/* Header */}
       <div>
         <h1 className="text-2xl font-bold text-foreground flex items-center gap-2">
           <Target className="h-6 w-6" />
           Missões
         </h1>
-        <p className="text-sm text-muted-foreground">
-          Gerencie e acompanhe suas missões
-        </p>
+        <p className="text-sm text-muted-foreground">Gerencie e acompanhe suas missões</p>
       </div>
 
-      {/* Filter Buttons */}
       <div className="flex gap-2">
-        <Button
-          variant={filter === "all" ? "default" : "outline"}
-          size="sm"
-          onClick={() => setFilter("all")}
-        >
-          Todas
-        </Button>
-        <Button
-          variant={filter === "active" ? "default" : "outline"}
-          size="sm"
-          onClick={() => setFilter("active")}
-        >
-          Ativas
-        </Button>
-        <Button
-          variant={filter === "completed" ? "default" : "outline"}
-          size="sm"
-          onClick={() => setFilter("completed")}
-        >
-          Concluídas
-        </Button>
+        <Button variant={filter === "all" ? "default" : "outline"} size="sm" onClick={() => setFilter("all")}>Todas</Button>
+        <Button variant={filter === "active" ? "default" : "outline"} size="sm" onClick={() => setFilter("active")}>Ativas</Button>
+        <Button variant={filter === "completed" ? "default" : "outline"} size="sm" onClick={() => setFilter("completed")}>Concluídas</Button>
       </div>
 
-      {/* Missions List */}
       <ScrollArea className="h-[calc(100vh-250px)]">
         <div className="space-y-3">
           {filteredMissions.map((mission) => (
@@ -175,16 +132,13 @@ export const MobileMissions: React.FC = () => {
                     {getStatusIcon(mission.status)}
                     <div>
                       <CardTitle className="text-base">{mission.title}</CardTitle>
-                      <CardDescription className="text-xs mt-1">
-                        {mission.description}
-                      </CardDescription>
+                      <CardDescription className="text-xs mt-1">{mission.description}</CardDescription>
                     </div>
                   </div>
                   {getStatusBadge(mission.status)}
                 </div>
               </CardHeader>
               <CardContent className="space-y-3">
-                {/* Progress */}
                 {mission.status === "active" && (
                   <div className="space-y-1">
                     <div className="flex justify-between text-xs">
@@ -194,27 +148,15 @@ export const MobileMissions: React.FC = () => {
                     <Progress value={mission.progress} />
                   </div>
                 )}
-
-                {/* Details */}
                 <div className="grid grid-cols-2 gap-2 text-xs">
-                  <div className="flex items-center gap-1 text-muted-foreground">
-                    <MapPin className="h-3 w-3" />
-                    <span>{mission.location}</span>
-                  </div>
-                  <div className="flex items-center gap-1 text-muted-foreground">
-                    <Users className="h-3 w-3" />
-                    <span>{mission.teamSize} membros</span>
-                  </div>
+                  <div className="flex items-center gap-1 text-muted-foreground"><MapPin className="h-3 w-3" /><span>{mission.location}</span></div>
+                  <div className="flex items-center gap-1 text-muted-foreground"><Users className="h-3 w-3" /><span>{mission.teamSize} membros</span></div>
                 </div>
-
-                {/* Priority & Date */}
                 <div className="flex items-center justify-between text-xs">
                   <span className={`font-semibold ${getPriorityColor(mission.priority)}`}>
                     Prioridade: {mission.priority === "high" ? "Alta" : mission.priority === "medium" ? "Média" : "Baixa"}
                   </span>
-                  <span className="text-muted-foreground">
-                    {mission.startDate.toLocaleDateString()}
-                  </span>
+                  <span className="text-muted-foreground">{mission.startDate.toLocaleDateString()}</span>
                 </div>
               </CardContent>
             </Card>
@@ -222,23 +164,22 @@ export const MobileMissions: React.FC = () => {
         </div>
       </ScrollArea>
 
-      {/* Summary Stats */}
       <div className="grid grid-cols-3 gap-2">
         <Card>
           <CardContent className="pt-4 text-center">
-            <p className="text-2xl font-bold text-blue-500">{missions.filter(m => m.status === "active").length}</p>
+            <p className="text-2xl font-bold text-info">{missions.filter(m => m.status === "active").length}</p>
             <p className="text-xs text-muted-foreground">Ativas</p>
           </CardContent>
         </Card>
         <Card>
           <CardContent className="pt-4 text-center">
-            <p className="text-2xl font-bold text-yellow-500">{missions.filter(m => m.status === "pending").length}</p>
+            <p className="text-2xl font-bold text-warning">{missions.filter(m => m.status === "pending").length}</p>
             <p className="text-xs text-muted-foreground">Pendentes</p>
           </CardContent>
         </Card>
         <Card>
           <CardContent className="pt-4 text-center">
-            <p className="text-2xl font-bold text-green-500">{missions.filter(m => m.status === "completed").length}</p>
+            <p className="text-2xl font-bold text-success">{missions.filter(m => m.status === "completed").length}</p>
             <p className="text-xs text-muted-foreground">Concluídas</p>
           </CardContent>
         </Card>

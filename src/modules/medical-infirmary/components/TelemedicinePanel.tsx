@@ -186,8 +186,8 @@ export default function TelemedicinePanel() {
         <Card>
           <CardContent className="pt-4">
             <div className="flex items-center gap-3">
-              <div className="p-2 rounded-lg bg-blue-500/10">
-                <CheckCircle2 className="h-5 w-5 text-blue-500" />
+              <div className="p-2 rounded-lg bg-info/10">
+                <CheckCircle2 className="h-5 w-5 text-info" />
               </div>
               <div>
                 <p className="text-2xl font-bold">{completedConsultations.length}</p>
@@ -199,8 +199,8 @@ export default function TelemedicinePanel() {
         <Card>
           <CardContent className="pt-4">
             <div className="flex items-center gap-3">
-              <div className="p-2 rounded-lg bg-amber-500/10">
-                <Shield className="h-5 w-5 text-amber-500" />
+              <div className="p-2 rounded-lg bg-warning/10">
+                <Shield className="h-5 w-5 text-warning" />
               </div>
               <div>
                 <p className="text-2xl font-bold">24/7</p>
@@ -251,7 +251,7 @@ export default function TelemedicinePanel() {
                           <p className="text-sm text-muted-foreground">{doctor.specialty}</p>
                           <div className="flex items-center gap-2 mt-1">
                             <div className="flex items-center gap-1">
-                              <Star className="h-3 w-3 fill-amber-400 text-amber-400" />
+                              <Star className="h-3 w-3 fill-warning text-warning" />
                               <span className="text-xs">{doctor.rating}</span>
                             </div>
                             <span className="text-xs text-muted-foreground">•</span>

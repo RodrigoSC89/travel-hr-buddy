@@ -202,7 +202,7 @@ export const IncidentForensicsAI: React.FC = () => {
 
       {/* Stats */}
       <div className="grid grid-cols-4 gap-4">
-        <Card className="bg-gradient-to-br from-red-500/10 to-red-600/5">
+        <Card className="bg-gradient-to-br from-destructive/10 to-destructive/5">
           <CardContent className="pt-4">
             <div className="flex items-center justify-between">
               <div>
@@ -224,25 +224,25 @@ export const IncidentForensicsAI: React.FC = () => {
             </div>
           </CardContent>
         </Card>
-        <Card className="bg-gradient-to-br from-blue-500/10 to-blue-600/5">
+        <Card className="bg-gradient-to-br from-info/10 to-info/5">
           <CardContent className="pt-4">
             <div className="flex items-center justify-between">
               <div>
                 <p className="text-sm text-muted-foreground">Tempo Médio Análise</p>
                 <p className="text-2xl font-bold">2.5h</p>
               </div>
-              <Clock className="h-8 w-8 text-blue-500" />
+              <Clock className="h-8 w-8 text-info" />
             </div>
           </CardContent>
         </Card>
-        <Card className="bg-gradient-to-br from-purple-500/10 to-purple-600/5">
+        <Card className="bg-gradient-to-br from-primary/10 to-primary/5">
           <CardContent className="pt-4">
             <div className="flex items-center justify-between">
               <div>
                 <p className="text-sm text-muted-foreground">Confiança IA Média</p>
                 <p className="text-2xl font-bold">90%</p>
               </div>
-              <Brain className="h-8 w-8 text-purple-500" />
+              <Brain className="h-8 w-8 text-primary" />
             </div>
           </CardContent>
         </Card>
@@ -331,7 +331,7 @@ export const IncidentForensicsAI: React.FC = () => {
                     <div className="space-y-3">
                       {selectedIncident.timeline.map((event) => (
                         <div key={`${event.timestamp}-${event.type}`} className="flex items-start gap-3 p-3 rounded-lg border">
-                          <div className={`p-2 rounded-lg ${event.criticality === "high" ? "bg-red-500/10" : event.criticality === "medium" ? "bg-yellow-500/10" : "bg-green-500/10"}`}>
+                          <div className={`p-2 rounded-lg ${event.criticality === "high" ? "bg-destructive/10" : event.criticality === "medium" ? "bg-warning/10" : "bg-success/10"}`}>
                             {getEventIcon(event.type)}
                           </div>
                           <div className="flex-1">
@@ -350,21 +350,21 @@ export const IncidentForensicsAI: React.FC = () => {
                 </TabsContent>
 
                 <TabsContent value="causes" className="space-y-4">
-                  <div className="p-4 bg-red-500/10 rounded-lg border border-red-500/20">
+                  <div className="p-4 bg-destructive/10 rounded-lg border border-destructive/20">
                     <h4 className="font-medium flex items-center gap-2 mb-3">
-                      <Target className="h-5 w-5 text-red-500" />
+                      <Target className="h-5 w-5 text-destructive" />
                       Causas Raiz Identificadas
                     </h4>
                     <ul className="space-y-2">
                       {selectedIncident.rootCauses.map((cause, idx) => (
                         <li key={cause} className="flex items-start gap-2 text-sm">
-                          <span className="text-red-500 font-bold">{idx + 1}.</span>
+                          <span className="text-destructive font-bold">{idx + 1}.</span>
                           {cause}
                         </li>
                       ))}
                     </ul>
                   </div>
-                  <div className="p-4 bg-blue-500/10 rounded-lg border border-blue-500/20">
+                  <div className="p-4 bg-info/10 rounded-lg border border-info/20">
                     <h4 className="font-medium mb-2">Sistemas Afetados</h4>
                     <div className="flex flex-wrap gap-2">
                       {selectedIncident.affectedSystems.map((sys) => (
@@ -375,15 +375,15 @@ export const IncidentForensicsAI: React.FC = () => {
                 </TabsContent>
 
                 <TabsContent value="actions" className="space-y-4">
-                  <div className="p-4 bg-green-500/10 rounded-lg border border-green-500/20">
+                  <div className="p-4 bg-success/10 rounded-lg border border-success/20">
                     <h4 className="font-medium flex items-center gap-2 mb-3">
-                      <CheckCircle className="h-5 w-5 text-green-500" />
+                      <CheckCircle className="h-5 w-5 text-success" />
                       Ações Corretivas Sugeridas
                     </h4>
                     <ul className="space-y-2">
                       {selectedIncident.correctiveActions.map((action) => (
                         <li key={action} className="flex items-start gap-2 text-sm">
-                          <span className="text-green-500 font-bold">•</span>
+                          <span className="text-success font-bold">•</span>
                           {action}
                         </li>
                       ))}
@@ -392,9 +392,9 @@ export const IncidentForensicsAI: React.FC = () => {
                 </TabsContent>
 
                 <TabsContent value="fmea" className="space-y-4">
-                  <div className="p-4 bg-purple-500/10 rounded-lg border border-purple-500/20">
+                  <div className="p-4 bg-primary/10 rounded-lg border border-primary/20">
                     <h4 className="font-medium flex items-center gap-2 mb-3">
-                      <Link2 className="h-5 w-5 text-purple-500" />
+                      <Link2 className="h-5 w-5 text-primary" />
                       Documentos FMEA Relacionados
                     </h4>
                     <div className="flex flex-wrap gap-2">

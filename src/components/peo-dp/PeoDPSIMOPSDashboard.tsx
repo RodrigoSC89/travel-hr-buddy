@@ -28,11 +28,11 @@ interface SimOp {
 
 const typeConfig: Record<string, { label: string; icon: React.ElementType; color: string }> = {
   crane_ops: { label: "Guincho/Crane", icon: Layers, color: "text-warning" },
-  diving: { label: "Mergulho", icon: Anchor, color: "text-blue-400" },
-  rov: { label: "ROV", icon: Target, color: "text-purple-400" },
+  diving: { label: "Mergulho", icon: Anchor, color: "text-info" },
+  rov: { label: "ROV", icon: Target, color: "text-accent-foreground" },
   pipe_lay: { label: "Pipe Lay", icon: Activity, color: "text-primary" },
   supply: { label: "Supply", icon: Anchor, color: "text-primary" },
-  helicopter: { label: "Helicóptero", icon: Zap, color: "text-orange-400" },
+  helicopter: { label: "Helicóptero", icon: Zap, color: "text-warning" },
 };
 
 const statusConfig: Record<string, { label: string; color: string }> = {
@@ -45,7 +45,7 @@ const statusConfig: Record<string, { label: string; color: string }> = {
 const riskColors: Record<string, string> = {
   low: "bg-success/10 text-success border-success/30",
   medium: "bg-warning/10 text-warning border-warning/30",
-  high: "bg-orange-500/10 text-orange-400 border-orange-500/30",
+  high: "bg-warning/10 text-warning border-warning/30",
   critical: "bg-destructive/10 text-destructive border-destructive/30",
 };
 

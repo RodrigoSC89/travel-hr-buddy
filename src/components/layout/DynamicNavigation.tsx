@@ -75,11 +75,11 @@ export function DynamicNavigation({ className }: DynamicNavigationProps) {
 
   const getStatusIcon = (module: ModuleDefinition) => {
     if (module.completeness === "100%") {
-      return <CheckCircle className="w-3 h-3 text-green-400" />;
+      return <CheckCircle className="w-3 h-3 text-success" />;
     } else if (module.completeness === "partial") {
-      return <AlertCircle className="w-3 h-3 text-yellow-400" />;
+      return <AlertCircle className="w-3 h-3 text-warning" />;
     } else if (module.completeness === "broken" || module.status === "incomplete") {
-      return <XCircle className="w-3 h-3 text-red-400" />;
+      return <XCircle className="w-3 h-3 text-destructive" />;
     }
     return null;
   };
@@ -219,19 +219,19 @@ export function DynamicNavigation({ className }: DynamicNavigationProps) {
         </nav>
 
         {/* Status Legend */}
-        <div className="p-4 border-t border-zinc-800 text-xs text-zinc-400">
+        <div className="p-4 border-t border-sidebar-border text-xs text-muted-foreground">
           <div className="font-semibold mb-2">Status Legend:</div>
           <div className="space-y-1">
             <div className="flex items-center gap-2">
-              <CheckCircle className="w-3 h-3 text-green-400" />
+              <CheckCircle className="w-3 h-3 text-success" />
               <span>Complete & Functional</span>
             </div>
             <div className="flex items-center gap-2">
-              <AlertCircle className="w-3 h-3 text-yellow-400" />
+              <AlertCircle className="w-3 h-3 text-warning" />
               <span>Partially Implemented</span>
             </div>
             <div className="flex items-center gap-2">
-              <XCircle className="w-3 h-3 text-red-400" />
+              <XCircle className="w-3 h-3 text-destructive" />
               <span>Incomplete/Broken</span>
             </div>
           </div>

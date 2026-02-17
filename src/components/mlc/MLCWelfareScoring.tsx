@@ -140,8 +140,8 @@ export function MLCWelfareScoring() {
 
   const getStatusBadge = (status: string) => {
     switch (status) {
-      case "compliant": return <Badge className="bg-emerald-500/10 text-emerald-600 border-emerald-500/30 text-xs"><CheckCircle2 className="h-3 w-3 mr-1" />OK</Badge>;
-      case "observation": return <Badge className="bg-amber-500/10 text-amber-600 border-amber-500/30 text-xs"><AlertTriangle className="h-3 w-3 mr-1" />OBS</Badge>;
+      case "compliant": return <Badge className="bg-success/10 text-success border-success/30 text-xs"><CheckCircle2 className="h-3 w-3 mr-1" />OK</Badge>;
+      case "observation": return <Badge className="bg-warning/10 text-warning border-warning/30 text-xs"><AlertTriangle className="h-3 w-3 mr-1" />OBS</Badge>;
       case "non_compliant": return <Badge variant="destructive" className="text-xs">NC</Badge>;
       default: return <Badge variant="outline" className="text-xs"><Clock className="h-3 w-3 mr-1" />Pending</Badge>;
     }
@@ -207,7 +207,7 @@ export function MLCWelfareScoring() {
                     <div className="flex-1 min-w-0">
                       <p className="text-sm font-medium">{item.name}</p>
                       <p className="text-xs text-muted-foreground">{item.standard}</p>
-                      {item.notes && <p className="text-xs text-amber-600 mt-1">{item.notes}</p>}
+                      {item.notes && <p className="text-xs text-warning mt-1">{item.notes}</p>}
                     </div>
                     <div className="flex items-center gap-3 shrink-0">
                       <div className="flex gap-1">
@@ -217,7 +217,7 @@ export function MLCWelfareScoring() {
                             onClick={() => updateItemScore(cat.id, item.id, s)}
                             className={`w-7 h-7 rounded text-xs font-bold transition-colors ${
                               s <= item.score
-                                ? s >= 4 ? "bg-emerald-500 text-white" : s >= 3 ? "bg-amber-500 text-white" : "bg-red-500 text-white"
+                                ? s >= 4 ? "bg-success text-success-foreground" : s >= 3 ? "bg-warning text-warning-foreground" : "bg-destructive text-destructive-foreground"
                                 : "bg-muted/30 text-muted-foreground hover:bg-muted/50"
                             }`}
                           >

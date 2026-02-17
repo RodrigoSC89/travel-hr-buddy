@@ -60,10 +60,10 @@ const initialSystems: ASOGSystem[] = [
 ];
 
 const STATUS_CONFIG: Record<ASOGLevel, { color: string; bg: string; label: string; icon: React.ElementType }> = {
-  GREEN: { color: "text-emerald-600", bg: "bg-emerald-500/10 border-emerald-500/30", label: "Normal Operation", icon: CheckCircle2 },
-  YELLOW: { color: "text-amber-600", bg: "bg-amber-500/10 border-amber-500/30", label: "Advisory - Reduced Redundancy", icon: AlertTriangle },
-  RED: { color: "text-red-600", bg: "bg-red-500/10 border-red-500/30", label: "Operations Restricted", icon: XCircle },
-  BLUE: { color: "text-blue-600", bg: "bg-blue-500/10 border-blue-500/30", label: "Planned Maintenance", icon: Timer },
+  GREEN: { color: "text-success", bg: "bg-success/10 border-success/30", label: "Normal Operation", icon: CheckCircle2 },
+  YELLOW: { color: "text-warning", bg: "bg-warning/10 border-warning/30", label: "Advisory - Reduced Redundancy", icon: AlertTriangle },
+  RED: { color: "text-destructive", bg: "bg-destructive/10 border-destructive/30", label: "Operations Restricted", icon: XCircle },
+  BLUE: { color: "text-info", bg: "bg-info/10 border-info/30", label: "Planned Maintenance", icon: Timer },
 };
 
 export function ASOGStatusBoard() {
@@ -149,15 +149,15 @@ export function ASOGStatusBoard() {
             </div>
             <div className="flex items-center gap-6">
               <div className="text-center">
-                <p className="text-3xl font-bold text-emerald-600">{greenCount}</p>
+                <p className="text-3xl font-bold text-success">{greenCount}</p>
                 <p className="text-xs text-muted-foreground">Normal</p>
               </div>
               <div className="text-center">
-                <p className="text-3xl font-bold text-amber-600">{yellowCount}</p>
+                <p className="text-3xl font-bold text-warning">{yellowCount}</p>
                 <p className="text-xs text-muted-foreground">Advisory</p>
               </div>
               <div className="text-center">
-                <p className="text-3xl font-bold text-red-600">{redCount}</p>
+                <p className="text-3xl font-bold text-destructive">{redCount}</p>
                 <p className="text-xs text-muted-foreground">Critical</p>
               </div>
               <div className="text-center">

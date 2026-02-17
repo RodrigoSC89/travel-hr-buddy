@@ -323,7 +323,7 @@ export default function InteractiveOnboarding() {
               exit={{ opacity: 0, x: -50 }}
               transition={{ duration: 0.3 }}
             >
-              <Card className={`border-2 ${visitedModules.includes(MODULES[currentStep].id) ? 'border-green-500/50' : 'border-primary/20'}`}>
+              <Card className={`border-2 ${visitedModules.includes(MODULES[currentStep].id) ? 'border-success/50' : 'border-primary/20'}`}>
                 <CardContent className="p-8">
                   <div className="grid md:grid-cols-2 gap-8">
                     {/* Left: Module Info */}
@@ -349,7 +349,7 @@ export default function InteractiveOnboarding() {
                         <ul className="space-y-2">
                           {MODULES[currentStep].features.map((feature) => (
                             <li key={feature} className="flex items-center gap-2 text-muted-foreground">
-                              <CheckCircle2 className="h-4 w-4 text-green-500" />
+                              <CheckCircle2 className="h-4 w-4 text-success" />
                               {feature}
                             </li>
                           ))}
@@ -434,7 +434,7 @@ export default function InteractiveOnboarding() {
                 i === currentStep
                   ? 'bg-primary scale-125'
                   : visitedModules.includes(module.id)
-                  ? 'bg-green-500'
+                  ? 'bg-success'
                   : 'bg-muted-foreground/30'
               }`}
             />
@@ -474,10 +474,10 @@ export default function InteractiveOnboarding() {
             initial={{ opacity: 0, y: 20 }}
             animate={{ opacity: 1, y: 0 }}
           >
-            <Card className="border-2 border-green-500/50 bg-green-500/5">
+            <Card className="border-2 border-success/50 bg-success/5">
               <CardContent className="py-8 text-center space-y-4">
-                <div className="w-16 h-16 mx-auto bg-green-500 rounded-full flex items-center justify-center">
-                  <CheckCircle2 className="h-8 w-8 text-white" />
+                <div className="w-16 h-16 mx-auto bg-success rounded-full flex items-center justify-center">
+                  <CheckCircle2 className="h-8 w-8 text-success-foreground" />
                 </div>
                 <h2 className="text-2xl font-bold">🎉 Tour Completo!</h2>
                 <p className="text-muted-foreground max-w-md mx-auto">

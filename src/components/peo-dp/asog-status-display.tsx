@@ -102,37 +102,37 @@ const STATUS_CONFIG: Record<ASOGStatus, {
     label: "GREEN",
     description: "Operações Normais",
     icon: CheckCircle,
-    bgColor: "bg-green-50 dark:bg-green-950/20",
-    textColor: "text-green-700 dark:text-green-400",
-    borderColor: "border-green-200 dark:border-green-800",
-    badgeColor: "bg-green-500"
+    bgColor: "bg-success/10",
+    textColor: "text-success",
+    borderColor: "border-success/30",
+    badgeColor: "bg-success"
   },
   blue: {
     label: "BLUE",
     description: "Advisory",
     icon: Info,
-    bgColor: "bg-blue-50 dark:bg-blue-950/20",
-    textColor: "text-blue-700 dark:text-blue-400",
-    borderColor: "border-blue-200 dark:border-blue-800",
-    badgeColor: "bg-blue-500"
+    bgColor: "bg-info/10",
+    textColor: "text-info",
+    borderColor: "border-info/30",
+    badgeColor: "bg-info"
   },
   yellow: {
     label: "YELLOW",
     description: "Degradado",
     icon: AlertTriangle,
-    bgColor: "bg-yellow-50 dark:bg-yellow-950/20",
-    textColor: "text-yellow-700 dark:text-yellow-400",
-    borderColor: "border-yellow-200 dark:border-yellow-800",
-    badgeColor: "bg-yellow-500"
+    bgColor: "bg-warning/10",
+    textColor: "text-warning",
+    borderColor: "border-warning/30",
+    badgeColor: "bg-warning"
   },
   red: {
     label: "RED",
     description: "Emergência",
     icon: XCircle,
-    bgColor: "bg-red-50 dark:bg-red-950/20",
-    textColor: "text-red-700 dark:text-red-400",
-    borderColor: "border-red-200 dark:border-red-800",
-    badgeColor: "bg-red-500"
+    bgColor: "bg-destructive/10",
+    textColor: "text-destructive",
+    borderColor: "border-destructive/30",
+    badgeColor: "bg-destructive"
   }
 };
 

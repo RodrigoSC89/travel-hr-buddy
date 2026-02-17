@@ -25,26 +25,26 @@ export const FleetHealthPanel: React.FC<FleetHealthPanelProps> = ({
 
   const getStatusColor = (status: string) => {
     switch (status) {
-      case "operacional": return "bg-green-500";
-      case "atencao": return "bg-yellow-500";
-      case "critico": return "bg-red-500";
-      default: return "bg-gray-500";
+      case "operacional": return "bg-success";
+      case "atencao": return "bg-warning";
+      case "critico": return "bg-destructive";
+      default: return "bg-muted";
     }
   };
 
   const getStatusIcon = (status: string) => {
     switch (status) {
-      case "operacional": return <CheckCircle className="h-4 w-4 text-green-500" />;
-      case "atencao": return <Clock className="h-4 w-4 text-yellow-500" />;
-      case "critico": return <AlertTriangle className="h-4 w-4 text-red-500" />;
+      case "operacional": return <CheckCircle className="h-4 w-4 text-success" />;
+      case "atencao": return <Clock className="h-4 w-4 text-warning" />;
+      case "critico": return <AlertTriangle className="h-4 w-4 text-destructive" />;
       default: return <Activity className="h-4 w-4" />;
     }
   };
 
   const getHealthColor = (saude: number) => {
-    if (saude >= 80) return "bg-green-500";
-    if (saude >= 60) return "bg-yellow-500";
-    return "bg-red-500";
+    if (saude >= 80) return "bg-success";
+    if (saude >= 60) return "bg-warning";
+    return "bg-destructive";
   };
 
   if (isLoading && !propEquipamentos) {
@@ -124,15 +124,15 @@ export const FleetHealthPanel: React.FC<FleetHealthPanelProps> = ({
         <CardContent>
           <div className="flex gap-4 mb-4">
             <div className="flex items-center gap-2">
-              <div className="w-3 h-3 rounded-full bg-green-500" />
+              <div className="w-3 h-3 rounded-full bg-success" />
               <span className="text-sm">{operacionais} Operacionais</span>
             </div>
             <div className="flex items-center gap-2">
-              <div className="w-3 h-3 rounded-full bg-yellow-500" />
+              <div className="w-3 h-3 rounded-full bg-warning" />
               <span className="text-sm">{atencao} Atenção</span>
             </div>
             <div className="flex items-center gap-2">
-              <div className="w-3 h-3 rounded-full bg-red-500" />
+              <div className="w-3 h-3 rounded-full bg-destructive" />
               <span className="text-sm">{criticos} Críticos</span>
             </div>
           </div>
@@ -149,8 +149,8 @@ export const FleetHealthPanel: React.FC<FleetHealthPanelProps> = ({
                 <div
                   key={equip.id}
                   className={`p-3 rounded-lg border ${
-                    equip.status === "critico" ? "border-red-500/50 bg-red-500/5" :
-                    equip.status === "atencao" ? "border-yellow-500/50 bg-yellow-500/5" :
+                    equip.status === "critico" ? "border-destructive/50 bg-destructive/5" :
+                    equip.status === "atencao" ? "border-warning/50 bg-warning/5" :
                     "border-border"
                   }`}
                 >
@@ -186,7 +186,7 @@ export const FleetHealthPanel: React.FC<FleetHealthPanelProps> = ({
                     </div>
                   </div>
                   {equip.falhasRecentes > 0 && (
-                    <div className="mt-2 flex items-center gap-2 text-xs text-yellow-600">
+                    <div className="mt-2 flex items-center gap-2 text-xs text-warning">
                       <AlertTriangle className="h-3 w-3" />
                       {equip.falhasRecentes} falha(s) nos últimos 90 dias
                     </div>
