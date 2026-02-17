@@ -34,6 +34,8 @@ serve(async (req) => {
       return await matchEvidence(supabase, body);
     } else if (action === "generate_responses") {
       return await generateResponses(supabase, body);
+    } else if (action === "rematch_gaps") {
+      return await rematchGaps(supabase, body);
     }
 
     return new Response(JSON.stringify({ error: "Invalid action" }), {
@@ -587,6 +589,215 @@ ${item.ai_suggestion ? `Sugestão: ${item.ai_suggestion}` : ""}`).join("\n\n")}`
 
   return new Response(
     JSON.stringify({ success: true, processed: items.length }),
+    { headers: { ...corsHeaders, "Content-Type": "application/json" } }
+  );
+}
+
+/**
+ * Step 4: Re-match only gap items (not_found or partial)
+ */
+async function rematchGaps(supabase: any, body: ParseRequest) {
+  const { pack_id, framework } = body;
+  if (!pack_id) {
+    return new Response(JSON.stringify({ error: "pack_id required" }), {
+      status: 400, headers: { ...corsHeaders, "Content-Type": "application/json" },
+    });
+  }
+
+  // Get only gap items
+  const { data: gapItems } = await supabase
+    .from("audit_evidence_items")
+    .select("id, item_text, requirement_description, metadata, element_id, evidence_status")
+    .eq("pack_id", pack_id)
+    .in("evidence_status", ["not_found", "partial", "pending"])
+    .order("sort_order");
+
+  if (!gapItems?.length) {
+    return new Response(
+      JSON.stringify({ success: true, message: "Nenhum gap encontrado", rematched: 0 }),
+      { headers: { ...corsHeaders, "Content-Type": "application/json" } }
+    );
+  }
+
+  // Get ALL documents (fresh scan)
+  const { data: documents } = await supabase
+    .from("ai_documents")
+    .select("id, file_name, title, category, ocr_text, description, file_type, storage_path")
+    .limit(500);
+
+  const docList = documents || [];
+  const docCatalog = docList.map((d: any) => ({
+    id: d.id,
+    name: d.file_name || d.title,
+    category: d.category,
+    type: d.file_type,
+    excerpt: (d.ocr_text || d.description || "").substring(0, 200),
+  }));
+
+  let improvedCount = 0;
+  const batchSize = 10;
+
+  for (let i = 0; i < gapItems.length; i += batchSize) {
+    const batch = gapItems.slice(i, i + batchSize);
+
+    const matchPrompt = `Você é um especialista em auditorias marítimas. Estes itens NÃO tiveram evidência encontrada anteriormente. Faça uma busca MAIS APROFUNDADA, considerando sinônimos, documentos relacionados indiretamente e evidências parciais.
+
+ITENS COM GAP:
+${batch.map((item: any, idx: number) => `[${idx}] ID:${item.id} | Status atual: ${item.evidence_status} | ${item.item_text}`).join("\n")}
+
+BIBLIOTECA DE DOCUMENTOS:
+${docCatalog.map((d: any) => `DOC_ID:${d.id} | ${d.name} | Cat:${d.category || "N/A"} | ${d.excerpt}`).join("\n")}
+
+IMPORTANTE: Seja mais flexível no matching. Considere evidências indiretas e parciais.`;
+
+    try {
+      const aiResponse = await fetch("https://ai.gateway.lovable.dev/v1/chat/completions", {
+        method: "POST",
+        headers: {
+          Authorization: `Bearer ${LOVABLE_API_KEY}`,
+          "Content-Type": "application/json",
+        },
+        body: JSON.stringify({
+          model: "google/gemini-3-flash-preview",
+          messages: [
+            { role: "system", content: "Re-matching expert. Busca mais flexível para evidências de auditoria marítima." },
+            { role: "user", content: matchPrompt },
+          ],
+          tools: [{
+            type: "function",
+            function: {
+              name: "match_items_to_documents",
+              description: "Match gap items to documents with deeper analysis",
+              parameters: {
+                type: "object",
+                properties: {
+                  matches: {
+                    type: "array",
+                    items: {
+                      type: "object",
+                      properties: {
+                        item_id: { type: "string" },
+                        status: { type: "string", enum: ["found", "partial", "not_found"] },
+                        matched_documents: {
+                          type: "array",
+                          items: {
+                            type: "object",
+                            properties: {
+                              document_id: { type: "string" },
+                              confidence: { type: "number" },
+                              reason: { type: "string" },
+                            },
+                            required: ["document_id", "confidence", "reason"],
+                          },
+                        },
+                        suggestion: { type: "string" },
+                        ai_response: { type: "string" },
+                      },
+                      required: ["item_id", "status"],
+                    },
+                  },
+                },
+                required: ["matches"],
+              },
+            },
+          }],
+          tool_choice: { type: "function", function: { name: "match_items_to_documents" } },
+        }),
+      });
+
+      if (!aiResponse.ok) continue;
+
+      const aiData = await aiResponse.json();
+      const toolCall = aiData.choices?.[0]?.message?.tool_calls?.[0];
+      if (!toolCall) continue;
+
+      const result = JSON.parse(toolCall.function.arguments);
+      for (const match of (result.matches || [])) {
+        const originalItem = batch.find((b: any) => b.id === match.item_id);
+        const improved = originalItem && (
+          (originalItem.evidence_status === "not_found" && match.status !== "not_found") ||
+          (originalItem.evidence_status === "partial" && match.status === "found")
+        );
+
+        if (improved) improvedCount++;
+
+        await supabase
+          .from("audit_evidence_items")
+          .update({
+            evidence_status: match.status,
+            ai_response: match.ai_response || null,
+            ai_suggestion: match.suggestion || null,
+          })
+          .eq("id", match.item_id);
+
+        if (match.matched_documents?.length) {
+          for (const doc of match.matched_documents) {
+            const foundDoc = docList.find((d: any) => d.id === doc.document_id);
+            if (foundDoc) {
+              // Delete old AI matches for this item before inserting new ones
+              await supabase.from("audit_evidence_matches")
+                .delete()
+                .eq("item_id", match.item_id)
+                .eq("match_source", "ai");
+
+              await supabase.from("audit_evidence_matches").insert({
+                item_id: match.item_id,
+                pack_id,
+                document_id: doc.document_id,
+                document_title: foundDoc.file_name || foundDoc.title,
+                document_type: foundDoc.file_type,
+                document_path: foundDoc.storage_path,
+                match_source: "ai",
+                match_confidence: doc.confidence,
+                match_reason: doc.reason,
+              });
+            }
+          }
+        }
+      }
+    } catch (err) {
+      console.error("Rematch batch error:", err);
+    }
+  }
+
+  // Recalculate element scores and pack totals
+  const { data: allItems } = await supabase
+    .from("audit_evidence_items")
+    .select("id, evidence_status, element_id")
+    .eq("pack_id", pack_id);
+
+  const { data: elements } = await supabase
+    .from("audit_evidence_elements")
+    .select("id")
+    .eq("pack_id", pack_id);
+
+  for (const el of (elements || [])) {
+    const elItems = (allItems || []).filter((i: any) => i.element_id === el.id);
+    const total = elItems.length;
+    const found = elItems.filter((i: any) => i.evidence_status === "found").length;
+    const partial = elItems.filter((i: any) => i.evidence_status === "partial").length;
+    const notFound = elItems.filter((i: any) => i.evidence_status === "not_found").length;
+    const score = total > 0 ? ((found + partial * 0.5) / total) * 100 : 0;
+
+    await supabase
+      .from("audit_evidence_elements")
+      .update({ matched_count: found, partial_count: partial, unmatched_count: notFound, compliance_score: Math.round(score * 100) / 100 })
+      .eq("id", el.id);
+  }
+
+  const totalItems = (allItems || []).length;
+  const totalFound = (allItems || []).filter((i: any) => i.evidence_status === "found").length;
+  const totalPartial = (allItems || []).filter((i: any) => i.evidence_status === "partial").length;
+  const totalNotFound = (allItems || []).filter((i: any) => i.evidence_status === "not_found").length;
+  const overallScore = totalItems > 0 ? ((totalFound + totalPartial * 0.5) / totalItems) * 100 : 0;
+
+  await supabase
+    .from("audit_evidence_packs")
+    .update({ matched_items: totalFound, partial_items: totalPartial, unmatched_items: totalNotFound, overall_score: Math.round(overallScore * 100) / 100 })
+    .eq("id", pack_id);
+
+  return new Response(
+    JSON.stringify({ success: true, gaps_processed: gapItems.length, improved: improvedCount, new_score: Math.round(overallScore * 100) / 100 }),
     { headers: { ...corsHeaders, "Content-Type": "application/json" } }
   );
 }

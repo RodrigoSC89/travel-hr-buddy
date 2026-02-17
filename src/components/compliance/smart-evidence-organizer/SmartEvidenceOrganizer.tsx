@@ -27,6 +27,8 @@ import { EvidenceDashboard } from "./EvidenceDashboard";
 import { EvidenceExporter } from "./EvidenceExporter";
 import { DocumentLibrarySidebar } from "./DocumentLibrarySidebar";
 import { PackHistoryComparison } from "./PackHistoryComparison";
+import { PackDiffComparison } from "./PackDiffComparison";
+import { CriticalGapsAlert } from "./CriticalGapsAlert";
 import type { EvidenceElement, EvidenceItem, EvidenceMatch, ViewMode } from "./types";
 import { Dialog, DialogContent, DialogHeader, DialogTitle } from "@/components/ui/dialog";
 
@@ -399,8 +401,8 @@ function ManualEvidenceDialog({ itemId, onSubmit, open, onOpenChange }: {
 export function SmartEvidenceOrganizer({ framework }: Props) {
   const {
     packs, activePack, elements, items, matches,
-    isLoading, processingStep,
-    loadPacks, loadPackDetails, setActivePack, uploadAndProcess, addManualEvidence,
+    isLoading, isRematching, processingStep,
+    loadPacks, loadPackDetails, loadPackElements, setActivePack, uploadAndProcess, addManualEvidence, rematchGaps,
   } = useEvidenceOrganizer(framework);
 
   const [viewMode, setViewMode] = useState<ViewMode>("tree");
@@ -489,6 +491,9 @@ export function SmartEvidenceOrganizer({ framework }: Props) {
             processingStep={processingStep}
           />
           <PackHistoryComparison packs={packs} onSelectPack={loadPackDetails} />
+          {packs.length >= 2 && (
+            <PackDiffComparison packs={packs} onLoadPackElements={loadPackElements} />
+          )}
         </motion.div>
       ) : (
         <div className="flex gap-4">
@@ -509,6 +514,15 @@ export function SmartEvidenceOrganizer({ framework }: Props) {
               </div>
               <Progress value={activePack.overall_score} className="h-2" />
               <KPIBar pack={activePack} />
+
+              {/* Critical Gaps Alert */}
+              <CriticalGapsAlert
+                items={items}
+                elements={elements}
+                overallScore={activePack.overall_score}
+                onRematchGaps={rematchGaps}
+                isRematching={isRematching}
+              />
             </motion.div>
 
             {/* Tabs: Evidence / Dashboard */}
