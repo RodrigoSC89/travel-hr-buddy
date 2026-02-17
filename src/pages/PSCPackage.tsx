@@ -1,11 +1,13 @@
+import { motion } from 'framer-motion';
+import { PSCPackagePanel } from '@/components/psc/PSCPackagePanel';
 import type { FC } from 'react';
 import { useState, Suspense, lazy } from 'react';
 import { ModulePageWrapper } from '@/components/ui/module-page-wrapper';
 import { ModuleHeader } from '@/components/ui/module-header';
-import { Shield, AlertTriangle, Package, Download, Sparkles, Search, MessageSquare, Zap, ClipboardCheck, FileSearch, Clock, Globe, Brain } from 'lucide-react';
-import { PSCPackagePanel } from '@/components/psc/PSCPackagePanel';
+import { Shield, AlertTriangle, Package, Sparkles, Search, MessageSquare, Zap, ClipboardCheck, Clock, Globe, Brain } from 'lucide-react';
 import { Tabs, TabsContent, TabsList, TabsTrigger } from '@/components/ui/tabs';
 import { Skeleton } from '@/components/ui/skeleton';
+import { staggerContainer, fadeUp } from '@/lib/animations/motion-variants';
 
 const ComplianceSGIAutoEvidence = lazy(() => import('@/components/compliance/ai/ComplianceSGIAutoEvidence').then(m => ({ default: m.ComplianceSGIAutoEvidence })));
 const ComplianceGapAnalyzer = lazy(() => import('@/components/compliance/ai/ComplianceGapAnalyzer').then(m => ({ default: m.ComplianceGapAnalyzer })));
@@ -38,49 +40,46 @@ const PSCPackagePage: FC = () => {
 
   return (
     <ModulePageWrapper gradient="orange">
-      <ModuleHeader
-        icon={Shield}
-        title="PSC Readiness Package"
-        description="Port State Control - Preparação e rastreamento de deficiências"
-        gradient="orange"
-        badges={[
-          { icon: Package, label: 'Pacotes ZIP/PDF' },
-          { icon: AlertTriangle, label: 'Deficiências' },
-          { icon: Brain, label: 'IA Integrada' },
-        ]}
-      />
-      <Tabs value={activeTab} onValueChange={setActiveTab} className="space-y-4">
-        <TabsList className="flex-wrap">
-          <TabsTrigger value="psc-panel">PSC Package</TabsTrigger>
-          <TabsTrigger value="sgi-evidence" className="gap-1"><Sparkles className="h-3 w-3" />SGI Evidence</TabsTrigger>
-          <TabsTrigger value="gap-analyzer" className="gap-1"><Search className="h-3 w-3" />Gap Analyzer</TabsTrigger>
-          <TabsTrigger value="interview-sim" className="gap-1"><MessageSquare className="h-3 w-3" />Simulador</TabsTrigger>
-          <TabsTrigger value="audit-prep" className="gap-1"><Zap className="h-3 w-3" />Audit Prep</TabsTrigger>
-          <TabsTrigger value="checklist-gen" className="gap-1"><ClipboardCheck className="h-3 w-3" />Checklist IA</TabsTrigger>
-          <TabsTrigger value="timeline" className="gap-1"><Clock className="h-3 w-3" />Timeline</TabsTrigger>
-          <TabsTrigger value="psc-risk" className="gap-1"><AlertTriangle className="h-3 w-3" />Risco Detenção</TabsTrigger>
-          <TabsTrigger value="nc-resolver" className="gap-1"><Zap className="h-3 w-3" />NC Resolver</TabsTrigger>
-          <TabsTrigger value="photo-ai" className="gap-1"><Search className="h-3 w-3" />Foto IA</TabsTrigger>
-          <TabsTrigger value="score-benchmark" className="gap-1"><Brain className="h-3 w-3" />Benchmarking</TabsTrigger>
-          <TabsTrigger value="reg-tracker" className="gap-1"><Globe className="h-3 w-3" />Regulatório</TabsTrigger>
-        </TabsList>
+      <motion.div initial="hidden" animate="visible" variants={staggerContainer}>
+        <motion.div variants={fadeUp}>
+          <ModuleHeader icon={Shield} title="PSC Readiness Package" description="Port State Control - Preparação e rastreamento de deficiências" gradient="orange"
+            badges={[{ icon: Package, label: 'Pacotes ZIP/PDF' }, { icon: AlertTriangle, label: 'Deficiências' }, { icon: Brain, label: 'IA Integrada' }]} />
+        </motion.div>
+        <motion.div variants={fadeUp}>
+          <Tabs value={activeTab} onValueChange={setActiveTab} className="space-y-4">
+            <TabsList className="flex-wrap">
+              <TabsTrigger value="psc-panel">PSC Package</TabsTrigger>
+              <TabsTrigger value="sgi-evidence" className="gap-1"><Sparkles className="h-3 w-3" />SGI Evidence</TabsTrigger>
+              <TabsTrigger value="gap-analyzer" className="gap-1"><Search className="h-3 w-3" />Gap Analyzer</TabsTrigger>
+              <TabsTrigger value="interview-sim" className="gap-1"><MessageSquare className="h-3 w-3" />Simulador</TabsTrigger>
+              <TabsTrigger value="audit-prep" className="gap-1"><Zap className="h-3 w-3" />Audit Prep</TabsTrigger>
+              <TabsTrigger value="checklist-gen" className="gap-1"><ClipboardCheck className="h-3 w-3" />Checklist IA</TabsTrigger>
+              <TabsTrigger value="timeline" className="gap-1"><Clock className="h-3 w-3" />Timeline</TabsTrigger>
+              <TabsTrigger value="psc-risk" className="gap-1"><AlertTriangle className="h-3 w-3" />Risco Detenção</TabsTrigger>
+              <TabsTrigger value="nc-resolver" className="gap-1"><Zap className="h-3 w-3" />NC Resolver</TabsTrigger>
+              <TabsTrigger value="photo-ai" className="gap-1"><Search className="h-3 w-3" />Foto IA</TabsTrigger>
+              <TabsTrigger value="score-benchmark" className="gap-1"><Brain className="h-3 w-3" />Benchmarking</TabsTrigger>
+              <TabsTrigger value="reg-tracker" className="gap-1"><Globe className="h-3 w-3" />Regulatório</TabsTrigger>
+            </TabsList>
 
-        <TabsContent value="psc-panel"><PSCPackagePanel /></TabsContent>
+            <TabsContent value="psc-panel"><PSCPackagePanel /></TabsContent>
 
-        <Suspense fallback={<LoadingFallback />}>
-          <TabsContent value="sgi-evidence"><ComplianceSGIAutoEvidence moduleId="psc" moduleName="PSC Readiness" checklistItems={PSC_ITEMS} /></TabsContent>
-          <TabsContent value="gap-analyzer"><ComplianceGapAnalyzer moduleId="psc" moduleName="PSC Readiness" standards={["Paris MoU", "Tokyo MoU", "USCG", "AMSA", "Indian Ocean MoU"]} /></TabsContent>
-          <TabsContent value="interview-sim"><ComplianceInterviewSimulator moduleId="psc" moduleName="PSC Readiness" standardContext="Port State Control inspection simulation. Covers SOLAS, MARPOL, MLC, ISM, ISPS compliance checks. Focus on certificate validity, crew competence, equipment readiness, and operational deficiencies commonly found by PSC inspectors." /></TabsContent>
-          <TabsContent value="audit-prep"><ComplianceOneClickAuditPrep moduleId="psc" moduleName="PSC Readiness" /></TabsContent>
-          <TabsContent value="checklist-gen"><ComplianceAutoChecklistGenerator moduleId="psc" moduleName="PSC Readiness" /></TabsContent>
-          <TabsContent value="timeline"><ComplianceTimeline moduleId="psc" moduleName="PSC Readiness" /></TabsContent>
-          <TabsContent value="psc-risk"><CompliancePSCRiskPredictor moduleId="psc" moduleName="PSC Readiness" /></TabsContent>
-          <TabsContent value="nc-resolver"><ComplianceAutoNCResolver moduleId="psc" moduleName="PSC Readiness" /></TabsContent>
-          <TabsContent value="photo-ai"><CompliancePhotoEvidenceAI moduleId="psc" moduleName="PSC Readiness" /></TabsContent>
-          <TabsContent value="score-benchmark"><ComplianceScoreBenchmark moduleId="psc" moduleName="PSC Readiness" /></TabsContent>
-          <TabsContent value="reg-tracker"><ComplianceRegulatoryChangeTracker moduleId="psc" moduleName="PSC Readiness" /></TabsContent>
-        </Suspense>
-      </Tabs>
+            <Suspense fallback={<LoadingFallback />}>
+              <TabsContent value="sgi-evidence"><ComplianceSGIAutoEvidence moduleId="psc" moduleName="PSC Readiness" checklistItems={PSC_ITEMS} /></TabsContent>
+              <TabsContent value="gap-analyzer"><ComplianceGapAnalyzer moduleId="psc" moduleName="PSC Readiness" standards={["Paris MoU", "Tokyo MoU", "USCG", "AMSA", "Indian Ocean MoU"]} /></TabsContent>
+              <TabsContent value="interview-sim"><ComplianceInterviewSimulator moduleId="psc" moduleName="PSC Readiness" standardContext="Port State Control inspection simulation. Covers SOLAS, MARPOL, MLC, ISM, ISPS compliance checks." /></TabsContent>
+              <TabsContent value="audit-prep"><ComplianceOneClickAuditPrep moduleId="psc" moduleName="PSC Readiness" /></TabsContent>
+              <TabsContent value="checklist-gen"><ComplianceAutoChecklistGenerator moduleId="psc" moduleName="PSC Readiness" /></TabsContent>
+              <TabsContent value="timeline"><ComplianceTimeline moduleId="psc" moduleName="PSC Readiness" /></TabsContent>
+              <TabsContent value="psc-risk"><CompliancePSCRiskPredictor moduleId="psc" moduleName="PSC Readiness" /></TabsContent>
+              <TabsContent value="nc-resolver"><ComplianceAutoNCResolver moduleId="psc" moduleName="PSC Readiness" /></TabsContent>
+              <TabsContent value="photo-ai"><CompliancePhotoEvidenceAI moduleId="psc" moduleName="PSC Readiness" /></TabsContent>
+              <TabsContent value="score-benchmark"><ComplianceScoreBenchmark moduleId="psc" moduleName="PSC Readiness" /></TabsContent>
+              <TabsContent value="reg-tracker"><ComplianceRegulatoryChangeTracker moduleId="psc" moduleName="PSC Readiness" /></TabsContent>
+            </Suspense>
+          </Tabs>
+        </motion.div>
+      </motion.div>
     </ModulePageWrapper>
   );
 };
