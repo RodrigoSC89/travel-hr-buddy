@@ -185,3 +185,26 @@ export async function getQueueStats(): Promise<{
   
   return { pendingCount, cacheSize };
 }
+
+/**
+ * Initialize auto-sync: flush pending actions when network comes back online
+ */
+export function initAutoSync(): () => void {
+  const handler = async () => {
+    if (navigator.onLine) {
+      const actions = await getPendingActions();
+      if (actions.length > 0) {
+        logger.info(`[SyncQueue] Network restored, ${actions.length} pending actions to sync`);
+      }
+    }
+  };
+
+  window.addEventListener("online", handler);
+
+  // Try initial flush
+  if (navigator.onLine) {
+    handler().catch(() => {});
+  }
+
+  return () => window.removeEventListener("online", handler);
+}

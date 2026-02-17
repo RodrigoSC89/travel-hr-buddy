@@ -1,4 +1,4 @@
-import React, { useState, useMemo, memo, useCallback } from "react";
+import React, { useState, useMemo, memo, useCallback, Suspense } from "react";
 import { useTranslation } from "react-i18next";
 import { useOptimizedPolling } from "@/hooks/use-optimized-polling";
 import { useQuery } from "@tanstack/react-query";
@@ -167,7 +167,7 @@ const EnhancedUnifiedDashboard = () => {
   const [isAutoUpdate, setIsAutoUpdate] = useState(true);
   const [filterPeriod, setFilterPeriod] = useState("30d");
 
-  const { data: realStats, refetch: refetchStats } = useDashboardStats();
+  const { data: realStats, isLoading: isStatsLoading, refetch: refetchStats } = useDashboardStats();
 
   const dashboardData = useMemo(() => ({
     kpis: {

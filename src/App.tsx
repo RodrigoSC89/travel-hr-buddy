@@ -21,6 +21,7 @@ import { AppRoutes } from "@/routes/AppRoutes";
 import { AppLoader } from "@/routes/AppLoader";
 import { prefetchCriticalRoutes } from "@/lib/performance/route-prefetch";
 import { initNautiOneDB } from "@/lib/offline/db";
+import { initAutoSync } from "@/lib/offline/sync-queue";
 import { PerformanceProvider } from "@/components/ui/PerformanceProvider";
 
 // ============================================
@@ -70,6 +71,9 @@ function App() {
     initNautiOneDB().catch((err) => {
       logger.warn('[App] IndexedDB init skipped:', err);
     });
+    // Initialize offline sync queue auto-flush on network recovery
+    const cleanupSync = initAutoSync();
+    return () => cleanupSync();
   }, []);
 
   return (
