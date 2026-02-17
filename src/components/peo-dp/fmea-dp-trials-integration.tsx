@@ -558,9 +558,9 @@ export const FMEADPTrialsIntegration: React.FC = () => {
                 </div>
               </div>
 
-              <div className="p-4 bg-blue-50 border border-blue-200 rounded-lg">
-                <h4 className="font-medium text-blue-800 mb-2">Recomendações do Sistema</h4>
-                <ul className="space-y-1 text-sm text-blue-700">
+              <div className="p-4 bg-info/10 border border-info/20 rounded-lg">
+                <h4 className="font-medium text-foreground mb-2">Recomendações do Sistema</h4>
+                <ul className="space-y-1 text-sm text-muted-foreground">
                   <li>• Capacidade ótima até 25 kts de vento em todas as direções</li>
                   <li>• Reduzir operações críticas quando corrente &gt; 2.0 kts</li>
                   <li>• Heading preferencial: Norte/Sul para máxima eficiência</li>

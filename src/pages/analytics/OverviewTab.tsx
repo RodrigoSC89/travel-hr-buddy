@@ -94,8 +94,8 @@ export const OverviewTab = ({ fleetMetrics, insights }: OverviewTabProps) => (
             <AreaChart data={REVENUE_DATA}>
               <CartesianGrid strokeDasharray="3 3" />
               <XAxis dataKey="month" /><YAxis /><Tooltip /><Legend />
-              <Area type="monotone" dataKey="receita" stackId="1" stroke="#10b981" fill="#10b981" name="Receita" />
-              <Area type="monotone" dataKey="custos" stackId="2" stroke="#f59e0b" fill="#f59e0b" name="Custos" />
+              <Area type="monotone" dataKey="receita" stackId="1" stroke="hsl(var(--success))" fill="hsl(var(--success))" name="Receita" />
+              <Area type="monotone" dataKey="custos" stackId="2" stroke="hsl(var(--warning))" fill="hsl(var(--warning))" name="Custos" />
             </AreaChart>
           </ResponsiveContainer>
         </CardContent>
@@ -107,9 +107,9 @@ export const OverviewTab = ({ fleetMetrics, insights }: OverviewTabProps) => (
             <RechartsLineChart data={TREND_DATA}>
               <CartesianGrid strokeDasharray="3 3" />
               <XAxis dataKey="date" /><YAxis /><Tooltip /><Legend />
-              <Line type="monotone" dataKey="eficiencia" stroke="#3b82f6" name="Eficiência" />
-              <Line type="monotone" dataKey="disponibilidade" stroke="#10b981" name="Disponibilidade" />
-              <Line type="monotone" dataKey="manutencao" stroke="#f59e0b" name="Manutenção" />
+              <Line type="monotone" dataKey="eficiencia" stroke="hsl(var(--primary))" name="Eficiência" />
+              <Line type="monotone" dataKey="disponibilidade" stroke="hsl(var(--success))" name="Disponibilidade" />
+              <Line type="monotone" dataKey="manutencao" stroke="hsl(var(--warning))" name="Manutenção" />
             </RechartsLineChart>
           </ResponsiveContainer>
         </CardContent>

@@ -333,8 +333,8 @@ export default function SGSOAuditReviewPage() {
             <h3 className="text-lg font-semibold mt-6">Itens da Auditoria</h3>
             {items.map((item) => (
               <Card key={item.id} className="border-l-4" style={{
-                borderLeftColor: item.compliance_status === "compliant" ? "#22c55e" :
-                  item.compliance_status === "partial" ? "#eab308" : "#ef4444"
+                borderLeftColor: item.compliance_status === "compliant" ? "hsl(var(--success))" :
+                  item.compliance_status === "partial" ? "hsl(var(--warning))" : "hsl(var(--destructive))"
               }}>
                 <CardHeader className="pb-3">
                   <div className="flex items-center justify-between">

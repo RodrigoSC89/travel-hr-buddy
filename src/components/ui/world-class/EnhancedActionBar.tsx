@@ -165,14 +165,14 @@ export function EnhancedActionBar({
               disabled={isDisabled}
               className={cn(
                 'gap-2 transition-all duration-200',
-                isSuccess && 'bg-green-500/10 text-green-600 border-green-500/20',
+                isSuccess && 'bg-success/10 text-success border-success/20',
                 action.variant === 'default' && 'bg-primary hover:bg-primary/90'
               )}
             >
               {isLoading ? (
                 <Loader2 className="h-4 w-4 animate-spin" />
               ) : isSuccess ? (
-                <CheckCircle2 className="h-4 w-4 text-green-600" />
+                <CheckCircle2 className="h-4 w-4 text-success" />
               ) : (
                 action.icon
               )}

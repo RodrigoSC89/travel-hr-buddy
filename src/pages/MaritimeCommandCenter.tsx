@@ -92,7 +92,7 @@ export default function MaritimeCommandCenter() {
       {/* KPIs Overview */}
       <div className="grid grid-cols-2 md:grid-cols-4 lg:grid-cols-8 gap-3 mb-6">
         {[
-          { icon: Users, value: stats.totalCrew, label: "Tripulantes", gradient: "from-blue-500/10 to-cyan-500/10", border: "border-blue-500/20", color: "text-primary" },
+          { icon: Users, value: stats.totalCrew, label: "Tripulantes", gradient: "from-primary/10 to-info/10", border: "border-primary/20", color: "text-primary" },
           { icon: CheckCircle, value: stats.activeCrew, label: "Ativos", gradient: "from-success/10 to-success/5", border: "border-success/20", color: "text-success" },
           { icon: Award, value: stats.certValid, label: "Cert. Válidas", gradient: "from-secondary/10 to-accent/10", border: "border-secondary/20", color: "text-secondary" },
           { icon: Clock, value: stats.certExpiring, label: "Cert. Vencendo", gradient: "from-warning/10 to-warning/5", border: "border-warning/20", color: "text-warning" },

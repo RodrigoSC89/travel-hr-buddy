@@ -20,21 +20,21 @@ export const HelpfulTip: React.FC<TipProps> = ({
   onDismiss
 }) => {
   return (
-    <Card className="border-blue-200 bg-blue-50 animate-slide-in-down">
+    <Card className="border-info/30 bg-info/10 animate-slide-in-down">
       <CardContent className="p-4">
         <div className="flex items-start gap-3">
-          <div className="p-2 bg-blue-100 rounded-full">
-            <Lightbulb className="h-4 w-4 text-blue-600" />
+          <div className="p-2 bg-info/20 rounded-full">
+            <Lightbulb className="h-4 w-4 text-info" />
           </div>
           <div className="flex-1 space-y-2">
-            <h4 className="font-medium text-blue-900">{title}</h4>
-            <p className="text-sm text-blue-800">{description}</p>
+            <h4 className="font-medium text-foreground">{title}</h4>
+            <p className="text-sm text-muted-foreground">{description}</p>
             {action && (
               <Button
                 variant="outline"
                 size="sm"
                 onClick={action.onClick}
-                className="border-blue-300 text-blue-700 hover:bg-blue-100"
+                className="border-info/30 text-info hover:bg-info/20"
               >
                 {action.label}
               </Button>
@@ -45,7 +45,7 @@ export const HelpfulTip: React.FC<TipProps> = ({
               variant="ghost"
               size="sm"
               onClick={onDismiss}
-              className="h-8 w-8 p-0 text-blue-600 hover:bg-blue-100"
+              className="h-8 w-8 p-0 text-info hover:bg-info/20"
             >
               <X className="h-4 w-4" />
             </Button>

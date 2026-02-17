@@ -50,10 +50,10 @@ interface RouteMapProps {
 }
 
 const MARITIME_CONDITION_COLORS: Record<string, string> = {
-  safe: '#10b981',
-  caution: '#f59e0b',
-  warning: '#f97316',
-  danger: '#ef4444',
+  safe: 'hsl(var(--success))',
+  caution: 'hsl(var(--warning))',
+  warning: 'hsl(var(--warning))',
+  danger: 'hsl(var(--destructive))',
 };
 
 export function RouteMap({ 

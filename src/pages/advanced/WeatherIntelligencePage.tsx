@@ -300,7 +300,7 @@ const WeatherIntelligencePage = () => {
             <CardContent>
               <div className="space-y-3">
                 {current && (current?.waveHeight ?? 0) > 2.5 && (
-                  <div className="p-3 bg-amber-500/10 border border-amber-500/20 rounded-lg">
+                  <div className="p-3 bg-warning/10 border border-warning/20 rounded-lg">
                     <p className="text-sm">
                       <strong>🌊 Ondas elevadas:</strong> Altura de {current.waveHeight}m detectada.
                       Considere rota alternativa para minimizar stress estrutural e consumo de combustível.

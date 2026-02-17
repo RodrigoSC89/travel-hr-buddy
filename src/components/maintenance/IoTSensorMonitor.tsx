@@ -289,8 +289,8 @@ export function IoTSensorMonitor({ vesselId, onAnomalyDetected }: IoTSensorMonit
           <Card
             key={sensor.id}
             className={`cursor-pointer hover:shadow-lg transition-all ${
-              sensor.status === "critical" ? "border-red-500/50" :
-              sensor.status === "warning" ? "border-yellow-500/50" : ""
+              sensor.status === "critical" ? "border-destructive/50" :
+              sensor.status === "warning" ? "border-warning/50" : ""
             }`}
             onClick={() => setSelectedSensor(sensor)}
           >

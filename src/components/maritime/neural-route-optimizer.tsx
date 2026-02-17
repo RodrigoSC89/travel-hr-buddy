@@ -202,7 +202,7 @@ export const NeuralRouteOptimizer: React.FC = () => {
               <div>
                 <CardTitle className="text-2xl flex items-center gap-2">
                   Neural Route Optimizer
-                  <Badge className="bg-purple-400 text-purple-900 hover:bg-purple-300">
+                  <Badge className="bg-accent text-accent-foreground hover:bg-accent/80">
                     <Zap className="h-3 w-3 mr-1" />
                     QUANTUM
                   </Badge>

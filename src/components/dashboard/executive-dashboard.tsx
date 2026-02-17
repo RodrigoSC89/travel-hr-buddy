@@ -49,10 +49,10 @@ const fleetPerformance = [
 ];
 
 const operationalMetrics = [
-  { name: "Excelente", value: 65, color: "#10b981" },
-  { name: "Bom", value: 25, color: "#3b82f6" },
-  { name: "Regular", value: 8, color: "#f59e0b" },
-  { name: "Crítico", value: 2, color: "#ef4444" },
+  { name: "Excelente", value: 65, color: "hsl(var(--success))" },
+  { name: "Bom", value: 25, color: "hsl(var(--primary))" },
+  { name: "Regular", value: 8, color: "hsl(var(--warning))" },
+  { name: "Crítico", value: 2, color: "hsl(var(--destructive))" },
 ];
 
 const KPICard = ({ title, value, change, icon: Icon, trend, prefix = "", suffix = "" }: { title: string; value: string | number; change: number; icon: React.ElementType; trend: string; prefix?: string; suffix?: string }) => {

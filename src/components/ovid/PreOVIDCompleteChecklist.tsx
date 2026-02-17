@@ -250,7 +250,7 @@ export const PreOVIDCompleteChecklist: React.FC<PreOVIDCompleteChecklistProps> =
                           <div className="flex items-center gap-2 mt-1">
                             {getPriorityBadge(question.priority)}
                             {question.mandatoryComment && (
-                              <Badge variant="outline" className="text-xs bg-yellow-50 dark:bg-yellow-950">
+                              <Badge variant="outline" className="text-xs bg-warning/10">
                                 Comentário obrigatório
                               </Badge>
                             )}

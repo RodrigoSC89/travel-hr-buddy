@@ -159,7 +159,7 @@ const ComplianceChecklist = () => {
         <AlertCircle className="h-3 w-3" /> Minor Risk
       </Badge>;
     case "compliant":
-      return <Badge variant="secondary" className="flex items-center gap-1 text-green-600">
+      return <Badge variant="secondary" className="flex items-center gap-1 text-success">
         <CheckCircle className="h-3 w-3" /> Compliant
       </Badge>;
     default:
@@ -172,11 +172,11 @@ const ComplianceChecklist = () => {
     case "completed":
       return <Badge variant="secondary">Completed</Badge>;
     case "pending_review":
-      return <Badge variant="outline" className="text-orange-600 border-orange-600">
+      return <Badge variant="outline" className="text-warning border-warning">
           Pending Review
       </Badge>;
     case "approved":
-      return <Badge variant="secondary" className="text-green-600">
+      return <Badge variant="secondary" className="text-success">
           Approved
       </Badge>;
     case "in_progress":
@@ -250,10 +250,10 @@ const ComplianceChecklist = () => {
         <Card>
           <CardHeader className="flex flex-row items-center justify-between pb-2">
             <CardTitle className="text-sm font-medium">At Risk</CardTitle>
-            <AlertTriangle className="h-4 w-4 text-orange-600" />
+            <AlertTriangle className="h-4 w-4 text-warning" />
           </CardHeader>
           <CardContent>
-            <div className="text-2xl font-bold text-orange-600">{atRiskCount}</div>
+            <div className="text-2xl font-bold text-warning">{atRiskCount}</div>
             <p className="text-xs text-muted-foreground">Need attention</p>
           </CardContent>
         </Card>
