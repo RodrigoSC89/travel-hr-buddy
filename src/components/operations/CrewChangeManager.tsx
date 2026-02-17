@@ -231,8 +231,8 @@ export function CrewChangeManager() {
             <Card className="border-border/50 bg-card/80">
               <CardHeader><CardTitle className="text-lg">Pre-Change Checklist Standard</CardTitle></CardHeader>
               <CardContent className="space-y-3">
-                {["Passport validity > 6 months", "Flag State endorsements current", "STCW certificates valid", "Medical fitness certificate", "Yellow fever vaccination", "Seaman's book up to date", "Drug & alcohol test completed", "Pre-embarkation briefing done", "COVID vaccination record", "Travel insurance confirmed"].map((item, i) => (
-                  <div key={i} className="flex items-center gap-3 p-2 rounded-lg bg-muted/20">
+                {["Passport validity > 6 months", "Flag State endorsements current", "STCW certificates valid", "Medical fitness certificate", "Yellow fever vaccination", "Seaman's book up to date", "Drug & alcohol test completed", "Pre-embarkation briefing done", "COVID vaccination record", "Travel insurance confirmed"].map((item) => (
+                  <div key={item} className="flex items-center gap-3 p-2 rounded-lg bg-muted/20">
                     <CheckCircle2 className="h-5 w-5 text-success" />
                     <span>{item}</span>
                   </div>

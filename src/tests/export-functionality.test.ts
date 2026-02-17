@@ -4,6 +4,11 @@
  */
 import { describe, it, expect, vi, beforeEach } from "vitest";
 
+// Mock sonner to avoid CSS injection issues in jsdom
+vi.mock("sonner", () => ({
+  toast: { info: vi.fn(), success: vi.fn(), error: vi.fn(), warning: vi.fn() },
+}));
+
 describe("Export Utilities", () => {
   beforeEach(() => {
     // Mock DOM APIs

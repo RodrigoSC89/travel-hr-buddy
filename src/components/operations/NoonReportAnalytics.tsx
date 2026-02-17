@@ -60,8 +60,8 @@ export function NoonReportAnalytics() {
           { label: "BF Avg", value: "4.2", icon: Wind, trend: "+0.5" },
           { label: "Slip", value: "4.2%", icon: Gauge, trend: "-0.3" },
           { label: "Reports", value: "15", icon: Clock, trend: null },
-        ].map((kpi, i) => (
-          <Card key={i} className="border-border/50 bg-card/80">
+        ].map((kpi) => (
+          <Card key={kpi.label} className="border-border/50 bg-card/80">
             <CardContent className="p-3 text-center">
               <kpi.icon className="h-4 w-4 mx-auto mb-1 text-primary" />
               <p className="text-xs text-muted-foreground">{kpi.label}</p>
@@ -128,8 +128,8 @@ export function NoonReportAnalytics() {
             <CardHeader><CardTitle className="text-lg">Charter Party vs Actual</CardTitle></CardHeader>
             <CardContent>
               <div className="space-y-3">
-                {performanceData.map((row, i) => (
-                  <div key={i} className="flex items-center justify-between p-3 rounded-lg bg-muted/20">
+                {performanceData.map((row) => (
+                  <div key={row.metric} className="flex items-center justify-between p-3 rounded-lg bg-muted/20">
                     <span className="text-sm font-medium w-32">{row.metric}</span>
                     <span className="text-sm">{row.actual}</span>
                     <span className="text-sm text-muted-foreground">{row.charter}</span>

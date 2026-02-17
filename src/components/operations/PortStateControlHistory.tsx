@@ -149,8 +149,8 @@ export function PortStateControlHistory() {
                 { cat: "MARPOL Annex I", code: "13", count: 2, pct: 15 },
                 { cat: "Working & Living Conditions", code: "14", count: 1, pct: 8 },
                 { cat: "ISM Code", code: "15", count: 1, pct: 8 },
-              ].map((d, i) => (
-                <div key={i} className="flex items-center gap-3">
+              ].map((d) => (
+                <div key={d.code} className="flex items-center gap-3">
                   <span className="text-xs text-muted-foreground w-6">{d.code}</span>
                   <span className="text-sm flex-1">{d.cat}</span>
                   <div className="w-32">
@@ -165,11 +165,14 @@ export function PortStateControlHistory() {
 
         <TabsContent value="risk" className="mt-4">
           <div className="grid grid-cols-1 md:grid-cols-2 gap-4">
-            {["MV Atlantic Pioneer", "MV Pacific Star", "MV Northern Spirit", "MV Southern Cross"].map((vessel, i) => {
-              const risk = i < 2 ? "low" : i === 2 ? "standard" : "low";
-              const score = i < 2 ? 95 : i === 2 ? 72 : 88;
+            {[
+              { vessel: "MV Atlantic Pioneer", risk: "low" as const, score: 95 },
+              { vessel: "MV Pacific Star", risk: "low" as const, score: 95 },
+              { vessel: "MV Northern Spirit", risk: "standard" as const, score: 72 },
+              { vessel: "MV Southern Cross", risk: "low" as const, score: 88 },
+            ].map(({ vessel, risk, score }) => {
               return (
-                <Card key={i} className="border-border/50 bg-card/80">
+                <Card key={vessel} className="border-border/50 bg-card/80">
                   <CardContent className="p-4">
                     <div className="flex items-center justify-between mb-2">
                       <span className="font-semibold flex items-center gap-2">

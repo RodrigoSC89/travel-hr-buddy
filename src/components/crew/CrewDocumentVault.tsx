@@ -97,8 +97,8 @@ export function CrewDocumentVault() {
           { icon: Clock, label: "Expiring ≤30d", value: expiringIn30.length, color: "text-warning" },
           { icon: AlertTriangle, label: "Expiring ≤90d", value: expiringIn90.length, color: "text-warning" },
           { icon: XCircle, label: "Expired", value: expired.length, color: "text-destructive" },
-        ].map((kpi, i) => (
-          <motion.div key={i} variants={kpiCard}><Card className="border-border/50 bg-card/80 backdrop-blur">
+        ].map((kpi) => (
+          <motion.div key={kpi.label} variants={kpiCard}><Card className="border-border/50 bg-card/80 backdrop-blur">
             <CardContent className="pt-4 text-center">
               <kpi.icon className={`h-5 w-5 mx-auto mb-1 ${kpi.color}`} />
               <p className="text-xs text-muted-foreground">{kpi.label}</p>
@@ -230,8 +230,8 @@ export function CrewDocumentVault() {
                 { flag: "🇱🇷 Liberia", required: 14, held: 13, compliance: 93 },
                 { flag: "🇵🇦 Panama", required: 11, held: 11, compliance: 100 },
                 { flag: "🇧🇸 Bahamas", required: 13, held: 12, compliance: 92 },
-              ].map((fs, i) => (
-                <div key={i} className="flex items-center gap-4 p-3 rounded-lg bg-background/50">
+              ].map((fs) => (
+                <div key={fs.flag} className="flex items-center gap-4 p-3 rounded-lg bg-background/50">
                   <span className="text-lg">{fs.flag}</span>
                   <div className="flex-1">
                     <div className="flex justify-between text-sm mb-1">

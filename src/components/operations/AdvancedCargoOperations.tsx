@@ -77,8 +77,8 @@ export function AdvancedCargoOperations() {
                 { id: "STS-001", from: "MV Nautilus Star", to: "MV Ocean Pioneer", cargo: "Crude Oil", qty: "45,000 MT", status: "In Progress", progress: 67 },
                 { id: "STS-002", from: "MV Deep Horizon", to: "MV Atlantic Grace", cargo: "VLSFO", qty: "12,000 MT", status: "Scheduled", progress: 0 },
                 { id: "STS-003", from: "MV Pacific Wave", to: "MV Nautilus Star", cargo: "Naphtha", qty: "28,000 MT", status: "Completed", progress: 100 },
-              ].map((sts, i) => (
-                <div key={i} className="p-4 rounded-lg bg-background/50 space-y-2">
+              ].map((sts) => (
+                <div key={sts.id} className="p-4 rounded-lg bg-background/50 space-y-2">
                   <div className="flex items-center justify-between">
                     <div className="flex items-center gap-2">
                       <Badge variant="outline" className="text-xs">{sts.id}</Badge>
