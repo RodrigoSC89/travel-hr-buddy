@@ -132,13 +132,9 @@ export const ComputerVisionInspector: React.FC = () => {
     setIsAnalyzing(true);
     setAnalyzeProgress(0);
 
-    const totalSteps = 10;
-    for (let i = 0; i <= totalSteps; i++) {
-      await new Promise(r => setTimeout(r, 200));
-      setAnalyzeProgress(Math.round((i / totalSteps) * 100));
-    }
-
+    setAnalyzeProgress(10);
     await createInspection.mutateAsync(files[0].name);
+    setAnalyzeProgress(100);
     setIsAnalyzing(false);
     if (event.target) event.target.value = '';
   };
