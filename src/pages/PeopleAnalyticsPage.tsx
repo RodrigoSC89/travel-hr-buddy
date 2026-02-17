@@ -285,8 +285,8 @@ export default function PeopleAnalyticsPage() {
                     <YAxis yAxisId="right" orientation="right" className="text-xs" />
                     <Tooltip contentStyle={{ backgroundColor: 'hsl(var(--card))', border: '1px solid hsl(var(--border))' }} />
                     <Legend />
-                    <Bar yAxisId="right" dataKey="hired" fill="#22c55e" name="Admissões" />
-                    <Bar yAxisId="right" dataKey="left" fill="#ef4444" name="Desligamentos" />
+                    <Bar yAxisId="right" dataKey="hired" fill="hsl(var(--success))" name="Admissões" />
+                    <Bar yAxisId="right" dataKey="left" fill="hsl(var(--destructive))" name="Desligamentos" />
                     <Line yAxisId="left" type="monotone" dataKey="turnover" stroke="hsl(var(--primary))" strokeWidth={2} name="Turnover %" />
                   </ComposedChart>
                 </ResponsiveContainer>

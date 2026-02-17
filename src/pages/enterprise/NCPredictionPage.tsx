@@ -52,9 +52,9 @@ export default function NCPredictionPage() {
     <div className="container mx-auto py-6 space-y-6">
       <div className="flex items-center justify-between">
         <div className="flex items-center gap-4">
-          <div className="p-3 bg-purple-500/20 rounded-xl"><Brain className="h-8 w-8 text-purple-500" /></div>
+          <div className="p-3 bg-accent/20 rounded-xl"><Brain className="h-8 w-8 text-accent-foreground" /></div>
           <div>
-            <h1 className="text-2xl font-bold flex items-center gap-2">NC Prediction<Badge variant="secondary" className="bg-purple-500/20 text-purple-400">ML</Badge></h1>
+            <h1 className="text-2xl font-bold flex items-center gap-2">NC Prediction<Badge variant="secondary" className="bg-accent/20 text-accent-foreground">ML</Badge></h1>
             <p className="text-muted-foreground">Predição de Não-Conformidades usando Machine Learning</p>
           </div>
         </div>

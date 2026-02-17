@@ -45,17 +45,17 @@ export function ConnectionStatusBadge({ showDetails = true, className }: Connect
   };
 
   const getStatusColor = () => {
-    if (isMaritime) return 'bg-amber-500 text-white';
+    if (isMaritime) return 'bg-warning text-warning-foreground';
     
     const effectiveType = connectionQuality?.effectiveType;
     switch (effectiveType) {
       case 'slow-2g':
       case '2g':
-        return 'bg-orange-500 text-white';
+        return 'bg-destructive text-destructive-foreground';
       case '3g':
-        return 'bg-yellow-500 text-black';
+        return 'bg-warning text-warning-foreground';
       case '4g':
-        return 'bg-green-500 text-white';
+        return 'bg-success text-success-foreground';
       default:
         return 'bg-muted text-muted-foreground';
     }
@@ -108,7 +108,7 @@ export function ConnectionStatusBadge({ showDetails = true, className }: Connect
                   <p>Velocidade: {connectionQuality.downlink.toFixed(1)} Mbps</p>
                   <p>Latência: {connectionQuality.rtt}ms</p>
                   {isMaritime && (
-                    <p className="text-amber-400">
+                    <p className="text-warning">
                       ⚠️ Conexão via satélite detectada. Modo otimizado ativado.
                     </p>
                   )}

@@ -127,11 +127,11 @@ export const AdvancedFeaturesTab: React.FC<AdvancedFeaturesTabProps> = ({
               return (
                 <div 
                   key={feature.id} 
-                  className={`p-4 border rounded-lg ${feature.danger ? "border-orange-200 bg-orange-50 dark:bg-orange-900/10" : ""}`}
+                  className={`p-4 border rounded-lg ${feature.danger ? "border-warning/30 bg-warning/5" : ""}`}
                 >
                   <div className="flex items-center justify-between mb-3">
                     <div className="flex items-center gap-3">
-                      <Icon className={`w-5 h-5 ${feature.danger ? "text-orange-600" : "text-primary"}`} />
+                      <Icon className={`w-5 h-5 ${feature.danger ? "text-warning" : "text-primary"}`} />
                       <div>
                         <h4 className="font-medium">{feature.title}</h4>
                         <p className="text-sm text-muted-foreground">{feature.description}</p>
@@ -144,7 +144,7 @@ export const AdvancedFeaturesTab: React.FC<AdvancedFeaturesTabProps> = ({
                   </div>
                   
                   {feature.danger && feature.enabled && (
-                    <div className="text-xs text-orange-700 dark:text-orange-300 bg-orange-100 dark:bg-orange-900/20 p-2 rounded">
+                    <div className="text-xs text-warning bg-warning/10 p-2 rounded">
                       ⚠️ Este recurso pode afetar a performance ou estabilidade
                     </div>
                   )}
@@ -207,13 +207,13 @@ export const AdvancedFeaturesTab: React.FC<AdvancedFeaturesTabProps> = ({
             <div className="space-y-4">
               <h4 className="font-medium">Modelos de IA Ativos</h4>
               <div className="space-y-2">
-                <div className="flex items-center justify-between p-2 bg-green-50 dark:bg-green-900/20 rounded">
+                <div className="flex items-center justify-between p-2 bg-success/10 rounded">
                   <span className="text-sm">Classificação de Documentos</span>
-                  <Badge className="bg-green-100 text-green-800">Ativo</Badge>
+                  <Badge className="bg-success/20 text-success">Ativo</Badge>
                 </div>
-                <div className="flex items-center justify-between p-2 bg-blue-50 dark:bg-blue-900/20 rounded">
+                <div className="flex items-center justify-between p-2 bg-info/10 rounded">
                   <span className="text-sm">Análise de Sentimentos</span>
-                  <Badge className="bg-blue-100 text-blue-800">Treinando</Badge>
+                  <Badge className="bg-info/20 text-info">Treinando</Badge>
                 </div>
                 <div className="flex items-center justify-between p-2 bg-muted rounded">
                   <span className="text-sm">Previsão de Demanda</span>

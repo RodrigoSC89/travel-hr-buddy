@@ -75,10 +75,10 @@ export const FleetOperationsCenter: React.FC = () => {
 
   const getDPModeBadge = (mode: string | undefined) => {
     switch (mode) {
-      case "Auto DP": return <Badge className="bg-green-500">Auto DP</Badge>;
-      case "TAM": return <Badge className="bg-blue-500">TAM</Badge>;
-      case "CAM": return <Badge className="bg-purple-500">CAM</Badge>;
-      case "Joystick": return <Badge className="bg-yellow-500 text-black">Joystick</Badge>;
+      case "Auto DP": return <Badge className="bg-success">Auto DP</Badge>;
+      case "TAM": return <Badge className="bg-info">TAM</Badge>;
+      case "CAM": return <Badge className="bg-accent">CAM</Badge>;
+      case "Joystick": return <Badge className="bg-warning text-warning-foreground">Joystick</Badge>;
       case "Manual": return <Badge variant="destructive">Manual</Badge>;
       case "Standby": return <Badge variant="secondary">Standby</Badge>;
       default: return <Badge variant="outline">{mode || "N/A"}</Badge>;
@@ -162,58 +162,58 @@ export const FleetOperationsCenter: React.FC = () => {
 
       {/* Global Stats */}
       <div className="grid grid-cols-5 gap-4">
-        <Card className="bg-gradient-to-br from-blue-500/10 to-blue-600/5">
+        <Card className="bg-gradient-to-br from-info/10 to-info/5">
           <CardContent className="pt-4">
             <div className="flex items-center justify-between">
               <div>
                 <p className="text-sm text-muted-foreground">Embarcações</p>
                 <p className="text-2xl font-bold">{stats.total}</p>
               </div>
-              <Ship className="h-8 w-8 text-blue-500" />
+              <Ship className="h-8 w-8 text-info" />
             </div>
           </CardContent>
         </Card>
-        <Card className="bg-gradient-to-br from-green-500/10 to-green-600/5">
+        <Card className="bg-gradient-to-br from-success/10 to-success/5">
           <CardContent className="pt-4">
             <div className="flex items-center justify-between">
               <div>
                 <p className="text-sm text-muted-foreground">Em Operação</p>
                 <p className="text-2xl font-bold">{stats.activeVessels}</p>
               </div>
-              <Activity className="h-8 w-8 text-green-500" />
+              <Activity className="h-8 w-8 text-success" />
             </div>
           </CardContent>
         </Card>
-        <Card className="bg-gradient-to-br from-yellow-500/10 to-yellow-600/5">
+        <Card className="bg-gradient-to-br from-warning/10 to-warning/5">
           <CardContent className="pt-4">
             <div className="flex items-center justify-between">
               <div>
                 <p className="text-sm text-muted-foreground">ASOG Alerta</p>
                 <p className="text-2xl font-bold">{stats.asogAlerts}</p>
               </div>
-              <AlertTriangle className="h-8 w-8 text-yellow-500" />
+              <AlertTriangle className="h-8 w-8 text-warning" />
             </div>
           </CardContent>
         </Card>
-        <Card className="bg-gradient-to-br from-purple-500/10 to-purple-600/5">
+        <Card className="bg-gradient-to-br from-accent/10 to-accent/5">
           <CardContent className="pt-4">
             <div className="flex items-center justify-between">
               <div>
                 <p className="text-sm text-muted-foreground">Tripulação Total</p>
                 <p className="text-2xl font-bold">{stats.totalCrew}</p>
               </div>
-              <Users className="h-8 w-8 text-purple-500" />
+              <Users className="h-8 w-8 text-accent-foreground" />
             </div>
           </CardContent>
         </Card>
-        <Card className="bg-gradient-to-br from-red-500/10 to-red-600/5">
+        <Card className="bg-gradient-to-br from-destructive/10 to-destructive/5">
           <CardContent className="pt-4">
             <div className="flex items-center justify-between">
               <div>
                 <p className="text-sm text-muted-foreground">Alertas Ativos</p>
                 <p className="text-2xl font-bold">{unacknowledgedAlerts}</p>
               </div>
-              <Bell className="h-8 w-8 text-red-500" />
+              <Bell className="h-8 w-8 text-destructive" />
             </div>
           </CardContent>
         </Card>
@@ -253,8 +253,8 @@ export const FleetOperationsCenter: React.FC = () => {
                 <CardContent className="pt-4">
                   <div className="flex items-start justify-between mb-3">
                     <div className="flex items-center gap-3">
-                      <div className={`p-2 rounded-lg ${vessel.onlineStatus === "online" ? "bg-green-500/10" : vessel.onlineStatus === "degraded" ? "bg-yellow-500/10" : "bg-red-500/10"}`}>
-                        <Ship className={`h-6 w-6 ${vessel.onlineStatus === "online" ? "text-green-500" : vessel.onlineStatus === "degraded" ? "text-yellow-500" : "text-red-500"}`} />
+                      <div className={`p-2 rounded-lg ${vessel.onlineStatus === "online" ? "bg-success/10" : vessel.onlineStatus === "degraded" ? "bg-warning/10" : "bg-destructive/10"}`}>
+                        <Ship className={`h-6 w-6 ${vessel.onlineStatus === "online" ? "text-success" : vessel.onlineStatus === "degraded" ? "text-warning" : "text-destructive"}`} />
                       </div>
                       <div>
                         <h3 className="font-semibold">{vessel.name}</h3>
@@ -313,7 +313,7 @@ export const FleetOperationsCenter: React.FC = () => {
               <ScrollArea className="h-[400px]">
                 {displayAlerts.length === 0 ? (
                   <div className="text-center py-12 text-muted-foreground">
-                    <CheckCircle className="h-12 w-12 mx-auto mb-4 text-green-500" />
+                    <CheckCircle className="h-12 w-12 mx-auto mb-4 text-success" />
                     <p>Nenhum alerta ativo no momento</p>
                   </div>
                 ) : (
@@ -323,21 +323,21 @@ export const FleetOperationsCenter: React.FC = () => {
                         key={alert.id} 
                         className={`p-4 rounded-lg border ${
                           alert.type === "critical" && !alert.acknowledged 
-                            ? "border-red-500/50 bg-red-500/5" 
+                            ? "border-destructive/50 bg-destructive/5" 
                             : alert.type === "warning" && !alert.acknowledged 
-                            ? "border-yellow-500/50 bg-yellow-500/5" 
+                            ? "border-warning/50 bg-warning/5" 
                             : "border-border bg-card"
                         }`}
                       >
                         <div className="flex items-center justify-between">
                           <div className="flex items-center gap-3">
                             <div className={`p-2 rounded-lg ${
-                              alert.type === "critical" ? "bg-red-500/10" : 
-                              alert.type === "warning" ? "bg-yellow-500/10" : "bg-blue-500/10"
+                              alert.type === "critical" ? "bg-destructive/10" : 
+                              alert.type === "warning" ? "bg-warning/10" : "bg-info/10"
                             }`}>
                               <AlertTriangle className={`h-5 w-5 ${
-                                alert.type === "critical" ? "text-red-500" : 
-                                alert.type === "warning" ? "text-yellow-500" : "text-blue-500"
+                                alert.type === "critical" ? "text-destructive" : 
+                                alert.type === "warning" ? "text-warning" : "text-info"
                               }`} />
                             </div>
                             <div>
@@ -346,7 +346,7 @@ export const FleetOperationsCenter: React.FC = () => {
                                 <Badge variant={alert.type === "critical" ? "destructive" : alert.type === "warning" ? "default" : "secondary"}>
                                   {alert.type === "critical" ? "Crítico" : alert.type === "warning" ? "Atenção" : "Info"}
                                 </Badge>
-                                {alert.acknowledged && <Badge variant="outline" className="text-green-500 border-green-500">✓ Reconhecido</Badge>}
+                                {alert.acknowledged && <Badge variant="outline" className="text-success border-success">✓ Reconhecido</Badge>}
                               </div>
                               <p className="text-sm mt-1">{alert.message}</p>
                               <p className="text-xs text-muted-foreground mt-1">{new Date(alert.timestamp).toLocaleString("pt-BR")}</p>

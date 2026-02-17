@@ -180,7 +180,7 @@ export function PortOperationsModule() {
                 <p className="text-sm text-muted-foreground">Tonelagem Total</p>
                 <p className="text-2xl font-bold">{(stats.totalTonnage / 1000).toFixed(0)}K</p>
               </div>
-              <Package className="h-8 w-8 text-amber-400" />
+              <Package className="h-8 w-8 text-warning" />
             </div>
           </CardContent>
         </Card>
@@ -311,7 +311,7 @@ export function PortOperationsModule() {
           <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-4">
             <div className="p-4 bg-background/50 rounded-lg border border-border/50">
               <h4 className="font-medium mb-2 flex items-center gap-2">
-                <AlertTriangle className="h-4 w-4 text-amber-400" />
+                <AlertTriangle className="h-4 w-4 text-warning" />
                 Alerta de Congestionamento
               </h4>
               <p className="text-sm text-muted-foreground">

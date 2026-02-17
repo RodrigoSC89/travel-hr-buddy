@@ -114,30 +114,30 @@ export const GovernanceESGPanel: React.FC = () => {
           </CardContent>
         </Card>
 
-        <Card className="bg-gradient-to-br from-purple-500/10 to-purple-600/10 border-purple-500/20">
+        <Card className="bg-gradient-to-br from-accent/10 to-accent/5 border-accent/20">
           <CardContent className="p-4">
             <div className="flex items-center justify-between mb-2">
-              <FileCheck className="h-5 w-5 text-purple-600" />
+              <FileCheck className="h-5 w-5 text-accent-foreground" />
             </div>
             <p className="text-2xl font-bold">5</p>
             <p className="text-sm text-muted-foreground">Certificações ISO</p>
           </CardContent>
         </Card>
 
-        <Card className="bg-gradient-to-br from-amber-500/10 to-amber-600/10 border-amber-500/20">
+        <Card className="bg-gradient-to-br from-warning/10 to-warning/5 border-warning/20">
           <CardContent className="p-4">
             <div className="flex items-center justify-between mb-2">
-              <Gavel className="h-5 w-5 text-amber-600" />
+              <Gavel className="h-5 w-5 text-warning" />
             </div>
             <p className="text-2xl font-bold">R$ 0</p>
             <p className="text-sm text-muted-foreground">Multas (YTD)</p>
           </CardContent>
         </Card>
 
-        <Card className="bg-gradient-to-br from-cyan-500/10 to-cyan-600/10 border-cyan-500/20">
+        <Card className="bg-gradient-to-br from-info/10 to-info/5 border-info/20">
           <CardContent className="p-4">
             <div className="flex items-center justify-between mb-2">
-              <Lock className="h-5 w-5 text-cyan-600" />
+              <Lock className="h-5 w-5 text-info" />
             </div>
             <p className="text-2xl font-bold">98%</p>
             <p className="text-sm text-muted-foreground">Treinamento Ética</p>
@@ -216,9 +216,9 @@ export const GovernanceESGPanel: React.FC = () => {
                     <TableCell className="font-medium">{item.regulation}</TableCell>
                     <TableCell className="text-center">
                       {item.status === "compliant" ? (
-                        <CheckCircle2 className="h-5 w-5 text-green-500 mx-auto" />
+                        <CheckCircle2 className="h-5 w-5 text-success mx-auto" />
                       ) : (
-                        <AlertTriangle className="h-5 w-5 text-yellow-500 mx-auto" />
+                        <AlertTriangle className="h-5 w-5 text-warning mx-auto" />
                       )}
                     </TableCell>
                     <TableCell className="text-center">{item.audits}</TableCell>
@@ -291,7 +291,7 @@ export const GovernanceESGPanel: React.FC = () => {
               {certifications.map((cert) => (
                 <div key={cert.name} className="flex items-center justify-between p-3 border rounded-lg">
                   <div className="flex items-center gap-3">
-                    <CheckCircle2 className="h-5 w-5 text-green-500" />
+                    <CheckCircle2 className="h-5 w-5 text-success" />
                     <div>
                       <p className="font-medium">{cert.name}</p>
                       <p className="text-sm text-muted-foreground">
@@ -299,7 +299,7 @@ export const GovernanceESGPanel: React.FC = () => {
                       </p>
                     </div>
                   </div>
-                  <Badge className="bg-green-500">Válido</Badge>
+                  <Badge className="bg-success">Válido</Badge>
                 </div>
               ))}
             </div>

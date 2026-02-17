@@ -68,8 +68,8 @@ export const OfflineIndicator = React.memo<OfflineIndicatorProps>(({
     if (!isOnline) return 'bg-destructive/10 border-destructive/30 text-destructive';
     if (status === 'syncing') return 'bg-primary/10 border-primary/30 text-primary';
     if (status === 'error') return 'bg-warning/10 border-warning/30 text-warning';
-    if (pendingCount > 0) return 'bg-amber-500/10 border-amber-500/30 text-amber-500';
-    return 'bg-green-500/10 border-green-500/30 text-green-500';
+    if (pendingCount > 0) return 'bg-warning/10 border-warning/30 text-warning';
+    return 'bg-success/10 border-success/30 text-success';
   };
 
   const positionClasses = {

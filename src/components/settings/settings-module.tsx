@@ -419,7 +419,7 @@ export const SettingsModule: React.FC = () => {
                     </div>
                     <div className="flex justify-between">
                       <span className="text-muted-foreground">Status:</span>
-                      <span className="text-green-600">Operacional</span>
+                      <span className="text-success">Operacional</span>
                     </div>
                   </div>
                 </div>

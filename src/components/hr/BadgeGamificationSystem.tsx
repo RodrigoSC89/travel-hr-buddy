@@ -166,15 +166,15 @@ const BADGE_DEFINITIONS: BadgeDefinition[] = [
 
 const TIER_STYLES: Record<string, { bg: string; border: string; text: string; glow: string }> = {
   bronze: {
-    bg: "bg-amber-900/20",
-    border: "border-amber-700/40",
-    text: "text-amber-600",
+    bg: "bg-warning/10",
+    border: "border-warning/30",
+    text: "text-warning",
     glow: "",
   },
   silver: {
-    bg: "bg-slate-300/10",
-    border: "border-slate-400/40",
-    text: "text-slate-400",
+    bg: "bg-muted/30",
+    border: "border-muted-foreground/40",
+    text: "text-muted-foreground",
     glow: "",
   },
   gold: {
@@ -267,7 +267,7 @@ export function BadgeGamificationSystem({ userProgress }: Props) {
       <CardHeader>
         <CardTitle className="flex items-center justify-between">
           <span className="flex items-center gap-2">
-            <Trophy className="h-5 w-5 text-yellow-500" />
+            <Trophy className="h-5 w-5 text-warning" />
             Suas Conquistas
           </span>
           <div className="flex items-center gap-2">
