@@ -107,9 +107,9 @@ export const PerformanceMetrics: React.FC = () => {
 
   const ratingBg = (r: WebVital["rating"]) => {
     switch (r) {
-      case "good": return "bg-green-500/10 border-green-500/20";
-      case "needs-improvement": return "bg-yellow-500/10 border-yellow-500/20";
-      case "poor": return "bg-red-500/10 border-red-500/20";
+      case "good": return "bg-success/10 border-success/20";
+      case "needs-improvement": return "bg-warning/10 border-warning/20";
+      case "poor": return "bg-destructive/10 border-destructive/20";
     }
   };
 

@@ -298,7 +298,7 @@ const BlockchainCertificatesPage = () => {
                       </div>
                     </div>
                     <div className="flex items-center gap-2">
-                      <Badge className="bg-green-500">Verificado</Badge>
+                      <Badge className="bg-success">Verificado</Badge>
                       <span className="text-sm text-muted-foreground">{ver.time}</span>
                     </div>
                   </div>

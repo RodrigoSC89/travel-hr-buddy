@@ -570,15 +570,15 @@ export const EnhancedSettingsHub: React.FC = () => {
   };
 
   const getHealthColor = (score: number) => {
-    if (score >= 90) return "text-green-600";
-    if (score >= 70) return "text-yellow-600";
-    return "text-red-600";
+    if (score >= 90) return "text-success";
+    if (score >= 70) return "text-warning";
+    return "text-destructive";
   };
 
   const getHealthBadge = (score: number) => {
-    if (score >= 90) return { text: "Excelente", className: "bg-green-100 text-green-800" };
-    if (score >= 70) return { text: "Bom", className: "bg-yellow-100 text-yellow-800" };
-    return { text: "Precisa Atenção", className: "bg-red-100 text-red-800" };
+    if (score >= 90) return { text: "Excelente", className: "bg-success/10 text-success" };
+    if (score >= 70) return { text: "Bom", className: "bg-warning/10 text-warning" };
+    return { text: "Precisa Atenção", className: "bg-destructive/10 text-destructive" };
   };
 
   const tabsData = [
@@ -593,20 +593,20 @@ export const EnhancedSettingsHub: React.FC = () => {
   ];
 
   return (
-    <div className="min-h-screen bg-gradient-to-br from-slate-50 via-blue-50 to-slate-100 dark:from-slate-900 dark:via-slate-800 dark:to-slate-900">
+    <div className="min-h-screen bg-gradient-to-br from-background via-muted/50 to-background">
       {/* Enhanced Header with Analytics */}
       <div className="border-b bg-card/80 backdrop-blur-sm sticky top-0 z-50">
         <div className="container mx-auto px-6 py-4">
           <div className="flex items-center justify-between">
             <div className="flex items-center gap-4">
               <div className="relative">
-                <div className="p-3 rounded-xl bg-gradient-to-r from-blue-500 to-purple-600 shadow-lg">
-                  <Settings className="h-8 w-8 text-white" />
+                <div className="p-3 rounded-xl bg-gradient-to-r from-primary to-accent shadow-lg">
+                  <Settings className="h-8 w-8 text-primary-foreground" />
                 </div>
-                <div className="absolute -top-1 -right-1 w-4 h-4 bg-green-500 rounded-full border-2 border-white animate-pulse"></div>
+                <div className="absolute -top-1 -right-1 w-4 h-4 bg-success rounded-full border-2 border-background animate-pulse"></div>
               </div>
               <div>
-                <h1 className="text-3xl font-bold bg-gradient-to-r from-blue-600 to-purple-600 bg-clip-text text-transparent">
+                <h1 className="text-3xl font-bold bg-gradient-to-r from-primary to-accent bg-clip-text text-transparent">
                   Centro de Configurações
                 </h1>
                 <p className="text-muted-foreground">
@@ -614,7 +614,7 @@ export const EnhancedSettingsHub: React.FC = () => {
                 </p>
                 <div className="flex items-center gap-4 mt-2">
                   <div className="flex items-center gap-2">
-                    <Target className="w-4 h-4 text-green-600" />
+                    <Target className="w-4 h-4 text-success" />
                     <span className="text-sm font-medium">
                       Saúde: <span className={getHealthColor(settingsHealth)}>{settingsHealth}%</span>
                     </span>
@@ -643,31 +643,31 @@ export const EnhancedSettingsHub: React.FC = () => {
               {/* Status Indicators */}
               <div className="flex items-center gap-2">
                 {collaborationEnabled && (
-                  <Badge variant="outline" className="bg-blue-50 text-blue-700 border-blue-200">
+                  <Badge variant="outline" className="bg-info/10 text-info border-info/30">
                     <Users className="w-3 h-3 mr-1" />
                     Colaborativo
                   </Badge>
                 )}
                 {previewMode && (
-                  <Badge variant="outline" className="bg-purple-50 text-purple-700 border-purple-200">
+                  <Badge variant="outline" className="bg-accent/10 text-accent border-accent/30">
                     <Eye className="w-3 h-3 mr-1" />
                     Prévia
                   </Badge>
                 )}
                 {testMode && (
-                  <Badge variant="outline" className="bg-orange-50 text-orange-700 border-orange-200">
+                  <Badge variant="outline" className="bg-warning/10 text-warning border-warning/30">
                     <TestTube className="w-3 h-3 mr-1" />
                     Teste
                   </Badge>
                 )}
                 {hasChanges && (
-                  <Badge variant="outline" className="bg-yellow-50 text-yellow-700 border-yellow-200 animate-pulse">
+                  <Badge variant="outline" className="bg-warning/10 text-warning border-warning/30 animate-pulse">
                     <Clock className="w-3 h-3 mr-1" />
                     {autoSave ? "Auto-salvando..." : "Alterações Pendentes"}
                   </Badge>
                 )}
                 {lastSaved && (
-                  <Badge variant="outline" className="bg-green-50 text-green-700 border-green-200">
+                  <Badge variant="outline" className="bg-success/10 text-success border-success/30">
                     <CheckCircle className="w-3 h-3 mr-1" />
                     Salvo {lastSaved.toLocaleTimeString()}
                   </Badge>
@@ -677,7 +677,7 @@ export const EnhancedSettingsHub: React.FC = () => {
               {/* Action Buttons */}
               <div className="flex items-center gap-2">
                 <Button variant="outline" size="sm" onClick={() => setAutoSave(!autoSave)}>
-                  <Zap className={`w-4 h-4 mr-2 ${autoSave ? "text-yellow-500" : ""}`} />
+                  <Zap className={`w-4 h-4 mr-2 ${autoSave ? "text-warning" : ""}`} />
                   {autoSave ? "Auto-Save ON" : "Auto-Save OFF"}
                 </Button>
                 
@@ -727,7 +727,7 @@ export const EnhancedSettingsHub: React.FC = () => {
                 <Button 
                   onClick={saveSettings} 
                   disabled={!hasChanges || isSaving}
-                  className="min-w-[140px] bg-gradient-to-r from-blue-500 to-purple-600 hover:from-blue-600 hover:to-purple-700"
+                  className="min-w-[140px] bg-gradient-to-r from-primary to-accent hover:from-primary/90 hover:to-accent/90"
                 >
                   {isSaving ? (
                     <>
@@ -747,17 +747,17 @@ export const EnhancedSettingsHub: React.FC = () => {
           
           {/* Additional Info Bar */}
           {(changeHistory.length > 0 || hasChanges) && (
-            <div className="mt-4 p-3 bg-blue-50 dark:bg-blue-900/20 rounded-lg border border-blue-200 dark:border-blue-800">
+            <div className="mt-4 p-3 bg-info/10 rounded-lg border border-info/30">
               <div className="flex items-center justify-between text-sm">
                 <div className="flex items-center gap-4">
                   {changeHistory.length > 0 && (
-                    <span className="text-blue-700 dark:text-blue-300">
+                    <span className="text-info">
                       <History className="w-4 h-4 inline mr-1" />
                       Última alteração: {changeHistory[0]?.action} por {changeHistory[0]?.user}
                     </span>
                   )}
                   {hasChanges && (
-                    <span className="text-amber-700 dark:text-amber-300">
+                    <span className="text-warning">
                       <AlertTriangle className="w-4 h-4 inline mr-1" />
                       {Object.keys(settings).filter(key => 
                         JSON.stringify(settings[key as keyof SettingsData]) !== JSON.stringify(settings[key as keyof SettingsData])

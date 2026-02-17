@@ -403,21 +403,21 @@ export const FleetOperationsCenter: React.FC = () => {
                 <div className="space-y-2">
                   <div className="flex justify-between text-sm">
                     <span>DP Uptime Médio</span>
-                    <span className="font-bold text-green-500">98.5%</span>
+                    <span className="font-bold text-success">98.5%</span>
                   </div>
                   <Progress value={98.5} className="h-2" />
                 </div>
                 <div className="space-y-2">
                   <div className="flex justify-between text-sm">
                     <span>Eficiência Operacional</span>
-                    <span className="font-bold text-blue-500">92%</span>
+                    <span className="font-bold text-primary">92%</span>
                   </div>
                   <Progress value={92} className="h-2" />
                 </div>
                 <div className="space-y-2">
                   <div className="flex justify-between text-sm">
                     <span>Compliance ASOG</span>
-                    <span className="font-bold text-green-500">95%</span>
+                    <span className="font-bold text-success">95%</span>
                   </div>
                   <Progress value={95} className="h-2" />
                 </div>

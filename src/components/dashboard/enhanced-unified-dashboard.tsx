@@ -377,13 +377,13 @@ const EnhancedUnifiedDashboard = () => {
           {/* Financial Performance */}
           <motion.div variants={fadeUp} custom={0}>
             <Card className="group relative border-0 shadow-elegant hover:shadow-glow transition-all duration-500 overflow-hidden h-full">
-              <div className="absolute inset-0 bg-gradient-to-br from-emerald-500/10 via-transparent to-emerald-600/5" />
-              <CardHeader className="relative border-b border-emerald-100/50 bg-gradient-to-r from-emerald-50/50 to-transparent backdrop-blur-sm">
+              <div className="absolute inset-0 bg-gradient-to-br from-success/10 via-transparent to-success/5" />
+              <CardHeader className="relative border-b border-success/20 bg-gradient-to-r from-success/10 to-transparent backdrop-blur-sm">
                 <CardTitle className="flex items-center gap-3">
-                  <div className="p-2 rounded-xl bg-gradient-to-br from-emerald-500 to-emerald-600 shadow-soft">
-                    <DollarSign className="w-5 h-5 text-primary-foreground" />
+                  <div className="p-2 rounded-xl bg-gradient-to-br from-success to-success/80 shadow-soft">
+                    <DollarSign className="w-5 h-5 text-success-foreground" />
                   </div>
-                  <span className="text-xl font-bold bg-gradient-to-r from-emerald-700 to-emerald-600 bg-clip-text text-transparent">
+                  <span className="text-xl font-bold bg-gradient-to-r from-success to-success/80 bg-clip-text text-transparent">
                     {t('ui.financialPerformance')}
                   </span>
                 </CardTitle>
@@ -640,7 +640,7 @@ const EnhancedUnifiedDashboard = () => {
                         initial={{ opacity: 0, x: -10 }}
                         animate={{ opacity: 1, x: 0 }}
                         transition={{ delay: i * 0.08 }}
-                        className="group/alert p-4 rounded-xl border border-border/50 hover:border-amber-300 hover:shadow-soft transition-all duration-300 bg-gradient-to-r from-background to-amber-50/20 cursor-pointer"
+                        className="group/alert p-4 rounded-xl border border-border/50 hover:border-warning/50 hover:shadow-soft transition-all duration-300 bg-gradient-to-r from-background to-warning/5 cursor-pointer"
                       >
                         <div className="flex items-start gap-3">
                           <div className="mt-0.5">{getStatusIcon(alert.type)}</div>
@@ -677,15 +677,15 @@ const EnhancedUnifiedDashboard = () => {
           {/* Recent Activities - Real Data */}
           <motion.div variants={fadeUp} custom={1}>
             <Card className="border-0 shadow-elegant hover:shadow-glow transition-all duration-500 overflow-hidden">
-              <div className="absolute inset-0 bg-gradient-to-br from-emerald-500/5 via-transparent to-emerald-600/5" />
-              <CardHeader className="relative border-b bg-gradient-to-r from-emerald-50/50 to-transparent backdrop-blur-sm">
+              <div className="absolute inset-0 bg-gradient-to-br from-success/5 via-transparent to-success/5" />
+              <CardHeader className="relative border-b bg-gradient-to-r from-success/10 to-transparent backdrop-blur-sm">
                 <div className="flex items-center justify-between">
                   <div>
                     <CardTitle className="flex items-center gap-3">
-                      <div className="p-2 rounded-xl bg-gradient-to-br from-emerald-500 to-emerald-600 shadow-soft">
-                        <Activity className="w-5 h-5 text-white" />
+                      <div className="p-2 rounded-xl bg-gradient-to-br from-success to-success/80 shadow-soft">
+                        <Activity className="w-5 h-5 text-success-foreground" />
                       </div>
-                      <span className="text-xl font-bold bg-gradient-to-r from-emerald-700 to-emerald-600 bg-clip-text text-transparent">
+                      <span className="text-xl font-bold bg-gradient-to-r from-success to-success/80 bg-clip-text text-transparent">
                         {t('ui.recentActivities')}
                       </span>
                     </CardTitle>
@@ -712,7 +712,7 @@ const EnhancedUnifiedDashboard = () => {
                         initial={{ opacity: 0, x: 10 }}
                         animate={{ opacity: 1, x: 0 }}
                         transition={{ delay: i * 0.08 }}
-                        className="group/activity p-4 rounded-xl border border-border/50 hover:border-emerald-300 hover:shadow-soft transition-all duration-300 bg-gradient-to-r from-background to-emerald-50/20"
+                        className="group/activity p-4 rounded-xl border border-border/50 hover:border-success/50 hover:shadow-soft transition-all duration-300 bg-gradient-to-r from-background to-success/5"
                       >
                         <div className="flex items-start gap-3">
                           <div className="mt-0.5">{getActivityIcon(activity.type)}</div>

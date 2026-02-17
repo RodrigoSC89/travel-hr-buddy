@@ -27,7 +27,7 @@ import { useFleetCIIData, type VesselCIIData } from "@/hooks/use-cii-data";
 import { supabase } from "@/integrations/supabase/client";
 
 const CII_COLORS: Record<string, string> = {
-  A: "#22c55e", B: "#84cc16", C: "#eab308", D: "#f97316", E: "#ef4444"
+  A: "hsl(var(--success))", B: "hsl(var(--success))", C: "hsl(var(--warning))", D: "hsl(var(--warning))", E: "hsl(var(--destructive))"
 };
 
 export function ESGCommandCenter() {
@@ -78,7 +78,7 @@ export function ESGCommandCenter() {
     }
   };
 
-  const getCIIColor = (rating: string) => CII_COLORS[rating] || "#6b7280";
+  const getCIIColor = (rating: string) => CII_COLORS[rating] || "hsl(var(--muted-foreground))";
   const getCIIBg = (rating: string) => {
     const map: Record<string, string> = {
       A: "bg-success", B: "bg-success/80", C: "bg-warning", D: "bg-warning/80", E: "bg-destructive"
@@ -88,7 +88,7 @@ export function ESGCommandCenter() {
 
   // Build chart data from real vessels
   const ciiDistribution = Object.entries(stats?.ratingDistribution || { A: 0, B: 0, C: 0, D: 0, E: 0 })
-    .map(([rating, count]) => ({ rating, count, color: CII_COLORS[rating] || "#6b7280" }));
+    .map(([rating, count]) => ({ rating, count, color: CII_COLORS[rating] || "hsl(var(--muted-foreground))" }));
 
   const esgRadarData = [
     { subject: "Emissões CO₂", A: stats ? Math.min(100, Math.round((1 - (stats.nonCompliantVessels / Math.max(1, stats.totalVessels))) * 100)) : 0, fullMark: 100 },
@@ -361,8 +361,8 @@ export function ESGCommandCenter() {
                 }))}>
                   <defs>
                     <linearGradient id="colorCII" x1="0" y1="0" x2="0" y2="1">
-                      <stop offset="5%" stopColor="#22c55e" stopOpacity={0.3} />
-                      <stop offset="95%" stopColor="#22c55e" stopOpacity={0} />
+                      <stop offset="5%" stopColor="hsl(var(--success))" stopOpacity={0.3} />
+                      <stop offset="95%" stopColor="hsl(var(--success))" stopOpacity={0} />
                     </linearGradient>
                   </defs>
                   <CartesianGrid strokeDasharray="3 3" className="stroke-muted" />

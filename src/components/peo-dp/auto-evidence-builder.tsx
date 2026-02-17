@@ -168,8 +168,8 @@ export const AutoEvidenceBuilder: React.FC = () => {
 
   const getStatusBadge = (status: string) => {
     switch (status) {
-      case "ready": return <Badge className="bg-green-500">Pronto</Badge>;
-      case "in_progress": return <Badge className="bg-blue-500">Em Progresso</Badge>;
+      case "ready": return <Badge className="bg-success">Pronto</Badge>;
+      case "in_progress": return <Badge className="bg-primary">Em Progresso</Badge>;
       case "draft": return <Badge variant="secondary">Rascunho</Badge>;
       default: return <Badge variant="outline">{status}</Badge>;
     }
@@ -177,9 +177,9 @@ export const AutoEvidenceBuilder: React.FC = () => {
 
   const getItemStatusIcon = (status: string) => {
     switch (status) {
-      case "available": return <CheckCircle className="h-4 w-4 text-green-500" />;
-      case "pending": return <Clock className="h-4 w-4 text-yellow-500" />;
-      case "missing": return <AlertTriangle className="h-4 w-4 text-red-500" />;
+      case "available": return <CheckCircle className="h-4 w-4 text-success" />;
+      case "pending": return <Clock className="h-4 w-4 text-warning" />;
+      case "missing": return <AlertTriangle className="h-4 w-4 text-destructive" />;
       default: return null;
     }
   };

@@ -350,11 +350,11 @@ export function CentralizedDocumentRepository() {
             <div className="flex items-center justify-between">
               <div>
                 <p className="text-sm text-muted-foreground">Desatualizados</p>
-                <p className="text-2xl font-bold text-amber-600">
+                <p className="text-2xl font-bold text-warning">
                   {documents.filter(d => d.status === 'outdated').length}
                 </p>
               </div>
-              <AlertTriangle className="h-8 w-8 text-amber-500 opacity-50" />
+              <AlertTriangle className="h-8 w-8 text-warning opacity-50" />
             </div>
           </CardContent>
         </Card>

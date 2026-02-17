@@ -708,9 +708,9 @@ export function MaintenanceCommandCenter() {
                               {part.partNumber}
                             </Badge>
                             <Badge className={
-                              part.status === "critical" ? "bg-red-500" :
-                              part.status === "low" ? "bg-amber-500" :
-                              "bg-emerald-500"
+                              part.status === "critical" ? "bg-destructive" :
+                              part.status === "low" ? "bg-warning" :
+                              "bg-success"
                             }>
                               {part.status === "critical" ? "Crítico" : part.status === "low" ? "Baixo" : "OK"}
                             </Badge>
