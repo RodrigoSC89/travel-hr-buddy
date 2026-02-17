@@ -23,10 +23,10 @@ const INCIDENT_TYPES = [
 ];
 
 const SEVERITY_CONFIG: Record<string, { label: string; color: string }> = {
-  low: { label: "Menor", color: "bg-blue-500" },
-  medium: { label: "Moderado", color: "bg-amber-500" },
-  high: { label: "Maior", color: "bg-orange-500" },
-  critical: { label: "Crítico", color: "bg-red-500" },
+  low: { label: "Menor", color: "bg-info" },
+  medium: { label: "Moderado", color: "bg-warning" },
+  high: { label: "Maior", color: "bg-warning" },
+  critical: { label: "Crítico", color: "bg-destructive" },
 };
 
 export function DPIncidentsCIRAS() {

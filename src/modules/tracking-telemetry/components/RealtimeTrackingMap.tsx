@@ -413,8 +413,8 @@ export default function RealtimeTrackingMap() {
                         key={alert.id}
                         className={`p-2 rounded-lg border ${
                           alert.severity === "critical" ? "border-destructive/50 bg-destructive/5" :
-                          alert.severity === "warning" ? "border-amber-500/50 bg-amber-500/5" :
-                          "border-blue-500/50 bg-blue-500/5"
+                          alert.severity === "warning" ? "border-warning/50 bg-warning/5" :
+                          "border-info/50 bg-info/5"
                         }`}
                       >
                         <div className="flex items-start gap-2">

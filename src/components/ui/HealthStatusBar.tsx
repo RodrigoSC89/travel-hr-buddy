@@ -86,9 +86,9 @@ export const HealthStatusBar: React.FC = () => {
 
   const statusColor = (s: ServiceHealth["status"]) => {
     switch (s) {
-      case "healthy": return "bg-green-500";
-      case "degraded": return "bg-yellow-500";
-      case "down": return "bg-red-500";
+      case "healthy": return "bg-success";
+      case "degraded": return "bg-warning";
+      case "down": return "bg-destructive";
       default: return "bg-muted-foreground/40 animate-pulse";
     }
   };

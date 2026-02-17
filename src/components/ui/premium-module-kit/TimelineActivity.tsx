@@ -38,9 +38,9 @@ const typeIcons = {
 };
 
 const typeColors = {
-  success: "bg-emerald-500",
-  warning: "bg-amber-500",
-  info: "bg-blue-500",
+  success: "bg-success",
+  warning: "bg-warning",
+  info: "bg-info",
   default: "bg-muted-foreground",
 };
 

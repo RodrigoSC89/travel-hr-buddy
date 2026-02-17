@@ -77,10 +77,10 @@ export default function ComplianceIARecommendations() {
 
       {/* Analysis Result */}
       {lastAnalysis && (
-        <Card className="bg-purple-500/10 border-purple-500/20">
+        <Card className="bg-accent/10 border-accent/20">
           <CardHeader>
             <CardTitle className="flex items-center gap-2">
-              <Zap className="h-5 w-5 text-purple-500" />
+              <Zap className="h-5 w-5 text-accent-foreground" />
               Última Análise
             </CardTitle>
           </CardHeader>

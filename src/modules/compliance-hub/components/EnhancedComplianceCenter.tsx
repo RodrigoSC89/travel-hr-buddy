@@ -489,8 +489,8 @@ export const EnhancedComplianceCenter: React.FC = () => {
                       .map(audit => (
                         <div key={audit.id} className="flex items-center justify-between p-3 rounded-lg bg-muted/30 hover:bg-muted/50 transition-colors">
                           <div className="flex items-center gap-3">
-                            <div className={`p-2 rounded-lg ${audit.status === 'overdue' ? 'bg-red-500/10' : 'bg-primary/10'}`}>
-                              <ClipboardCheck className={`h-4 w-4 ${audit.status === 'overdue' ? 'text-red-500' : 'text-primary'}`} />
+                            <div className={`p-2 rounded-lg ${audit.status === 'overdue' ? 'bg-destructive/10' : 'bg-primary/10'}`}>
+                              <ClipboardCheck className={`h-4 w-4 ${audit.status === 'overdue' ? 'text-destructive' : 'text-primary'}`} />
                             </div>
                             <div>
                               <p className="font-medium text-sm">{audit.title}</p>
@@ -510,8 +510,8 @@ export const EnhancedComplianceCenter: React.FC = () => {
                       .map(cert => (
                         <div key={cert.id} className="flex items-center justify-between p-3 rounded-lg bg-muted/30 hover:bg-muted/50 transition-colors">
                           <div className="flex items-center gap-3">
-                            <div className={`p-2 rounded-lg ${cert.status === 'expired' ? 'bg-red-500/10' : 'bg-yellow-500/10'}`}>
-                              <Award className={`h-4 w-4 ${cert.status === 'expired' ? 'text-red-500' : 'text-yellow-500'}`} />
+                            <div className={`p-2 rounded-lg ${cert.status === 'expired' ? 'bg-destructive/10' : 'bg-warning/10'}`}>
+                              <Award className={`h-4 w-4 ${cert.status === 'expired' ? 'text-destructive' : 'text-warning'}`} />
                             </div>
                             <div>
                               <p className="font-medium text-sm">{cert.name}</p>
@@ -543,12 +543,12 @@ export const EnhancedComplianceCenter: React.FC = () => {
               <CardContent>
                 <div className="grid grid-cols-2 gap-3">
                   {[
-                    { icon: Plus, label: 'Nova Auditoria', color: 'bg-blue-500/10 text-blue-500' },
-                    { icon: FileText, label: 'Gerar Relatório', color: 'bg-green-500/10 text-green-500' },
-                    { icon: AlertTriangle, label: 'Registrar NC', color: 'bg-red-500/10 text-red-500' },
-                    { icon: Award, label: 'Renovar Cert.', color: 'bg-yellow-500/10 text-yellow-500' },
-                    { icon: Brain, label: 'Análise IA', color: 'bg-purple-500/10 text-purple-500' },
-                    { icon: Download, label: 'Exportar Dados', color: 'bg-gray-500/10 text-gray-500' },
+                    { icon: Plus, label: 'Nova Auditoria', color: 'bg-info/10 text-info' },
+                    { icon: FileText, label: 'Gerar Relatório', color: 'bg-success/10 text-success' },
+                    { icon: AlertTriangle, label: 'Registrar NC', color: 'bg-destructive/10 text-destructive' },
+                    { icon: Award, label: 'Renovar Cert.', color: 'bg-warning/10 text-warning' },
+                    { icon: Brain, label: 'Análise IA', color: 'bg-accent/10 text-accent-foreground' },
+                    { icon: Download, label: 'Exportar Dados', color: 'bg-muted text-muted-foreground' },
                   ].map((action) => (
                     <Button
                       key={action.label}
@@ -576,14 +576,14 @@ export const EnhancedComplianceCenter: React.FC = () => {
                   <div className="flex items-center justify-between">
                     <div className="flex items-center gap-4">
                       <div className={`p-3 rounded-lg ${
-                        audit.priority === 'critical' ? 'bg-red-500/10' :
-                        audit.priority === 'high' ? 'bg-orange-500/10' :
-                        audit.priority === 'medium' ? 'bg-yellow-500/10' : 'bg-green-500/10'
+                        audit.priority === 'critical' ? 'bg-destructive/10' :
+                        audit.priority === 'high' ? 'bg-warning/10' :
+                        audit.priority === 'medium' ? 'bg-warning/10' : 'bg-success/10'
                       }`}>
                         <ClipboardCheck className={`h-6 w-6 ${
-                          audit.priority === 'critical' ? 'text-red-500' :
-                          audit.priority === 'high' ? 'text-orange-500' :
-                          audit.priority === 'medium' ? 'text-yellow-500' : 'text-green-500'
+                          audit.priority === 'critical' ? 'text-destructive' :
+                          audit.priority === 'high' ? 'text-warning' :
+                          audit.priority === 'medium' ? 'text-warning' : 'text-success'
                         }`} />
                       </div>
                       <div>
@@ -781,7 +781,7 @@ export const EnhancedComplianceCenter: React.FC = () => {
                   <div 
                     key={item.id}
                     className={`flex items-start gap-4 p-4 rounded-lg border transition-colors ${
-                      item.completed ? 'bg-green-500/5 border-green-500/20' : 'bg-muted/30 hover:bg-muted/50'
+                      item.completed ? 'bg-success/5 border-success/20' : 'bg-muted/30 hover:bg-muted/50'
                     }`}
                   >
                     <Checkbox
@@ -800,7 +800,7 @@ export const EnhancedComplianceCenter: React.FC = () => {
                     </div>
                     <div className="flex gap-2">
                       {item.completed ? (
-                        <CheckCircle className="h-5 w-5 text-green-500" />
+                        <CheckCircle className="h-5 w-5 text-success" />
                       ) : (
                         <Button variant="ghost" size="sm">
                           <Edit className="h-4 w-4" />

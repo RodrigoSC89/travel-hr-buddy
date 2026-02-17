@@ -106,7 +106,7 @@ export function ShipVettingManager() {
           </Button>
           <Dialog open={showNewDialog} onOpenChange={setShowNewDialog}>
             <DialogTrigger asChild>
-              <Button size="sm" className="bg-emerald-600 hover:bg-emerald-700">
+              <Button size="sm" className="bg-success hover:bg-success/90">
                 <Plus className="h-4 w-4 mr-1" /> New Inspection
               </Button>
             </DialogTrigger>

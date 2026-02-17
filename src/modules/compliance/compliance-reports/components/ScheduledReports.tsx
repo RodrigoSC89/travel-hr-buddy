@@ -205,12 +205,12 @@ export const ScheduledReports: React.FC = () => {
 
   const getFrequencyBadge = (frequency: string) => {
     const colors: Record<string, string> = {
-      daily: "bg-blue-500",
-      weekly: "bg-green-500",
-      monthly: "bg-purple-500",
-      quarterly: "bg-orange-500",
+      daily: "bg-info",
+      weekly: "bg-success",
+      monthly: "bg-accent",
+      quarterly: "bg-warning",
     };
-    return colors[frequency] || "bg-gray-500";
+    return colors[frequency] || "bg-muted";
   };
 
   return (

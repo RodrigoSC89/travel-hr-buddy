@@ -107,7 +107,7 @@ export function ChecklistInterface({ inspectionId, onUpdate }: ChecklistInterfac
             const isExpanded = expandedItem === index;
             
             return (
-              <Card key={item.regulation} className="border-l-4" style={{ borderLeftColor: existingFinding ? (existingFinding.compliance ? "#22c55e" : "#ef4444") : "#6b7280" }}>
+              <Card key={item.regulation} className="border-l-4" style={{ borderLeftColor: existingFinding ? (existingFinding.compliance ? "hsl(var(--success))" : "hsl(var(--destructive))") : "hsl(var(--muted-foreground))" }}>
                 <CardHeader className="pb-3">
                   <div className="flex items-center justify-between">
                     <div className="flex-1">

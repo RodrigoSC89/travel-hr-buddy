@@ -206,8 +206,8 @@ export const NotificationsAlertsTab: React.FC<NotificationsAlertsTabProps> = ({
             </div>
           </div>
 
-          <div className="p-4 bg-blue-50 border border-blue-200 rounded-lg">
-            <p className="text-sm text-blue-800">
+          <div className="p-4 bg-info/10 border border-info/30 rounded-lg">
+            <p className="text-sm text-info">
               <strong>Período ativo:</strong> De {settings.scheduleStart} às {settings.scheduleEnd}
               <br />
               Notificações urgentes serão enviadas independente do horário.
@@ -481,19 +481,19 @@ const InspectionAlertsSection: React.FC<{
       </CardHeader>
       <CardContent className="space-y-6">
         {/* Permission Status */}
-        <div className={`p-4 rounded-lg border ${permissionGranted ? 'bg-green-50 border-green-200' : 'bg-yellow-50 border-yellow-200'}`}>
+        <div className={`p-4 rounded-lg border ${permissionGranted ? 'bg-success/10 border-success/30' : 'bg-warning/10 border-warning/30'}`}>
           <div className="flex items-center justify-between">
             <div className="flex items-center gap-3">
               {permissionGranted ? (
-                <CheckCircle2 className="w-5 h-5 text-green-600" />
+                <CheckCircle2 className="w-5 h-5 text-success" />
               ) : (
-                <AlertTriangle className="w-5 h-5 text-yellow-600" />
+                <AlertTriangle className="w-5 h-5 text-warning" />
               )}
               <div>
-                <p className={`font-medium ${permissionGranted ? 'text-green-800' : 'text-yellow-800'}`}>
+                <p className={`font-medium ${permissionGranted ? 'text-success' : 'text-warning'}`}>
                   {permissionGranted ? 'Notificações Push Ativadas' : 'Permissão Necessária'}
                 </p>
-                <p className={`text-sm ${permissionGranted ? 'text-green-700' : 'text-yellow-700'}`}>
+                <p className={`text-sm ${permissionGranted ? 'text-success/80' : 'text-warning/80'}`}>
                   {permissionGranted 
                     ? 'Você receberá alertas de prazos de inspeção' 
                     : 'Ative as notificações para receber alertas'}
@@ -504,7 +504,7 @@ const InspectionAlertsSection: React.FC<{
               <Button 
                 variant="outline" 
                 onClick={handleRequestPermission}
-                className="border-yellow-400 text-yellow-700 hover:bg-yellow-100"
+                className="border-warning text-warning hover:bg-warning/10"
               >
                 <Bell className="w-4 h-4 mr-2" />
                 Ativar

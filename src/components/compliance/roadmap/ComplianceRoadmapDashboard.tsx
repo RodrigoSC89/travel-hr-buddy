@@ -48,8 +48,8 @@ const CHART_COLORS: Record<string, string> = {
   'PEO-DP': 'hsl(var(--success))',
   MLC: 'hsl(var(--warning))',
   SGSO: 'hsl(var(--accent))',
-  'Pre-OVID': '#ef4444',
-  meta: '#6b7280',
+  'Pre-OVID': 'hsl(var(--destructive))',
+  meta: 'hsl(var(--muted-foreground))',
 };
 
 // Types
@@ -559,8 +559,8 @@ export function ComplianceRoadmapDashboard() {
                       }} 
                     />
                     <Legend />
-                    <Bar dataKey="ncsAbertas" name="Abertas" fill="#ef4444" />
-                    <Bar dataKey="ncsFechadas" name="Fechadas" fill="#22c55e" />
+                    <Bar dataKey="ncsAbertas" name="Abertas" fill="hsl(var(--destructive))" />
+                    <Bar dataKey="ncsFechadas" name="Fechadas" fill="hsl(var(--success))" />
                   </BarChart>
                 </ResponsiveContainer>
               </CardContent>

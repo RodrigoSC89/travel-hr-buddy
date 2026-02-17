@@ -50,9 +50,9 @@ const templateLibrary = [
 const getPriorityConfig = (p: string) => {
   const map: Record<string, { color: string; icon: React.ReactNode; label: string }> = {
     critical: { color: "bg-destructive/10 text-destructive border-destructive/30", icon: <AlertCircle className="h-3 w-3" />, label: "Crítica" },
-    high: { color: "bg-orange-500/10 text-orange-600 border-orange-200", icon: <AlertTriangle className="h-3 w-3" />, label: "Alta" },
-    medium: { color: "bg-yellow-500/10 text-yellow-700 border-yellow-200", icon: <Minus className="h-3 w-3" />, label: "Média" },
-    low: { color: "bg-green-500/10 text-green-600 border-green-200", icon: <CheckCircle2 className="h-3 w-3" />, label: "Baixa" },
+    high: { color: "bg-warning/10 text-warning border-warning/30", icon: <AlertTriangle className="h-3 w-3" />, label: "Alta" },
+    medium: { color: "bg-warning/10 text-warning border-warning/30", icon: <Minus className="h-3 w-3" />, label: "Média" },
+    low: { color: "bg-success/10 text-success border-success/30", icon: <CheckCircle2 className="h-3 w-3" />, label: "Baixa" },
   };
   return map[p] || map.medium;
 };
@@ -675,7 +675,7 @@ export const WorldClassChecklistSystem: React.FC = () => {
                     <div
                       key={item.id}
                       className={`p-3 rounded-lg border cursor-pointer transition-colors ${
-                        item.completed ? "border-green-200 bg-green-50/50 dark:bg-green-950/10" : "border-border hover:bg-muted/50"
+                        item.completed ? "border-success/30 bg-success/5" : "border-border hover:bg-muted/50"
                       }`}
                       onClick={() => handleToggleItem(selectedChecklist, item.id)}
                     >

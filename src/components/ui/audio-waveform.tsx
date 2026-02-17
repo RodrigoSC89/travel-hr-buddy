@@ -146,7 +146,7 @@ export const CanvasWaveform: React.FC<CanvasWaveformProps> = ({
       if (!isActive) {
         // Draw flat line when inactive
         ctx.beginPath();
-        ctx.strokeStyle = type === 'input' ? 'hsl(var(--primary))' : '#22c55e';
+        ctx.strokeStyle = type === 'input' ? 'hsl(var(--primary))' : 'hsl(var(--success))';
         ctx.lineWidth = 2;
         ctx.globalAlpha = 0.3;
         ctx.moveTo(0, height / 2);
@@ -157,7 +157,7 @@ export const CanvasWaveform: React.FC<CanvasWaveformProps> = ({
 
       // Draw simulated waveform
       ctx.beginPath();
-      ctx.strokeStyle = type === 'input' ? 'hsl(var(--primary))' : '#22c55e';
+      ctx.strokeStyle = type === 'input' ? 'hsl(var(--primary))' : 'hsl(var(--success))';
       ctx.lineWidth = 2;
       ctx.globalAlpha = 1;
 
