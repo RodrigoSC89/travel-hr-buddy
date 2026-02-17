@@ -112,7 +112,7 @@ export function PoolDistributionManager() {
                             <span className="text-xs">{v.pool_share_pct}%</span>
                           </div>
                         </td>
-                        <td className="p-3 text-right font-bold text-green-400">${v.net_distribution.toLocaleString()}</td>
+                        <td className="p-3 text-right font-bold text-success">${v.net_distribution.toLocaleString()}</td>
                       </tr>
                     ))}
                   </tbody>

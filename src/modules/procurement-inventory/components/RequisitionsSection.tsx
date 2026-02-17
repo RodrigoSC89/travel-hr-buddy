@@ -266,25 +266,25 @@ export default function RequisitionsSection({ searchQuery }: RequisitionsSection
             </div>
           </CardContent>
         </Card>
-        <Card className="border-green-500/50">
+        <Card className="border-success/50">
           <CardContent className="p-4">
             <div className="flex items-center justify-between">
               <div>
                 <p className="text-sm text-muted-foreground">Aprovadas</p>
-                <p className="text-2xl font-bold text-green-600">{approvedCount}</p>
+                <p className="text-2xl font-bold text-success">{approvedCount}</p>
               </div>
-              <CheckCircle2 className="h-8 w-8 text-green-500 opacity-60" />
+              <CheckCircle2 className="h-8 w-8 text-success opacity-60" />
             </div>
           </CardContent>
         </Card>
-        <Card className="border-purple-500/50">
+        <Card className="border-accent/50">
           <CardContent className="p-4">
             <div className="flex items-center justify-between">
               <div>
                 <p className="text-sm text-muted-foreground">Sugestões IA</p>
-                <p className="text-2xl font-bold text-purple-600">{aiSuggestedCount}</p>
+                <p className="text-2xl font-bold text-accent-foreground">{aiSuggestedCount}</p>
               </div>
-              <Brain className="h-8 w-8 text-purple-500 opacity-60" />
+              <Brain className="h-8 w-8 text-accent-foreground opacity-60" />
             </div>
           </CardContent>
         </Card>
@@ -410,7 +410,7 @@ export default function RequisitionsSection({ searchQuery }: RequisitionsSection
                           <Button
                             variant="ghost"
                             size="icon"
-                            className="text-green-600 hover:text-green-700"
+                            className="text-success hover:text-success/80"
                             onClick={() => handleApprove(req)}
                             aria-label="Aprovar requisição"
                             title="Aprovar"
@@ -420,7 +420,7 @@ export default function RequisitionsSection({ searchQuery }: RequisitionsSection
                           <Button
                             variant="ghost"
                             size="icon"
-                            className="text-red-600 hover:text-red-700"
+                            className="text-destructive hover:text-destructive/80"
                             onClick={() => handleReject(req, "Requisição rejeitada pelo aprovador.")}
                             aria-label="Rejeitar requisição"
                             title="Rejeitar"

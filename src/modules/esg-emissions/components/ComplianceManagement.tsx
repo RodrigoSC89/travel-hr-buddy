@@ -79,12 +79,12 @@ const ciiRatings: CIIRating[] = [
 
 const getRatingColor = (rating: string) => {
   switch (rating) {
-    case "A": return "bg-green-500";
-    case "B": return "bg-green-400";
-    case "C": return "bg-yellow-400";
-    case "D": return "bg-orange-400";
-    case "E": return "bg-red-500";
-    default: return "bg-gray-400";
+    case "A": return "bg-success";
+    case "B": return "bg-success/80";
+    case "C": return "bg-warning";
+    case "D": return "bg-warning/80";
+    case "E": return "bg-destructive";
+    default: return "bg-muted";
   }
 };
 
@@ -259,7 +259,7 @@ export function ComplianceManagement() {
                       <TableCell>
                         <Badge 
                           variant={item.status === "compliant" ? "default" : item.status === "warning" ? "secondary" : item.status === "pending" ? "outline" : "destructive"}
-                          className={item.status === "compliant" ? "bg-green-600" : item.status === "warning" ? "bg-amber-500" : ""}
+                          className={item.status === "compliant" ? "bg-success" : item.status === "warning" ? "bg-warning" : ""}
                         >
                           {item.status === "compliant" && <CheckCircle className="h-3 w-3 mr-1" />}
                           {item.status === "warning" && <AlertTriangle className="h-3 w-3 mr-1" />}
@@ -304,7 +304,7 @@ export function ComplianceManagement() {
                           <p className="text-sm text-muted-foreground">CII Value: {vessel.ciiValue} gCO₂/dwt·nm</p>
                           <div className="flex items-center gap-2 mt-2">
                             <span className="text-sm">Tendência:</span>
-                            <Badge variant={vessel.trend < 0 ? "default" : "destructive"} className={vessel.trend < 0 ? "bg-green-600" : ""}>
+                            <Badge variant={vessel.trend < 0 ? "default" : "destructive"} className={vessel.trend < 0 ? "bg-success" : ""}>
                               {vessel.trend < 0 ? <TrendingDown className="h-3 w-3 mr-1" /> : <TrendingUp className="h-3 w-3 mr-1" />}
                               {Math.abs(vessel.trend)}%
                             </Badge>
@@ -321,7 +321,7 @@ export function ComplianceManagement() {
                         <div className="flex items-center justify-between text-sm">
                           <span>Meta: Rating {vessel.targetRating}</span>
                           {vessel.currentRating === vessel.targetRating ? (
-                            <Badge className="bg-green-600">
+                            <Badge className="bg-success">
                               <CheckCircle className="h-3 w-3 mr-1" />
                               Meta Atingida
                             </Badge>

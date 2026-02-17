@@ -126,7 +126,7 @@ export default function WorkOrderManager() {
     const config = {
       low: { label: "Baixa", className: "bg-muted text-muted-foreground" },
       medium: { label: "Média", className: "bg-warning/20 text-warning-foreground" },
-      high: { label: "Alta", className: "bg-orange-500/20 text-orange-700" },
+      high: { label: "Alta", className: "bg-warning/20 text-warning" },
       critical: { label: "Crítica", className: "bg-destructive/20 text-destructive" },
     };
     const { label, className } = config[priority];

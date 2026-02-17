@@ -19,12 +19,12 @@ interface Props {
 
 export function VoyageStatsBar({ stats }: Props) {
   const items = [
-    { label: "Viagens Ativas", value: stats.active, color: "text-green-600", icon: Ship, iconColor: "text-green-500" },
-    { label: "Planejadas", value: stats.planned, color: "text-blue-600", icon: Calendar, iconColor: "text-blue-500" },
+    { label: "Viagens Ativas", value: stats.active, color: "text-success", icon: Ship, iconColor: "text-success" },
+    { label: "Planejadas", value: stats.planned, color: "text-info", icon: Calendar, iconColor: "text-info" },
     { label: "Milhas Total", value: stats.totalDistance.toLocaleString(), icon: Navigation, iconColor: "text-primary" },
-    { label: "Combustível", value: `${stats.totalFuel.toLocaleString()}t`, icon: Fuel, iconColor: "text-amber-500" },
-    { label: "Pontualidade", value: `${stats.onTimeRate}%`, color: "text-green-600", icon: Target, iconColor: "text-green-500" },
-    { label: "Economia IA", value: `${stats.fuelSaved}t`, color: "text-emerald-600", icon: Sparkles, iconColor: "text-emerald-500" },
+    { label: "Combustível", value: `${stats.totalFuel.toLocaleString()}t`, icon: Fuel, iconColor: "text-warning" },
+    { label: "Pontualidade", value: `${stats.onTimeRate}%`, color: "text-success", icon: Target, iconColor: "text-success" },
+    { label: "Economia IA", value: `${stats.fuelSaved}t`, color: "text-success", icon: Sparkles, iconColor: "text-success" },
   ];
 
   return (
