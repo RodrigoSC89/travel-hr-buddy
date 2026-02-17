@@ -95,15 +95,15 @@ const CircuitCard: React.FC<CircuitCardProps> = ({
         <div className="flex justify-between text-xs">
           <span className="text-muted-foreground">Taxa de Sucesso</span>
           <span className={cn(
-            successRate >= 95 ? 'text-green-500' : 
-            successRate >= 80 ? 'text-yellow-500' : 'text-red-500'
+            successRate >= 95 ? 'text-success' : 
+            successRate >= 80 ? 'text-warning' : 'text-destructive'
           )}>
             {successRate}%
           </span>
         </div>
         <Progress 
           value={successRate} 
-          className={cn('h-1.5', successRate < 80 && 'bg-red-200')}
+          className={cn('h-1.5', successRate < 80 && 'bg-destructive/20')}
         />
         
         <div className="grid grid-cols-2 gap-2 text-xs">

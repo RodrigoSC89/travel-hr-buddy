@@ -27,7 +27,7 @@ import { format } from "date-fns";
 const CARGO_TYPES = ["Dry Bulk", "Liquid Bulk", "Break Bulk", "Container", "Ro-Ro", "Reefer", "Project Cargo", "Hazmat"];
 const CARGO_STATUS = ["booked", "loading", "in_transit", "discharging", "completed", "cancelled"];
 const HAZMAT_CLASSES = ["1 - Explosives", "2 - Gases", "3 - Flammable Liquids", "4 - Flammable Solids", "5 - Oxidizers", "6 - Toxics", "7 - Radioactive", "8 - Corrosives", "9 - Misc"];
-const COLORS = ["#3b82f6", "#22c55e", "#eab308", "#f97316", "#ef4444", "#8b5cf6"];
+const COLORS = ["hsl(var(--primary))", "hsl(var(--success))", "hsl(var(--warning))", "hsl(var(--warning))", "hsl(var(--destructive))", "hsl(var(--accent))"];
 
 export function CargoManager() {
   const queryClient = useQueryClient();

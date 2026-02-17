@@ -368,7 +368,7 @@ export const OrganizationSetupWizard: React.FC = () => {
       return (
         <div className="space-y-6">
           <div className="text-center mb-6">
-            <CheckCircle className="w-16 h-16 text-green-500 mx-auto mb-4" />
+            <CheckCircle className="w-16 h-16 text-success mx-auto mb-4" />
             <h3 className="text-xl font-semibold mb-2">Configuração Quase Concluída!</h3>
             <p className="text-muted-foreground">
                 Revise as configurações abaixo e finalize a configuração da sua organização.

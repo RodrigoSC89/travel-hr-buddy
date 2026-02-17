@@ -223,7 +223,7 @@ export const OVIDHistoricalEvolution: React.FC<OVIDHistoricalEvolutionProps> = (
             <CardContent className="pt-4">
               <div className="text-center">
                 <p className="text-xs text-muted-foreground mb-1">Máximo</p>
-                <p className="text-2xl font-bold text-green-500">{stats.max}%</p>
+                <p className="text-2xl font-bold text-success">{stats.max}%</p>
               </div>
             </CardContent>
           </Card>
@@ -231,22 +231,22 @@ export const OVIDHistoricalEvolution: React.FC<OVIDHistoricalEvolutionProps> = (
             <CardContent className="pt-4">
               <div className="text-center">
                 <p className="text-xs text-muted-foreground mb-1">Mínimo</p>
-                <p className="text-2xl font-bold text-red-500">{stats.min}%</p>
+                <p className="text-2xl font-bold text-destructive">{stats.min}%</p>
               </div>
             </CardContent>
           </Card>
-          <Card className={stats.trend >= 0 ? 'border-green-500/30' : 'border-red-500/30'}>
+          <Card className={stats.trend >= 0 ? 'border-success/30' : 'border-destructive/30'}>
             <CardContent className="pt-4">
               <div className="text-center">
                 <p className="text-xs text-muted-foreground mb-1">Tendência</p>
                 <div className="flex items-center justify-center gap-1">
-                  <p className={`text-2xl font-bold ${stats.trend >= 0 ? 'text-green-500' : 'text-red-500'}`}>
+                  <p className={`text-2xl font-bold ${stats.trend >= 0 ? 'text-success' : 'text-destructive'}`}>
                     {stats.trend > 0 ? '+' : ''}{stats.trend}
                   </p>
                   {stats.trend > 0 ? (
-                    <TrendingUp className="w-5 h-5 text-green-500" />
+                    <TrendingUp className="w-5 h-5 text-success" />
                   ) : stats.trend < 0 ? (
-                    <TrendingDown className="w-5 h-5 text-red-500" />
+                    <TrendingDown className="w-5 h-5 text-destructive" />
                   ) : null}
                 </div>
               </div>

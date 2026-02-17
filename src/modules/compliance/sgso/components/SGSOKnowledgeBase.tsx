@@ -189,13 +189,13 @@ export const SGSOKnowledgeBase: React.FC = () => {
   const getSourceColor = (source: string) => {
     switch (source) {
     case "ANP":
-      return "bg-blue-500";
+      return "bg-primary";
     case "IBP":
-      return "bg-green-500";
+      return "bg-success";
     case "ABNT":
-      return "bg-purple-500";
+      return "bg-accent";
     case "IMO":
-      return "bg-orange-500";
+      return "bg-warning";
     default:
       return "bg-muted-foreground";
     }

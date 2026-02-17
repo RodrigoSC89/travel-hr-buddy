@@ -428,7 +428,7 @@ export default function ComplianceDenuncias() {
                           Registrado: {new Date(report.createdAt).toLocaleDateString("pt-BR")}
                         </span>
                         {report.aiClassification && (
-                          <span className="flex items-center gap-1 text-purple-400">
+                          <span className="flex items-center gap-1 text-accent">
                             <Brain className="h-3 w-3" />
                             {report.aiClassification}
                           </span>
