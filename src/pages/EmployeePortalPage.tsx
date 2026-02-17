@@ -35,10 +35,10 @@ export default function EmployeePortalPage() {
   ];
 
   const quickActions = [
-    { icon: FileText, label: 'Holerite', color: 'text-blue-500', bg: 'bg-blue-500/10', tab: 'documents' },
-    { icon: Calendar, label: 'Férias', color: 'text-green-500', bg: 'bg-green-500/10', tab: 'requests' },
-    { icon: Clock, label: 'Ponto', color: 'text-purple-500', bg: 'bg-purple-500/10', tab: 'home' },
-    { icon: Gift, label: 'Benefícios', color: 'text-amber-500', bg: 'bg-amber-500/10', tab: 'home' },
+    { icon: FileText, label: 'Holerite', color: 'text-primary', bg: 'bg-primary/10', tab: 'documents' },
+    { icon: Calendar, label: 'Férias', color: 'text-success', bg: 'bg-success/10', tab: 'requests' },
+    { icon: Clock, label: 'Ponto', color: 'text-accent-foreground', bg: 'bg-accent/10', tab: 'home' },
+    { icon: Gift, label: 'Benefícios', color: 'text-warning', bg: 'bg-warning/10', tab: 'home' },
   ];
 
   const formatCurrency = (value: number) => 
@@ -94,7 +94,7 @@ export default function EmployeePortalPage() {
           <Button variant="ghost" size="icon" className="text-primary-foreground relative" aria-label="Notificações" title="Notificações">
             <Bell className="h-5 w-5" />
             {notifications.filter(n => n.unread).length > 0 && (
-              <span className="absolute -top-1 -right-1 h-4 w-4 bg-red-500 rounded-full text-xs flex items-center justify-center">
+              <span className="absolute -top-1 -right-1 h-4 w-4 bg-destructive rounded-full text-xs flex items-center justify-center">
                 {notifications.filter(n => n.unread).length}
               </span>
             )}
@@ -409,8 +409,8 @@ export default function EmployeePortalPage() {
                 { name: 'AWS Solutions Architect', duration: '20h', match: 75 },
               ].map((course) => (
                 <div key={course.name} className="flex items-center gap-3 p-3 rounded-lg border hover:bg-muted/50 cursor-pointer">
-                  <div className="p-2 bg-purple-500/10 rounded-lg">
-                    <GraduationCap className="h-4 w-4 text-purple-500" />
+                  <div className="p-2 bg-accent/10 rounded-lg">
+                    <GraduationCap className="h-4 w-4 text-accent-foreground" />
                   </div>
                   <div className="flex-1">
                     <p className="text-sm font-medium">{course.name}</p>

@@ -179,14 +179,14 @@ export const TrainingCompliance: React.FC = () => {
           </CardContent>
         </Card>
 
-        <Card className="bg-gradient-to-br from-blue-50 to-blue-100 border-blue-200">
+        <Card className="bg-gradient-to-br from-primary/10 to-primary/5 border-primary/20">
           <CardContent className="p-6">
             <div className="flex items-center justify-between mb-4">
-              <TrendingUp className="h-10 w-10 text-blue-600" />
-              <Badge className="bg-blue-600 text-white font-bold">COMPLIANCE</Badge>
+              <TrendingUp className="h-10 w-10 text-primary" />
+              <Badge className="bg-primary text-primary-foreground font-bold">COMPLIANCE</Badge>
             </div>
-            <h3 className="text-sm font-medium text-blue-700 mb-1">Compliance Geral</h3>
-            <p className="text-3xl font-bold text-blue-900">{overallCompliance}%</p>
+            <h3 className="text-sm font-medium text-primary mb-1">Compliance Geral</h3>
+            <p className="text-3xl font-bold text-foreground">{overallCompliance}%</p>
             <Progress value={overallCompliance} className="mt-2" />
           </CardContent>
         </Card>
@@ -315,7 +315,7 @@ export const TrainingCompliance: React.FC = () => {
                         </Button>
                         <Button 
                           size="sm"
-                          className="min-h-[44px] px-6 bg-blue-600 hover:bg-blue-700 text-white"
+                          className="min-h-[44px] px-6 bg-primary hover:bg-primary/90 text-primary-foreground"
                           onClick={() => showInfo("Agendando Treinamento", "Abrindo agenda")} disabled={isLoading}
                         >
                           <Calendar className="h-4 w-4 mr-2" />
@@ -378,7 +378,7 @@ export const TrainingCompliance: React.FC = () => {
               <span className="font-semibold">Expirados</span>
             </Button>
             <Button 
-              className="bg-purple-600 hover:bg-purple-700 text-white min-h-[56px] flex-col gap-2"
+              className="bg-accent hover:bg-accent/90 text-accent-foreground min-h-[56px] flex-col gap-2"
               onClick={() => {
                 toast({
                   title: "👥 Matriz de Competências",

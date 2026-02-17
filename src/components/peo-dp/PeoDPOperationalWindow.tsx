@@ -164,26 +164,26 @@ export const PeoDPOperationalWindow: React.FC = () => {
     <div className="space-y-6">
       {/* ASOG Header */}
       <Card className={`border-2 ${
-        asogStatus === "GREEN" ? "border-green-500/50 bg-green-500/5" :
-        asogStatus === "YELLOW" ? "border-yellow-500/50 bg-yellow-500/5" :
-        "border-red-500/50 bg-red-500/5"
+        asogStatus === "GREEN" ? "border-success/50 bg-success/5" :
+        asogStatus === "YELLOW" ? "border-warning/50 bg-warning/5" :
+        "border-destructive/50 bg-destructive/5"
       }`}>
         <CardContent className="pt-6">
           <div className="flex items-center justify-between flex-wrap gap-4">
             <div className="flex items-center gap-4">
               <div className={`p-4 rounded-2xl ${
-                asogStatus === "GREEN" ? "bg-green-500/20" :
-                asogStatus === "YELLOW" ? "bg-yellow-500/20" : "bg-red-500/20"
+                asogStatus === "GREEN" ? "bg-success/20" :
+                asogStatus === "YELLOW" ? "bg-warning/20" : "bg-destructive/20"
               }`}>
                 <Shield className={`h-8 w-8 ${
-                  asogStatus === "GREEN" ? "text-green-500" :
-                  asogStatus === "YELLOW" ? "text-yellow-500" : "text-red-500"
+                  asogStatus === "GREEN" ? "text-success" :
+                  asogStatus === "YELLOW" ? "text-warning" : "text-destructive"
                 }`} />
               </div>
               <div>
                 <h3 className="text-2xl font-bold flex items-center gap-3">
                   ASOG Status:
-                  <span className={asogStatus === "GREEN" ? "text-green-500" : asogStatus === "YELLOW" ? "text-yellow-500" : "text-red-500"}>
+                  <span className={asogStatus === "GREEN" ? "text-success" : asogStatus === "YELLOW" ? "text-warning" : "text-destructive"}>
                     {asogStatus}
                   </span>
                 </h3>
@@ -207,7 +207,7 @@ export const PeoDPOperationalWindow: React.FC = () => {
       <Card>
         <CardHeader className="pb-3">
           <CardTitle className="text-lg flex items-center gap-2">
-            <ThermometerSun className="h-5 w-5 text-blue-500" />
+            <ThermometerSun className="h-5 w-5 text-info" />
             Condições Ambientais — Janela Operacional
           </CardTitle>
         </CardHeader>
@@ -217,11 +217,11 @@ export const PeoDPOperationalWindow: React.FC = () => {
               const envStatus = getEnvStatus(rec);
               const Icon = ICON_MAP[rec.parameter] || Activity;
               return (
-                <Card key={rec.id} className={envStatus === "red" ? "border-destructive/40 bg-destructive/5" : envStatus === "yellow" ? "border-yellow-500/40 bg-yellow-500/5" : ""}>
+                <Card key={rec.id} className={envStatus === "red" ? "border-destructive/40 bg-destructive/5" : envStatus === "yellow" ? "border-warning/40 bg-warning/5" : ""}>
                   <CardContent className="pt-4 pb-3">
                     <div className="flex items-center justify-between mb-2">
                       <div className="flex items-center gap-2">
-                        <Icon className={`h-5 w-5 ${envStatus === "red" ? "text-destructive" : envStatus === "yellow" ? "text-yellow-500" : "text-green-500"}`} />
+                        <Icon className={`h-5 w-5 ${envStatus === "red" ? "text-destructive" : envStatus === "yellow" ? "text-warning" : "text-success"}`} />
                         <span className="font-medium">{rec.parameter}</span>
                       </div>
                       <span className={`text-2xl font-bold ${envStatus === "red" ? "text-destructive" : envStatus === "yellow" ? "text-yellow-500" : "text-green-500"}`}>

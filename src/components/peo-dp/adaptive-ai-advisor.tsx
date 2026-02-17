@@ -36,11 +36,11 @@ interface ConversationMessage {
 }
 
 const profileConfig: Record<UserProfile, { icon: React.ElementType; label: string; color: string; description: string }> = {
-  dpo: { icon: Target, label: "DPO", color: "bg-blue-500", description: "Operador de Posicionamento Dinâmico" },
-  inspector: { icon: ClipboardCheck, label: "Inspetor", color: "bg-purple-500", description: "Auditor de Conformidade" },
-  manager: { icon: User, label: "Gestor", color: "bg-green-500", description: "Gerente de Operações" },
-  engineer: { icon: Wrench, label: "Engenheiro", color: "bg-orange-500", description: "Engenheiro de Sistemas DP" },
-  auditor: { icon: Shield, label: "Auditor", color: "bg-red-500", description: "Auditor Externo" }
+  dpo: { icon: Target, label: "DPO", color: "bg-primary", description: "Operador de Posicionamento Dinâmico" },
+  inspector: { icon: ClipboardCheck, label: "Inspetor", color: "bg-accent", description: "Auditor de Conformidade" },
+  manager: { icon: User, label: "Gestor", color: "bg-success", description: "Gerente de Operações" },
+  engineer: { icon: Wrench, label: "Engenheiro", color: "bg-warning", description: "Engenheiro de Sistemas DP" },
+  auditor: { icon: Shield, label: "Auditor", color: "bg-destructive", description: "Auditor Externo" }
 };
 
 const suggestedQuestions: Record<UserProfile, string[]> = {

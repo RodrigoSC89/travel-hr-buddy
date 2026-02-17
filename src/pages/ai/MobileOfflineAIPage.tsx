@@ -38,7 +38,7 @@ export default function MobileOfflineAIPage() {
               Capacidades mobile e sincronização offline com IA
             </p>
           </div>
-          <Badge variant="default" className="text-lg px-4 py-2 bg-emerald-500">
+          <Badge variant="default" className="text-lg px-4 py-2 bg-success">
             <Wifi className="h-4 w-4 mr-2" />
             Online
           </Badge>
@@ -51,9 +51,9 @@ export default function MobileOfflineAIPage() {
               <div className="flex items-center justify-between">
                 <div>
                   <p className="text-sm text-muted-foreground">Dados Sincronizados</p>
-                  <p className="text-3xl font-bold text-emerald-500">100%</p>
+                  <p className="text-3xl font-bold text-success">100%</p>
                 </div>
-                <Cloud className="h-8 w-8 text-emerald-500" />
+                <Cloud className="h-8 w-8 text-success" />
               </div>
             </CardContent>
           </Card>
@@ -149,7 +149,7 @@ export default function MobileOfflineAIPage() {
                 <div key={item.feature} className="flex items-center justify-between p-2 rounded-lg bg-muted/50">
                   <span>{item.feature}</span>
                   {item.available ? (
-                    <Badge variant="default" className="bg-emerald-500">Disponível</Badge>
+                    <Badge variant="default" className="bg-success">Disponível</Badge>
                   ) : (
                     <Badge variant="outline">Online Only</Badge>
                   )}
@@ -166,18 +166,18 @@ export default function MobileOfflineAIPage() {
               </CardTitle>
             </CardHeader>
             <CardContent className="space-y-4">
-              <div className="p-4 rounded-lg border bg-blue-500/5 border-blue-500/30">
+              <div className="p-4 rounded-lg border bg-info/5 border-info/30">
                 <div className="flex items-center gap-2 mb-2">
-                  <Brain className="h-4 w-4 text-blue-500" />
+                  <Brain className="h-4 w-4 text-info" />
                   <span className="font-medium">OCR Local</span>
                 </div>
                 <p className="text-sm text-muted-foreground">
                   Processamento de documentos diretamente no dispositivo, mesmo sem conexão.
                 </p>
               </div>
-              <div className="p-4 rounded-lg border bg-emerald-500/5 border-emerald-500/30">
+              <div className="p-4 rounded-lg border bg-success/5 border-success/30">
                 <div className="flex items-center gap-2 mb-2">
-                  <Smartphone className="h-4 w-4 text-emerald-500" />
+                  <Smartphone className="h-4 w-4 text-success" />
                   <span className="font-medium">Voice Commands</span>
                 </div>
                 <p className="text-sm text-muted-foreground">

@@ -200,12 +200,12 @@ const NautilusAutomation: React.FC = () => {
     switch (status) {
       case "active":
       case "running":
-        return <Badge className="bg-green-500/20 text-green-400 border-green-500/30">Ativo</Badge>;
+        return <Badge className="bg-success/20 text-success border-success/30">Ativo</Badge>;
       case "paused":
       case "idle":
-        return <Badge className="bg-yellow-500/20 text-yellow-400 border-yellow-500/30">Pausado</Badge>;
+        return <Badge className="bg-warning/20 text-warning border-warning/30">Pausado</Badge>;
       case "error":
-        return <Badge className="bg-red-500/20 text-red-400 border-red-500/30">Erro</Badge>;
+        return <Badge className="bg-destructive/20 text-destructive border-destructive/30">Erro</Badge>;
       default:
         return <Badge variant="secondary">{status}</Badge>;
     }
@@ -216,7 +216,7 @@ const NautilusAutomation: React.FC = () => {
       {/* Header */}
       <div className="flex items-center justify-between">
         <div className="flex items-center gap-3">
-          <div className="p-3 rounded-xl bg-gradient-to-br from-primary/20 to-orange-500/20 border border-primary/30">
+          <div className="p-3 rounded-xl bg-gradient-to-br from-primary/20 to-warning/20 border border-primary/30">
             <Workflow className="h-8 w-8 text-primary" />
           </div>
           <div>
@@ -250,7 +250,7 @@ const NautilusAutomation: React.FC = () => {
                 <p className="text-sm text-muted-foreground">Bots RPA</p>
                 <p className="text-2xl font-bold text-foreground">{bots.filter(b => b.status === "running").length} / {bots.length}</p>
               </div>
-              <Bot className="h-8 w-8 text-green-400 opacity-50" />
+              <Bot className="h-8 w-8 text-success opacity-50" />
             </div>
           </CardContent>
         </Card>
@@ -261,7 +261,7 @@ const NautilusAutomation: React.FC = () => {
                 <p className="text-sm text-muted-foreground">Triggers Ativos</p>
                 <p className="text-2xl font-bold text-foreground">{triggers.filter(t => t.isActive).length}</p>
               </div>
-              <Zap className="h-8 w-8 text-yellow-400 opacity-50" />
+              <Zap className="h-8 w-8 text-warning opacity-50" />
             </div>
           </CardContent>
         </Card>
@@ -272,7 +272,7 @@ const NautilusAutomation: React.FC = () => {
                 <p className="text-sm text-muted-foreground">Taxa de Sucesso</p>
                 <p className="text-2xl font-bold text-foreground">97.2%</p>
               </div>
-              <CheckCircle className="h-8 w-8 text-green-400 opacity-50" />
+              <CheckCircle className="h-8 w-8 text-success opacity-50" />
             </div>
           </CardContent>
         </Card>

@@ -46,8 +46,8 @@ export default function FinanceProcurementAIPage() {
             </div>
           </div>
           <div className="flex gap-2">
-            <Badge variant="outline" className="text-lg px-4 py-2 bg-green-50 dark:bg-green-950">
-              <TrendingUp className="h-4 w-4 mr-2 text-green-600" />
+            <Badge variant="outline" className="text-lg px-4 py-2 bg-success/10">
+              <TrendingUp className="h-4 w-4 mr-2 text-success" />
               $750k economia/ano
             </Badge>
             <Badge variant="outline" className="text-lg px-4 py-2">

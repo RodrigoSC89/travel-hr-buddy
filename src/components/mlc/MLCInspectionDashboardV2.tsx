@@ -241,24 +241,24 @@ export const MLCInspectionDashboardV2: React.FC = () => {
               <XCircle className="h-4 w-4 text-destructive" />
               <p className="text-sm text-muted-foreground">Não Conforme</p>
             </div>
-            <p className="text-2xl font-bold text-red-500">{nonCompliantItems}</p>
+            <p className="text-2xl font-bold text-destructive">{nonCompliantItems}</p>
           </CardContent>
         </Card>
 
         <Card>
           <CardContent className="pt-4">
             <div className="flex items-center gap-2">
-              <Star className="h-4 w-4 text-orange-500" />
+              <Star className="h-4 w-4 text-warning" />
               <p className="text-sm text-muted-foreground">Críticos</p>
             </div>
-            <p className="text-2xl font-bold text-orange-500">{criticalItems.length}</p>
+            <p className="text-2xl font-bold text-warning">{criticalItems.length}</p>
           </CardContent>
         </Card>
 
         <Card>
           <CardContent className="pt-4">
             <div className="flex items-center gap-2">
-              <ClipboardCheck className="h-4 w-4 text-blue-500" />
+              <ClipboardCheck className="h-4 w-4 text-info" />
               <p className="text-sm text-muted-foreground">Total Itens</p>
             </div>
             <p className="text-2xl font-bold">{totalItems}</p>
@@ -268,10 +268,10 @@ export const MLCInspectionDashboardV2: React.FC = () => {
         <Card>
           <CardContent className="pt-4">
             <div className="flex items-center gap-2">
-              <BarChart3 className="h-4 w-4 text-purple-500" />
+              <BarChart3 className="h-4 w-4 text-accent-foreground" />
               <p className="text-sm text-muted-foreground">Progresso</p>
             </div>
-            <p className="text-2xl font-bold text-purple-500">{progressPercent}%</p>
+            <p className="text-2xl font-bold text-accent-foreground">{progressPercent}%</p>
           </CardContent>
         </Card>
       </div>
@@ -351,7 +351,7 @@ export const MLCInspectionDashboardV2: React.FC = () => {
             <Card>
               <CardHeader>
                 <CardTitle className="flex items-center gap-2">
-                  <Scale className="h-5 w-5 text-blue-500" />
+                  <Scale className="h-5 w-5 text-info" />
                   Sobre a MLC 2006
                 </CardTitle>
               </CardHeader>
@@ -377,7 +377,7 @@ export const MLCInspectionDashboardV2: React.FC = () => {
             <Card>
               <CardHeader>
                 <CardTitle className="flex items-center gap-2">
-                  <Ship className="h-5 w-5 text-blue-500" />
+                  <Ship className="h-5 w-5 text-info" />
                   {inspectionStarted ? 'Inspeção em Andamento' : 'Nova Inspeção MLC'}
                 </CardTitle>
                 <CardDescription>
@@ -636,7 +636,7 @@ export const MLCInspectionDashboardV2: React.FC = () => {
                                             <p className="text-xs text-muted-foreground mt-1">
                                               {item.description}
                                             </p>
-                                            <p className="text-xs text-blue-600 mt-1">
+                                            <p className="text-xs text-info mt-1">
                                               {item.legalBasis}
                                             </p>
                                           </div>
@@ -695,7 +695,7 @@ export const MLCInspectionDashboardV2: React.FC = () => {
           <Card>
             <CardHeader>
               <CardTitle className="flex items-center gap-2">
-                <AlertTriangle className="h-5 w-5 text-red-500" />
+                <AlertTriangle className="h-5 w-5 text-destructive" />
                 Não Conformidades Identificadas
               </CardTitle>
               <CardDescription>
@@ -749,7 +749,7 @@ export const MLCInspectionDashboardV2: React.FC = () => {
                                   <p className="text-sm text-muted-foreground mt-1">
                                     {foundItem.description}
                                   </p>
-                                  <p className="text-xs text-blue-600 mt-1">
+                                  <p className="text-xs text-info mt-1">
                                     {foundItem.legalBasis}
                                   </p>
                                 </div>

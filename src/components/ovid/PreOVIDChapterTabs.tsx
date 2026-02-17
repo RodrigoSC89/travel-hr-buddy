@@ -48,9 +48,9 @@ export const PreOVIDChapterTabs: React.FC<PreOVIDChapterTabsProps> = ({
 }) => {
   const getProgressColor = (progress: ChapterProgress) => {
     if (progress.completed === 0) return 'bg-muted';
-    if (progress.nonCompliant > 0) return 'bg-red-500';
-    if (progress.completed === progress.total) return 'bg-green-500';
-    return 'bg-yellow-500';
+    if (progress.nonCompliant > 0) return 'bg-destructive';
+    if (progress.completed === progress.total) return 'bg-success';
+    return 'bg-warning';
   };
 
   return (

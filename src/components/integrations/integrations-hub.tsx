@@ -91,7 +91,7 @@ export const IntegrationsHub: React.FC = () => {
 
   const getStatusColor = (status: string) => {
     switch (status) {
-    case "connected": return "text-green-600 bg-green-100";
+    case "connected": return "text-success bg-success/10";
     case "disconnected": return "text-muted-foreground bg-muted";
     case "error": return "text-destructive bg-destructive/10";
     default: return "text-muted-foreground bg-muted";
@@ -170,7 +170,7 @@ export const IntegrationsHub: React.FC = () => {
         <Card>
           <CardContent className="p-4">
             <div className="flex items-center gap-2">
-              <CheckCircle className="h-5 w-5 text-green-600" />
+              <CheckCircle className="h-5 w-5 text-success" />
               <div>
                 <p className="text-sm text-muted-foreground">Conectadas</p>
                 <p className="text-2xl font-bold">{connectedCount}</p>
@@ -203,7 +203,7 @@ export const IntegrationsHub: React.FC = () => {
         <Card>
           <CardContent className="p-4">
             <div className="flex items-center gap-2">
-              <Zap className="h-5 w-5 text-orange-600" />
+              <Zap className="h-5 w-5 text-warning" />
               <div>
                 <p className="text-sm text-muted-foreground">Ativas</p>
                 <p className="text-2xl font-bold">{integrations.filter(i => i.isEnabled).length}</p>
