@@ -1514,3 +1514,11 @@ comment = "TCE market benchmark by vessel type with percentile analysis — excl
 [functions.smart-evidence-organizer]
 verify_jwt = false
 comment = "AI-powered checklist parser + evidence matcher for PEO-DP and PEOTRAM audits"
+
+[functions.proactive-alerts-cron]
+verify_jwt = false
+comment = "Proactive alerts cron - scans expiring certificates and overdue maintenance"
+
+[functions.seed-demo-data]
+verify_jwt = false
+comment = "Seed demo data for commercial demonstrations with realistic maritime data"

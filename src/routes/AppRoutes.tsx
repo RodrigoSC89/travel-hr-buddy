@@ -53,6 +53,7 @@ export const AppRoutes = () => (
       <Route path="/billing-portal" element={<Pages.BillingPortal />} />
       <Route path="/planos" element={<Pages.Billing />} />
       <Route path="/onboarding" element={<Pages.OnboardingDashboard />} />
+      <Route path="/onboarding/setup" element={<Pages.TenantOnboardingWizard />} />
       <Route path="/onboarding-tour" element={<Pages.InteractiveOnboarding />} />
       <Route path="/welcome" element={<Pages.InteractiveOnboarding />} />
       <Route path="/analytics-feedback" element={<Pages.AnalyticsFeedback />} />
