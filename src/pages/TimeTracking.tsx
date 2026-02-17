@@ -208,25 +208,25 @@ const TimeTracking: React.FC = () => {
                   </CardDescription>
                 </CardHeader>
                 <CardContent className="space-y-3">
-                  <div className="p-3 bg-blue-500/10 border border-blue-500/30 rounded-lg">
+                  <div className="p-3 bg-info/10 border border-info/30 rounded-lg">
                     <div className="flex items-center gap-2 mb-1">
-                      <Sun className="w-4 h-4 text-blue-500" />
+                      <Sun className="w-4 h-4 text-info" />
                       <span className="font-medium">Turno Diurno (06h-14h)</span>
                     </div>
                     <p className="text-sm text-muted-foreground">
                       {filteredRecords.filter(r => r.clock_in).length} colaboradores
                     </p>
                   </div>
-                  <div className="p-3 bg-orange-500/10 border border-orange-500/30 rounded-lg">
+                  <div className="p-3 bg-warning/10 border border-warning/30 rounded-lg">
                     <div className="flex items-center gap-2 mb-1">
-                      <Clock className="w-4 h-4 text-orange-500" />
+                      <Clock className="w-4 h-4 text-warning" />
                       <span className="font-medium">Turno Vespertino (14h-22h)</span>
                     </div>
                     <p className="text-sm text-muted-foreground">0 colaboradores</p>
                   </div>
-                  <div className="p-3 bg-purple-500/10 border border-purple-500/30 rounded-lg">
+                  <div className="p-3 bg-accent/10 border border-accent/30 rounded-lg">
                     <div className="flex items-center gap-2 mb-1">
-                      <Moon className="w-4 h-4 text-purple-500" />
+                      <Moon className="w-4 h-4 text-accent-foreground" />
                       <span className="font-medium">Turno Noturno (22h-06h)</span>
                     </div>
                     <p className="text-sm text-muted-foreground">0 colaboradores</p>
@@ -386,13 +386,13 @@ const TimeTracking: React.FC = () => {
                       <div className="flex items-center gap-4">
                         <div className={cn(
                           'text-2xl font-bold',
-                          record.overtime_hours >= 0 ? 'text-green-500' : 'text-red-500'
+                          record.overtime_hours >= 0 ? 'text-success' : 'text-destructive'
                         )}>
                           {record.overtime_hours >= 0 ? '+' : ''}{record.overtime_hours}h
                         </div>
                         <TrendingUp className={cn(
                           'w-5 h-5',
-                          record.overtime_hours >= 0 ? 'text-green-500' : 'text-red-500 rotate-180'
+                          record.overtime_hours >= 0 ? 'text-success' : 'text-destructive rotate-180'
                         )} />
                       </div>
                     </motion.div>

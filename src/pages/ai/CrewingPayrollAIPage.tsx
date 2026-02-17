@@ -68,7 +68,7 @@ export default function CrewingPayrollAIPage() {
                   <p className="text-sm text-muted-foreground">Folha Mensal</p>
                   <p className="text-3xl font-bold">$485K</p>
                 </div>
-                <DollarSign className="h-8 w-8 text-emerald-500" />
+                <DollarSign className="h-8 w-8 text-success" />
               </div>
             </CardContent>
           </Card>
@@ -77,9 +77,9 @@ export default function CrewingPayrollAIPage() {
               <div className="flex items-center justify-between">
                 <div>
                   <p className="text-sm text-muted-foreground">Rotações Pendentes</p>
-                  <p className="text-3xl font-bold text-amber-500">8</p>
+                  <p className="text-3xl font-bold text-warning">8</p>
                 </div>
-                <Clock className="h-8 w-8 text-amber-500" />
+                <Clock className="h-8 w-8 text-warning" />
               </div>
             </CardContent>
           </Card>
@@ -88,9 +88,9 @@ export default function CrewingPayrollAIPage() {
               <div className="flex items-center justify-between">
                 <div>
                   <p className="text-sm text-muted-foreground">MLC Compliance</p>
-                  <p className="text-3xl font-bold text-emerald-500">98%</p>
+                  <p className="text-3xl font-bold text-success">98%</p>
                 </div>
-                <CheckCircle className="h-8 w-8 text-emerald-500" />
+                <CheckCircle className="h-8 w-8 text-success" />
               </div>
             </CardContent>
           </Card>
@@ -114,12 +114,12 @@ export default function CrewingPayrollAIPage() {
                 >
                   <div className="flex items-center gap-4">
                     <div className={`p-2 rounded-lg ${
-                      rotation.status === 'onboard' ? 'bg-emerald-500/10' : 'bg-amber-500/10'
+                      rotation.status === 'onboard' ? 'bg-success/10' : 'bg-warning/10'
                     }`}>
                       {rotation.status === 'onboard' ? (
-                        <CheckCircle className="h-5 w-5 text-emerald-500" />
+                        <CheckCircle className="h-5 w-5 text-success" />
                       ) : (
-                        <AlertTriangle className="h-5 w-5 text-amber-500" />
+                        <AlertTriangle className="h-5 w-5 text-warning" />
                       )}
                     </div>
                     <div>
@@ -187,18 +187,18 @@ export default function CrewingPayrollAIPage() {
               </CardTitle>
             </CardHeader>
             <CardContent className="space-y-4">
-              <div className="p-3 rounded-lg border bg-amber-500/5 border-amber-500/30">
+              <div className="p-3 rounded-lg border bg-warning/5 border-warning/30">
                 <div className="flex items-center gap-2 mb-1">
-                  <AlertTriangle className="h-4 w-4 text-amber-500" />
+                  <AlertTriangle className="h-4 w-4 text-warning" />
                   <span className="font-medium text-sm">Alerta de Rotação</span>
                 </div>
                 <p className="text-sm text-muted-foreground">
                   3 tripulantes atingem limite MLC de 11 meses nos próximos 30 dias.
                 </p>
               </div>
-              <div className="p-3 rounded-lg border bg-emerald-500/5 border-emerald-500/30">
+              <div className="p-3 rounded-lg border bg-success/5 border-success/30">
                 <div className="flex items-center gap-2 mb-1">
-                  <TrendingUp className="h-4 w-4 text-emerald-500" />
+                  <TrendingUp className="h-4 w-4 text-success" />
                   <span className="font-medium text-sm">Otimização Sugerida</span>
                 </div>
                 <p className="text-sm text-muted-foreground">

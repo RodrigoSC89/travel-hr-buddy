@@ -164,14 +164,14 @@ export default function AIAssistantPanel({ onClose }: AIAssistantPanelProps) {
   };
 
   const quickActions = [
-    { icon: Package, label: "Estoque crítico", color: "text-amber-500" },
-    { icon: AlertTriangle, label: "Atrasados", color: "text-red-500" },
-    { icon: Building2, label: "Fornecedores", color: "text-blue-500" },
-    { icon: TrendingUp, label: "Previsões", color: "text-purple-500" },
+    { icon: Package, label: "Estoque crítico", color: "text-warning" },
+    { icon: AlertTriangle, label: "Atrasados", color: "text-destructive" },
+    { icon: Building2, label: "Fornecedores", color: "text-info" },
+    { icon: TrendingUp, label: "Previsões", color: "text-primary" },
   ];
 
   return (
-    <Card className="h-[calc(100vh-220px)] flex flex-col bg-gradient-to-br from-primary/5 to-purple-500/5 border-primary/20">
+    <Card className="h-[calc(100vh-220px)] flex flex-col bg-gradient-to-br from-primary/5 to-accent/5 border-primary/20">
       <CardHeader className="pb-3 border-b">
         <div className="flex items-center justify-between">
           <CardTitle className="flex items-center gap-2 text-base">

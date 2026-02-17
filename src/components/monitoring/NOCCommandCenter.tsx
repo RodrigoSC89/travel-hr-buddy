@@ -233,10 +233,10 @@ export function NOCCommandCenter() {
 
   const getStatusColor = (status: ServiceStatus) => {
     const colors: Record<ServiceStatus, string> = {
-      operational: "bg-green-500",
-      degraded: "bg-yellow-500",
-      outage: "bg-red-500",
-      maintenance: "bg-blue-500"
+      operational: "bg-success",
+      degraded: "bg-warning",
+      outage: "bg-destructive",
+      maintenance: "bg-info"
     };
     return colors[status];
   };
@@ -304,31 +304,31 @@ export function NOCCommandCenter() {
         <Card>
           <CardContent className="pt-4">
             <p className="text-sm text-muted-foreground">Operacional</p>
-            <p className="text-2xl font-bold text-green-500">{stats.operational}</p>
+            <p className="text-2xl font-bold text-success">{stats.operational}</p>
           </CardContent>
         </Card>
         <Card>
           <CardContent className="pt-4">
             <p className="text-sm text-muted-foreground">Degradado</p>
-            <p className="text-2xl font-bold text-yellow-500">{stats.degraded}</p>
+            <p className="text-2xl font-bold text-warning">{stats.degraded}</p>
           </CardContent>
         </Card>
         <Card>
           <CardContent className="pt-4">
             <p className="text-sm text-muted-foreground">Indisponível</p>
-            <p className="text-2xl font-bold text-red-500">{stats.outage}</p>
+            <p className="text-2xl font-bold text-destructive">{stats.outage}</p>
           </CardContent>
         </Card>
         <Card>
           <CardContent className="pt-4">
             <p className="text-sm text-muted-foreground">Alertas Ativos</p>
-            <p className="text-2xl font-bold text-orange-500">{stats.activeAlerts}</p>
+            <p className="text-2xl font-bold text-warning">{stats.activeAlerts}</p>
           </CardContent>
         </Card>
         <Card>
           <CardContent className="pt-4">
             <p className="text-sm text-muted-foreground">Críticos</p>
-            <p className="text-2xl font-bold text-red-500">{stats.criticalAlerts}</p>
+            <p className="text-2xl font-bold text-destructive">{stats.criticalAlerts}</p>
           </CardContent>
         </Card>
         <Card>
@@ -429,15 +429,15 @@ export function NOCCommandCenter() {
               <ScrollArea className="h-[400px]">
                 {filteredAlerts.length === 0 ? (
                   <div className="py-8 text-center text-muted-foreground">
-                    <CheckCircle className="h-12 w-12 mx-auto mb-4 text-green-500" />
+                    <CheckCircle className="h-12 w-12 mx-auto mb-4 text-success" />
                     <p>Nenhum alerta ativo</p>
                   </div>
                 ) : (
                   <div className="space-y-3">
                     {filteredAlerts.map((alert) => (
                       <Card key={alert.id} className={`border-l-4 ${
-                        alert.severity === 'critical' ? 'border-l-red-500' :
-                        alert.severity === 'warning' ? 'border-l-yellow-500' : 'border-l-blue-500'
+                        alert.severity === 'critical' ? 'border-l-destructive' :
+                        alert.severity === 'warning' ? 'border-l-warning' : 'border-l-info'
                       }`}>
                         <CardContent className="pt-4">
                           <div className="flex items-start justify-between">

@@ -308,7 +308,7 @@ export function InsurancePIManager() {
               All policies are current. No upcoming renewals within 60 days.
             </CardContent></Card>
           ) : expiringPolicies.map((p: any) => (
-            <Card key={p.id} className="border-yellow-500/30 mb-3">
+            <Card key={p.id} className="border-warning/30 mb-3">
               <CardContent className="p-4 flex justify-between items-center">
                 <div>
                   <div className="flex items-center gap-2">

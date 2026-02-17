@@ -121,13 +121,13 @@ export const HealthCheckin: React.FC = () => {
 
   const getRatingColor = (rating: number, inverse: boolean = false) => {
     if (inverse) {
-      if (rating >= 4) return "text-red-500";
-      if (rating === 3) return "text-yellow-500";
-      return "text-green-500";
+      if (rating >= 4) return "text-destructive";
+      if (rating === 3) return "text-warning";
+      return "text-success";
     }
-    if (rating >= 4) return "text-green-500";
-    if (rating === 3) return "text-yellow-500";
-    return "text-red-500";
+    if (rating >= 4) return "text-success";
+    if (rating === 3) return "text-warning";
+    return "text-destructive";
   };
 
   const getRatingIcon = (value: number) => {
@@ -140,7 +140,7 @@ export const HealthCheckin: React.FC = () => {
       <Card>
         <CardHeader>
           <CardTitle className="flex items-center gap-2">
-            <Heart className="h-5 w-5 text-red-500" />
+            <Heart className="h-5 w-5 text-destructive" />
             Daily Health Check-in
           </CardTitle>
           <CardDescription>Track your wellbeing metrics</CardDescription>
@@ -150,7 +150,7 @@ export const HealthCheckin: React.FC = () => {
           <div className="space-y-4">
             <div className="flex items-center justify-between">
               <div className="flex items-center gap-2">
-                <Moon className="h-5 w-5 text-blue-500" />
+                <Moon className="h-5 w-5 text-info" />
                 <Label>Sleep</Label>
               </div>
               <span className="text-sm font-medium">{metrics.sleep_hours} hours</span>
@@ -187,7 +187,7 @@ export const HealthCheckin: React.FC = () => {
           <div className="space-y-2">
             <div className="flex items-center justify-between mb-2">
               <div className="flex items-center gap-2">
-                <Apple className="h-5 w-5 text-green-500" />
+                <Apple className="h-5 w-5 text-success" />
                 <Label>Nutrition</Label>
               </div>
               <span className={`text-sm font-medium ${getRatingColor(metrics.nutrition_rating)}`}>
@@ -208,7 +208,7 @@ export const HealthCheckin: React.FC = () => {
           <div className="space-y-2">
             <div className="flex items-center justify-between mb-2">
               <div className="flex items-center gap-2">
-                <Smile className="h-5 w-5 text-yellow-500" />
+                <Smile className="h-5 w-5 text-warning" />
                 <Label>Mood</Label>
               </div>
               <span className={`text-sm font-medium ${getRatingColor(metrics.mood_rating)}`}>
@@ -229,7 +229,7 @@ export const HealthCheckin: React.FC = () => {
           <div className="space-y-2">
             <div className="flex items-center justify-between mb-2">
               <div className="flex items-center gap-2">
-                <AlertCircle className="h-5 w-5 text-orange-500" />
+                <AlertCircle className="h-5 w-5 text-warning" />
                 <Label>Stress Level</Label>
               </div>
               <span className={`text-sm font-medium ${getRatingColor(metrics.stress_level, true)}`}>
@@ -250,7 +250,7 @@ export const HealthCheckin: React.FC = () => {
           <div className="space-y-2">
             <div className="flex items-center justify-between mb-2">
               <div className="flex items-center gap-2">
-                <Activity className="h-5 w-5 text-purple-500" />
+                <Activity className="h-5 w-5 text-primary" />
                 <Label>Energy Level</Label>
               </div>
               <span className={`text-sm font-medium ${getRatingColor(metrics.energy_level)}`}>

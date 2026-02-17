@@ -386,10 +386,10 @@ const ClimateEngagement: React.FC = () => {
                     Maior score do período. Colaboradores valorizam infraestrutura.
                   </p>
                 </div>
-                <div className="p-3 bg-green-500/10 border border-green-500/30 rounded-lg">
+                <div className="p-3 bg-success/10 border border-success/30 rounded-lg">
                   <div className="flex items-center justify-between mb-1">
                     <span className="font-medium text-sm">Colaboração entre Equipes</span>
-                    <TrendingUp className="w-4 h-4 text-green-500" />
+                    <TrendingUp className="w-4 h-4 text-success" />
                   </div>
                   <p className="text-xs text-muted-foreground">
                     Cultura de colaboração forte. Ações de integração funcionando.
@@ -448,11 +448,11 @@ const ClimateEngagement: React.FC = () => {
             <CardContent>
               <div className="flex justify-center gap-6 py-8">
                 {[
-                  { value: 'great', icon: Smile, label: 'Ótimo', color: 'text-green-500 hover:bg-green-500/20' },
-                  { value: 'good', icon: Smile, label: 'Bem', color: 'text-blue-500 hover:bg-blue-500/20' },
-                  { value: 'neutral', icon: Meh, label: 'Neutro', color: 'text-yellow-500 hover:bg-yellow-500/20' },
-                  { value: 'bad', icon: Frown, label: 'Ruim', color: 'text-orange-500 hover:bg-orange-500/20' },
-                  { value: 'terrible', icon: Frown, label: 'Péssimo', color: 'text-red-500 hover:bg-red-500/20' }
+                  { value: 'great', icon: Smile, label: 'Ótimo', color: 'text-success hover:bg-success/20' },
+                  { value: 'good', icon: Smile, label: 'Bem', color: 'text-info hover:bg-info/20' },
+                  { value: 'neutral', icon: Meh, label: 'Neutro', color: 'text-warning hover:bg-warning/20' },
+                  { value: 'bad', icon: Frown, label: 'Ruim', color: 'text-warning hover:bg-warning/20' },
+                  { value: 'terrible', icon: Frown, label: 'Péssimo', color: 'text-destructive hover:bg-destructive/20' }
                 ].map((mood) => (
                   <motion.button
                     key={mood.value}
