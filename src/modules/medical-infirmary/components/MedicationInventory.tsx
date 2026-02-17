@@ -294,7 +294,7 @@ export default function MedicationInventory() {
 
   const getStockStatus = (med: Medication) => {
     if (med.quantity <= 0) return { label: "Sem Estoque", color: "bg-destructive/20 text-destructive" };
-    if (med.quantity <= med.min_quantity) return { label: "Estoque Baixo", color: "bg-orange-500/20 text-orange-500" };
+    if (med.quantity <= med.min_quantity) return { label: "Estoque Baixo", color: "bg-warning/20 text-warning" };
     return { label: "OK", color: "bg-success/20 text-success" };
   };
 
@@ -302,7 +302,7 @@ export default function MedicationInventory() {
     const days = differenceInDays(new Date(expiryDate), new Date());
     if (days <= 0) return { label: "Expirado", color: "bg-destructive/20 text-destructive", days };
     if (days <= 30) return { label: `${days}d`, color: "bg-destructive/20 text-destructive", days };
-    if (days <= 90) return { label: `${days}d`, color: "bg-amber-500/20 text-amber-500", days };
+    if (days <= 90) return { label: `${days}d`, color: "bg-warning/20 text-warning", days };
     return { label: `${days}d`, color: "bg-success/20 text-success", days };
   };
 
@@ -325,12 +325,12 @@ export default function MedicationInventory() {
             </Card>
           )}
           {lowStockMeds.length > 0 && (
-            <Card className="border-orange-500/50 bg-orange-500/5">
+            <Card className="border-warning/50 bg-warning/5">
               <CardContent className="pt-4">
                 <div className="flex items-center gap-3">
-                  <Package className="h-8 w-8 text-orange-500" />
+                  <Package className="h-8 w-8 text-warning" />
                   <div>
-                    <p className="font-bold text-orange-500">{lowStockMeds.length} Item(ns) Estoque Baixo</p>
+                    <p className="font-bold text-warning">{lowStockMeds.length} Item(ns) Estoque Baixo</p>
                     <p className="text-sm text-muted-foreground">Reposição recomendada</p>
                   </div>
                 </div>
@@ -353,36 +353,36 @@ export default function MedicationInventory() {
             </div>
           </CardContent>
         </Card>
-        <Card className="border-l-4 border-l-emerald-500">
+        <Card className="border-l-4 border-l-success">
           <CardContent className="pt-4">
             <div className="flex items-center justify-between">
               <div>
                 <p className="text-xs text-muted-foreground">Unidades</p>
                 <p className="text-2xl font-bold">{stats.totalItems}</p>
               </div>
-              <Package className="h-6 w-6 text-emerald-500 opacity-60" />
+              <Package className="h-6 w-6 text-success opacity-60" />
             </div>
           </CardContent>
         </Card>
-        <Card className="border-l-4 border-l-orange-500">
+        <Card className="border-l-4 border-l-warning">
           <CardContent className="pt-4">
             <div className="flex items-center justify-between">
               <div>
                 <p className="text-xs text-muted-foreground">Estoque Baixo</p>
-                <p className="text-2xl font-bold text-orange-500">{stats.lowStock}</p>
+                <p className="text-2xl font-bold text-warning">{stats.lowStock}</p>
               </div>
-              <ArrowDownRight className="h-6 w-6 text-orange-500 opacity-60" />
+              <ArrowDownRight className="h-6 w-6 text-warning opacity-60" />
             </div>
           </CardContent>
         </Card>
-        <Card className="border-l-4 border-l-amber-500">
+        <Card className="border-l-4 border-l-warning">
           <CardContent className="pt-4">
             <div className="flex items-center justify-between">
               <div>
                 <p className="text-xs text-muted-foreground">Expirando</p>
-                <p className="text-2xl font-bold text-amber-500">{stats.expiring}</p>
+                <p className="text-2xl font-bold text-warning">{stats.expiring}</p>
               </div>
-              <Clock className="h-6 w-6 text-amber-500 opacity-60" />
+              <Clock className="h-6 w-6 text-warning opacity-60" />
             </div>
           </CardContent>
         </Card>
@@ -397,14 +397,14 @@ export default function MedicationInventory() {
             </div>
           </CardContent>
         </Card>
-        <Card className="border-l-4 border-l-purple-500">
+        <Card className="border-l-4 border-l-accent">
           <CardContent className="pt-4">
             <div className="flex items-center justify-between">
               <div>
                 <p className="text-xs text-muted-foreground">Controlados</p>
-                <p className="text-2xl font-bold text-purple-500">{stats.controlled}</p>
+                <p className="text-2xl font-bold text-accent-foreground">{stats.controlled}</p>
               </div>
-              <ShieldCheck className="h-6 w-6 text-purple-500 opacity-60" />
+              <ShieldCheck className="h-6 w-6 text-accent-foreground opacity-60" />
             </div>
           </CardContent>
         </Card>
@@ -481,11 +481,11 @@ export default function MedicationInventory() {
                       const expiryStatus = getExpiryStatus(med.expiry_date);
 
                       return (
-                        <TableRow key={med.id} className={med.controlled ? "bg-purple-500/5" : ""}>
+                        <TableRow key={med.id} className={med.controlled ? "bg-accent/5" : ""}>
                           <TableCell>
                             <div className="flex items-center gap-2">
                               {med.controlled && (
-                                <ShieldCheck className="h-4 w-4 text-purple-500" />
+                                <ShieldCheck className="h-4 w-4 text-accent-foreground" />
                               )}
                               <div>
                                 <p className="font-medium">{med.name}</p>

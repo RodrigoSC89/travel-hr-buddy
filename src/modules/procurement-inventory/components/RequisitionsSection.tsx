@@ -255,14 +255,14 @@ export default function RequisitionsSection({ searchQuery }: RequisitionsSection
             </div>
           </CardContent>
         </Card>
-        <Card className="border-amber-500/50">
+        <Card className="border-warning/50">
           <CardContent className="p-4">
             <div className="flex items-center justify-between">
               <div>
                 <p className="text-sm text-muted-foreground">Pendentes</p>
-                <p className="text-2xl font-bold text-amber-600">{pendingCount}</p>
+                <p className="text-2xl font-bold text-warning">{pendingCount}</p>
               </div>
-              <Clock className="h-8 w-8 text-amber-500 opacity-60" />
+              <Clock className="h-8 w-8 text-warning opacity-60" />
             </div>
           </CardContent>
         </Card>

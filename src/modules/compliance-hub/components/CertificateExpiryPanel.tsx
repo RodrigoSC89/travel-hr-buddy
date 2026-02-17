@@ -113,7 +113,7 @@ function getStatusColor(status: Certificate["status"]) {
   const colors = {
     valid: "text-success bg-success/10 border-success/20",
     expiring_soon: "text-warning bg-warning/10 border-warning/20",
-    expiring: "text-orange-500 bg-orange-500/10 border-orange-500/20",
+    expiring: "text-warning bg-warning/10 border-warning/20",
     expired: "text-destructive bg-destructive/10 border-destructive/20",
   };
   return colors[status];
@@ -122,7 +122,7 @@ function getStatusColor(status: Certificate["status"]) {
 function getPriorityConfig(priority: Certificate["priority"]) {
   const config = {
     critical: { label: "Crítico", className: "bg-destructive/10 text-destructive border-destructive/20 animate-pulse" },
-    high: { label: "Alto", className: "bg-orange-500/10 text-orange-500 border-orange-500/20" },
+    high: { label: "Alto", className: "bg-warning/10 text-warning border-warning/20" },
     medium: { label: "Médio", className: "bg-warning/10 text-warning border-warning/20" },
     low: { label: "Baixo", className: "bg-muted text-muted-foreground" },
   };
@@ -370,12 +370,12 @@ export default function CertificateExpiryPanel() {
                         <div className="flex items-center gap-4">
                           <div className={cn(
                             "h-12 w-12 rounded-lg flex items-center justify-center",
-                            cert.holderType === "crew" ? "bg-primary/10" : "bg-purple-500/10"
+                            cert.holderType === "crew" ? "bg-primary/10" : "bg-accent/10"
                           )}>
                             {cert.holderType === "crew" ? (
                               <User className="h-6 w-6 text-primary" />
                             ) : (
-                              <Ship className="h-6 w-6 text-purple-500" />
+                              <Ship className="h-6 w-6 text-accent-foreground" />
                             )}
                           </div>
                           <div>

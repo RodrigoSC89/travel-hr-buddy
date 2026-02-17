@@ -104,12 +104,12 @@ export const SmartOCRAI: React.FC = () => {
   };
 
   return (
-    <Card className="border-cyan-500/20">
+    <Card className="border-info/20">
       <CardHeader>
         <CardTitle className="flex items-center gap-2">
-          <Scan className="h-5 w-5 text-cyan-500" />
+          <Scan className="h-5 w-5 text-info" />
           OCR Inteligente
-          <Badge className="ml-auto bg-cyan-500/10 text-cyan-500">Smart Extract</Badge>
+          <Badge className="ml-auto bg-info/10 text-info">Smart Extract</Badge>
         </CardTitle>
       </CardHeader>
       <CardContent className="space-y-4">
@@ -148,12 +148,12 @@ export const ExecutiveReportAI: React.FC<{ vesselId?: string }> = ({ vesselId })
   };
 
   return (
-    <Card className="border-indigo-500/20">
+    <Card className="border-primary/20">
       <CardHeader>
         <CardTitle className="flex items-center gap-2">
-          <BarChart3 className="h-5 w-5 text-indigo-500" />
+          <BarChart3 className="h-5 w-5 text-primary" />
           Relatório Executivo IA
-          <Badge className="ml-auto bg-indigo-500/10 text-indigo-500">Executive AI</Badge>
+          <Badge className="ml-auto bg-primary/10 text-primary">Executive AI</Badge>
         </CardTitle>
       </CardHeader>
       <CardContent className="space-y-4">

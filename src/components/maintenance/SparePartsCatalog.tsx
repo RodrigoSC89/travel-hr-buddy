@@ -206,7 +206,7 @@ export function SparePartsCatalog() {
             {criticalParts.length === 0 ? (
               <Card className="md:col-span-2"><CardContent className="p-8 text-center text-muted-foreground">No critical spares defined. Mark critical equipment spares for priority management.</CardContent></Card>
             ) : criticalParts.map((part: SparePart) => (
-              <Card key={part.id} className="border-amber-500/30">
+              <Card key={part.id} className="border-warning/30">
                 <CardContent className="p-4">
                   <div className="flex items-start justify-between">
                     <div>

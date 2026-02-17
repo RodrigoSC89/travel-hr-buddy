@@ -39,25 +39,25 @@ const ComplianceHubEnhanced: React.FC = () => {
     {
       title: 'Centro de Compliance Marítimo',
       description: 'Gerencie conformidade com ISM, ISPS, MLC, SOLAS, MARPOL e STCW em um dashboard unificado.',
-      icon: <Shield className="h-6 w-6 text-blue-500" />,
+      icon: <Shield className="h-6 w-6 text-info" />,
       tip: 'O score geral é calculado automaticamente com base em todas as regulamentações'
     },
     {
       title: 'Auditorias e Checklists',
       description: 'Execute auditorias internas com checklists digitais e assinatura eletrônica.',
-      icon: <ClipboardCheck className="h-6 w-6 text-green-500" />,
+      icon: <ClipboardCheck className="h-6 w-6 text-success" />,
       tip: 'Use os templates pré-configurados para auditorias padrão'
     },
     {
       title: 'Gestão de Certificados',
       description: 'Monitore vencimentos de certificados com alertas automáticos 90, 60 e 30 dias antes.',
-      icon: <Award className="h-6 w-6 text-yellow-500" />,
+      icon: <Award className="h-6 w-6 text-warning" />,
       tip: 'Configure renovações automáticas para documentos recorrentes'
     },
     {
       title: 'Não Conformidades',
       description: 'Registre e acompanhe tratativas com workflow de aprovação e evidências.',
-      icon: <AlertTriangle className="h-6 w-6 text-red-500" />,
+      icon: <AlertTriangle className="h-6 w-6 text-destructive" />,
       tip: 'NCs críticas geram alertas imediatos para toda a cadeia de comando'
     }
   ];

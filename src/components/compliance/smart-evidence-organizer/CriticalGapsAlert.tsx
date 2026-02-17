@@ -156,7 +156,7 @@ export const CriticalGapsAlert = memo(({ items, elements, overallScore, onRematc
                         <span className="text-xs text-muted-foreground truncate">{element.element_name}</span>
                         <Badge variant="outline" className={cn(
                           "text-[9px] ml-auto",
-                          element.compliance_score < 40 ? "border-destructive/50 text-destructive" : "border-yellow-500/50 text-yellow-600"
+                          element.compliance_score < 40 ? "border-destructive/50 text-destructive" : "border-warning/50 text-warning"
                         )}>
                           {element.compliance_score.toFixed(0)}%
                         </Badge>
@@ -183,13 +183,13 @@ export const CriticalGapsAlert = memo(({ items, elements, overallScore, onRematc
           {/* Worst Elements */}
           {worstElements.length > 0 && (
             <div>
-              <p className="text-xs font-semibold text-yellow-600 mb-2">Elementos com Menor Conformidade:</p>
+              <p className="text-xs font-semibold text-warning mb-2">Elementos com Menor Conformidade:</p>
               <div className="flex flex-wrap gap-2">
                 {worstElements.map(el => (
                   <Badge
                     key={el.id}
                     variant="outline"
-                    className="border-yellow-500/50 text-yellow-600"
+                    className="border-warning/50 text-warning"
                   >
                     {el.element_code || `E${el.element_number}`}: {el.compliance_score.toFixed(0)}%
                   </Badge>
