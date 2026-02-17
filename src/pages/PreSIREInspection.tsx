@@ -127,7 +127,7 @@ const PreSIREInspection: FC = () => {
                 <Target className="h-4 w-4 text-muted-foreground" />
               </CardHeader>
               <CardContent>
-                <div className="text-2xl font-bold text-green-600">{overallScore}%</div>
+                <div className="text-2xl font-bold text-success">{overallScore}%</div>
                 <Progress value={overallScore} className="mt-2" />
               </CardContent>
             </Card>
@@ -146,17 +146,17 @@ const PreSIREInspection: FC = () => {
             <Card>
               <CardHeader className="flex flex-row items-center justify-between space-y-0 pb-2">
                 <CardTitle className="text-sm font-medium">Pending Actions</CardTitle>
-                <AlertTriangle className="h-4 w-4 text-orange-500" />
+                <AlertTriangle className="h-4 w-4 text-warning" />
               </CardHeader>
               <CardContent>
-                <div className="text-2xl font-bold text-orange-600">23</div>
+                <div className="text-2xl font-bold text-warning">23</div>
                 <p className="text-xs text-muted-foreground">8 high priority</p>
               </CardContent>
             </Card>
             <Card>
               <CardHeader className="flex flex-row items-center justify-between space-y-0 pb-2">
                 <CardTitle className="text-sm font-medium">Inspections Done</CardTitle>
-                <CheckCircle2 className="h-4 w-4 text-green-500" />
+                <CheckCircle2 className="h-4 w-4 text-success" />
               </CardHeader>
               <CardContent>
                 <div className="text-2xl font-bold">47</div>
@@ -277,9 +277,9 @@ const PreSIREInspection: FC = () => {
               <CardDescription>Machine learning insights for inspection optimization</CardDescription>
             </CardHeader>
             <CardContent className="space-y-4">
-              <div className="p-4 bg-blue-50 dark:bg-blue-950 rounded-lg border border-blue-200 dark:border-blue-800">
-                <h4 className="font-medium flex items-center gap-2 text-blue-900 dark:text-blue-100"><Shield className="h-4 w-4" />Key Recommendations</h4>
-                <ul className="mt-2 space-y-2 text-sm text-blue-800 dark:text-blue-200">
+              <div className="p-4 bg-info/10 rounded-lg border border-info/20">
+                <h4 className="font-medium flex items-center gap-2 text-info"><Shield className="h-4 w-4" />Key Recommendations</h4>
+                <ul className="mt-2 space-y-2 text-sm text-info/80">
                   <li>• Focus on Structural Condition category - lowest score at 85%</li>
                   <li>• 23 pending corrective actions require attention before next inspection</li>
                   <li>• Recommend refresher training for Navigation procedures</li>

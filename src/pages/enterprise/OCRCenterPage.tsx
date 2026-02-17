@@ -35,9 +35,9 @@ interface OCRResult {
 }
 
 const ENGINE_INFO = {
-  tesseract: { name: 'Tesseract', color: 'bg-blue-500', icon: '🔍' },
-  azure: { name: 'Azure Vision', color: 'bg-purple-500', icon: '☁️' },
-  google: { name: 'Google Vision', color: 'bg-green-500', icon: '🌐' },
+  tesseract: { name: 'Tesseract', color: 'bg-primary', icon: '🔍' },
+  azure: { name: 'Azure Vision', color: 'bg-accent', icon: '☁️' },
+  google: { name: 'Google Vision', color: 'bg-success', icon: '🌐' },
 };
 
 export default function OCRCenterPage() {
@@ -107,9 +107,9 @@ export default function OCRCenterPage() {
 
         {/* Stats */}
         <div className="grid grid-cols-2 md:grid-cols-4 gap-4">
-          <Card><CardContent className="pt-4"><div className="flex items-center gap-3"><div className="p-2 rounded-lg bg-blue-500/10"><FileText className="h-5 w-5 text-blue-500" /></div><div><p className="text-2xl font-bold">{stats.total}</p><p className="text-xs text-muted-foreground">Documentos</p></div></div></CardContent></Card>
-          <Card><CardContent className="pt-4"><div className="flex items-center gap-3"><div className="p-2 rounded-lg bg-green-500/10"><CheckCircle2 className="h-5 w-5 text-green-500" /></div><div><p className="text-2xl font-bold">{stats.completed}</p><p className="text-xs text-muted-foreground">Processados</p></div></div></CardContent></Card>
-          <Card><CardContent className="pt-4"><div className="flex items-center gap-3"><div className="p-2 rounded-lg bg-purple-500/10"><BarChart3 className="h-5 w-5 text-purple-500" /></div><div><p className="text-2xl font-bold">{stats.avgConfidence.toFixed(1)}%</p><p className="text-xs text-muted-foreground">Confiança Média</p></div></div></CardContent></Card>
+          <Card><CardContent className="pt-4"><div className="flex items-center gap-3"><div className="p-2 rounded-lg bg-primary/10"><FileText className="h-5 w-5 text-primary" /></div><div><p className="text-2xl font-bold">{stats.total}</p><p className="text-xs text-muted-foreground">Documentos</p></div></div></CardContent></Card>
+          <Card><CardContent className="pt-4"><div className="flex items-center gap-3"><div className="p-2 rounded-lg bg-success/10"><CheckCircle2 className="h-5 w-5 text-success" /></div><div><p className="text-2xl font-bold">{stats.completed}</p><p className="text-xs text-muted-foreground">Processados</p></div></div></CardContent></Card>
+          <Card><CardContent className="pt-4"><div className="flex items-center gap-3"><div className="p-2 rounded-lg bg-accent/10"><BarChart3 className="h-5 w-5 text-accent-foreground" /></div><div><p className="text-2xl font-bold">{stats.avgConfidence.toFixed(1)}%</p><p className="text-xs text-muted-foreground">Confiança Média</p></div></div></CardContent></Card>
           <Card><CardContent className="pt-4"><div className="flex items-center gap-3"><div className="p-2 rounded-lg bg-amber-500/10"><Zap className="h-5 w-5 text-amber-500" /></div><div><p className="text-2xl font-bold">~2.5s</p><p className="text-xs text-muted-foreground">Tempo Médio</p></div></div></CardContent></Card>
         </div>
 
@@ -163,7 +163,7 @@ export default function OCRCenterPage() {
                               <h4 className="font-medium flex items-center gap-2"><FileText className="h-4 w-4" />{result.fileName}</h4>
                               <p className="text-xs text-muted-foreground">{formatFileSize(result.fileSize)} • {result.createdAt.toLocaleTimeString()}</p>
                             </div>
-                            <Badge variant={result.status === 'completed' ? 'default' : 'secondary'} className={cn(result.status === 'completed' && 'bg-green-500', result.status === 'processing' && 'bg-blue-500', result.status === 'failed' && 'bg-red-500')}>
+                            <Badge variant={result.status === 'completed' ? 'default' : 'secondary'} className={cn(result.status === 'completed' && 'bg-success', result.status === 'processing' && 'bg-primary', result.status === 'failed' && 'bg-destructive')}>
                               {result.status === 'processing' && <Loader2 className="h-3 w-3 mr-1 animate-spin" />}
                               {result.status === 'completed' && <CheckCircle2 className="h-3 w-3 mr-1" />}
                               {result.status}
@@ -185,14 +185,14 @@ export default function OCRCenterPage() {
                             })}
                           </div>
                           {result.status === 'completed' && result.consensusConfidence && (
-                            <div className="p-3 rounded-lg bg-green-500/10 border border-green-500/20">
+                            <div className="p-3 rounded-lg bg-success/10 border border-success/20">
                               <div className="flex items-center justify-between mb-2">
-                                <span className="text-sm font-medium flex items-center gap-2"><Sparkles className="h-4 w-4 text-green-500" />Consenso Final</span>
-                                <Badge className="bg-green-500">{result.consensusConfidence.toFixed(1)}% confiança</Badge>
+                                <span className="text-sm font-medium flex items-center gap-2"><Sparkles className="h-4 w-4 text-success" />Consenso Final</span>
+                                <Badge className="bg-success">{result.consensusConfidence.toFixed(1)}% confiança</Badge>
                               </div>
                               {result.classification && <div className="flex items-center gap-2 mb-2"><span className="text-xs text-muted-foreground">Classificação:</span><Badge variant="outline">{result.classification}</Badge></div>}
                               {result.extractedData && (
-                                <div className="mt-2 pt-2 border-t border-green-500/20">
+                                <div className="mt-2 pt-2 border-t border-success/20">
                                   <p className="text-xs font-medium mb-1">Dados Extraídos:</p>
                                   <div className="grid grid-cols-2 gap-1">
                                     {Object.entries(result.extractedData).map(([key, value]) => (

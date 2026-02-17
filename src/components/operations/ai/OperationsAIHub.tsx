@@ -128,12 +128,12 @@ export const FuelOptimizationAI: React.FC<{ vesselId?: string }> = ({ vesselId }
   ];
 
   return (
-    <Card className="border-orange-500/20">
+    <Card className="border-warning/20">
       <CardHeader>
         <CardTitle className="flex items-center gap-2">
-          <Fuel className="h-5 w-5 text-orange-500" />
+          <Fuel className="h-5 w-5 text-warning" />
           Otimização de Combustível IA
-          <Badge className="ml-auto bg-orange-500/10 text-orange-500">Savings Engine</Badge>
+          <Badge className="ml-auto bg-warning/10 text-warning">Savings Engine</Badge>
         </CardTitle>
       </CardHeader>
       <CardContent className="space-y-4">
@@ -176,7 +176,7 @@ export const WeatherRoutingAI: React.FC = () => {
   };
 
   return (
-    <Card className="border-blue-500/20">
+    <Card className="border-info/20">
       <CardHeader>
         <CardTitle className="flex items-center gap-2">
           <ThermometerSun className="h-5 w-5 text-info" />

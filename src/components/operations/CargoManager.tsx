@@ -149,7 +149,7 @@ export function CargoManager() {
       booked: <Badge variant="secondary">Reservado</Badge>,
       loading: <Badge className="bg-primary/20 text-primary">Carregando</Badge>,
       in_transit: <Badge className="bg-warning/20 text-warning">Em Trânsito</Badge>,
-      discharging: <Badge className="bg-orange-500/20 text-orange-500">Descarregando</Badge>,
+      discharging: <Badge className="bg-warning/20 text-warning">Descarregando</Badge>,
       completed: <Badge className="bg-success/20 text-success">Concluído</Badge>,
       cancelled: <Badge variant="destructive">Cancelado</Badge>,
     };
