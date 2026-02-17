@@ -59,11 +59,11 @@ export const ChartSkeleton = memo(({ height = "h-64" }: { height?: string }) => 
       </CardHeader>
       <CardContent>
         <div className={`${height} rounded-lg bg-muted/40 flex items-end justify-between px-4 pb-4 gap-2`}>
-          {Array.from({ length: 7 }).map((_, i) => (
+          {[25, 60, 40, 75, 35, 55, 45].map((height, i) => (
             <motion.div
               key={i}
               className="flex-1 rounded-t bg-muted"
-              style={{ height: `${20 + Math.random() * 60}%` }}
+              style={{ height: `${height}%` }}
               {...shimmer}
               transition={{ ...shimmer.transition, delay: i * 0.08 }}
             />

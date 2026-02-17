@@ -81,9 +81,14 @@ export default function Payroll() {
   return (
     <motion.div initial="hidden" animate="visible" variants={staggerContainer} className="container mx-auto py-6 space-y-6">
       <motion.div variants={kpiCard} className="flex items-center justify-between">
-        <div>
-          <h1 className="text-3xl font-bold">Folha de Pagamento</h1>
-          <p className="text-muted-foreground">Cálculo de salários, descontos e encargos</p>
+        <div className="flex items-center gap-4">
+          <div className="p-3 rounded-xl bg-gradient-to-br from-primary/20 to-primary/5">
+            <DollarSign className="h-8 w-8 text-primary" />
+          </div>
+          <div>
+            <h1 className="text-3xl font-bold">Folha de Pagamento</h1>
+            <p className="text-muted-foreground">Cálculo de salários, descontos e encargos</p>
+          </div>
         </div>
         <Button variant="outline" onClick={() => loadEmployees()}><RefreshCw className="h-4 w-4 mr-2" />Atualizar</Button>
       </motion.div>

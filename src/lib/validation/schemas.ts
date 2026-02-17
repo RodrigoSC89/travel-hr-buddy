@@ -91,6 +91,27 @@ export const crewMemberSchema = z.object({
   })).optional(),
 });
 
+// ============= Add Crew Form Schema =============
+export const addCrewFormSchema = z.object({
+  full_name: z.string()
+    .trim()
+    .min(2, { message: "Nome deve ter no mínimo 2 caracteres" })
+    .max(100, { message: "Nome muito longo" })
+    .regex(/^[a-zA-ZÀ-ÿ\s'-]+$/, { message: "Nome contém caracteres inválidos" }),
+  rank: z.string().min(1, "Cargo é obrigatório"),
+  nationality: z.string().min(1, "Nacionalidade é obrigatória").max(3, "Use código ISO (ex: BR)"),
+  status: z.string().refine(
+    (v) => ["available", "active", "training", "on_leave", "onboard", "off_duty"].includes(v),
+    { message: "Status inválido" }
+  ),
+  employee_id: z.string().max(50).optional().or(z.literal("")),
+  position: z.string().max(100).optional().or(z.literal("")),
+  email: z.string().trim().email("Email inválido").optional().or(z.literal("")),
+  phone: z.string().max(30).optional().or(z.literal("")),
+});
+
+export type AddCrewFormInput = z.infer<typeof addCrewFormSchema>;
+
 // ============= Contact/Feedback Schemas =============
 export const contactSchema = z.object({
   name: z.string()

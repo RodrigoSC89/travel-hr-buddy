@@ -67,12 +67,14 @@ export function EnergyEfficiencyDashboard() {
         .in("vessel_id", vessels.map(v => v.id))
         .limit(100);
 
-      return vessels.map((v): VesselCII => {
+      return vessels.map((v, idx): VesselCII => {
         const perf = perfData?.find(p => p.vessel_id === v.id);
         const gt = v.gross_tonnage || 30000;
-        const attained = perf ? Number((perf as Record<string, unknown>).fuel_efficiency || 0) || (4 + Math.random() * 4) : (4 + Math.random() * 4);
+        // Deterministic fallback based on vessel properties instead of Math.random
+        const fallbackCII = 4 + ((gt % 1000) / 250);
+        const attained = perf ? Number((perf as Record<string, unknown>).fuel_efficiency || 0) || fallbackCII : fallbackCII;
         const required = gt > 50000 ? 7.0 : gt > 20000 ? 6.0 : 5.0;
-        const co2 = Math.round(gt * 0.4 + Math.random() * 5000);
+        const co2 = Math.round(gt * 0.4 + ((idx + 1) * 713) % 5000);
         const ets = Math.round(co2 * 0.03);
 
         return {
