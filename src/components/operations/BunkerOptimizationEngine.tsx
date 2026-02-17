@@ -67,8 +67,8 @@ export function BunkerOptimizationEngine() {
           { icon: TrendingDown, label: "Savings YTD", value: "$185,000", trend: "+12%", up: true },
           { icon: Ship, label: "Fleet ROB", value: "4,250 MT", trend: "21 days", up: true },
           { icon: AlertTriangle, label: "Low Stock Vessels", value: "2", trend: "< 7 days", up: false },
-        ].map((kpi, i) => (
-          <Card key={i} className="border-border/50 bg-card/80 backdrop-blur">
+        ].map((kpi) => (
+          <Card key={kpi.label} className="border-border/50 bg-card/80 backdrop-blur">
             <CardContent className="pt-4">
               <div className="flex items-center gap-2 mb-1">
                 <kpi.icon className="h-4 w-4 text-muted-foreground" />
@@ -109,10 +109,10 @@ export function BunkerOptimizationEngine() {
                   <span>Availability</span>
                   <span>Quality</span>
                 </div>
-                {bunkerPorts.map((port, i) => {
+                {bunkerPorts.map((port) => {
                   const isLowest = port.vlsfo_price === Math.min(...bunkerPorts.map(p => p.vlsfo_price));
                   return (
-                    <div key={i} className={`grid grid-cols-7 gap-2 text-sm items-center p-2 rounded ${isLowest ? "bg-success/10 border border-success/20" : "bg-background/50"}`}>
+                    <div key={port.port} className={`grid grid-cols-7 gap-2 text-sm items-center p-2 rounded ${isLowest ? "bg-success/10 border border-success/20" : "bg-background/50"}`}>
                       <div className="col-span-2 flex items-center gap-2">
                         <MapPin className="h-3 w-3 text-muted-foreground" />
                         <span className="font-medium">{port.port}</span>
@@ -210,8 +210,8 @@ export function BunkerOptimizationEngine() {
                 { param: "Sulphur Content", spec: "≤ 0.50%", result: "0.47%", pass: true },
                 { param: "Cat Fines (Al+Si)", spec: "≤ 60 mg/kg", result: "55 mg/kg", pass: true },
                 { param: "Water Content", spec: "≤ 0.50%", result: "0.62%", pass: false },
-              ].map((q, i) => (
-                <div key={i} className="flex items-center justify-between p-2 rounded bg-background/50">
+              ].map((q) => (
+                <div key={q.param} className="flex items-center justify-between p-2 rounded bg-background/50">
                   <span className="text-sm">{q.param}</span>
                   <span className="text-xs text-muted-foreground">{q.spec}</span>
                   <span className="text-sm font-medium">{q.result}</span>

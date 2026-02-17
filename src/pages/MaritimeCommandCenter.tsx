@@ -15,7 +15,7 @@ import { ModulePageWrapper } from "@/components/ui/module-page-wrapper";
 import { ModuleHeader } from "@/components/ui/module-header";
 import ModuleActionButton from "@/components/ui/module-action-button";
 import { useMaritimeActions } from "@/hooks/useMaritimeActions";
-import { CrewMember, MaritimeStats, DEMO_CREW_MEMBERS } from "./maritime/types";
+import { CrewMember, MaritimeStats, FALLBACK_CREW_MEMBERS } from "./maritime/types";
 import { MaritimeTabs } from "./maritime/MaritimeTabs";
 
 export default function MaritimeCommandCenter() {
@@ -42,8 +42,8 @@ export default function MaritimeCommandCenter() {
       if (vesselsData) setVessels(vesselsData);
 
       const { data: checklists } = await supabase.from("operational_checklists").select("status, compliance_score");
-      const demoCrewMembers = DEMO_CREW_MEMBERS([vesselsData?.[0]?.id, vesselsData?.[1]?.id]);
-      setCrewMembers(demoCrewMembers);
+      const fallbackCrewMembers = FALLBACK_CREW_MEMBERS([vesselsData?.[0]?.id, vesselsData?.[1]?.id]);
+      setCrewMembers(fallbackCrewMembers);
 
       const total = checklists?.length || 12;
       const completed = checklists?.filter(c => c.status === "completed").length || 8;
@@ -54,7 +54,7 @@ export default function MaritimeCommandCenter() {
       setStats({
         totalChecklists: total, completedChecklists: completed, pendingChecklists: pending,
         activeVessels: vesselsData?.length || 5, averageCompliance: Math.round(avgCompliance), criticalIssues: 2,
-        totalCrew: demoCrewMembers.length, activeCrew: demoCrewMembers.filter(m => m.status === "active").length,
+        totalCrew: fallbackCrewMembers.length, activeCrew: fallbackCrewMembers.filter((m: CrewMember) => m.status === "active").length,
         certExpiring: 3, certValid: 12
       });
     } catch {

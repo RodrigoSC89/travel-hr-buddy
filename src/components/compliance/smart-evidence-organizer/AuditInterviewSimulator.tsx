@@ -344,7 +344,7 @@ export const AuditInterviewSimulator = memo(({ framework, pack, elements }: Prop
               className="min-h-[60px] resize-none"
               disabled={isLoading}
             />
-            <Button onClick={sendAnswer} disabled={isLoading || !userInput.trim()} size="icon" className="shrink-0 h-[60px] w-[60px]">
+            <Button onClick={sendAnswer} disabled={isLoading || !userInput.trim()} size="icon" className="shrink-0 h-[60px] w-[60px]" aria-label="Enviar resposta">
               {isLoading ? <Loader2 className="h-4 w-4 animate-spin" /> : <Send className="h-4 w-4" />}
             </Button>
           </div>

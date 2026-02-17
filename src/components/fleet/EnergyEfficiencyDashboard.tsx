@@ -89,8 +89,8 @@ export function EnergyEfficiencyDashboard() {
           { icon: Ship, label: "CII Compliant", value: `${compliantCount}/${mockFleetCII.length}`, sub: "vessels ≤C rating", color: "text-success" },
           { icon: Globe, label: "Total CO₂", value: `${(totalCO2 / 1000).toFixed(1)}k t`, sub: `Year ${selectedYear}`, color: "text-warning" },
           { icon: Target, label: "EU ETS Cost", value: `€${(totalETS * 85).toLocaleString()}`, sub: `${totalETS} allowances`, color: "text-info" },
-        ].map((item, i) => (
-          <Card key={i} className="border-border/50 bg-card/80 backdrop-blur">
+        ].map((item) => (
+          <Card key={item.label} className="border-border/50 bg-card/80 backdrop-blur">
             <CardContent className="pt-4">
               <div className="flex items-center gap-2 mb-1">
                 <item.icon className={`h-4 w-4 ${item.color}`} />
@@ -113,8 +113,8 @@ export function EnergyEfficiencyDashboard() {
 
         <TabsContent value="cii" className="space-y-4">
           <div className="grid gap-3">
-            {mockFleetCII.map((vessel, i) => (
-              <Card key={i} className="border-border/50 bg-card/80 backdrop-blur">
+            {mockFleetCII.map((vessel) => (
+              <Card key={vessel.imo} className="border-border/50 bg-card/80 backdrop-blur">
                 <CardContent className="py-4">
                   <div className="flex items-center gap-4">
                     <div className={`w-12 h-12 rounded-xl flex items-center justify-center font-bold text-lg ${ratingBg[vessel.rating]}`}>
@@ -156,8 +156,8 @@ export function EnergyEfficiencyDashboard() {
             <Card className="border-border/50 bg-card/80 backdrop-blur">
               <CardHeader><CardTitle className="text-sm">EEXI Compliance Status</CardTitle></CardHeader>
               <CardContent className="space-y-3">
-                {mockFleetCII.map((v, i) => (
-                  <div key={i} className="flex items-center justify-between p-3 rounded-lg bg-background/50">
+                {mockFleetCII.map((v) => (
+                  <div key={v.imo} className="flex items-center justify-between p-3 rounded-lg bg-background/50">
                     <span className="text-sm">{v.vessel_name}</span>
                     <Badge className={v.eexi_compliant ? "bg-success/20 text-success" : "bg-destructive/20 text-destructive"}>
                       {v.eexi_compliant ? "Compliant" : "Non-Compliant"}
@@ -174,8 +174,8 @@ export function EnergyEfficiencyDashboard() {
                   { measure: "Shaft Generator Installation", saving: "8%", cost: "$180,000", status: "Planned" },
                   { measure: "Hull Coating Optimization", saving: "5%", cost: "$120,000", status: "Pending" },
                   { measure: "Propeller Boss Cap Fins", saving: "3%", cost: "$25,000", status: "Applied" },
-                ].map((m, i) => (
-                  <div key={i} className="flex items-center justify-between p-2 rounded bg-background/50 text-sm">
+                ].map((m) => (
+                  <div key={m.measure} className="flex items-center justify-between p-2 rounded bg-background/50 text-sm">
                     <div>
                       <p className="font-medium">{m.measure}</p>
                       <p className="text-xs text-muted-foreground">Saving: {m.saving} • Cost: {m.cost}</p>
@@ -193,8 +193,8 @@ export function EnergyEfficiencyDashboard() {
             <CardHeader><CardTitle className="text-sm flex items-center gap-2"><Globe className="h-4 w-4" /> EU ETS Exposure</CardTitle></CardHeader>
             <CardContent>
               <div className="space-y-3">
-                {mockFleetCII.map((v, i) => (
-                  <div key={i} className="flex items-center gap-4 p-3 rounded-lg bg-background/50">
+                {mockFleetCII.map((v) => (
+                  <div key={v.imo} className="flex items-center gap-4 p-3 rounded-lg bg-background/50">
                     <Ship className="h-5 w-5 text-muted-foreground" />
                     <div className="flex-1">
                       <p className="text-sm font-medium">{v.vessel_name}</p>
@@ -224,8 +224,8 @@ export function EnergyEfficiencyDashboard() {
                   { year: "2030", target: "-40% CI", progress: 65, status: "On Track" },
                   { year: "2040", target: "-70% CI", progress: 35, status: "Needs Action" },
                   { year: "2050", target: "Net Zero", progress: 15, status: "Planning" },
-                ].map((t, i) => (
-                  <div key={i} className="space-y-1">
+                ].map((t) => (
+                  <div key={t.year} className="space-y-1">
                     <div className="flex justify-between text-sm">
                       <span className="font-medium">IMO {t.year}: {t.target}</span>
                       <Badge variant="outline" className="text-[10px]">{t.status}</Badge>
@@ -244,8 +244,8 @@ export function EnergyEfficiencyDashboard() {
                   { fuel: "Methanol (Green)", readiness: 55, viability: "Medium", timeline: "2026-2035" },
                   { fuel: "Ammonia", readiness: 30, viability: "Medium", timeline: "2028-2040" },
                   { fuel: "Hydrogen", readiness: 15, viability: "Low", timeline: "2035-2050" },
-                ].map((f, i) => (
-                  <div key={i} className="space-y-1">
+                ].map((f) => (
+                  <div key={f.fuel} className="space-y-1">
                     <div className="flex justify-between text-sm">
                       <span>{f.fuel}</span>
                       <span className="text-xs text-muted-foreground">{f.timeline}</span>

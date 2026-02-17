@@ -308,7 +308,7 @@ export const EvidenceCollaboration = memo(({ pack, items, elements }: Props) => 
                         placeholder="Escreva um comentário..."
                         className="min-h-[60px] resize-none text-sm"
                       />
-                      <Button onClick={addComment} disabled={isSubmitting || !newComment.trim()} size="icon" className="shrink-0 h-[60px] w-[60px]">
+                      <Button onClick={addComment} disabled={isSubmitting || !newComment.trim()} size="icon" className="shrink-0 h-[60px] w-[60px]" aria-label="Enviar comentário">
                         {isSubmitting ? <Loader2 className="h-4 w-4 animate-spin" /> : <Send className="h-4 w-4" />}
                       </Button>
                     </div>

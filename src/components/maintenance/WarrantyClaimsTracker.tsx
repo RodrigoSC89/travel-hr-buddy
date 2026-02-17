@@ -330,7 +330,7 @@ export function WarrantyClaimsTracker() {
                             </td>
                             <td className="py-2 px-2 text-center">
                               <div className="flex gap-1 justify-center">
-                                <Button size="icon" variant="ghost" className="h-7 w-7" onClick={() => {
+                                <Button size="icon" variant="ghost" className="h-7 w-7" aria-label="Editar garantia" onClick={() => {
                                   setForm({
                                     equipment: c.equipment || "", manufacturer: c.manufacturer || "",
                                     vessel_id: c.vessel_id || "", vessel_name: "",
@@ -343,7 +343,7 @@ export function WarrantyClaimsTracker() {
                                     status: c.status || "draft",
                                   });
                                   setShowEdit(c.id);
-                                }} aria-label="Edit claim"><Edit className="h-3.5 w-3.5" /></Button>
+                                }} ><Edit className="h-3.5 w-3.5" /></Button>
                                 <Button size="icon" variant="ghost" className="h-7 w-7 text-destructive" onClick={() => {
                                   if (confirm("Delete this claim?")) deleteMutation.mutate(c.id);
                                 }} aria-label="Delete claim"><Trash2 className="h-3.5 w-3.5" /></Button>
