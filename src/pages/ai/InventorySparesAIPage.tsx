@@ -189,7 +189,7 @@ export default function InventorySparesAIPage() {
                     <div key={item.partNumber} className="flex items-center justify-between p-4 border rounded-lg">
                       <div className="flex items-center gap-4">
                         <Package className={`h-6 w-6 ${
-                          item.stock <= item.min ? 'text-red-500' : 'text-green-500'
+                          item.stock <= item.min ? 'text-destructive' : 'text-success'
                         }`} />
                         <div>
                           <p className="font-medium">{item.name}</p>

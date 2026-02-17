@@ -237,19 +237,19 @@ export default function APIMonitor() {
           <div className="grid grid-cols-2 md:grid-cols-5 gap-4 mb-6">
             <Card>
               <CardContent className="p-4 text-center">
-                <div className="text-2xl font-bold text-green-500">{summary.healthy}</div>
+                <div className="text-2xl font-bold text-success">{summary.healthy}</div>
                 <div className="text-xs text-muted-foreground">Operacionais</div>
               </CardContent>
             </Card>
             <Card>
               <CardContent className="p-4 text-center">
-                <div className="text-2xl font-bold text-yellow-500">{summary.degraded}</div>
+                <div className="text-2xl font-bold text-warning">{summary.degraded}</div>
                 <div className="text-xs text-muted-foreground">Degradados</div>
               </CardContent>
             </Card>
             <Card>
               <CardContent className="p-4 text-center">
-                <div className="text-2xl font-bold text-red-500">{summary.down}</div>
+                <div className="text-2xl font-bold text-destructive">{summary.down}</div>
                 <div className="text-xs text-muted-foreground">Offline</div>
               </CardContent>
             </Card>

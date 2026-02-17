@@ -104,7 +104,7 @@ export const FatigueTabs: React.FC<FatigueTabsProps> = ({ crew, violations }) =>
       <TabsContent value="violations">
         <Card>
           <CardHeader>
-            <CardTitle className="flex items-center gap-2"><AlertTriangle className="h-5 w-5 text-amber-500" />Violações MLC 2006</CardTitle>
+            <CardTitle className="flex items-center gap-2"><AlertTriangle className="h-5 w-5 text-warning" />Violações MLC 2006</CardTitle>
             <CardDescription>Registro de não conformidades com regulamentos de trabalho marítimo</CardDescription>
           </CardHeader>
           <CardContent>

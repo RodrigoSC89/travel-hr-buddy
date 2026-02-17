@@ -105,7 +105,7 @@ Competências STCW cadastradas: ${stats.competencyCount}
         {/* KPI Cards - Real Data */}
         <div className="grid grid-cols-2 md:grid-cols-4 lg:grid-cols-8 gap-4">
           {[
-            { icon: Award, value: stats.certificatesValid, label: "Cert. Válidos", color: "text-emerald-500" },
+            { icon: Award, value: stats.certificatesValid, label: "Cert. Válidos", color: "text-success" },
             { icon: AlertTriangle, value: stats.certificatesExpiring, label: "Expirando 90d", color: "text-warning" },
             { icon: Clock, value: stats.certificatesExpired, label: "Expirados", color: "text-destructive" },
             { icon: GraduationCap, value: `${stats.trainingRate}%`, label: "Treinamentos", color: "text-info" },
@@ -312,17 +312,17 @@ Competências STCW cadastradas: ${stats.competencyCount}
               </CardHeader>
               <CardContent className="space-y-6">
                 <div className="grid grid-cols-1 md:grid-cols-3 gap-4">
-                  <Card className="border-emerald-500/30">
+                  <Card className="border-success/30">
                     <CardContent className="pt-6 text-center">
-                      <CheckCircle2 className="h-12 w-12 mx-auto text-emerald-500 mb-3" />
-                      <p className="text-3xl font-bold text-emerald-600">{stats.certificatesValid}</p>
+                      <CheckCircle2 className="h-12 w-12 mx-auto text-success mb-3" />
+                      <p className="text-3xl font-bold text-success">{stats.certificatesValid}</p>
                       <p className="text-sm text-muted-foreground">Valid Certificates</p>
                     </CardContent>
                   </Card>
-                  <Card className="border-amber-500/30">
+                  <Card className="border-warning/30">
                     <CardContent className="pt-6 text-center">
-                      <AlertTriangle className="h-12 w-12 mx-auto text-amber-500 mb-3" />
-                      <p className="text-3xl font-bold text-amber-600">{stats.certificatesExpiring}</p>
+                      <AlertTriangle className="h-12 w-12 mx-auto text-warning mb-3" />
+                      <p className="text-3xl font-bold text-warning">{stats.certificatesExpiring}</p>
                       <p className="text-sm text-muted-foreground">Expiring in 90 Days</p>
                     </CardContent>
                   </Card>

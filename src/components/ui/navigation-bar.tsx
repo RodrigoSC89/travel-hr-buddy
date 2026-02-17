@@ -18,32 +18,32 @@ const quickActions = [
     icon: Users,
     path: "/collaboration",
     description: "Colaboração em tempo real",
-    color: "text-blue-600",
-    bgColor: "hover:bg-blue-50 dark:hover:bg-blue-900/20"
+    color: "text-primary",
+    bgColor: "hover:bg-primary/10"
   },
   {
     title: "Assistente IA",
     icon: Bot,
     path: "/ai-assistant",
     description: "Assistente inteligente",
-    color: "text-green-600",
-    bgColor: "hover:bg-green-50 dark:hover:bg-green-900/20"
+    color: "text-success",
+    bgColor: "hover:bg-success/10"
   },
   {
     title: "IA Avançada",
     icon: Brain,
     path: "/ai-insights",
     description: "Insights avançados",
-    color: "text-purple-600",
-    bgColor: "hover:bg-purple-50 dark:hover:bg-purple-900/20"
+    color: "text-accent",
+    bgColor: "hover:bg-accent/10"
   },
   {
     title: "Workflows",
     icon: Workflow,
     path: "/smart-workflow",
     description: "Automação inteligente",
-    color: "text-orange-600",
-    bgColor: "hover:bg-orange-50 dark:hover:bg-orange-900/20"
+    color: "text-warning",
+    bgColor: "hover:bg-warning/10"
   },
   {
     title: "BI Analytics",
@@ -58,16 +58,16 @@ const quickActions = [
     icon: Trophy,
     path: "/gamification",
     description: "Sistema de gamificação",
-    color: "text-yellow-600",
-    bgColor: "hover:bg-yellow-50 dark:hover:bg-yellow-900/20"
+    color: "text-warning",
+    bgColor: "hover:bg-warning/10"
   },
   {
     title: "Status Sistema",
     icon: Monitor,
     path: "/system-monitor",
     description: "Monitoramento do sistema",
-    color: "text-red-600",
-    bgColor: "hover:bg-red-50 dark:hover:bg-red-900/20"
+    color: "text-destructive",
+    bgColor: "hover:bg-destructive/10"
   }
 ];
 

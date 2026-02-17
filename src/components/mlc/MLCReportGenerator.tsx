@@ -714,7 +714,7 @@ The undersigned parties hereby confirm that:
       <Card>
         <CardHeader>
           <CardTitle className="flex items-center gap-2">
-            <FileText className="h-5 w-5 text-blue-500" />
+            <FileText className="h-5 w-5 text-primary" />
             Gerador de Relatório MLC
           </CardTitle>
           <CardDescription>
@@ -725,11 +725,11 @@ The undersigned parties hereby confirm that:
           {/* Summary Stats */}
           <div className="grid grid-cols-4 gap-4 p-4 bg-muted/50 rounded-lg">
             <div className="text-center">
-              <div className="text-2xl font-bold text-green-500">{compliantItems}</div>
+              <div className="text-2xl font-bold text-success">{compliantItems}</div>
               <div className="text-xs text-muted-foreground">Conforme</div>
             </div>
             <div className="text-center">
-              <div className="text-2xl font-bold text-red-500">{nonCompliantItems}</div>
+              <div className="text-2xl font-bold text-destructive">{nonCompliantItems}</div>
               <div className="text-xs text-muted-foreground">Não Conforme</div>
             </div>
             <div className="text-center">
@@ -737,7 +737,7 @@ The undersigned parties hereby confirm that:
               <div className="text-xs text-muted-foreground">N/A</div>
             </div>
             <div className="text-center">
-              <div className={`text-2xl font-bold ${complianceScore >= 90 ? 'text-green-500' : complianceScore >= 70 ? 'text-orange-500' : 'text-red-500'}`}>
+              <div className={`text-2xl font-bold ${complianceScore >= 90 ? 'text-success' : complianceScore >= 70 ? 'text-warning' : 'text-destructive'}`}>
                 {complianceScore}%
               </div>
               <div className="text-xs text-muted-foreground">Score</div>
@@ -901,7 +901,7 @@ The undersigned parties hereby confirm that:
               <DialogContent className="sm:max-w-md">
                 <DialogHeader>
                   <DialogTitle className="flex items-center gap-2">
-                    <Mail className="h-5 w-5 text-blue-500" />
+                    <Mail className="h-5 w-5 text-primary" />
                     Enviar Relatório MLC por Email
                   </DialogTitle>
                 </DialogHeader>
@@ -952,13 +952,13 @@ The undersigned parties hereby confirm that:
                     </div>
                     <div className="flex justify-between">
                       <span className="text-muted-foreground">Score:</span>
-                      <span className={`font-medium ${complianceScore >= 90 ? 'text-green-500' : complianceScore >= 70 ? 'text-orange-500' : 'text-red-500'}`}>
+                      <span className={`font-medium ${complianceScore >= 90 ? 'text-success' : complianceScore >= 70 ? 'text-warning' : 'text-destructive'}`}>
                         {complianceScore}%
                       </span>
                     </div>
                     <div className="flex justify-between">
                       <span className="text-muted-foreground">Não Conformidades:</span>
-                      <span className="font-medium text-red-500">{nonCompliantItems}</span>
+                      <span className="font-medium text-destructive">{nonCompliantItems}</span>
                     </div>
                   </div>
 

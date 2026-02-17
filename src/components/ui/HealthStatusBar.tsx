@@ -100,7 +100,7 @@ export const HealthStatusBar: React.FC = () => {
       <Tooltip>
         <TooltipTrigger asChild>
           <div className="flex items-center gap-1.5 cursor-default">
-            <Activity className={`h-3.5 w-3.5 ${allHealthy ? "text-green-500" : "text-yellow-500"}`} />
+            <Activity className={`h-3.5 w-3.5 ${allHealthy ? "text-success" : "text-warning"}`} />
             <div className="flex gap-1">
               {services.map((service) => (
                 <motion.div

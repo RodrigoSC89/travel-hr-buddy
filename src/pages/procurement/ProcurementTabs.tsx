@@ -109,7 +109,7 @@ export function ProcurementTabs(props: ProcurementTabsProps) {
             </CardContent>
           </Card>
           <Card>
-            <CardHeader><CardTitle className="flex items-center gap-2"><Star className="h-5 w-5 text-amber-500" />Top Fornecedores</CardTitle></CardHeader>
+            <CardHeader><CardTitle className="flex items-center gap-2"><Star className="h-5 w-5 text-warning" />Top Fornecedores</CardTitle></CardHeader>
             <CardContent className="space-y-4">
               {suppliers.slice(0, 4).map((supplier) => (
                 <div key={supplier.id} className="flex items-center justify-between p-3 rounded-lg border">

@@ -224,14 +224,14 @@ export const PeoDPOperationalWindow: React.FC = () => {
                         <Icon className={`h-5 w-5 ${envStatus === "red" ? "text-destructive" : envStatus === "yellow" ? "text-warning" : "text-success"}`} />
                         <span className="font-medium">{rec.parameter}</span>
                       </div>
-                      <span className={`text-2xl font-bold ${envStatus === "red" ? "text-destructive" : envStatus === "yellow" ? "text-yellow-500" : "text-green-500"}`}>
+                      <span className={`text-2xl font-bold ${envStatus === "red" ? "text-destructive" : envStatus === "yellow" ? "text-warning" : "text-success"}`}>
                         {rec.current_value} <span className="text-sm font-normal text-muted-foreground">{rec.unit}</span>
                       </span>
                     </div>
                     <Progress value={getEnvProgress(rec)} className="h-2 mb-2" />
                     <div className="flex justify-between text-[10px] text-muted-foreground">
                       <span>Atual: {rec.current_value}{rec.unit}</span>
-                      <span className="text-yellow-500">Yellow: {rec.yellow_limit}{rec.unit}</span>
+                      <span className="text-warning">Yellow: {rec.yellow_limit}{rec.unit}</span>
                       <span className="text-destructive">Red: {rec.red_limit}{rec.unit}</span>
                     </div>
                   </CardContent>
@@ -293,7 +293,7 @@ export const PeoDPOperationalWindow: React.FC = () => {
       <Card>
         <CardHeader className="pb-3">
           <CardTitle className="text-lg flex items-center gap-2">
-            <Shield className="h-5 w-5 text-green-500" />
+            <Shield className="h-5 w-5 text-success" />
             Resumo de Redundância — Classe {dpClass}
           </CardTitle>
         </CardHeader>
