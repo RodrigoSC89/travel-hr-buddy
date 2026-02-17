@@ -251,8 +251,8 @@ export function WeatherRoutingEngine() {
               { icon: Waves, label: "Significant Wave", value: "2.1-3.2m", sub: "Peak 4.5m", color: "text-info" },
               { icon: Thermometer, label: "Sea Temp", value: "18-24°C", sub: "SST Normal", color: "text-warning" },
               { icon: Eye, label: "Visibility", value: "> 10 NM", sub: "Clear", color: "text-success" },
-            ].map((item, i) => (
-              <Card key={i} className="border-border/50 bg-card/80 backdrop-blur">
+            ].map((item) => (
+              <Card key={item.label} className="border-border/50 bg-card/80 backdrop-blur">
                 <CardContent className="pt-4 text-center">
                   <item.icon className={`h-8 w-8 mx-auto mb-2 ${item.color}`} />
                   <p className="text-xs text-muted-foreground">{item.label}</p>
