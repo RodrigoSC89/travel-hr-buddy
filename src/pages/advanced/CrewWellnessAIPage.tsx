@@ -116,8 +116,8 @@ const CrewWellnessAIPage = () => {
                 })()}
                 <div>
                   <Badge className={
-                    overallScore >= 80 ? "bg-green-500" :
-                    overallScore >= 60 ? "bg-yellow-500" : "bg-red-500"
+                    overallScore >= 80 ? "bg-success" :
+                    overallScore >= 60 ? "bg-warning" : "bg-destructive"
                   }>
                     {overallScore >= 80 ? "Excelente" :
                      overallScore >= 60 ? "Bom" : "Requer Atenção"}
@@ -195,9 +195,9 @@ const CrewWellnessAIPage = () => {
                   <div 
                     key={alert.id}
                     className={`p-4 rounded-lg border-l-4 ${
-                      alert.severity === "high" ? "border-l-red-500 bg-red-500/5" :
-                      alert.severity === "medium" ? "border-l-yellow-500 bg-yellow-500/5" :
-                      "border-l-blue-500 bg-blue-500/5"
+                      alert.severity === "high" ? "border-l-destructive bg-destructive/5" :
+                      alert.severity === "medium" ? "border-l-warning bg-warning/5" :
+                      "border-l-info bg-info/5"
                     }`}
                   >
                     <div className="flex items-start justify-between">
@@ -213,8 +213,8 @@ const CrewWellnessAIPage = () => {
                         </div>
                       </div>
                       <Badge className={
-                        alert.severity === "high" ? "bg-red-500" :
-                        alert.severity === "medium" ? "bg-yellow-500" : "bg-blue-500"
+                        alert.severity === "high" ? "bg-destructive" :
+                        alert.severity === "medium" ? "bg-warning" : "bg-info"
                       }>
                         {alert.severity === "high" ? "Alto" :
                          alert.severity === "medium" ? "Médio" : "Baixo"}
@@ -308,24 +308,24 @@ const CrewWellnessAIPage = () => {
             </CardHeader>
             <CardContent>
               <div className="space-y-3">
-                <div className="p-4 bg-green-500/10 rounded-lg">
-                  <h4 className="font-semibold text-green-700 mb-2">✅ Pontos Positivos</h4>
+                <div className="p-4 bg-success/10 rounded-lg">
+                  <h4 className="font-semibold text-success mb-2">✅ Pontos Positivos</h4>
                   <ul className="text-sm space-y-1">
                     <li>• Moral da equipe em alta após último evento social</li>
                     <li>• Saúde física melhorou com programa de exercícios</li>
                     <li>• Engajamento aumentou após melhorias na conectividade</li>
                   </ul>
                 </div>
-                <div className="p-4 bg-yellow-500/10 rounded-lg">
-                  <h4 className="font-semibold text-yellow-700 mb-2">⚠️ Áreas de Atenção</h4>
+                <div className="p-4 bg-warning/10 rounded-lg">
+                  <h4 className="font-semibold text-warning mb-2">⚠️ Áreas de Atenção</h4>
                   <ul className="text-sm space-y-1">
                     <li>• Qualidade do sono em declínio - revisar temperatura dos camarotes</li>
                     <li>• 3 tripulantes com mais de 5 meses a bordo - planejar rotações</li>
                     <li>• Níveis de estresse elevados no engine room</li>
                   </ul>
                 </div>
-                <div className="p-4 bg-blue-500/10 rounded-lg">
-                  <h4 className="font-semibold text-blue-700 mb-2">💡 Sugestões</h4>
+                <div className="p-4 bg-info/10 rounded-lg">
+                  <h4 className="font-semibold text-info mb-2">💡 Sugestões</h4>
                   <ul className="text-sm space-y-1">
                     <li>• Implementar "Wellness Wednesday" com atividades recreativas</li>
                     <li>• Melhorar menu do rancho com mais opções variadas</li>

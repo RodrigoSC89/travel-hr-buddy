@@ -190,7 +190,7 @@ const WeatherIntelligencePage = () => {
           <Card>
             <CardContent className="p-4">
               <div className="flex items-center gap-3">
-                <Thermometer className="h-8 w-8 text-orange-500" />
+                <Thermometer className="h-8 w-8 text-warning" />
                 <div>
                   <p className="text-sm text-muted-foreground">Temperatura</p>
                   <p className="text-2xl font-bold">{current?.airTemperature ?? "—"}°C</p>
@@ -201,7 +201,7 @@ const WeatherIntelligencePage = () => {
           <Card>
             <CardContent className="p-4">
               <div className="flex items-center gap-3">
-                <Wind className="h-8 w-8 text-blue-500" />
+                <Wind className="h-8 w-8 text-info" />
                 <div>
                   <p className="text-sm text-muted-foreground">Vento</p>
                   <p className="text-2xl font-bold">
@@ -214,7 +214,7 @@ const WeatherIntelligencePage = () => {
           <Card>
             <CardContent className="p-4">
               <div className="flex items-center gap-3">
-                <Waves className="h-8 w-8 text-cyan-500" />
+                <Waves className="h-8 w-8 text-info" />
                 <div>
                   <p className="text-sm text-muted-foreground">Ondas</p>
                   <p className="text-2xl font-bold">{current?.waveHeight ?? "—"}m</p>
@@ -225,7 +225,7 @@ const WeatherIntelligencePage = () => {
           <Card>
             <CardContent className="p-4">
               <div className="flex items-center gap-3">
-                <Droplets className="h-8 w-8 text-blue-400" />
+                <Droplets className="h-8 w-8 text-info" />
                 <div>
                   <p className="text-sm text-muted-foreground">Umidade</p>
                   <p className="text-2xl font-bold">{current?.humidity ?? "—"}%</p>
@@ -360,8 +360,8 @@ const WeatherIntelligencePage = () => {
                       >
                         <p className="font-semibold mb-2">{day.day}</p>
                         <Icon className={`h-10 w-10 mx-auto mb-2 ${
-                          risk === "high" ? "text-red-500" :
-                          risk === "medium" ? "text-yellow-500" : "text-blue-500"
+                          risk === "high" ? "text-destructive" :
+                          risk === "medium" ? "text-warning" : "text-info"
                         }`} />
                         <p className="text-xl font-bold">{day.avgTemp}°C</p>
                         <div className="mt-2 space-y-1 text-sm text-muted-foreground">
@@ -371,9 +371,9 @@ const WeatherIntelligencePage = () => {
                         <Badge
                           variant="outline"
                           className={`mt-2 ${
-                            risk === "high" ? "border-red-500 text-red-500" :
-                            risk === "medium" ? "border-yellow-500 text-yellow-500" :
-                            "border-green-500 text-green-500"
+                            risk === "high" ? "border-destructive text-destructive" :
+                            risk === "medium" ? "border-warning text-warning" :
+                            "border-success text-success"
                           }`}
                         >
                           {risk === "high" ? "Alto Risco" : risk === "medium" ? "Médio" : "Baixo"}
@@ -446,8 +446,8 @@ const WeatherIntelligencePage = () => {
                     }`}>
                       <div className="flex items-center gap-3">
                         <AlertTriangle className={`h-5 w-5 ${
-                          alert.severity === "high" || alert.severity === "critical" ? "text-red-500" :
-                          alert.severity === "medium" ? "text-yellow-500" : "text-blue-500"
+                          alert.severity === "high" || alert.severity === "critical" ? "text-destructive" :
+                          alert.severity === "medium" ? "text-warning" : "text-info"
                         }`} />
                         <div>
                           <p className="font-semibold">{alert.title}</p>

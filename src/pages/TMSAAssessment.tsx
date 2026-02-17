@@ -261,9 +261,9 @@ const TMSAAssessment: FC = () => {
               <CardDescription>Compare your TMSA scores with industry standards</CardDescription>
             </CardHeader>
             <CardContent className="space-y-4">
-              <div className="p-4 bg-teal-50 dark:bg-teal-950 rounded-lg border border-teal-200 dark:border-teal-800">
-                <h4 className="font-medium flex items-center gap-2 text-teal-900 dark:text-teal-100"><Shield className="h-4 w-4" />Improvement Recommendations</h4>
-                <ul className="mt-2 space-y-2 text-sm text-teal-800 dark:text-teal-200">
+              <div className="p-4 bg-info/10 rounded-lg border border-info/30">
+                <h4 className="font-medium flex items-center gap-2 text-info"><Shield className="h-4 w-4" />Improvement Recommendations</h4>
+                <ul className="mt-2 space-y-2 text-sm text-muted-foreground">
                   <li>• Element 4 (Reliability & Maintenance) - Implement predictive maintenance program</li>
                   <li>• Element 7 (Management of Change) - Strengthen MOC documentation</li>
                   <li>• Element 9 (Safety Management) - Enhance near-miss reporting culture</li>
@@ -272,15 +272,15 @@ const TMSAAssessment: FC = () => {
               </div>
               <div className="grid gap-4 md:grid-cols-3">
                 <div className="p-4 border rounded-lg text-center">
-                  <div className="text-3xl font-bold text-green-600">{overallLevel}</div>
+                  <div className="text-3xl font-bold text-success">{overallLevel}</div>
                   <p className="text-sm text-muted-foreground">Your Average Level</p>
                 </div>
                 <div className="p-4 border rounded-lg text-center">
-                  <div className="text-3xl font-bold text-blue-600">3.4</div>
+                  <div className="text-3xl font-bold text-primary">3.4</div>
                   <p className="text-sm text-muted-foreground">Industry Average</p>
                 </div>
                 <div className="p-4 border rounded-lg text-center">
-                  <div className="text-3xl font-bold text-purple-600">Top 15%</div>
+                  <div className="text-3xl font-bold text-accent">Top 15%</div>
                   <p className="text-sm text-muted-foreground">Your Ranking</p>
                 </div>
               </div>

@@ -99,9 +99,9 @@ export const PerformanceMetrics: React.FC = () => {
 
   const ratingColor = (r: WebVital["rating"]) => {
     switch (r) {
-      case "good": return "text-green-500";
-      case "needs-improvement": return "text-yellow-500";
-      case "poor": return "text-red-500";
+      case "good": return "text-success";
+      case "needs-improvement": return "text-warning";
+      case "poor": return "text-destructive";
     }
   };
 

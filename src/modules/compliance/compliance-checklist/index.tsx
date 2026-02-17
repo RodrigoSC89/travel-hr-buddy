@@ -151,11 +151,11 @@ const ComplianceChecklist = () => {
         <XCircle className="h-3 w-3" /> Non-Compliant
       </Badge>;
     case "major_risk":
-      return <Badge variant="destructive" className="flex items-center gap-1 bg-orange-600">
+      return <Badge variant="destructive" className="flex items-center gap-1 bg-warning">
         <AlertTriangle className="h-3 w-3" /> Major Risk
       </Badge>;
     case "minor_risk":
-      return <Badge variant="outline" className="flex items-center gap-1 text-orange-600 border-orange-600">
+      return <Badge variant="outline" className="flex items-center gap-1 text-warning border-warning">
         <AlertCircle className="h-3 w-3" /> Minor Risk
       </Badge>;
     case "compliant":
@@ -272,7 +272,7 @@ const ComplianceChecklist = () => {
 
       {/* AI Insights */}
       {aiInsight && (
-        <Card className="border-blue-200 bg-blue-50 dark:bg-blue-950 dark:border-blue-800">
+        <Card className="border-info/30 bg-info/5">
           <CardHeader>
             <CardTitle className="text-sm flex items-center gap-2">
               <Shield className="h-4 w-4" />
@@ -418,7 +418,7 @@ const ComplianceChecklist = () => {
 
                     {/* AI Result */}
                     {record.ai_result && (
-                      <div className="mb-3 p-3 bg-blue-50 dark:bg-blue-950 rounded-lg border border-blue-200 dark:border-blue-800">
+                      <div className="mb-3 p-3 bg-info/5 rounded-lg border border-info/30">
                         <p className="text-sm">{record.ai_result}</p>
                       </div>
                     )}

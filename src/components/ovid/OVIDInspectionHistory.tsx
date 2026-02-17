@@ -50,9 +50,9 @@ export const OVIDInspectionHistory: React.FC<OVIDInspectionHistoryProps> = ({
   };
 
   const getScoreColor = (score: number) => {
-    if (score >= 85) return 'text-green-500';
-    if (score >= 70) return 'text-yellow-500';
-    return 'text-red-500';
+    if (score >= 85) return 'text-success';
+    if (score >= 70) return 'text-warning';
+    return 'text-destructive';
   };
 
   const getScoreTrend = (index: number) => {
@@ -60,8 +60,8 @@ export const OVIDInspectionHistory: React.FC<OVIDInspectionHistoryProps> = ({
     const current = inspections[index].compliance_score;
     const previous = inspections[index + 1].compliance_score;
     
-    if (current > previous) return <TrendingUp className="w-4 h-4 text-green-500" />;
-    if (current < previous) return <TrendingDown className="w-4 h-4 text-red-500" />;
+    if (current > previous) return <TrendingUp className="w-4 h-4 text-success" />;
+    if (current < previous) return <TrendingDown className="w-4 h-4 text-destructive" />;
     return <Minus className="w-4 h-4 text-muted-foreground" />;
   };
 
@@ -143,9 +143,9 @@ export const OVIDInspectionHistory: React.FC<OVIDInspectionHistoryProps> = ({
             <div className="flex items-center justify-between">
               <div>
                 <p className="text-sm text-muted-foreground">Concluídas</p>
-                <p className="text-2xl font-bold text-green-500">{stats.completed}</p>
+                <p className="text-2xl font-bold text-success">{stats.completed}</p>
               </div>
-              <CheckCircle className="w-8 h-8 text-green-500" />
+              <CheckCircle className="w-8 h-8 text-success" />
             </div>
           </CardContent>
         </Card>
@@ -167,9 +167,9 @@ export const OVIDInspectionHistory: React.FC<OVIDInspectionHistoryProps> = ({
             <div className="flex items-center justify-between">
               <div>
                 <p className="text-sm text-muted-foreground">Melhor Score</p>
-                <p className="text-2xl font-bold text-green-500">{stats.bestScore}%</p>
+                <p className="text-2xl font-bold text-success">{stats.bestScore}%</p>
               </div>
-              <TrendingUp className="w-8 h-8 text-green-500" />
+              <TrendingUp className="w-8 h-8 text-success" />
             </div>
           </CardContent>
         </Card>
@@ -300,11 +300,11 @@ export const OVIDInspectionHistory: React.FC<OVIDInspectionHistoryProps> = ({
                             {getScoreTrend(index)}
                           </div>
                           <div className="flex items-center gap-2 mt-1 text-xs">
-                            <span className="flex items-center gap-1 text-green-600">
+                            <span className="flex items-center gap-1 text-success">
                               <CheckCircle className="w-3 h-3" />
                               {insp.compliant_count}
                             </span>
-                            <span className="flex items-center gap-1 text-red-600">
+                            <span className="flex items-center gap-1 text-destructive">
                               <XCircle className="w-3 h-3" />
                               {insp.non_compliant_count}
                             </span>
