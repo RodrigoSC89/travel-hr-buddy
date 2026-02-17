@@ -112,3 +112,62 @@ export const notificationBadge: Variants = {
   hidden: { scale: 0, opacity: 0 },
   visible: { scale: 1, opacity: 1, transition: { type: "spring", stiffness: 500, damping: 15 } },
 };
+
+// === SUCCESS feedback flash ===
+export const successFlash: Variants = {
+  idle: { backgroundColor: "transparent" },
+  flash: {
+    backgroundColor: ["transparent", "hsla(var(--success) / 0.15)", "transparent"],
+    transition: { duration: 0.6, ease: "easeOut" },
+  },
+};
+
+// === Error shake ===
+export const errorShake: Variants = {
+  idle: { x: 0 },
+  shake: {
+    x: [-6, 6, -4, 4, -2, 2, 0],
+    transition: { duration: 0.4, ease: "easeOut" },
+  },
+};
+
+// === Skeleton wave (loading) ===
+export const skeletonWave: Variants = {
+  initial: { backgroundPosition: "200% 0" },
+  animate: {
+    backgroundPosition: ["-200% 0", "200% 0"],
+    transition: { duration: 1.8, repeat: Infinity, ease: "linear" },
+  },
+};
+
+// === Toast slide-in ===
+export const toastSlideIn: Variants = {
+  hidden: { opacity: 0, y: 20, scale: 0.95 },
+  visible: { opacity: 1, y: 0, scale: 1, transition: { type: "spring", stiffness: 350, damping: 25 } },
+  exit: { opacity: 0, y: -10, scale: 0.95, transition: { duration: 0.2 } },
+};
+
+// === List item stagger ===
+export const listItem: Variants = {
+  hidden: { opacity: 0, x: -12 },
+  visible: { opacity: 1, x: 0, transition: { duration: 0.3, ease: "easeOut" } },
+};
+
+// === Modal overlay ===
+export const modalOverlay: Variants = {
+  hidden: { opacity: 0 },
+  visible: { opacity: 1, transition: { duration: 0.2 } },
+  exit: { opacity: 0, transition: { duration: 0.15 } },
+};
+
+export const modalContent: Variants = {
+  hidden: { opacity: 0, scale: 0.95, y: 10 },
+  visible: { opacity: 1, scale: 1, y: 0, transition: { type: "spring", stiffness: 300, damping: 24 } },
+  exit: { opacity: 0, scale: 0.95, y: 10, transition: { duration: 0.15 } },
+};
+
+// === Progress bar fill ===
+export const progressFill = (percent: number) => ({
+  initial: { width: "0%" },
+  animate: { width: `${percent}%`, transition: { duration: 0.8, ease: "easeOut", delay: 0.2 } },
+});

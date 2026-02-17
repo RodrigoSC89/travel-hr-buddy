@@ -123,6 +123,58 @@ export const idParamSchema = z.object({
   id: z.string().uuid({ message: "ID inválido" }),
 });
 
+// ============= Vessel Schemas =============
+export const vesselSchema = z.object({
+  name: z.string().trim().min(2, "Nome da embarcação é obrigatório").max(150),
+  imo_number: z.string().regex(/^IMO\s?\d{7}$/, "Formato IMO inválido (ex: IMO 1234567)").optional().or(z.literal("")),
+  vessel_type: z.string().min(1, "Tipo de embarcação é obrigatório"),
+  flag_state: z.string().min(1, "Estado de bandeira é obrigatório"),
+  gross_tonnage: z.coerce.number().min(0, "Deve ser positivo").optional(),
+  year_built: z.coerce.number().min(1900).max(new Date().getFullYear() + 1).optional(),
+  status: z.enum(["active", "inactive", "maintenance", "drydock", "scrapped"]).default("active"),
+});
+
+// ============= Maintenance Schemas =============
+export const maintenanceOrderSchema = z.object({
+  title: z.string().trim().min(3, "Título mínimo 3 caracteres").max(200),
+  description: z.string().max(2000).optional(),
+  priority: z.enum(["low", "medium", "high", "critical"]).default("medium"),
+  category: z.string().min(1, "Categoria é obrigatória"),
+  due_date: z.string().refine((v) => !v || !isNaN(Date.parse(v)), "Data inválida").optional(),
+  assigned_to: z.string().uuid().optional(),
+  vessel_id: z.string().uuid("Embarcação inválida"),
+});
+
+// ============= Certificate Schemas =============
+export const certificateSchema = z.object({
+  certificate_type: z.string().min(1, "Tipo é obrigatório"),
+  certificate_number: z.string().min(1, "Número é obrigatório"),
+  issue_date: z.string().refine((v) => !isNaN(Date.parse(v)), "Data inválida"),
+  expiry_date: z.string().refine((v) => !isNaN(Date.parse(v)), "Data inválida"),
+  issuing_authority: z.string().min(1, "Autoridade emissora é obrigatória"),
+});
+
+// ============= Procurement Schemas =============
+export const purchaseOrderSchema = z.object({
+  supplier_name: z.string().trim().min(2, "Fornecedor é obrigatório"),
+  items: z.array(z.object({
+    description: z.string().min(1),
+    quantity: z.coerce.number().min(1, "Quantidade mínima: 1"),
+    unit_price: z.coerce.number().min(0, "Preço deve ser positivo"),
+  })).min(1, "Adicione ao menos 1 item"),
+  delivery_port: z.string().optional(),
+  notes: z.string().max(1000).optional(),
+});
+
+// ============= Reset Password Schema =============
+export const resetPasswordSchema = z.object({
+  password: z.string().min(8, "Mínimo 8 caracteres").max(128),
+  confirmPassword: z.string(),
+}).refine((data) => data.password === data.confirmPassword, {
+  message: "Senhas não conferem",
+  path: ["confirmPassword"],
+});
+
 // ============= Type Exports =============
 export type LoginInput = z.infer<typeof loginSchema>;
 export type SignupInput = z.infer<typeof signupSchema>;
@@ -132,3 +184,8 @@ export type ComplianceFormInput = z.infer<typeof complianceFormSchema>;
 export type CrewMemberInput = z.infer<typeof crewMemberSchema>;
 export type ContactInput = z.infer<typeof contactSchema>;
 export type PaginationInput = z.infer<typeof paginationSchema>;
+export type VesselInput = z.infer<typeof vesselSchema>;
+export type MaintenanceOrderInput = z.infer<typeof maintenanceOrderSchema>;
+export type CertificateInput = z.infer<typeof certificateSchema>;
+export type PurchaseOrderInput = z.infer<typeof purchaseOrderSchema>;
+export type ResetPasswordInput = z.infer<typeof resetPasswordSchema>;
