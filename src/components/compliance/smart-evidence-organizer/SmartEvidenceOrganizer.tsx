@@ -20,7 +20,7 @@ import {
   ChevronRight, ChevronDown, Search, Loader2,
   CheckCircle2, XCircle, AlertTriangle, Sparkles,
   LayoutGrid, List, FolderTree, Plus, RefreshCw,
-  BarChart3, Library, ArrowLeft
+  BarChart3, Library, ArrowLeft, MessageSquare, Calendar, Wand2, Users
 } from "lucide-react";
 import { useEvidenceOrganizer } from "./useEvidenceOrganizer";
 import { EvidenceDashboard } from "./EvidenceDashboard";
@@ -29,6 +29,10 @@ import { DocumentLibrarySidebar } from "./DocumentLibrarySidebar";
 import { PackHistoryComparison } from "./PackHistoryComparison";
 import { PackDiffComparison } from "./PackDiffComparison";
 import { CriticalGapsAlert } from "./CriticalGapsAlert";
+import { AuditInterviewSimulator } from "./AuditInterviewSimulator";
+import { EvidenceValidityTimeline } from "./EvidenceValidityTimeline";
+import { AutoEvidenceGenerator } from "./AutoEvidenceGenerator";
+import { EvidenceCollaboration } from "./EvidenceCollaboration";
 import type { EvidenceElement, EvidenceItem, EvidenceMatch, ViewMode } from "./types";
 import { Dialog, DialogContent, DialogHeader, DialogTitle } from "@/components/ui/dialog";
 
@@ -546,6 +550,18 @@ export function SmartEvidenceOrganizer({ framework }: Props) {
                     <TabsTrigger value="dashboard" className="gap-1">
                       <BarChart3 className="h-3.5 w-3.5" /> Dashboard
                     </TabsTrigger>
+                    <TabsTrigger value="interview" className="gap-1">
+                      <MessageSquare className="h-3.5 w-3.5" /> Entrevista IA
+                    </TabsTrigger>
+                    <TabsTrigger value="timeline" className="gap-1">
+                      <Calendar className="h-3.5 w-3.5" /> Timeline
+                    </TabsTrigger>
+                    <TabsTrigger value="autogen" className="gap-1">
+                      <Wand2 className="h-3.5 w-3.5" /> Auto-Gerar
+                    </TabsTrigger>
+                    <TabsTrigger value="collab" className="gap-1">
+                      <Users className="h-3.5 w-3.5" /> Colaboração
+                    </TabsTrigger>
                   </TabsList>
 
                   {activeTab === "evidence" && (
@@ -618,6 +634,28 @@ export function SmartEvidenceOrganizer({ framework }: Props) {
 
                 <TabsContent value="dashboard" className="mt-4">
                   <EvidenceDashboard pack={activePack} elements={elements} items={items} />
+                </TabsContent>
+
+                <TabsContent value="interview" className="mt-4">
+                  <AuditInterviewSimulator framework={framework} pack={activePack} elements={elements} />
+                </TabsContent>
+
+                <TabsContent value="timeline" className="mt-4">
+                  <EvidenceValidityTimeline items={items} matches={matches} elements={elements} />
+                </TabsContent>
+
+                <TabsContent value="autogen" className="mt-4">
+                  <AutoEvidenceGenerator
+                    framework={framework}
+                    pack={activePack}
+                    items={items}
+                    elements={elements}
+                    onRefresh={() => loadPackDetails(activePack.id)}
+                  />
+                </TabsContent>
+
+                <TabsContent value="collab" className="mt-4">
+                  <EvidenceCollaboration pack={activePack} items={items} elements={elements} />
                 </TabsContent>
               </Tabs>
             </motion.div>
