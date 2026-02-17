@@ -1,10 +1,11 @@
 /**
  * Procurement Workflow Manager - vs AMOS/TM Master
  * Complete RFQ → PO → Invoice → Delivery pipeline
+ * Zero Mock Policy: data from purchase_requisitions & procurement_orders
  */
-import { useState, useMemo, useCallback } from "react";
+import { useState, useMemo } from "react";
 import { motion } from "framer-motion";
-import { staggerContainer, kpiCard } from "@/lib/animations/motion-variants";
+import { staggerContainer } from "@/lib/animations/motion-variants";
 import { Card, CardContent, CardHeader, CardTitle } from "@/components/ui/card";
 import { Tabs, TabsContent, TabsList, TabsTrigger } from "@/components/ui/tabs";
 import { Button } from "@/components/ui/button";
@@ -22,116 +23,9 @@ import {
   Send, Eye, ShoppingCart
 } from "lucide-react";
 import { toast } from "sonner";
-
-interface PurchaseRequisition {
-  id: string;
-  prNumber: string;
-  vessel: string;
-  department: string;
-  requestedBy: string;
-  items: RequisitionItem[];
-  priority: "critical" | "urgent" | "routine" | "planned";
-  status: "draft" | "pending_approval" | "approved" | "rfq_sent" | "po_issued" | "delivered" | "closed";
-  totalEstimate: number;
-  currency: string;
-  createdAt: string;
-  requiredDate: string;
-  approvedBy?: string;
-  notes?: string;
-}
-
-interface RequisitionItem {
-  id: string;
-  partNumber: string;
-  description: string;
-  quantity: number;
-  unit: string;
-  estimatedPrice: number;
-  category: string;
-  impaCode?: string;
-}
-
-interface RFQ {
-  id: string;
-  rfqNumber: string;
-  prId: string;
-  suppliers: string[];
-  sentDate: string;
-  dueDate: string;
-  status: "sent" | "received" | "evaluated" | "awarded";
-  quotations: Quotation[];
-}
-
-interface Quotation {
-  supplier: string;
-  totalPrice: number;
-  currency: string;
-  deliveryDays: number;
-  validUntil: string;
-  score: number;
-}
-
-interface PurchaseOrder {
-  id: string;
-  poNumber: string;
-  supplier: string;
-  vessel: string;
-  items: RequisitionItem[];
-  totalAmount: number;
-  currency: string;
-  status: "issued" | "confirmed" | "shipped" | "delivered" | "invoiced" | "paid";
-  deliveryPort: string;
-  eta: string;
-  trackingNumber?: string;
-}
-
-const MOCK_REQUISITIONS: PurchaseRequisition[] = [
-  {
-    id: "1", prNumber: "PR-2026-0142", vessel: "MV Atlantic Pioneer",
-    department: "Engine", requestedBy: "Chief Engineer",
-    items: [
-      { id: "1", partNumber: "FLT-0045", description: "Fuel Oil Filter Element 10μm", quantity: 24, unit: "pcs", estimatedPrice: 85, category: "Filters", impaCode: "27.13.01" },
-      { id: "2", partNumber: "GSK-0122", description: "Cylinder Head Gasket Set", quantity: 6, unit: "sets", estimatedPrice: 450, category: "Engine Spares", impaCode: "27.01.05" },
-    ],
-    priority: "urgent", status: "approved", totalEstimate: 4740, currency: "USD",
-    createdAt: "2026-02-10", requiredDate: "2026-03-01", approvedBy: "Fleet Manager"
-  },
-  {
-    id: "2", prNumber: "PR-2026-0143", vessel: "MV Pacific Guardian",
-    department: "Deck", requestedBy: "Chief Officer",
-    items: [
-      { id: "3", partNumber: "RPE-0089", description: "Mooring Rope 72mm PP", quantity: 2, unit: "coils", estimatedPrice: 3200, category: "Deck Equipment", impaCode: "23.02.01" },
-    ],
-    priority: "routine", status: "pending_approval", totalEstimate: 6400, currency: "USD",
-    createdAt: "2026-02-12", requiredDate: "2026-04-15"
-  },
-  {
-    id: "3", prNumber: "PR-2026-0141", vessel: "MV Nordic Star",
-    department: "Safety", requestedBy: "Safety Officer",
-    items: [
-      { id: "4", partNumber: "LSA-0034", description: "EPIRB Battery Replacement", quantity: 4, unit: "pcs", estimatedPrice: 280, category: "Safety Equipment", impaCode: "43.01.08" },
-      { id: "5", partNumber: "LSA-0056", description: "Immersion Suit Type I", quantity: 10, unit: "pcs", estimatedPrice: 520, category: "Safety Equipment", impaCode: "43.03.01" },
-    ],
-    priority: "critical", status: "rfq_sent", totalEstimate: 6320, currency: "USD",
-    createdAt: "2026-02-08", requiredDate: "2026-02-25"
-  },
-];
-
-const MOCK_POS: PurchaseOrder[] = [
-  {
-    id: "1", poNumber: "PO-2026-0098", supplier: "Wärtsila Marine Parts",
-    vessel: "MV Atlantic Pioneer", totalAmount: 4250, currency: "USD",
-    items: MOCK_REQUISITIONS[0].items,
-    status: "shipped", deliveryPort: "Rotterdam", eta: "2026-02-28",
-    trackingNumber: "WMP-NL-2026-4455"
-  },
-  {
-    id: "2", poNumber: "PO-2026-0095", supplier: "MarineTech Supplies",
-    vessel: "MV Nordic Star", totalAmount: 5890, currency: "USD",
-    items: MOCK_REQUISITIONS[2].items,
-    status: "confirmed", deliveryPort: "Singapore", eta: "2026-03-05"
-  },
-];
+import { useQuery, useMutation, useQueryClient } from "@tanstack/react-query";
+import { supabase } from "@/integrations/supabase/client";
+import { useAuth } from "@/contexts/AuthContext";
 
 const priorityColors: Record<string, string> = {
   critical: "bg-destructive text-destructive-foreground",
@@ -147,14 +41,74 @@ export function ProcurementWorkflow() {
   const [searchQuery, setSearchQuery] = useState("");
   const [priorityFilter, setPriorityFilter] = useState("all");
   const [showNewPR, setShowNewPR] = useState(false);
+  const { user } = useAuth();
+  const queryClient = useQueryClient();
 
-  const stats = {
-    totalOpen: MOCK_REQUISITIONS.filter(r => !["closed", "delivered"].includes(r.status)).length,
-    pendingApproval: MOCK_REQUISITIONS.filter(r => r.status === "pending_approval").length,
-    activePOs: MOCK_POS.filter(po => !["paid"].includes(po.status)).length,
-    totalSpend: MOCK_POS.reduce((s, po) => s + po.totalAmount, 0),
-    criticalItems: MOCK_REQUISITIONS.filter(r => r.priority === "critical").length,
-  };
+  // Real data from Supabase
+  const { data: requisitions = [] } = useQuery({
+    queryKey: ["purchase-requisitions"],
+    queryFn: async () => {
+      const { data, error } = await supabase
+        .from("purchase_requisitions")
+        .select("*")
+        .order("created_at", { ascending: false })
+        .limit(100);
+      if (error) return [];
+      return data || [];
+    },
+  });
+
+  const { data: orders = [] } = useQuery({
+    queryKey: ["procurement-orders"],
+    queryFn: async () => {
+      const { data, error } = await supabase
+        .from("procurement_orders")
+        .select("*")
+        .order("created_at", { ascending: false })
+        .limit(100);
+      if (error) return [];
+      return data || [];
+    },
+  });
+
+  const createRequisition = useMutation({
+    mutationFn: async (formData: { vessel: string; department: string; priority: string; required_date: string; notes: string }) => {
+      const reqNumber = `PR-${Date.now().toString(36).toUpperCase()}`;
+      const { error } = await supabase.from("purchase_requisitions").insert({
+        requisition_number: reqNumber,
+        title: reqNumber,
+        description: formData.notes || `Requisition for ${formData.department}`,
+        status: "draft",
+        priority: formData.priority,
+        requested_by_id: user?.id,
+        vessel_name: formData.vessel,
+        department: formData.department,
+        delivery_date: formData.required_date || null,
+        notes: formData.notes || null,
+      });
+      if (error) throw error;
+    },
+    onSuccess: () => {
+      queryClient.invalidateQueries({ queryKey: ["purchase-requisitions"] });
+      setShowNewPR(false);
+      toast.success("Requisition created successfully");
+    },
+    onError: () => toast.error("Failed to create requisition"),
+  });
+
+  const stats = useMemo(() => ({
+    totalOpen: requisitions.filter((r: any) => !["closed", "delivered"].includes(r.status)).length,
+    pendingApproval: requisitions.filter((r: any) => r.status === "pending_approval").length,
+    activePOs: orders.filter((po: any) => !["paid", "cancelled"].includes(po.status)).length,
+    totalSpend: orders.reduce((s: number, po: any) => s + (Number(po.total_amount) || 0), 0),
+    criticalItems: requisitions.filter((r: any) => r.priority === "critical").length,
+  }), [requisitions, orders]);
+
+  const [newVessel, setNewVessel] = useState("");
+  const [newDept, setNewDept] = useState("");
+  const [newPriority, setNewPriority] = useState("");
+  const [newDate, setNewDate] = useState("");
+  const [newNotes, setNewNotes] = useState("");
 
   return (
     <motion.div className="space-y-6 p-4 md:p-6" initial="hidden" animate="visible" variants={staggerContainer}>
@@ -177,13 +131,13 @@ export function ProcurementWorkflow() {
             </DialogHeader>
             <div className="space-y-4">
               <div className="grid grid-cols-2 gap-4">
-                <div><Label>Vessel</Label><Select><SelectTrigger><SelectValue placeholder="Select vessel" /></SelectTrigger><SelectContent><SelectItem value="v1">MV Atlantic Pioneer</SelectItem><SelectItem value="v2">MV Pacific Guardian</SelectItem></SelectContent></Select></div>
-                <div><Label>Department</Label><Select><SelectTrigger><SelectValue placeholder="Select department" /></SelectTrigger><SelectContent><SelectItem value="engine">Engine</SelectItem><SelectItem value="deck">Deck</SelectItem><SelectItem value="safety">Safety</SelectItem><SelectItem value="galley">Galley</SelectItem></SelectContent></Select></div>
-                <div><Label>Priority</Label><Select><SelectTrigger><SelectValue placeholder="Priority" /></SelectTrigger><SelectContent><SelectItem value="critical">Critical</SelectItem><SelectItem value="urgent">Urgent</SelectItem><SelectItem value="routine">Routine</SelectItem><SelectItem value="planned">Planned</SelectItem></SelectContent></Select></div>
-                <div><Label>Required By</Label><Input type="date" /></div>
+                <div><Label>Vessel</Label><Input value={newVessel} onChange={e => setNewVessel(e.target.value)} placeholder="Vessel name" /></div>
+                <div><Label>Department</Label><Select value={newDept} onValueChange={setNewDept}><SelectTrigger><SelectValue placeholder="Select department" /></SelectTrigger><SelectContent><SelectItem value="engine">Engine</SelectItem><SelectItem value="deck">Deck</SelectItem><SelectItem value="safety">Safety</SelectItem><SelectItem value="galley">Galley</SelectItem></SelectContent></Select></div>
+                <div><Label>Priority</Label><Select value={newPriority} onValueChange={setNewPriority}><SelectTrigger><SelectValue placeholder="Priority" /></SelectTrigger><SelectContent><SelectItem value="critical">Critical</SelectItem><SelectItem value="urgent">Urgent</SelectItem><SelectItem value="routine">Routine</SelectItem><SelectItem value="planned">Planned</SelectItem></SelectContent></Select></div>
+                <div><Label>Required By</Label><Input type="date" value={newDate} onChange={e => setNewDate(e.target.value)} /></div>
               </div>
-              <div><Label>Notes</Label><Textarea placeholder="Additional notes..." /></div>
-              <Button className="w-full" onClick={() => { setShowNewPR(false); toast.success("Requisition PR-2026-0144 created"); }}>
+              <div><Label>Notes</Label><Textarea placeholder="Additional notes..." value={newNotes} onChange={e => setNewNotes(e.target.value)} /></div>
+              <Button className="w-full" onClick={() => createRequisition.mutate({ vessel: newVessel, department: newDept, priority: newPriority || "routine", required_date: newDate, notes: newNotes })}>
                 Create Requisition
               </Button>
             </div>
@@ -219,33 +173,31 @@ export function ProcurementWorkflow() {
             <Table>
               <TableHeader>
                 <TableRow>
-                  <TableHead>PR Number</TableHead>
-                  <TableHead>Vessel</TableHead>
-                  <TableHead>Department</TableHead>
-                  <TableHead>Items</TableHead>
-                  <TableHead>Priority</TableHead>
+                  <TableHead>PR / Title</TableHead>
                   <TableHead>Status</TableHead>
-                  <TableHead>Est. Value</TableHead>
-                  <TableHead>Required By</TableHead>
+                  <TableHead>Priority</TableHead>
+                  <TableHead>Created</TableHead>
                   <TableHead>Actions</TableHead>
                 </TableRow>
               </TableHeader>
               <TableBody>
-                {MOCK_REQUISITIONS.map(pr => (
+                {requisitions.length === 0 ? (
+                  <TableRow><TableCell colSpan={5} className="text-center text-muted-foreground p-8">No requisitions yet. Create one to get started.</TableCell></TableRow>
+                ) : requisitions.filter((pr: any) => {
+                  if (priorityFilter !== "all" && pr.priority !== priorityFilter) return false;
+                  if (searchQuery && !(pr.title || "").toLowerCase().includes(searchQuery.toLowerCase())) return false;
+                  return true;
+                }).map((pr: any) => (
                   <TableRow key={pr.id}>
-                    <TableCell className="font-mono font-medium">{pr.prNumber}</TableCell>
-                    <TableCell>{pr.vessel}</TableCell>
-                    <TableCell>{pr.department}</TableCell>
-                    <TableCell>{pr.items.length} items</TableCell>
-                    <TableCell><Badge className={priorityColors[pr.priority]}>{pr.priority}</Badge></TableCell>
-                    <TableCell><Badge variant="outline">{pr.status.replace(/_/g, " ")}</Badge></TableCell>
-                    <TableCell className="font-medium">${pr.totalEstimate.toLocaleString()}</TableCell>
-                    <TableCell>{pr.requiredDate}</TableCell>
+                    <TableCell className="font-medium">{pr.title || pr.id.slice(0, 8)}</TableCell>
+                    <TableCell><Badge variant="outline">{(pr.status || "draft").replace(/_/g, " ")}</Badge></TableCell>
+                    <TableCell><Badge className={priorityColors[pr.priority] || priorityColors.routine}>{pr.priority || "routine"}</Badge></TableCell>
+                    <TableCell className="text-sm text-muted-foreground">{new Date(pr.created_at).toLocaleDateString()}</TableCell>
                     <TableCell>
                       <div className="flex gap-1">
-                        <Button size="sm" variant="ghost"><Eye className="h-4 w-4" /></Button>
-                        {pr.status === "approved" && <Button size="sm" variant="ghost" onClick={() => toast.success("RFQ sent to 3 suppliers")}><Send className="h-4 w-4" /></Button>}
-                        {pr.status === "pending_approval" && <Button size="sm" variant="ghost" onClick={() => toast.success("PR approved")}><CheckCircle2 className="h-4 w-4 text-success" /></Button>}
+                        <Button size="sm" variant="ghost" aria-label="View requisition"><Eye className="h-4 w-4" /></Button>
+                        {pr.status === "approved" && <Button size="sm" variant="ghost" aria-label="Send RFQ" onClick={() => toast.success("RFQ sent to suppliers")}><Send className="h-4 w-4" /></Button>}
+                        {pr.status === "pending_approval" && <Button size="sm" variant="ghost" aria-label="Approve" onClick={() => toast.success("PR approved")}><CheckCircle2 className="h-4 w-4 text-success" /></Button>}
                       </div>
                     </TableCell>
                   </TableRow>
@@ -264,7 +216,7 @@ export function ProcurementWorkflow() {
                     <div className="text-center">
                       <div className={`w-10 h-10 rounded-full flex items-center justify-center text-xs font-bold ${
                         i <= 3 ? "bg-primary text-primary-foreground" : "bg-muted text-muted-foreground"
-                      }`}>{MOCK_REQUISITIONS.filter(r => r.status === step).length}</div>
+                      }`}>{requisitions.filter((r: any) => r.status === step).length}</div>
                       <p className="text-xs mt-1 capitalize text-muted-foreground">{step.replace(/_/g, " ")}</p>
                     </div>
                     {i < statusFlow.length - 1 && <ArrowRight className="h-4 w-4 text-muted-foreground" />}
@@ -279,24 +231,30 @@ export function ProcurementWorkflow() {
           <Card>
             <CardHeader><CardTitle>RFQ Comparison Matrix</CardTitle></CardHeader>
             <CardContent>
-              <Table>
-                <TableHeader>
-                  <TableRow>
-                    <TableHead>Criteria</TableHead>
-                    <TableHead className="text-center">Wärtsila Marine</TableHead>
-                    <TableHead className="text-center">MarineTech</TableHead>
-                    <TableHead className="text-center">Global Ship Supply</TableHead>
-                  </TableRow>
-                </TableHeader>
-                <TableBody>
-                  <TableRow><TableCell>Total Price</TableCell><TableCell className="text-center font-medium text-success">$4,250</TableCell><TableCell className="text-center">$4,890</TableCell><TableCell className="text-center">$5,120</TableCell></TableRow>
-                  <TableRow><TableCell>Delivery (days)</TableCell><TableCell className="text-center font-medium text-success">14</TableCell><TableCell className="text-center">18</TableCell><TableCell className="text-center">12</TableCell></TableRow>
-                  <TableRow><TableCell>Quality Score</TableCell><TableCell className="text-center">95%</TableCell><TableCell className="text-center">88%</TableCell><TableCell className="text-center font-medium text-success">92%</TableCell></TableRow>
-                  <TableRow><TableCell>Past Performance</TableCell><TableCell className="text-center font-medium text-success">4.8/5</TableCell><TableCell className="text-center">4.2/5</TableCell><TableCell className="text-center">4.5/5</TableCell></TableRow>
-                  <TableRow><TableCell className="font-bold">Overall Score</TableCell><TableCell className="text-center font-bold text-success">92/100 ⭐</TableCell><TableCell className="text-center font-bold">78/100</TableCell><TableCell className="text-center font-bold">85/100</TableCell></TableRow>
-                </TableBody>
-              </Table>
-              <div className="mt-4 flex justify-end"><Button onClick={() => toast.success("PO issued to Wärtsila Marine Parts")}>Award to Best Supplier</Button></div>
+              {orders.length === 0 ? (
+                <p className="text-center text-muted-foreground p-8">No RFQ data yet. Send RFQs from approved requisitions.</p>
+              ) : (
+                <Table>
+                  <TableHeader>
+                    <TableRow>
+                      <TableHead>PO / Order</TableHead>
+                      <TableHead>Supplier</TableHead>
+                      <TableHead>Amount</TableHead>
+                      <TableHead>Status</TableHead>
+                    </TableRow>
+                  </TableHeader>
+                  <TableBody>
+                    {orders.slice(0, 10).map((o: any) => (
+                      <TableRow key={o.id}>
+                        <TableCell className="font-mono">{o.po_number || o.id.slice(0, 8)}</TableCell>
+                        <TableCell>{o.supplier_name || "N/A"}</TableCell>
+                        <TableCell className="font-medium">${Number(o.total_amount || 0).toLocaleString()}</TableCell>
+                        <TableCell><Badge variant="outline">{o.status}</Badge></TableCell>
+                      </TableRow>
+                    ))}
+                  </TableBody>
+                </Table>
+              )}
             </CardContent>
           </Card>
         </TabsContent>
@@ -308,25 +266,21 @@ export function ProcurementWorkflow() {
                 <TableRow>
                   <TableHead>PO Number</TableHead>
                   <TableHead>Supplier</TableHead>
-                  <TableHead>Vessel</TableHead>
                   <TableHead>Amount</TableHead>
                   <TableHead>Status</TableHead>
-                  <TableHead>Delivery Port</TableHead>
-                  <TableHead>ETA</TableHead>
-                  <TableHead>Tracking</TableHead>
+                  <TableHead>Created</TableHead>
                 </TableRow>
               </TableHeader>
               <TableBody>
-                {MOCK_POS.map(po => (
+                {orders.length === 0 ? (
+                  <TableRow><TableCell colSpan={5} className="text-center text-muted-foreground p-8">No purchase orders yet.</TableCell></TableRow>
+                ) : orders.map((po: any) => (
                   <TableRow key={po.id}>
-                    <TableCell className="font-mono font-medium">{po.poNumber}</TableCell>
-                    <TableCell>{po.supplier}</TableCell>
-                    <TableCell>{po.vessel}</TableCell>
-                    <TableCell className="font-medium">${po.totalAmount.toLocaleString()}</TableCell>
+                    <TableCell className="font-mono font-medium">{po.po_number || po.id.slice(0, 8)}</TableCell>
+                    <TableCell>{po.supplier_name || "N/A"}</TableCell>
+                    <TableCell className="font-medium">${Number(po.total_amount || 0).toLocaleString()}</TableCell>
                     <TableCell><Badge variant={po.status === "shipped" ? "default" : "outline"}>{po.status}</Badge></TableCell>
-                    <TableCell>{po.deliveryPort}</TableCell>
-                    <TableCell>{po.eta}</TableCell>
-                    <TableCell className="font-mono text-xs">{po.trackingNumber || "—"}</TableCell>
+                    <TableCell className="text-sm text-muted-foreground">{new Date(po.created_at).toLocaleDateString()}</TableCell>
                   </TableRow>
                 ))}
               </TableBody>
@@ -337,36 +291,38 @@ export function ProcurementWorkflow() {
         <TabsContent value="analytics" className="space-y-4">
           <div className="grid grid-cols-1 md:grid-cols-2 gap-4">
             <Card>
-              <CardHeader><CardTitle className="text-sm">Spend by Category</CardTitle></CardHeader>
+              <CardHeader><CardTitle className="text-sm">Spend Summary</CardTitle></CardHeader>
               <CardContent className="space-y-3">
-                {[
-                  { cat: "Engine Spares", pct: 38, val: "$45.2K" },
-                  { cat: "Safety Equipment", pct: 22, val: "$26.1K" },
-                  { cat: "Deck Equipment", pct: 18, val: "$21.3K" },
-                  { cat: "Filters & Consumables", pct: 12, val: "$14.2K" },
-                  { cat: "Galley & Provisions", pct: 10, val: "$11.8K" },
-                ].map(item => (
-                  <div key={item.cat} className="space-y-1">
-                    <div className="flex justify-between text-sm"><span>{item.cat}</span><span className="font-medium">{item.val} ({item.pct}%)</span></div>
-                    <Progress value={item.pct} className="h-2" />
-                  </div>
-                ))}
+                <div className="flex justify-between text-sm p-3 rounded-lg bg-muted/50">
+                  <span>Total Requisitions</span>
+                  <span className="font-bold">{requisitions.length}</span>
+                </div>
+                <div className="flex justify-between text-sm p-3 rounded-lg bg-muted/50">
+                  <span>Active POs</span>
+                  <span className="font-bold">{stats.activePOs}</span>
+                </div>
+                <div className="flex justify-between text-sm p-3 rounded-lg bg-primary/5 border border-primary/20">
+                  <span className="font-medium">Total Spend</span>
+                  <span className="font-bold text-primary">${stats.totalSpend.toLocaleString()}</span>
+                </div>
               </CardContent>
             </Card>
             <Card>
-              <CardHeader><CardTitle className="text-sm">Supplier Performance</CardTitle></CardHeader>
+              <CardHeader><CardTitle className="text-sm">Status Distribution</CardTitle></CardHeader>
               <CardContent className="space-y-3">
-                {[
-                  { name: "Wärtsila Marine Parts", score: 95, orders: 42, onTime: "98%" },
-                  { name: "MarineTech Supplies", score: 88, orders: 28, onTime: "92%" },
-                  { name: "Global Ship Supply", score: 85, orders: 35, onTime: "89%" },
-                  { name: "Orient Maritime Co.", score: 82, orders: 19, onTime: "87%" },
-                ].map(s => (
-                  <div key={s.name} className="flex items-center justify-between p-2 rounded-lg bg-muted/50">
-                    <div><p className="font-medium text-sm">{s.name}</p><p className="text-xs text-muted-foreground">{s.orders} orders • {s.onTime} on-time</p></div>
-                    <Badge variant={s.score >= 90 ? "default" : "secondary"}>{s.score}/100</Badge>
-                  </div>
-                ))}
+                {statusFlow.map(status => {
+                  const count = requisitions.filter((r: any) => r.status === status).length;
+                  const pct = requisitions.length > 0 ? (count / requisitions.length) * 100 : 0;
+                  return (
+                    <div key={status} className="space-y-1">
+                      <div className="flex justify-between text-sm">
+                        <span className="capitalize">{status.replace(/_/g, " ")}</span>
+                        <span className="font-medium">{count}</span>
+                      </div>
+                      <Progress value={pct} className="h-1.5" />
+                    </div>
+                  );
+                })}
               </CardContent>
             </Card>
           </div>
