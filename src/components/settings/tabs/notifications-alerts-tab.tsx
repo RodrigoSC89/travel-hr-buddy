@@ -267,7 +267,7 @@ export const NotificationsAlertsTab: React.FC<NotificationsAlertsTabProps> = ({
           <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-4">
             <div className="p-4 border rounded-lg">
               <div className="flex items-center justify-between mb-2">
-                <Badge className="bg-red-100 text-red-800">Crítico</Badge>
+                <Badge className="bg-destructive/10 text-destructive">Crítico</Badge>
                 <Switch defaultChecked />
               </div>
               <h5 className="font-medium mb-1">Alertas Críticos</h5>
@@ -278,7 +278,7 @@ export const NotificationsAlertsTab: React.FC<NotificationsAlertsTabProps> = ({
 
             <div className="p-4 border rounded-lg">
               <div className="flex items-center justify-between mb-2">
-                <Badge className="bg-yellow-100 text-yellow-800">Importante</Badge>
+                <Badge className="bg-warning/10 text-warning">Importante</Badge>
                 <Switch defaultChecked />
               </div>
               <h5 className="font-medium mb-1">Alertas Importantes</h5>
@@ -289,7 +289,7 @@ export const NotificationsAlertsTab: React.FC<NotificationsAlertsTabProps> = ({
 
             <div className="p-4 border rounded-lg">
               <div className="flex items-center justify-between mb-2">
-                <Badge className="bg-blue-100 text-blue-800">Informativo</Badge>
+                <Badge className="bg-primary/10 text-primary">Informativo</Badge>
                 <Switch defaultChecked />
               </div>
               <h5 className="font-medium mb-1">Alertas Informativos</h5>
@@ -333,15 +333,15 @@ export const NotificationsAlertsTab: React.FC<NotificationsAlertsTabProps> = ({
         </CardHeader>
         <CardContent>
           <div className="flex flex-wrap gap-3">
-            <button className="px-4 py-2 bg-blue-100 text-blue-800 rounded-lg hover:bg-blue-200 transition-colors">
+            <button className="px-4 py-2 bg-primary/10 text-primary rounded-lg hover:bg-primary/20 transition-colors">
               <Mail className="w-4 h-4 inline mr-2" />
               Testar E-mail
             </button>
-            <button className="px-4 py-2 bg-green-100 text-green-800 rounded-lg hover:bg-green-200 transition-colors">
+            <button className="px-4 py-2 bg-success/10 text-success rounded-lg hover:bg-success/20 transition-colors">
               <Smartphone className="w-4 h-4 inline mr-2" />
               Testar Push
             </button>
-            <button className="px-4 py-2 bg-purple-100 text-purple-800 rounded-lg hover:bg-purple-200 transition-colors">
+            <button className="px-4 py-2 bg-accent/10 text-accent rounded-lg hover:bg-accent/20 transition-colors">
               <Monitor className="w-4 h-4 inline mr-2" />
               Testar Sistema
             </button>
@@ -426,8 +426,8 @@ const InspectionAlertsSection: React.FC<{
       title: "Inspeções Atrasadas",
       description: "Alertas para inspeções que já passaram do prazo",
       icon: AlertTriangle,
-      color: "text-red-600",
-      badgeColor: "bg-red-100 text-red-800",
+      color: "text-destructive",
+      badgeColor: "bg-destructive/10 text-destructive",
       priority: "Crítico"
     },
     {
@@ -435,8 +435,8 @@ const InspectionAlertsSection: React.FC<{
       title: "Vencem Hoje",
       description: "Alertas para inspeções que vencem hoje",
       icon: CalendarClock,
-      color: "text-orange-600",
-      badgeColor: "bg-orange-100 text-orange-800",
+      color: "text-warning",
+      badgeColor: "bg-warning/10 text-warning",
       priority: "Alto"
     },
     {
@@ -444,8 +444,8 @@ const InspectionAlertsSection: React.FC<{
       title: "Próximos 3 Dias",
       description: "Alertas antecipados para prazos em 3 dias",
       icon: Clock,
-      color: "text-yellow-600",
-      badgeColor: "bg-yellow-100 text-yellow-800",
+      color: "text-warning",
+      badgeColor: "bg-warning/10 text-warning",
       priority: "Médio"
     },
     {
@@ -453,8 +453,8 @@ const InspectionAlertsSection: React.FC<{
       title: "Próximos 7 Dias",
       description: "Alertas antecipados para prazos em 7 dias",
       icon: CalendarClock,
-      color: "text-blue-600",
-      badgeColor: "bg-blue-100 text-blue-800",
+      color: "text-primary",
+      badgeColor: "bg-primary/10 text-primary",
       priority: "Baixo"
     },
     {
@@ -462,8 +462,8 @@ const InspectionAlertsSection: React.FC<{
       title: "Itens Pendentes",
       description: "Alertas sobre itens de checklist não concluídos",
       icon: ClipboardCheck,
-      color: "text-purple-600",
-      badgeColor: "bg-purple-100 text-purple-800",
+      color: "text-accent",
+      badgeColor: "bg-accent/10 text-accent",
       priority: "Médio"
     }
   ];

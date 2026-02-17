@@ -42,7 +42,7 @@ const getStatusConfig = (s: string) => {
     draft: { label: "Rascunho", color: "bg-muted text-muted-foreground border-border", icon: <Edit className="h-3 w-3" /> },
     archived: { label: "Arquivado", color: "bg-muted text-muted-foreground border-border", icon: <Archive className="h-3 w-3" /> },
     expired: { label: "Expirado", color: "bg-destructive/10 text-destructive border-destructive/30", icon: <FileWarning className="h-3 w-3" /> },
-    pending: { label: "Pendente", color: "bg-amber-100 text-amber-700 border-amber-200", icon: <Clock className="h-3 w-3" /> },
+    pending: { label: "Pendente", color: "bg-warning/10 text-warning border-warning/30", icon: <Clock className="h-3 w-3" /> },
   };
   return map[s] || map.active;
 };
@@ -459,13 +459,13 @@ export const WorldClassDocumentCenter: React.FC = () => {
                   {expiringDocs.map(doc => {
                     const days = Math.round((new Date(doc.expiry_date!).getTime() - Date.now()) / (1000 * 60 * 60 * 24));
                     return (
-                      <div key={doc.id} className="flex items-center justify-between p-3 rounded-lg border border-amber-200 bg-amber-50/50 dark:bg-amber-950/10 cursor-pointer hover:bg-amber-100/50"
+                      <div key={doc.id} className="flex items-center justify-between p-3 rounded-lg border border-warning/30 bg-warning/5 cursor-pointer hover:bg-warning/10"
                         onClick={() => { setSelectedDoc(doc); setIsDetailOpen(true); }}>
                         <div>
                           <p className="text-sm font-medium">{doc.title}</p>
                           <p className="text-xs text-muted-foreground">{doc.document_type}</p>
                         </div>
-                        <Badge variant="outline" className="text-amber-700 border-amber-300">
+                        <Badge variant="outline" className="text-warning border-warning/30">
                           {days} dias restantes
                         </Badge>
                       </div>

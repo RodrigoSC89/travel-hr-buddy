@@ -43,9 +43,9 @@ const complianceStatusLabels = {
 };
 
 const complianceStatusColors = {
-  compliant: "bg-green-100 text-green-800 border-green-300",
-  partial: "bg-yellow-100 text-yellow-800 border-yellow-300",
-  "non-compliant": "bg-red-100 text-red-800 border-red-300"
+  compliant: "bg-success/10 text-success border-success/30",
+  partial: "bg-warning/10 text-warning border-warning/30",
+  "non-compliant": "bg-destructive/10 text-destructive border-destructive/30"
 };
 
 export default function SGSOAuditReviewPage() {

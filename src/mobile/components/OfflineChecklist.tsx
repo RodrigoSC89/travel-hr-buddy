@@ -93,22 +93,22 @@ export const OfflineChecklist: React.FC<OfflineChecklistProps> = ({
 
   const getCategoryColor = (category: string) => {
     switch (category) {
-    case "operational": return "bg-blue-500";
-    case "safety": return "bg-red-500";
-    case "maintenance": return "bg-yellow-500";
-    case "inspection": return "bg-green-500";
-    default: return "bg-gray-500";
+    case "operational": return "bg-primary";
+    case "safety": return "bg-destructive";
+    case "maintenance": return "bg-warning";
+    case "inspection": return "bg-success";
+    default: return "bg-muted-foreground";
     }
   };
 
   const getSyncStatusIcon = () => {
     switch (checklist.syncStatus) {
     case "synced":
-      return <Cloud className="h-4 w-4 text-green-500" />;
+      return <Cloud className="h-4 w-4 text-success" />;
     case "pending":
-      return <WifiOff className="h-4 w-4 text-yellow-500" />;
+      return <WifiOff className="h-4 w-4 text-warning" />;
     case "failed":
-      return <AlertCircle className="h-4 w-4 text-red-500" />;
+      return <AlertCircle className="h-4 w-4 text-destructive" />;
     default:
       return null;
     }
@@ -135,10 +135,10 @@ export const OfflineChecklist: React.FC<OfflineChecklistProps> = ({
             <span>{Math.round(progress)}% Complete</span>
             <span>{items.filter(i => i.checked).length}/{items.length}</span>
           </div>
-          <div className="w-full h-2 bg-gray-200 rounded-full overflow-hidden">
+          <div className="w-full h-2 bg-muted rounded-full overflow-hidden">
             <div
               className={`h-full transition-all duration-300 ${
-                progress === 100 ? "bg-green-500" : "bg-blue-500"
+                progress === 100 ? "bg-success" : "bg-primary"
               }`}
               style={{ width: `${progress}%` }}
             />
