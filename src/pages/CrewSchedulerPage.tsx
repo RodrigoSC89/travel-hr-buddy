@@ -3,6 +3,8 @@
  * P0-005 FIX: Route was 404, now functional with real data
  */
 import { useState } from 'react';
+import { motion } from 'framer-motion';
+import { staggerContainer, fadeUp } from '@/lib/animations/motion-variants';
 import { useQuery, useMutation, useQueryClient } from '@tanstack/react-query';
 import { supabase } from '@/integrations/supabase/client';
 import { Card, CardContent, CardHeader, CardTitle } from '@/components/ui/card';
@@ -15,6 +17,7 @@ import { Label } from '@/components/ui/label';
 import { Select, SelectContent, SelectItem, SelectTrigger, SelectValue } from '@/components/ui/select';
 import { toast } from 'sonner';
 import { RefreshCw, Download, Plus, Calendar, Users, Ship, Clock, AlertTriangle } from 'lucide-react';
+import { addCrewFormSchema } from '@/lib/validation/schemas';
 
 interface CrewMember {
   id: string;
@@ -36,6 +39,7 @@ export default function CrewSchedulerPage() {
     rank: 'AB',
     status: 'available',
   });
+  const [formErrors, setFormErrors] = useState<Record<string, string>>({});
   const queryClient = useQueryClient();
 
   const { data: crewMembers, isLoading, error, refetch } = useQuery({
@@ -83,6 +87,16 @@ export default function CrewSchedulerPage() {
 
   const addCrewMutation = useMutation({
     mutationFn: async (crew: typeof newCrewMember) => {
+      const validation = addCrewFormSchema.safeParse({
+        full_name: crew.name, rank: crew.rank, nationality: 'BR', status: crew.status,
+      });
+      if (!validation.success) {
+        const errors: Record<string, string> = {};
+        validation.error.issues.forEach(issue => { errors[issue.path[0] as string] = issue.message; });
+        setFormErrors(errors);
+        throw new Error('Validação falhou');
+      }
+      setFormErrors({});
       const { error } = await supabase.from('crew_members').insert([{
         full_name: crew.name,
         employee_id: `EMP-${Date.now().toString(36).toUpperCase()}`,
@@ -98,10 +112,11 @@ export default function CrewSchedulerPage() {
       queryClient.invalidateQueries({ queryKey: ['crew-scheduler'] });
       toast.success('Tripulante adicionado com sucesso');
       setIsDialogOpen(false);
+      setFormErrors({});
       setNewCrewMember({ name: '', rank: 'AB', status: 'available' });
     },
-    onError: () => {
-      toast.error('Erro ao adicionar tripulante');
+    onError: (err) => {
+      if (err.message !== 'Validação falhou') toast.error('Erro ao adicionar tripulante');
     },
   });
 
@@ -187,15 +202,17 @@ export default function CrewSchedulerPage() {
   }
 
   return (
-    <div className="container mx-auto p-6 space-y-6">
+    <motion.div initial="hidden" animate="visible" variants={staggerContainer} className="container mx-auto p-6 space-y-6">
       {/* Header */}
-      <div className="flex flex-col sm:flex-row justify-between items-start sm:items-center gap-4">
-        <div>
-          <h1 className="text-2xl font-bold flex items-center gap-2">
-            <Calendar className="h-6 w-6 text-primary" />
-            Crew Scheduler
-          </h1>
-          <p className="text-muted-foreground">Gestão de Escalas e Rotações de Tripulação</p>
+      <motion.div variants={fadeUp} className="flex flex-col sm:flex-row justify-between items-start sm:items-center gap-4">
+        <div className="flex items-center gap-4">
+          <div className="p-3 rounded-xl bg-gradient-to-br from-primary/20 to-primary/5">
+            <Calendar className="h-8 w-8 text-primary" />
+          </div>
+          <div>
+            <h1 className="text-3xl font-bold">Crew Scheduler</h1>
+            <p className="text-muted-foreground">Gestão de Escalas e Rotações de Tripulação</p>
+          </div>
         </div>
         <div className="flex gap-2">
           <Button variant="outline" onClick={handleRefresh}>
@@ -219,12 +236,14 @@ export default function CrewSchedulerPage() {
               </DialogHeader>
               <div className="space-y-4">
                 <div>
-                  <Label>Nome</Label>
+                  <Label>Nome Completo *</Label>
                   <Input
                     value={newCrewMember.name}
-                    onChange={(e) => setNewCrewMember(prev => ({ ...prev, name: e.target.value }))}
+                    onChange={(e) => { setNewCrewMember(prev => ({ ...prev, name: e.target.value })); setFormErrors(p => ({ ...p, full_name: '' })); }}
+                    className={formErrors.full_name ? 'border-destructive' : ''}
                     placeholder="Nome completo"
                   />
+                  {formErrors.full_name && <p className="text-xs text-destructive mt-1">{formErrors.full_name}</p>}
                 </div>
                 <div>
                   <Label>Cargo</Label>
@@ -271,7 +290,7 @@ export default function CrewSchedulerPage() {
             </DialogContent>
           </Dialog>
         </div>
-      </div>
+      </motion.div>
 
       {/* KPI Cards */}
       <div className="grid grid-cols-2 sm:grid-cols-3 lg:grid-cols-6 gap-4">
@@ -331,7 +350,7 @@ export default function CrewSchedulerPage() {
                 <p className="text-sm text-muted-foreground flex items-center gap-1">
                   <AlertTriangle className="h-4 w-4" /> Expirando
                 </p>
-                <p className="text-2xl font-bold text-amber-600">{stats.expiringSoon}</p>
+                <p className="text-2xl font-bold text-warning">{stats.expiringSoon}</p>
               </CardContent>
             </Card>
           </>
@@ -410,6 +429,6 @@ export default function CrewSchedulerPage() {
           )}
         </CardContent>
       </Card>
-    </div>
+    </motion.div>
   );
 }

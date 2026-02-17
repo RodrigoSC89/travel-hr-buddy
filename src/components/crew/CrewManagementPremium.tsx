@@ -4,6 +4,7 @@
  * Features: STCW Compliance, Rest Hours, Rotations, Certificates, Wellness, Payroll
  */
 import React, { useState, useMemo, useCallback, memo } from 'react';
+import { addCrewFormSchema, type AddCrewFormInput } from '@/lib/validation/schemas';
 import { useQuery, useMutation, useQueryClient } from '@tanstack/react-query';
 import { supabase } from '@/integrations/supabase/client';
 import { Card, CardContent, CardHeader, CardTitle } from '@/components/ui/card';
@@ -91,8 +92,18 @@ export default function CrewManagementPremium() {
     staleTime: 60000,
   });
 
+  const [formErrors, setFormErrors] = useState<Record<string, string>>({});
+
   const addCrewMutation = useMutation({
     mutationFn: async (data: typeof newCrew) => {
+      const validation = addCrewFormSchema.safeParse(data);
+      if (!validation.success) {
+        const errors: Record<string, string> = {};
+        validation.error.issues.forEach(issue => { errors[issue.path[0] as string] = issue.message; });
+        setFormErrors(errors);
+        throw new Error('Validação falhou');
+      }
+      setFormErrors({});
       const { error } = await supabase.from('crew_members').insert({
         full_name: data.full_name, rank: data.rank, position: data.position || data.rank,
         nationality: data.nationality, status: data.status,
@@ -104,9 +115,10 @@ export default function CrewManagementPremium() {
       queryClient.invalidateQueries({ queryKey: ['crew-premium'] });
       toast.success('Tripulante adicionado com sucesso');
       setAddDialog(false);
+      setFormErrors({});
       setNewCrew({ full_name: '', rank: 'AB', nationality: 'BR', status: 'available', employee_id: '', position: '', email: '', phone: '' });
     },
-    onError: () => toast.error('Erro ao adicionar tripulante'),
+    onError: (err) => { if (err.message !== 'Validação falhou') toast.error('Erro ao adicionar tripulante'); },
   });
 
   const metrics = useMemo(() => {
@@ -526,7 +538,11 @@ export default function CrewManagementPremium() {
         <DialogContent className="sm:max-w-md">
           <DialogHeader><DialogTitle className="flex items-center gap-2"><UserPlus className="h-5 w-5 text-primary" />Novo Tripulante</DialogTitle></DialogHeader>
           <div className="space-y-4 py-2">
-            <div><Label>Nome Completo *</Label><Input value={newCrew.full_name} onChange={e => setNewCrew(p => ({ ...p, full_name: e.target.value }))} placeholder="João da Silva" /></div>
+            <div>
+              <Label>Nome Completo *</Label>
+              <Input value={newCrew.full_name} onChange={e => { setNewCrew(p => ({ ...p, full_name: e.target.value })); setFormErrors(p => ({ ...p, full_name: '' })); }} placeholder="João da Silva" className={formErrors.full_name ? 'border-destructive' : ''} />
+              {formErrors.full_name && <p className="text-xs text-destructive mt-1">{formErrors.full_name}</p>}
+            </div>
             <div className="grid grid-cols-2 gap-4">
               <div><Label>Cargo</Label>
                 <Select value={newCrew.rank} onValueChange={v => setNewCrew(p => ({ ...p, rank: v, position: v }))}>
@@ -534,7 +550,11 @@ export default function CrewManagementPremium() {
                   <SelectContent>{RANKS.map(r => <SelectItem key={r} value={r}>{r}</SelectItem>)}</SelectContent>
                 </Select>
               </div>
-              <div><Label>Nacionalidade</Label><Input value={newCrew.nationality} onChange={e => setNewCrew(p => ({ ...p, nationality: e.target.value }))} placeholder="BR" /></div>
+              <div>
+                <Label>Nacionalidade</Label>
+                <Input value={newCrew.nationality} onChange={e => { setNewCrew(p => ({ ...p, nationality: e.target.value })); setFormErrors(p => ({ ...p, nationality: '' })); }} placeholder="BR" className={formErrors.nationality ? 'border-destructive' : ''} />
+                {formErrors.nationality && <p className="text-xs text-destructive mt-1">{formErrors.nationality}</p>}
+              </div>
             </div>
             <div className="grid grid-cols-2 gap-4">
               <div><Label>Status</Label>

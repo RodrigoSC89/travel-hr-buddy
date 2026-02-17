@@ -146,8 +146,8 @@ export async function secureLogout(): Promise<{ success: boolean; error?: string
         return { success: false, error: error.message };
       }
 
-      // Clear local storage
-      localStorage.removeItem("supabase.auth.token");
+      // Clear legacy auth storage safely
+      try { localStorage.removeItem("sb-auth"); } catch { /* ignore */ }
       sessionStorage.clear();
 
       logger.info("Secure logout completed");
