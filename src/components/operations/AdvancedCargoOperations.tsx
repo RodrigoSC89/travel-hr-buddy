@@ -3,6 +3,8 @@
  * STS operations, cargo heating, tank cleaning, and cargo claims
  */
 import { useState } from "react";
+import { motion } from "framer-motion";
+import { staggerContainer, fadeUp, kpiCard } from "@/lib/animations/motion-variants";
 import { Card, CardContent, CardHeader, CardTitle } from "@/components/ui/card";
 import { Badge } from "@/components/ui/badge";
 import { Button } from "@/components/ui/button";
@@ -25,7 +27,7 @@ export function AdvancedCargoOperations() {
   });
 
   return (
-    <div className="space-y-6">
+    <motion.div className="space-y-6" initial="hidden" animate="visible" variants={staggerContainer}>
       <div className="flex items-center justify-between">
         <div>
           <h1 className="text-2xl font-bold flex items-center gap-2">
@@ -38,22 +40,22 @@ export function AdvancedCargoOperations() {
       </div>
 
       {/* KPIs */}
-      <div className="grid grid-cols-2 md:grid-cols-4 gap-4">
+      <motion.div className="grid grid-cols-2 md:grid-cols-4 gap-4" variants={staggerContainer}>
         {[
           { icon: Package, label: "Active Cargoes", value: "12", color: "text-accent-foreground" },
           { icon: ArrowLeftRight, label: "STS Planned", value: "3", color: "text-info" },
           { icon: Thermometer, label: "Cargoes Heating", value: "5", color: "text-warning" },
           { icon: FileWarning, label: "Open Claims", value: "2", color: "text-destructive" },
         ].map((kpi, i) => (
-          <Card key={i} className="border-border/50 bg-card/80 backdrop-blur">
+          <motion.div key={i} variants={kpiCard}><Card className="border-border/50 bg-card/80 backdrop-blur">
             <CardContent className="pt-4 text-center">
               <kpi.icon className={`h-5 w-5 mx-auto mb-1 ${kpi.color}`} />
               <p className="text-xs text-muted-foreground">{kpi.label}</p>
               <p className="text-2xl font-bold">{kpi.value}</p>
             </CardContent>
-          </Card>
+          </Card></motion.div>
         ))}
-      </div>
+      </motion.div>
 
       <Tabs defaultValue="sts" className="space-y-4">
         <TabsList>
@@ -202,6 +204,6 @@ export function AdvancedCargoOperations() {
           </Card>
         </TabsContent>
       </Tabs>
-    </div>
+    </motion.div>
   );
 }

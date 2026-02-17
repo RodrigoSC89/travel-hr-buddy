@@ -2,7 +2,9 @@
  * 💰 CREW PAYROLL CALCULATOR - vs Compas/Stena
  * Multi-currency payroll, ITF scales, allotments, overtime, leave pay
  */
-import React, { useState } from "react";
+import React, { useState, useMemo, useCallback, memo } from "react";
+import { motion } from "framer-motion";
+import { staggerContainer, fadeUp, kpiCard } from "@/lib/animations/motion-variants";
 import { Card, CardContent, CardHeader, CardTitle } from "@/components/ui/card";
 import { Button } from "@/components/ui/button";
 import { Badge } from "@/components/ui/badge";
@@ -47,19 +49,34 @@ const statusColors: Record<string, string> = {
   paid: "bg-success/20 text-success",
 };
 
+const KPICard = memo(({ icon: Icon, label, value, color }: { icon: React.ElementType; label: string; value: string | number; color: string }) => (
+  <motion.div variants={kpiCard}>
+    <Card className={`border-${color}/30 bg-${color}/5`}>
+      <CardContent className="pt-4 pb-3">
+        <div className="flex items-center gap-2 text-sm text-muted-foreground mb-1"><Icon className="h-4 w-4" /> {label}</div>
+        <div className="text-2xl font-bold">{value}</div>
+      </CardContent>
+    </Card>
+  </motion.div>
+));
+KPICard.displayName = "KPICard";
+
 export function CrewPayrollCalculator() {
   const [filterVessel, setFilterVessel] = useState("all");
-  const data = filterVessel === "all" ? PAYROLL_DATA : PAYROLL_DATA.filter(p => p.vessel === filterVessel);
-  const vessels = [...new Set(PAYROLL_DATA.map(p => p.vessel))];
+  const data = useMemo(() => filterVessel === "all" ? PAYROLL_DATA : PAYROLL_DATA.filter(p => p.vessel === filterVessel), [filterVessel]);
+  const vessels = useMemo(() => [...new Set(PAYROLL_DATA.map(p => p.vessel))], []);
 
-  const totalCost = data.reduce((s, p) => s + p.total_cost, 0);
-  const totalOT = data.reduce((s, p) => s + (p.overtime_hours * p.overtime_rate), 0);
-  const avgSalary = data.length > 0 ? data.reduce((s, p) => s + p.base_salary, 0) / data.length : 0;
+  const totalCost = useMemo(() => data.reduce((s, p) => s + p.total_cost, 0), [data]);
+  const totalOT = useMemo(() => data.reduce((s, p) => s + (p.overtime_hours * p.overtime_rate), 0), [data]);
+  const avgSalary = useMemo(() => data.length > 0 ? data.reduce((s, p) => s + p.base_salary, 0) / data.length : 0, [data]);
+
+  const handleExportCSV = useCallback(() => toast.success("Payroll exported to CSV"), []);
+  const handleRunPayroll = useCallback(() => toast.success("Payroll calculation started"), []);
 
   return (
-    <div className="space-y-6">
+    <motion.div className="space-y-6" initial="hidden" animate="visible" variants={staggerContainer}>
       {/* KPIs */}
-      <div className="grid grid-cols-1 md:grid-cols-4 gap-4">
+      <motion.div className="grid grid-cols-1 md:grid-cols-4 gap-4" variants={staggerContainer}>
         <Card className="border-primary/30 bg-primary/5">
           <CardContent className="pt-4 pb-3">
             <div className="flex items-center gap-2 text-sm text-muted-foreground mb-1"><Users className="h-4 w-4" /> Crew Count</div>
@@ -84,7 +101,7 @@ export function CrewPayrollCalculator() {
             <div className="text-2xl font-bold text-info">${avgSalary.toLocaleString(undefined, { maximumFractionDigits: 0 })}</div>
           </CardContent>
         </Card>
-      </div>
+      </motion.div>
 
       {/* Filters */}
       <div className="flex gap-3">
@@ -95,12 +112,12 @@ export function CrewPayrollCalculator() {
             {vessels.map(v => <SelectItem key={v} value={v}>{v}</SelectItem>)}
           </SelectContent>
         </Select>
-        <Button size="sm" variant="outline" className="gap-2"><Calculator className="h-4 w-4" /> Run Payroll</Button>
-        <Button size="sm" variant="outline" className="gap-2"><Download className="h-4 w-4" /> Export CSV</Button>
+        <Button size="sm" variant="outline" className="gap-2" onClick={handleRunPayroll}><Calculator className="h-4 w-4" /> Run Payroll</Button>
+        <Button size="sm" variant="outline" className="gap-2" onClick={handleExportCSV}><Download className="h-4 w-4" /> Export CSV</Button>
       </div>
 
       {/* Payroll Table */}
-      <Card>
+      <motion.div variants={fadeUp}><Card>
         <CardHeader className="pb-3">
           <CardTitle className="text-lg flex items-center gap-2"><DollarSign className="h-5 w-5" /> Payroll Register — Feb 2026</CardTitle>
         </CardHeader>
@@ -149,8 +166,8 @@ export function CrewPayrollCalculator() {
             </table>
           </div>
         </CardContent>
-      </Card>
-    </div>
+      </Card></motion.div>
+    </motion.div>
   );
 }
 

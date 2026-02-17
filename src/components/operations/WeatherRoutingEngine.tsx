@@ -3,7 +3,9 @@
  * AI-powered voyage weather routing with risk assessment
  * Real-time marine weather integration for optimal waypoint calculation
  */
-import { useState, useCallback } from "react";
+import { useState, useCallback, useMemo } from "react";
+import { motion } from "framer-motion";
+import { staggerContainer, fadeUp, kpiCard } from "@/lib/animations/motion-variants";
 import { Card, CardContent, CardHeader, CardTitle } from "@/components/ui/card";
 import { Button } from "@/components/ui/button";
 import { Badge } from "@/components/ui/badge";
@@ -108,7 +110,7 @@ export function WeatherRoutingEngine() {
   const selected = mockRoutes.find(r => r.id === selectedRoute);
 
   return (
-    <div className="space-y-6">
+    <motion.div className="space-y-6" initial="hidden" animate="visible" variants={staggerContainer}>
       {/* Header */}
       <div className="flex items-center justify-between">
         <div>
@@ -384,6 +386,6 @@ export function WeatherRoutingEngine() {
           </Card>
         </TabsContent>
       </Tabs>
-    </div>
+    </motion.div>
   );
 }

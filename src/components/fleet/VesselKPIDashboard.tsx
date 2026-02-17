@@ -2,7 +2,9 @@
  * Vessel KPI Dashboard - vs Cloud Fleet Manager (CFM)
  * Per-vessel performance KPIs with fleet comparison
  */
-import { useState } from "react";
+import { useState, useMemo, useCallback } from "react";
+import { motion } from "framer-motion";
+import { staggerContainer, fadeUp, kpiCard } from "@/lib/animations/motion-variants";
 import { Card, CardContent, CardHeader, CardTitle } from "@/components/ui/card";
 import { Tabs, TabsContent, TabsList, TabsTrigger } from "@/components/ui/tabs";
 import { Badge } from "@/components/ui/badge";
@@ -106,8 +108,10 @@ export function VesselKPIDashboard() {
     tce: Math.round(VESSELS.reduce((s, v) => s + v.kpis.revenuePerDay, 0) / VESSELS.length),
   };
 
+  const handleExport = useCallback(() => toast.success("KPI report exported to PDF"), []);
+
   return (
-    <div className="space-y-6 p-4 md:p-6">
+    <motion.div className="space-y-6 p-4 md:p-6" initial="hidden" animate="visible" variants={staggerContainer}>
       <div className="flex items-center justify-between">
         <div>
           <h1 className="text-2xl font-bold text-foreground flex items-center gap-2">
@@ -124,7 +128,7 @@ export function VesselKPIDashboard() {
               {VESSELS.map(v => <SelectItem key={v.vessel} value={v.vessel}>{v.vessel}</SelectItem>)}
             </SelectContent>
           </Select>
-          <Button variant="outline" onClick={() => toast.success("KPI report exported to PDF")}>Export</Button>
+          <Button variant="outline" onClick={handleExport}>Export</Button>
         </div>
       </div>
 
@@ -270,7 +274,7 @@ export function VesselKPIDashboard() {
           </Card>
         </TabsContent>
       </Tabs>
-    </div>
+    </motion.div>
   );
 }
 

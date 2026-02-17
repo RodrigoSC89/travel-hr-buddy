@@ -3,7 +3,9 @@
  * BEATS: Veson IMOS (Chartering, Fixture Notes, Freight Invoicing)
  * Features: CP Terms, Fixture Notes, Voyage Estimates, Freight Settlement, Pool Management
  */
-import React, { useState } from 'react';
+import React, { useState, useMemo, useCallback, memo } from 'react';
+import { motion } from "framer-motion";
+import { staggerContainer, fadeUp, kpiCard } from "@/lib/animations/motion-variants";
 import { useQuery, useMutation, useQueryClient } from '@tanstack/react-query';
 import { supabase } from '@/integrations/supabase/client';
 import { Card, CardContent, CardHeader, CardTitle } from '@/components/ui/card';
@@ -144,16 +146,16 @@ export function CharterPartyManager() {
     : 0;
 
   return (
-    <div className="space-y-6">
+    <motion.div className="space-y-6" initial="hidden" animate="visible" variants={staggerContainer}>
       {/* KPIs */}
-      <div className="grid grid-cols-2 md:grid-cols-4 gap-4">
+      <motion.div className="grid grid-cols-2 md:grid-cols-4 gap-4" variants={staggerContainer}>
         {[
           { label: 'Total CPs', value: totalCharters, icon: FileText, color: 'text-primary' },
           { label: 'Ativos', value: activeCharters, icon: Ship, color: 'text-success' },
           { label: 'On Subs', value: onSubs, icon: Clock, color: 'text-warning' },
           { label: 'TCE Médio', value: `$${avgTCE.toLocaleString('en', { maximumFractionDigits: 0 })}/dia`, icon: DollarSign, color: 'text-primary' },
         ].map(kpi => (
-          <Card key={kpi.label}>
+          <motion.div key={kpi.label} variants={kpiCard}><Card>
             <CardContent className="p-4 flex items-center gap-3">
               <kpi.icon className={`h-8 w-8 ${kpi.color}`} />
               <div>
@@ -161,9 +163,9 @@ export function CharterPartyManager() {
                 <p className="text-xl font-bold">{kpi.value}</p>
               </div>
             </CardContent>
-          </Card>
+          </Card></motion.div>
         ))}
-      </div>
+      </motion.div>
 
       <Tabs value={tab} onValueChange={setTab}>
         <div className="flex items-center justify-between">
@@ -312,6 +314,6 @@ export function CharterPartyManager() {
           </Card>
         </TabsContent>
       </Tabs>
-    </div>
+    </motion.div>
   );
 }

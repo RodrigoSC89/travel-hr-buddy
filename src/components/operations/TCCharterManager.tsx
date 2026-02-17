@@ -2,7 +2,9 @@
  * Time Charter Manager - vs Veson IMOS
  * TC-In / TC-Out management with hire calculations
  */
-import { useState } from "react";
+import { useState, useMemo, useCallback } from "react";
+import { motion } from "framer-motion";
+import { staggerContainer, kpiCard } from "@/lib/animations/motion-variants";
 import { Card, CardContent, CardHeader, CardTitle } from "@/components/ui/card";
 import { Tabs, TabsContent, TabsList, TabsTrigger } from "@/components/ui/tabs";
 import { Button } from "@/components/ui/button";
@@ -84,7 +86,7 @@ export function TCCharterManager() {
     : MOCK_CHARTERS.filter(c => c.type === typeFilter);
 
   return (
-    <div className="space-y-6 p-4 md:p-6">
+    <motion.div className="space-y-6 p-4 md:p-6" initial="hidden" animate="visible" variants={staggerContainer}>
       <div className="flex items-center justify-between">
         <div>
           <h1 className="text-2xl font-bold text-foreground flex items-center gap-2">
@@ -235,7 +237,7 @@ export function TCCharterManager() {
           </div>
         </TabsContent>
       </Tabs>
-    </div>
+    </motion.div>
   );
 }
 

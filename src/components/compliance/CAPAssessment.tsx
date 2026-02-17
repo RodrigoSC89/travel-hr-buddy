@@ -2,7 +2,9 @@
  * Condition Assessment Program (CAP) - vs DNV ShipManager
  * Hull & machinery condition grading with class survey integration
  */
-import { useState } from "react";
+import { useState, useMemo, useCallback } from "react";
+import { motion } from "framer-motion";
+import { staggerContainer, fadeUp, kpiCard } from "@/lib/animations/motion-variants";
 import { Card, CardContent, CardHeader, CardTitle } from "@/components/ui/card";
 import { Tabs, TabsContent, TabsList, TabsTrigger } from "@/components/ui/tabs";
 import { Button } from "@/components/ui/button";
@@ -115,7 +117,7 @@ export function CAPAssessment() {
   const inspection = INITIAL_INSPECTIONS[0];
 
   return (
-    <div className="space-y-6 p-4 md:p-6">
+    <motion.div className="space-y-6 p-4 md:p-6" initial="hidden" animate="visible" variants={staggerContainer}>
       <div className="flex items-center justify-between">
         <div>
           <h1 className="text-2xl font-bold text-foreground flex items-center gap-2">
@@ -265,7 +267,7 @@ export function CAPAssessment() {
           </Card>
         </TabsContent>
       </Tabs>
-    </div>
+    </motion.div>
   );
 }
 
