@@ -60,6 +60,12 @@ declare module 'https://esm.sh/@supabase/supabase-js@2.7.1' {
   export default supabase;
 }
 
+declare module 'https://esm.sh/@supabase/supabase-js@2.49.1' {
+  const supabase: any;
+  export function createClient(url: string, key: string, opts?: any): any;
+  export default supabase;
+}
+
 // Fallback generic esm.sh module (catch common patterns)
 declare module 'https://esm.sh/*' {
   const anymod: any;
