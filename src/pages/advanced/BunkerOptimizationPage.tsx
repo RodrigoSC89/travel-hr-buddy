@@ -284,14 +284,14 @@ const BunkerOptimizationPage = () => {
                     <div className="flex-1 space-y-1">
                       <div className="flex items-center gap-2">
                         <div 
-                          className="h-4 bg-blue-500 rounded"
+                          className="h-4 bg-primary rounded"
                           style={{ width: `${(data.consumption / 1600) * 100}%` }}
                         />
                         <span className="text-sm">{data.consumption} t</span>
                       </div>
                       <div className="flex items-center gap-2">
                         <div 
-                          className="h-4 bg-green-500/50 rounded"
+                          className="h-4 bg-success/50 rounded"
                           style={{ width: `${(data.prediction / 1600) * 100}%` }}
                         />
                         <span className="text-sm text-muted-foreground">{data.prediction} t (ML)</span>
@@ -302,11 +302,11 @@ const BunkerOptimizationPage = () => {
               </div>
               <div className="mt-4 flex gap-4 text-sm">
                 <div className="flex items-center gap-2">
-                  <div className="w-4 h-4 bg-blue-500 rounded" />
+                  <div className="w-4 h-4 bg-primary rounded" />
                   <span>Consumo Real</span>
                 </div>
                 <div className="flex items-center gap-2">
-                  <div className="w-4 h-4 bg-green-500/50 rounded" />
+                  <div className="w-4 h-4 bg-success/50 rounded" />
                   <span>Predição ML</span>
                 </div>
               </div>

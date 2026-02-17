@@ -97,7 +97,7 @@ export function HREmployeeList({ searchQuery = '' }: HREmployeeListProps) {
 
   const getStatusBadge = (status: string | null) => {
     switch (status) {
-      case 'active': return <Badge className="bg-green-500">Ativo</Badge>;
+      case 'active': return <Badge className="bg-success text-success-foreground">Ativo</Badge>;
       case 'on_leave': return <Badge variant="secondary">Afastado</Badge>;
       case 'terminated': return <Badge variant="destructive">Desligado</Badge>;
       default: return <Badge variant="outline">{status || 'N/A'}</Badge>;
@@ -107,8 +107,8 @@ export function HREmployeeList({ searchQuery = '' }: HREmployeeListProps) {
   const getRiskBadge = (risk: number | null) => {
     if (!risk) return <Badge variant="outline" className="text-muted-foreground">--</Badge>;
     if (risk >= 70) return <Badge variant="destructive" className="gap-1"><AlertTriangle className="h-3 w-3" />{risk}%</Badge>;
-    if (risk >= 40) return <Badge variant="secondary" className="bg-amber-500/20 text-amber-500">{risk}%</Badge>;
-    return <Badge variant="outline" className="text-green-500">{risk}%</Badge>;
+    if (risk >= 40) return <Badge variant="secondary" className="bg-warning/20 text-warning">{risk}%</Badge>;
+    return <Badge variant="outline" className="text-success">{risk}%</Badge>;
   };
 
   // Loading state

@@ -143,15 +143,15 @@ export function MLCInspectionOverview({
   const getStatusBadge = (status: string) => {
     switch (status) {
       case 'open':
-        return <Badge className="bg-orange-500 text-white">Open</Badge>;
+        return <Badge className="bg-warning text-warning-foreground">Open</Badge>;
       case 'resolved':
-        return <Badge className="bg-green-500 text-white">Resolved</Badge>;
+        return <Badge className="bg-success text-success-foreground">Resolved</Badge>;
       case 'pending':
         return <Badge variant="secondary">Pending</Badge>;
       case 'completed':
-        return <Badge className="bg-green-500 text-white"><CheckCircle className="h-3 w-3 mr-1" />Completed</Badge>;
+        return <Badge className="bg-success text-success-foreground"><CheckCircle className="h-3 w-3 mr-1" />Completed</Badge>;
       case 'deficiencies':
-        return <Badge className="bg-red-500 text-white"><XCircle className="h-3 w-3 mr-1" />No Deficiencies</Badge>;
+        return <Badge variant="destructive"><XCircle className="h-3 w-3 mr-1" />No Deficiencies</Badge>;
       default:
         return <Badge variant="outline">{status}</Badge>;
     }
@@ -189,23 +189,23 @@ export function MLCInspectionOverview({
           </div>
         </Card>
         <Card className="p-3 flex items-center gap-3">
-          <Ship className="h-5 w-5 text-blue-500" />
+          <Ship className="h-5 w-5 text-info" />
           <div>
             <div className="text-lg font-bold">{stats.shipsInspected}</div>
             <p className="text-xs text-muted-foreground">Ships Inspected</p>
           </div>
         </Card>
         <Card className="p-3 flex items-center gap-3">
-          <CheckCircle className="h-5 w-5 text-green-500" />
+          <CheckCircle className="h-5 w-5 text-success" />
           <div>
-            <div className="text-lg font-bold text-green-600">{stats.deficienciesFound}</div>
+            <div className="text-lg font-bold text-success">{stats.deficienciesFound}</div>
             <p className="text-xs text-muted-foreground">Deficiencies Found</p>
           </div>
         </Card>
         <Card className="p-3 flex items-center gap-3">
-          <AlertTriangle className="h-5 w-5 text-orange-500" />
+          <AlertTriangle className="h-5 w-5 text-warning" />
           <div>
-            <div className="text-lg font-bold text-orange-600">{stats.reportsPending}</div>
+            <div className="text-lg font-bold text-warning">{stats.reportsPending}</div>
             <p className="text-xs text-muted-foreground">Reports Pending</p>
           </div>
         </Card>
@@ -223,21 +223,21 @@ export function MLCInspectionOverview({
       {/* Stats Cards Row */}
       <div className="grid grid-cols-2 md:grid-cols-4 gap-4">
         <Card className="p-4 flex items-center gap-3">
-          <Calendar className="h-5 w-5 text-blue-500" />
+          <Calendar className="h-5 w-5 text-info" />
           <div>
             <div className="text-2xl font-bold">{stats.upcomingInspections}</div>
             <p className="text-xs text-muted-foreground">Próximas Inspeções</p>
           </div>
         </Card>
         <Card className="p-4 flex items-center gap-3">
-          <ClipboardCheck className="h-5 w-5 text-green-500" />
+          <ClipboardCheck className="h-5 w-5 text-success" />
           <div>
             <div className="text-2xl font-bold">{stats.completedInspections}</div>
             <p className="text-xs text-muted-foreground">Concluídas</p>
           </div>
         </Card>
         <Card className="p-4 flex items-center gap-3">
-          <FileText className="h-5 w-5 text-orange-500" />
+          <FileText className="h-5 w-5 text-warning" />
           <div>
             <div className="text-2xl font-bold">{stats.reportsPending}</div>
             <p className="text-xs text-muted-foreground">Relatórios Pendentes</p>
@@ -340,7 +340,7 @@ export function MLCInspectionOverview({
                     <tr key={finding.id} className="border-t">
                       <td className="p-3">
                         <div className="flex items-center gap-2">
-                          <CheckCircle className={`h-4 w-4 ${finding.status === 'resolved' ? 'text-green-500' : 'text-muted-foreground'}`} />
+                          <CheckCircle className={`h-4 w-4 ${finding.status === 'resolved' ? 'text-success' : 'text-muted-foreground'}`} />
                           <div>
                             <p className="font-medium">{finding.name}</p>
                             {finding.description && (
@@ -458,14 +458,14 @@ export function MLCInspectionOverview({
                       <span>Crew Satisfaction</span>
                       <span className="font-semibold">{surveyResults.crewSatisfaction}%</span>
                     </div>
-                    <Progress value={surveyResults.crewSatisfaction} className="h-2 bg-green-100" />
+                    <Progress value={surveyResults.crewSatisfaction} className="h-2" />
                   </div>
                   <div>
                     <div className="flex justify-between text-sm mb-1">
                       <span>Working Hours Compliance</span>
                       <span className="font-semibold">{surveyResults.workingHoursCompliance}%</span>
                     </div>
-                    <Progress value={surveyResults.workingHoursCompliance} className="h-2 bg-green-100" />
+                    <Progress value={surveyResults.workingHoursCompliance} className="h-2" />
                   </div>
                 </div>
                 <p className="text-xs text-muted-foreground mt-3">
@@ -488,7 +488,7 @@ export function MLCInspectionOverview({
             <CardContent className="pt-4 space-y-3">
               <div className="flex justify-between">
                 <span className="text-sm">Inspection Status:</span>
-                <Badge className="bg-green-500 text-white">Completed</Badge>
+                <Badge className="bg-success text-success-foreground">Completed</Badge>
               </div>
               <div className="flex justify-between">
                 <span className="text-sm">Deficiencies Found:</span>
@@ -496,7 +496,7 @@ export function MLCInspectionOverview({
               </div>
               <div className="flex justify-between">
                 <span className="text-sm">Actions Taken:</span>
-                <span className="text-sm">Corrected <span className="text-green-600 font-semibold">2</span>, Pending <span className="text-orange-600 font-semibold">1</span></span>
+                <span className="text-sm">Corrected <span className="text-success font-semibold">2</span>, Pending <span className="text-warning font-semibold">1</span></span>
               </div>
               <div className="pt-2 border-t">
                 <p className="text-sm font-medium mb-1">Inspector's Remarks</p>

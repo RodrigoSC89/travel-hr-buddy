@@ -239,7 +239,7 @@ export function HRPerformanceReview() {
                   {[1, 2, 3, 4, 5].map(i => (
                     <Star
                       key={`star-${i}`}
-                      className={`h-5 w-5 ${i <= Math.round(selectedEmployee.overall_score) ? "fill-yellow-400 text-yellow-400" : "text-muted"}`}
+                      className={`h-5 w-5 ${i <= Math.round(selectedEmployee.overall_score) ? "fill-warning text-warning" : "text-muted"}`}
                     />
                   ))}
                 </div>

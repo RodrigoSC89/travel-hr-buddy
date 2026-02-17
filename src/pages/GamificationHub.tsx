@@ -65,14 +65,14 @@ export default function GamificationHub() {
   return (
     <div className="min-h-screen bg-background p-4 md:p-6 space-y-6">
       <Helmet><title>Gamificação | Nauti One</title></Helmet>
-      <motion.div initial={{ opacity: 0, y: -20 }} animate={{ opacity: 1, y: 0 }} className="relative overflow-hidden rounded-xl border bg-gradient-to-r from-purple-500/10 via-blue-500/10 to-cyan-500/10 p-6">
+      <motion.div initial={{ opacity: 0, y: -20 }} animate={{ opacity: 1, y: 0 }} className="relative overflow-hidden rounded-xl border bg-gradient-to-r from-accent/10 via-primary/10 to-info/10 p-6">
         <div className="flex flex-col md:flex-row md:items-center justify-between gap-4">
-          <div><h1 className="text-3xl font-bold flex items-center gap-3"><Trophy className="h-8 w-8 text-yellow-500" />Centro de Conquistas</h1><p className="text-muted-foreground mt-1">Seu progresso, conquistas e ranking na tripulação</p></div>
+          <div><h1 className="text-3xl font-bold flex items-center gap-3"><Trophy className="h-8 w-8 text-warning" />Centro de Conquistas</h1><p className="text-muted-foreground mt-1">Seu progresso, conquistas e ranking na tripulação</p></div>
           <div className="flex items-center gap-4">
-            <div className="text-center"><div className="text-3xl font-bold text-purple-400">{currentLevel}</div><div className="text-xs text-muted-foreground">Nível</div></div>
-            <div className="text-center"><div className="text-3xl font-bold text-yellow-500">{totalXP}</div><div className="text-xs text-muted-foreground">XP Total</div></div>
-            <div className="text-center"><div className="text-3xl font-bold text-cyan-400">{earnedCount}</div><div className="text-xs text-muted-foreground">Badges</div></div>
-            <div className="text-center"><div className="text-3xl font-bold text-orange-500 flex items-center gap-1"><Flame className="h-5 w-5" />{userProgress.consecutiveDaysActive}</div><div className="text-xs text-muted-foreground">Streak</div></div>
+            <div className="text-center"><div className="text-3xl font-bold text-accent-foreground">{currentLevel}</div><div className="text-xs text-muted-foreground">Nível</div></div>
+            <div className="text-center"><div className="text-3xl font-bold text-warning">{totalXP}</div><div className="text-xs text-muted-foreground">XP Total</div></div>
+            <div className="text-center"><div className="text-3xl font-bold text-info">{earnedCount}</div><div className="text-xs text-muted-foreground">Badges</div></div>
+            <div className="text-center"><div className="text-3xl font-bold text-warning flex items-center gap-1"><Flame className="h-5 w-5" />{userProgress.consecutiveDaysActive}</div><div className="text-xs text-muted-foreground">Streak</div></div>
           </div>
         </div>
         <div className="mt-4"><div className="flex justify-between text-xs mb-1"><span className="text-muted-foreground">Nível {currentLevel}</span><span className="text-muted-foreground">{xpToNext} XP para nível {currentLevel + 1}</span></div><Progress value={((totalXP % 500) / 500) * 100} className="h-3" /></div>

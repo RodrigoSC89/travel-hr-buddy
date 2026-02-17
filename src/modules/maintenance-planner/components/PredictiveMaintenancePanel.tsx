@@ -46,7 +46,7 @@ import { toast } from "sonner";
 function getSeverityConfig(severity: string) {
   const configs = {
     critical: { color: "text-destructive", bg: "bg-destructive/10", border: "border-destructive/30", label: "Crítico" },
-    high: { color: "text-orange-500", bg: "bg-orange-500/10", border: "border-orange-500/30", label: "Alto" },
+    high: { color: "text-warning", bg: "bg-warning/10", border: "border-warning/30", label: "Alto" },
     medium: { color: "text-warning", bg: "bg-warning/10", border: "border-warning/30", label: "Médio" },
     low: { color: "text-success", bg: "bg-success/10", border: "border-success/30", label: "Baixo" },
   };
@@ -148,14 +148,14 @@ export default function PredictiveMaintenancePanel() {
           </CardContent>
         </Card>
 
-        <Card className="border-l-4 border-l-purple-500">
+        <Card className="border-l-4 border-l-accent">
           <CardContent className="p-4">
             <div className="flex items-center justify-between">
               <div>
                 <p className="text-xs text-muted-foreground">Confiança IA</p>
-                <p className="text-2xl font-bold text-purple-600">{stats.avgConfidence}%</p>
+                <p className="text-2xl font-bold text-accent-foreground">{stats.avgConfidence}%</p>
               </div>
-              <Target className="h-8 w-8 text-purple-500 opacity-60" />
+              <Target className="h-8 w-8 text-accent-foreground opacity-60" />
             </div>
           </CardContent>
         </Card>
@@ -288,7 +288,7 @@ export default function PredictiveMaintenancePanel() {
         <Card>
           <CardHeader className="pb-3">
             <CardTitle className="flex items-center gap-2">
-              <Sparkles className="h-5 w-5 text-purple-500" />
+              <Sparkles className="h-5 w-5 text-accent-foreground" />
               Performance do Modelo
             </CardTitle>
           </CardHeader>

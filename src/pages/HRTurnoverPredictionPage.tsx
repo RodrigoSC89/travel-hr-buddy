@@ -48,11 +48,11 @@ export default function HRTurnoverPredictionPage() {
       {/* KPIs */}
       <div className="grid grid-cols-2 md:grid-cols-5 gap-4">
         {[
-          { label: 'Total Colaboradores', value: '347', icon: Users, color: 'text-blue-500' },
-          { label: 'Risco Crítico', value: '3', icon: AlertTriangle, color: 'text-red-500' },
-          { label: 'Risco Alto', value: '8', icon: AlertTriangle, color: 'text-orange-500' },
-          { label: 'Custo Potencial', value: 'R$ 420K', icon: DollarSign, color: 'text-amber-500' },
-          { label: 'Taxa Atual', value: '4.2%', icon: Target, color: 'text-green-500' },
+          { label: 'Total Colaboradores', value: '347', icon: Users, color: 'text-info' },
+          { label: 'Risco Crítico', value: '3', icon: AlertTriangle, color: 'text-destructive' },
+          { label: 'Risco Alto', value: '8', icon: AlertTriangle, color: 'text-warning' },
+          { label: 'Custo Potencial', value: 'R$ 420K', icon: DollarSign, color: 'text-warning' },
+          { label: 'Taxa Atual', value: '4.2%', icon: Target, color: 'text-success' },
         ].map((stat) => (
           <Card key={stat.label}>
             <CardContent className="p-4 flex items-center gap-3">
@@ -74,17 +74,17 @@ export default function HRTurnoverPredictionPage() {
           <Card 
             key={`insight-${insight.title}`} 
             className={`border ${
-              insight.type === 'warning' ? 'border-amber-500/30 bg-amber-500/5' :
-              insight.type === 'success' ? 'border-green-500/30 bg-green-500/5' :
-              'border-blue-500/30 bg-blue-500/5'
+              insight.type === 'warning' ? 'border-warning/30 bg-warning/5' :
+              insight.type === 'success' ? 'border-success/30 bg-success/5' :
+              'border-info/30 bg-info/5'
             }`}
           >
             <CardContent className="p-4">
               <div className="flex items-start gap-3">
                 <Brain className={`h-5 w-5 mt-0.5 ${
-                  insight.type === 'warning' ? 'text-amber-500' :
-                  insight.type === 'success' ? 'text-green-500' :
-                  'text-blue-500'
+                  insight.type === 'warning' ? 'text-warning' :
+                  insight.type === 'success' ? 'text-success' :
+                  'text-info'
                 }`} />
                 <div>
                   <p className="font-medium text-sm">{insight.title}</p>
