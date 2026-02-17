@@ -10,8 +10,10 @@ import { Button } from "@/components/ui/button";
 import { Badge } from "@/components/ui/badge";
 import { Progress } from "@/components/ui/progress";
 import { ScrollArea } from "@/components/ui/scroll-area";
-import { Activity, Heart, Thermometer, Wind, AlertTriangle, Shield, MapPin, Watch, Users, Zap, Brain, Moon } from "lucide-react";
-import { LineChart, Line, XAxis, YAxis, CartesianGrid, Tooltip, ResponsiveContainer, AreaChart, Area } from "recharts";
+import { Activity, Heart, Thermometer, Wind, AlertTriangle, MapPin, Watch, Users, Brain, Moon } from "lucide-react";
+import { XAxis, YAxis, CartesianGrid, Tooltip, ResponsiveContainer, AreaChart, Area } from "recharts";
+import { motion } from "framer-motion";
+import { staggerContainer, fadeUp } from "@/lib/animations/motion-variants";
 
 interface CrewVitals {
   id: string;
@@ -112,25 +114,26 @@ export default function IoTWearablesDashboardPage() {
   const avgFatigue = Math.round(crew.reduce((a, b) => a + b.fatigueScore, 0) / (crew.length || 1));
   const onDuty = crew.filter(c => c.isOnDuty).length;
 
-  const alertColors = { normal: "text-success", warning: "text-warning", critical: "text-destructive" };
   const alertBg = { normal: "bg-success/10", warning: "bg-warning/10", critical: "bg-destructive/10" };
 
   return (
-    <div className="container mx-auto p-6 space-y-6 max-w-7xl">
-      <Card className="border-primary/20 bg-gradient-to-r from-primary/5 to-transparent">
-        <CardHeader>
-          <CardTitle className="flex items-center gap-2 text-xl">
-            <Watch className="h-6 w-6 text-primary" />
-            IoT Wearables — Monitoramento de Tripulação em Tempo Real
-          </CardTitle>
-          <CardDescription>
-            Sensores vestíveis monitoram frequência cardíaca, fadiga, sono e localização da tripulação. Alertas automáticos para condições de risco e violações MLC de descanso.
-          </CardDescription>
-        </CardHeader>
-      </Card>
+    <motion.div initial="hidden" animate="visible" variants={staggerContainer} className="container mx-auto p-6 space-y-6 max-w-7xl">
+      <motion.div variants={fadeUp}>
+        <Card className="border-primary/20 bg-gradient-to-r from-primary/5 to-transparent">
+          <CardHeader>
+            <CardTitle className="flex items-center gap-2 text-xl">
+              <Watch className="h-6 w-6 text-primary" />
+              IoT Wearables — Monitoramento de Tripulação em Tempo Real
+            </CardTitle>
+            <CardDescription>
+              Sensores vestíveis monitoram frequência cardíaca, fadiga, sono e localização da tripulação. Alertas automáticos para condições de risco e violações MLC de descanso.
+            </CardDescription>
+          </CardHeader>
+        </Card>
+      </motion.div>
 
       {/* KPIs */}
-      <div className="grid grid-cols-2 md:grid-cols-5 gap-4">
+      <motion.div variants={staggerContainer} className="grid grid-cols-2 md:grid-cols-5 gap-4">
         {[
           { label: "Tripulantes", value: crew.length, icon: Users, color: "text-primary" },
           { label: "Em Serviço", value: onDuty, icon: Activity, color: "text-success" },
@@ -138,81 +141,87 @@ export default function IoTWearablesDashboardPage() {
           { label: "Fadiga Média", value: `${avgFatigue}%`, icon: Brain, color: avgFatigue > 60 ? "text-warning" : "text-success" },
           { label: "Alertas", value: alerts.length, icon: AlertTriangle, color: alerts.length > 0 ? "text-destructive" : "text-success" },
         ].map(kpi => (
-          <Card key={kpi.label}>
-            <CardContent className="p-4">
-              <div className="flex items-center justify-between">
-                <div>
-                  <p className="text-xs text-muted-foreground">{kpi.label}</p>
-                  <p className={`text-xl font-bold ${kpi.color}`}>{kpi.value}</p>
+          <motion.div key={kpi.label} variants={fadeUp}>
+            <Card>
+              <CardContent className="p-4">
+                <div className="flex items-center justify-between">
+                  <div>
+                    <p className="text-xs text-muted-foreground">{kpi.label}</p>
+                    <p className={`text-xl font-bold ${kpi.color}`}>{kpi.value}</p>
+                  </div>
+                  <kpi.icon className={`h-5 w-5 ${kpi.color} opacity-60`} />
                 </div>
-                <kpi.icon className={`h-5 w-5 ${kpi.color} opacity-60`} />
-              </div>
-            </CardContent>
-          </Card>
+              </CardContent>
+            </Card>
+          </motion.div>
         ))}
-      </div>
+      </motion.div>
 
       {/* Alerts */}
       {alerts.length > 0 && (
-        <Card className="border-destructive/30">
-          <CardHeader className="pb-2">
-            <CardTitle className="text-base text-destructive flex items-center gap-2">
-              <AlertTriangle className="h-4 w-4" />
-              Alertas Ativos ({alerts.length})
-            </CardTitle>
-          </CardHeader>
-          <CardContent>
-            <div className="grid grid-cols-1 md:grid-cols-2 gap-2">
-              {alerts.map(a => (
-                <div key={a.id} className={`p-3 border rounded-lg ${alertBg[a.alertLevel]}`}>
-                  <div className="flex justify-between">
-                    <p className="font-medium text-sm">{a.name}</p>
-                    <Badge variant="destructive" className="text-xs">{a.alertLevel === "critical" ? "CRÍTICO" : "ATENÇÃO"}</Badge>
+        <motion.div variants={fadeUp}>
+          <Card className="border-destructive/30">
+            <CardHeader className="pb-2">
+              <CardTitle className="text-base text-destructive flex items-center gap-2">
+                <AlertTriangle className="h-4 w-4" />
+                Alertas Ativos ({alerts.length})
+              </CardTitle>
+            </CardHeader>
+            <CardContent>
+              <div className="grid grid-cols-1 md:grid-cols-2 gap-2">
+                {alerts.map(a => (
+                  <div key={a.id} className={`p-3 border rounded-lg ${alertBg[a.alertLevel]}`}>
+                    <div className="flex justify-between">
+                      <p className="font-medium text-sm">{a.name}</p>
+                      <Badge variant="destructive" className="text-xs">{a.alertLevel === "critical" ? "CRÍTICO" : "ATENÇÃO"}</Badge>
+                    </div>
+                    <p className="text-xs text-muted-foreground mt-1">
+                      FC: {a.heartRate}bpm • Fadiga: {a.fatigueScore}% • Sono: {a.sleepHours}h
+                    </p>
                   </div>
-                  <p className="text-xs text-muted-foreground mt-1">
-                    FC: {a.heartRate}bpm • Fadiga: {a.fatigueScore}% • Sono: {a.sleepHours}h
-                  </p>
-                </div>
-              ))}
-            </div>
-          </CardContent>
-        </Card>
+                ))}
+              </div>
+            </CardContent>
+          </Card>
+        </motion.div>
       )}
 
       <div className="grid grid-cols-1 lg:grid-cols-3 gap-6">
         {/* Crew List */}
-        <Card>
-          <CardHeader><CardTitle className="text-base">Tripulação ({crew.length})</CardTitle></CardHeader>
-          <CardContent>
-            <ScrollArea className="h-[500px]">
-              <div className="space-y-2">
-                {crew.map(c => (
-                  <div
-                    key={c.id}
-                    className={`p-3 border rounded-lg cursor-pointer transition-colors hover:bg-muted/50 ${selected?.id === c.id ? "border-primary bg-primary/5" : ""}`}
-                    onClick={() => setSelected(c)}
-                  >
-                    <div className="flex items-center justify-between">
-                      <div>
-                        <p className="font-medium text-sm">{c.name}</p>
-                        <p className="text-xs text-muted-foreground">{c.rank}</p>
+        <motion.div variants={fadeUp}>
+          <Card>
+            <CardHeader><CardTitle className="text-base">Tripulação ({crew.length})</CardTitle></CardHeader>
+            <CardContent>
+              <ScrollArea className="h-[500px]">
+                <div className="space-y-2">
+                  {crew.map(c => (
+                    <div
+                      key={c.id}
+                      className={`p-3 border rounded-lg cursor-pointer transition-colors hover:bg-muted/50 ${selected?.id === c.id ? "border-primary bg-primary/5" : ""}`}
+                      onClick={() => setSelected(c)}
+                    >
+                      <div className="flex items-center justify-between">
+                        <div>
+                          <p className="font-medium text-sm">{c.name}</p>
+                          <p className="text-xs text-muted-foreground">{c.rank}</p>
+                        </div>
+                        <div className={`h-3 w-3 rounded-full ${c.alertLevel === "critical" ? "bg-destructive animate-pulse" : c.alertLevel === "warning" ? "bg-warning" : "bg-success"}`} />
                       </div>
-                      <div className={`h-3 w-3 rounded-full ${c.alertLevel === "critical" ? "bg-destructive animate-pulse" : c.alertLevel === "warning" ? "bg-warning" : "bg-success"}`} />
+                      <div className="flex gap-3 mt-1 text-xs text-muted-foreground">
+                        <span className="flex items-center gap-1"><Heart className="h-3 w-3 text-red-400" />{c.heartRate}</span>
+                        <span className="flex items-center gap-1"><Brain className="h-3 w-3" />{c.fatigueScore}%</span>
+                        <span className="flex items-center gap-1"><MapPin className="h-3 w-3" />{c.location}</span>
+                      </div>
                     </div>
-                    <div className="flex gap-3 mt-1 text-xs text-muted-foreground">
-                      <span className="flex items-center gap-1"><Heart className="h-3 w-3 text-red-400" />{c.heartRate}</span>
-                      <span className="flex items-center gap-1"><Brain className="h-3 w-3" />{c.fatigueScore}%</span>
-                      <span className="flex items-center gap-1"><MapPin className="h-3 w-3" />{c.location}</span>
-                    </div>
-                  </div>
-                ))}
-              </div>
-            </ScrollArea>
-          </CardContent>
-        </Card>
+                  ))}
+                </div>
+              </ScrollArea>
+            </CardContent>
+          </Card>
+        </motion.div>
 
         {/* Detail Panel */}
-        <div className="lg:col-span-2 space-y-4">
+        <motion.div variants={fadeUp} className="lg:col-span-2 space-y-4">
           {selected && (
             <>
               <Card>
@@ -283,8 +292,8 @@ export default function IoTWearablesDashboardPage() {
               </Card>
             </>
           )}
-        </div>
+        </motion.div>
       </div>
-    </div>
+    </motion.div>
   );
 }

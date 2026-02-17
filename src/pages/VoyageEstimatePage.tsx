@@ -1,10 +1,11 @@
-import React from "react";
+import { motion } from "framer-motion";
+import { staggerContainer, fadeUp } from "@/lib/animations/motion-variants";
 import { VoyageEstimateCalculator } from "@/components/operations/VoyageEstimateCalculator";
 
-const VoyageEstimatePage = () => (
-  <div className="min-h-screen bg-background p-6">
-    <VoyageEstimateCalculator />
-  </div>
-);
-
-export default VoyageEstimatePage;
+export default function VoyageEstimatePage() {
+  return (
+    <motion.div initial="hidden" animate="visible" variants={staggerContainer} className="min-h-screen bg-background p-6">
+      <motion.div variants={fadeUp}><VoyageEstimateCalculator /></motion.div>
+    </motion.div>
+  );
+}
