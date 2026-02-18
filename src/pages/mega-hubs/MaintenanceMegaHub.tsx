@@ -48,6 +48,8 @@ const BacklogAgingAnalysis = lazy(() => import('@/components/dashboard/BacklogAg
 const SparePartsCriticality = lazy(() => import('@/components/dashboard/SparePartsCriticality').then(m => ({ default: m.SparePartsCriticality })));
 const ReliabilityMetricsPanel = lazy(() => import('@/components/dashboard/ReliabilityMetricsPanel').then(m => ({ default: m.ReliabilityMetricsPanel })));
 const WorkOrderPipeline = lazy(() => import('@/components/dashboard/WorkOrderPipeline').then(m => ({ default: m.WorkOrderPipeline })));
+const PredictiveFailureHeatmap = lazy(() => import('@/components/dashboard/PredictiveFailureHeatmap'));
+const SupplyChainIntelligence = lazy(() => import('@/components/dashboard/SupplyChainIntelligence'));
 const LoadingSkeleton = () => (
   <div className="space-y-4 p-6">
     <Skeleton className="h-8 w-64" />
@@ -298,6 +300,12 @@ export default function MaintenanceMegaHub() {
               <div className="grid grid-cols-1 lg:grid-cols-2 gap-4">
                 <ReliabilityMetricsPanel />
                 <WorkOrderPipeline />
+              </div>
+
+              {/* Wave 24: Predictive Failure & Supply Chain Intelligence */}
+              <div className="grid grid-cols-1 lg:grid-cols-2 gap-4">
+                <PredictiveFailureHeatmap />
+                <SupplyChainIntelligence />
               </div>
 
               {!maintLoading && maintMetrics.total === 0 && (
