@@ -35,6 +35,8 @@ const OperationsAIHub = lazy(() => import('@/components/operations/ai/Operations
 const ManningAgentPortal = lazy(() => import('@/components/crew/ManningAgentPortal').then(m => ({ default: m.ManningAgentPortal })));
 const VoyagePerformanceAnalytics = lazy(() => import('@/components/dashboard/VoyagePerformanceAnalytics'));
 const FleetUtilizationMatrix = lazy(() => import('@/components/dashboard/FleetUtilizationMatrix'));
+const CrewWellbeingDashboard = lazy(() => import('@/components/dashboard/CrewWellbeingDashboard'));
+const CompetencyGapAnalyzer = lazy(() => import('@/components/dashboard/CompetencyGapAnalyzer'));
 const LoadingSkeleton = () => (
   <div className="space-y-4 p-6">
     <Skeleton className="h-8 w-64" />
@@ -251,8 +253,17 @@ export default function OpsMegaHub() {
                 <Suspense fallback={<Skeleton className="h-[500px]" />}>
                   <FleetUtilizationMatrix />
                 </Suspense>
-              </div>
+                </div>
 
+              {/* Wave 17: Crew Intelligence Center */}
+              <div className="grid grid-cols-1 lg:grid-cols-2 gap-6">
+                <Suspense fallback={<Skeleton className="h-[500px]" />}>
+                  <CrewWellbeingDashboard />
+                </Suspense>
+                <Suspense fallback={<Skeleton className="h-[500px]" />}>
+                  <CompetencyGapAnalyzer />
+                </Suspense>
+              </div>
               {/* Original Operations Hub */}
               {(isLoading || metrics.totalVessels > 0) && <OperationsCommandHub />}
             </TabsContent>
