@@ -53,6 +53,7 @@ const VoyageWeatherRiskPanel = lazy(() => import('@/components/dashboard/VoyageW
 const BunkerConsumptionAnalytics = lazy(() => import('@/components/dashboard/BunkerConsumptionAnalytics').then(m => ({ default: m.BunkerConsumptionAnalytics })));
 const CrewRotationTimeline = lazy(() => import('@/components/dashboard/CrewRotationTimeline').then(m => ({ default: m.CrewRotationTimeline })));
 const PortCostIntelligence = lazy(() => import('@/components/dashboard/PortCostIntelligence').then(m => ({ default: m.PortCostIntelligence })));
+const FleetFuelEfficiencyTracker = lazy(() => import('@/components/dashboard/FleetFuelEfficiencyTracker').then(m => ({ default: m.FleetFuelEfficiencyTracker })));
 const LoadingSkeleton = () => (
   <div className="space-y-4 p-6">
     <Skeleton className="h-8 w-64" />
@@ -362,6 +363,11 @@ export default function OpsMegaHub() {
                   <PortCostIntelligence />
                 </Suspense>
               </div>
+
+              {/* Wave 51: Fleet Fuel Efficiency */}
+              <Suspense fallback={<Skeleton className="h-80" />}>
+                <FleetFuelEfficiencyTracker />
+              </Suspense>
 
               {/* Original Operations Hub */}
               {(isLoading || metrics.totalVessels > 0) && <OperationsCommandHub />}
