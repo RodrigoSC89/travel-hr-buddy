@@ -44,6 +44,8 @@ const OperationalRadar = lazy(() => import('@/components/dashboard/OperationalRa
 const SituationRoom = lazy(() => import('@/components/dashboard/SituationRoom'));
 const FleetDigitalTwinMap = lazy(() => import('@/components/dashboard/FleetDigitalTwinMap'));
 const AIDecisionEngine = lazy(() => import('@/components/dashboard/AIDecisionEngine'));
+const PredictiveCommandCenter = lazy(() => import('@/components/dashboard/PredictiveCommandCenter'));
+const AutonomousFleetOptimizer = lazy(() => import('@/components/dashboard/AutonomousFleetOptimizer'));
 
 const LoadingSkeleton = () => (
   <div className="space-y-4 p-6">
@@ -312,6 +314,16 @@ export default function CommandMegaHub() {
                 </Suspense>
                 <Suspense fallback={<Skeleton className="h-[500px]" />}>
                   <AIDecisionEngine />
+                </Suspense>
+              </div>
+
+              {/* Wave 10: Autonomous Fleet Intelligence */}
+              <div className="grid grid-cols-1 lg:grid-cols-2 gap-6">
+                <Suspense fallback={<Skeleton className="h-[500px]" />}>
+                  <PredictiveCommandCenter />
+                </Suspense>
+                <Suspense fallback={<Skeleton className="h-[500px]" />}>
+                  <AutonomousFleetOptimizer />
                 </Suspense>
               </div>
 
