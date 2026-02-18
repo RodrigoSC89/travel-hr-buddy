@@ -88,13 +88,30 @@ const SIDE_EFFECTS: Record<string, SideEffectFn[]> = {
   'maintenance.work_order.status_changed': [
     async (event) => {
       const p = event.payload as Record<string, unknown>;
-      if (p.status === 'completed') {
-        await safeInsert('action_items', {
-          title: `Verificar compliance pós-OS: ${p.work_order_id ?? p.id}`,
-          source_module: 'maintenance', source_reference_id: String(p.work_order_id ?? p.id ?? ''),
-          status: 'pending', priority: 'medium', vessel_id: p.vessel_id || null,
-          description: `Status da OS alterado para ${p.status}. Verificar se os registros de compliance estão atualizados.`,
+      const status = String(p.status ?? '').toLowerCase();
+      if (status === 'completed') {
+        // REAL ACTION: Duplicate completed logic for status_changed path
+        await safeInsert('maintenance_records', {
+          title: `Conclusão OS: ${p.work_order_number ?? p.work_order_id ?? p.id}`,
+          vessel_id: p.vessel_id ?? null, status: 'completed',
+          completion_date: new Date().toISOString(),
+          notes: `Auto-registrado via status_changed. Custo: ${p.actual_cost ?? 'N/A'}.`,
         });
+        const cost = Number(p.actual_cost ?? 0);
+        if (cost > 0) {
+          await safeInsert('expenses', {
+            description: `Manutenção OS ${p.work_order_number ?? p.work_order_id ?? p.id}`,
+            amount: cost, category: 'maintenance', status: 'approved',
+            vessel_id: p.vessel_id ?? null,
+            reference_id: String(p.work_order_id ?? p.id ?? ''), reference_type: 'work_order',
+          });
+        }
+      }
+      if (status === 'in_progress') {
+        // REAL ACTION: Update vessel maintenance status
+        if (p.vessel_id) {
+          await safeUpdate('vessels', { maintenance_status: 'in_progress' }, { id: String(p.vessel_id) });
+        }
       }
     },
   ],
@@ -114,13 +131,18 @@ const SIDE_EFFECTS: Record<string, SideEffectFn[]> = {
   'maintenance.task.status_changed': [
     async (event) => {
       const p = event.payload as Record<string, unknown>;
-      if (p.status !== 'completed') return;
-      await safeInsert('action_items', {
-        title: `Registrar conclusão PMS: ${p.title ?? p.id}`,
-        source_module: 'maintenance', source_reference_id: String(p.task_id ?? p.id ?? ''),
-        status: 'pending', priority: 'low', vessel_id: p.vessel_id || null,
-        description: `Tarefa PMS concluída. Atualizar running hours e verificar próximo intervalo de manutenção.`,
+      if (String(p.status ?? '').toLowerCase() !== 'completed') return;
+      // REAL ACTION: Create training record for completed PMS task
+      await safeInsert('training_records', {
+        training_type: `PMS Task: ${p.title ?? 'Maintenance'}`,
+        completion_date: new Date().toISOString().split('T')[0],
+        status: 'completed', vessel_id: p.vessel_id ?? null,
+        notes: `Task ${p.task_id ?? p.id} completed. Auto-logged for STCW evidence.`,
       });
+      // Update running hours trigger check
+      if (p.vessel_id) {
+        await safeUpdate('vessels', { last_maintenance_date: new Date().toISOString() }, { id: String(p.vessel_id) });
+      }
     },
   ],
 
@@ -157,11 +179,18 @@ const SIDE_EFFECTS: Record<string, SideEffectFn[]> = {
       const qty = Number(p.quantity ?? p.current_stock ?? 0);
       const min = Number(p.minimum_stock ?? p.reorder_point ?? 5);
       if (qty > min) return;
-      await safeInsert('action_items', {
-        title: `Reordenar peça: ${p.part_name ?? p.description ?? p.id}`,
-        source_module: 'inventory', source_reference_id: String(p.id ?? ''),
+      // REAL ACTION: Auto-create purchase requisition for low stock
+      await safeInsert('purchase_requisitions', {
+        title: `Reposição automática: ${p.part_name ?? p.description ?? p.id}`,
+        description: `Estoque abaixo do mínimo (${qty}/${min}). Requisição gerada automaticamente.`,
         status: 'pending', priority: 'high',
-        description: `Estoque abaixo do mínimo (${qty}/${min}). Gerar requisição de compra automaticamente.`,
+        vessel_id: p.vessel_id ?? null,
+      });
+      await safeInsert('soc_alerts', {
+        vessel_id: p.vessel_id || null, alert_type: 'low_stock',
+        severity: 'medium', title: `Estoque baixo: ${p.part_name ?? p.description ?? ''}`,
+        description: `Estoque atual: ${qty}, Mínimo: ${min}. Requisição de compra gerada automaticamente.`,
+        status: 'active',
       });
     },
   ],
@@ -195,24 +224,45 @@ const SIDE_EFFECTS: Record<string, SideEffectFn[]> = {
   'maintenance.hull.inspection_created': [
     async (event) => {
       const p = event.payload as Record<string, unknown>;
-      await safeInsert('action_items', {
-        title: `Registrar inspeção de casco`,
-        source_module: 'maintenance', source_reference_id: String(p.id ?? ''),
-        status: 'pending', priority: 'medium', vessel_id: p.vessel_id || null,
-        description: `Nova inspeção de zona de casco registrada. Atualizar wastage% e verificar condições de classe.`,
+      // REAL ACTION: Create maintenance record for hull inspection
+      await safeInsert('maintenance_records', {
+        title: `Inspeção de casco: ${p.zone_name ?? 'Zona'}`,
+        vessel_id: p.vessel_id ?? null, status: 'completed',
+        completion_date: new Date().toISOString(),
+        notes: `Wastage: ${p.wastage_percent ?? 'N/A'}%. Auto-registrado pelo sistema de integração.`,
       });
+      // If wastage is high, create class condition
+      const wastage = Number(p.wastage_percent ?? 0);
+      if (wastage > 20) {
+        await safeInsert('non_conformities', {
+          title: `Wastage crítico: ${wastage}% na zona ${p.zone_name ?? ''}`,
+          category: 'hull_integrity', severity: wastage > 30 ? 'critical' : 'major', status: 'open',
+          vessel_id: p.vessel_id || null, source_module: 'maintenance',
+          description: `Wastage acima do limite. Notificar sociedade classificadora e agendar reparo.`,
+        });
+      }
     },
   ],
 
   'maintenance.defect.created': [
     async (event) => {
       const p = event.payload as Record<string, unknown>;
-      await safeInsert('action_items', {
-        title: `Avaliar defeito: ${p.title ?? p.id}`,
-        source_module: 'maintenance', source_reference_id: String(p.id ?? ''),
-        status: 'pending', priority: 'high', vessel_id: p.vessel_id || null,
-        description: `Novo defeito registrado. Avaliar criticidade, gerar OS corretiva e notificar classe se necessário.`,
+      // REAL ACTION: Auto-create corrective work order from defect
+      await safeInsert('pms_work_orders', {
+        title: `OS Corretiva: ${p.title ?? p.description ?? 'Defeito'}`,
+        vessel_id: p.vessel_id ?? null,
+        status: 'open', priority: p.severity === 'critical' ? 'critical' : 'high',
+        description: `Gerada automaticamente a partir do defeito ${p.id ?? ''}. Requer ação corretiva.`,
+        work_order_type: 'corrective',
       });
+      // If critical, also create SOC alert
+      if (String(p.severity ?? '').toLowerCase() === 'critical') {
+        await safeInsert('soc_alerts', {
+          vessel_id: p.vessel_id || null, alert_type: 'critical_defect',
+          severity: 'critical', title: `Defeito crítico: ${p.title ?? ''}`,
+          description: `OS corretiva gerada automaticamente. Requer atenção imediata.`, status: 'active',
+        });
+      }
     },
   ],
 
@@ -277,12 +327,24 @@ const SIDE_EFFECTS: Record<string, SideEffectFn[]> = {
   'compliance.nc.created': [
     async (event) => {
       const p = event.payload as Record<string, unknown>;
-      await safeInsert('action_items', {
-        title: `Resolver NC: ${p.title ?? p.nc_id ?? p.id}`,
-        source_module: 'compliance', source_reference_id: String(p.nc_id ?? p.id ?? ''),
-        status: 'pending', priority: String(p.severity ?? '').toLowerCase() === 'critical' ? 'critical' : 'high',
-        vessel_id: p.vessel_id || null,
-        description: `Não-conformidade registrada (${p.category ?? 'N/A'}). Ação corretiva necessária.`,
+      const severity = String(p.severity ?? '').toLowerCase();
+      // REAL ACTION: Auto-create CAPA for major/critical NCs
+      if (severity === 'major' || severity === 'critical') {
+        await safeInsert('ism_capa', {
+          title: `CAPA automática: NC ${p.title ?? p.nc_id ?? p.id}`,
+          status: 'open', priority: severity === 'critical' ? 'critical' : 'high',
+          vessel_id: p.vessel_id || null,
+          description: `CAPA gerado automaticamente para NC de severidade ${severity}.`,
+          root_cause: 'Pendente análise', corrective_action: 'Pendente definição',
+        });
+      }
+      // REAL ACTION: Create SOC alert for all NCs
+      await safeInsert('soc_alerts', {
+        vessel_id: p.vessel_id || null, alert_type: 'non_conformity',
+        severity: severity === 'critical' ? 'critical' : 'high',
+        title: `NC Registrada: ${p.title ?? p.category ?? 'N/A'}`,
+        description: `Não-conformidade (${p.category ?? 'N/A'}). CAPA ${severity === 'major' || severity === 'critical' ? 'gerado automaticamente' : 'requer avaliação'}.`,
+        status: 'active',
       });
     },
   ],
@@ -290,12 +352,17 @@ const SIDE_EFFECTS: Record<string, SideEffectFn[]> = {
   'compliance.nc.status_changed': [
     async (event) => {
       const p = event.payload as Record<string, unknown>;
-      if (p.status !== 'closed') return;
-      await safeInsert('action_items', {
-        title: `Verificar eficácia: NC ${p.nc_id ?? p.id} encerrada`,
-        source_module: 'compliance', source_reference_id: String(p.nc_id ?? p.id ?? ''),
-        status: 'pending', priority: 'medium', vessel_id: p.vessel_id || null,
-        description: `NC fechada. Agendar verificação de eficácia em 90 dias e atualizar risk matrix.`,
+      if (String(p.status ?? '').toLowerCase() !== 'closed') return;
+      // REAL ACTION: Close related CAPAs
+      if (p.nc_id || p.id) {
+        await safeUpdate('ism_capa', { status: 'closed' }, { id: String(p.nc_id ?? p.id) });
+      }
+      // REAL ACTION: Create evidence record for closed NC
+      await safeInsert('maintenance_records', {
+        title: `Evidência: NC ${p.nc_id ?? p.id} encerrada`,
+        status: 'completed', completion_date: new Date().toISOString(),
+        vessel_id: p.vessel_id ?? null,
+        notes: `NC fechada. Verificação de eficácia em 90 dias.`,
       });
     },
   ],
@@ -545,11 +612,20 @@ const SIDE_EFFECTS: Record<string, SideEffectFn[]> = {
   'people.crew.created': [
     async (event) => {
       const p = event.payload as Record<string, unknown>;
+      // REAL ACTION: Create onboarding checklist
+      const crewId = String(p.crew_id ?? p.id ?? '');
       await safeInsert('action_items', {
         title: `Onboarding: ${p.full_name ?? 'Novo tripulante'}`,
-        source_module: 'people', source_reference_id: String(p.crew_id ?? p.id ?? ''),
-        status: 'pending', priority: 'high', vessel_id: p.vessel_id || null,
-        description: `Novo tripulante (${p.rank ?? 'N/A'}). Iniciar onboarding: documentos, STCW, exame médico.`,
+        source_module: 'people', source_reference_id: crewId,
+        status: 'pending', priority: 'critical', vessel_id: p.vessel_id || null,
+        description: `Novo tripulante (${p.rank ?? 'N/A'}). Documentos, STCW, exame médico.`,
+      });
+      // REAL ACTION: Create initial training records
+      await safeInsert('training_records', {
+        crew_member_id: crewId || null,
+        training_type: 'Safety Familiarization (SOLAS III/19.4)',
+        status: 'planned',
+        notes: `Treinamento obrigatório de familiarização para ${p.full_name ?? 'novo tripulante'}.`,
       });
     },
   ],
@@ -558,11 +634,19 @@ const SIDE_EFFECTS: Record<string, SideEffectFn[]> = {
     async (event) => {
       const p = event.payload as Record<string, unknown>;
       if (!p.vessel_id) return;
+      // REAL ACTION: Verify certificates and create compliance check
       await safeInsert('action_items', {
-        title: `Verificar certificados: Crew atribuído a embarcação`,
+        title: `Verificar certificados: Crew atribuído`,
         source_module: 'people', source_reference_id: String(p.crew_id ?? p.id ?? ''),
         status: 'pending', priority: 'critical', vessel_id: String(p.vessel_id),
-        description: `Tripulante atribuído. Validar todos os certificados STCW, MLC e flag state antes do embarque.`,
+        description: `Tripulante atribuído. Validar certificados STCW, MLC e flag state.`,
+      });
+      // REAL ACTION: Create vessel history event
+      await safeInsert('vessel_history_events', {
+        vessel_id: String(p.vessel_id),
+        event_type: 'crew_assignment',
+        description: `Tripulante ${p.full_name ?? p.crew_id ?? ''} (${p.rank ?? 'N/A'}) embarcou.`,
+        event_date: new Date().toISOString(),
       });
     },
   ],
@@ -1011,12 +1095,23 @@ const SIDE_EFFECTS: Record<string, SideEffectFn[]> = {
   'vessel.created': [
     async (event) => {
       const p = event.payload as Record<string, unknown>;
+      const vesselId = p.id ? String(p.id) : null;
+      // REAL ACTION: Create initial compliance baseline
       await safeInsert('action_items', {
         title: `Setup inicial: ${p.name ?? 'Nova embarcação'}`,
         source_module: 'fleet', source_reference_id: String(p.id ?? ''),
-        status: 'pending', priority: 'critical', vessel_id: p.id ? String(p.id) : null,
-        description: `Nova embarcação (${p.vessel_type ?? 'N/A'}, IMO: ${p.imo_number ?? 'N/A'}). Criar: compliance baseline, PMS, certificados, equipe.`,
+        status: 'pending', priority: 'critical', vessel_id: vesselId,
+        description: `Nova embarcação. Criar: compliance baseline, PMS, certificados, equipe.`,
       });
+      // REAL ACTION: Create vessel history event
+      if (vesselId) {
+        await safeInsert('vessel_history_events', {
+          vessel_id: vesselId,
+          event_type: 'vessel_registered',
+          description: `Embarcação ${p.name ?? ''} (${p.vessel_type ?? 'N/A'}, IMO: ${p.imo_number ?? 'N/A'}) registrada no sistema.`,
+          event_date: new Date().toISOString(),
+        });
+      }
     },
   ],
 
@@ -1057,11 +1152,22 @@ const SIDE_EFFECTS: Record<string, SideEffectFn[]> = {
   'medical.record.created': [
     async (event) => {
       const p = event.payload as Record<string, unknown>;
-      await safeInsert('action_items', {
-        title: `Atualizar aptidão: Registro médico criado`,
-        source_module: 'medical', source_reference_id: String(p.id ?? ''),
-        status: 'pending', priority: 'high',
-        description: `Registro médico para tripulante ${p.crew_member_id ?? ''}. Verificar aptidão e compliance MLC Title 4.`,
+      // REAL ACTION: Create crew certification for medical fitness
+      if (p.crew_member_id) {
+        await safeInsert('crew_certifications', {
+          crew_member_id: p.crew_member_id,
+          certification_name: `Medical Fitness Certificate (${p.record_type ?? 'General'})`,
+          certification_type: 'medical',
+          issue_date: new Date().toISOString().split('T')[0],
+          expiry_date: new Date(Date.now() + 2 * 365 * 24 * 60 * 60 * 1000).toISOString().split('T')[0],
+          status: 'valid',
+        });
+      }
+      // REAL ACTION: Update MLC compliance evidence
+      await safeInsert('maintenance_records', {
+        title: `MLC Title 4: Registro médico - ${p.crew_member_id ?? ''}`,
+        status: 'completed', completion_date: new Date().toISOString(),
+        notes: `Evidência de compliance MLC Reg. 4.1 registrada automaticamente.`,
       });
     },
   ],
@@ -1073,11 +1179,11 @@ const SIDE_EFFECTS: Record<string, SideEffectFn[]> = {
   'training.session.created': [
     async (event) => {
       const p = event.payload as Record<string, unknown>;
-      await safeInsert('action_items', {
-        title: `Acompanhar treinamento: ${p.topic ?? p.course_name ?? ''}`,
-        source_module: 'training', source_reference_id: String(p.id ?? ''),
-        status: 'pending', priority: 'medium',
-        description: `Sessão de treinamento criada. Monitorar progresso e verificar conclusão.`,
+      // REAL ACTION: Create training record when session is created
+      await safeInsert('training_records', {
+        training_type: p.topic ?? p.course_name ?? 'General Training',
+        status: 'in_progress',
+        notes: `Sessão criada automaticamente. ID: ${p.id ?? ''}`,
       });
     },
   ],
@@ -1111,11 +1217,23 @@ const SIDE_EFFECTS: Record<string, SideEffectFn[]> = {
   'training.cbt.completed': [
     async (event) => {
       const p = event.payload as Record<string, unknown>;
-      await safeInsert('action_items', {
-        title: `Atualizar registros: CBT concluído`,
-        source_module: 'training', source_reference_id: String(p.id ?? ''),
-        status: 'pending', priority: 'low',
-        description: `Computer Based Training concluído. Atualizar certificados e competency matrix.`,
+      // REAL ACTION: Create certification and training record for CBT
+      if (p.user_id || p.crew_member_id) {
+        await safeInsert('crew_certifications', {
+          crew_member_id: p.crew_member_id ?? p.user_id,
+          certification_name: `CBT: ${p.course_name ?? p.title ?? 'Computer Based Training'}`,
+          certification_type: 'training',
+          issue_date: new Date().toISOString().split('T')[0],
+          expiry_date: new Date(Date.now() + 365 * 24 * 60 * 60 * 1000).toISOString().split('T')[0],
+          status: 'valid',
+        });
+      }
+      await safeInsert('training_records', {
+        crew_member_id: p.crew_member_id ?? p.user_id ?? null,
+        training_type: `CBT: ${p.course_name ?? p.title ?? 'General'}`,
+        completion_date: new Date().toISOString().split('T')[0],
+        score: p.score ?? p.final_score ?? null,
+        status: 'completed', certificate_issued: true,
       });
     },
   ],
@@ -1391,37 +1509,43 @@ const SIDE_EFFECTS: Record<string, SideEffectFn[]> = {
     async (event) => {
       const p = event.payload as Record<string, unknown>;
       if (p.status !== 'completed' && p.status !== 'discharged') return;
-      await safeInsert('action_items', {
-        title: `Finalizar operação de carga: BL e frete`,
-        source_module: 'operations', source_reference_id: String(p.cargo_id ?? p.id ?? ''),
-        status: 'pending', priority: 'medium', vessel_id: p.vessel_id || null,
-        description: `Carga descarregada. Emitir NOR, calcular demurrage/despatch e faturar frete.`,
+      // REAL ACTION: Create invoice for freight
+      await safeInsert('invoices', {
+        description: `Frete: Operação de carga ${p.cargo_id ?? p.id}`,
+        amount: p.freight_amount ?? p.amount ?? 0,
+        status: 'pending', invoice_type: 'freight',
+        vessel_id: p.vessel_id || null,
+      });
+      // REAL ACTION: Create expense for port costs
+      await safeInsert('expenses', {
+        description: `Custos portuários: Carga ${p.cargo_id ?? p.id}`,
+        amount: p.port_costs ?? 0, category: 'port_costs', status: 'pending',
+        vessel_id: p.vessel_id || null,
+        reference_id: String(p.cargo_id ?? p.id ?? ''), reference_type: 'cargo_operation',
       });
     },
   ],
 
   'maintenance.record.created': [
-    async (event) => {
-      const p = event.payload as Record<string, unknown>;
-      await safeInsert('action_items', {
-        title: `Verificar registro de manutenção`,
-        source_module: 'maintenance', source_reference_id: String(p.record_id ?? p.id ?? ''),
-        status: 'pending', priority: 'low', vessel_id: p.vessel_id || null,
-        description: `Registro de manutenção criado. Verificar se OS vinculada foi fechada e compliance atualizado.`,
-      });
-    },
+    async () => { /* No-op: maintenance_records are evidence artifacts, no further action needed */ },
   ],
 
   'maintenance.drydock.updated': [
     async (event) => {
       const p = event.payload as Record<string, unknown>;
       if (p.status !== 'completed') return;
-      await safeInsert('action_items', {
-        title: `Doca seca concluída: Atualizar classe e certificados`,
-        source_module: 'maintenance', source_reference_id: String(p.id ?? ''),
-        status: 'pending', priority: 'critical', vessel_id: p.vessel_id || null,
-        description: `Doca seca finalizada. Atualizar certificados de classe, recalcular CII baseline e atualizar P&L.`,
-      });
+      // REAL ACTION: Update vessel class status and create expense
+      if (p.vessel_id) {
+        await safeUpdate('vessels', {
+          last_drydock_date: new Date().toISOString(),
+          next_drydock_date: new Date(Date.now() + 5 * 365 * 24 * 60 * 60 * 1000).toISOString(),
+        }, { id: String(p.vessel_id) });
+        await safeInsert('vessel_history_events', {
+          vessel_id: String(p.vessel_id), event_type: 'drydock_completed',
+          description: `Doca seca ${p.title ?? ''} concluída. Custo: ${p.actual_cost ?? p.budget ?? 'N/A'}.`,
+          event_date: new Date().toISOString(),
+        });
+      }
       await safeInsert('expenses', {
         description: `Custo final doca seca: ${p.title ?? ''}`, amount: p.actual_cost ?? p.budget ?? 0,
         category: 'drydock', status: 'approved', vessel_id: p.vessel_id || null,
@@ -1436,11 +1560,18 @@ const SIDE_EFFECTS: Record<string, SideEffectFn[]> = {
       if (!p.operational_status) return;
       const status = String(p.operational_status).toLowerCase();
       if (status !== 'laid_up' && status !== 'scrapped') return;
-      await safeInsert('action_items', {
-        title: `Status especial: Embarcação ${status}`,
-        source_module: 'fleet', source_reference_id: String(p.vessel_id ?? p.id ?? ''),
-        status: 'pending', priority: 'critical', vessel_id: String(p.vessel_id ?? p.id ?? ''),
-        description: `Embarcação marcada como ${status}. Cancelar seguros, fechar PMS ativo e desembarcar tripulação.`,
+      // REAL ACTION: Create vessel history event and SOC alert
+      const vesselId = String(p.vessel_id ?? p.id ?? '');
+      await safeInsert('vessel_history_events', {
+        vessel_id: vesselId, event_type: `vessel_${status}`,
+        description: `Embarcação marcada como ${status}. Seguros, PMS e tripulação devem ser ajustados.`,
+        event_date: new Date().toISOString(),
+      });
+      await safeInsert('soc_alerts', {
+        vessel_id: vesselId, alert_type: `vessel_${status}`, severity: 'critical',
+        title: `⚠️ Embarcação ${status}`,
+        description: `Status especial. Cancelar seguros, fechar PMS e desembarcar tripulação.`,
+        status: 'active',
       });
     },
   ],

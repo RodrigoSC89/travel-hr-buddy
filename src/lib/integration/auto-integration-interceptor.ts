@@ -13,7 +13,7 @@
  * 3. Audit trail → audit_events
  */
 
-import { localEventBus, type EventType, type DomainEvent } from "@/lib/events/event-bus";
+import { localEventBus, EVENT_TYPES, type EventType, type DomainEvent } from "@/lib/events/event-bus";
 import { logger } from "@/lib/logger";
 import type { EntityType } from "@/lib/domain/types";
 
@@ -95,7 +95,10 @@ const TABLE_EVENT_MAP: Record<string, TableEventMapping> = {
     update: 'maintenance.work_order.status_changed',
     entityType: 'work_order',
     getEntityId: (r) => String(r.id ?? ''),
-    buildPayload: (op, r) => ({ work_order_id: r.id, vessel_id: r.vessel_id, status: r.status, priority: r.priority }),
+    buildPayload: (op, r) => ({
+      work_order_id: r.id, vessel_id: r.vessel_id, status: r.status, priority: r.priority,
+      actual_cost: r.actual_cost, work_order_number: r.work_order_number, title: r.title,
+    }),
   },
   pms_systems: {
     insert: 'maintenance.system.created',
@@ -849,8 +852,24 @@ export function interceptMutation(
   if (!mapping) return; // Table not mapped — skip silently
 
   const op = operation === 'upsert' ? 'insert' : operation;
-  const eventType = mapping[op as 'insert' | 'update' | 'delete'];
+  let eventType = mapping[op as 'insert' | 'update' | 'delete'];
   if (!eventType) return;
+
+  // Smart event type resolution: detect "completed" status from data
+  // This fixes the mismatch where interceptor maps update→status_changed
+  // but side effects have richer logic on the .completed variant
+  if (op === 'update' && Array.isArray(resultData) ? resultData.length > 0 : resultData) {
+    const firstRow = (Array.isArray(resultData) ? resultData[0] : resultData) as Record<string, unknown>;
+    const status = String(firstRow?.status ?? '').toLowerCase();
+    if (status === 'completed' || status === 'closed' || status === 'approved') {
+      const completedKey = eventType.replace('.status_changed', `.${status}`)
+        .replace('.updated', `.${status}`) as EventType;
+      // Check if there's a more specific event type registered
+      if (completedKey in EVENT_TYPES) {
+        eventType = completedKey;
+      }
+    }
+  }
 
   // Extract rows from result (can be single object or array)
   const rows = Array.isArray(resultData) ? resultData : resultData ? [resultData] : [];
