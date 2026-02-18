@@ -54,6 +54,7 @@ const IncidentResponseTimeline = lazy(() => import('@/components/dashboard/Incid
 const SystemUptimeMonitor = lazy(() => import('@/components/dashboard/SystemUptimeMonitor'));
 const FleetROICommand = lazy(() => import('@/components/dashboard/FleetROICommand'));
 const PredictiveCrewTurnover = lazy(() => import('@/components/dashboard/PredictiveCrewTurnover'));
+const ContractExpiryRadar = lazy(() => import('@/components/dashboard/ContractExpiryRadar'));
 
 const LoadingSkeleton = () => (
   <div className="space-y-4 p-6">
@@ -372,10 +373,13 @@ export default function CommandMegaHub() {
                 </Suspense>
               </div>
 
-              {/* Wave 36: Predictive Crew Turnover */}
+              {/* Wave 36: Predictive Crew Turnover + Wave 41: Contract Expiry */}
               <div className="grid grid-cols-1 lg:grid-cols-2 gap-6">
                 <Suspense fallback={<Skeleton className="h-64" />}>
                   <PredictiveCrewTurnover />
+                </Suspense>
+                <Suspense fallback={<Skeleton className="h-64" />}>
+                  <ContractExpiryRadar />
                 </Suspense>
               </div>
 

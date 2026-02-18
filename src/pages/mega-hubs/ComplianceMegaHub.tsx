@@ -51,6 +51,7 @@ const AuditReadinessTimeline = lazy(() => import('@/components/dashboard/AuditRe
 const RegulatoryChangeTracker = lazy(() => import('@/components/dashboard/RegulatoryChangeTracker'));
 const AuditGapHeatmap = lazy(() => import('@/components/dashboard/AuditGapHeatmap'));
 const VettingReadinessCenter = lazy(() => import('@/components/dashboard/VettingReadinessCenter'));
+const RegulatoryRadarLive = lazy(() => import('@/components/dashboard/RegulatoryRadarLive'));
 
 // ═══════════════════════════════════════════════════════════
 // 12 AUDITORIAS MARÍTIMAS COMPLETAS - ZERO SUPRESSÃO
@@ -379,6 +380,13 @@ export default function ComplianceMegaHub() {
                 </Suspense>
                 <Suspense fallback={<Skeleton className="h-64" />}>
                   <AuditGapHeatmap />
+                </Suspense>
+              </div>
+
+              {/* Wave 39: Regulatory Radar Live */}
+              <div className="grid grid-cols-1 lg:grid-cols-2 gap-6">
+                <Suspense fallback={<Skeleton className="h-64" />}>
+                  <RegulatoryRadarLive />
                 </Suspense>
               </div>
 
