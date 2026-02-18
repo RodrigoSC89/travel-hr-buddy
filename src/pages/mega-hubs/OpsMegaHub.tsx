@@ -51,6 +51,7 @@ const CertificationExpiryTracker = lazy(() => import('@/components/dashboard/Cer
 const PortCallTimeline = lazy(() => import('@/components/dashboard/PortCallTimeline').then(m => ({ default: m.PortCallTimeline })));
 const VoyageWeatherRiskPanel = lazy(() => import('@/components/dashboard/VoyageWeatherRiskPanel').then(m => ({ default: m.VoyageWeatherRiskPanel })));
 const BunkerConsumptionAnalytics = lazy(() => import('@/components/dashboard/BunkerConsumptionAnalytics').then(m => ({ default: m.BunkerConsumptionAnalytics })));
+const CrewRotationTimeline = lazy(() => import('@/components/dashboard/CrewRotationTimeline').then(m => ({ default: m.CrewRotationTimeline })));
 const LoadingSkeleton = () => (
   <div className="space-y-4 p-6">
     <Skeleton className="h-8 w-64" />
@@ -351,6 +352,11 @@ export default function OpsMegaHub() {
                   <BunkerConsumptionAnalytics />
                 </Suspense>
               </div>
+              {/* Crew Rotation Timeline */}
+              <Suspense fallback={<Skeleton className="h-80" />}>
+                <CrewRotationTimeline />
+              </Suspense>
+
               {/* Original Operations Hub */}
               {(isLoading || metrics.totalVessels > 0) && <OperationsCommandHub />}
             </TabsContent>

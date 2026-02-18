@@ -61,6 +61,7 @@ const FleetKPISummaryCards = lazy(() => import('@/components/dashboard/FleetKPIS
 const FleetStatusGrid = lazy(() => import('@/components/dashboard/FleetStatusGrid').then(m => ({ default: m.FleetStatusGrid })));
 const VoyagePnLQuickView = lazy(() => import('@/components/dashboard/VoyagePnLQuickView').then(m => ({ default: m.VoyagePnLQuickView })));
 const FleetUtilizationKPI = lazy(() => import('@/components/dashboard/FleetUtilizationKPI').then(m => ({ default: m.FleetUtilizationKPI })));
+const LiveIncidentFeed = lazy(() => import('@/components/dashboard/LiveIncidentFeed').then(m => ({ default: m.LiveIncidentFeed })));
 
 const LoadingSkeleton = () => (
   <div className="space-y-4 p-6">
@@ -411,6 +412,11 @@ export default function CommandMegaHub() {
                   <FleetStatusGrid />
                 </Suspense>
               </div>
+
+              {/* Live Incident Feed */}
+              <Suspense fallback={<Skeleton className="h-64" />}>
+                <LiveIncidentFeed />
+              </Suspense>
 
               {/* Event System - Central Nervous System */}
               <Suspense fallback={<Skeleton className="h-64" />}>
