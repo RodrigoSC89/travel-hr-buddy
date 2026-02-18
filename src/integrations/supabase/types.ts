@@ -5557,6 +5557,100 @@ export type Database = {
         }
         Relationships: []
       }
+      bid_submissions: {
+        Row: {
+          attachments: Json | null
+          bid_number: string | null
+          compliance_score: number | null
+          created_at: string | null
+          currency: string | null
+          delivery_terms: string | null
+          evaluation_notes: string | null
+          id: string
+          line_items: Json | null
+          organization_id: string | null
+          overall_score: number | null
+          payment_terms: string | null
+          price_score: number | null
+          rfq_id: string | null
+          status: string | null
+          submitted_at: string | null
+          supplier_id: string | null
+          technical_proposal: string | null
+          total_amount: number | null
+          updated_at: string | null
+          validity_days: number | null
+        }
+        Insert: {
+          attachments?: Json | null
+          bid_number?: string | null
+          compliance_score?: number | null
+          created_at?: string | null
+          currency?: string | null
+          delivery_terms?: string | null
+          evaluation_notes?: string | null
+          id?: string
+          line_items?: Json | null
+          organization_id?: string | null
+          overall_score?: number | null
+          payment_terms?: string | null
+          price_score?: number | null
+          rfq_id?: string | null
+          status?: string | null
+          submitted_at?: string | null
+          supplier_id?: string | null
+          technical_proposal?: string | null
+          total_amount?: number | null
+          updated_at?: string | null
+          validity_days?: number | null
+        }
+        Update: {
+          attachments?: Json | null
+          bid_number?: string | null
+          compliance_score?: number | null
+          created_at?: string | null
+          currency?: string | null
+          delivery_terms?: string | null
+          evaluation_notes?: string | null
+          id?: string
+          line_items?: Json | null
+          organization_id?: string | null
+          overall_score?: number | null
+          payment_terms?: string | null
+          price_score?: number | null
+          rfq_id?: string | null
+          status?: string | null
+          submitted_at?: string | null
+          supplier_id?: string | null
+          technical_proposal?: string | null
+          total_amount?: number | null
+          updated_at?: string | null
+          validity_days?: number | null
+        }
+        Relationships: [
+          {
+            foreignKeyName: "bid_submissions_organization_id_fkey"
+            columns: ["organization_id"]
+            isOneToOne: false
+            referencedRelation: "organizations"
+            referencedColumns: ["id"]
+          },
+          {
+            foreignKeyName: "bid_submissions_rfq_id_fkey"
+            columns: ["rfq_id"]
+            isOneToOne: false
+            referencedRelation: "rfq_requests"
+            referencedColumns: ["id"]
+          },
+          {
+            foreignKeyName: "bid_submissions_supplier_id_fkey"
+            columns: ["supplier_id"]
+            isOneToOne: false
+            referencedRelation: "suppliers"
+            referencedColumns: ["id"]
+          },
+        ]
+      }
       billing_plans: {
         Row: {
           created_at: string | null
@@ -7375,6 +7469,78 @@ export type Database = {
           },
         ]
       }
+      charter_party_clauses: {
+        Row: {
+          amendments: Json | null
+          bimco_reference: string | null
+          charter_party_id: string | null
+          clause_number: number
+          clause_text: string | null
+          clause_title: string
+          clause_type: string | null
+          created_at: string | null
+          id: string
+          is_negotiable: boolean | null
+          legal_notes: string | null
+          negotiation_status: string | null
+          organization_id: string | null
+          proposed_by: string | null
+          risk_assessment: string | null
+          updated_at: string | null
+        }
+        Insert: {
+          amendments?: Json | null
+          bimco_reference?: string | null
+          charter_party_id?: string | null
+          clause_number: number
+          clause_text?: string | null
+          clause_title: string
+          clause_type?: string | null
+          created_at?: string | null
+          id?: string
+          is_negotiable?: boolean | null
+          legal_notes?: string | null
+          negotiation_status?: string | null
+          organization_id?: string | null
+          proposed_by?: string | null
+          risk_assessment?: string | null
+          updated_at?: string | null
+        }
+        Update: {
+          amendments?: Json | null
+          bimco_reference?: string | null
+          charter_party_id?: string | null
+          clause_number?: number
+          clause_text?: string | null
+          clause_title?: string
+          clause_type?: string | null
+          created_at?: string | null
+          id?: string
+          is_negotiable?: boolean | null
+          legal_notes?: string | null
+          negotiation_status?: string | null
+          organization_id?: string | null
+          proposed_by?: string | null
+          risk_assessment?: string | null
+          updated_at?: string | null
+        }
+        Relationships: [
+          {
+            foreignKeyName: "charter_party_clauses_charter_party_id_fkey"
+            columns: ["charter_party_id"]
+            isOneToOne: false
+            referencedRelation: "charter_parties"
+            referencedColumns: ["id"]
+          },
+          {
+            foreignKeyName: "charter_party_clauses_organization_id_fkey"
+            columns: ["organization_id"]
+            isOneToOne: false
+            referencedRelation: "organizations"
+            referencedColumns: ["id"]
+          },
+        ]
+      }
       checklist_ai_analysis: {
         Row: {
           analysis_data: Json
@@ -7793,14 +7959,31 @@ export type Database = {
           annual_co2_tonnes: number | null
           annual_distance_nm: number | null
           attained_cii: number | null
+          cii_ratio: number | null
+          corrective_action_plan: string | null
+          corrective_measures: Json | null
           created_at: string | null
+          dwt: number | null
+          eexi_attained: number | null
+          eexi_compliant: boolean | null
+          eexi_required: number | null
+          epla_installed: boolean | null
+          gt: number | null
           id: string
           improvement_plan: Json | null
           org_id: string | null
+          projected_cii_next_year: number | null
+          projected_rating: string | null
           rating: string | null
+          rating_boundary_lower: number | null
+          rating_boundary_upper: number | null
+          reduction_factor_pct: number | null
           required_cii: number | null
+          total_fuel_mt: number | null
+          transport_work: number | null
           updated_at: string | null
           vessel_id: string | null
+          vessel_type_cii: string | null
           year: number
         }
         Insert: {
@@ -7808,14 +7991,31 @@ export type Database = {
           annual_co2_tonnes?: number | null
           annual_distance_nm?: number | null
           attained_cii?: number | null
+          cii_ratio?: number | null
+          corrective_action_plan?: string | null
+          corrective_measures?: Json | null
           created_at?: string | null
+          dwt?: number | null
+          eexi_attained?: number | null
+          eexi_compliant?: boolean | null
+          eexi_required?: number | null
+          epla_installed?: boolean | null
+          gt?: number | null
           id?: string
           improvement_plan?: Json | null
           org_id?: string | null
+          projected_cii_next_year?: number | null
+          projected_rating?: string | null
           rating?: string | null
+          rating_boundary_lower?: number | null
+          rating_boundary_upper?: number | null
+          reduction_factor_pct?: number | null
           required_cii?: number | null
+          total_fuel_mt?: number | null
+          transport_work?: number | null
           updated_at?: string | null
           vessel_id?: string | null
+          vessel_type_cii?: string | null
           year: number
         }
         Update: {
@@ -7823,14 +8023,31 @@ export type Database = {
           annual_co2_tonnes?: number | null
           annual_distance_nm?: number | null
           attained_cii?: number | null
+          cii_ratio?: number | null
+          corrective_action_plan?: string | null
+          corrective_measures?: Json | null
           created_at?: string | null
+          dwt?: number | null
+          eexi_attained?: number | null
+          eexi_compliant?: boolean | null
+          eexi_required?: number | null
+          epla_installed?: boolean | null
+          gt?: number | null
           id?: string
           improvement_plan?: Json | null
           org_id?: string | null
+          projected_cii_next_year?: number | null
+          projected_rating?: string | null
           rating?: string | null
+          rating_boundary_lower?: number | null
+          rating_boundary_upper?: number | null
+          reduction_factor_pct?: number | null
           required_cii?: number | null
+          total_fuel_mt?: number | null
+          transport_work?: number | null
           updated_at?: string | null
           vessel_id?: string | null
+          vessel_type_cii?: string | null
           year?: number
         }
         Relationships: [
@@ -7911,10 +8128,15 @@ export type Database = {
           documents: string[] | null
           due_date: string
           findings: Json | null
+          hull_survey_status: string | null
           id: string
+          load_line_status: string | null
+          machinery_survey_status: string | null
+          memoranda: Json | null
           notes: string | null
           organization_id: string | null
           recommendations: Json | null
+          safety_equipment_status: string | null
           status: string | null
           survey_location: string | null
           survey_name: string
@@ -7935,10 +8157,15 @@ export type Database = {
           documents?: string[] | null
           due_date: string
           findings?: Json | null
+          hull_survey_status?: string | null
           id?: string
+          load_line_status?: string | null
+          machinery_survey_status?: string | null
+          memoranda?: Json | null
           notes?: string | null
           organization_id?: string | null
           recommendations?: Json | null
+          safety_equipment_status?: string | null
           status?: string | null
           survey_location?: string | null
           survey_name: string
@@ -7959,10 +8186,15 @@ export type Database = {
           documents?: string[] | null
           due_date?: string
           findings?: Json | null
+          hull_survey_status?: string | null
           id?: string
+          load_line_status?: string | null
+          machinery_survey_status?: string | null
+          memoranda?: Json | null
           notes?: string | null
           organization_id?: string | null
           recommendations?: Json | null
+          safety_equipment_status?: string | null
           status?: string | null
           survey_location?: string | null
           survey_name?: string
@@ -17448,6 +17680,120 @@ export type Database = {
           },
         ]
       }
+      eu_ets_voyage_emissions: {
+        Row: {
+          allowance_price_eur: number | null
+          allowances_required: number | null
+          arrival_date: string | null
+          arrival_port: string | null
+          ch4_emissions_mt: number | null
+          co2_emissions_mt: number | null
+          co2_equivalent_mt: number | null
+          created_at: string | null
+          departure_date: string | null
+          departure_port: string | null
+          emission_factor: number | null
+          eu_applicability_pct: number | null
+          fuel_consumed_mt: number | null
+          fuel_type: string | null
+          fueleu_compliance_balance: number | null
+          fueleu_penalty_eur: number | null
+          fueleu_target: number | null
+          ghg_intensity: number | null
+          id: string
+          n2o_emissions_mt: number | null
+          organization_id: string | null
+          phase_in_pct: number | null
+          reporting_year: number
+          status: string | null
+          total_cost_eur: number | null
+          updated_at: string | null
+          verified_by: string | null
+          vessel_id: string | null
+          voyage_id: string | null
+          voyage_type: string | null
+        }
+        Insert: {
+          allowance_price_eur?: number | null
+          allowances_required?: number | null
+          arrival_date?: string | null
+          arrival_port?: string | null
+          ch4_emissions_mt?: number | null
+          co2_emissions_mt?: number | null
+          co2_equivalent_mt?: number | null
+          created_at?: string | null
+          departure_date?: string | null
+          departure_port?: string | null
+          emission_factor?: number | null
+          eu_applicability_pct?: number | null
+          fuel_consumed_mt?: number | null
+          fuel_type?: string | null
+          fueleu_compliance_balance?: number | null
+          fueleu_penalty_eur?: number | null
+          fueleu_target?: number | null
+          ghg_intensity?: number | null
+          id?: string
+          n2o_emissions_mt?: number | null
+          organization_id?: string | null
+          phase_in_pct?: number | null
+          reporting_year: number
+          status?: string | null
+          total_cost_eur?: number | null
+          updated_at?: string | null
+          verified_by?: string | null
+          vessel_id?: string | null
+          voyage_id?: string | null
+          voyage_type?: string | null
+        }
+        Update: {
+          allowance_price_eur?: number | null
+          allowances_required?: number | null
+          arrival_date?: string | null
+          arrival_port?: string | null
+          ch4_emissions_mt?: number | null
+          co2_emissions_mt?: number | null
+          co2_equivalent_mt?: number | null
+          created_at?: string | null
+          departure_date?: string | null
+          departure_port?: string | null
+          emission_factor?: number | null
+          eu_applicability_pct?: number | null
+          fuel_consumed_mt?: number | null
+          fuel_type?: string | null
+          fueleu_compliance_balance?: number | null
+          fueleu_penalty_eur?: number | null
+          fueleu_target?: number | null
+          ghg_intensity?: number | null
+          id?: string
+          n2o_emissions_mt?: number | null
+          organization_id?: string | null
+          phase_in_pct?: number | null
+          reporting_year?: number
+          status?: string | null
+          total_cost_eur?: number | null
+          updated_at?: string | null
+          verified_by?: string | null
+          vessel_id?: string | null
+          voyage_id?: string | null
+          voyage_type?: string | null
+        }
+        Relationships: [
+          {
+            foreignKeyName: "eu_ets_voyage_emissions_organization_id_fkey"
+            columns: ["organization_id"]
+            isOneToOne: false
+            referencedRelation: "organizations"
+            referencedColumns: ["id"]
+          },
+          {
+            foreignKeyName: "eu_ets_voyage_emissions_vessel_id_fkey"
+            columns: ["vessel_id"]
+            isOneToOne: false
+            referencedRelation: "vessels"
+            referencedColumns: ["id"]
+          },
+        ]
+      }
       event_snapshots: {
         Row: {
           aggregate_id: string
@@ -23301,49 +23647,67 @@ export type Database = {
       }
       insurance_policies: {
         Row: {
+          claims_history: Json | null
           coverage: number | null
           created_at: string | null
           deductible: number | null
           end_date: string | null
+          hull_value: number | null
           id: string
           insurer: string
+          loss_ratio: number | null
           notes: string | null
+          pi_club: string | null
           premium: number | null
+          renewal_terms: Json | null
           start_date: string | null
           status: string | null
           type: string
           updated_at: string | null
           vessel_id: string | null
+          war_risk_premium: number | null
         }
         Insert: {
+          claims_history?: Json | null
           coverage?: number | null
           created_at?: string | null
           deductible?: number | null
           end_date?: string | null
+          hull_value?: number | null
           id?: string
           insurer: string
+          loss_ratio?: number | null
           notes?: string | null
+          pi_club?: string | null
           premium?: number | null
+          renewal_terms?: Json | null
           start_date?: string | null
           status?: string | null
           type: string
           updated_at?: string | null
           vessel_id?: string | null
+          war_risk_premium?: number | null
         }
         Update: {
+          claims_history?: Json | null
           coverage?: number | null
           created_at?: string | null
           deductible?: number | null
           end_date?: string | null
+          hull_value?: number | null
           id?: string
           insurer?: string
+          loss_ratio?: number | null
           notes?: string | null
+          pi_club?: string | null
           premium?: number | null
+          renewal_terms?: Json | null
           start_date?: string | null
           status?: string | null
           type?: string
           updated_at?: string | null
           vessel_id?: string | null
+          war_risk_premium?: number | null
         }
         Relationships: [
           {
@@ -25850,6 +26214,136 @@ export type Database = {
           user_id?: string | null
         }
         Relationships: []
+      }
+      laytime_calculations: {
+        Row: {
+          agreed_amount: number | null
+          cargo_quantity: number | null
+          cargo_unit: string | null
+          charter_party_id: string | null
+          created_at: string | null
+          currency: string | null
+          demurrage_amount: number | null
+          demurrage_rate_per_day: number | null
+          despatch_amount: number | null
+          despatch_rate_per_day: number | null
+          dispute_notes: string | null
+          excluded_periods: Json | null
+          id: string
+          invoice_number: string | null
+          laytime_allowed_hours: number | null
+          laytime_commencement: string | null
+          laytime_ends_at: string | null
+          laytime_starts_at: string | null
+          laytime_type: string | null
+          nor_accepted_at: string | null
+          nor_tendered_at: string | null
+          organization_id: string | null
+          port_name: string
+          port_type: string | null
+          status: string | null
+          sundays_holidays_excluded: boolean | null
+          time_exceeded_hours: number | null
+          time_saved_hours: number | null
+          time_used_hours: number | null
+          updated_at: string | null
+          vessel_id: string | null
+          voyage_id: string | null
+          weather_working_days: boolean | null
+        }
+        Insert: {
+          agreed_amount?: number | null
+          cargo_quantity?: number | null
+          cargo_unit?: string | null
+          charter_party_id?: string | null
+          created_at?: string | null
+          currency?: string | null
+          demurrage_amount?: number | null
+          demurrage_rate_per_day?: number | null
+          despatch_amount?: number | null
+          despatch_rate_per_day?: number | null
+          dispute_notes?: string | null
+          excluded_periods?: Json | null
+          id?: string
+          invoice_number?: string | null
+          laytime_allowed_hours?: number | null
+          laytime_commencement?: string | null
+          laytime_ends_at?: string | null
+          laytime_starts_at?: string | null
+          laytime_type?: string | null
+          nor_accepted_at?: string | null
+          nor_tendered_at?: string | null
+          organization_id?: string | null
+          port_name: string
+          port_type?: string | null
+          status?: string | null
+          sundays_holidays_excluded?: boolean | null
+          time_exceeded_hours?: number | null
+          time_saved_hours?: number | null
+          time_used_hours?: number | null
+          updated_at?: string | null
+          vessel_id?: string | null
+          voyage_id?: string | null
+          weather_working_days?: boolean | null
+        }
+        Update: {
+          agreed_amount?: number | null
+          cargo_quantity?: number | null
+          cargo_unit?: string | null
+          charter_party_id?: string | null
+          created_at?: string | null
+          currency?: string | null
+          demurrage_amount?: number | null
+          demurrage_rate_per_day?: number | null
+          despatch_amount?: number | null
+          despatch_rate_per_day?: number | null
+          dispute_notes?: string | null
+          excluded_periods?: Json | null
+          id?: string
+          invoice_number?: string | null
+          laytime_allowed_hours?: number | null
+          laytime_commencement?: string | null
+          laytime_ends_at?: string | null
+          laytime_starts_at?: string | null
+          laytime_type?: string | null
+          nor_accepted_at?: string | null
+          nor_tendered_at?: string | null
+          organization_id?: string | null
+          port_name?: string
+          port_type?: string | null
+          status?: string | null
+          sundays_holidays_excluded?: boolean | null
+          time_exceeded_hours?: number | null
+          time_saved_hours?: number | null
+          time_used_hours?: number | null
+          updated_at?: string | null
+          vessel_id?: string | null
+          voyage_id?: string | null
+          weather_working_days?: boolean | null
+        }
+        Relationships: [
+          {
+            foreignKeyName: "laytime_calculations_charter_party_id_fkey"
+            columns: ["charter_party_id"]
+            isOneToOne: false
+            referencedRelation: "charter_parties"
+            referencedColumns: ["id"]
+          },
+          {
+            foreignKeyName: "laytime_calculations_organization_id_fkey"
+            columns: ["organization_id"]
+            isOneToOne: false
+            referencedRelation: "organizations"
+            referencedColumns: ["id"]
+          },
+          {
+            foreignKeyName: "laytime_calculations_vessel_id_fkey"
+            columns: ["vessel_id"]
+            isOneToOne: false
+            referencedRelation: "vessels"
+            referencedColumns: ["id"]
+          },
+        ]
       }
       learning_adjustments: {
         Row: {
