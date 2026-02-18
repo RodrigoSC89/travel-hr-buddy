@@ -298,6 +298,7 @@ export const WarrantyClaimsPage = lazy(() => import("@/pages/WarrantyClaimsPage"
 // WORLD-CLASS GAP-CLOSING MODULES (vs IMOS, AMOS, Compas, CFM)
 // ============================================
 export const SparePartsPage = lazy(() => import("@/pages/SparePartsPage"));
+export const PMSHubPage = lazy(() => import("@/pages/PMSHubPage"));
 export const PortCostPage = lazy(() => import("@/pages/PortCostPage"));
 export const CrewCompetencyPage = lazy(() => import("@/pages/CrewCompetencyPage"));
 export const InsurancePIPage = lazy(() => import("@/pages/InsurancePIPage"));

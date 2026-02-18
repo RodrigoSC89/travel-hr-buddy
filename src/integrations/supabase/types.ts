@@ -34923,6 +34923,505 @@ export type Database = {
           },
         ]
       }
+      pms_components: {
+        Row: {
+          code: string
+          condition_rating: number | null
+          created_at: string
+          description: string | null
+          id: string
+          impa_code: string | null
+          is_critical: boolean | null
+          manufacturer: string | null
+          model: string | null
+          name: string
+          part_number: string | null
+          running_hours_at_last_maintenance: number | null
+          running_hours_current: number | null
+          serial_number: string | null
+          sort_order: number | null
+          subsystem_id: string
+          updated_at: string
+        }
+        Insert: {
+          code: string
+          condition_rating?: number | null
+          created_at?: string
+          description?: string | null
+          id?: string
+          impa_code?: string | null
+          is_critical?: boolean | null
+          manufacturer?: string | null
+          model?: string | null
+          name: string
+          part_number?: string | null
+          running_hours_at_last_maintenance?: number | null
+          running_hours_current?: number | null
+          serial_number?: string | null
+          sort_order?: number | null
+          subsystem_id: string
+          updated_at?: string
+        }
+        Update: {
+          code?: string
+          condition_rating?: number | null
+          created_at?: string
+          description?: string | null
+          id?: string
+          impa_code?: string | null
+          is_critical?: boolean | null
+          manufacturer?: string | null
+          model?: string | null
+          name?: string
+          part_number?: string | null
+          running_hours_at_last_maintenance?: number | null
+          running_hours_current?: number | null
+          serial_number?: string | null
+          sort_order?: number | null
+          subsystem_id?: string
+          updated_at?: string
+        }
+        Relationships: [
+          {
+            foreignKeyName: "pms_components_subsystem_id_fkey"
+            columns: ["subsystem_id"]
+            isOneToOne: false
+            referencedRelation: "pms_subsystems"
+            referencedColumns: ["id"]
+          },
+        ]
+      }
+      pms_jobs: {
+        Row: {
+          can_do_at_sea: boolean | null
+          class_survey_type: string | null
+          component_id: string
+          created_at: string
+          description: string | null
+          estimated_cost: number | null
+          estimated_hours: number | null
+          id: string
+          interval_days: number | null
+          interval_hours: number | null
+          interval_months: number | null
+          is_class_required: boolean | null
+          job_code: string
+          job_type: string
+          last_done_date: string | null
+          last_done_hours: number | null
+          next_due_date: string | null
+          next_due_hours: number | null
+          organization_id: string | null
+          priority: string
+          procedure_reference: string | null
+          regulatory_reference: string | null
+          requires_docking: boolean | null
+          safety_precautions: string | null
+          spare_parts_required: Json | null
+          status: string
+          title: string
+          tools_required: Json | null
+          updated_at: string
+        }
+        Insert: {
+          can_do_at_sea?: boolean | null
+          class_survey_type?: string | null
+          component_id: string
+          created_at?: string
+          description?: string | null
+          estimated_cost?: number | null
+          estimated_hours?: number | null
+          id?: string
+          interval_days?: number | null
+          interval_hours?: number | null
+          interval_months?: number | null
+          is_class_required?: boolean | null
+          job_code: string
+          job_type?: string
+          last_done_date?: string | null
+          last_done_hours?: number | null
+          next_due_date?: string | null
+          next_due_hours?: number | null
+          organization_id?: string | null
+          priority?: string
+          procedure_reference?: string | null
+          regulatory_reference?: string | null
+          requires_docking?: boolean | null
+          safety_precautions?: string | null
+          spare_parts_required?: Json | null
+          status?: string
+          title: string
+          tools_required?: Json | null
+          updated_at?: string
+        }
+        Update: {
+          can_do_at_sea?: boolean | null
+          class_survey_type?: string | null
+          component_id?: string
+          created_at?: string
+          description?: string | null
+          estimated_cost?: number | null
+          estimated_hours?: number | null
+          id?: string
+          interval_days?: number | null
+          interval_hours?: number | null
+          interval_months?: number | null
+          is_class_required?: boolean | null
+          job_code?: string
+          job_type?: string
+          last_done_date?: string | null
+          last_done_hours?: number | null
+          next_due_date?: string | null
+          next_due_hours?: number | null
+          organization_id?: string | null
+          priority?: string
+          procedure_reference?: string | null
+          regulatory_reference?: string | null
+          requires_docking?: boolean | null
+          safety_precautions?: string | null
+          spare_parts_required?: Json | null
+          status?: string
+          title?: string
+          tools_required?: Json | null
+          updated_at?: string
+        }
+        Relationships: [
+          {
+            foreignKeyName: "pms_jobs_component_id_fkey"
+            columns: ["component_id"]
+            isOneToOne: false
+            referencedRelation: "pms_components"
+            referencedColumns: ["id"]
+          },
+          {
+            foreignKeyName: "pms_jobs_organization_id_fkey"
+            columns: ["organization_id"]
+            isOneToOne: false
+            referencedRelation: "organizations"
+            referencedColumns: ["id"]
+          },
+        ]
+      }
+      pms_running_hours_triggers: {
+        Row: {
+          auto_create_work_order: boolean | null
+          component_id: string
+          created_at: string
+          id: string
+          is_active: boolean | null
+          job_id: string
+          last_triggered_at: string | null
+          last_triggered_hours: number | null
+          sensor_id: string | null
+          threshold_hours: number
+        }
+        Insert: {
+          auto_create_work_order?: boolean | null
+          component_id: string
+          created_at?: string
+          id?: string
+          is_active?: boolean | null
+          job_id: string
+          last_triggered_at?: string | null
+          last_triggered_hours?: number | null
+          sensor_id?: string | null
+          threshold_hours: number
+        }
+        Update: {
+          auto_create_work_order?: boolean | null
+          component_id?: string
+          created_at?: string
+          id?: string
+          is_active?: boolean | null
+          job_id?: string
+          last_triggered_at?: string | null
+          last_triggered_hours?: number | null
+          sensor_id?: string | null
+          threshold_hours?: number
+        }
+        Relationships: [
+          {
+            foreignKeyName: "pms_running_hours_triggers_component_id_fkey"
+            columns: ["component_id"]
+            isOneToOne: false
+            referencedRelation: "pms_components"
+            referencedColumns: ["id"]
+          },
+          {
+            foreignKeyName: "pms_running_hours_triggers_job_id_fkey"
+            columns: ["job_id"]
+            isOneToOne: false
+            referencedRelation: "pms_jobs"
+            referencedColumns: ["id"]
+          },
+          {
+            foreignKeyName: "pms_running_hours_triggers_sensor_id_fkey"
+            columns: ["sensor_id"]
+            isOneToOne: false
+            referencedRelation: "iot_sensors"
+            referencedColumns: ["id"]
+          },
+        ]
+      }
+      pms_subsystems: {
+        Row: {
+          code: string
+          created_at: string
+          description: string | null
+          id: string
+          name: string
+          sort_order: number | null
+          system_id: string
+          updated_at: string
+        }
+        Insert: {
+          code: string
+          created_at?: string
+          description?: string | null
+          id?: string
+          name: string
+          sort_order?: number | null
+          system_id: string
+          updated_at?: string
+        }
+        Update: {
+          code?: string
+          created_at?: string
+          description?: string | null
+          id?: string
+          name?: string
+          sort_order?: number | null
+          system_id?: string
+          updated_at?: string
+        }
+        Relationships: [
+          {
+            foreignKeyName: "pms_subsystems_system_id_fkey"
+            columns: ["system_id"]
+            isOneToOne: false
+            referencedRelation: "pms_systems"
+            referencedColumns: ["id"]
+          },
+        ]
+      }
+      pms_systems: {
+        Row: {
+          code: string
+          created_at: string
+          description: string | null
+          id: string
+          installation_date: string | null
+          is_critical: boolean | null
+          manufacturer: string | null
+          model: string | null
+          name: string
+          organization_id: string | null
+          serial_number: string | null
+          sort_order: number | null
+          system_type: string | null
+          updated_at: string
+          vessel_id: string | null
+        }
+        Insert: {
+          code: string
+          created_at?: string
+          description?: string | null
+          id?: string
+          installation_date?: string | null
+          is_critical?: boolean | null
+          manufacturer?: string | null
+          model?: string | null
+          name: string
+          organization_id?: string | null
+          serial_number?: string | null
+          sort_order?: number | null
+          system_type?: string | null
+          updated_at?: string
+          vessel_id?: string | null
+        }
+        Update: {
+          code?: string
+          created_at?: string
+          description?: string | null
+          id?: string
+          installation_date?: string | null
+          is_critical?: boolean | null
+          manufacturer?: string | null
+          model?: string | null
+          name?: string
+          organization_id?: string | null
+          serial_number?: string | null
+          sort_order?: number | null
+          system_type?: string | null
+          updated_at?: string
+          vessel_id?: string | null
+        }
+        Relationships: [
+          {
+            foreignKeyName: "pms_systems_organization_id_fkey"
+            columns: ["organization_id"]
+            isOneToOne: false
+            referencedRelation: "organizations"
+            referencedColumns: ["id"]
+          },
+          {
+            foreignKeyName: "pms_systems_vessel_id_fkey"
+            columns: ["vessel_id"]
+            isOneToOne: false
+            referencedRelation: "vessels"
+            referencedColumns: ["id"]
+          },
+        ]
+      }
+      pms_work_orders: {
+        Row: {
+          actual_cost: number | null
+          actual_end: string | null
+          actual_start: string | null
+          approved_at: string | null
+          approved_by: string | null
+          assigned_department: string | null
+          assigned_to: string | null
+          attachments: Json | null
+          component_id: string | null
+          created_at: string
+          description: string | null
+          estimated_cost: number | null
+          findings: string | null
+          id: string
+          is_class_related: boolean | null
+          job_id: string | null
+          organization_id: string | null
+          permit_to_work_required: boolean | null
+          planned_end: string | null
+          planned_start: string | null
+          priority: string
+          recommendations: string | null
+          risk_assessment_done: boolean | null
+          running_hours_at_completion: number | null
+          running_hours_at_start: number | null
+          source_reference_id: string | null
+          spare_parts_used: Json | null
+          status: string
+          title: string
+          triggered_by: string | null
+          updated_at: string
+          verified_at: string | null
+          verified_by: string | null
+          vessel_id: string | null
+          work_done_report: string | null
+          work_order_number: string
+          work_order_type: string
+        }
+        Insert: {
+          actual_cost?: number | null
+          actual_end?: string | null
+          actual_start?: string | null
+          approved_at?: string | null
+          approved_by?: string | null
+          assigned_department?: string | null
+          assigned_to?: string | null
+          attachments?: Json | null
+          component_id?: string | null
+          created_at?: string
+          description?: string | null
+          estimated_cost?: number | null
+          findings?: string | null
+          id?: string
+          is_class_related?: boolean | null
+          job_id?: string | null
+          organization_id?: string | null
+          permit_to_work_required?: boolean | null
+          planned_end?: string | null
+          planned_start?: string | null
+          priority?: string
+          recommendations?: string | null
+          risk_assessment_done?: boolean | null
+          running_hours_at_completion?: number | null
+          running_hours_at_start?: number | null
+          source_reference_id?: string | null
+          spare_parts_used?: Json | null
+          status?: string
+          title: string
+          triggered_by?: string | null
+          updated_at?: string
+          verified_at?: string | null
+          verified_by?: string | null
+          vessel_id?: string | null
+          work_done_report?: string | null
+          work_order_number: string
+          work_order_type?: string
+        }
+        Update: {
+          actual_cost?: number | null
+          actual_end?: string | null
+          actual_start?: string | null
+          approved_at?: string | null
+          approved_by?: string | null
+          assigned_department?: string | null
+          assigned_to?: string | null
+          attachments?: Json | null
+          component_id?: string | null
+          created_at?: string
+          description?: string | null
+          estimated_cost?: number | null
+          findings?: string | null
+          id?: string
+          is_class_related?: boolean | null
+          job_id?: string | null
+          organization_id?: string | null
+          permit_to_work_required?: boolean | null
+          planned_end?: string | null
+          planned_start?: string | null
+          priority?: string
+          recommendations?: string | null
+          risk_assessment_done?: boolean | null
+          running_hours_at_completion?: number | null
+          running_hours_at_start?: number | null
+          source_reference_id?: string | null
+          spare_parts_used?: Json | null
+          status?: string
+          title?: string
+          triggered_by?: string | null
+          updated_at?: string
+          verified_at?: string | null
+          verified_by?: string | null
+          vessel_id?: string | null
+          work_done_report?: string | null
+          work_order_number?: string
+          work_order_type?: string
+        }
+        Relationships: [
+          {
+            foreignKeyName: "pms_work_orders_component_id_fkey"
+            columns: ["component_id"]
+            isOneToOne: false
+            referencedRelation: "pms_components"
+            referencedColumns: ["id"]
+          },
+          {
+            foreignKeyName: "pms_work_orders_job_id_fkey"
+            columns: ["job_id"]
+            isOneToOne: false
+            referencedRelation: "pms_jobs"
+            referencedColumns: ["id"]
+          },
+          {
+            foreignKeyName: "pms_work_orders_organization_id_fkey"
+            columns: ["organization_id"]
+            isOneToOne: false
+            referencedRelation: "organizations"
+            referencedColumns: ["id"]
+          },
+          {
+            foreignKeyName: "pms_work_orders_vessel_id_fkey"
+            columns: ["vessel_id"]
+            isOneToOne: false
+            referencedRelation: "vessels"
+            referencedColumns: ["id"]
+          },
+        ]
+      }
       port_calls: {
         Row: {
           actual_costs: number | null
