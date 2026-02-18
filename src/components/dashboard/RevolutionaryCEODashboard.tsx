@@ -17,6 +17,9 @@ import {
   AlertTriangle, Activity, Anchor, Wrench, FileCheck, Gauge,
   ArrowUpRight, ArrowDownRight, Zap, Globe, Brain, Bell
 } from "lucide-react";
+import { FleetHealthHeatmap } from "./FleetHealthHeatmap";
+import { AIExecutiveInsights } from "./AIExecutiveInsights";
+import { LiveActivityFeed } from "./LiveActivityFeed";
 import { useEffect, useState } from "react";
 
 const CHART_COLORS = [
@@ -388,29 +391,25 @@ export default function RevolutionaryCEODashboard() {
         </Card>
       </motion.div>
 
-      {/* AI Insight Footer */}
-      <motion.div initial={{ opacity: 0 }} animate={{ opacity: 1 }} transition={{ delay: 0.6 }}>
-        <Card className="border-border/30 bg-gradient-to-r from-primary/5 via-transparent to-accent/5">
-          <CardContent className="p-4 flex items-center gap-4">
-            <div className="p-2 rounded-xl bg-primary/10">
-              <Brain className="h-5 w-5 text-primary" />
-            </div>
-            <div className="flex-1">
-              <p className="text-sm font-medium">💡 Insight IA</p>
-              <p className="text-xs text-muted-foreground">
-                {complianceScore >= 90
-                  ? "Excelente compliance! A frota está em conformidade exemplar com todas as regulamentações."
-                  : complianceScore >= 70
-                  ? `Score de compliance em ${complianceScore}%. Recomenda-se atenção aos ${openNCs} NCs abertas para atingir excelência.`
-                  : `⚠️ Score de compliance em ${complianceScore}%. Ação urgente necessária: ${criticalNCs} NCs críticas e ${expiringCerts} certificados vencendo.`}
-              </p>
-            </div>
-            <Badge variant="outline" className="shrink-0 gap-1">
-              <Zap className="h-3 w-3" />
-              Auto-Analysis
-            </Badge>
-          </CardContent>
-        </Card>
+      {/* Fleet Health Heatmap */}
+      <motion.div initial={{ opacity: 0 }} animate={{ opacity: 1 }} transition={{ delay: 0.55 }}>
+        <FleetHealthHeatmap vessels={vessels} maintenance={maintenance} certificates={certificates} />
+      </motion.div>
+
+      {/* AI Insights + Live Feed */}
+      <motion.div initial={{ opacity: 0 }} animate={{ opacity: 1 }} transition={{ delay: 0.6 }} className="grid grid-cols-1 md:grid-cols-2 gap-4">
+        <AIExecutiveInsights
+          vesselCount={vessels.length}
+          activeVessels={activeVessels}
+          crewCount={crew.length}
+          activeCrew={activeCrew}
+          pendingMaint={pendingMaint}
+          complianceScore={complianceScore}
+          openNCs={openNCs}
+          totalExpenses={totalExpenses}
+          expiringCerts={expiringCerts}
+        />
+        <LiveActivityFeed />
       </motion.div>
     </div>
   );
