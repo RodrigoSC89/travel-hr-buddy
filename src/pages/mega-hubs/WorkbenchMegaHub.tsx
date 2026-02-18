@@ -45,6 +45,8 @@ const CrewRotationOverview = lazy(() => import('@/components/dashboard/CrewRotat
 const CrewCompetencyRadar = lazy(() => import('@/components/dashboard/CrewCompetencyRadar').then(m => ({ default: m.CrewCompetencyRadar })));
 const CashFlowForecast = lazy(() => import('@/components/dashboard/CashFlowForecast').then(m => ({ default: m.CashFlowForecast })));
 const CrewOvertimeTracker = lazy(() => import('@/components/dashboard/CrewOvertimeTracker').then(m => ({ default: m.CrewOvertimeTracker })));
+const ProcurementPipelineTracker = lazy(() => import('@/components/dashboard/ProcurementPipelineTracker').then(m => ({ default: m.ProcurementPipelineTracker })));
+const PayrollSummaryDashboard = lazy(() => import('@/components/dashboard/PayrollSummaryDashboard').then(m => ({ default: m.PayrollSummaryDashboard })));
 
 const LoadingSkeleton = () => (
   <div className="space-y-4 p-6">
@@ -487,12 +489,19 @@ export default function WorkbenchMegaHub() {
               <Suspense fallback={<Skeleton className="h-64" />}>
                 <CashFlowForecast />
               </Suspense>
-              {/* Wave 46: Payroll Intelligence */}
+              {/* Wave 46: Payroll Intelligence + Summary */}
               <div className="grid grid-cols-1 lg:grid-cols-2 gap-6">
                 <Suspense fallback={<Skeleton className="h-64" />}>
                   <PayrollIntelligence />
                 </Suspense>
+                <Suspense fallback={<Skeleton className="h-64" />}>
+                  <PayrollSummaryDashboard />
+                </Suspense>
               </div>
+              {/* Procurement Pipeline */}
+              <Suspense fallback={<Skeleton className="h-64" />}>
+                <ProcurementPipelineTracker />
+              </Suspense>
               <FinanceHub />
             </TabsContent>
 
