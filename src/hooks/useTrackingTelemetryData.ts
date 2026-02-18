@@ -3,9 +3,10 @@
  * PATCH TRACKING-2.0
  */
 
-import { useQuery, useMutation, useQueryClient } from "@tanstack/react-query";
+import { useQuery } from "@tanstack/react-query";
 import { supabase } from "@/integrations/supabase/client";
 import { toast } from "sonner";
+import { useAcknowledgeAlertIntegrated, useCreateTelemetryAlert } from "@/hooks/useModuleHooks";
 
 export interface VesselPosition {
   id: string;
@@ -39,7 +40,6 @@ export interface TelemetryAlert {
 }
 
 export function useTrackingTelemetryData() {
-  const queryClient = useQueryClient();
 
   // Fetch vessel positions
   const { data: positions = [], isLoading: positionsLoading } = useQuery({
@@ -152,41 +152,9 @@ export function useTrackingTelemetryData() {
     staleTime: 30000,
   });
 
-  // Acknowledge alert
-  const acknowledgeAlert = useMutation({
-    mutationFn: async (alertId: string) => {
-      const { error } = await supabase
-        .from("telemetry_alerts")
-        .update({ acknowledged: true, acknowledged_at: new Date().toISOString() })
-        .eq("id", alertId);
-      
-      if (error) throw error;
-    },
-    onSuccess: () => {
-      queryClient.invalidateQueries({ queryKey: ["tracking-alerts"] });
-      toast.success("Alerta reconhecido");
-    },
-  });
-
-  // Create alert - simplified since telemetry_alerts may not exist
-  const createAlert = useMutation({
-    mutationFn: async (alertData: Partial<TelemetryAlert>) => {
-      // Table may not exist - return local fallback
-      return {
-        id: crypto.randomUUID(),
-        vessel_id: alertData.vessel_id || null,
-        alert_type: alertData.alert_type || "info",
-        severity: alertData.severity || "medium",
-        message: alertData.message || "",
-        acknowledged: false,
-        created_at: new Date().toISOString(),
-      } as TelemetryAlert;
-    },
-    onSuccess: () => {
-      queryClient.invalidateQueries({ queryKey: ["tracking-alerts"] });
-      toast.success("Alerta criado");
-    },
-  });
+  // Integrated mutations
+  const acknowledgeAlert = useAcknowledgeAlertIntegrated();
+  const createAlert = useCreateTelemetryAlert();
 
   // Calculate telemetry metrics
   const telemetryMetrics = {

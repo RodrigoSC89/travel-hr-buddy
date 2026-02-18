@@ -1,9 +1,9 @@
 /**
  * Hook: Security Scanner - Real data from telemetry_alerts + compliance checks
  */
-import { useQuery, useMutation, useQueryClient } from "@tanstack/react-query";
+import { useQuery } from "@tanstack/react-query";
 import { supabase } from "@/integrations/supabase/client";
-import { toast } from "sonner";
+import { useFixSecurityFinding } from "@/hooks/useModuleHooks";
 
 interface SecurityFinding {
   id: string;
@@ -15,7 +15,6 @@ interface SecurityFinding {
 }
 
 export function useSecurityScanData() {
-  const queryClient = useQueryClient();
 
   const { data: findings = [], isLoading, error, refetch } = useQuery({
     queryKey: ["security-findings"],
@@ -44,20 +43,7 @@ export function useSecurityScanData() {
     },
   });
 
-  const markFixed = useMutation({
-    mutationFn: async (findingId: string) => {
-      const { error } = await supabase
-        .from("telemetry_alerts")
-        .update({ acknowledged: true })
-        .eq("id", findingId);
-      if (error) throw error;
-    },
-    onSuccess: () => {
-      queryClient.invalidateQueries({ queryKey: ["security-findings"] });
-      toast.success("Finding marcado como corrigido");
-    },
-    onError: () => toast.error("Erro ao atualizar finding"),
-  });
+  const markFixed = useFixSecurityFinding();
 
   return { findings, isLoading, error, refetch, markFixed };
 }

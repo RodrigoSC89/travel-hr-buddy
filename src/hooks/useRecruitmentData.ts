@@ -3,9 +3,10 @@
  * Substitui mockCandidatos e mockVagas em RecruitmentPipeline.tsx
  */
 
-import { useQuery, useMutation, useQueryClient } from "@tanstack/react-query";
+import { useQuery } from "@tanstack/react-query";
 import { supabase } from "@/integrations/supabase/client";
 import { toast } from "sonner";
+import { useUpdateRecruitmentStage } from "@/hooks/useModuleHooks";
 
 export interface Candidato {
   id: string;
@@ -140,24 +141,7 @@ function mapEtapa(status: string | null): Candidato["etapa"] {
 }
 
 export function useUpdateCandidatoEtapa() {
-  const queryClient = useQueryClient();
-
-  return useMutation({
-    mutationFn: async ({ candidatoId, novaEtapa }: { candidatoId: string; novaEtapa: string }) => {
-      // Log the stage change
-      await supabase.from("logs").insert({
-        module: "recruitment",
-        level: "info",
-        message: `Candidato ${candidatoId} movido para ${novaEtapa}`,
-        metadata: { candidato_id: candidatoId, nova_etapa: novaEtapa },
-      });
-
-      return { candidatoId, novaEtapa };
-    },
-    onSuccess: () => {
-      queryClient.invalidateQueries({ queryKey: ["recruitment-candidatos"] });
-    },
-  });
+  return useUpdateRecruitmentStage();
 }
 
 export function useRecruitmentData() {

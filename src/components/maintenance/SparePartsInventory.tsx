@@ -5,8 +5,9 @@
  * Features: Inventário, ROB, Requisições, Fornecedores, Previsão IA
  */
 import React, { useState, useMemo } from 'react';
-import { useQuery, useMutation, useQueryClient } from '@tanstack/react-query';
+import { useQuery } from '@tanstack/react-query';
 import { supabase } from '@/integrations/supabase/client';
+import { useAddSparePart } from '@/hooks/useModuleHooks';
 import { Card, CardContent, CardHeader, CardTitle } from '@/components/ui/card';
 import { Button } from '@/components/ui/button';
 import { Input } from '@/components/ui/input';
@@ -41,7 +42,6 @@ export default function SparePartsInventory() {
   const [searchTerm, setSearchTerm] = useState('');
   const [addDialog, setAddDialog] = useState(false);
   const [categoryFilter, setCategoryFilter] = useState('all');
-  const queryClient = useQueryClient();
 
   const [newPart, setNewPart] = useState({
     part_number: '', description: '', category: 'Motor',
@@ -102,28 +102,25 @@ export default function SparePartsInventory() {
     staleTime: 30000,
   });
 
-  // Add part mutation
-  const addPart = useMutation({
-    mutationFn: async (data: typeof newPart) => {
-      const { error } = await supabase.from('inventory_items').insert({
-        name: data.description,
-        item_code: data.part_number || `SP-${Date.now().toString(36).toUpperCase()}`,
-        category: data.category,
-        quantity: Number(data.quantity),
-        min_quantity: Number(data.minimum_stock),
-        unit_cost: Number(data.unit_cost),
-        location: data.location,
-      });
-      if (error) throw error;
-    },
-    onSuccess: () => {
-      queryClient.invalidateQueries({ queryKey: ['spare-parts-inventory'] });
-      toast.success('Peça adicionada ao inventário');
-      setAddDialog(false);
-      setNewPart({ part_number: '', description: '', category: 'Motor', quantity: '10', minimum_stock: '5', unit_cost: '0', location: 'Paiol Principal' });
-    },
-    onError: () => toast.error('Erro ao adicionar peça'),
-  });
+  // Add part via integrated pipeline
+  const addPartMutation = useAddSparePart();
+  const addPart = {
+    mutate: (data: typeof newPart) => addPartMutation.mutate({
+      name: data.description,
+      item_code: data.part_number || `SP-${Date.now().toString(36).toUpperCase()}`,
+      category: data.category,
+      quantity: Number(data.quantity),
+      min_quantity: Number(data.minimum_stock),
+      unit_cost: Number(data.unit_cost),
+      location: data.location,
+    } as any, {
+      onSuccess: () => {
+        setAddDialog(false);
+        setNewPart({ part_number: '', description: '', category: 'Motor', quantity: '10', minimum_stock: '5', unit_cost: '0', location: 'Paiol Principal' });
+      },
+    }),
+    isPending: addPartMutation.isPending,
+  };
 
   // Metrics
   const metrics = useMemo(() => {
