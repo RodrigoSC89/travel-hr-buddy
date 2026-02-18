@@ -39,6 +39,7 @@ const FleetPositionIntelligence = lazy(() => import('@/components/dashboard/Flee
 const GeofenceIntelligence = lazy(() => import('@/components/dashboard/GeofenceIntelligence'));
 const IoTAnomalyDetector = lazy(() => import('@/components/dashboard/IoTAnomalyDetector'));
 const SATCOMPerformanceMonitor = lazy(() => import('@/components/dashboard/SATCOMPerformanceMonitor'));
+const VesselETAPredictor = lazy(() => import('@/components/dashboard/VesselETAPredictor'));
 
 const LoadingSkeleton = () => (
   <div className="space-y-4 p-6">
@@ -304,6 +305,9 @@ export default function TrackingMegaHub() {
               <div className="grid grid-cols-1 lg:grid-cols-2 gap-6">
                 <Suspense fallback={<Skeleton className="h-64" />}>
                   <SATCOMPerformanceMonitor />
+                </Suspense>
+                <Suspense fallback={<Skeleton className="h-64" />}>
+                  <VesselETAPredictor />
                 </Suspense>
               </div>
 
