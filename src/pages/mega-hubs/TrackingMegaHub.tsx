@@ -34,6 +34,8 @@ const WeatherIntelligencePage = lazy(() => import('@/pages/advanced/WeatherIntel
 const AlertsCommandCenter = lazy(() => import('@/pages/tracking/TrackingAlerts'));
 const PredictiveTelemetry = lazy(() => import('@/pages/PredictiveMaintenancePage'));
 const TrackingAIHub = lazy(() => import('@/components/tracking/ai/TrackingAIHub'));
+const TelemetryHealthMatrix = lazy(() => import('@/components/dashboard/TelemetryHealthMatrix'));
+const FleetPositionIntelligence = lazy(() => import('@/components/dashboard/FleetPositionIntelligence'));
 
 const LoadingSkeleton = () => (
   <div className="space-y-4 p-6">
@@ -274,6 +276,16 @@ export default function TrackingMegaHub() {
                   onPrimaryAction={() => navigate('/ops')} 
                 />
               )}
+
+              {/* Wave 20: Tracking Intelligence Panels */}
+              <div className="grid grid-cols-1 lg:grid-cols-2 gap-6">
+                <Suspense fallback={<Skeleton className="h-64" />}>
+                  <TelemetryHealthMatrix />
+                </Suspense>
+                <Suspense fallback={<Skeleton className="h-64" />}>
+                  <FleetPositionIntelligence />
+                </Suspense>
+              </div>
 
               {(vesselsLoading || trackingMetrics.totalVessels > 0) && <TrackingTelemetryHub />}
             </TabsContent>
