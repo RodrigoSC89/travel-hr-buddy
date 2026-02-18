@@ -36,6 +36,7 @@ const PredictiveTelemetry = lazy(() => import('@/pages/PredictiveMaintenancePage
 const TrackingAIHub = lazy(() => import('@/components/tracking/ai/TrackingAIHub'));
 const TelemetryHealthMatrix = lazy(() => import('@/components/dashboard/TelemetryHealthMatrix'));
 const FleetPositionIntelligence = lazy(() => import('@/components/dashboard/FleetPositionIntelligence'));
+const GeofenceIntelligence = lazy(() => import('@/components/dashboard/GeofenceIntelligence'));
 
 const LoadingSkeleton = () => (
   <div className="space-y-4 p-6">
@@ -284,6 +285,13 @@ export default function TrackingMegaHub() {
                 </Suspense>
                 <Suspense fallback={<Skeleton className="h-64" />}>
                   <FleetPositionIntelligence />
+                </Suspense>
+              </div>
+
+              {/* Wave 28: Geofence Intelligence */}
+              <div className="grid grid-cols-1 lg:grid-cols-2 gap-6">
+                <Suspense fallback={<Skeleton className="h-64" />}>
+                  <GeofenceIntelligence />
                 </Suspense>
               </div>
 

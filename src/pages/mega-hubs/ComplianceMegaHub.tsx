@@ -50,6 +50,7 @@ const ComplianceRiskPredictor = lazy(() => import('@/components/dashboard/Compli
 const AuditReadinessTimeline = lazy(() => import('@/components/dashboard/AuditReadinessTimeline'));
 const RegulatoryChangeTracker = lazy(() => import('@/components/dashboard/RegulatoryChangeTracker'));
 const AuditGapHeatmap = lazy(() => import('@/components/dashboard/AuditGapHeatmap'));
+const VettingReadinessCenter = lazy(() => import('@/components/dashboard/VettingReadinessCenter'));
 
 // ═══════════════════════════════════════════════════════════
 // 12 AUDITORIAS MARÍTIMAS COMPLETAS - ZERO SUPRESSÃO
@@ -365,6 +366,16 @@ export default function ComplianceMegaHub() {
               <div className="grid grid-cols-1 lg:grid-cols-2 gap-6">
                 <Suspense fallback={<Skeleton className="h-64" />}>
                   <RegulatoryChangeTracker />
+                </Suspense>
+              </div>
+
+              {/* Wave 29: Vetting Readiness */}
+              <div className="grid grid-cols-1 lg:grid-cols-2 gap-6">
+                <Suspense fallback={<Skeleton className="h-64" />}>
+                  <VettingReadinessCenter />
+                </Suspense>
+                <Suspense fallback={<Skeleton className="h-64" />}>
+                  <AuditGapHeatmap />
                 </Suspense>
                 <Suspense fallback={<Skeleton className="h-64" />}>
                   <AuditGapHeatmap />
