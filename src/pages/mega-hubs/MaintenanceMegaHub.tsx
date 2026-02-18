@@ -52,6 +52,7 @@ const PredictiveFailureHeatmap = lazy(() => import('@/components/dashboard/Predi
 const SupplyChainIntelligence = lazy(() => import('@/components/dashboard/SupplyChainIntelligence'));
 const AssetIntegrityMatrix = lazy(() => import('@/components/dashboard/AssetIntegrityMatrix'));
 const DrydockCostOptimizer = lazy(() => import('@/components/dashboard/DrydockCostOptimizer'));
+const PMSCalendarView = lazy(() => import('@/components/maintenance/PMSCalendarView').then(m => ({ default: m.PMSCalendarView })));
 const LoadingSkeleton = () => (
   <div className="space-y-4 p-6">
     <Skeleton className="h-8 w-64" />
@@ -360,7 +361,10 @@ export default function MaintenanceMegaHub() {
                 ]}
               />
 
-              {/* MaintenanceGanttCalendar removed */}
+              {/* PMS Calendar View */}
+              <Suspense fallback={<LoadingSkeleton />}>
+                <PMSCalendarView />
+              </Suspense>
             </TabsContent>
             
             <TabsContent value="equipment" className="mt-0">

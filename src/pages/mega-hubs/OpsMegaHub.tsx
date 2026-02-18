@@ -45,6 +45,8 @@ const CrewFatigueCommand = lazy(() => import('@/components/dashboard/CrewFatigue
 const BunkerIntelligence = lazy(() => import('@/components/dashboard/BunkerIntelligence'));
 const CargoUtilizationOptimizer = lazy(() => import('@/components/dashboard/CargoUtilizationOptimizer'));
 const NoonReportAnalytics = lazy(() => import('@/components/dashboard/NoonReportAnalytics'));
+const WeatherRoutingQuickPanel = lazy(() => import('@/components/operations/WeatherRoutingQuickPanel'));
+const LaytimeQuickPanel = lazy(() => import('@/components/operations/LaytimeQuickPanel'));
 const LoadingSkeleton = () => (
   <div className="space-y-4 p-6">
     <Skeleton className="h-8 w-64" />
@@ -313,6 +315,16 @@ export default function OpsMegaHub() {
               <div className="grid grid-cols-1 lg:grid-cols-2 gap-6">
                 <Suspense fallback={<Skeleton className="h-64" />}>
                   <NoonReportAnalytics />
+                </Suspense>
+              </div>
+
+              {/* Weather Routing & Laytime Quick Panels */}
+              <div className="grid grid-cols-1 lg:grid-cols-2 gap-6">
+                <Suspense fallback={<Skeleton className="h-64" />}>
+                  <WeatherRoutingQuickPanel />
+                </Suspense>
+                <Suspense fallback={<Skeleton className="h-64" />}>
+                  <LaytimeQuickPanel />
                 </Suspense>
               </div>
 
