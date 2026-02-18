@@ -251,6 +251,7 @@ export const AppRoutes = () => (
       
       {/* ======== WORLD-CLASS COMPETITIVE MODULES ======== */}
       <Route path="/world-class" element={<Pages.WorldClassDashboard />} />
+      <Route path="/commercial-ops" element={<Pages.CommercialOperationsHub />} />
       <Route path="/charter-party" element={<Pages.CharterPartyPage />} />
       <Route path="/laytime-demurrage" element={<Pages.LaytimeDemurragePage />} />
       <Route path="/running-hours" element={<Pages.RunningHoursPage />} />
