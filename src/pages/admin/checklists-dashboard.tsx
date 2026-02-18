@@ -145,7 +145,7 @@ export default function ChecklistDashboard() {
               <XAxis dataKey="date" />
               <YAxis domain={[0, 100]} />
               <Tooltip />
-              <Line type="monotone" dataKey="coverage" stroke="#10b981" strokeWidth={2} />
+              <Line type="monotone" dataKey="coverage" stroke="hsl(var(--success))" strokeWidth={2} />
             </LineChart>
           </ResponsiveContainer>
         </CardContent>

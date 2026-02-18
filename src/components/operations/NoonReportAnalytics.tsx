@@ -97,8 +97,8 @@ export function NoonReportAnalytics() {
                   <XAxis dataKey="day" tick={{ fontSize: 11 }} stroke="hsl(var(--muted-foreground))" />
                   <YAxis tick={{ fontSize: 11 }} stroke="hsl(var(--muted-foreground))" />
                   <Tooltip contentStyle={{ background: "hsl(var(--card))", border: "1px solid hsl(var(--border))" }} />
-                  <Area type="monotone" dataKey="hfo" stackId="1" stroke="#00f2ff" fill="#00f2ff" fillOpacity={0.3} name="HFO (mt)" />
-                  <Area type="monotone" dataKey="mdo" stackId="1" stroke="#f59e0b" fill="#f59e0b" fillOpacity={0.3} name="MDO (mt)" />
+                  <Area type="monotone" dataKey="hfo" stackId="1" stroke="hsl(var(--info))" fill="hsl(var(--info))" fillOpacity={0.3} name="HFO (mt)" />
+                  <Area type="monotone" dataKey="mdo" stackId="1" stroke="hsl(var(--warning))" fill="hsl(var(--warning))" fillOpacity={0.3} name="MDO (mt)" />
                 </AreaChart>
               </ResponsiveContainer>
             </CardContent>
@@ -115,8 +115,8 @@ export function NoonReportAnalytics() {
                   <XAxis dataKey="day" tick={{ fontSize: 11 }} stroke="hsl(var(--muted-foreground))" />
                   <YAxis tick={{ fontSize: 11 }} stroke="hsl(var(--muted-foreground))" />
                   <Tooltip contentStyle={{ background: "hsl(var(--card))", border: "1px solid hsl(var(--border))" }} />
-                  <Bar dataKey="hfo" fill="#00f2ff" radius={[4, 4, 0, 0]} name="HFO (mt)" />
-                  <Bar dataKey="mdo" fill="#f59e0b" radius={[4, 4, 0, 0]} name="MDO (mt)" />
+                  <Bar dataKey="hfo" fill="hsl(var(--info))" radius={[4, 4, 0, 0]} name="HFO (mt)" />
+                  <Bar dataKey="mdo" fill="hsl(var(--warning))" radius={[4, 4, 0, 0]} name="MDO (mt)" />
                 </BarChart>
               </ResponsiveContainer>
             </CardContent>

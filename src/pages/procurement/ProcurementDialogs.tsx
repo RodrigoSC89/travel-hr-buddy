@@ -214,7 +214,7 @@ export function AlternativesDialog({ open, onOpenChange, recommendation, supplie
   const renderStars = (rating: number) => (
     <div className="flex items-center gap-0.5">
       {[1, 2, 3, 4, 5].map((star) => (
-        <Star key={star} className={cn("h-3.5 w-3.5", star <= rating ? "fill-amber-400 text-amber-400" : "text-muted-foreground/30")} />
+        <Star key={star} className={cn("h-3.5 w-3.5", star <= rating ? "fill-warning text-warning" : "text-muted-foreground/30")} />
       ))}
       <span className="ml-1 text-sm text-muted-foreground">({rating?.toFixed(1) || "N/A"})</span>
     </div>

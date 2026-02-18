@@ -94,14 +94,14 @@ const SENSOR_ICONS: Record<string, React.ElementType> = {
 };
 
 const SENSOR_COLORS: Record<string, string> = {
-  temperature: '#f97316',
-  vibration: '#8b5cf6',
-  pressure: '#3b82f6',
-  voltage: '#eab308',
-  current: '#facc15',
-  flow: '#06b6d4',
-  rpm: '#10b981',
-  fuel: '#22c55e',
+  temperature: 'hsl(var(--warning))',
+  vibration: 'hsl(var(--accent))',
+  pressure: 'hsl(var(--primary))',
+  voltage: 'hsl(var(--warning))',
+  current: 'hsl(var(--warning))',
+  flow: 'hsl(var(--info))',
+  rpm: 'hsl(var(--success))',
+  fuel: 'hsl(var(--success))',
 };
 
 export function IoTSensorHistory() {
@@ -429,8 +429,8 @@ export function IoTSensorHistory() {
                       <Area
                         type="monotone"
                         dataKey={Object.keys(chartData[type]?.[0] || {}).find(k => k !== 'time') || 'value'}
-                        stroke={SENSOR_COLORS[type] || '#3b82f6'}
-                        fill={SENSOR_COLORS[type] || '#3b82f6'}
+                        stroke={SENSOR_COLORS[type] || 'hsl(var(--primary))'}
+                        fill={SENSOR_COLORS[type] || 'hsl(var(--primary))'}
                         fillOpacity={0.2}
                         strokeWidth={2}
                       />
@@ -593,7 +593,7 @@ export function IoTSensorHistory() {
                   <Scatter
                     name="Normal"
                     data={correlationData.filter(p => !p.isAnomaly)}
-                    fill="#3b82f6"
+                    fill="hsl(var(--primary))"
                     opacity={0.6}
                   />
                   
@@ -601,14 +601,14 @@ export function IoTSensorHistory() {
                   <Scatter
                     name="Anomalia"
                     data={correlationData.filter(p => p.isAnomaly)}
-                    fill="#ef4444"
+                    fill="hsl(var(--destructive))"
                     opacity={0.9}
                     shape="diamond"
                   />
                   
                   {/* Reference lines for thresholds */}
-                  <ReferenceLine y={85} stroke="#f97316" strokeDasharray="5 5" label="Temp Crítica" />
-                  <ReferenceLine x={8} stroke="#8b5cf6" strokeDasharray="5 5" label="Vib Crítica" />
+                  <ReferenceLine y={85} stroke="hsl(var(--warning))" strokeDasharray="5 5" label="Temp Crítica" />
+                  <ReferenceLine x={8} stroke="hsl(var(--accent))" strokeDasharray="5 5" label="Vib Crítica" />
                 </ScatterChart>
               </ResponsiveContainer>
             </div>

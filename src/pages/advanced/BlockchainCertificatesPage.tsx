@@ -152,8 +152,8 @@ const BlockchainCertificatesPage = () => {
         </Card>
         <Card>
           <CardContent className="p-4 text-center">
-            <Search className="h-6 w-6 mx-auto text-blue-500 mb-2" />
-            <p className="text-2xl font-bold text-blue-500">{blockchainStats.avgVerificationTime}</p>
+            <Search className="h-6 w-6 mx-auto text-info mb-2" />
+            <p className="text-2xl font-bold text-info">{blockchainStats.avgVerificationTime}</p>
             <p className="text-xs text-muted-foreground">Tempo Médio</p>
           </CardContent>
         </Card>
@@ -187,7 +187,7 @@ const BlockchainCertificatesPage = () => {
                         <div className="flex items-center gap-2">
                           <p className="font-semibold">{cert.type}</p>
                           {cert.verified && (
-                            <CheckCircle className="h-4 w-4 text-green-500" />
+                            <CheckCircle className="h-4 w-4 text-success" />
                           )}
                         </div>
                         <p className="text-sm text-muted-foreground">
@@ -291,7 +291,7 @@ const BlockchainCertificatesPage = () => {
                 {recentVerifications.map((ver) => (
                   <div key={`${ver.cert}-${ver.by}-${ver.time}`} className="flex items-center justify-between p-3 border rounded-lg">
                     <div className="flex items-center gap-3">
-                      <CheckCircle className="h-5 w-5 text-green-500" />
+                      <CheckCircle className="h-5 w-5 text-success" />
                       <div>
                         <p className="font-medium">{ver.cert}</p>
                         <p className="text-sm text-muted-foreground">Por: {ver.by}</p>

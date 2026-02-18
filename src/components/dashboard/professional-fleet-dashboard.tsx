@@ -322,8 +322,8 @@ export function ProfessionalFleetDashboard() {
                   <Radar 
                     name="Performance" 
                     dataKey="value" 
-                    stroke="#3b82f6" 
-                    fill="#3b82f6" 
+                    stroke="hsl(var(--primary))" 
+                    fill="hsl(var(--primary))" 
                     fillOpacity={0.6} 
                   />
                   <Tooltip />
@@ -350,12 +350,12 @@ export function ProfessionalFleetDashboard() {
                 <AreaChart data={fuelTrend}>
                   <defs>
                     <linearGradient id="colorConsumption" x1="0" y1="0" x2="0" y2="1">
-                      <stop offset="5%" stopColor="#f59e0b" stopOpacity={0.8}/>
-                      <stop offset="95%" stopColor="#f59e0b" stopOpacity={0}/>
+                      <stop offset="5%" stopColor="hsl(var(--warning))" stopOpacity={0.8}/>
+                      <stop offset="95%" stopColor="hsl(var(--warning))" stopOpacity={0}/>
                     </linearGradient>
                     <linearGradient id="colorEfficiency" x1="0" y1="0" x2="0" y2="1">
-                      <stop offset="5%" stopColor="#10b981" stopOpacity={0.8}/>
-                      <stop offset="95%" stopColor="#10b981" stopOpacity={0}/>
+                      <stop offset="5%" stopColor="hsl(var(--success))" stopOpacity={0.8}/>
+                      <stop offset="95%" stopColor="hsl(var(--success))" stopOpacity={0}/>
                     </linearGradient>
                   </defs>
                   <CartesianGrid strokeDasharray="3 3" />
@@ -368,7 +368,7 @@ export function ProfessionalFleetDashboard() {
                     yAxisId="left"
                     type="monotone" 
                     dataKey="consumption" 
-                    stroke="#f59e0b" 
+                    stroke="hsl(var(--warning))" 
                     fillOpacity={1} 
                     fill="url(#colorConsumption)"
                     name="Consumo (L)"
@@ -377,7 +377,7 @@ export function ProfessionalFleetDashboard() {
                     yAxisId="right"
                     type="monotone" 
                     dataKey="efficiency" 
-                    stroke="#10b981" 
+                    stroke="hsl(var(--success))" 
                     strokeWidth={3}
                     name="Eficiência (%)"
                   />

@@ -244,7 +244,7 @@ export const WorldClassDocumentCenter: React.FC = () => {
             { label: "Total", value: stats.total, icon: <FileText className="h-4 w-4" />, color: "text-primary" },
             { label: "Ativos", value: stats.active, icon: <FileCheck className="h-4 w-4" />, color: "text-success" },
             { label: "Expirados", value: stats.expired, icon: <FileWarning className="h-4 w-4" />, color: "text-destructive" },
-            { label: "Certificados", value: stats.certificates, icon: <Shield className="h-4 w-4" />, color: "text-amber-500" },
+            { label: "Certificados", value: stats.certificates, icon: <Shield className="h-4 w-4" />, color: "text-warning" },
           ].map((kpi) => (
             <Card key={kpi.label} className="p-3">
               <div className="flex items-center gap-2 mb-1">
@@ -451,7 +451,7 @@ export const WorldClassDocumentCenter: React.FC = () => {
             {expiringDocs.length > 0 && (
               <Card>
                 <CardHeader className="pb-2">
-                  <CardTitle className="text-base flex items-center gap-2 text-amber-600">
+                  <CardTitle className="text-base flex items-center gap-2 text-warning">
                     <Clock className="h-4 w-4" /> Expirando em 30 dias ({expiringDocs.length})
                   </CardTitle>
                 </CardHeader>

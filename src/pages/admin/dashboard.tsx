@@ -443,7 +443,7 @@ export default function AdminDashboard() {
                   <XAxis dataKey="day" />
                   <YAxis />
                   <Tooltip />
-                  <Bar dataKey="count" fill="#8884d8" />
+                  <Bar dataKey="count" fill="hsl(var(--primary))" />
                 </BarChart>
               </ResponsiveContainer>
             )}

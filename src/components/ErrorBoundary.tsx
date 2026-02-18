@@ -87,11 +87,11 @@ export class ErrorBoundary extends Component<Props, State> {
           padding: '2rem',
           margin: '2rem auto',
           maxWidth: '600px',
-          border: '2px solid #ef4444',
+          border: '2px solid hsl(var(--destructive))',
           borderRadius: '8px',
-          backgroundColor: '#fef2f2',
+          backgroundColor: 'hsl(var(--destructive) / 0.05)',
         }}>
-          <h2 style={{ color: '#dc2626', marginBottom: '1rem' }}>
+          <h2 style={{ color: 'hsl(var(--destructive))', marginBottom: '1rem' }}>
             ⚠️ Algo deu errado
           </h2>
           
@@ -106,7 +106,7 @@ export class ErrorBoundary extends Component<Props, State> {
               </summary>
               <pre style={{
                 padding: '1rem',
-                backgroundColor: '#fee2e2',
+                backgroundColor: 'hsl(var(--destructive) / 0.1)',
                 borderRadius: '4px',
                 overflow: 'auto',
                 fontSize: '0.875rem',
@@ -122,7 +122,7 @@ export class ErrorBoundary extends Component<Props, State> {
             onClick={this.handleReset}
             style={{
               padding: '0.5rem 1rem',
-              backgroundColor: '#3b82f6',
+              backgroundColor: 'hsl(var(--primary))',
               color: 'white',
               border: 'none',
               borderRadius: '4px',

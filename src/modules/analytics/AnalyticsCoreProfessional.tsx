@@ -1418,7 +1418,7 @@ Este relatório apresenta uma análise abrangente dos principais indicadores de 
                   <div className="text-3xl font-bold">
                     {metric.value.toLocaleString("pt-BR")}{metric.unit}
                   </div>
-                  <p className={`text-xs mt-1 flex items-center gap-1 ${metric.change >= 0 ? 'text-green-500' : 'text-red-500'}`}>
+                  <p className={`text-xs mt-1 flex items-center gap-1 ${metric.change >= 0 ? 'text-success' : 'text-destructive'}`}>
                     {metric.change >= 0 ? <TrendingUp className="h-3 w-3" /> : <TrendingDown className="h-3 w-3" />}
                     {metric.change >= 0 ? '+' : ''}{metric.change.toFixed(1)}% vs período anterior
                   </p>

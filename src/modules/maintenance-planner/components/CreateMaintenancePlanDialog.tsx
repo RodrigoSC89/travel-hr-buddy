@@ -41,7 +41,7 @@ const maintenanceTypes = [
 const priorityLevels = [
   { value: "low", label: "Baixa", color: "text-muted-foreground" },
   { value: "medium", label: "Média", color: "text-warning" },
-  { value: "high", label: "Alta", color: "text-orange-500" },
+  { value: "high", label: "Alta", color: "text-warning" },
   { value: "critical", label: "Crítica", color: "text-destructive" },
 ];
 

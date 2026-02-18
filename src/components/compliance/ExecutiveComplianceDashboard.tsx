@@ -206,10 +206,10 @@ const useExecutiveKPIs = () => {
       };
       
       const modules: ModuleKPI[] = [
-        generateModuleKPI('peotram', 'PEOTRAM 2024', 'PEOTRAM', Anchor, '#3b82f6'),
-        generateModuleKPI('peo-dp', 'PEO-DP 2026', 'PEO-DP', Ship, '#8b5cf6'),
-        generateModuleKPI('mlc', 'MLC 2006', 'MLC', Shield, '#22c55e'),
-        generateModuleKPI('sgso', 'SGSO ANP 46/2016', 'SGSO', FileCheck, '#f59e0b'),
+        generateModuleKPI('peotram', 'PEOTRAM 2024', 'PEOTRAM', Anchor, 'hsl(var(--primary))'),
+        generateModuleKPI('peo-dp', 'PEO-DP 2026', 'PEO-DP', Ship, 'hsl(var(--accent))'),
+        generateModuleKPI('mlc', 'MLC 2006', 'MLC', Shield, 'hsl(var(--success))'),
+        generateModuleKPI('sgso', 'SGSO ANP 46/2016', 'SGSO', FileCheck, 'hsl(var(--warning))'),
       ];
       
       const overallScore = Math.round(modules.reduce((sum, m) => sum + m.score, 0) / modules.length);

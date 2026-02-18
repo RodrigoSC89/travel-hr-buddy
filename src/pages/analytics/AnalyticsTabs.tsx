@@ -81,9 +81,9 @@ export const AnalyticsTabs = ({ metrics, insights, predictions, fleetMetrics }: 
               <ComposedChart data={REVENUE_DATA}>
                 <CartesianGrid strokeDasharray="3 3" />
                 <XAxis dataKey="month" /><YAxis /><Tooltip /><Legend />
-                <Bar dataKey="receita" fill="#3b82f6" name="Receita" />
-                <Bar dataKey="custos" fill="#f59e0b" name="Custos" />
-                <Line type="monotone" dataKey="lucro" stroke="#10b981" strokeWidth={2} name="Lucro" />
+                <Bar dataKey="receita" fill="hsl(var(--primary))" name="Receita" />
+                <Bar dataKey="custos" fill="hsl(var(--warning))" name="Custos" />
+                <Line type="monotone" dataKey="lucro" stroke="hsl(var(--success))" strokeWidth={2} name="Lucro" />
               </ComposedChart>
             </ResponsiveContainer>
           </CardContent>
@@ -116,7 +116,7 @@ export const AnalyticsTabs = ({ metrics, insights, predictions, fleetMetrics }: 
               <RechartsLineChart data={PERFORMANCE_DATA}>
                 <CartesianGrid strokeDasharray="3 3" />
                 <XAxis dataKey="date" /><YAxis /><Tooltip /><Legend />
-                <Line type="monotone" dataKey="fuel_efficiency" stroke="#8884d8" name="Eficiência %" />
+                <Line type="monotone" dataKey="fuel_efficiency" stroke="hsl(var(--accent))" name="Eficiência %" />
               </RechartsLineChart>
             </ResponsiveContainer>
           </CardContent>
@@ -128,7 +128,7 @@ export const AnalyticsTabs = ({ metrics, insights, predictions, fleetMetrics }: 
               <AreaChart data={PERFORMANCE_DATA}>
                 <CartesianGrid strokeDasharray="3 3" />
                 <XAxis dataKey="date" /><YAxis /><Tooltip /><Legend />
-                <Area type="monotone" dataKey="revenue" stroke="#82ca9d" fill="#82ca9d" name="Receita" />
+                <Area type="monotone" dataKey="revenue" stroke="hsl(var(--success))" fill="hsl(var(--success))" name="Receita" />
               </AreaChart>
             </ResponsiveContainer>
           </CardContent>

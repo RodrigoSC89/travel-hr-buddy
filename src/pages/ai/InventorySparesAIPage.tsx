@@ -327,21 +327,21 @@ export default function InventorySparesAIPage() {
               </CardHeader>
               <CardContent>
                 <div className="grid grid-cols-1 md:grid-cols-3 gap-4 mb-4">
-                  <Card className="bg-green-50 dark:bg-green-950">
+                  <Card className="bg-success/10">
                     <CardContent className="pt-4">
                       <p className="text-sm font-medium">Classe A</p>
                       <p className="text-2xl font-bold">245 itens</p>
                       <p className="text-sm text-muted-foreground">70% do valor</p>
                     </CardContent>
                   </Card>
-                  <Card className="bg-yellow-50 dark:bg-yellow-950">
+                  <Card className="bg-warning/10">
                     <CardContent className="pt-4">
                       <p className="text-sm font-medium">Classe B</p>
                       <p className="text-2xl font-bold">612 itens</p>
                       <p className="text-sm text-muted-foreground">20% do valor</p>
                     </CardContent>
                   </Card>
-                  <Card className="bg-blue-50 dark:bg-blue-950">
+                  <Card className="bg-info/10">
                     <CardContent className="pt-4">
                       <p className="text-sm font-medium">Classe C</p>
                       <p className="text-2xl font-bold">1,990 itens</p>

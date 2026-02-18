@@ -87,9 +87,9 @@ const DashboardCharts: React.FC<{ profile: string }> = ({ profile }) => {
     ];
 
     const distributionData: ChartData[] = [
-      { name: "Conformes", value: 75, color: "#22c55e" },
-      { name: "Pendentes", value: 15, color: "#f59e0b" },
-      { name: "Não Conformes", value: 10, color: "#ef4444" }
+      { name: "Conformes", value: 75, color: "hsl(var(--success))" },
+      { name: "Pendentes", value: 15, color: "hsl(var(--warning))" },
+      { name: "Não Conformes", value: 10, color: "hsl(var(--destructive))" }
     ];
 
     const comparisonData: ChartData[] = [
@@ -172,7 +172,7 @@ const DashboardCharts: React.FC<{ profile: string }> = ({ profile }) => {
                 labelLine={false}
                 label={({ name, value }) => `${name}: ${value}%`}
                 outerRadius={80}
-                fill="#8884d8"
+                fill="hsl(var(--accent))"
                 dataKey="value"
               >
                 {distributionData.map((entry, index) => (

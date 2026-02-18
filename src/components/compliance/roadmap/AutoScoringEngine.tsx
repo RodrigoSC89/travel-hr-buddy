@@ -496,8 +496,8 @@ export function AutoScoringEngine() {
                   }} 
                 />
                 <Legend />
-                <Bar dataKey="conformes" name="Conformes" fill="#22c55e" />
-                <Bar dataKey="naoConformes" name="Não Conformes" fill="#ef4444" />
+                <Bar dataKey="conformes" name="Conformes" fill="hsl(var(--success))" />
+                <Bar dataKey="naoConformes" name="Não Conformes" fill="hsl(var(--destructive))" />
               </BarChart>
             </ResponsiveContainer>
             
