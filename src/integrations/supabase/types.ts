@@ -4040,6 +4040,56 @@ export type Database = {
           },
         ]
       }
+      audit_events: {
+        Row: {
+          action: string
+          actor_id: string | null
+          created_at: string
+          diff_json: Json | null
+          entity_id: string | null
+          entity_type: string
+          id: string
+          ip_address: string | null
+          metadata_json: Json | null
+          organization_id: string | null
+          user_agent: string | null
+        }
+        Insert: {
+          action: string
+          actor_id?: string | null
+          created_at?: string
+          diff_json?: Json | null
+          entity_id?: string | null
+          entity_type: string
+          id?: string
+          ip_address?: string | null
+          metadata_json?: Json | null
+          organization_id?: string | null
+          user_agent?: string | null
+        }
+        Update: {
+          action?: string
+          actor_id?: string | null
+          created_at?: string
+          diff_json?: Json | null
+          entity_id?: string | null
+          entity_type?: string
+          id?: string
+          ip_address?: string | null
+          metadata_json?: Json | null
+          organization_id?: string | null
+          user_agent?: string | null
+        }
+        Relationships: [
+          {
+            foreignKeyName: "audit_events_organization_id_fkey"
+            columns: ["organization_id"]
+            isOneToOne: false
+            referencedRelation: "organizations"
+            referencedColumns: ["id"]
+          },
+        ]
+      }
       audit_evidence: {
         Row: {
           audit_id: string
@@ -18548,6 +18598,47 @@ export type Database = {
         }
         Relationships: []
       }
+      entity_documents: {
+        Row: {
+          created_at: string
+          document_id: string
+          entity_id: string
+          entity_type: string
+          id: string
+          linked_by: string | null
+          organization_id: string | null
+          purpose: string | null
+        }
+        Insert: {
+          created_at?: string
+          document_id: string
+          entity_id: string
+          entity_type: string
+          id?: string
+          linked_by?: string | null
+          organization_id?: string | null
+          purpose?: string | null
+        }
+        Update: {
+          created_at?: string
+          document_id?: string
+          entity_id?: string
+          entity_type?: string
+          id?: string
+          linked_by?: string | null
+          organization_id?: string | null
+          purpose?: string | null
+        }
+        Relationships: [
+          {
+            foreignKeyName: "entity_documents_organization_id_fkey"
+            columns: ["organization_id"]
+            isOneToOne: false
+            referencedRelation: "organizations"
+            referencedColumns: ["id"]
+          },
+        ]
+      }
       equipment_sensors: {
         Row: {
           created_at: string
@@ -19025,6 +19116,65 @@ export type Database = {
           },
         ]
       }
+      event_outbox: {
+        Row: {
+          actor_id: string | null
+          created_at: string
+          error_message: string | null
+          event_type: string
+          id: string
+          max_retries: number
+          organization_id: string | null
+          payload: Json
+          processed_at: string | null
+          retries: number
+          source_entity_id: string | null
+          source_entity_type: string | null
+          status: string
+          updated_at: string
+        }
+        Insert: {
+          actor_id?: string | null
+          created_at?: string
+          error_message?: string | null
+          event_type: string
+          id?: string
+          max_retries?: number
+          organization_id?: string | null
+          payload?: Json
+          processed_at?: string | null
+          retries?: number
+          source_entity_id?: string | null
+          source_entity_type?: string | null
+          status?: string
+          updated_at?: string
+        }
+        Update: {
+          actor_id?: string | null
+          created_at?: string
+          error_message?: string | null
+          event_type?: string
+          id?: string
+          max_retries?: number
+          organization_id?: string | null
+          payload?: Json
+          processed_at?: string | null
+          retries?: number
+          source_entity_id?: string | null
+          source_entity_type?: string | null
+          status?: string
+          updated_at?: string
+        }
+        Relationships: [
+          {
+            foreignKeyName: "event_outbox_organization_id_fkey"
+            columns: ["organization_id"]
+            isOneToOne: false
+            referencedRelation: "organizations"
+            referencedColumns: ["id"]
+          },
+        ]
+      }
       event_snapshots: {
         Row: {
           aggregate_id: string
@@ -19062,6 +19212,42 @@ export type Database = {
             referencedColumns: ["id"]
           },
         ]
+      }
+      event_subscriptions: {
+        Row: {
+          consumer_name: string
+          created_at: string
+          enabled: boolean
+          event_type: string
+          filter_conditions: Json | null
+          handler_function: string | null
+          id: string
+          priority: number
+          updated_at: string
+        }
+        Insert: {
+          consumer_name: string
+          created_at?: string
+          enabled?: boolean
+          event_type: string
+          filter_conditions?: Json | null
+          handler_function?: string | null
+          id?: string
+          priority?: number
+          updated_at?: string
+        }
+        Update: {
+          consumer_name?: string
+          created_at?: string
+          enabled?: boolean
+          event_type?: string
+          filter_conditions?: Json | null
+          handler_function?: string | null
+          id?: string
+          priority?: number
+          updated_at?: string
+        }
+        Relationships: []
       }
       evidences: {
         Row: {
@@ -25494,6 +25680,56 @@ export type Database = {
           user_id?: string | null
         }
         Relationships: []
+      }
+      integration_health: {
+        Row: {
+          avg_latency_ms: number | null
+          created_at: string
+          error_count_24h: number
+          id: string
+          integration_name: string
+          last_failure_at: string | null
+          last_success_at: string | null
+          metadata: Json | null
+          organization_id: string | null
+          status: string
+          updated_at: string
+        }
+        Insert: {
+          avg_latency_ms?: number | null
+          created_at?: string
+          error_count_24h?: number
+          id?: string
+          integration_name: string
+          last_failure_at?: string | null
+          last_success_at?: string | null
+          metadata?: Json | null
+          organization_id?: string | null
+          status?: string
+          updated_at?: string
+        }
+        Update: {
+          avg_latency_ms?: number | null
+          created_at?: string
+          error_count_24h?: number
+          id?: string
+          integration_name?: string
+          last_failure_at?: string | null
+          last_success_at?: string | null
+          metadata?: Json | null
+          organization_id?: string | null
+          status?: string
+          updated_at?: string
+        }
+        Relationships: [
+          {
+            foreignKeyName: "integration_health_organization_id_fkey"
+            columns: ["organization_id"]
+            isOneToOne: false
+            referencedRelation: "organizations"
+            referencedColumns: ["id"]
+          },
+        ]
       }
       integration_logs: {
         Row: {
@@ -58984,6 +59220,15 @@ export type Database = {
           similarity: number
           titulo: string
         }[]
+      }
+      publish_event: {
+        Args: {
+          p_event_type: string
+          p_payload?: Json
+          p_source_entity_id?: string
+          p_source_entity_type?: string
+        }
+        Returns: string
       }
       revoke_session_token:
         | { Args: { p_token: string }; Returns: undefined }
