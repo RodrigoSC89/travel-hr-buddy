@@ -31,6 +31,8 @@ import { useQueryClient, useQuery } from '@tanstack/react-query';
 import { supabase } from '@/integrations/supabase/client';
 import { useRealActionHandlers } from '@/hooks/useRealActionHandlers';
 import { toast } from 'sonner';
+import { CrossModulePanel } from '@/components/integration';
+import { publishEvent } from '@/lib/events/event-bus';
 
 // ═══════════════════════════════════════════════════════════
 // LAZY LOAD - SUB-COMPONENTS
@@ -211,16 +213,25 @@ export default function ComplianceMegaHub() {
   const handleSubmitAudit = useCallback(async () => {
     if (!auditForm.audit_type) { toast.error('Tipo de auditoria obrigatório'); return; }
     const auditNumber = `AUD-${new Date().getFullYear()}-${String(Date.now() % 9999).padStart(4, '0')}`;
-    const { error } = await supabase.from('internal_audits').insert({
+    const { data, error } = await supabase.from('internal_audits').insert({
       audit_number: auditNumber,
       audit_type: auditForm.audit_type,
       scope: auditForm.scope || null,
       vessel_id: auditForm.vessel_id || null,
       status: 'planned',
-    });
+    }).select().single();
     if (error) { toast.error('Erro ao criar auditoria: ' + error.message); return; }
     toast.success('Auditoria criada: ' + auditNumber);
+    // Publish cross-module event
+    publishEvent({
+      type: 'compliance.audit.created',
+      payload: { audit_id: data?.id, audit_number: auditNumber, audit_type: auditForm.audit_type, vessel_id: auditForm.vessel_id },
+      sourceEntityType: 'audit',
+      sourceEntityId: data?.id,
+    });
     queryClient.invalidateQueries({ queryKey: ['compliance-audits-hub'] });
+    queryClient.invalidateQueries({ queryKey: ['compliance'] });
+    queryClient.invalidateQueries({ queryKey: ['dashboard-kpis'] });
     setAuditDialogOpen(false);
     setAuditForm({ audit_type: 'internal', scope: '', vessel_id: '' });
   }, [auditForm, queryClient]);
@@ -439,6 +450,15 @@ export default function ComplianceMegaHub() {
               </Suspense>
 
               {(auditsLoading || complianceMetrics.totalAudits > 0) && <ComplianceHubPage />}
+
+              {/* Cross-Module Integration — Compliance ↔ Maintenance ↔ Risk ↔ Training */}
+              <CrossModulePanel
+                entityType="audit"
+                entityId={audits[0]?.id ?? ''}
+                vesselId={audits[0]?.vessel_id ?? undefined}
+                showQuickActions
+                showActivityFeed
+              />
             </TabsContent>
 
             <TabsContent value="audit-workflow" className="mt-0 space-y-6">

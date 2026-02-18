@@ -27,6 +27,8 @@ import { useQueryClient, useQuery } from '@tanstack/react-query';
 import { supabase } from '@/integrations/supabase/client';
 import { useRealActionHandlers } from '@/hooks/useRealActionHandlers';
 import { toast } from 'sonner';
+import { CrossModulePanel } from '@/components/integration';
+import { publishEvent } from '@/lib/events/event-bus';
 
 // Lazy load sub-components
 const MaintenanceHub = lazy(() => import('@/pages/MaintenanceCommandCenter'));
@@ -161,17 +163,26 @@ export default function MaintenanceMegaHub() {
 
   const handleSubmitWorkOrder = useCallback(async () => {
     if (!woForm.title) { toast.error('Título obrigatório'); return; }
-    const { error } = await supabase.from('maintenance_tasks').insert({
+    const { data, error } = await supabase.from('maintenance_tasks').insert({
       title: woForm.title,
       description: woForm.description || null,
       component_name: woForm.component || null,
       priority: woForm.priority,
       status: 'pending',
       vessel_id: woForm.vessel_id || null,
-    });
+    }).select().single();
     if (error) { toast.error('Erro ao criar OS: ' + error.message); return; }
     toast.success('Ordem de Serviço criada');
+    // Publish cross-module event
+    publishEvent({
+      type: 'maintenance.work_order.created',
+      payload: { task_id: data?.id, title: woForm.title, vessel_id: woForm.vessel_id, priority: woForm.priority },
+      sourceEntityType: 'maintenance_task',
+      sourceEntityId: data?.id,
+    });
     queryClient.invalidateQueries({ queryKey: ['maintenance-records-hub'] });
+    queryClient.invalidateQueries({ queryKey: ['maintenance'] });
+    queryClient.invalidateQueries({ queryKey: ['dashboard-kpis'] });
     setWoDialogOpen(false);
     setWoForm({ vessel_id: '', component: '', title: '', description: '', priority: 'medium' });
   }, [woForm, queryClient]);
@@ -374,6 +385,17 @@ export default function MaintenanceMegaHub() {
 
               {/* Original Maintenance Hub */}
               {(maintLoading || maintMetrics.total > 0) && <MaintenanceHub />}
+
+              {/* Cross-Module Integration Panel */}
+              {vessels.length > 0 && (
+                <CrossModulePanel
+                  entityType="vessel"
+                  entityId={vessels[0]?.id}
+                  vesselId={vessels[0]?.id}
+                  showQuickActions
+                  showActivityFeed
+                />
+              )}
             </TabsContent>
 
             <TabsContent value="planning" className="mt-0 space-y-6">
