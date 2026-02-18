@@ -46,6 +46,8 @@ const SecurityCenter = lazy(() => import('@/pages/SecurityCenter'));
 const ComplianceAIHub = lazy(() => import('@/components/compliance/ai/ComplianceAIHub'));
 const LOTOProceduresManager = lazy(() => import('@/components/safety/LOTOProceduresManager').then(m => ({ default: m.LOTOProceduresManager })));
 const JSATemplatesManager = lazy(() => import('@/components/safety/JSATemplatesManager').then(m => ({ default: m.JSATemplatesManager })));
+const ComplianceRiskPredictor = lazy(() => import('@/components/dashboard/ComplianceRiskPredictor'));
+const AuditReadinessTimeline = lazy(() => import('@/components/dashboard/AuditReadinessTimeline'));
 
 // ═══════════════════════════════════════════════════════════
 // 12 AUDITORIAS MARÍTIMAS COMPLETAS - ZERO SUPRESSÃO
@@ -346,6 +348,16 @@ export default function ComplianceMegaHub() {
                   onPrimaryAction={handleNewAudit} 
                 />
               )}
+
+              {/* Wave 18: Compliance Intelligence Panels */}
+              <div className="grid grid-cols-1 lg:grid-cols-2 gap-6">
+                <Suspense fallback={<Skeleton className="h-64" />}>
+                  <ComplianceRiskPredictor />
+                </Suspense>
+                <Suspense fallback={<Skeleton className="h-64" />}>
+                  <AuditReadinessTimeline />
+                </Suspense>
+              </div>
 
               {(auditsLoading || complianceMetrics.totalAudits > 0) && <ComplianceHubPage />}
             </TabsContent>
