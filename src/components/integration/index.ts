@@ -4,3 +4,4 @@ export { EventActivityFeed } from './EventActivityFeed';
 export { IntegrationSidebar } from './IntegrationSidebar';
 export { IntegrationHealthWidget } from './IntegrationHealthWidget';
 export { default as IntegrationHealthDashboard } from './IntegrationHealthDashboard';
+export { CrossModulePanel } from './CrossModulePanel';

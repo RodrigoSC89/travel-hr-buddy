@@ -17,6 +17,7 @@ import { useRealtimeToasts } from "@/hooks/useRealtimeToasts";
 import { useAutonomousMonitor } from "@/hooks/useAutonomousMonitor";
 import { ProactiveAlertsBanner } from "@/components/dashboard/ProactiveAlertsBanner";
 import { useSmartPrefetch } from "@/lib/performance/smart-prefetch";
+import { useEventReactor } from "@/hooks/useEventReactor";
 
 const OfflineStatusBar = lazy(() => 
   import("@/components/offline/OfflineStatusBar").then(mod => ({ default: mod.OfflineStatusBar }))
@@ -50,6 +51,7 @@ const SpotlightSearch = lazy(() =>
 export const AuthenticatedLayout = () => {
   useRealtimeToasts();
   useSmartPrefetch();
+  useEventReactor(); // Cross-module event reactor — listens to all domain events
   const { alerts, dismissAlert } = useAutonomousMonitor({ enabled: true });
 
   return (

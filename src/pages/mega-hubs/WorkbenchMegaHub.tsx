@@ -23,6 +23,8 @@ import { useQueryClient, useQuery } from '@tanstack/react-query';
 import { supabase } from '@/integrations/supabase/client';
 import { useRealActionHandlers } from '@/hooks/useRealActionHandlers';
 import { toast } from 'sonner';
+import { CrossModulePanel } from '@/components/integration';
+import { publishEvent } from '@/lib/events/event-bus';
 
 // Lazy load sub-components
 const DocumentCenterHub = lazy(() => import('@/pages/Documents'));
@@ -427,6 +429,16 @@ export default function WorkbenchMegaHub() {
                 <CrewOvertimeTracker />
               </Suspense>
               <PeopleHub />
+              {/* Cross-Module Integration — People ↔ Compliance ↔ Medical ↔ Training */}
+              {crewMembers.length > 0 && (
+                <CrossModulePanel
+                  entityType="crew_member"
+                  entityId={crewMembers[0]?.id}
+                  vesselId={crewMembers[0]?.vessel_id ?? undefined}
+                  showQuickActions
+                  showActivityFeed
+                />
+              )}
             </TabsContent>
 
             <TabsContent value="crew-schedule" className="mt-0 space-y-6">
@@ -509,6 +521,16 @@ export default function WorkbenchMegaHub() {
                 <ProcurementPipelineTracker />
               </Suspense>
               <FinanceHub />
+              {/* Cross-Module Integration — Finance ↔ Procurement ↔ Voyage P&L */}
+              {vessels.length > 0 && (
+                <CrossModulePanel
+                  entityType="vessel"
+                  entityId={vessels[0]?.id}
+                  vesselId={vessels[0]?.id}
+                  showQuickActions={false}
+                  showActivityFeed
+                />
+              )}
             </TabsContent>
 
             <TabsContent value="approvals" className="mt-0 space-y-6">
