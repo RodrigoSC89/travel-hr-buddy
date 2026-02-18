@@ -308,6 +308,8 @@ export const PortCostPage = lazy(() => import("@/pages/PortCostPage"));
 export const CrewCompetencyPage = lazy(() => import("@/pages/CrewCompetencyPage"));
 export const InsurancePIPage = lazy(() => import("@/pages/InsurancePIPage"));
 export const PoolDistributionPage = lazy(() => import("@/pages/PoolDistributionPage"));
+export const PIClaimsHubPage = lazy(() => import("@/pages/PIClaimsHubPage"));
+export const PoolDistributionHubPage = lazy(() => import("@/pages/PoolDistributionHubPage"));
 
 // ============================================
 // WORLD-CLASS FINAL GAP-CLOSING (vs AMOS, Veson, Compas, CFM, DNV)

@@ -277,6 +277,8 @@ export const AppRoutes = () => (
       <Route path="/crew-competency" element={<Pages.CrewCompetencyPage />} />
       <Route path="/insurance-pi" element={<Pages.InsurancePIPage />} />
       <Route path="/pool-distribution" element={<Pages.PoolDistributionPage />} />
+      <Route path="/pi-claims" element={<Pages.PIClaimsHubPage />} />
+      <Route path="/pool-distribution-hub" element={<Pages.PoolDistributionHubPage />} />
       <Route path="/procurement" element={<Pages.ProcurementPage />} />
       <Route path="/tc-charter" element={<Pages.TCCharterPage />} />
       <Route path="/crew-planning" element={<Pages.CrewPlanningPage />} />
