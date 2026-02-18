@@ -48,6 +48,8 @@ const LOTOProceduresManager = lazy(() => import('@/components/safety/LOTOProcedu
 const JSATemplatesManager = lazy(() => import('@/components/safety/JSATemplatesManager').then(m => ({ default: m.JSATemplatesManager })));
 const ComplianceRiskPredictor = lazy(() => import('@/components/dashboard/ComplianceRiskPredictor'));
 const AuditReadinessTimeline = lazy(() => import('@/components/dashboard/AuditReadinessTimeline'));
+const RegulatoryChangeTracker = lazy(() => import('@/components/dashboard/RegulatoryChangeTracker'));
+const AuditGapHeatmap = lazy(() => import('@/components/dashboard/AuditGapHeatmap'));
 
 // ═══════════════════════════════════════════════════════════
 // 12 AUDITORIAS MARÍTIMAS COMPLETAS - ZERO SUPRESSÃO
@@ -356,6 +358,16 @@ export default function ComplianceMegaHub() {
                 </Suspense>
                 <Suspense fallback={<Skeleton className="h-64" />}>
                   <AuditReadinessTimeline />
+                </Suspense>
+              </div>
+
+              {/* Wave 25: Compliance Deep Analytics */}
+              <div className="grid grid-cols-1 lg:grid-cols-2 gap-6">
+                <Suspense fallback={<Skeleton className="h-64" />}>
+                  <RegulatoryChangeTracker />
+                </Suspense>
+                <Suspense fallback={<Skeleton className="h-64" />}>
+                  <AuditGapHeatmap />
                 </Suspense>
               </div>
 
