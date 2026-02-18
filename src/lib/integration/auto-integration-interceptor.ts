@@ -81,11 +81,6 @@ const TABLE_EVENT_MAP: Record<string, TableEventMapping> = {
     entityType: 'rotation',
     getEntityId: (r) => String(r.id ?? ''),
   },
-  crew_payroll: {
-    insert: 'finance.invoice.created',
-    entityType: 'crew_member',
-    getEntityId: (r) => String(r.id ?? ''),
-  },
 
   // ═══════ MAINTENANCE ═══════
   maintenance_tasks: {
@@ -121,18 +116,6 @@ const TABLE_EVENT_MAP: Record<string, TableEventMapping> = {
   },
   impa_spare_parts: {
     insert: 'maintenance.spare_part.added',
-    entityType: 'work_order',
-    getEntityId: (r) => String(r.id ?? ''),
-  },
-  drydock_projects: {
-    insert: 'maintenance.work_order.created',
-    update: 'maintenance.work_order.status_changed',
-    entityType: 'work_order',
-    getEntityId: (r) => String(r.id ?? ''),
-  },
-  defect_work_requests: {
-    insert: 'maintenance.work_order.created',
-    update: 'maintenance.work_order.status_changed',
     entityType: 'work_order',
     getEntityId: (r) => String(r.id ?? ''),
   },
@@ -301,18 +284,7 @@ const TABLE_EVENT_MAP: Record<string, TableEventMapping> = {
     getEntityId: (r) => String(r.id ?? ''),
   },
 
-  // ═══════ SAFETY ═══════
-  incident_reports: {
-    insert: 'safety.nc.created',
-    update: 'safety.nc.status_changed',
-    entityType: 'finding',
-    getEntityId: (r) => String(r.id ?? ''),
-  },
-  near_miss_reports: {
-    insert: 'safety.nc.created',
-    entityType: 'finding',
-    getEntityId: (r) => String(r.id ?? ''),
-  },
+  // ═══════ SAFETY (LOTO) ═══════
   loto_procedures: {
     insert: 'safety.jsa.template_created',
     entityType: 'audit',
@@ -334,13 +306,6 @@ const TABLE_EVENT_MAP: Record<string, TableEventMapping> = {
     getEntityId: (r) => String(r.id ?? ''),
   },
 
-  // ═══════ MEDICAL ═══════
-  medical_consultations: {
-    insert: 'people.medical.fitness_updated',
-    update: 'people.medical.fitness_updated',
-    entityType: 'crew_member',
-    getEntityId: (r) => String(r.crew_member_id ?? r.id ?? ''),
-  },
 
   // ═══════ TRAINING ═══════
   training_records: {
@@ -386,12 +351,6 @@ const TABLE_EVENT_MAP: Record<string, TableEventMapping> = {
     getEntityId: (r) => String(r.id ?? ''),
   },
 
-  // ═══════ RECRUITMENT ═══════
-  manning_agent_candidates: {
-    update: 'recruitment.stage.changed',
-    entityType: 'crew_member',
-    getEntityId: (r) => String(r.id ?? ''),
-  },
 
   // ═══════ VESSEL HISTORY ═══════
   vessel_history_events: {
@@ -432,7 +391,7 @@ const TABLE_EVENT_MAP: Record<string, TableEventMapping> = {
 
   // ═══════ WARRANTY ═══════
   warranty_claims: {
-    insert: 'maintenance.work_order.created',
+    insert: 'maintenance.warranty.created',
     update: 'maintenance.work_order.status_changed',
     entityType: 'work_order',
     getEntityId: (r) => String(r.id ?? ''),
@@ -440,14 +399,416 @@ const TABLE_EVENT_MAP: Record<string, TableEventMapping> = {
 
   // ═══════ INSURANCE ═══════
   insurance_policies: {
-    insert: 'finance.charter.created',
-    update: 'finance.charter.status_changed',
+    insert: 'finance.contract.created',
+    update: 'finance.contract.updated',
     entityType: 'charter_party',
     getEntityId: (r) => String(r.id ?? ''),
   },
   insurance_claims: {
     insert: 'finance.invoice.created',
     entityType: 'invoice',
+    getEntityId: (r) => String(r.id ?? ''),
+  },
+
+  // ═══════════════════════════════════════════════════════
+  // WAVE 63 — COMPLETE TABLE COVERAGE
+  // ═══════════════════════════════════════════════════════
+
+  // ═══════ NON-CONFORMITIES ═══════
+  non_conformities: {
+    insert: 'compliance.nc.created',
+    update: 'compliance.nc.status_changed',
+    entityType: 'finding',
+    getEntityId: (r) => String(r.id ?? ''),
+    buildPayload: (op, r) => ({ nc_id: r.id, vessel_id: r.vessel_id, severity: r.severity, status: r.status, category: r.category }),
+  },
+
+  // ═══════ INTERNAL AUDITS ═══════
+  internal_audits: {
+    insert: 'compliance.internal_audit.created',
+    update: 'compliance.internal_audit.completed',
+    entityType: 'audit',
+    getEntityId: (r) => String(r.id ?? ''),
+    buildPayload: (op, r) => ({ audit_id: r.id, vessel_id: r.vessel_id, audit_type: r.audit_type, status: r.status }),
+  },
+
+  // ═══════ CHECKLISTS ═══════
+  operational_checklists: {
+    insert: 'operations.checklist.created',
+    update: 'operations.checklist.completed',
+    entityType: 'audit',
+    getEntityId: (r) => String(r.id ?? ''),
+  },
+  checklist_completions: {
+    insert: 'operations.checklist.completed',
+    entityType: 'audit',
+    getEntityId: (r) => String(r.id ?? ''),
+  },
+  checklist_items: {
+    update: 'operations.checklist.completed',
+    entityType: 'audit',
+    getEntityId: (r) => String(r.id ?? ''),
+  },
+
+  // ═══════ DRILLS / SAFETY ═══════
+  drill_records: {
+    insert: 'safety.drill.created',
+    update: 'safety.drill.completed',
+    entityType: 'finding',
+    getEntityId: (r) => String(r.id ?? ''),
+    buildPayload: (op, r) => ({ drill_id: r.id, vessel_id: r.vessel_id, drill_type: r.drill_type, status: r.status }),
+  },
+  incident_reports: {
+    insert: 'safety.incident.created',
+    update: 'safety.incident.updated',
+    entityType: 'finding',
+    getEntityId: (r) => String(r.id ?? ''),
+    buildPayload: (op, r) => ({ incident_id: r.id, vessel_id: r.vessel_id, severity: r.severity, status: r.status }),
+  },
+  near_miss_reports: {
+    insert: 'safety.near_miss.created',
+    entityType: 'finding',
+    getEntityId: (r) => String(r.id ?? ''),
+  },
+
+  // ═══════ FINANCE EXPANDED ═══════
+  financial_transactions: {
+    insert: 'finance.transaction.created',
+    entityType: 'invoice',
+    getEntityId: (r) => String(r.id ?? ''),
+    buildPayload: (op, r) => ({ transaction_id: r.id, amount: r.amount, type: r.transaction_type, vessel_id: r.vessel_id }),
+  },
+  budgets: {
+    insert: 'finance.budget.created',
+    update: 'finance.budget.updated',
+    entityType: 'invoice',
+    getEntityId: (r) => String(r.id ?? ''),
+  },
+  crew_payroll: {
+    insert: 'finance.payroll.created',
+    entityType: 'crew_member',
+    getEntityId: (r) => String(r.crew_member_id ?? r.id ?? ''),
+  },
+  charter_contracts: {
+    insert: 'finance.contract.created',
+    update: 'finance.contract.updated',
+    entityType: 'charter_party',
+    getEntityId: (r) => String(r.id ?? ''),
+  },
+
+  // ═══════ HR / PEOPLE EXPANDED ═══════
+  leave_requests: {
+    insert: 'people.leave.requested',
+    update: 'people.leave.approved',
+    entityType: 'crew_member',
+    getEntityId: (r) => String(r.crew_member_id ?? r.id ?? ''),
+  },
+  performance_evaluations: {
+    insert: 'people.evaluation.created',
+    entityType: 'crew_member',
+    getEntityId: (r) => String(r.crew_member_id ?? r.id ?? ''),
+  },
+  wellness_assessments: {
+    insert: 'people.wellness.updated',
+    update: 'people.wellness.updated',
+    entityType: 'crew_member',
+    getEntityId: (r) => String(r.crew_member_id ?? r.id ?? ''),
+  },
+  hr_climate_responses: {
+    insert: 'people.climate.response',
+    entityType: 'crew_member',
+    getEntityId: (r) => String(r.id ?? ''),
+  },
+  crew_contracts: {
+    insert: 'finance.contract.created',
+    update: 'finance.contract.updated',
+    entityType: 'crew_member',
+    getEntityId: (r) => String(r.crew_member_id ?? r.id ?? ''),
+  },
+
+  // ═══════ MEDICAL EXPANDED ═══════
+  medical_records: {
+    insert: 'medical.record.created',
+    update: 'medical.record.updated',
+    entityType: 'crew_member',
+    getEntityId: (r) => String(r.crew_member_id ?? r.id ?? ''),
+    buildPayload: (op, r) => ({ record_id: r.id, crew_member_id: r.crew_member_id, record_type: r.record_type }),
+  },
+  medical_consultations: {
+    insert: 'medical.record.created',
+    update: 'medical.record.updated',
+    entityType: 'crew_member',
+    getEntityId: (r) => String(r.crew_member_id ?? r.id ?? ''),
+  },
+
+  // ═══════ CARGO / OPERATIONS ═══════
+  cargo_operations: {
+    insert: 'operations.cargo.created',
+    update: 'operations.cargo.updated',
+    entityType: 'voyage',
+    getEntityId: (r) => String(r.id ?? ''),
+    buildPayload: (op, r) => ({ cargo_id: r.id, vessel_id: r.vessel_id, status: r.status }),
+  },
+  cargo_shipments: {
+    insert: 'operations.cargo.created',
+    update: 'operations.cargo.updated',
+    entityType: 'voyage',
+    getEntityId: (r) => String(r.id ?? ''),
+  },
+  bunker_operations: {
+    insert: 'operations.bunker.created',
+    entityType: 'vessel',
+    getEntityId: (r) => String(r.vessel_id ?? r.id ?? ''),
+  },
+  ballast_water_records: {
+    insert: 'operations.ballast.created',
+    entityType: 'vessel',
+    getEntityId: (r) => String(r.vessel_id ?? r.id ?? ''),
+  },
+
+  // ═══════ MAINTENANCE EXPANDED ═══════
+  maintenance_records: {
+    insert: 'maintenance.record.created',
+    update: 'maintenance.record.updated',
+    entityType: 'maintenance_task',
+    getEntityId: (r) => String(r.id ?? ''),
+    buildPayload: (op, r) => ({ record_id: r.id, vessel_id: r.vessel_id, title: r.title, status: r.status }),
+  },
+  defect_work_requests: {
+    insert: 'maintenance.defect.created',
+    update: 'maintenance.work_order.status_changed',
+    entityType: 'work_order',
+    getEntityId: (r) => String(r.id ?? ''),
+  },
+  drydock_projects: {
+    insert: 'maintenance.drydock.created',
+    update: 'maintenance.drydock.updated',
+    entityType: 'work_order',
+    getEntityId: (r) => String(r.id ?? ''),
+  },
+
+  // ═══════ EMISSIONS / ENVIRONMENTAL ═══════
+  emissions_records: {
+    insert: 'environmental.emissions.created',
+    update: 'environmental.emissions.updated',
+    entityType: 'vessel',
+    getEntityId: (r) => String(r.vessel_id ?? r.id ?? ''),
+  },
+  cii_ratings: {
+    insert: 'environmental.emissions.created',
+    entityType: 'vessel',
+    getEntityId: (r) => String(r.vessel_id ?? r.id ?? ''),
+  },
+
+  // ═══════ COMMUNICATION ═══════
+  channel_messages: {
+    insert: 'comms.message.sent',
+    entityType: 'alert',
+    getEntityId: (r) => String(r.id ?? ''),
+  },
+
+  // ═══════ AUTOMATION ═══════
+  automation_workflows: {
+    insert: 'automation.workflow.created',
+    update: 'automation.workflow.executed',
+    entityType: 'alert',
+    getEntityId: (r) => String(r.id ?? ''),
+  },
+  automation_executions: {
+    insert: 'automation.workflow.executed',
+    entityType: 'alert',
+    getEntityId: (r) => String(r.id ?? ''),
+  },
+
+  // ═══════ CALENDAR ═══════
+  calendar_events: {
+    insert: 'calendar.event.created',
+    update: 'calendar.event.updated',
+    entityType: 'alert',
+    getEntityId: (r) => String(r.id ?? ''),
+  },
+
+  // ═══════ SGSO / ISM ═══════
+  sgso_plans: {
+    insert: 'compliance.sgso.plan_created',
+    update: 'compliance.sgso.plan_updated',
+    entityType: 'audit',
+    getEntityId: (r) => String(r.id ?? ''),
+  },
+
+  // ═══════ PREOVID ═══════
+  preovid_audits: {
+    insert: 'compliance.preovid.created',
+    update: 'compliance.preovid.updated',
+    entityType: 'audit',
+    getEntityId: (r) => String(r.id ?? ''),
+  },
+  preovid_responses: {
+    insert: 'compliance.preovid.updated',
+    update: 'compliance.preovid.updated',
+    entityType: 'audit',
+    getEntityId: (r) => String(r.audit_id ?? r.id ?? ''),
+  },
+
+  // ═══════ PEOTRAM ═══════
+  peotram_audits: {
+    insert: 'compliance.peotram.audit_created',
+    update: 'compliance.peotram.audit_updated',
+    entityType: 'audit',
+    getEntityId: (r) => String(r.id ?? ''),
+  },
+
+  // ═══════ RESERVATIONS / TRAVEL ═══════
+  reservations: {
+    insert: 'travel.reservation.created',
+    update: 'travel.reservation.updated',
+    entityType: 'crew_member',
+    getEntityId: (r) => String(r.id ?? ''),
+  },
+
+  // ═══════ VESSEL DOWNTIME ═══════
+  vessel_downtimes: {
+    insert: 'fleet.downtime.created',
+    update: 'fleet.downtime.updated',
+    entityType: 'vessel',
+    getEntityId: (r) => String(r.vessel_id ?? r.id ?? ''),
+  },
+
+  // ═══════ CBT (Computer Based Training) ═══════
+  cbt_courses: {
+    insert: 'training.cbt.started',
+    entityType: 'crew_member',
+    getEntityId: (r) => String(r.id ?? ''),
+  },
+  cbt_progress: {
+    insert: 'training.cbt.started',
+    update: 'training.cbt.completed',
+    entityType: 'crew_member',
+    getEntityId: (r) => String(r.user_id ?? r.id ?? ''),
+  },
+
+  // ═══════ MANNING AGENTS ═══════
+  manning_agent_candidates: {
+    insert: 'recruitment.candidate.created',
+    update: 'recruitment.candidate.updated',
+    entityType: 'crew_member',
+    getEntityId: (r) => String(r.id ?? ''),
+  },
+  manning_agents: {
+    insert: 'procurement.supplier.created',
+    update: 'procurement.supplier.updated',
+    entityType: 'purchase_order',
+    getEntityId: (r) => String(r.id ?? ''),
+  },
+
+  // ═══════ IoT / SENSOR DATA ═══════
+  iot_sensor_data: {
+    insert: 'iot.sensor_data.created',
+    entityType: 'vessel',
+    getEntityId: (r) => String(r.sensor_id ?? r.id ?? ''),
+  },
+
+  // ═══════ ANALYTICS / REPORTS ═══════
+  analytics_reports: {
+    insert: 'analytics.report.generated',
+    entityType: 'alert',
+    getEntityId: (r) => String(r.id ?? ''),
+  },
+  analytics_dashboards: {
+    update: 'analytics.dashboard.updated',
+    entityType: 'alert',
+    getEntityId: (r) => String(r.id ?? ''),
+  },
+  ai_reports: {
+    insert: 'analytics.report.generated',
+    entityType: 'alert',
+    getEntityId: (r) => String(r.id ?? ''),
+  },
+
+  // ═══════ PROFILES / USERS ═══════
+  profiles: {
+    update: 'people.crew.assigned',
+    entityType: 'crew_member',
+    getEntityId: (r) => String(r.id ?? ''),
+  },
+  user_roles: {
+    insert: 'access.role.changed',
+    update: 'access.role.changed',
+    entityType: 'crew_member',
+    getEntityId: (r) => String(r.user_id ?? r.id ?? ''),
+  },
+
+  // ═══════ MARITIME CERTIFICATES ═══════
+  maritime_certificates: {
+    insert: 'compliance.certificate.expiring',
+    update: 'compliance.certificate.expiring',
+    entityType: 'certificate',
+    getEntityId: (r) => String(r.id ?? ''),
+    buildPayload: (op, r) => ({ cert_id: r.id, crew_member_id: r.crew_member_id, certificate_type: r.certificate_type, expiry_date: r.expiry_date }),
+  },
+
+  // ═══════ COMPLIANCE ITEMS ═══════
+  compliance_items: {
+    insert: 'compliance.audit.created',
+    update: 'compliance.audit.completed',
+    entityType: 'audit',
+    getEntityId: (r) => String(r.id ?? ''),
+  },
+
+  // ═══════ ALERT RULES ═══════
+  alert_rules: {
+    insert: 'tracking.alert.created',
+    update: 'alert.acknowledged',
+    entityType: 'alert',
+    getEntityId: (r) => String(r.id ?? ''),
+  },
+
+  // ═══════ TASK / TODO MANAGEMENT ═══════
+  autonomous_tasks: {
+    insert: 'operations.task.created',
+    update: 'operations.task.updated',
+    entityType: 'finding',
+    getEntityId: (r) => String(r.id ?? ''),
+  },
+
+  // ═══════ DOCUMENT VERSIONS ═══════
+  document_versions: {
+    insert: 'document.version.created',
+    entityType: 'document',
+    getEntityId: (r) => String(r.document_id ?? r.id ?? ''),
+  },
+
+  // ═══════ AI EXPANDED ═══════
+  ai_suggestions: {
+    insert: 'ai.suggestion.created',
+    update: 'ai.suggestion.accepted',
+    entityType: 'ai_decision',
+    getEntityId: (r) => String(r.id ?? ''),
+  },
+  ai_chat_conversations: {
+    insert: 'ai.decision.logged',
+    entityType: 'ai_decision',
+    getEntityId: (r) => String(r.id ?? ''),
+  },
+  ai_generated_documents: {
+    insert: 'document.created',
+    update: 'document.created',
+    entityType: 'document',
+    getEntityId: (r) => String(r.id ?? ''),
+  },
+  ai_maintenance_predictions: {
+    insert: 'maintenance.prediction.created',
+    entityType: 'maintenance_task',
+    getEntityId: (r) => String(r.id ?? ''),
+  },
+  ai_risk_assessments: {
+    insert: 'compliance.finding.created',
+    entityType: 'finding',
+    getEntityId: (r) => String(r.id ?? ''),
+  },
+  ai_contract_analysis: {
+    insert: 'finance.contract.created',
+    entityType: 'charter_party',
     getEntityId: (r) => String(r.id ?? ''),
   },
 };
