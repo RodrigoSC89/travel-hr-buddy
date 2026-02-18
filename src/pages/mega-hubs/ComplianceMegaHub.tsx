@@ -53,6 +53,7 @@ const AuditGapHeatmap = lazy(() => import('@/components/dashboard/AuditGapHeatma
 const VettingReadinessCenter = lazy(() => import('@/components/dashboard/VettingReadinessCenter'));
 const RegulatoryRadarLive = lazy(() => import('@/components/dashboard/RegulatoryRadarLive'));
 const ISMGapAnalyzer = lazy(() => import('@/components/dashboard/ISMGapAnalyzer'));
+const PSCDetentionPredictor = lazy(() => import('@/components/dashboard/PSCDetentionPredictor'));
 
 // ═══════════════════════════════════════════════════════════
 // 12 AUDITORIAS MARÍTIMAS COMPLETAS - ZERO SUPRESSÃO
@@ -391,10 +392,13 @@ export default function ComplianceMegaHub() {
                 </Suspense>
               </div>
 
-              {/* Wave 44: ISM Gap Analyzer */}
+              {/* Wave 44: ISM Gap Analyzer + Wave 50: PSC Detention Predictor */}
               <div className="grid grid-cols-1 lg:grid-cols-2 gap-6">
                 <Suspense fallback={<Skeleton className="h-64" />}>
                   <ISMGapAnalyzer />
+                </Suspense>
+                <Suspense fallback={<Skeleton className="h-64" />}>
+                  <PSCDetentionPredictor />
                 </Suspense>
               </div>
 

@@ -52,6 +52,7 @@ const AIModelPerformanceMatrix = lazy(() => import('@/components/dashboard/AIMod
 const AutonomousDecisionTracker = lazy(() => import('@/components/dashboard/AutonomousDecisionTracker'));
 const AIModelObservatory = lazy(() => import('@/components/dashboard/AIModelObservatory'));
 const RAGKnowledgeMetrics = lazy(() => import('@/components/dashboard/RAGKnowledgeMetrics'));
+const AISwarmOrchestrator = lazy(() => import('@/components/dashboard/AISwarmOrchestrator'));
 
 const LoadingSkeleton = () => (
   <div className="space-y-4 p-6">
@@ -365,6 +366,9 @@ export default function AIMegaHub() {
               <div className="grid grid-cols-1 lg:grid-cols-2 gap-6">
                 <Suspense fallback={<Skeleton className="h-64" />}>
                   <RAGKnowledgeMetrics />
+                </Suspense>
+                <Suspense fallback={<Skeleton className="h-64" />}>
+                  <AISwarmOrchestrator />
                 </Suspense>
               </div>
 
