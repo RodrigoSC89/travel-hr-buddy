@@ -44,6 +44,7 @@ const PayrollIntelligence = lazy(() => import('@/components/dashboard/PayrollInt
 const CrewRotationOverview = lazy(() => import('@/components/dashboard/CrewRotationOverview').then(m => ({ default: m.CrewRotationOverview })));
 const CrewCompetencyRadar = lazy(() => import('@/components/dashboard/CrewCompetencyRadar').then(m => ({ default: m.CrewCompetencyRadar })));
 const CashFlowForecast = lazy(() => import('@/components/dashboard/CashFlowForecast').then(m => ({ default: m.CashFlowForecast })));
+const CrewOvertimeTracker = lazy(() => import('@/components/dashboard/CrewOvertimeTracker').then(m => ({ default: m.CrewOvertimeTracker })));
 
 const LoadingSkeleton = () => (
   <div className="space-y-4 p-6">
@@ -413,6 +414,10 @@ export default function WorkbenchMegaHub() {
                   <CrewCompetencyRadar />
                 </Suspense>
               </div>
+              {/* MLC Work/Rest Overtime Tracker */}
+              <Suspense fallback={<Skeleton className="h-64" />}>
+                <CrewOvertimeTracker />
+              </Suspense>
               <PeopleHub />
             </TabsContent>
 

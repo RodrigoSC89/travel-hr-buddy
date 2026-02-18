@@ -60,6 +60,7 @@ const SystemEventsPanel = lazy(() => import('@/components/dashboard/SystemEvents
 const FleetKPISummaryCards = lazy(() => import('@/components/dashboard/FleetKPISummaryCards').then(m => ({ default: m.FleetKPISummaryCards })));
 const FleetStatusGrid = lazy(() => import('@/components/dashboard/FleetStatusGrid').then(m => ({ default: m.FleetStatusGrid })));
 const VoyagePnLQuickView = lazy(() => import('@/components/dashboard/VoyagePnLQuickView').then(m => ({ default: m.VoyagePnLQuickView })));
+const FleetUtilizationKPI = lazy(() => import('@/components/dashboard/FleetUtilizationKPI').then(m => ({ default: m.FleetUtilizationKPI })));
 
 const LoadingSkeleton = () => (
   <div className="space-y-4 p-6">
@@ -256,6 +257,11 @@ export default function CommandMegaHub() {
               {/* Fleet KPI Summary Cards */}
               <Suspense fallback={<Skeleton className="h-24" />}>
                 <FleetKPISummaryCards />
+              </Suspense>
+
+              {/* Fleet Utilization KPI */}
+              <Suspense fallback={<Skeleton className="h-48" />}>
+                <FleetUtilizationKPI />
               </Suspense>
 
               {/* System Health KPIs - Always visible */}

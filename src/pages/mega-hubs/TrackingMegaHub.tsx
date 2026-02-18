@@ -40,6 +40,7 @@ const GeofenceIntelligence = lazy(() => import('@/components/dashboard/GeofenceI
 const IoTAnomalyDetector = lazy(() => import('@/components/dashboard/IoTAnomalyDetector'));
 const SATCOMPerformanceMonitor = lazy(() => import('@/components/dashboard/SATCOMPerformanceMonitor'));
 const VesselETAPredictor = lazy(() => import('@/components/dashboard/VesselETAPredictor'));
+const TrackingKPISummary = lazy(() => import('@/components/dashboard/TrackingKPISummary').then(m => ({ default: m.TrackingKPISummary })));
 
 const LoadingSkeleton = () => (
   <div className="space-y-4 p-6">
@@ -280,6 +281,11 @@ export default function TrackingMegaHub() {
                   onPrimaryAction={() => navigate('/ops')} 
                 />
               )}
+
+              {/* Tracking KPI Summary Cards */}
+              <Suspense fallback={<Skeleton className="h-24" />}>
+                <TrackingKPISummary />
+              </Suspense>
 
               {/* Wave 20: Tracking Intelligence Panels */}
               <div className="grid grid-cols-1 lg:grid-cols-2 gap-6">
