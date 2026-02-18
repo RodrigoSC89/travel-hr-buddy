@@ -3,8 +3,9 @@
  * Only accessible by admin users
  */
 import { useState } from "react";
-import { useQuery, useMutation, useQueryClient } from "@tanstack/react-query";
+import { useQuery } from "@tanstack/react-query";
 import { supabase } from "@/integrations/supabase/client";
+import { useUpdateUserRole } from "@/hooks/useModuleHooks";
 import { Card, CardContent, CardDescription, CardHeader, CardTitle } from "@/components/ui/card";
 import { Button } from "@/components/ui/button";
 import { Badge } from "@/components/ui/badge";
@@ -38,7 +39,6 @@ interface UserWithRole {
 
 export default function RoleManagementPage() {
   const [search, setSearch] = useState("");
-  const queryClient = useQueryClient();
 
   const { data: usersWithRoles = [], isLoading } = useQuery({
     queryKey: ["admin-user-roles"],
@@ -68,20 +68,8 @@ export default function RoleManagementPage() {
     },
   });
 
-  const updateRole = useMutation({
-    mutationFn: async ({ userId, newRole }: { userId: string; newRole: UserRole }) => {
-      const { error } = await supabase
-        .from("user_roles")
-        .update({ role: newRole })
-        .eq("user_id", userId);
-      if (error) throw error;
-    },
-    onSuccess: () => {
-      queryClient.invalidateQueries({ queryKey: ["admin-user-roles"] });
-      toast.success("Role atualizado com sucesso");
-    },
-    onError: () => toast.error("Erro ao atualizar role"),
-  });
+  // ✅ INTEGRATED — publishes access.role.changed event + audit trail
+  const updateRole = useUpdateUserRole();
 
   const filtered = usersWithRoles.filter(u =>
     (u.email?.toLowerCase().includes(search.toLowerCase()) ||

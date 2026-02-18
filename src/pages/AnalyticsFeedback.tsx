@@ -14,8 +14,9 @@ import { RadioGroup, RadioGroupItem } from '@/components/ui/radio-group';
 import { ScrollArea } from '@/components/ui/scroll-area';
 import { BarChart3, Users, Ship, TrendingUp, MessageSquare, Bug, Lightbulb, Star, Send, ThumbsUp, Clock, CheckCircle2, Activity, Loader2 } from 'lucide-react';
 import { toast } from 'sonner';
-import { useQuery, useMutation } from '@tanstack/react-query';
+import { useQuery } from '@tanstack/react-query';
 import { supabase } from '@/integrations/supabase/client';
+import { useSubmitFeedback } from '@/hooks/useModuleHooks';
 
 export default function AnalyticsFeedback() {
   const [npsScore, setNpsScore] = useState<number | null>(null);
@@ -44,25 +45,16 @@ export default function AnalyticsFeedback() {
     }
   });
 
-  const submitMutation = useMutation({
-    mutationFn: async () => {
-      const userId = (await supabase.auth.getUser()).data.user?.id;
-      const { error } = await supabase.from('ai_feedback_scores').insert({
-        command_type: feedbackType,
-        command_data: { content: feedbackComment },
-        self_score: npsScore || 0,
-        feedback_data: { type: feedbackType, comment: feedbackComment },
-        user_id: userId
+  // ✅ INTEGRATED — publishes feedback.submitted event + cross-module cache invalidation
+  const submitFeedbackHook = useSubmitFeedback();
+  const submitMutation = {
+    mutate: () => {
+      submitFeedbackHook.mutate({ type: feedbackType, comment: feedbackComment, score: npsScore || 0 }, {
+        onSuccess: () => { setFeedbackComment(''); setNpsScore(null); },
       });
-      if (error) throw error;
     },
-    onSuccess: () => {
-      toast.success('Feedback enviado!');
-      setFeedbackComment('');
-      setNpsScore(null);
-    },
-    onError: () => toast.error('Erro ao enviar feedback')
-  });
+    isPending: submitFeedbackHook.isPending,
+  };
 
   if (isLoading) return <div className="flex justify-center p-8"><Loader2 className="h-8 w-8 animate-spin" /></div>;
 
