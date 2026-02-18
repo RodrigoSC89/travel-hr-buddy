@@ -53,6 +53,7 @@ const AutonomousDecisionTracker = lazy(() => import('@/components/dashboard/Auto
 const AIModelObservatory = lazy(() => import('@/components/dashboard/AIModelObservatory'));
 const RAGKnowledgeMetrics = lazy(() => import('@/components/dashboard/RAGKnowledgeMetrics'));
 const AISwarmOrchestrator = lazy(() => import('@/components/dashboard/AISwarmOrchestrator'));
+const QuickAIPromptPanel = lazy(() => import('@/components/dashboard/QuickAIPromptPanel').then(m => ({ default: m.QuickAIPromptPanel })));
 
 const LoadingSkeleton = () => (
   <div className="space-y-4 p-6">
@@ -371,6 +372,11 @@ export default function AIMegaHub() {
                   <AISwarmOrchestrator />
                 </Suspense>
               </div>
+
+              {/* Quick AI Prompt Panel */}
+              <Suspense fallback={<Skeleton className="h-64" />}>
+                <QuickAIPromptPanel />
+              </Suspense>
 
               {(agentsLoading || agentMetrics.totalAgents > 0) && <AIControlTowerHub />}
             </TabsContent>
