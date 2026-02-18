@@ -42,6 +42,7 @@ const CargoPerformanceDashboard = lazy(() => import('@/components/dashboard/Carg
 const WeatherRoutingIntelligence = lazy(() => import('@/components/dashboard/WeatherRoutingIntelligence'));
 const PortPerformanceAnalytics = lazy(() => import('@/components/dashboard/PortPerformanceAnalytics'));
 const CrewFatigueCommand = lazy(() => import('@/components/dashboard/CrewFatigueCommand'));
+const BunkerIntelligence = lazy(() => import('@/components/dashboard/BunkerIntelligence'));
 const LoadingSkeleton = () => (
   <div className="space-y-4 p-6">
     <Skeleton className="h-8 w-64" />
@@ -293,6 +294,13 @@ export default function OpsMegaHub() {
               <div className="grid grid-cols-1 lg:grid-cols-2 gap-6">
                 <Suspense fallback={<Skeleton className="h-64" />}>
                   <CrewFatigueCommand />
+                </Suspense>
+              </div>
+
+              {/* Wave 35: Bunker Intelligence */}
+              <div className="grid grid-cols-1 lg:grid-cols-2 gap-6">
+                <Suspense fallback={<Skeleton className="h-64" />}>
+                  <BunkerIntelligence />
                 </Suspense>
               </div>
 

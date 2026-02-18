@@ -51,6 +51,7 @@ const WorkOrderPipeline = lazy(() => import('@/components/dashboard/WorkOrderPip
 const PredictiveFailureHeatmap = lazy(() => import('@/components/dashboard/PredictiveFailureHeatmap'));
 const SupplyChainIntelligence = lazy(() => import('@/components/dashboard/SupplyChainIntelligence'));
 const AssetIntegrityMatrix = lazy(() => import('@/components/dashboard/AssetIntegrityMatrix'));
+const DrydockCostOptimizer = lazy(() => import('@/components/dashboard/DrydockCostOptimizer'));
 const LoadingSkeleton = () => (
   <div className="space-y-4 p-6">
     <Skeleton className="h-8 w-64" />
@@ -313,6 +314,13 @@ export default function MaintenanceMegaHub() {
               <div className="grid grid-cols-1 lg:grid-cols-2 gap-6">
                 <Suspense fallback={<Skeleton className="h-64" />}>
                   <AssetIntegrityMatrix />
+                </Suspense>
+              </div>
+
+              {/* Wave 37: Drydock Cost Optimizer */}
+              <div className="grid grid-cols-1 lg:grid-cols-2 gap-6">
+                <Suspense fallback={<Skeleton className="h-64" />}>
+                  <DrydockCostOptimizer />
                 </Suspense>
               </div>
 
