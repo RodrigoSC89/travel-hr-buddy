@@ -173,19 +173,19 @@ export function PredictiveCostDashboard() {
         </motion.div>
 
         <motion.div whileHover={{ scale: 1.02 }}>
-          <Card className="bg-gradient-to-br from-purple-500/10 to-purple-500/5">
+          <Card className="bg-gradient-to-br from-accent/10 to-accent/5">
             <CardContent className="pt-6">
               <div className="flex items-center justify-between">
                 <div>
                   <p className="text-sm text-muted-foreground">ROI Médio</p>
-                  <p className="text-2xl font-bold text-purple-600">
+                  <p className="text-2xl font-bold text-accent">
                     {savings.length > 0 
                       ? (savings.reduce((a, s) => a + s.roi, 0) / savings.length).toFixed(0) 
                       : 0}%
                   </p>
                   <p className="text-xs text-muted-foreground mt-1">Das economias</p>
                 </div>
-                <Target className="h-8 w-8 text-purple-500 opacity-80" />
+                <Target className="h-8 w-8 text-accent opacity-80" />
               </div>
             </CardContent>
           </Card>
@@ -351,7 +351,7 @@ export function PredictiveCostDashboard() {
                       </div>
                       <div className="mt-4 flex items-center justify-between">
                         <div className="flex items-center gap-2">
-                          <Target className="h-4 w-4 text-purple-500" />
+                          <Target className="h-4 w-4 text-accent" />
                           <span className="text-sm font-medium">ROI: {opportunity.roi}%</span>
                         </div>
                         <Button size="sm" variant="outline">

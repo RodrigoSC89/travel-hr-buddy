@@ -332,8 +332,8 @@ export function IoTSensorMonitor({ vesselId, onAnomalyDetected }: IoTSensorMonit
                       <Area
                         type="monotone"
                         dataKey="value"
-                        stroke={sensor.status === "critical" ? "#ef4444" : sensor.status === "warning" ? "#eab308" : "#22c55e"}
-                        fill={sensor.status === "critical" ? "#ef444420" : sensor.status === "warning" ? "#eab30820" : "#22c55e20"}
+                        stroke={sensor.status === "critical" ? "hsl(var(--destructive))" : sensor.status === "warning" ? "hsl(var(--warning))" : "hsl(var(--success))"}
+                        fill={sensor.status === "critical" ? "hsl(var(--destructive) / 0.12)" : sensor.status === "warning" ? "hsl(var(--warning) / 0.12)" : "hsl(var(--success) / 0.12)"}
                       />
                     </AreaChart>
                   </ResponsiveContainer>

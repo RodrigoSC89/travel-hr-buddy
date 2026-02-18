@@ -314,7 +314,7 @@ export const PreOVIDCompleteChecklist: React.FC<PreOVIDCompleteChecklistProps> =
                         {/* Observation */}
                         <div>
                           <Label className="text-sm mb-2 block">
-                            Observação {question.mandatoryComment && <span className="text-red-500">*</span>}:
+                            Observação {question.mandatoryComment && <span className="text-destructive">*</span>}:
                           </Label>
                           <Textarea
                             placeholder="Adicione observações, evidências ou detalhes..."

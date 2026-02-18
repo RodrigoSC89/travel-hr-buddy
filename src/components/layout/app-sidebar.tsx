@@ -268,7 +268,7 @@ export function AppSidebar({ activeItem, onItemChange }: AppSidebarProps) {
             onClick={(e) => { e.stopPropagation(); togglePin(item.path); }}
             className={cn(
               "opacity-0 group-hover/nav-item:opacity-100 transition-opacity p-0.5 rounded hover:bg-sidebar-accent",
-              isPinned(item.path) && "opacity-100 text-amber-400"
+              isPinned(item.path) && "opacity-100 text-warning"
             )}
             aria-label={isPinned(item.path) ? t('sidebar.pinned') : "Pin"}
           >
@@ -389,8 +389,8 @@ export function AppSidebar({ activeItem, onItemChange }: AppSidebarProps) {
           {/* Pinned items */}
           {!filteredItems && pinnedItems.length > 0 && !collapsed && (
             <SidebarGroup>
-              <SidebarGroupLabel className="text-xs flex items-center gap-1 text-amber-400/80">
-                <Star className="h-3 w-3 fill-amber-400/60" /> {t('sidebar.pinned')}
+              <SidebarGroupLabel className="text-xs flex items-center gap-1 text-warning/80">
+                <Star className="h-3 w-3 fill-warning/60" /> {t('sidebar.pinned')}
               </SidebarGroupLabel>
               <SidebarGroupContent>
                 <div className="space-y-0.5 px-2">

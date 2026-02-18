@@ -192,7 +192,7 @@ export function RouteMap({
             'line-cap': 'round'
           },
           paint: {
-            'line-color': '#60a5fa',
+            'line-color': 'hsl(217, 91%, 60%)',
             'line-width': 16,
             'line-opacity': 0.15,
             'line-blur': 8
@@ -209,7 +209,7 @@ export function RouteMap({
             'line-cap': 'round'
           },
           paint: {
-            'line-color': '#3b82f6',
+            'line-color': 'hsl(217, 91%, 60%)',
             'line-width': 10,
             'line-opacity': 0.3,
             'line-blur': 4
@@ -226,7 +226,7 @@ export function RouteMap({
             'line-cap': 'round'
           },
           paint: {
-            'line-color': '#3b82f6',
+            'line-color': 'hsl(217, 91%, 60%)',
             'line-width': 4,
             'line-opacity': 1
           }
@@ -259,7 +259,7 @@ export function RouteMap({
           el.style.cssText = `
             width: ${isStart || isEnd ? '28px' : '18px'};
             height: ${isStart || isEnd ? '28px' : '18px'};
-            background: ${isStart ? '#10b981' : isEnd ? '#ef4444' : '#3b82f6'};
+            background: ${isStart ? 'hsl(160, 84%, 39%)' : isEnd ? 'hsl(0, 84%, 60%)' : 'hsl(217, 91%, 60%)'};
             border: 3px solid white;
             border-radius: 50%;
             box-shadow: 0 4px 12px rgba(0,0,0,0.4), 0 0 0 4px ${isStart ? 'rgba(16,185,129,0.3)' : isEnd ? 'rgba(239,68,68,0.3)' : 'rgba(59,130,246,0.2)'};

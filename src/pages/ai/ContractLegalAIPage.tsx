@@ -72,9 +72,9 @@ export default function ContractLegalAIPage() {
               <div className="flex items-center justify-between">
                 <div>
                   <p className="text-sm text-muted-foreground">Expirando (30 dias)</p>
-                  <p className="text-3xl font-bold text-amber-500">5</p>
+                  <p className="text-3xl font-bold text-warning">5</p>
                 </div>
-                <Clock className="h-8 w-8 text-amber-500" />
+                <Clock className="h-8 w-8 text-warning" />
               </div>
             </CardContent>
           </Card>
@@ -83,9 +83,9 @@ export default function ContractLegalAIPage() {
               <div className="flex items-center justify-between">
                 <div>
                   <p className="text-sm text-muted-foreground">Pendentes Aprovação</p>
-                  <p className="text-3xl font-bold text-blue-500">8</p>
+                  <p className="text-3xl font-bold text-info">8</p>
                 </div>
-                <AlertTriangle className="h-8 w-8 text-blue-500" />
+                <AlertTriangle className="h-8 w-8 text-info" />
               </div>
             </CardContent>
           </Card>
@@ -96,7 +96,7 @@ export default function ContractLegalAIPage() {
                   <p className="text-sm text-muted-foreground">Valor Total</p>
                   <p className="text-3xl font-bold">$28M</p>
                 </div>
-                <Scale className="h-8 w-8 text-emerald-500" />
+                <Scale className="h-8 w-8 text-success" />
               </div>
             </CardContent>
           </Card>

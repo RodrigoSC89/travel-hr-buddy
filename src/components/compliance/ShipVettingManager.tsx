@@ -95,7 +95,7 @@ export function ShipVettingManager() {
       <div className="flex items-center justify-between">
         <div>
           <h1 className="text-2xl font-bold flex items-center gap-2">
-            <Shield className="h-7 w-7 text-emerald-400" />
+            <Shield className="h-7 w-7 text-success" />
             Ship Vetting Manager
           </h1>
           <p className="text-muted-foreground">SIRE 2.0, CDI, RightShip GHG rating tracking</p>

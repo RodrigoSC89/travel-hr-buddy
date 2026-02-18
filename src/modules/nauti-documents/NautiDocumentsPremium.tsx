@@ -107,7 +107,7 @@ function DocumentsDashboard() {
                 <p className="text-xs text-muted-foreground">IA Insights</p>
                 <p className="text-2xl font-bold">156</p>
               </div>
-              <Bot className="h-8 w-8 text-violet-500 opacity-60" />
+              <Bot className="h-8 w-8 text-accent opacity-60" />
             </div>
           </CardContent>
         </Card>

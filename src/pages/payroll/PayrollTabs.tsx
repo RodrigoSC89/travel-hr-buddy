@@ -211,7 +211,7 @@ export const PayrollTabs: React.FC<PayrollTabsProps> = ({
           </Card>
           <Card className="cursor-pointer hover:border-primary transition-colors">
             <CardHeader>
-              <CardTitle className="flex items-center gap-2"><Building2 className="h-5 w-5 text-orange-600" />eSocial / SEFIP</CardTitle>
+              <CardTitle className="flex items-center gap-2"><Building2 className="h-5 w-5 text-warning" />eSocial / SEFIP</CardTitle>
               <CardDescription>Geração de arquivo XML para envio ao eSocial (S-1200/S-2200)</CardDescription>
             </CardHeader>
             <CardContent>

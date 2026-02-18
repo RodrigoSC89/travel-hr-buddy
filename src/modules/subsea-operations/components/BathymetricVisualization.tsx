@@ -153,9 +153,9 @@ export function BathymetricVisualization() {
         ctx.beginPath();
         ctx.arc(ax, ay, r, 0, Math.PI * 2);
         ctx.fillStyle =
-          asset.type === "rov" ? "#22c55e" :
-          asset.type === "auv" ? "#3b82f6" :
-          asset.type === "sensor" ? "#eab308" : "#ef4444";
+          asset.type === "rov" ? "hsl(142, 71%, 45%)" :
+          asset.type === "auv" ? "hsl(217, 91%, 60%)" :
+          asset.type === "sensor" ? "hsl(48, 96%, 53%)" : "hsl(0, 84%, 60%)";
         ctx.fill();
 
         if (cellSize >= 14) {

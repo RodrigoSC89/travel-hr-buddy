@@ -368,7 +368,7 @@ export const SuperAdminDashboard: React.FC = () => {
               <div key={org.id} className="flex items-center justify-between p-4 border rounded-lg hover:bg-accent/50 transition-colors">
                 <div className="flex items-center space-x-4">
                   <div className="w-12 h-12 rounded-lg flex items-center justify-center text-azure-50 font-bold" 
-                    style={{ backgroundColor: org.branding?.primary_color || "#1e40af" }}>
+                    style={{ backgroundColor: org.branding?.primary_color || "hsl(var(--primary))" }}>
                     {org.branding?.company_name?.charAt(0) || org.name.charAt(0)}
                   </div>
                   <div>

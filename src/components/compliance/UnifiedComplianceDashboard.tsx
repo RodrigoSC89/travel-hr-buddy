@@ -206,9 +206,9 @@ export function UnifiedComplianceDashboard() {
     const warning = modules.filter(m => m.status === 'warning').length;
     const critical = modules.filter(m => m.status === 'critical').length;
     return [
-      { name: 'Conformes', value: compliant, color: '#22c55e' },
-      { name: 'Atenção', value: warning, color: '#f59e0b' },
-      { name: 'Críticos', value: critical, color: '#ef4444' },
+      { name: 'Conformes', value: compliant, color: 'hsl(var(--success))' },
+      { name: 'Atenção', value: warning, color: 'hsl(var(--warning))' },
+      { name: 'Críticos', value: critical, color: 'hsl(var(--destructive))' },
     ].filter(d => d.value > 0);
   }, [modules]);
 

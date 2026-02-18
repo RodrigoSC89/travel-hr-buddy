@@ -198,8 +198,8 @@ export const OVIDHistoricalEvolution: React.FC<OVIDHistoricalEvolutionProps> = (
               <div className="text-center">
                 <p className="text-xs text-muted-foreground mb-1">Score Médio</p>
                 <p className={`text-2xl font-bold ${
-                  stats.avg >= 85 ? 'text-green-500' : 
-                  stats.avg >= 70 ? 'text-yellow-500' : 'text-red-500'
+                  stats.avg >= 85 ? 'text-success' : 
+                  stats.avg >= 70 ? 'text-warning' : 'text-destructive'
                 }`}>
                   {stats.avg}%
                 </p>
@@ -211,8 +211,8 @@ export const OVIDHistoricalEvolution: React.FC<OVIDHistoricalEvolutionProps> = (
               <div className="text-center">
                 <p className="text-xs text-muted-foreground mb-1">Último Score</p>
                 <p className={`text-2xl font-bold ${
-                  stats.latest >= 85 ? 'text-green-500' : 
-                  stats.latest >= 70 ? 'text-yellow-500' : 'text-red-500'
+                  stats.latest >= 85 ? 'text-success' : 
+                  stats.latest >= 70 ? 'text-warning' : 'text-destructive'
                 }`}>
                   {stats.latest}%
                 </p>

@@ -57,10 +57,10 @@ const demoMonthlyEmissions = [
 ];
 
 const fuelConsumption = [
-  { name: "MGO (0.1% S)", value: 45, color: "#22c55e" },
-  { name: "VLSFO (0.5% S)", value: 35, color: "#3b82f6" },
-  { name: "HFO (Scrubber)", value: 15, color: "#f59e0b" },
-  { name: "LNG", value: 5, color: "#8b5cf6" },
+  { name: "MGO (0.1% S)", value: 45, color: "hsl(var(--success))" },
+  { name: "VLSFO (0.5% S)", value: 35, color: "hsl(var(--primary))" },
+  { name: "HFO (Scrubber)", value: 15, color: "hsl(var(--warning))" },
+  { name: "LNG", value: 5, color: "hsl(var(--accent))" },
 ];
 
 // Vessel emissions data

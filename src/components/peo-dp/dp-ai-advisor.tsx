@@ -282,8 +282,8 @@ export const DPAIAdvisor: React.FC = () => {
       {/* Header */}
       <div className="flex items-center justify-between">
         <div className="flex items-center gap-3">
-          <div className="p-3 bg-gradient-to-br from-purple-500/20 to-blue-500/20 rounded-xl">
-            <Brain className="h-8 w-8 text-purple-500" />
+          <div className="p-3 bg-gradient-to-br from-accent/20 to-primary/20 rounded-xl">
+            <Brain className="h-8 w-8 text-accent" />
           </div>
           <div>
             <h2 className="text-2xl font-bold text-foreground">DP AI Advisor</h2>
@@ -334,7 +334,7 @@ export const DPAIAdvisor: React.FC = () => {
                                   <ThumbsUp className={`h-3 w-3 ${message.rating === "positive" ? "text-success fill-success" : ""}`} />
                                 </Button>
                                 <Button size="sm" variant="ghost" className="h-6 px-2" onClick={() => handleRating(message.id, "negative")}>
-                                  <ThumbsDown className={`h-3 w-3 ${message.rating === "negative" ? "text-red-500 fill-red-500" : ""}`} />
+                                  <ThumbsDown className={`h-3 w-3 ${message.rating === "negative" ? "text-destructive fill-destructive" : ""}`} />
                                 </Button>
                                 <Button size="sm" variant="ghost" className="h-6 px-2" onClick={() => handleCopy(message.content)}>
                                   <Copy className="h-3 w-3" />
@@ -352,7 +352,7 @@ export const DPAIAdvisor: React.FC = () => {
                   {isLoading && (
                     <div className="flex justify-start">
                       <div className="flex items-center gap-2 p-3 rounded-lg bg-muted">
-                        <RefreshCw className="h-4 w-4 animate-spin text-purple-500" />
+                        <RefreshCw className="h-4 w-4 animate-spin text-accent" />
                         <span className="text-sm">Analisando...</span>
                       </div>
                     </div>
@@ -416,19 +416,19 @@ export const DPAIAdvisor: React.FC = () => {
             <CardContent>
               <div className="space-y-2 text-sm">
                 <div className="flex items-center gap-2">
-                  <CheckCircle className="h-4 w-4 text-green-500" />
+                  <CheckCircle className="h-4 w-4 text-success" />
                   <span>IMCA M103, M117, M182, M190</span>
                 </div>
                 <div className="flex items-center gap-2">
-                  <CheckCircle className="h-4 w-4 text-green-500" />
+                  <CheckCircle className="h-4 w-4 text-success" />
                   <span>IMO MSC.1/Circ.1580</span>
                 </div>
                 <div className="flex items-center gap-2">
-                  <CheckCircle className="h-4 w-4 text-green-500" />
+                  <CheckCircle className="h-4 w-4 text-success" />
                   <span>NI DP Operator's Handbook</span>
                 </div>
                 <div className="flex items-center gap-2">
-                  <CheckCircle className="h-4 w-4 text-green-500" />
+                  <CheckCircle className="h-4 w-4 text-success" />
                   <span>Lições Aprendidas Internas</span>
                 </div>
               </div>

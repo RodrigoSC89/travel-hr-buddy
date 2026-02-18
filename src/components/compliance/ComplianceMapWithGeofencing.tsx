@@ -534,7 +534,7 @@ export function ComplianceMapWithGeofencing({
   }, [isRealtime, fetchVessels]);
 
   function getMarkerHTML(status: VesselInspection['status'], inGeofence: boolean): string {
-    const colors = { 'overdue': '#ef4444', 'due-soon': '#f59e0b', 'compliant': '#22c55e', 'in-progress': '#3b82f6' };
+    const colors = { 'overdue': 'hsl(0, 84%, 60%)', 'due-soon': 'hsl(38, 92%, 50%)', 'compliant': 'hsl(142, 71%, 45%)', 'in-progress': 'hsl(217, 91%, 60%)' };
     const color = colors[status];
     const ring = inGeofence ? 'box-shadow: 0 0 0 3px rgba(245, 158, 11, 0.5), 0 2px 8px rgba(0,0,0,0.3);' : 'box-shadow: 0 2px 8px rgba(0,0,0,0.3);';
     
@@ -546,7 +546,7 @@ export function ComplianceMapWithGeofencing({
   }
 
   function getStatusColor(status: VesselInspection['status']): string {
-    const colors = { 'overdue': '#ef4444', 'due-soon': '#f59e0b', 'compliant': '#22c55e', 'in-progress': '#3b82f6' };
+    const colors = { 'overdue': 'hsl(0, 84%, 60%)', 'due-soon': 'hsl(38, 92%, 50%)', 'compliant': 'hsl(142, 71%, 45%)', 'in-progress': 'hsl(217, 91%, 60%)' };
     return colors[status];
   }
 
