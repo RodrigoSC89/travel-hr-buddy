@@ -17,6 +17,7 @@ import { useSessionSecurity } from "@/hooks/useSessionSecurity";
 import { useCrossModuleAutomation } from "@/hooks/useCrossModuleAutomation";
 import { useRealtimeAlerts } from "@/hooks/useRealtimeAlerts";
 import { useGlobalShortcuts } from "@/hooks/useGlobalShortcuts";
+import { SmartBreadcrumbs } from "@/components/layout/SmartBreadcrumbs";
 
 // Lazy load offline components
 const OfflineStatusBar = lazy(() => 
@@ -24,6 +25,9 @@ const OfflineStatusBar = lazy(() =>
 );
 const QuickActionFAB = lazy(() => 
   import('@/components/ui/QuickActionFAB').then(m => ({ default: m.QuickActionFAB }))
+);
+const KeyboardShortcutsHelp = lazy(() => 
+  import('@/components/ui/KeyboardShortcutsHelp').then(m => ({ default: m.KeyboardShortcutsHelp }))
 );
 
 export const AppLayout: FC = () => {
@@ -55,6 +59,7 @@ export const AppLayout: FC = () => {
             <div className="flex-1 flex flex-col min-w-0 w-full">
               <Header />
               <main className="flex-1 overflow-auto px-3 pb-20 md:px-6 md:pb-6" data-tour="main-content">
+                <SmartBreadcrumbs />
                 <Outlet />
               </main>
             </div>
@@ -74,6 +79,9 @@ export const AppLayout: FC = () => {
             {/* Quick Action FAB */}
             <Suspense fallback={null}>
               <QuickActionFAB />
+            </Suspense>
+            <Suspense fallback={null}>
+              <KeyboardShortcutsHelp />
             </Suspense>
             
             {/* Toast Notifications — single instance in App.tsx */}
