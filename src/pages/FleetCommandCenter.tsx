@@ -15,6 +15,7 @@ import { Select, SelectContent, SelectItem, SelectTrigger, SelectValue } from "@
 import { Tabs, TabsList, TabsTrigger } from "@/components/ui/tabs";
 import { supabase } from "@/integrations/supabase/client";
 import { useToast } from "@/hooks/use-toast";
+import { useCreateVessel } from "@/hooks/useModuleHooks";
 import { CreateMissionDialog } from "@/components/dialogs/CreateMissionDialog";
 import { Ship, Plus, RefreshCw, Target, CheckCircle, Gauge, Fuel } from "lucide-react";
 import { IntegrationSidebar } from "@/components/integration";
@@ -24,6 +25,7 @@ import { KPICard } from "./fleet/KPICard";
 import { FleetTabs } from "./fleet/FleetTabs";
 
 export default function FleetCommandCenter() {
+  const createVesselMutation = useCreateVessel();
   const { toast } = useToast();
   // eslint-disable-next-line @typescript-eslint/no-explicit-any -- enriched vessel rows with computed fields
   const [vessels, setVessels] = useState<any[]>([]);
@@ -156,16 +158,14 @@ export default function FleetCommandCenter() {
       return;
     }
     try {
-      const { error } = await supabase.from("vessels").insert([{
+      await createVesselMutation.mutateAsync({
         name: newVessel.name,
         imo_number: newVessel.imo_number || null,
         vessel_type: newVessel.vessel_type,
         status: "active",
         current_location: newVessel.location || null,
-        flag_state: "BR"
-      }]);
-      if (error) throw error;
-      toast({ title: "Sucesso", description: "Embarcação adicionada!" });
+        flag_state: "BR",
+      });
       setShowAddDialog(false);
       setNewVessel({ name: "", imo_number: "", vessel_type: "cargo", location: "" });
       loadData();

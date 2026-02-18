@@ -15,6 +15,7 @@ import { Bell, Plus, CheckCircle, AlertTriangle, Search, Loader2, MapPin, Ship, 
 import { toast } from "sonner";
 import { useQuery, useMutation, useQueryClient } from "@tanstack/react-query";
 import { supabase } from "@/integrations/supabase/client";
+import { useCreateTrackingAlert } from "@/hooks/useModuleHooks";
 
 const ALERT_TYPES = [
   { value: "geofence", label: "Geofence", icon: "🗺️" },
@@ -66,19 +67,19 @@ export default function TrackingAlerts() {
     },
   });
 
-  // ✅ CREATE
+  // ✅ CREATE — via integrated domain service (publishes event + audit)
+  const createAlertHook = useCreateTrackingAlert();
   const createMutation = useMutation({
     mutationFn: async (alert: typeof newAlert & { vessel_id?: string }) => {
-      const { error } = await supabase.from("tracking_alerts").insert({
+      await createAlertHook.mutateAsync({
         title: alert.title, description: alert.description,
         alert_type: alert.alert_type, severity: alert.severity,
         latitude: alert.latitude ? parseFloat(alert.latitude) : null,
         longitude: alert.longitude ? parseFloat(alert.longitude) : null,
         vessel_id: alert.vessel_id || null,
       });
-      if (error) throw error;
     },
-    onSuccess: () => { queryClient.invalidateQueries({ queryKey: ["tracking-alerts"] }); toast.success("Alerta criado"); setShowCreateDialog(false); },
+    onSuccess: () => { queryClient.invalidateQueries({ queryKey: ["tracking-alerts"] }); setShowCreateDialog(false); },
     onError: () => toast.error("Erro ao criar alerta"),
   });
 
