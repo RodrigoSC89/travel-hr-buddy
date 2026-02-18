@@ -1538,3 +1538,7 @@ comment = "EU MRV XML export - generate Regulation EU 2015/757 compliant reports
 [functions.chartering-email-parser]
 verify_jwt = false
 comment = "NLP-based chartering email parser - extract fixture data from emails"
+
+[functions.event-dispatcher]
+verify_jwt = false
+comment = "Cron-based event outbox dispatcher - processes pending events and routes to consumers"

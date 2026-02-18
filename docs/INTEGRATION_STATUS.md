@@ -37,8 +37,9 @@
 
 ## Next Steps (Planned)
 
-1. **Event Dispatcher Edge Function** — Cron-based consumer that processes `event_outbox` pending events
-2. **Related Records Panel** — Universal UI component for cross-entity navigation
-3. **Quick Actions** — Contextual create actions (Finding → CAPA, WO → PO, etc.)
-4. **Feature Guards** — Expired cert blocks rotation assignment (server-side)
-5. **Integration Health Dashboard** — Real-time monitoring in System Hub
+1. ~~**Event Dispatcher Edge Function**~~ ✅ Implemented — Cron-based consumer that processes `event_outbox` pending events
+2. ~~**Integration Health Dashboard**~~ ✅ Implemented — Real-time monitoring with KPIs, audit trail, and dispatcher trigger
+3. ~~**Related Records Panel**~~ ✅ Implemented — Universal UI component for cross-entity navigation
+4. ~~**Quick Actions**~~ ✅ Implemented — Contextual create actions (Finding → CAPA, WO → PO, etc.)
+5. **Feature Guards** — Expired cert blocks rotation assignment (server-side)
+6. **E2E Smoke Tests** — Playwright tests for cross-module flows
