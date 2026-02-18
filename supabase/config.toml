@@ -1522,3 +1522,19 @@ comment = "Proactive alerts cron - scans expiring certificates and overdue maint
 [functions.seed-demo-data]
 verify_jwt = false
 comment = "Seed demo data for commercial demonstrations with realistic maritime data"
+
+# ============================================
+# WAVE 5: COMPETITIVE GAP CLOSURE
+# ============================================
+
+[functions.ocimf-sire-import]
+verify_jwt = false
+comment = "OCIMF SIRE 2.0 JSON import - parse and store inspection data"
+
+[functions.eu-mrv-export]
+verify_jwt = false
+comment = "EU MRV XML export - generate Regulation EU 2015/757 compliant reports"
+
+[functions.chartering-email-parser]
+verify_jwt = false
+comment = "NLP-based chartering email parser - extract fixture data from emails"

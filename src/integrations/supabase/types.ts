@@ -5568,6 +5568,51 @@ export type Database = {
           },
         ]
       }
+      baltic_exchange_rates: {
+        Row: {
+          change_abs: number | null
+          change_pct: number | null
+          created_at: string
+          id: string
+          index_code: string
+          index_name: string
+          rate_date: string
+          route_code: string | null
+          route_description: string | null
+          source: string | null
+          value: number
+          vessel_size: string | null
+        }
+        Insert: {
+          change_abs?: number | null
+          change_pct?: number | null
+          created_at?: string
+          id?: string
+          index_code: string
+          index_name: string
+          rate_date: string
+          route_code?: string | null
+          route_description?: string | null
+          source?: string | null
+          value: number
+          vessel_size?: string | null
+        }
+        Update: {
+          change_abs?: number | null
+          change_pct?: number | null
+          created_at?: string
+          id?: string
+          index_code?: string
+          index_name?: string
+          rate_date?: string
+          route_code?: string | null
+          route_description?: string | null
+          source?: string | null
+          value?: number
+          vessel_size?: string | null
+        }
+        Relationships: []
+      }
       behavioral_risk_assessments: {
         Row: {
           assessment_date: string | null
@@ -7876,6 +7921,66 @@ export type Database = {
           },
           {
             foreignKeyName: "charter_party_clauses_organization_id_fkey"
+            columns: ["organization_id"]
+            isOneToOne: false
+            referencedRelation: "organizations"
+            referencedColumns: ["id"]
+          },
+        ]
+      }
+      chartering_email_extractions: {
+        Row: {
+          confidence_score: number | null
+          created_at: string
+          email_from: string | null
+          email_received_at: string | null
+          email_subject: string | null
+          extracted_data: Json | null
+          fixture_negotiation_id: string | null
+          id: string
+          organization_id: string | null
+          processed_at: string | null
+          raw_content: string | null
+          status: string | null
+        }
+        Insert: {
+          confidence_score?: number | null
+          created_at?: string
+          email_from?: string | null
+          email_received_at?: string | null
+          email_subject?: string | null
+          extracted_data?: Json | null
+          fixture_negotiation_id?: string | null
+          id?: string
+          organization_id?: string | null
+          processed_at?: string | null
+          raw_content?: string | null
+          status?: string | null
+        }
+        Update: {
+          confidence_score?: number | null
+          created_at?: string
+          email_from?: string | null
+          email_received_at?: string | null
+          email_subject?: string | null
+          extracted_data?: Json | null
+          fixture_negotiation_id?: string | null
+          id?: string
+          organization_id?: string | null
+          processed_at?: string | null
+          raw_content?: string | null
+          status?: string | null
+        }
+        Relationships: [
+          {
+            foreignKeyName: "chartering_email_extractions_fixture_negotiation_id_fkey"
+            columns: ["fixture_negotiation_id"]
+            isOneToOne: false
+            referencedRelation: "fixture_negotiations"
+            referencedColumns: ["id"]
+          },
+          {
+            foreignKeyName: "chartering_email_extractions_organization_id_fkey"
             columns: ["organization_id"]
             isOneToOne: false
             referencedRelation: "organizations"
@@ -16948,6 +17053,80 @@ export type Database = {
           },
         ]
       }
+      drydock_gantt_tasks: {
+        Row: {
+          actual_cost: number | null
+          actual_end: string | null
+          actual_start: string | null
+          assigned_contractor: string | null
+          category: string | null
+          created_at: string
+          dependencies: string[] | null
+          drydock_project_id: string
+          estimated_cost: number | null
+          id: string
+          is_critical_path: boolean | null
+          notes: string | null
+          organization_id: string | null
+          planned_end: string
+          planned_start: string
+          progress_percent: number | null
+          status: string | null
+          task_name: string
+          updated_at: string
+        }
+        Insert: {
+          actual_cost?: number | null
+          actual_end?: string | null
+          actual_start?: string | null
+          assigned_contractor?: string | null
+          category?: string | null
+          created_at?: string
+          dependencies?: string[] | null
+          drydock_project_id: string
+          estimated_cost?: number | null
+          id?: string
+          is_critical_path?: boolean | null
+          notes?: string | null
+          organization_id?: string | null
+          planned_end: string
+          planned_start: string
+          progress_percent?: number | null
+          status?: string | null
+          task_name: string
+          updated_at?: string
+        }
+        Update: {
+          actual_cost?: number | null
+          actual_end?: string | null
+          actual_start?: string | null
+          assigned_contractor?: string | null
+          category?: string | null
+          created_at?: string
+          dependencies?: string[] | null
+          drydock_project_id?: string
+          estimated_cost?: number | null
+          id?: string
+          is_critical_path?: boolean | null
+          notes?: string | null
+          organization_id?: string | null
+          planned_end?: string
+          planned_start?: string
+          progress_percent?: number | null
+          status?: string | null
+          task_name?: string
+          updated_at?: string
+        }
+        Relationships: [
+          {
+            foreignKeyName: "drydock_gantt_tasks_organization_id_fkey"
+            columns: ["organization_id"]
+            isOneToOne: false
+            referencedRelation: "organizations"
+            referencedColumns: ["id"]
+          },
+        ]
+      }
       drydock_projects: {
         Row: {
           budget_usd: number
@@ -18762,6 +18941,90 @@ export type Database = {
           },
         ]
       }
+      eu_mrv_submissions: {
+        Row: {
+          avg_energy_efficiency: number | null
+          created_at: string
+          id: string
+          notes: string | null
+          organization_id: string | null
+          reporting_period_end: string
+          reporting_period_start: string
+          submission_date: string | null
+          thetis_mrv_id: string | null
+          time_at_sea_hours: number | null
+          total_cargo_carried_mt: number | null
+          total_co2_emissions: number | null
+          total_distance_nm: number | null
+          total_fuel_consumption: number | null
+          transport_work: number | null
+          updated_at: string
+          verification_body: string | null
+          verification_status: string | null
+          vessel_id: string
+          xml_report_url: string | null
+        }
+        Insert: {
+          avg_energy_efficiency?: number | null
+          created_at?: string
+          id?: string
+          notes?: string | null
+          organization_id?: string | null
+          reporting_period_end: string
+          reporting_period_start: string
+          submission_date?: string | null
+          thetis_mrv_id?: string | null
+          time_at_sea_hours?: number | null
+          total_cargo_carried_mt?: number | null
+          total_co2_emissions?: number | null
+          total_distance_nm?: number | null
+          total_fuel_consumption?: number | null
+          transport_work?: number | null
+          updated_at?: string
+          verification_body?: string | null
+          verification_status?: string | null
+          vessel_id: string
+          xml_report_url?: string | null
+        }
+        Update: {
+          avg_energy_efficiency?: number | null
+          created_at?: string
+          id?: string
+          notes?: string | null
+          organization_id?: string | null
+          reporting_period_end?: string
+          reporting_period_start?: string
+          submission_date?: string | null
+          thetis_mrv_id?: string | null
+          time_at_sea_hours?: number | null
+          total_cargo_carried_mt?: number | null
+          total_co2_emissions?: number | null
+          total_distance_nm?: number | null
+          total_fuel_consumption?: number | null
+          transport_work?: number | null
+          updated_at?: string
+          verification_body?: string | null
+          verification_status?: string | null
+          vessel_id?: string
+          xml_report_url?: string | null
+        }
+        Relationships: [
+          {
+            foreignKeyName: "eu_mrv_submissions_organization_id_fkey"
+            columns: ["organization_id"]
+            isOneToOne: false
+            referencedRelation: "organizations"
+            referencedColumns: ["id"]
+          },
+          {
+            foreignKeyName: "eu_mrv_submissions_vessel_id_fkey"
+            columns: ["vessel_id"]
+            isOneToOne: false
+            referencedRelation: "vessels"
+            referencedColumns: ["id"]
+          },
+        ]
+      }
       event_snapshots: {
         Row: {
           aggregate_id: string
@@ -19426,6 +19689,173 @@ export type Database = {
           trigger_reason?: string
         }
         Relationships: []
+      }
+      fixture_negotiations: {
+        Row: {
+          address_commission_pct: number | null
+          broker_name: string | null
+          cargo_quantity_mt: number | null
+          cargo_type: string | null
+          charter_party_id: string | null
+          charterer_name: string
+          commission_pct: number | null
+          created_at: string
+          created_by: string | null
+          current_round: number | null
+          demurrage_rate: number | null
+          discharge_port: string | null
+          fixed_at: string | null
+          freight_rate: number | null
+          freight_unit: string | null
+          id: string
+          laycan_end: string | null
+          laycan_start: string | null
+          laytime_hours: number | null
+          load_port: string | null
+          notes: string | null
+          organization_id: string | null
+          status: string
+          subjects: string[] | null
+          subjects_deadline: string | null
+          updated_at: string
+          vessel_id: string | null
+        }
+        Insert: {
+          address_commission_pct?: number | null
+          broker_name?: string | null
+          cargo_quantity_mt?: number | null
+          cargo_type?: string | null
+          charter_party_id?: string | null
+          charterer_name: string
+          commission_pct?: number | null
+          created_at?: string
+          created_by?: string | null
+          current_round?: number | null
+          demurrage_rate?: number | null
+          discharge_port?: string | null
+          fixed_at?: string | null
+          freight_rate?: number | null
+          freight_unit?: string | null
+          id?: string
+          laycan_end?: string | null
+          laycan_start?: string | null
+          laytime_hours?: number | null
+          load_port?: string | null
+          notes?: string | null
+          organization_id?: string | null
+          status?: string
+          subjects?: string[] | null
+          subjects_deadline?: string | null
+          updated_at?: string
+          vessel_id?: string | null
+        }
+        Update: {
+          address_commission_pct?: number | null
+          broker_name?: string | null
+          cargo_quantity_mt?: number | null
+          cargo_type?: string | null
+          charter_party_id?: string | null
+          charterer_name?: string
+          commission_pct?: number | null
+          created_at?: string
+          created_by?: string | null
+          current_round?: number | null
+          demurrage_rate?: number | null
+          discharge_port?: string | null
+          fixed_at?: string | null
+          freight_rate?: number | null
+          freight_unit?: string | null
+          id?: string
+          laycan_end?: string | null
+          laycan_start?: string | null
+          laytime_hours?: number | null
+          load_port?: string | null
+          notes?: string | null
+          organization_id?: string | null
+          status?: string
+          subjects?: string[] | null
+          subjects_deadline?: string | null
+          updated_at?: string
+          vessel_id?: string | null
+        }
+        Relationships: [
+          {
+            foreignKeyName: "fixture_negotiations_organization_id_fkey"
+            columns: ["organization_id"]
+            isOneToOne: false
+            referencedRelation: "organizations"
+            referencedColumns: ["id"]
+          },
+          {
+            foreignKeyName: "fixture_negotiations_vessel_id_fkey"
+            columns: ["vessel_id"]
+            isOneToOne: false
+            referencedRelation: "vessels"
+            referencedColumns: ["id"]
+          },
+        ]
+      }
+      fixture_offers: {
+        Row: {
+          additional_terms: Json | null
+          created_at: string
+          demurrage_rate: number | null
+          expires_at: string | null
+          freight_rate: number | null
+          id: string
+          laycan_end: string | null
+          laycan_start: string | null
+          laytime_hours: number | null
+          negotiation_id: string
+          notes: string | null
+          offer_type: string
+          offered_at: string
+          offered_by: string
+          round_number: number
+        }
+        Insert: {
+          additional_terms?: Json | null
+          created_at?: string
+          demurrage_rate?: number | null
+          expires_at?: string | null
+          freight_rate?: number | null
+          id?: string
+          laycan_end?: string | null
+          laycan_start?: string | null
+          laytime_hours?: number | null
+          negotiation_id: string
+          notes?: string | null
+          offer_type: string
+          offered_at?: string
+          offered_by: string
+          round_number?: number
+        }
+        Update: {
+          additional_terms?: Json | null
+          created_at?: string
+          demurrage_rate?: number | null
+          expires_at?: string | null
+          freight_rate?: number | null
+          id?: string
+          laycan_end?: string | null
+          laycan_start?: string | null
+          laytime_hours?: number | null
+          negotiation_id?: string
+          notes?: string | null
+          offer_type?: string
+          offered_at?: string
+          offered_by?: string
+          round_number?: number
+        }
+        Relationships: [
+          {
+            foreignKeyName: "fixture_offers_negotiation_id_fkey"
+            columns: ["negotiation_id"]
+            isOneToOne: false
+            referencedRelation: "fixture_negotiations"
+            referencedColumns: ["id"]
+          },
+        ]
       }
       fleet_anomalies: {
         Row: {
@@ -25443,6 +25873,8 @@ export type Database = {
           notes: string | null
           organization_id: string | null
           part_number: string | null
+          photo_thumbnail_url: string | null
+          photo_url: string | null
           quantity: number | null
           reorder_point: number | null
           status: string | null
@@ -25477,6 +25909,8 @@ export type Database = {
           notes?: string | null
           organization_id?: string | null
           part_number?: string | null
+          photo_thumbnail_url?: string | null
+          photo_url?: string | null
           quantity?: number | null
           reorder_point?: number | null
           status?: string | null
@@ -25511,6 +25945,8 @@ export type Database = {
           notes?: string | null
           organization_id?: string | null
           part_number?: string | null
+          photo_thumbnail_url?: string | null
+          photo_url?: string | null
           quantity?: number | null
           reorder_point?: number | null
           status?: string | null
@@ -27251,6 +27687,166 @@ export type Database = {
           },
         ]
       }
+      jsa_records: {
+        Row: {
+          assessment_date: string
+          control_measures: Json
+          created_at: string
+          created_by: string | null
+          id: string
+          identified_hazards: Json
+          job_description: string
+          location: string | null
+          organization_id: string | null
+          permit_to_work_id: string | null
+          residual_risk_level: string | null
+          reviewed_at: string | null
+          reviewed_by: string | null
+          status: string | null
+          supervisor: string | null
+          team_members: string[] | null
+          template_id: string | null
+          updated_at: string
+          vessel_id: string | null
+        }
+        Insert: {
+          assessment_date?: string
+          control_measures?: Json
+          created_at?: string
+          created_by?: string | null
+          id?: string
+          identified_hazards?: Json
+          job_description: string
+          location?: string | null
+          organization_id?: string | null
+          permit_to_work_id?: string | null
+          residual_risk_level?: string | null
+          reviewed_at?: string | null
+          reviewed_by?: string | null
+          status?: string | null
+          supervisor?: string | null
+          team_members?: string[] | null
+          template_id?: string | null
+          updated_at?: string
+          vessel_id?: string | null
+        }
+        Update: {
+          assessment_date?: string
+          control_measures?: Json
+          created_at?: string
+          created_by?: string | null
+          id?: string
+          identified_hazards?: Json
+          job_description?: string
+          location?: string | null
+          organization_id?: string | null
+          permit_to_work_id?: string | null
+          residual_risk_level?: string | null
+          reviewed_at?: string | null
+          reviewed_by?: string | null
+          status?: string | null
+          supervisor?: string | null
+          team_members?: string[] | null
+          template_id?: string | null
+          updated_at?: string
+          vessel_id?: string | null
+        }
+        Relationships: [
+          {
+            foreignKeyName: "jsa_records_organization_id_fkey"
+            columns: ["organization_id"]
+            isOneToOne: false
+            referencedRelation: "organizations"
+            referencedColumns: ["id"]
+          },
+          {
+            foreignKeyName: "jsa_records_permit_to_work_id_fkey"
+            columns: ["permit_to_work_id"]
+            isOneToOne: false
+            referencedRelation: "permits_to_work"
+            referencedColumns: ["id"]
+          },
+          {
+            foreignKeyName: "jsa_records_template_id_fkey"
+            columns: ["template_id"]
+            isOneToOne: false
+            referencedRelation: "jsa_templates"
+            referencedColumns: ["id"]
+          },
+          {
+            foreignKeyName: "jsa_records_vessel_id_fkey"
+            columns: ["vessel_id"]
+            isOneToOne: false
+            referencedRelation: "vessels"
+            referencedColumns: ["id"]
+          },
+        ]
+      }
+      jsa_templates: {
+        Row: {
+          approved_at: string | null
+          approved_by: string | null
+          control_measures: Json
+          created_at: string
+          description: string | null
+          hazards: Json
+          id: string
+          is_active: boolean | null
+          job_type: string
+          organization_id: string | null
+          ppe_required: string[] | null
+          regulatory_reference: string | null
+          risk_level: string | null
+          title: string
+          updated_at: string
+          version: number | null
+        }
+        Insert: {
+          approved_at?: string | null
+          approved_by?: string | null
+          control_measures?: Json
+          created_at?: string
+          description?: string | null
+          hazards?: Json
+          id?: string
+          is_active?: boolean | null
+          job_type: string
+          organization_id?: string | null
+          ppe_required?: string[] | null
+          regulatory_reference?: string | null
+          risk_level?: string | null
+          title: string
+          updated_at?: string
+          version?: number | null
+        }
+        Update: {
+          approved_at?: string | null
+          approved_by?: string | null
+          control_measures?: Json
+          created_at?: string
+          description?: string | null
+          hazards?: Json
+          id?: string
+          is_active?: boolean | null
+          job_type?: string
+          organization_id?: string | null
+          ppe_required?: string[] | null
+          regulatory_reference?: string | null
+          risk_level?: string | null
+          title?: string
+          updated_at?: string
+          version?: number | null
+        }
+        Relationships: [
+          {
+            foreignKeyName: "jsa_templates_organization_id_fkey"
+            columns: ["organization_id"]
+            isOneToOne: false
+            referencedRelation: "organizations"
+            referencedColumns: ["id"]
+          },
+        ]
+      }
       knowledge_base: {
         Row: {
           author_id: string | null
@@ -28480,6 +29076,103 @@ export type Database = {
         }
         Relationships: []
       }
+      loto_procedures: {
+        Row: {
+          created_at: string
+          energy_source: string
+          equipment_name: string
+          equipment_tag: string | null
+          id: string
+          isolation_method: string
+          isolation_point: string
+          lock_number: string | null
+          locked_at: string | null
+          locked_by: string | null
+          locked_by_user_id: string | null
+          notes: string | null
+          organization_id: string | null
+          permit_to_work_id: string | null
+          released_at: string | null
+          released_by: string | null
+          status: string
+          tag_number: string | null
+          updated_at: string
+          verified_at: string | null
+          verified_by: string | null
+          vessel_id: string | null
+        }
+        Insert: {
+          created_at?: string
+          energy_source: string
+          equipment_name: string
+          equipment_tag?: string | null
+          id?: string
+          isolation_method: string
+          isolation_point: string
+          lock_number?: string | null
+          locked_at?: string | null
+          locked_by?: string | null
+          locked_by_user_id?: string | null
+          notes?: string | null
+          organization_id?: string | null
+          permit_to_work_id?: string | null
+          released_at?: string | null
+          released_by?: string | null
+          status?: string
+          tag_number?: string | null
+          updated_at?: string
+          verified_at?: string | null
+          verified_by?: string | null
+          vessel_id?: string | null
+        }
+        Update: {
+          created_at?: string
+          energy_source?: string
+          equipment_name?: string
+          equipment_tag?: string | null
+          id?: string
+          isolation_method?: string
+          isolation_point?: string
+          lock_number?: string | null
+          locked_at?: string | null
+          locked_by?: string | null
+          locked_by_user_id?: string | null
+          notes?: string | null
+          organization_id?: string | null
+          permit_to_work_id?: string | null
+          released_at?: string | null
+          released_by?: string | null
+          status?: string
+          tag_number?: string | null
+          updated_at?: string
+          verified_at?: string | null
+          verified_by?: string | null
+          vessel_id?: string | null
+        }
+        Relationships: [
+          {
+            foreignKeyName: "loto_procedures_organization_id_fkey"
+            columns: ["organization_id"]
+            isOneToOne: false
+            referencedRelation: "organizations"
+            referencedColumns: ["id"]
+          },
+          {
+            foreignKeyName: "loto_procedures_permit_to_work_id_fkey"
+            columns: ["permit_to_work_id"]
+            isOneToOne: false
+            referencedRelation: "permits_to_work"
+            referencedColumns: ["id"]
+          },
+          {
+            foreignKeyName: "loto_procedures_vessel_id_fkey"
+            columns: ["vessel_id"]
+            isOneToOne: false
+            referencedRelation: "vessels"
+            referencedColumns: ["id"]
+          },
+        ]
+      }
       maintenance_alerts: {
         Row: {
           acknowledged_at: string | null
@@ -28919,6 +29612,161 @@ export type Database = {
             columns: ["vessel_id"]
             isOneToOne: false
             referencedRelation: "vessels"
+            referencedColumns: ["id"]
+          },
+        ]
+      }
+      manning_agent_candidates: {
+        Row: {
+          agent_id: string
+          availability_date: string | null
+          candidate_name: string
+          created_at: string
+          currency: string | null
+          date_of_birth: string | null
+          experience_years: number | null
+          id: string
+          medical_expiry: string | null
+          nationality: string | null
+          notes: string | null
+          organization_id: string | null
+          passport_number: string | null
+          previous_vessels: Json | null
+          rank: string | null
+          salary_expectation: number | null
+          seaman_book_number: string | null
+          status: string | null
+          stcw_certificates: Json | null
+          updated_at: string
+        }
+        Insert: {
+          agent_id: string
+          availability_date?: string | null
+          candidate_name: string
+          created_at?: string
+          currency?: string | null
+          date_of_birth?: string | null
+          experience_years?: number | null
+          id?: string
+          medical_expiry?: string | null
+          nationality?: string | null
+          notes?: string | null
+          organization_id?: string | null
+          passport_number?: string | null
+          previous_vessels?: Json | null
+          rank?: string | null
+          salary_expectation?: number | null
+          seaman_book_number?: string | null
+          status?: string | null
+          stcw_certificates?: Json | null
+          updated_at?: string
+        }
+        Update: {
+          agent_id?: string
+          availability_date?: string | null
+          candidate_name?: string
+          created_at?: string
+          currency?: string | null
+          date_of_birth?: string | null
+          experience_years?: number | null
+          id?: string
+          medical_expiry?: string | null
+          nationality?: string | null
+          notes?: string | null
+          organization_id?: string | null
+          passport_number?: string | null
+          previous_vessels?: Json | null
+          rank?: string | null
+          salary_expectation?: number | null
+          seaman_book_number?: string | null
+          status?: string | null
+          stcw_certificates?: Json | null
+          updated_at?: string
+        }
+        Relationships: [
+          {
+            foreignKeyName: "manning_agent_candidates_agent_id_fkey"
+            columns: ["agent_id"]
+            isOneToOne: false
+            referencedRelation: "manning_agents"
+            referencedColumns: ["id"]
+          },
+          {
+            foreignKeyName: "manning_agent_candidates_organization_id_fkey"
+            columns: ["organization_id"]
+            isOneToOne: false
+            referencedRelation: "organizations"
+            referencedColumns: ["id"]
+          },
+        ]
+      }
+      manning_agents: {
+        Row: {
+          agent_name: string
+          contact_person: string | null
+          country: string | null
+          created_at: string
+          email: string | null
+          flag_state_approved: string[] | null
+          id: string
+          last_portal_access: string | null
+          license_number: string | null
+          mlc_compliant: boolean | null
+          notes: string | null
+          organization_id: string | null
+          phone: string | null
+          portal_access_token: string | null
+          portal_enabled: boolean | null
+          rating: number | null
+          status: string | null
+          updated_at: string
+        }
+        Insert: {
+          agent_name: string
+          contact_person?: string | null
+          country?: string | null
+          created_at?: string
+          email?: string | null
+          flag_state_approved?: string[] | null
+          id?: string
+          last_portal_access?: string | null
+          license_number?: string | null
+          mlc_compliant?: boolean | null
+          notes?: string | null
+          organization_id?: string | null
+          phone?: string | null
+          portal_access_token?: string | null
+          portal_enabled?: boolean | null
+          rating?: number | null
+          status?: string | null
+          updated_at?: string
+        }
+        Update: {
+          agent_name?: string
+          contact_person?: string | null
+          country?: string | null
+          created_at?: string
+          email?: string | null
+          flag_state_approved?: string[] | null
+          id?: string
+          last_portal_access?: string | null
+          license_number?: string | null
+          mlc_compliant?: boolean | null
+          notes?: string | null
+          organization_id?: string | null
+          phone?: string | null
+          portal_access_token?: string | null
+          portal_enabled?: boolean | null
+          rating?: number | null
+          status?: string | null
+          updated_at?: string
+        }
+        Relationships: [
+          {
+            foreignKeyName: "manning_agents_organization_id_fkey"
+            columns: ["organization_id"]
+            isOneToOne: false
+            referencedRelation: "organizations"
             referencedColumns: ["id"]
           },
         ]
@@ -40709,6 +41557,69 @@ export type Database = {
           },
         ]
       }
+      punchout_catalogs: {
+        Row: {
+          catalog_name: string
+          created_at: string
+          endpoint_url: string | null
+          id: string
+          identity: string | null
+          is_active: boolean | null
+          item_count: number | null
+          last_sync_at: string | null
+          organization_id: string | null
+          protocol: string | null
+          shared_secret: string | null
+          supplier_id: string | null
+          updated_at: string
+        }
+        Insert: {
+          catalog_name: string
+          created_at?: string
+          endpoint_url?: string | null
+          id?: string
+          identity?: string | null
+          is_active?: boolean | null
+          item_count?: number | null
+          last_sync_at?: string | null
+          organization_id?: string | null
+          protocol?: string | null
+          shared_secret?: string | null
+          supplier_id?: string | null
+          updated_at?: string
+        }
+        Update: {
+          catalog_name?: string
+          created_at?: string
+          endpoint_url?: string | null
+          id?: string
+          identity?: string | null
+          is_active?: boolean | null
+          item_count?: number | null
+          last_sync_at?: string | null
+          organization_id?: string | null
+          protocol?: string | null
+          shared_secret?: string | null
+          supplier_id?: string | null
+          updated_at?: string
+        }
+        Relationships: [
+          {
+            foreignKeyName: "punchout_catalogs_organization_id_fkey"
+            columns: ["organization_id"]
+            isOneToOne: false
+            referencedRelation: "organizations"
+            referencedColumns: ["id"]
+          },
+          {
+            foreignKeyName: "punchout_catalogs_supplier_id_fkey"
+            columns: ["supplier_id"]
+            isOneToOne: false
+            referencedRelation: "suppliers"
+            referencedColumns: ["id"]
+          },
+        ]
+      }
       purchase_orders: {
         Row: {
           approved_at: string | null
@@ -40923,6 +41834,69 @@ export type Database = {
           user_id?: string
         }
         Relationships: []
+      }
+      q88_questionnaires: {
+        Row: {
+          completion_percent: number | null
+          created_at: string
+          expires_at: string | null
+          id: string
+          last_synced_at: string | null
+          organization_id: string | null
+          q88_vessel_id: string | null
+          questionnaire_version: string | null
+          responses: Json | null
+          status: string | null
+          submitted_at: string | null
+          updated_at: string
+          vessel_id: string
+        }
+        Insert: {
+          completion_percent?: number | null
+          created_at?: string
+          expires_at?: string | null
+          id?: string
+          last_synced_at?: string | null
+          organization_id?: string | null
+          q88_vessel_id?: string | null
+          questionnaire_version?: string | null
+          responses?: Json | null
+          status?: string | null
+          submitted_at?: string | null
+          updated_at?: string
+          vessel_id: string
+        }
+        Update: {
+          completion_percent?: number | null
+          created_at?: string
+          expires_at?: string | null
+          id?: string
+          last_synced_at?: string | null
+          organization_id?: string | null
+          q88_vessel_id?: string | null
+          questionnaire_version?: string | null
+          responses?: Json | null
+          status?: string | null
+          submitted_at?: string | null
+          updated_at?: string
+          vessel_id?: string
+        }
+        Relationships: [
+          {
+            foreignKeyName: "q88_questionnaires_organization_id_fkey"
+            columns: ["organization_id"]
+            isOneToOne: false
+            referencedRelation: "organizations"
+            referencedColumns: ["id"]
+          },
+          {
+            foreignKeyName: "q88_questionnaires_vessel_id_fkey"
+            columns: ["vessel_id"]
+            isOneToOne: false
+            referencedRelation: "vessels"
+            referencedColumns: ["id"]
+          },
+        ]
       }
       quality_metrics: {
         Row: {
@@ -44723,6 +45697,75 @@ export type Database = {
           },
           {
             foreignKeyName: "sensor_alerts_vessel_id_fkey"
+            columns: ["vessel_id"]
+            isOneToOne: false
+            referencedRelation: "vessels"
+            referencedColumns: ["id"]
+          },
+        ]
+      }
+      sensor_logbook_mappings: {
+        Row: {
+          auto_fill_enabled: boolean | null
+          conversion_formula: string | null
+          created_at: string
+          id: string
+          last_reading: number | null
+          last_reading_at: string | null
+          logbook_field: string
+          logbook_type: string
+          organization_id: string | null
+          sensor_id: string | null
+          sensor_type: string
+          threshold_max: number | null
+          threshold_min: number | null
+          updated_at: string
+          vessel_id: string
+        }
+        Insert: {
+          auto_fill_enabled?: boolean | null
+          conversion_formula?: string | null
+          created_at?: string
+          id?: string
+          last_reading?: number | null
+          last_reading_at?: string | null
+          logbook_field: string
+          logbook_type: string
+          organization_id?: string | null
+          sensor_id?: string | null
+          sensor_type: string
+          threshold_max?: number | null
+          threshold_min?: number | null
+          updated_at?: string
+          vessel_id: string
+        }
+        Update: {
+          auto_fill_enabled?: boolean | null
+          conversion_formula?: string | null
+          created_at?: string
+          id?: string
+          last_reading?: number | null
+          last_reading_at?: string | null
+          logbook_field?: string
+          logbook_type?: string
+          organization_id?: string | null
+          sensor_id?: string | null
+          sensor_type?: string
+          threshold_max?: number | null
+          threshold_min?: number | null
+          updated_at?: string
+          vessel_id?: string
+        }
+        Relationships: [
+          {
+            foreignKeyName: "sensor_logbook_mappings_organization_id_fkey"
+            columns: ["organization_id"]
+            isOneToOne: false
+            referencedRelation: "organizations"
+            referencedColumns: ["id"]
+          },
+          {
+            foreignKeyName: "sensor_logbook_mappings_vessel_id_fkey"
             columns: ["vessel_id"]
             isOneToOne: false
             referencedRelation: "vessels"
