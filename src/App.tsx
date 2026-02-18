@@ -24,6 +24,7 @@ import { prefetchCriticalRoutes } from "@/lib/performance/route-prefetch";
 import { initNautiOneDB } from "@/lib/offline/db";
 import { initAutoSync } from "@/lib/offline/sync-queue";
 import { PerformanceProvider } from "@/components/ui/PerformanceProvider";
+import { installAutoIntegration } from "@/lib/integration/install-auto-integration";
 
 // ============================================
 // GLOBAL ERROR HANDLERS - Prevent white screens
@@ -67,6 +68,8 @@ const queryClient = new QueryClient({
 function App() {
   // Prefetch critical routes and init offline DB after initial render
   useEffect(() => {
+    // Install auto-integration interceptor (makes ALL mutations publish events)
+    installAutoIntegration();
     prefetchCriticalRoutes();
     // Initialize IndexedDB for offline-first support
     initNautiOneDB().catch((err) => {
