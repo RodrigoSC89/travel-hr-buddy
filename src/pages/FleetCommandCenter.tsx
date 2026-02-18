@@ -17,6 +17,7 @@ import { supabase } from "@/integrations/supabase/client";
 import { useToast } from "@/hooks/use-toast";
 import { CreateMissionDialog } from "@/components/dialogs/CreateMissionDialog";
 import { Ship, Plus, RefreshCw, Target, CheckCircle, Gauge, Fuel } from "lucide-react";
+import { IntegrationSidebar } from "@/components/integration";
 
 import { EnrichedVessel, INITIAL_PERFORMANCE_METRICS } from "./fleet/types";
 import { KPICard } from "./fleet/KPICard";
@@ -243,30 +244,43 @@ export default function FleetCommandCenter() {
       </motion.div>
 
       {/* Main Content */}
-      <motion.div variants={fadeUp}>
-        <Tabs value={activeTab} onValueChange={setActiveTab} className="space-y-4">
-          <TabsList className="grid w-full grid-cols-6">
-            <TabsTrigger value="overview">Visão Geral</TabsTrigger>
-            <TabsTrigger value="tracking">Rastreamento</TabsTrigger>
-            <TabsTrigger value="vessels">Embarcações</TabsTrigger>
-            <TabsTrigger value="maintenance">Manutenção</TabsTrigger>
-            <TabsTrigger value="fuel">Combustível</TabsTrigger>
-            <TabsTrigger value="analytics">Analytics</TabsTrigger>
-          </TabsList>
+      <div className="grid grid-cols-1 lg:grid-cols-4 gap-6">
+        <motion.div variants={fadeUp} className="lg:col-span-3">
+          <Tabs value={activeTab} onValueChange={setActiveTab} className="space-y-4">
+            <TabsList className="grid w-full grid-cols-6">
+              <TabsTrigger value="overview">Visão Geral</TabsTrigger>
+              <TabsTrigger value="tracking">Rastreamento</TabsTrigger>
+              <TabsTrigger value="vessels">Embarcações</TabsTrigger>
+              <TabsTrigger value="maintenance">Manutenção</TabsTrigger>
+              <TabsTrigger value="fuel">Combustível</TabsTrigger>
+              <TabsTrigger value="analytics">Analytics</TabsTrigger>
+            </TabsList>
 
-          <FleetTabs
-            vessels={vessels}
-            maintenance={maintenance}
-            fuelTrend={fuelTrend}
-            performanceMetrics={performanceMetrics}
-            selectedVessel={selectedVessel}
-            loading={loading}
-            onSelectVessel={setSelectedVessel}
-            onShowAddDialog={() => setShowAddDialog(true)}
-            onToast={toast}
-          />
-        </Tabs>
-      </motion.div>
+            <FleetTabs
+              vessels={vessels}
+              maintenance={maintenance}
+              fuelTrend={fuelTrend}
+              performanceMetrics={performanceMetrics}
+              selectedVessel={selectedVessel}
+              loading={loading}
+              onSelectVessel={setSelectedVessel}
+              onShowAddDialog={() => setShowAddDialog(true)}
+              onToast={toast}
+            />
+          </Tabs>
+        </motion.div>
+
+        {/* Integration Sidebar */}
+        {selectedVessel && (
+          <motion.div variants={fadeUp} className="lg:col-span-1">
+            <IntegrationSidebar
+              entityType="vessel"
+              entityId={selectedVessel.id}
+              vesselId={selectedVessel.id}
+            />
+          </motion.div>
+        )}
+      </div>
 
       <CreateMissionDialog open={showMissionDialog} onOpenChange={setShowMissionDialog} />
     </motion.div>

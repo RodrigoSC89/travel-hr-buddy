@@ -11,6 +11,7 @@ import { Button } from "@/components/ui/button";
 import { Badge } from "@/components/ui/badge";
 import { Tabs, TabsContent, TabsList, TabsTrigger } from "@/components/ui/tabs";
 import { Compass, Brain, Plus, Download } from "lucide-react";
+import { QuickActions } from "@/components/integration";
 import { toast } from "sonner";
 import { usePorts } from "@/hooks/usePortsData";
 import { useMarineWeather } from "@/hooks/useMarineWeather";
@@ -214,6 +215,18 @@ export default function VoyageCommandCenter() {
           <VoyageRoutesTab ports={ports} />
         </TabsContent>
       </Tabs></motion.div>
+
+      {/* Cross-module quick actions */}
+      {selectedVoyage && (
+        <motion.div variants={fadeUp}>
+          <QuickActions
+            entityType="voyage"
+            entityId={selectedVoyage.id}
+            vesselId={(selectedVoyage as any).vessel_id}
+            compact
+          />
+        </motion.div>
+      )}
 
       <CreateVoyageDialog open={createDialogOpen} onOpenChange={setCreateDialogOpen} ports={ports} newVoyage={newVoyage} onNewVoyageChange={setNewVoyage} onCreate={handleCreateVoyage} />
       <VoyageDetailsDialog open={detailsDialogOpen} onOpenChange={setDetailsDialogOpen} voyage={selectedVoyage} onOptimize={handleOptimizeRoute} />

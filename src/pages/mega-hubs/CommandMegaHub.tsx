@@ -64,6 +64,8 @@ const FleetUtilizationKPI = lazy(() => import('@/components/dashboard/FleetUtili
 const LiveIncidentFeed = lazy(() => import('@/components/dashboard/LiveIncidentFeed').then(m => ({ default: m.LiveIncidentFeed })));
 const CrewCertificationRadar = lazy(() => import('@/components/dashboard/CrewCertificationRadar').then(m => ({ default: m.CrewCertificationRadar })));
 const PIClaimsIntelligence = lazy(() => import('@/components/dashboard/PIClaimsIntelligence').then(m => ({ default: m.PIClaimsIntelligence })));
+const IntegrationHealthWidget = lazy(() => import('@/components/integration/IntegrationHealthWidget').then(m => ({ default: m.IntegrationHealthWidget })));
+const EventActivityFeed = lazy(() => import('@/components/integration/EventActivityFeed').then(m => ({ default: m.EventActivityFeed })));
 
 const LoadingSkeleton = () => (
   <div className="space-y-4 p-6">
@@ -434,6 +436,16 @@ export default function CommandMegaHub() {
               <Suspense fallback={<Skeleton className="h-80" />}>
                 <PIClaimsIntelligence />
               </Suspense>
+
+              {/* Wave 54: Cross-Module Integration Health */}
+              <div className="grid grid-cols-1 lg:grid-cols-2 gap-6">
+                <Suspense fallback={<Skeleton className="h-80" />}>
+                  <IntegrationHealthWidget />
+                </Suspense>
+                <Suspense fallback={<Skeleton className="h-80" />}>
+                  <EventActivityFeed title="Eventos Cross-Module" limit={15} />
+                </Suspense>
+              </div>
 
               {/* Full Dashboard below */}
               <EnhancedUnifiedDashboard />
