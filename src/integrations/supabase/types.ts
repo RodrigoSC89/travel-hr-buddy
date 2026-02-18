@@ -12141,6 +12141,142 @@ export type Database = {
           },
         ]
       }
+      crew_planning_assignments: {
+        Row: {
+          actual_duration_days: number | null
+          assignment_type: string | null
+          contract_end: string | null
+          contract_start: string | null
+          contract_type: string | null
+          created_at: string | null
+          crew_member_id: string | null
+          disembark_date: string | null
+          disembark_port: string | null
+          embark_date: string
+          embark_port: string | null
+          handover_days: number | null
+          id: string
+          leave_days_entitled: number | null
+          leave_days_remaining: number | null
+          leave_days_used: number | null
+          leave_end: string | null
+          leave_start: string | null
+          leave_type: string | null
+          metadata: Json | null
+          notes: string | null
+          organization_id: string | null
+          planned_duration_months: number | null
+          position: string
+          rank: string | null
+          relief_confirmed: boolean | null
+          relief_crew_id: string | null
+          sea_service_start: string | null
+          status: string | null
+          travel_booked: boolean | null
+          travel_booking_ref: string | null
+          updated_at: string | null
+          vessel_id: string | null
+          visa_required: boolean | null
+          visa_status: string | null
+        }
+        Insert: {
+          actual_duration_days?: number | null
+          assignment_type?: string | null
+          contract_end?: string | null
+          contract_start?: string | null
+          contract_type?: string | null
+          created_at?: string | null
+          crew_member_id?: string | null
+          disembark_date?: string | null
+          disembark_port?: string | null
+          embark_date: string
+          embark_port?: string | null
+          handover_days?: number | null
+          id?: string
+          leave_days_entitled?: number | null
+          leave_days_remaining?: number | null
+          leave_days_used?: number | null
+          leave_end?: string | null
+          leave_start?: string | null
+          leave_type?: string | null
+          metadata?: Json | null
+          notes?: string | null
+          organization_id?: string | null
+          planned_duration_months?: number | null
+          position: string
+          rank?: string | null
+          relief_confirmed?: boolean | null
+          relief_crew_id?: string | null
+          sea_service_start?: string | null
+          status?: string | null
+          travel_booked?: boolean | null
+          travel_booking_ref?: string | null
+          updated_at?: string | null
+          vessel_id?: string | null
+          visa_required?: boolean | null
+          visa_status?: string | null
+        }
+        Update: {
+          actual_duration_days?: number | null
+          assignment_type?: string | null
+          contract_end?: string | null
+          contract_start?: string | null
+          contract_type?: string | null
+          created_at?: string | null
+          crew_member_id?: string | null
+          disembark_date?: string | null
+          disembark_port?: string | null
+          embark_date?: string
+          embark_port?: string | null
+          handover_days?: number | null
+          id?: string
+          leave_days_entitled?: number | null
+          leave_days_remaining?: number | null
+          leave_days_used?: number | null
+          leave_end?: string | null
+          leave_start?: string | null
+          leave_type?: string | null
+          metadata?: Json | null
+          notes?: string | null
+          organization_id?: string | null
+          planned_duration_months?: number | null
+          position?: string
+          rank?: string | null
+          relief_confirmed?: boolean | null
+          relief_crew_id?: string | null
+          sea_service_start?: string | null
+          status?: string | null
+          travel_booked?: boolean | null
+          travel_booking_ref?: string | null
+          updated_at?: string | null
+          vessel_id?: string | null
+          visa_required?: boolean | null
+          visa_status?: string | null
+        }
+        Relationships: [
+          {
+            foreignKeyName: "crew_planning_assignments_crew_member_id_fkey"
+            columns: ["crew_member_id"]
+            isOneToOne: false
+            referencedRelation: "crew_members"
+            referencedColumns: ["id"]
+          },
+          {
+            foreignKeyName: "crew_planning_assignments_organization_id_fkey"
+            columns: ["organization_id"]
+            isOneToOne: false
+            referencedRelation: "organizations"
+            referencedColumns: ["id"]
+          },
+          {
+            foreignKeyName: "crew_planning_assignments_vessel_id_fkey"
+            columns: ["vessel_id"]
+            isOneToOne: false
+            referencedRelation: "vessels"
+            referencedColumns: ["id"]
+          },
+        ]
+      }
       crew_rotation_logs: {
         Row: {
           changed_by: string | null
@@ -49626,6 +49762,189 @@ export type Database = {
           },
           {
             foreignKeyName: "vessel_inspections_vessel_id_fkey"
+            columns: ["vessel_id"]
+            isOneToOne: false
+            referencedRelation: "vessels"
+            referencedColumns: ["id"]
+          },
+        ]
+      }
+      vessel_kpi_snapshots: {
+        Row: {
+          audit_findings: number | null
+          availability_pct: number | null
+          avg_fatigue_score: number | null
+          breakdown_hours: number | null
+          budget_variance_pct: number | null
+          cert_expiry_alerts: number | null
+          cii_rating: string | null
+          co2_emissions_mt: number | null
+          created_at: string | null
+          crew_retention_pct: number | null
+          crew_satisfaction_score: number | null
+          critical_spares_stock_pct: number | null
+          daily_opex: number | null
+          deficiency_count: number | null
+          drills_completed: number | null
+          drills_planned: number | null
+          drydock_reserve: number | null
+          eexi_compliance: boolean | null
+          fuel_consumption_mt: number | null
+          fuel_efficiency: number | null
+          id: string
+          idle_days: number | null
+          ltif: number | null
+          metadata: Json | null
+          mtbf_hours: number | null
+          near_miss_count: number | null
+          net_earnings: number | null
+          notes: string | null
+          off_hire_days: number | null
+          open_ncs: number | null
+          organization_id: string | null
+          overall_score: number | null
+          overdue_capa: number | null
+          overdue_jobs: number | null
+          period: string | null
+          pms_compliance_pct: number | null
+          port_days: number | null
+          psc_deficiencies: number | null
+          revenue: number | null
+          running_costs: number | null
+          safety_observations: number | null
+          scoring_methodology: string | null
+          sea_days: number | null
+          snapshot_date: string
+          sox_emissions_mt: number | null
+          tce_rate: number | null
+          training_compliance_pct: number | null
+          trir: number | null
+          updated_at: string | null
+          utilization_pct: number | null
+          vessel_id: string | null
+          vetting_score: number | null
+          voyage_costs: number | null
+        }
+        Insert: {
+          audit_findings?: number | null
+          availability_pct?: number | null
+          avg_fatigue_score?: number | null
+          breakdown_hours?: number | null
+          budget_variance_pct?: number | null
+          cert_expiry_alerts?: number | null
+          cii_rating?: string | null
+          co2_emissions_mt?: number | null
+          created_at?: string | null
+          crew_retention_pct?: number | null
+          crew_satisfaction_score?: number | null
+          critical_spares_stock_pct?: number | null
+          daily_opex?: number | null
+          deficiency_count?: number | null
+          drills_completed?: number | null
+          drills_planned?: number | null
+          drydock_reserve?: number | null
+          eexi_compliance?: boolean | null
+          fuel_consumption_mt?: number | null
+          fuel_efficiency?: number | null
+          id?: string
+          idle_days?: number | null
+          ltif?: number | null
+          metadata?: Json | null
+          mtbf_hours?: number | null
+          near_miss_count?: number | null
+          net_earnings?: number | null
+          notes?: string | null
+          off_hire_days?: number | null
+          open_ncs?: number | null
+          organization_id?: string | null
+          overall_score?: number | null
+          overdue_capa?: number | null
+          overdue_jobs?: number | null
+          period?: string | null
+          pms_compliance_pct?: number | null
+          port_days?: number | null
+          psc_deficiencies?: number | null
+          revenue?: number | null
+          running_costs?: number | null
+          safety_observations?: number | null
+          scoring_methodology?: string | null
+          sea_days?: number | null
+          snapshot_date: string
+          sox_emissions_mt?: number | null
+          tce_rate?: number | null
+          training_compliance_pct?: number | null
+          trir?: number | null
+          updated_at?: string | null
+          utilization_pct?: number | null
+          vessel_id?: string | null
+          vetting_score?: number | null
+          voyage_costs?: number | null
+        }
+        Update: {
+          audit_findings?: number | null
+          availability_pct?: number | null
+          avg_fatigue_score?: number | null
+          breakdown_hours?: number | null
+          budget_variance_pct?: number | null
+          cert_expiry_alerts?: number | null
+          cii_rating?: string | null
+          co2_emissions_mt?: number | null
+          created_at?: string | null
+          crew_retention_pct?: number | null
+          crew_satisfaction_score?: number | null
+          critical_spares_stock_pct?: number | null
+          daily_opex?: number | null
+          deficiency_count?: number | null
+          drills_completed?: number | null
+          drills_planned?: number | null
+          drydock_reserve?: number | null
+          eexi_compliance?: boolean | null
+          fuel_consumption_mt?: number | null
+          fuel_efficiency?: number | null
+          id?: string
+          idle_days?: number | null
+          ltif?: number | null
+          metadata?: Json | null
+          mtbf_hours?: number | null
+          near_miss_count?: number | null
+          net_earnings?: number | null
+          notes?: string | null
+          off_hire_days?: number | null
+          open_ncs?: number | null
+          organization_id?: string | null
+          overall_score?: number | null
+          overdue_capa?: number | null
+          overdue_jobs?: number | null
+          period?: string | null
+          pms_compliance_pct?: number | null
+          port_days?: number | null
+          psc_deficiencies?: number | null
+          revenue?: number | null
+          running_costs?: number | null
+          safety_observations?: number | null
+          scoring_methodology?: string | null
+          sea_days?: number | null
+          snapshot_date?: string
+          sox_emissions_mt?: number | null
+          tce_rate?: number | null
+          training_compliance_pct?: number | null
+          trir?: number | null
+          updated_at?: string | null
+          utilization_pct?: number | null
+          vessel_id?: string | null
+          vetting_score?: number | null
+          voyage_costs?: number | null
+        }
+        Relationships: [
+          {
+            foreignKeyName: "vessel_kpi_snapshots_organization_id_fkey"
+            columns: ["organization_id"]
+            isOneToOne: false
+            referencedRelation: "organizations"
+            referencedColumns: ["id"]
+          },
+          {
+            foreignKeyName: "vessel_kpi_snapshots_vessel_id_fkey"
             columns: ["vessel_id"]
             isOneToOne: false
             referencedRelation: "vessels"
