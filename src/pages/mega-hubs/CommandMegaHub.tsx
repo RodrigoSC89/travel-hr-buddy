@@ -58,6 +58,7 @@ const ContractExpiryRadar = lazy(() => import('@/components/dashboard/ContractEx
 const FleetRiskHeatmap = lazy(() => import('@/components/dashboard/FleetRiskHeatmap'));
 const SystemEventsPanel = lazy(() => import('@/components/dashboard/SystemEventsPanel'));
 const FleetKPISummaryCards = lazy(() => import('@/components/dashboard/FleetKPISummaryCards').then(m => ({ default: m.FleetKPISummaryCards })));
+const FleetStatusGrid = lazy(() => import('@/components/dashboard/FleetStatusGrid').then(m => ({ default: m.FleetStatusGrid })));
 
 const LoadingSkeleton = () => (
   <div className="space-y-4 p-6">
@@ -393,6 +394,11 @@ export default function CommandMegaHub() {
                   <ContractExpiryRadar />
                 </Suspense>
               </div>
+
+              {/* Fleet Status Grid - Real-time vessel health */}
+              <Suspense fallback={<Skeleton className="h-64" />}>
+                <FleetStatusGrid />
+              </Suspense>
 
               {/* Event System - Central Nervous System */}
               <Suspense fallback={<Skeleton className="h-64" />}>

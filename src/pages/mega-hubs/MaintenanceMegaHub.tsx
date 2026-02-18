@@ -52,6 +52,7 @@ const PredictiveFailureHeatmap = lazy(() => import('@/components/dashboard/Predi
 const SupplyChainIntelligence = lazy(() => import('@/components/dashboard/SupplyChainIntelligence'));
 const AssetIntegrityMatrix = lazy(() => import('@/components/dashboard/AssetIntegrityMatrix'));
 const DrydockCostOptimizer = lazy(() => import('@/components/dashboard/DrydockCostOptimizer'));
+const DrydockProjectTracker = lazy(() => import('@/components/dashboard/DrydockProjectTracker').then(m => ({ default: m.DrydockProjectTracker })));
 const PMSCalendarView = lazy(() => import('@/components/maintenance/PMSCalendarView').then(m => ({ default: m.PMSCalendarView })));
 const MaintenanceBacklogAnalytics = lazy(() => import('@/components/dashboard/MaintenanceBacklogAnalytics').then(m => ({ default: m.MaintenanceBacklogAnalytics })));
 const LoadingSkeleton = () => (
@@ -324,10 +325,13 @@ export default function MaintenanceMegaHub() {
                 </Suspense>
               </div>
 
-              {/* Wave 37: Drydock Cost Optimizer */}
+              {/* Wave 37: Drydock Cost Optimizer + Project Tracker */}
               <div className="grid grid-cols-1 lg:grid-cols-2 gap-6">
                 <Suspense fallback={<Skeleton className="h-64" />}>
                   <DrydockCostOptimizer />
+                </Suspense>
+                <Suspense fallback={<Skeleton className="h-64" />}>
+                  <DrydockProjectTracker />
                 </Suspense>
               </div>
 
