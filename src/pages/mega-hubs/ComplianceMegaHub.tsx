@@ -52,6 +52,7 @@ const RegulatoryChangeTracker = lazy(() => import('@/components/dashboard/Regula
 const AuditGapHeatmap = lazy(() => import('@/components/dashboard/AuditGapHeatmap'));
 const VettingReadinessCenter = lazy(() => import('@/components/dashboard/VettingReadinessCenter'));
 const RegulatoryRadarLive = lazy(() => import('@/components/dashboard/RegulatoryRadarLive'));
+const ISMGapAnalyzer = lazy(() => import('@/components/dashboard/ISMGapAnalyzer'));
 
 // ═══════════════════════════════════════════════════════════
 // 12 AUDITORIAS MARÍTIMAS COMPLETAS - ZERO SUPRESSÃO
@@ -387,6 +388,13 @@ export default function ComplianceMegaHub() {
               <div className="grid grid-cols-1 lg:grid-cols-2 gap-6">
                 <Suspense fallback={<Skeleton className="h-64" />}>
                   <RegulatoryRadarLive />
+                </Suspense>
+              </div>
+
+              {/* Wave 44: ISM Gap Analyzer */}
+              <div className="grid grid-cols-1 lg:grid-cols-2 gap-6">
+                <Suspense fallback={<Skeleton className="h-64" />}>
+                  <ISMGapAnalyzer />
                 </Suspense>
               </div>
 
