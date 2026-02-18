@@ -302,6 +302,8 @@ export const PMSHubPage = lazy(() => import("@/pages/PMSHubPage"));
 export const ISMCodeHubPage = lazy(() => import("@/pages/ISMCodeHubPage"));
 export const CharteringHubPage = lazy(() => import("@/pages/CharteringHubPage"));
 export const EUETSHubPage = lazy(() => import("@/pages/EUETSHubPage"));
+export const IMPASparePartsHubPage = lazy(() => import("@/pages/IMPASparePartsHubPage"));
+export const SIRE2HubPage = lazy(() => import("@/pages/SIRE2HubPage"));
 export const PortCostPage = lazy(() => import("@/pages/PortCostPage"));
 export const CrewCompetencyPage = lazy(() => import("@/pages/CrewCompetencyPage"));
 export const InsurancePIPage = lazy(() => import("@/pages/InsurancePIPage"));

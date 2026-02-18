@@ -22100,6 +22100,114 @@ export type Database = {
           },
         ]
       }
+      impa_spare_parts: {
+        Row: {
+          category: string
+          created_at: string
+          criticality: string | null
+          currency: string | null
+          description: string | null
+          dimensions: string | null
+          equipment_type: string | null
+          hazmat_class: string | null
+          id: string
+          impa_code: string
+          is_hazardous: boolean | null
+          issa_code: string | null
+          lead_time_days: number | null
+          manufacturer: string | null
+          max_stock: number | null
+          min_stock: number | null
+          name: string
+          notes: string | null
+          organization_id: string | null
+          part_number: string | null
+          reorder_point: number | null
+          shelf_life_months: number | null
+          standard_unit_cost: number | null
+          sub_category: string | null
+          unit: string
+          updated_at: string
+          vessel_id: string | null
+          weight_kg: number | null
+        }
+        Insert: {
+          category: string
+          created_at?: string
+          criticality?: string | null
+          currency?: string | null
+          description?: string | null
+          dimensions?: string | null
+          equipment_type?: string | null
+          hazmat_class?: string | null
+          id?: string
+          impa_code: string
+          is_hazardous?: boolean | null
+          issa_code?: string | null
+          lead_time_days?: number | null
+          manufacturer?: string | null
+          max_stock?: number | null
+          min_stock?: number | null
+          name: string
+          notes?: string | null
+          organization_id?: string | null
+          part_number?: string | null
+          reorder_point?: number | null
+          shelf_life_months?: number | null
+          standard_unit_cost?: number | null
+          sub_category?: string | null
+          unit?: string
+          updated_at?: string
+          vessel_id?: string | null
+          weight_kg?: number | null
+        }
+        Update: {
+          category?: string
+          created_at?: string
+          criticality?: string | null
+          currency?: string | null
+          description?: string | null
+          dimensions?: string | null
+          equipment_type?: string | null
+          hazmat_class?: string | null
+          id?: string
+          impa_code?: string
+          is_hazardous?: boolean | null
+          issa_code?: string | null
+          lead_time_days?: number | null
+          manufacturer?: string | null
+          max_stock?: number | null
+          min_stock?: number | null
+          name?: string
+          notes?: string | null
+          organization_id?: string | null
+          part_number?: string | null
+          reorder_point?: number | null
+          shelf_life_months?: number | null
+          standard_unit_cost?: number | null
+          sub_category?: string | null
+          unit?: string
+          updated_at?: string
+          vessel_id?: string | null
+          weight_kg?: number | null
+        }
+        Relationships: [
+          {
+            foreignKeyName: "impa_spare_parts_organization_id_fkey"
+            columns: ["organization_id"]
+            isOneToOne: false
+            referencedRelation: "organizations"
+            referencedColumns: ["id"]
+          },
+          {
+            foreignKeyName: "impa_spare_parts_vessel_id_fkey"
+            columns: ["vessel_id"]
+            isOneToOne: false
+            referencedRelation: "vessels"
+            referencedColumns: ["id"]
+          },
+        ]
+      }
       improvement_suggestions: {
         Row: {
           actual_benefit: string | null
@@ -42263,6 +42371,179 @@ export type Database = {
           },
         ]
       }
+      sire2_findings: {
+        Row: {
+          chapter_name: string | null
+          chapter_number: number
+          completion_date: string | null
+          corrective_action: string | null
+          created_at: string
+          description: string | null
+          evidence_provided: string | null
+          finding_type: string | null
+          id: string
+          inspection_id: string
+          photos: Json | null
+          question_ref: string | null
+          question_text: string | null
+          root_cause: string | null
+          severity: string | null
+          status: string | null
+          target_date: string | null
+          updated_at: string
+        }
+        Insert: {
+          chapter_name?: string | null
+          chapter_number: number
+          completion_date?: string | null
+          corrective_action?: string | null
+          created_at?: string
+          description?: string | null
+          evidence_provided?: string | null
+          finding_type?: string | null
+          id?: string
+          inspection_id: string
+          photos?: Json | null
+          question_ref?: string | null
+          question_text?: string | null
+          root_cause?: string | null
+          severity?: string | null
+          status?: string | null
+          target_date?: string | null
+          updated_at?: string
+        }
+        Update: {
+          chapter_name?: string | null
+          chapter_number?: number
+          completion_date?: string | null
+          corrective_action?: string | null
+          created_at?: string
+          description?: string | null
+          evidence_provided?: string | null
+          finding_type?: string | null
+          id?: string
+          inspection_id?: string
+          photos?: Json | null
+          question_ref?: string | null
+          question_text?: string | null
+          root_cause?: string | null
+          severity?: string | null
+          status?: string | null
+          target_date?: string | null
+          updated_at?: string
+        }
+        Relationships: [
+          {
+            foreignKeyName: "sire2_findings_inspection_id_fkey"
+            columns: ["inspection_id"]
+            isOneToOne: false
+            referencedRelation: "sire2_inspections"
+            referencedColumns: ["id"]
+          },
+        ]
+      }
+      sire2_inspections: {
+        Row: {
+          chapters_assessed: Json | null
+          corrective_actions_due: string | null
+          country: string | null
+          created_at: string
+          critical_findings: number | null
+          id: string
+          inspection_date: string
+          inspection_number: string | null
+          inspection_type: string
+          inspector_company: string | null
+          inspector_name: string | null
+          max_score: number | null
+          next_inspection_date: string | null
+          oil_major: string | null
+          organization_id: string | null
+          overall_score: number | null
+          port: string | null
+          report_date: string | null
+          report_url: string | null
+          risk_rating: string | null
+          status: string | null
+          summary: string | null
+          total_non_conformities: number | null
+          total_observations: number | null
+          updated_at: string
+          vessel_id: string | null
+        }
+        Insert: {
+          chapters_assessed?: Json | null
+          corrective_actions_due?: string | null
+          country?: string | null
+          created_at?: string
+          critical_findings?: number | null
+          id?: string
+          inspection_date: string
+          inspection_number?: string | null
+          inspection_type?: string
+          inspector_company?: string | null
+          inspector_name?: string | null
+          max_score?: number | null
+          next_inspection_date?: string | null
+          oil_major?: string | null
+          organization_id?: string | null
+          overall_score?: number | null
+          port?: string | null
+          report_date?: string | null
+          report_url?: string | null
+          risk_rating?: string | null
+          status?: string | null
+          summary?: string | null
+          total_non_conformities?: number | null
+          total_observations?: number | null
+          updated_at?: string
+          vessel_id?: string | null
+        }
+        Update: {
+          chapters_assessed?: Json | null
+          corrective_actions_due?: string | null
+          country?: string | null
+          created_at?: string
+          critical_findings?: number | null
+          id?: string
+          inspection_date?: string
+          inspection_number?: string | null
+          inspection_type?: string
+          inspector_company?: string | null
+          inspector_name?: string | null
+          max_score?: number | null
+          next_inspection_date?: string | null
+          oil_major?: string | null
+          organization_id?: string | null
+          overall_score?: number | null
+          port?: string | null
+          report_date?: string | null
+          report_url?: string | null
+          risk_rating?: string | null
+          status?: string | null
+          summary?: string | null
+          total_non_conformities?: number | null
+          total_observations?: number | null
+          updated_at?: string
+          vessel_id?: string | null
+        }
+        Relationships: [
+          {
+            foreignKeyName: "sire2_inspections_organization_id_fkey"
+            columns: ["organization_id"]
+            isOneToOne: false
+            referencedRelation: "organizations"
+            referencedColumns: ["id"]
+          },
+          {
+            foreignKeyName: "sire2_inspections_vessel_id_fkey"
+            columns: ["vessel_id"]
+            isOneToOne: false
+            referencedRelation: "vessels"
+            referencedColumns: ["id"]
+          },
+        ]
+      }
       siscomex_audit_log: {
         Row: {
           action: string
@@ -43469,6 +43750,69 @@ export type Database = {
           visibility?: number | null
         }
         Relationships: []
+      }
+      spare_parts_movements: {
+        Row: {
+          created_at: string
+          from_location: string | null
+          id: string
+          movement_type: string
+          notes: string | null
+          performed_by: string | null
+          quantity: number
+          reference_number: string | null
+          reference_type: string | null
+          spare_part_id: string
+          to_location: string | null
+          unit_cost: number | null
+          vessel_id: string | null
+        }
+        Insert: {
+          created_at?: string
+          from_location?: string | null
+          id?: string
+          movement_type: string
+          notes?: string | null
+          performed_by?: string | null
+          quantity: number
+          reference_number?: string | null
+          reference_type?: string | null
+          spare_part_id: string
+          to_location?: string | null
+          unit_cost?: number | null
+          vessel_id?: string | null
+        }
+        Update: {
+          created_at?: string
+          from_location?: string | null
+          id?: string
+          movement_type?: string
+          notes?: string | null
+          performed_by?: string | null
+          quantity?: number
+          reference_number?: string | null
+          reference_type?: string | null
+          spare_part_id?: string
+          to_location?: string | null
+          unit_cost?: number | null
+          vessel_id?: string | null
+        }
+        Relationships: [
+          {
+            foreignKeyName: "spare_parts_movements_spare_part_id_fkey"
+            columns: ["spare_part_id"]
+            isOneToOne: false
+            referencedRelation: "impa_spare_parts"
+            referencedColumns: ["id"]
+          },
+          {
+            foreignKeyName: "spare_parts_movements_vessel_id_fkey"
+            columns: ["vessel_id"]
+            isOneToOne: false
+            referencedRelation: "vessels"
+            referencedColumns: ["id"]
+          },
+        ]
       }
       starfix_inspections: {
         Row: {
