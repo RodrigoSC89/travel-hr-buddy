@@ -33,7 +33,8 @@ const LogisticsCommandPage = lazy(() => import('@/pages/ai/VoyageLogisticsAIPage
 const VesselContractsUnified = lazy(() => import('@/pages/CharterPartyPage'));
 const OperationsAIHub = lazy(() => import('@/components/operations/ai/OperationsAIHub'));
 const ManningAgentPortal = lazy(() => import('@/components/crew/ManningAgentPortal').then(m => ({ default: m.ManningAgentPortal })));
-
+const VoyagePerformanceAnalytics = lazy(() => import('@/components/dashboard/VoyagePerformanceAnalytics'));
+const FleetUtilizationMatrix = lazy(() => import('@/components/dashboard/FleetUtilizationMatrix'));
 const LoadingSkeleton = () => (
   <div className="space-y-4 p-6">
     <Skeleton className="h-8 w-64" />
@@ -241,6 +242,16 @@ export default function OpsMegaHub() {
                   onPrimaryAction={() => setVoyageDialogOpen(true)} 
                 />
               )}
+
+              {/* Wave 16: Operations Intelligence Center */}
+              <div className="grid grid-cols-1 lg:grid-cols-2 gap-6">
+                <Suspense fallback={<Skeleton className="h-[500px]" />}>
+                  <VoyagePerformanceAnalytics />
+                </Suspense>
+                <Suspense fallback={<Skeleton className="h-[500px]" />}>
+                  <FleetUtilizationMatrix />
+                </Suspense>
+              </div>
 
               {/* Original Operations Hub */}
               {(isLoading || metrics.totalVessels > 0) && <OperationsCommandHub />}
