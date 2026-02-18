@@ -31,7 +31,7 @@ import { toast } from 'sonner';
 
 // Lazy load sub-components
 const AIControlTowerHub = lazy(() => import('@/pages/AIHubPage'));
-const AICommandCenter = lazy(() => import('@/pages/AIHubPage'));
+const AICommandCenter = lazy(() => import('@/components/ai/UniversalAIChat').then(m => ({ default: m.UniversalAIChat })));
 const AutonomousCommandCenter = lazy(() => import('@/components/ai/AutonomousAgentPanel').then(m => ({ default: m.AutonomousAgentPanel })));
 const AIAgentDirectory = lazy(() => import('@/pages/AIAgents/AIAgentDirectory'));
 const WorkflowCommandCenter = lazy(() => import('@/pages/WorkflowCommandCenter'));
@@ -384,7 +384,7 @@ export default function AIMegaHub() {
                 active={chatSubTab}
                 onChange={(id) => setChatSubTab(id as 'chat' | 'voice')}
               />
-              {chatSubTab === 'chat' && <AICommandCenter />}
+              {chatSubTab === 'chat' && <AICommandCenter module="command" welcomeMessage="Olá! Sou o assistente IA do Nautilus One. Como posso ajudar você hoje?" />}
               {chatSubTab === 'voice' && <VoiceAssistant />}
             </TabsContent>
 
