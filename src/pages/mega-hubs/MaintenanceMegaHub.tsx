@@ -55,6 +55,7 @@ const DrydockCostOptimizer = lazy(() => import('@/components/dashboard/DrydockCo
 const DrydockProjectTracker = lazy(() => import('@/components/dashboard/DrydockProjectTracker').then(m => ({ default: m.DrydockProjectTracker })));
 const PMSCalendarView = lazy(() => import('@/components/maintenance/PMSCalendarView').then(m => ({ default: m.PMSCalendarView })));
 const MaintenanceBacklogAnalytics = lazy(() => import('@/components/dashboard/MaintenanceBacklogAnalytics').then(m => ({ default: m.MaintenanceBacklogAnalytics })));
+const MaintenanceCostTrend = lazy(() => import('@/components/dashboard/MaintenanceCostTrend').then(m => ({ default: m.MaintenanceCostTrend })));
 const LoadingSkeleton = () => (
   <div className="space-y-4 p-6">
     <Skeleton className="h-8 w-64" />
@@ -334,6 +335,11 @@ export default function MaintenanceMegaHub() {
                   <DrydockProjectTracker />
                 </Suspense>
               </div>
+
+              {/* Maintenance Cost Trend */}
+              <Suspense fallback={<Skeleton className="h-80" />}>
+                <MaintenanceCostTrend />
+              </Suspense>
 
               {!maintLoading && maintMetrics.total === 0 && (
                 <HubEmptyState 
