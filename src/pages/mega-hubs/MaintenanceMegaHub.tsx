@@ -42,6 +42,8 @@ const SparePartsInventory = lazy(() => import('@/components/maintenance/SparePar
 const PMSEquipmentTree = lazy(() => import('@/components/maintenance/PMSEquipmentTree'));
 const DryDockGanttChart = lazy(() => import('@/components/maintenance/DryDockGanttChart').then(m => ({ default: m.DryDockGanttChart })));
 const SensorLogbookManager = lazy(() => import('@/components/logbook/SensorLogbookManager').then(m => ({ default: m.SensorLogbookManager })));
+const EquipmentHealthMatrix = lazy(() => import('@/components/dashboard/EquipmentHealthMatrix').then(m => ({ default: m.EquipmentHealthMatrix })));
+const MaintenanceKPIStrip = lazy(() => import('@/components/dashboard/MaintenanceKPIStrip').then(m => ({ default: m.MaintenanceKPIStrip })));
 const LoadingSkeleton = () => (
   <div className="space-y-4 p-6">
     <Skeleton className="h-8 w-64" />
@@ -228,6 +230,9 @@ export default function MaintenanceMegaHub() {
                 <span>{maintMetrics.vesselsInMaint} embarcações em manutenção</span>
               </div>
 
+              {/* 🆕 Wave 13: Maintenance KPI Command Strip */}
+              <MaintenanceKPIStrip />
+
               {/* Enhanced Action Bar */}
               <EnhancedActionBar
                 title="Centro de Manutenção"
@@ -275,6 +280,9 @@ export default function MaintenanceMegaHub() {
                 steps={workflowSteps}
                 variant="horizontal"
               />
+
+              {/* 🆕 Wave 13: Equipment Health Matrix */}
+              <EquipmentHealthMatrix />
 
               {/* Empty state when no data */}
               {!maintLoading && maintMetrics.total === 0 && (
