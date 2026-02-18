@@ -25,6 +25,7 @@ import { useQueryClient } from '@tanstack/react-query';
 import { useRealActionHandlers } from '@/hooks/useRealActionHandlers';
 import { useOperationsCommandData } from '@/hooks/useOperationsCommandData';
 import { toast } from 'sonner';
+import { CrossModulePanel } from '@/components/integration';
 
 // Lazy load sub-components
 const EnhancedUnifiedDashboard = lazy(() => import('@/components/dashboard/enhanced-unified-dashboard'));

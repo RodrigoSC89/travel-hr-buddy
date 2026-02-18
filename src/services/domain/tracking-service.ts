@@ -7,7 +7,9 @@ import { publishEvent } from "@/lib/events/event-bus";
 
 export const TrackingService = {
   async createAlert(alert: Record<string, unknown>) {
-    const { data, error } = await (supabase.from as Function)('soc_alerts').insert(alert).select().single();
+    // Try telemetry_alerts first (for sensor/geofence alerts), fallback to soc_alerts
+    const table = alert.sensor_id ? 'telemetry_alerts' : 'soc_alerts';
+    const { data, error } = await (supabase.from as Function)(table).insert(alert).select().single();
     if (error) throw error;
 
     await publishEvent({
@@ -15,8 +17,9 @@ export const TrackingService = {
       payload: {
         alert_id: data.id,
         vessel_id: data.vessel_id,
-        alert_type: data.alert_type,
-        severity: data.severity,
+        alert_type: data.alert_type ?? alert.alert_type,
+        severity: data.severity ?? alert.severity,
+        message: data.message ?? alert.message,
       },
       sourceEntityType: 'alert',
       sourceEntityId: data.id,

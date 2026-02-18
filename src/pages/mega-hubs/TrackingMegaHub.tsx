@@ -23,6 +23,8 @@ import { useQueryClient, useQuery } from '@tanstack/react-query';
 import { supabase } from '@/integrations/supabase/client';
 import { useRealActionHandlers } from '@/hooks/useRealActionHandlers';
 import { toast } from 'sonner';
+import { CrossModulePanel } from '@/components/integration';
+import { useCreateTrackingAlert } from '@/hooks/useModuleHooks';
 
 // Lazy load sub-components
 const TrackingTelemetryHub = lazy(() => import('@/pages/TelemetriaCommand'));
@@ -73,6 +75,7 @@ export default function TrackingMegaHub() {
   const activeTab = searchParams.get('tab') || 'overview';
   const queryClient = useQueryClient();
   const { exportToCSV } = useRealActionHandlers();
+  const createAlertMutation = useCreateTrackingAlert();
 
   // Real data: vessels for tracking
   const { data: vessels = [], isLoading: vesselsLoading } = useQuery({
@@ -138,20 +141,14 @@ export default function TrackingMegaHub() {
     exportToCSV(exportData, 'fleet-positions');
   }, [vessels, exportToCSV]);
 
-  const handleCreateAlert = useCallback(async () => {
-    const { error } = await supabase.from('telemetry_alerts').insert([{
+  const handleCreateAlert = useCallback(() => {
+    createAlertMutation.mutate({
       sensor_id: 'manual',
       alert_type: 'geofence',
       severity: 'medium',
       message: `Alerta manual - ${new Date().toLocaleString('pt-BR')}`,
-    }]);
-    if (error) {
-      toast.error(`Erro ao criar alerta: ${error.message}`);
-    } else {
-      toast.success('Alerta criado com sucesso');
-      queryClient.invalidateQueries({ queryKey: ['tracking-alerts'] });
-    }
-  }, [queryClient]);
+    });
+  }, [createAlertMutation]);
 
   return (
     <div className="min-h-screen bg-background">
@@ -320,8 +317,18 @@ export default function TrackingMegaHub() {
 
               {/* Vessel Performance Sparklines */}
               <Suspense fallback={<Skeleton className="h-64" />}>
-                <VesselPerformanceSparklines />
+              <VesselPerformanceSparklines />
               </Suspense>
+
+              {/* Cross-Module Integration Panel */}
+              <CrossModulePanel
+                entityType="vessel"
+                entityId={vessels[0]?.id ?? ''}
+                showQuickActions
+                showActivityFeed
+                className="mt-6"
+              />
+
               {(vesselsLoading || trackingMetrics.totalVessels > 0) && <TrackingTelemetryHub />}
             </TabsContent>
 

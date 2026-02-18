@@ -23,6 +23,7 @@ import { useOperationsCommandData } from '@/hooks/useOperationsCommandData';
 import { useRealActionHandlers } from '@/hooks/useRealActionHandlers';
 import { toast } from 'sonner';
 import { NewVoyageDialog } from '@/components/operations/QuickActionDialogs';
+import { CrossModulePanel } from '@/components/integration';
 // Lazy load sub-components
 const OperationsCommandHub = lazy(() => import('@/pages/OperationsCommandCenter'));
 const MaritimeCommandCenter = lazy(() => import('@/pages/MaritimeCommandCenter'));
@@ -398,6 +399,15 @@ export default function OpsMegaHub() {
                   <VoyageTCEPerformance />
                 </Suspense>
               </div>
+
+              {/* Cross-Module Integration */}
+              <CrossModulePanel
+                entityType="voyage"
+                entityId={voyages[0]?.id ?? ''}
+                showQuickActions
+                showActivityFeed
+                className="mt-6"
+              />
 
               {/* Original Operations Hub */}
               {(isLoading || metrics.totalVessels > 0) && <OperationsCommandHub />}
