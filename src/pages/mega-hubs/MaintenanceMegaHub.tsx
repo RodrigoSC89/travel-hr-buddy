@@ -44,6 +44,8 @@ const DryDockGanttChart = lazy(() => import('@/components/maintenance/DryDockGan
 const SensorLogbookManager = lazy(() => import('@/components/logbook/SensorLogbookManager').then(m => ({ default: m.SensorLogbookManager })));
 const EquipmentHealthMatrix = lazy(() => import('@/components/dashboard/EquipmentHealthMatrix').then(m => ({ default: m.EquipmentHealthMatrix })));
 const MaintenanceKPIStrip = lazy(() => import('@/components/dashboard/MaintenanceKPIStrip').then(m => ({ default: m.MaintenanceKPIStrip })));
+const BacklogAgingAnalysis = lazy(() => import('@/components/dashboard/BacklogAgingAnalysis').then(m => ({ default: m.BacklogAgingAnalysis })));
+const SparePartsCriticality = lazy(() => import('@/components/dashboard/SparePartsCriticality').then(m => ({ default: m.SparePartsCriticality })));
 const LoadingSkeleton = () => (
   <div className="space-y-4 p-6">
     <Skeleton className="h-8 w-64" />
@@ -283,6 +285,12 @@ export default function MaintenanceMegaHub() {
 
               {/* 🆕 Wave 13: Equipment Health Matrix */}
               <EquipmentHealthMatrix />
+
+              {/* 🆕 Wave 14: Backlog Aging + Spare Parts Criticality */}
+              <div className="grid grid-cols-1 lg:grid-cols-2 gap-4">
+                <BacklogAgingAnalysis />
+                <SparePartsCriticality />
+              </div>
 
               {/* Empty state when no data */}
               {!maintLoading && maintMetrics.total === 0 && (
