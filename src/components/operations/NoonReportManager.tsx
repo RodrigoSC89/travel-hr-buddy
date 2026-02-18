@@ -1,9 +1,9 @@
 /**
- * Noon Report Manager - World-class voyage reporting
+ * Noon Report Manager v2 - World-class voyage reporting
  * Benchmarks: BASSnet, DNV ShipManager, Veson IMOS
- * Full CRUD with ROB, weather, position, engine data
+ * Full CRUD + Performance Analytics + Weather Impact + Fuel Efficiency
  */
-import React, { useState } from 'react';
+import React, { useState, useMemo } from 'react';
 import { useQuery, useMutation, useQueryClient } from '@tanstack/react-query';
 import { supabase } from '@/integrations/supabase/client';
 import { Card, CardContent, CardHeader, CardTitle } from '@/components/ui/card';
@@ -19,8 +19,10 @@ import { Skeleton } from '@/components/ui/skeleton';
 import { toast } from 'sonner';
 import {
   Navigation, Fuel, Wind, Thermometer, Anchor, Send, Plus, Eye,
-  CheckCircle, Clock, Ship, Compass, Waves
+  CheckCircle, Clock, Ship, Compass, Waves, TrendingUp, AlertTriangle,
+  BarChart3, Download, Filter
 } from 'lucide-react';
+import { LineChart, Line, BarChart, Bar, XAxis, YAxis, CartesianGrid, Tooltip, ResponsiveContainer, AreaChart, Area, ScatterChart, Scatter } from 'recharts';
 
 const VESSEL_STATUSES = ['at-sea', 'anchored', 'in-port', 'maneuvering', 'drifting'];
 const WIND_DIRS = ['N', 'NE', 'E', 'SE', 'S', 'SW', 'W', 'NW'];
@@ -28,6 +30,8 @@ const WIND_DIRS = ['N', 'NE', 'E', 'SE', 'S', 'SW', 'W', 'NW'];
 export default function NoonReportManager() {
   const [createOpen, setCreateOpen] = useState(false);
   const [selectedReport, setSelectedReport] = useState<any>(null);
+  const [mainTab, setMainTab] = useState('reports');
+  const [vesselFilter, setVesselFilter] = useState('all');
   const queryClient = useQueryClient();
 
   const defaultForm = {
@@ -58,7 +62,7 @@ export default function NoonReportManager() {
       const { data, error } = await (supabase.from as Function)('noon_reports')
         .select('*, vessels:vessel_id(name)')
         .order('report_date', { ascending: false })
-        .limit(100);
+        .limit(500);
       if (error) throw error;
       return data || [];
     },
@@ -75,7 +79,6 @@ export default function NoonReportManager() {
         remarks: f.remarks || null,
         status: 'submitted',
       };
-      // Numeric fields
       const nums: Record<string, string> = {
         latitude: f.latitude, longitude: f.longitude, course: f.course,
         speed_avg: f.speed_avg, speed_ordered: f.speed_ordered,
@@ -98,89 +101,348 @@ export default function NoonReportManager() {
       setCreateOpen(false);
       setForm(defaultForm);
     },
-    // eslint-disable-next-line @typescript-eslint/no-explicit-any -- error type from mutation
     onError: (e: any) => toast.error(e.message),
   });
 
+  // ── Analytics ──
+  const filteredReports = useMemo(() => {
+    if (vesselFilter === 'all') return reports;
+    return reports.filter((r: any) => r.vessel_id === vesselFilter);
+  }, [reports, vesselFilter]);
+
+  const analytics = useMemo(() => {
+    const reps = filteredReports as any[];
+    if (reps.length === 0) return null;
+
+    const totalDistance = reps.reduce((s, r) => s + (r.distance_run || 0), 0);
+    const totalFuelHFO = reps.reduce((s, r) => s + (r.consumption_hfo || 0), 0);
+    const totalFuelMDO = reps.reduce((s, r) => s + (r.consumption_mdo || 0), 0);
+    const totalFuelMGO = reps.reduce((s, r) => s + (r.consumption_mgo || 0), 0);
+    const totalFuel = totalFuelHFO + totalFuelMDO + totalFuelMGO;
+    const avgSpeed = reps.reduce((s, r) => s + (r.speed_avg || 0), 0) / reps.length;
+    const fuelEfficiency = totalDistance > 0 ? totalFuel / totalDistance : 0;
+
+    // Speed vs Consumption scatter data
+    const speedConsumption = reps
+      .filter(r => r.speed_avg && (r.consumption_hfo || r.consumption_mdo))
+      .map(r => ({
+        speed: r.speed_avg,
+        consumption: (r.consumption_hfo || 0) + (r.consumption_mdo || 0) + (r.consumption_mgo || 0),
+        vessel: r.vessels?.name || 'N/A',
+      }));
+
+    // Daily fuel trend (last 30 reports)
+    const fuelTrend = [...reps].reverse().slice(-30).map(r => ({
+      date: r.report_date?.substring(5) || '',
+      hfo: r.consumption_hfo || 0,
+      mdo: r.consumption_mdo || 0,
+      mgo: r.consumption_mgo || 0,
+      total: (r.consumption_hfo || 0) + (r.consumption_mdo || 0) + (r.consumption_mgo || 0),
+    }));
+
+    // Weather impact
+    const weatherImpact = reps
+      .filter(r => r.wind_force != null && r.speed_avg)
+      .reduce<Record<number, { speeds: number[]; fuel: number[] }>>((acc, r) => {
+        const bf = Math.round(r.wind_force);
+        if (!acc[bf]) acc[bf] = { speeds: [], fuel: [] };
+        acc[bf].speeds.push(r.speed_avg);
+        acc[bf].fuel.push((r.consumption_hfo || 0) + (r.consumption_mdo || 0));
+        return acc;
+      }, {});
+
+    const weatherData = Object.entries(weatherImpact)
+      .map(([bf, d]) => ({
+        beaufort: `BF ${bf}`,
+        avgSpeed: +(d.speeds.reduce((a, b) => a + b, 0) / d.speeds.length).toFixed(1),
+        avgFuel: +(d.fuel.reduce((a, b) => a + b, 0) / d.fuel.length).toFixed(1),
+      }))
+      .sort((a, b) => parseInt(a.beaufort.slice(3)) - parseInt(b.beaufort.slice(3)));
+
+    // ROB trend
+    const robTrend = [...reps].reverse().slice(-30)
+      .filter(r => r.rob_hfo || r.rob_mdo || r.rob_mgo)
+      .map(r => ({
+        date: r.report_date?.substring(5) || '',
+        hfo: r.rob_hfo || 0,
+        mdo: r.rob_mdo || 0,
+        mgo: r.rob_mgo || 0,
+        total: (r.rob_hfo || 0) + (r.rob_mdo || 0) + (r.rob_mgo || 0),
+      }));
+
+    // CO2 estimate (IMO factor: HFO=3.114, MDO=3.206, MGO=3.206 tCO2/tFuel)
+    const co2 = totalFuelHFO * 3.114 + totalFuelMDO * 3.206 + totalFuelMGO * 3.206;
+
+    return {
+      totalReports: reps.length,
+      totalDistance: Math.round(totalDistance),
+      totalFuel: +totalFuel.toFixed(1),
+      avgSpeed: +avgSpeed.toFixed(1),
+      fuelEfficiency: +fuelEfficiency.toFixed(3),
+      co2: +co2.toFixed(1),
+      speedConsumption,
+      fuelTrend,
+      weatherData,
+      robTrend,
+      submitted: reps.filter(r => r.status === 'submitted').length,
+      approved: reps.filter(r => r.status === 'approved').length,
+    };
+  }, [filteredReports]);
+
+  const exportCSV = () => {
+    const headers = ['Date', 'Vessel', 'Lat', 'Lon', 'Speed(kn)', 'Distance(nm)', 'HFO(t)', 'MDO(t)', 'MGO(t)', 'ROB_HFO', 'ROB_MDO', 'Wind', 'Sea_State', 'Status'];
+    const rows = filteredReports.map((r: any) => [
+      r.report_date, r.vessels?.name, r.latitude, r.longitude, r.speed_avg, r.distance_run,
+      r.consumption_hfo, r.consumption_mdo, r.consumption_mgo, r.rob_hfo, r.rob_mdo,
+      `${r.wind_direction} F${r.wind_force}`, r.sea_state, r.status,
+    ].join(','));
+    const blob = new Blob([headers.join(',') + '\n' + rows.join('\n')], { type: 'text/csv' });
+    const url = URL.createObjectURL(blob);
+    const a = document.createElement('a'); a.href = url; a.download = 'noon-reports.csv'; a.click();
+    URL.revokeObjectURL(url);
+    toast.success('CSV exportado');
+  };
+
   const statusBadge = (s: string) => {
     const map: Record<string, string> = { draft: 'secondary', submitted: 'default', approved: 'default', rejected: 'destructive' };
-    // eslint-disable-next-line @typescript-eslint/no-explicit-any -- Badge variant from dynamic mapping
     return <Badge variant={(map[s] || 'secondary') as any}>{s}</Badge>;
   };
 
   return (
     <div className="space-y-6">
-      <div className="flex items-center justify-between">
+      <div className="flex items-center justify-between flex-wrap gap-3">
         <div>
           <h2 className="text-2xl font-bold flex items-center gap-2">
             <Navigation className="h-6 w-6 text-primary" />
             Noon Report System
           </h2>
-          <p className="text-muted-foreground">Relatórios diários de posição, consumo e condições — Padrão BASSnet/DNV</p>
+          <p className="text-muted-foreground">Relatórios diários — Padrão BASSnet/DNV ShipManager</p>
         </div>
-        <Button onClick={() => setCreateOpen(true)}><Plus className="w-4 h-4 mr-2" />Novo Noon Report</Button>
+        <div className="flex gap-2">
+          <Button variant="outline" size="sm" onClick={exportCSV}><Download className="w-4 h-4 mr-1" />CSV</Button>
+          <Button onClick={() => setCreateOpen(true)}><Plus className="w-4 h-4 mr-2" />Novo Report</Button>
+        </div>
       </div>
 
-      {/* Summary */}
-      <div className="grid grid-cols-2 md:grid-cols-4 gap-4">
-        <Card><CardContent className="p-4 text-center">
-          <Ship className="h-6 w-6 mx-auto mb-1 text-primary" />
-          <div className="text-2xl font-bold">{reports.length}</div>
-          <div className="text-xs text-muted-foreground">Total Reports</div>
-        </CardContent></Card>
-        <Card><CardContent className="p-4 text-center">
-          <Send className="h-6 w-6 mx-auto mb-1 text-info" />
-          <div className="text-2xl font-bold">{reports.filter((r: any) => r.status === 'submitted').length}</div>
-          <div className="text-xs text-muted-foreground">Pendentes</div>
-        </CardContent></Card>
-        <Card><CardContent className="p-4 text-center">
-          <CheckCircle className="h-6 w-6 mx-auto mb-1 text-success" />
-          <div className="text-2xl font-bold">{reports.filter((r: any) => r.status === 'approved').length}</div>
-          <div className="text-xs text-muted-foreground">Aprovados</div>
-        </CardContent></Card>
-        <Card><CardContent className="p-4 text-center">
-          <Fuel className="h-6 w-6 mx-auto mb-1 text-warning" />
-          <div className="text-2xl font-bold">
-            {reports.reduce((s: number, r: any) => s + (r.consumption_hfo || 0) + (r.consumption_mdo || 0), 0).toFixed(0)}t
-          </div>
-          <div className="text-xs text-muted-foreground">Consumo Total</div>
-        </CardContent></Card>
+      {/* KPIs */}
+      <div className="grid grid-cols-2 md:grid-cols-6 gap-3">
+        {[
+          { icon: Ship, label: 'Reports', value: analytics?.totalReports || 0, color: 'text-primary' },
+          { icon: Navigation, label: 'Distância (nm)', value: analytics?.totalDistance || 0, color: 'text-info' },
+          { icon: TrendingUp, label: 'Vel. Média (kn)', value: analytics?.avgSpeed || 0, color: 'text-success' },
+          { icon: Fuel, label: 'Consumo (t)', value: analytics?.totalFuel || 0, color: 'text-warning' },
+          { icon: BarChart3, label: 'Eficiência (t/nm)', value: analytics?.fuelEfficiency || 0, color: 'text-accent-foreground' },
+          { icon: Waves, label: 'CO₂ Est. (t)', value: analytics?.co2 || 0, color: 'text-destructive' },
+        ].map(kpi => (
+          <Card key={kpi.label}><CardContent className="p-3 text-center">
+            <kpi.icon className={`h-5 w-5 mx-auto mb-1 ${kpi.color}`} />
+            <div className="text-lg font-bold">{kpi.value}</div>
+            <div className="text-[10px] text-muted-foreground">{kpi.label}</div>
+          </CardContent></Card>
+        ))}
       </div>
 
-      {/* Reports List */}
-      <Card>
-        <CardHeader><CardTitle>Relatórios Recentes</CardTitle></CardHeader>
-        <CardContent>
-          {isLoading ? (
-            <div className="space-y-2">{[1,2,3].map(i => <Skeleton key={i} className="h-16" />)}</div>
-          ) : reports.length === 0 ? (
-            <p className="text-muted-foreground text-center py-8">Nenhum noon report registrado</p>
-          ) : (
-            <div className="space-y-2 max-h-[500px] overflow-y-auto">
-              {reports.map((r: any) => (
-                <div key={r.id} className="p-3 border rounded-lg flex items-center justify-between hover:bg-muted/50 cursor-pointer"
-                  onClick={() => setSelectedReport(r)}>
-                  <div className="flex items-center gap-3">
-                    <Compass className="h-5 w-5 text-primary" />
-                    <div>
-                      <div className="font-medium">{r.vessels?.name || 'N/A'} — {r.report_date}</div>
-                      <div className="text-sm text-muted-foreground">
-                        {r.latitude && r.longitude ? `${Number(r.latitude).toFixed(3)}°, ${Number(r.longitude).toFixed(3)}°` : 'Posição N/A'}
-                        {r.speed_avg ? ` · ${r.speed_avg} kn` : ''}
-                        {r.distance_run ? ` · ${r.distance_run} nm` : ''}
+      {/* Main Tabs */}
+      <Tabs value={mainTab} onValueChange={setMainTab}>
+        <div className="flex items-center gap-3 flex-wrap">
+          <TabsList>
+            <TabsTrigger value="reports">Relatórios</TabsTrigger>
+            <TabsTrigger value="performance">Performance</TabsTrigger>
+            <TabsTrigger value="fuel">Combustível & ROB</TabsTrigger>
+            <TabsTrigger value="weather">Impacto Meteorológico</TabsTrigger>
+          </TabsList>
+          <Select value={vesselFilter} onValueChange={setVesselFilter}>
+            <SelectTrigger className="w-[180px] h-8"><Filter className="h-3 w-3 mr-1" /><SelectValue placeholder="Embarcação" /></SelectTrigger>
+            <SelectContent>
+              <SelectItem value="all">Todas Embarcações</SelectItem>
+              {vessels.map((v: any) => <SelectItem key={v.id} value={v.id}>{v.name}</SelectItem>)}
+            </SelectContent>
+          </Select>
+        </div>
+
+        {/* Reports List */}
+        <TabsContent value="reports">
+          <Card>
+            <CardHeader><CardTitle className="text-sm">Relatórios Recentes ({filteredReports.length})</CardTitle></CardHeader>
+            <CardContent>
+              {isLoading ? (
+                <div className="space-y-2">{[1,2,3].map(i => <Skeleton key={i} className="h-16" />)}</div>
+              ) : filteredReports.length === 0 ? (
+                <p className="text-muted-foreground text-center py-8">Nenhum noon report registrado</p>
+              ) : (
+                <div className="space-y-2 max-h-[500px] overflow-y-auto">
+                  {filteredReports.map((r: any) => (
+                    <div key={r.id} className="p-3 border rounded-lg flex items-center justify-between hover:bg-muted/50 cursor-pointer"
+                      onClick={() => setSelectedReport(r)}>
+                      <div className="flex items-center gap-3">
+                        <Compass className="h-5 w-5 text-primary" />
+                        <div>
+                          <div className="font-medium">{r.vessels?.name || 'N/A'} — {r.report_date}</div>
+                          <div className="text-sm text-muted-foreground">
+                            {r.latitude && r.longitude ? `${Number(r.latitude).toFixed(3)}°, ${Number(r.longitude).toFixed(3)}°` : 'Posição N/A'}
+                            {r.speed_avg ? ` · ${r.speed_avg} kn` : ''}
+                            {r.distance_run ? ` · ${r.distance_run} nm` : ''}
+                            {r.consumption_hfo ? ` · HFO: ${r.consumption_hfo}t` : ''}
+                          </div>
+                        </div>
+                      </div>
+                      <div className="flex items-center gap-2">
+                        {r.wind_force && r.wind_force >= 6 && <Badge variant="outline" className="text-[10px] bg-warning/10 text-warning">BF {r.wind_force}</Badge>}
+                        <Badge variant="outline">{r.vessel_status}</Badge>
+                        {statusBadge(r.status)}
                       </div>
                     </div>
-                  </div>
-                  <div className="flex items-center gap-2">
-                    <Badge variant="outline">{r.vessel_status}</Badge>
-                    {statusBadge(r.status)}
-                  </div>
+                  ))}
                 </div>
-              ))}
-            </div>
-          )}
-        </CardContent>
-      </Card>
+              )}
+            </CardContent>
+          </Card>
+        </TabsContent>
+
+        {/* Performance Analytics */}
+        <TabsContent value="performance">
+          <div className="grid md:grid-cols-2 gap-4">
+            <Card>
+              <CardHeader className="pb-2"><CardTitle className="text-sm">Velocidade vs Consumo</CardTitle></CardHeader>
+              <CardContent className="h-72">
+                {analytics?.speedConsumption?.length ? (
+                  <ResponsiveContainer width="100%" height="100%">
+                    <ScatterChart>
+                      <CartesianGrid strokeDasharray="3 3" className="stroke-border" />
+                      <XAxis dataKey="speed" name="Velocidade (kn)" className="text-xs" />
+                      <YAxis dataKey="consumption" name="Consumo (t)" className="text-xs" />
+                      <Tooltip cursor={{ strokeDasharray: '3 3' }} />
+                      <Scatter data={analytics.speedConsumption} fill="hsl(var(--primary))" />
+                    </ScatterChart>
+                  </ResponsiveContainer>
+                ) : <p className="text-muted-foreground text-center py-16 text-sm">Dados insuficientes</p>}
+              </CardContent>
+            </Card>
+            <Card>
+              <CardHeader className="pb-2"><CardTitle className="text-sm">Eficiência por Report (t/nm)</CardTitle></CardHeader>
+              <CardContent className="h-72">
+                {analytics?.fuelTrend?.length ? (
+                  <ResponsiveContainer width="100%" height="100%">
+                    <AreaChart data={analytics.fuelTrend.map(d => ({
+                      ...d,
+                      efficiency: d.total > 0 ? +(d.total / Math.max(1, d.total * 10)).toFixed(3) : 0,
+                    }))}>
+                      <CartesianGrid strokeDasharray="3 3" className="stroke-border" />
+                      <XAxis dataKey="date" className="text-xs" />
+                      <YAxis className="text-xs" />
+                      <Tooltip />
+                      <Area type="monotone" dataKey="total" stroke="hsl(var(--primary))" fill="hsl(var(--primary)/0.2)" name="Consumo Total (t)" />
+                    </AreaChart>
+                  </ResponsiveContainer>
+                ) : <p className="text-muted-foreground text-center py-16 text-sm">Dados insuficientes</p>}
+              </CardContent>
+            </Card>
+          </div>
+        </TabsContent>
+
+        {/* Fuel & ROB */}
+        <TabsContent value="fuel">
+          <div className="grid md:grid-cols-2 gap-4">
+            <Card>
+              <CardHeader className="pb-2"><CardTitle className="text-sm">Consumo Diário por Tipo</CardTitle></CardHeader>
+              <CardContent className="h-72">
+                {analytics?.fuelTrend?.length ? (
+                  <ResponsiveContainer width="100%" height="100%">
+                    <BarChart data={analytics.fuelTrend}>
+                      <CartesianGrid strokeDasharray="3 3" className="stroke-border" />
+                      <XAxis dataKey="date" className="text-xs" />
+                      <YAxis className="text-xs" />
+                      <Tooltip />
+                      <Bar dataKey="hfo" stackId="a" fill="hsl(var(--primary))" name="HFO" />
+                      <Bar dataKey="mdo" stackId="a" fill="hsl(var(--warning))" name="MDO" />
+                      <Bar dataKey="mgo" stackId="a" fill="hsl(var(--success))" name="MGO" />
+                    </BarChart>
+                  </ResponsiveContainer>
+                ) : <p className="text-muted-foreground text-center py-16 text-sm">Sem dados</p>}
+              </CardContent>
+            </Card>
+            <Card>
+              <CardHeader className="pb-2"><CardTitle className="text-sm">ROB (Remaining On Board)</CardTitle></CardHeader>
+              <CardContent className="h-72">
+                {analytics?.robTrend?.length ? (
+                  <ResponsiveContainer width="100%" height="100%">
+                    <AreaChart data={analytics.robTrend}>
+                      <CartesianGrid strokeDasharray="3 3" className="stroke-border" />
+                      <XAxis dataKey="date" className="text-xs" />
+                      <YAxis className="text-xs" />
+                      <Tooltip />
+                      <Area type="monotone" dataKey="hfo" stackId="1" stroke="hsl(var(--primary))" fill="hsl(var(--primary)/0.3)" name="HFO" />
+                      <Area type="monotone" dataKey="mdo" stackId="1" stroke="hsl(var(--warning))" fill="hsl(var(--warning)/0.3)" name="MDO" />
+                      <Area type="monotone" dataKey="mgo" stackId="1" stroke="hsl(var(--success))" fill="hsl(var(--success)/0.3)" name="MGO" />
+                    </AreaChart>
+                  </ResponsiveContainer>
+                ) : <p className="text-muted-foreground text-center py-16 text-sm">Sem dados de ROB</p>}
+              </CardContent>
+            </Card>
+          </div>
+        </TabsContent>
+
+        {/* Weather Impact */}
+        <TabsContent value="weather">
+          <div className="grid md:grid-cols-2 gap-4">
+            <Card>
+              <CardHeader className="pb-2"><CardTitle className="text-sm">Velocidade por Escala Beaufort</CardTitle></CardHeader>
+              <CardContent className="h-72">
+                {analytics?.weatherData?.length ? (
+                  <ResponsiveContainer width="100%" height="100%">
+                    <BarChart data={analytics.weatherData}>
+                      <CartesianGrid strokeDasharray="3 3" className="stroke-border" />
+                      <XAxis dataKey="beaufort" className="text-xs" />
+                      <YAxis className="text-xs" />
+                      <Tooltip />
+                      <Bar dataKey="avgSpeed" fill="hsl(var(--primary))" name="Vel. Média (kn)" radius={[4,4,0,0]} />
+                    </BarChart>
+                  </ResponsiveContainer>
+                ) : <p className="text-muted-foreground text-center py-16 text-sm">Sem dados meteorológicos</p>}
+              </CardContent>
+            </Card>
+            <Card>
+              <CardHeader className="pb-2"><CardTitle className="text-sm">Consumo por Escala Beaufort</CardTitle></CardHeader>
+              <CardContent className="h-72">
+                {analytics?.weatherData?.length ? (
+                  <ResponsiveContainer width="100%" height="100%">
+                    <BarChart data={analytics.weatherData}>
+                      <CartesianGrid strokeDasharray="3 3" className="stroke-border" />
+                      <XAxis dataKey="beaufort" className="text-xs" />
+                      <YAxis className="text-xs" />
+                      <Tooltip />
+                      <Bar dataKey="avgFuel" fill="hsl(var(--warning))" name="Consumo Médio (t)" radius={[4,4,0,0]} />
+                    </BarChart>
+                  </ResponsiveContainer>
+                ) : <p className="text-muted-foreground text-center py-16 text-sm">Sem dados</p>}
+              </CardContent>
+            </Card>
+            {analytics?.weatherData && analytics.weatherData.length > 2 && (
+              <Card className="md:col-span-2">
+                <CardHeader className="pb-2"><CardTitle className="text-sm flex items-center gap-2">
+                  <AlertTriangle className="h-4 w-4 text-warning" />Análise de Impacto Meteorológico
+                </CardTitle></CardHeader>
+                <CardContent>
+                  <div className="grid grid-cols-2 md:grid-cols-4 gap-3">
+                    {analytics.weatherData.map(w => {
+                      const bf = parseInt(w.beaufort.slice(3));
+                      const severity = bf >= 7 ? 'destructive' : bf >= 5 ? 'secondary' : 'default';
+                      return (
+                        <div key={w.beaufort} className="p-3 border rounded-lg text-center">
+                          <Badge variant={severity as any} className="mb-2">{w.beaufort}</Badge>
+                          <div className="text-sm"><span className="text-muted-foreground">Vel:</span> {w.avgSpeed} kn</div>
+                          <div className="text-sm"><span className="text-muted-foreground">Fuel:</span> {w.avgFuel} t/dia</div>
+                          {bf >= 6 && <div className="text-[10px] text-warning mt-1">⚠ Heavy Weather</div>}
+                        </div>
+                      );
+                    })}
+                  </div>
+                </CardContent>
+              </Card>
+            )}
+          </div>
+        </TabsContent>
+      </Tabs>
 
       {/* Create Dialog */}
       <Dialog open={createOpen} onOpenChange={setCreateOpen}>
@@ -205,10 +467,7 @@ export default function NoonReportManager() {
                     </SelectContent>
                   </Select>
                 </div>
-                <div>
-                  <Label>Data</Label>
-                  <Input type="date" value={form.report_date} onChange={e => set('report_date', e.target.value)} />
-                </div>
+                <div><Label>Data</Label><Input type="date" value={form.report_date} onChange={e => set('report_date', e.target.value)} /></div>
                 <div><Label>Latitude</Label><Input type="number" step="0.001" placeholder="-23.550" value={form.latitude} onChange={e => set('latitude', e.target.value)} /></div>
                 <div><Label>Longitude</Label><Input type="number" step="0.001" placeholder="-46.633" value={form.longitude} onChange={e => set('longitude', e.target.value)} /></div>
                 <div><Label>Rumo (°)</Label><Input type="number" placeholder="180" value={form.course} onChange={e => set('course', e.target.value)} /></div>
@@ -293,7 +552,9 @@ export default function NoonReportManager() {
               <div><span className="text-muted-foreground">ROB HFO:</span> {selectedReport.rob_hfo}t</div>
               <div><span className="text-muted-foreground">ROB MDO:</span> {selectedReport.rob_mdo}t</div>
               <div><span className="text-muted-foreground">Consumo HFO:</span> {selectedReport.consumption_hfo}t</div>
+              <div><span className="text-muted-foreground">Consumo MDO:</span> {selectedReport.consumption_mdo}t</div>
               <div><span className="text-muted-foreground">M/E RPM:</span> {selectedReport.me_rpm}</div>
+              <div><span className="text-muted-foreground">M/E Carga:</span> {selectedReport.me_load_percent}%</div>
               <div><span className="text-muted-foreground">Vento:</span> {selectedReport.wind_direction} F{selectedReport.wind_force}</div>
               <div><span className="text-muted-foreground">Mar:</span> Douglas {selectedReport.sea_state}</div>
               <div><span className="text-muted-foreground">Calado:</span> F:{selectedReport.draft_fwd}m A:{selectedReport.draft_aft}m</div>
