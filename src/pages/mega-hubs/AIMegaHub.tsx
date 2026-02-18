@@ -50,6 +50,7 @@ const ProactiveMonitoringPanel = lazy(() => import('@/components/ai/ProactiveMon
 const AIPredictiveInsights = lazy(() => import('@/components/ai/AIPredictiveInsights'));
 const AIModelPerformanceMatrix = lazy(() => import('@/components/dashboard/AIModelPerformanceMatrix'));
 const AutonomousDecisionTracker = lazy(() => import('@/components/dashboard/AutonomousDecisionTracker'));
+const AIModelObservatory = lazy(() => import('@/components/dashboard/AIModelObservatory'));
 
 const LoadingSkeleton = () => (
   <div className="space-y-4 p-6">
@@ -349,6 +350,13 @@ export default function AIMegaHub() {
                 </Suspense>
                 <Suspense fallback={<Skeleton className="h-64" />}>
                   <AutonomousDecisionTracker />
+                </Suspense>
+              </div>
+
+              {/* Wave 27: AI Model Observatory */}
+              <div className="grid grid-cols-1 lg:grid-cols-2 gap-6">
+                <Suspense fallback={<Skeleton className="h-64" />}>
+                  <AIModelObservatory />
                 </Suspense>
               </div>
 
