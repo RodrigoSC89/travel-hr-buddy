@@ -6250,6 +6250,102 @@ export type Database = {
           },
         ]
       }
+      cap_assessments: {
+        Row: {
+          accommodation: Json | null
+          approved_at: string | null
+          approved_by: string | null
+          cargo_systems: Json | null
+          classification_society: string | null
+          created_at: string | null
+          findings: Json | null
+          hull_condition: Json | null
+          id: string
+          machinery_condition: Json | null
+          navigation_equipment: Json | null
+          next_survey_due: string | null
+          organization_id: string | null
+          overall_rating: string | null
+          overall_score: number | null
+          photos: Json | null
+          recommendations: string | null
+          report_url: string | null
+          status: string | null
+          survey_date: string
+          survey_type: string
+          surveyor_name: string | null
+          updated_at: string | null
+          vessel_id: string | null
+        }
+        Insert: {
+          accommodation?: Json | null
+          approved_at?: string | null
+          approved_by?: string | null
+          cargo_systems?: Json | null
+          classification_society?: string | null
+          created_at?: string | null
+          findings?: Json | null
+          hull_condition?: Json | null
+          id?: string
+          machinery_condition?: Json | null
+          navigation_equipment?: Json | null
+          next_survey_due?: string | null
+          organization_id?: string | null
+          overall_rating?: string | null
+          overall_score?: number | null
+          photos?: Json | null
+          recommendations?: string | null
+          report_url?: string | null
+          status?: string | null
+          survey_date?: string
+          survey_type?: string
+          surveyor_name?: string | null
+          updated_at?: string | null
+          vessel_id?: string | null
+        }
+        Update: {
+          accommodation?: Json | null
+          approved_at?: string | null
+          approved_by?: string | null
+          cargo_systems?: Json | null
+          classification_society?: string | null
+          created_at?: string | null
+          findings?: Json | null
+          hull_condition?: Json | null
+          id?: string
+          machinery_condition?: Json | null
+          navigation_equipment?: Json | null
+          next_survey_due?: string | null
+          organization_id?: string | null
+          overall_rating?: string | null
+          overall_score?: number | null
+          photos?: Json | null
+          recommendations?: string | null
+          report_url?: string | null
+          status?: string | null
+          survey_date?: string
+          survey_type?: string
+          surveyor_name?: string | null
+          updated_at?: string | null
+          vessel_id?: string | null
+        }
+        Relationships: [
+          {
+            foreignKeyName: "cap_assessments_organization_id_fkey"
+            columns: ["organization_id"]
+            isOneToOne: false
+            referencedRelation: "organizations"
+            referencedColumns: ["id"]
+          },
+          {
+            foreignKeyName: "cap_assessments_vessel_id_fkey"
+            columns: ["vessel_id"]
+            isOneToOne: false
+            referencedRelation: "vessels"
+            referencedColumns: ["id"]
+          },
+        ]
+      }
       cargo_claims: {
         Row: {
           cargo_operation_id: string | null
@@ -45394,6 +45490,53 @@ export type Database = {
         Relationships: [
           {
             foreignKeyName: "system_health_metrics_organization_id_fkey"
+            columns: ["organization_id"]
+            isOneToOne: false
+            referencedRelation: "organizations"
+            referencedColumns: ["id"]
+          },
+        ]
+      }
+      system_integration_events: {
+        Row: {
+          created_at: string | null
+          error_message: string | null
+          event_data: Json | null
+          event_type: string
+          id: string
+          organization_id: string | null
+          processing_time_ms: number | null
+          source_module: string
+          status: string | null
+          target_module: string
+        }
+        Insert: {
+          created_at?: string | null
+          error_message?: string | null
+          event_data?: Json | null
+          event_type: string
+          id?: string
+          organization_id?: string | null
+          processing_time_ms?: number | null
+          source_module: string
+          status?: string | null
+          target_module: string
+        }
+        Update: {
+          created_at?: string | null
+          error_message?: string | null
+          event_data?: Json | null
+          event_type?: string
+          id?: string
+          organization_id?: string | null
+          processing_time_ms?: number | null
+          source_module?: string
+          status?: string | null
+          target_module?: string
+        }
+        Relationships: [
+          {
+            foreignKeyName: "system_integration_events_organization_id_fkey"
             columns: ["organization_id"]
             isOneToOne: false
             referencedRelation: "organizations"
