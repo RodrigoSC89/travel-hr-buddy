@@ -422,7 +422,7 @@ export const WorkflowTabs: React.FC<WorkflowTabsProps> = ({
                   <p className="text-sm text-muted-foreground">Execuções/Mês</p>
                 </div>
                 <div className="text-center p-4 bg-muted/50 rounded-lg">
-                  <p className="text-3xl font-bold text-yellow-500">23h</p>
+                  <p className="text-3xl font-bold text-warning">23h</p>
                   <p className="text-sm text-muted-foreground">Economia/Semana</p>
                 </div>
               </div>

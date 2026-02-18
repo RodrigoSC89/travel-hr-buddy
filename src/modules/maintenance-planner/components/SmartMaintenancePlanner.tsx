@@ -121,12 +121,12 @@ const MAINTENANCE_TASKS: MaintenanceTask[] = [
 ];
 
 const systems = [
-  { name: "Propulsão", tasks: 12, completed: 10, color: "#6366f1" },
-  { name: "Elétrico", tasks: 18, completed: 15, color: "#f59e0b" },
-  { name: "Hidráulico", tasks: 8, completed: 6, color: "#3b82f6" },
-  { name: "Navegação", tasks: 6, completed: 5, color: "#10b981" },
-  { name: "Salvatagem", tasks: 10, completed: 9, color: "#ef4444" },
-  { name: "HVAC", tasks: 4, completed: 4, color: "#8b5cf6" },
+  { name: "Propulsão", tasks: 12, completed: 10, color: "hsl(var(--accent))" },
+  { name: "Elétrico", tasks: 18, completed: 15, color: "hsl(var(--warning))" },
+  { name: "Hidráulico", tasks: 8, completed: 6, color: "hsl(var(--primary))" },
+  { name: "Navegação", tasks: 6, completed: 5, color: "hsl(var(--success))" },
+  { name: "Salvatagem", tasks: 10, completed: 9, color: "hsl(var(--destructive))" },
+  { name: "HVAC", tasks: 4, completed: 4, color: "hsl(var(--info))" },
 ];
 
 const priorityColors = {

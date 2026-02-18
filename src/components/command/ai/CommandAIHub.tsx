@@ -33,7 +33,7 @@ const AI_TOOLS = [
     name: 'Strategic Decision AI',
     description: 'Analisa cenários e recomenda decisões estratégicas para operações marítimas',
     icon: Target,
-    color: 'text-blue-500',
+    color: 'text-primary',
     prompt: 'Analise o cenário operacional atual da frota e forneça recomendações estratégicas para otimização de operações marítimas. Considere fatores como condições meteorológicas, custos operacionais, compliance regulatório e eficiência de tripulação.',
   },
   {
@@ -41,7 +41,7 @@ const AI_TOOLS = [
     name: 'Fleet Optimization AI',
     description: 'Otimiza alocação de recursos, rotas e scheduling da frota',
     icon: Compass,
-    color: 'text-emerald-500',
+    color: 'text-success',
     prompt: 'Sugira otimizações para a frota marítima considerando: 1) Alocação eficiente de embarcações por rota, 2) Minimização de tempo ocioso, 3) Balanceamento de carga de trabalho da tripulação, 4) Redução de custos de combustível. Forneça um plano acionável.',
   },
   {
@@ -49,7 +49,7 @@ const AI_TOOLS = [
     name: 'Executive Insights AI',
     description: 'Gera relatórios executivos com insights acionáveis automaticamente',
     icon: BarChart3,
-    color: 'text-purple-500',
+    color: 'text-accent',
     prompt: 'Gere um relatório executivo resumido com: 1) Status geral da operação, 2) KPIs críticos e tendências, 3) Riscos identificados e mitigações, 4) Oportunidades de melhoria, 5) Recomendações para os próximos 30 dias. Formato profissional para diretoria.',
   },
   {
@@ -57,7 +57,7 @@ const AI_TOOLS = [
     name: 'Crisis Management AI',
     description: 'Identifica riscos potenciais e gera planos de contingência com IA',
     icon: AlertTriangle,
-    color: 'text-red-500',
+    color: 'text-destructive',
     prompt: 'Analise potenciais cenários de crise para operações marítimas e gere planos de contingência para: 1) Falha mecânica em embarcação, 2) Condições meteorológicas severas, 3) Incidente de segurança, 4) Falha de comunicação, 5) Emergência médica a bordo. Para cada cenário, forneça procedimentos de resposta rápida.',
   },
   {
@@ -65,7 +65,7 @@ const AI_TOOLS = [
     name: 'KPI Forecasting AI',
     description: 'Prevê tendências de KPIs e identifica desvios antes que ocorram',
     icon: TrendingUp,
-    color: 'text-amber-500',
+    color: 'text-warning',
     prompt: 'Com base nos dados operacionais, projete tendências de KPIs para os próximos 90 dias: 1) Taxa de utilização da frota, 2) Custo por milha náutica, 3) Índice de compliance, 4) Tempo médio de resposta a incidentes, 5) Satisfação da tripulação. Identifique possíveis desvios e sugira ações preventivas.',
   },
 ];

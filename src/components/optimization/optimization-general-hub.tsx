@@ -162,10 +162,10 @@ export const OptimizationGeneralHub = () => {
   ];
 
   const categoryData = [
-    { name: "Performance", value: 85, color: "#0ea5e9" },
-    { name: "Segurança", value: 92, color: "#10b981" },
-    { name: "Eficiência", value: 67, color: "#f59e0b" },
-    { name: "UX", value: 88, color: "#8b5cf6" }
+    { name: "Performance", value: 85, color: "hsl(var(--info))" },
+    { name: "Segurança", value: 92, color: "hsl(var(--success))" },
+    { name: "Eficiência", value: 67, color: "hsl(var(--warning))" },
+    { name: "UX", value: 88, color: "hsl(var(--accent))" }
   ];
 
   useEffect(() => {

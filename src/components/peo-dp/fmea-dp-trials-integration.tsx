@@ -526,8 +526,8 @@ export const FMEADPTrialsIntegration: React.FC = () => {
                           <span className="text-sm w-16">{current} kts</span>
                           <Progress value={capability} className="flex-1 h-3" />
                           <span className={`text-sm font-medium w-12 ${
-                            capability >= 80 ? "text-green-600" :
-                            capability >= 60 ? "text-yellow-600" : "text-red-600"
+                            capability >= 80 ? "text-success" :
+                            capability >= 60 ? "text-warning" : "text-destructive"
                           }`}>
                             {capability}%
                           </span>
@@ -548,7 +548,7 @@ export const FMEADPTrialsIntegration: React.FC = () => {
                       <div key={dir} className="text-center p-3 bg-muted rounded-lg">
                         <div className="text-lg font-bold">{dir}</div>
                         <div className={`text-sm ${
-                          capability >= 85 ? "text-green-600" : "text-yellow-600"
+                          capability >= 85 ? "text-success" : "text-warning"
                         }`}>
                           {capability}%
                         </div>

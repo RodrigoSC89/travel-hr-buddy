@@ -76,9 +76,9 @@ export default function QualityManagementAIPage() {
               <div className="flex items-center justify-between">
                 <div>
                   <p className="text-sm text-muted-foreground">Fechadas (Mês)</p>
-                  <p className="text-3xl font-bold text-emerald-500">23</p>
+                  <p className="text-3xl font-bold text-success">23</p>
                 </div>
-                <CheckCircle className="h-8 w-8 text-emerald-500" />
+                <CheckCircle className="h-8 w-8 text-success" />
               </div>
             </CardContent>
           </Card>

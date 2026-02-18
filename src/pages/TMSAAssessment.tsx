@@ -168,7 +168,7 @@ const TMSAAssessment: FC = () => {
                 <TrendingUp className="h-4 w-4 text-warning" />
               </CardHeader>
               <CardContent>
-                <div className="text-2xl font-bold text-orange-600">{13 - level4Count}</div>
+                <div className="text-2xl font-bold text-warning">{13 - level4Count}</div>
                 <p className="text-xs text-muted-foreground">Elements below Level 4</p>
               </CardContent>
             </Card>

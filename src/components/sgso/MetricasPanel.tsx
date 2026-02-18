@@ -88,7 +88,7 @@ export const MetricasPanel = () => {
   const pieData = metricsRisco.map(item => ({
     name: item.risco_nivel,
     value: item.total_auditorias,
-    fill: riskColors[item.risco_nivel] || "#6b7280",
+    fill: riskColors[item.risco_nivel] || "hsl(var(--muted-foreground))",
   }));
 
   const lineData = evolucaoMensal.map(item => {
@@ -193,7 +193,7 @@ export const MetricasPanel = () => {
           <TabsTrigger value="vessel">Métricas por Embarcação</TabsTrigger>
         </TabsList>
         <TabsContent value="risk" className="space-y-4">
-          <Card><CardHeader><CardTitle>Métricas por Nível de Risco</CardTitle></CardHeader><CardContent><div className="overflow-x-auto"><table className="w-full"><thead><tr className="border-b"><th className="text-left p-2">Nível de Risco</th><th className="text-right p-2">Total Auditorias</th><th className="text-right p-2">Falhas Críticas</th><th className="text-right p-2">Score Médio</th></tr></thead><tbody>{metricsRisco.map((item) => (<tr key={`risco-${item.risco_nivel}`} className="border-b hover:bg-muted/50"><td className="p-2"><div className="flex items-center gap-2"><div className="w-3 h-3 rounded-full" style={{ backgroundColor: riskColors[item.risco_nivel] || "#6b7280" }} />{item.risco_nivel}</div></td><td className="text-right p-2">{item.total_auditorias}</td><td className="text-right p-2">{item.falhas_criticas}</td><td className="text-right p-2">{item.score_medio.toFixed(2)}</td></tr>))}</tbody></table></div></CardContent></Card>
+          <Card><CardHeader><CardTitle>Métricas por Nível de Risco</CardTitle></CardHeader><CardContent><div className="overflow-x-auto"><table className="w-full"><thead><tr className="border-b"><th className="text-left p-2">Nível de Risco</th><th className="text-right p-2">Total Auditorias</th><th className="text-right p-2">Falhas Críticas</th><th className="text-right p-2">Score Médio</th></tr></thead><tbody>{metricsRisco.map((item) => (<tr key={`risco-${item.risco_nivel}`} className="border-b hover:bg-muted/50"><td className="p-2"><div className="flex items-center gap-2"><div className="w-3 h-3 rounded-full" style={{ backgroundColor: riskColors[item.risco_nivel] || "hsl(var(--muted-foreground))" }} />{item.risco_nivel}</div></td><td className="text-right p-2">{item.total_auditorias}</td><td className="text-right p-2">{item.falhas_criticas}</td><td className="text-right p-2">{item.score_medio.toFixed(2)}</td></tr>))}</tbody></table></div></CardContent></Card>
         </TabsContent>
         <TabsContent value="vessel" className="space-y-4">
           <Card><CardHeader><CardTitle>Métricas por Embarcação</CardTitle></CardHeader><CardContent><div className="overflow-x-auto"><table className="w-full"><thead><tr className="border-b"><th className="text-left p-2">Embarcação</th><th className="text-right p-2">Total Auditorias</th><th className="text-right p-2">Falhas Críticas</th><th className="text-right p-2">Score Médio</th><th className="text-right p-2">Última Auditoria</th></tr></thead><tbody>{metricsEmbarcacao.map((item) => (<tr key={`emb-${item.nome_navio}`} className="border-b hover:bg-muted/50"><td className="p-2 font-medium">{item.nome_navio}</td><td className="text-right p-2">{item.total_auditorias}</td><td className="text-right p-2">{item.falhas_criticas}</td><td className="text-right p-2">{item.score_medio.toFixed(2)}</td><td className="text-right p-2">{new Date(item.ultima_auditoria).toLocaleDateString("pt-BR")}</td></tr>))}</tbody></table></div></CardContent></Card>

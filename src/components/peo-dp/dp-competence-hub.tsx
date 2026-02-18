@@ -260,7 +260,7 @@ export const DPCompetenceHub: React.FC = () => {
                 <p className="text-sm text-muted-foreground">Alertas Ativos</p>
                 <p className="text-2xl font-bold">{expiringCerts.length + overdueTrainings.length}</p>
               </div>
-              <AlertTriangle className="h-8 w-8 text-red-500" />
+              <AlertTriangle className="h-8 w-8 text-destructive" />
             </div>
           </CardContent>
         </Card>
@@ -424,7 +424,7 @@ export const DPCompetenceHub: React.FC = () => {
             </Card>
             <Card>
               <CardHeader>
-                <CardTitle className="flex items-center gap-2"><Users className="h-5 w-5 text-blue-500" />Mentees</CardTitle>
+                <CardTitle className="flex items-center gap-2"><Users className="h-5 w-5 text-primary" />Mentees</CardTitle>
               </CardHeader>
               <CardContent>
                 <div className="space-y-3">

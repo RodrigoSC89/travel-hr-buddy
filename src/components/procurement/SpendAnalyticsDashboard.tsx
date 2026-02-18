@@ -15,7 +15,7 @@ import {
 } from 'lucide-react';
 import { BarChart, Bar, XAxis, YAxis, Tooltip, ResponsiveContainer, PieChart as RechartsPie, Pie, Cell, LineChart, Line, CartesianGrid, Legend, Area, AreaChart } from 'recharts';
 
-const COLORS = ['hsl(var(--primary))', 'hsl(var(--destructive))', 'hsl(var(--warning))', '#10b981', '#8b5cf6', '#f59e0b', '#06b6d4', '#ec4899'];
+const COLORS = ['hsl(var(--primary))', 'hsl(var(--destructive))', 'hsl(var(--warning))', 'hsl(var(--success))', 'hsl(var(--accent))', 'hsl(var(--warning))', 'hsl(var(--info))', 'hsl(var(--primary))'];
 
 export default function SpendAnalyticsDashboard() {
   // Fetch expenses for spend analysis

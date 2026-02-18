@@ -144,7 +144,7 @@ export const MobileHome: React.FC = () => {
 
         <Card className="cursor-pointer hover:bg-accent transition-colors">
           <CardHeader className="pb-2">
-            <CheckSquare className="h-8 w-8 text-green-500 mb-2" />
+            <CheckSquare className="h-8 w-8 text-success mb-2" />
             <CardTitle className="text-base">Checklists</CardTitle>
           </CardHeader>
           <CardContent>
@@ -155,7 +155,7 @@ export const MobileHome: React.FC = () => {
 
         <Card className="cursor-pointer hover:bg-accent transition-colors">
           <CardHeader className="pb-2">
-            <AlertTriangle className="h-8 w-8 text-yellow-500 mb-2" />
+            <AlertTriangle className="h-8 w-8 text-warning mb-2" />
             <CardTitle className="text-base">Incidentes</CardTitle>
           </CardHeader>
           <CardContent>
@@ -166,7 +166,7 @@ export const MobileHome: React.FC = () => {
 
         <Card className="cursor-pointer hover:bg-accent transition-colors">
           <CardHeader className="pb-2">
-            <Activity className="h-8 w-8 text-blue-500 mb-2" />
+            <Activity className="h-8 w-8 text-primary mb-2" />
             <CardTitle className="text-base">Manutenção</CardTitle>
           </CardHeader>
           <CardContent>

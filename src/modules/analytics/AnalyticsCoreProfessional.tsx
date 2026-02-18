@@ -808,8 +808,8 @@ Este relatório apresenta uma análise abrangente dos principais indicadores de 
             <title>Relatório Analytics Core</title>
             <style>
               body { font-family: Arial, sans-serif; padding: 20px; }
-              h1 { color: #3b82f6; }
-              h2 { color: #1f2937; margin-top: 24px; }
+              h1 { color: hsl(217, 91%, 60%); }
+              h2 { color: hsl(220, 13%, 18%); margin-top: 24px; }
               ul { margin: 10px 0; }
               li { margin: 5px 0; }
             </style>

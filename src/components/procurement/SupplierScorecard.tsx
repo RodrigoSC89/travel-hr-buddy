@@ -127,7 +127,7 @@ export function SupplierScorecard() {
         </Card>
         <Card>
           <CardContent className="p-4 flex items-center gap-3">
-            <Star className="h-8 w-8 text-amber-500" />
+            <Star className="h-8 w-8 text-warning" />
             <div>
               <p className="text-sm text-muted-foreground">Rating Médio</p>
               <p className="text-2xl font-bold">{avgRating.toFixed(1)}/5.0</p>
@@ -413,7 +413,7 @@ export function SupplierScorecard() {
                       >
                         <Star className={cn(
                           "h-6 w-6 transition-colors",
-                          v <= evalData[metric] ? "fill-amber-400 text-amber-400" : "text-muted-foreground/30"
+                          v <= evalData[metric] ? "fill-warning text-warning" : "text-muted-foreground/30"
                         )} />
                       </button>
                     ))}

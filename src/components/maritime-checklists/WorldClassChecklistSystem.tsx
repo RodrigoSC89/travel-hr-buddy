@@ -522,7 +522,7 @@ export const WorldClassChecklistSystem: React.FC = () => {
                     </div>
                     <div className="flex items-center justify-between">
                       <div className="flex items-center gap-1">
-                        <Star className="h-3 w-3 text-amber-500 fill-amber-500" />
+                        <Star className="h-3 w-3 text-warning fill-warning" />
                         <span className="text-xs font-medium">{t.rating}</span>
                       </div>
                       <span className="text-xs text-muted-foreground">{t.uses.toLocaleString()} usos</span>
@@ -747,7 +747,7 @@ export const WorldClassChecklistSystem: React.FC = () => {
           <DialogContent>
             <DialogHeader>
               <DialogTitle className="flex items-center gap-2">
-                <Brain className="h-5 w-5 text-purple-500" /> Gerar Checklist com IA
+                <Brain className="h-5 w-5 text-accent" /> Gerar Checklist com IA
               </DialogTitle>
               <DialogDescription>Descreva o tipo de inspeção e a IA criará itens automaticamente</DialogDescription>
             </DialogHeader>

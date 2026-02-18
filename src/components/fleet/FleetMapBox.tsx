@@ -248,7 +248,7 @@ export function FleetMapBox({
       
       const isMoving = vessel.speed > 0.5;
       const isSelected = selectedVessel?.id === vessel.vesselId || selectedVessel?.name === vessel.name;
-      const color = isSelected ? "#f97316" : isMoving ? "#3b82f6" : "#10b981";
+      const color = isSelected ? "hsl(24, 95%, 53%)" : isMoving ? "hsl(217, 91%, 60%)" : "hsl(160, 84%, 39%)";
       
       el.style.cssText = `
         width: ${isSelected ? "40px" : "32px"};

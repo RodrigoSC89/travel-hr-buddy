@@ -100,7 +100,7 @@ export const MaintenanceCalendarView: React.FC = () => {
             }}
             modifiersStyles={{
               hasTasks: { 
-                backgroundColor: "#3b82f6", 
+                backgroundColor: "hsl(217, 91%, 60%)", 
                 color: "white",
                 fontWeight: "bold"
               }
