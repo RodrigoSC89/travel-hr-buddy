@@ -27,6 +27,7 @@ import { toast } from 'sonner';
 // Lazy load sub-components
 const TrackingTelemetryHub = lazy(() => import('@/pages/TelemetriaCommand'));
 const RealTimeTrackingPage = lazy(() => import('@/pages/tracking/RealTimeTrackingPage'));
+const VesselTrackingMapPage = lazy(() => import('@/pages/VesselTrackingPage'));
 const AISTrackerPage = lazy(() => import('@/pages/AISTrackerPage'));
 const SatcomDashboardEnhanced = lazy(() => import('@/modules/nauti-satellite'));
 const WeatherIntelligencePage = lazy(() => import('@/pages/advanced/WeatherIntelligencePage'));
@@ -312,8 +313,8 @@ export default function TrackingMegaHub() {
                 ]}
               />
 
-              {/* RealTimeTrackingMap removed - using RealTimeTrackingPage */}
-              <Suspense fallback={<LoadingSkeleton />}><RealTimeTrackingPage /></Suspense>
+              {/* Live Map - dedicated vessel tracking with map focus */}
+              <Suspense fallback={<LoadingSkeleton />}><VesselTrackingMapPage /></Suspense>
             </TabsContent>
             
             <TabsContent value="realtime" className="mt-0">

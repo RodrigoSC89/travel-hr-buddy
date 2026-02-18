@@ -41,7 +41,7 @@ const AgentsDashboard = lazy(() => import('@/pages/audit-agents/AgentsDashboard'
 const DiagnosticCertificatesPage = lazy(() => import('@/pages/DiagnosticCertificatesPage'));
 const RiskMatrixV2 = lazy(() => import('@/pages/DiagnosticDashboardPage'));
 const DiagnosticNCsPage = lazy(() => import('@/pages/DiagnosticNCsPage'));
-const RegulationsV2 = lazy(() => import('@/pages/ComplianceRoadmapPage'));
+const RegulationsV2 = lazy(() => import('@/pages/DiagnosticReportsPage'));
 const SecurityCenter = lazy(() => import('@/pages/SecurityCenter'));
 const ComplianceAIHub = lazy(() => import('@/components/compliance/ai/ComplianceAIHub'));
 
