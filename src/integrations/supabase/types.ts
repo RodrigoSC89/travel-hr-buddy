@@ -7117,6 +7117,168 @@ export type Database = {
           },
         ]
       }
+      charter_parties: {
+        Row: {
+          addendums: Json | null
+          address_commission: number | null
+          ballast_bonus: number | null
+          broker_commission: number | null
+          broker_name: string | null
+          cargo_quantity_mt: number | null
+          cargo_quantity_tolerance: number | null
+          cargo_type: string | null
+          charter_form: string | null
+          charter_number: string
+          charter_type: string
+          charterer_name: string
+          coa_shipments_completed: number | null
+          coa_shipments_total: number | null
+          coa_shipped_mt: number | null
+          coa_total_quantity_mt: number | null
+          commencement_date: string | null
+          cp_document_id: string | null
+          created_at: string
+          demurrage_rate: number | null
+          despatch_rate: number | null
+          discharge_port: string | null
+          freight_currency: string | null
+          freight_rate: number | null
+          freight_type: string | null
+          hire_rate: number | null
+          id: string
+          laycan_from: string | null
+          laycan_to: string | null
+          laytime_discharge_hours: number | null
+          laytime_loading_hours: number | null
+          laytime_terms: string | null
+          loading_port: string | null
+          max_duration_days: number | null
+          min_duration_days: number | null
+          net_profit: number | null
+          organization_id: string | null
+          owner_name: string | null
+          redelivery_date: string | null
+          status: string
+          tce_achieved: number | null
+          total_costs: number | null
+          total_revenue: number | null
+          updated_at: string
+          vessel_id: string | null
+          worldscale_rate: number | null
+        }
+        Insert: {
+          addendums?: Json | null
+          address_commission?: number | null
+          ballast_bonus?: number | null
+          broker_commission?: number | null
+          broker_name?: string | null
+          cargo_quantity_mt?: number | null
+          cargo_quantity_tolerance?: number | null
+          cargo_type?: string | null
+          charter_form?: string | null
+          charter_number: string
+          charter_type: string
+          charterer_name: string
+          coa_shipments_completed?: number | null
+          coa_shipments_total?: number | null
+          coa_shipped_mt?: number | null
+          coa_total_quantity_mt?: number | null
+          commencement_date?: string | null
+          cp_document_id?: string | null
+          created_at?: string
+          demurrage_rate?: number | null
+          despatch_rate?: number | null
+          discharge_port?: string | null
+          freight_currency?: string | null
+          freight_rate?: number | null
+          freight_type?: string | null
+          hire_rate?: number | null
+          id?: string
+          laycan_from?: string | null
+          laycan_to?: string | null
+          laytime_discharge_hours?: number | null
+          laytime_loading_hours?: number | null
+          laytime_terms?: string | null
+          loading_port?: string | null
+          max_duration_days?: number | null
+          min_duration_days?: number | null
+          net_profit?: number | null
+          organization_id?: string | null
+          owner_name?: string | null
+          redelivery_date?: string | null
+          status?: string
+          tce_achieved?: number | null
+          total_costs?: number | null
+          total_revenue?: number | null
+          updated_at?: string
+          vessel_id?: string | null
+          worldscale_rate?: number | null
+        }
+        Update: {
+          addendums?: Json | null
+          address_commission?: number | null
+          ballast_bonus?: number | null
+          broker_commission?: number | null
+          broker_name?: string | null
+          cargo_quantity_mt?: number | null
+          cargo_quantity_tolerance?: number | null
+          cargo_type?: string | null
+          charter_form?: string | null
+          charter_number?: string
+          charter_type?: string
+          charterer_name?: string
+          coa_shipments_completed?: number | null
+          coa_shipments_total?: number | null
+          coa_shipped_mt?: number | null
+          coa_total_quantity_mt?: number | null
+          commencement_date?: string | null
+          cp_document_id?: string | null
+          created_at?: string
+          demurrage_rate?: number | null
+          despatch_rate?: number | null
+          discharge_port?: string | null
+          freight_currency?: string | null
+          freight_rate?: number | null
+          freight_type?: string | null
+          hire_rate?: number | null
+          id?: string
+          laycan_from?: string | null
+          laycan_to?: string | null
+          laytime_discharge_hours?: number | null
+          laytime_loading_hours?: number | null
+          laytime_terms?: string | null
+          loading_port?: string | null
+          max_duration_days?: number | null
+          min_duration_days?: number | null
+          net_profit?: number | null
+          organization_id?: string | null
+          owner_name?: string | null
+          redelivery_date?: string | null
+          status?: string
+          tce_achieved?: number | null
+          total_costs?: number | null
+          total_revenue?: number | null
+          updated_at?: string
+          vessel_id?: string | null
+          worldscale_rate?: number | null
+        }
+        Relationships: [
+          {
+            foreignKeyName: "charter_parties_organization_id_fkey"
+            columns: ["organization_id"]
+            isOneToOne: false
+            referencedRelation: "organizations"
+            referencedColumns: ["id"]
+          },
+          {
+            foreignKeyName: "charter_parties_vessel_id_fkey"
+            columns: ["vessel_id"]
+            isOneToOne: false
+            referencedRelation: "vessels"
+            referencedColumns: ["id"]
+          },
+        ]
+      }
       checklist_ai_analysis: {
         Row: {
           analysis_data: Json
@@ -16836,6 +16998,120 @@ export type Database = {
           user_id?: string | null
         }
         Relationships: []
+      }
+      eu_ets_tracking: {
+        Row: {
+          allowance_price_eur: number | null
+          allowances_purchased: number | null
+          allowances_required: number | null
+          arrival_port: string | null
+          co2_subject_to_ets: number
+          created_at: string
+          departure_port: string | null
+          distance_nm: number | null
+          eexi_attained: number | null
+          eexi_compliant: boolean | null
+          eexi_required: number | null
+          ets_percentage: number | null
+          fuel_consumed_mt: number | null
+          fuel_ghg_intensity: number | null
+          fuel_type: string | null
+          fueleu_compliance_balance: number | null
+          fueleu_penalty_eur: number | null
+          fueleu_target_intensity: number | null
+          id: string
+          imo_dcs_reported: boolean | null
+          imo_dcs_submission_date: string | null
+          organization_id: string | null
+          reporting_year: number
+          status: string | null
+          total_co2_mt: number
+          total_cost_eur: number | null
+          updated_at: string
+          vessel_id: string | null
+          voyage_id: string | null
+          voyage_type: string | null
+        }
+        Insert: {
+          allowance_price_eur?: number | null
+          allowances_purchased?: number | null
+          allowances_required?: number | null
+          arrival_port?: string | null
+          co2_subject_to_ets?: number
+          created_at?: string
+          departure_port?: string | null
+          distance_nm?: number | null
+          eexi_attained?: number | null
+          eexi_compliant?: boolean | null
+          eexi_required?: number | null
+          ets_percentage?: number | null
+          fuel_consumed_mt?: number | null
+          fuel_ghg_intensity?: number | null
+          fuel_type?: string | null
+          fueleu_compliance_balance?: number | null
+          fueleu_penalty_eur?: number | null
+          fueleu_target_intensity?: number | null
+          id?: string
+          imo_dcs_reported?: boolean | null
+          imo_dcs_submission_date?: string | null
+          organization_id?: string | null
+          reporting_year: number
+          status?: string | null
+          total_co2_mt?: number
+          total_cost_eur?: number | null
+          updated_at?: string
+          vessel_id?: string | null
+          voyage_id?: string | null
+          voyage_type?: string | null
+        }
+        Update: {
+          allowance_price_eur?: number | null
+          allowances_purchased?: number | null
+          allowances_required?: number | null
+          arrival_port?: string | null
+          co2_subject_to_ets?: number
+          created_at?: string
+          departure_port?: string | null
+          distance_nm?: number | null
+          eexi_attained?: number | null
+          eexi_compliant?: boolean | null
+          eexi_required?: number | null
+          ets_percentage?: number | null
+          fuel_consumed_mt?: number | null
+          fuel_ghg_intensity?: number | null
+          fuel_type?: string | null
+          fueleu_compliance_balance?: number | null
+          fueleu_penalty_eur?: number | null
+          fueleu_target_intensity?: number | null
+          id?: string
+          imo_dcs_reported?: boolean | null
+          imo_dcs_submission_date?: string | null
+          organization_id?: string | null
+          reporting_year?: number
+          status?: string | null
+          total_co2_mt?: number
+          total_cost_eur?: number | null
+          updated_at?: string
+          vessel_id?: string | null
+          voyage_id?: string | null
+          voyage_type?: string | null
+        }
+        Relationships: [
+          {
+            foreignKeyName: "eu_ets_tracking_organization_id_fkey"
+            columns: ["organization_id"]
+            isOneToOne: false
+            referencedRelation: "organizations"
+            referencedColumns: ["id"]
+          },
+          {
+            foreignKeyName: "eu_ets_tracking_vessel_id_fkey"
+            columns: ["vessel_id"]
+            isOneToOne: false
+            referencedRelation: "vessels"
+            referencedColumns: ["id"]
+          },
+        ]
       }
       event_snapshots: {
         Row: {
