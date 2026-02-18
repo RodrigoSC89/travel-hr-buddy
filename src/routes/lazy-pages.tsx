@@ -278,6 +278,7 @@ export const AIEnterpriseEnginesHub = lazy(() => import("@/pages/AIEnterpriseEng
 // ============================================
 // WORLD-CLASS COMPETITIVE MODULES (vs IMOS, AMOS, DNV, Compas)
 // ============================================
+export const CommercialOperationsHub = lazy(() => import("@/pages/CommercialOperationsHub"));
 export const CharterPartyPage = lazy(() => import("@/pages/CharterPartyPage"));
 export const LaytimeDemurragePage = lazy(() => import("@/pages/LaytimeDemurragePage"));
 export const RunningHoursPage = lazy(() => import("@/pages/RunningHoursPage"));
