@@ -28,6 +28,8 @@ import { useQueryClient, useQuery } from '@tanstack/react-query';
 import { supabase } from '@/integrations/supabase/client';
 import { useRealActionHandlers } from '@/hooks/useRealActionHandlers';
 import { toast } from 'sonner';
+import { CrossModulePanel } from '@/components/integration';
+import { publishEvent } from '@/lib/events/event-bus';
 
 // Lazy load sub-components
 const AIControlTowerHub = lazy(() => import('@/pages/AIHubPage'));
@@ -175,15 +177,23 @@ export default function AIMegaHub() {
   const handleSubmitAgent = useCallback(async () => {
     if (!agentForm.name || !agentForm.agent_id) { toast.error('Nome e ID do agente são obrigatórios'); return; }
     const caps = agentForm.capabilities ? agentForm.capabilities.split(',').map(s => s.trim()) : [];
-    const { error } = await supabase.from('agent_registry').insert({
+    const { error, data } = await supabase.from('agent_registry').insert({
       name: agentForm.name,
       agent_id: agentForm.agent_id,
       capabilities: caps,
       status: 'active',
-    });
+    }).select().single();
     if (error) { toast.error('Erro ao criar agente: ' + error.message); return; }
+    // Publish cross-module event
+    publishEvent({
+      type: 'ai.decision.logged',
+      payload: { agent_name: agentForm.name, agent_id: agentForm.agent_id, action: 'agent_deployed' },
+      sourceEntityType: 'ai_decision',
+      sourceEntityId: data?.id,
+    });
     toast.success('Agente implantado com sucesso');
     queryClient.invalidateQueries({ queryKey: ['ai-agents-hub'] });
+    queryClient.invalidateQueries({ queryKey: ['ai-decisions'] });
     setAgentDialogOpen(false);
     setAgentForm({ name: '', agent_id: '', capabilities: '' });
   }, [agentForm, queryClient]);
