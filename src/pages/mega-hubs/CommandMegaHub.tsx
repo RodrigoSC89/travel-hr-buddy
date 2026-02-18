@@ -62,6 +62,7 @@ const FleetStatusGrid = lazy(() => import('@/components/dashboard/FleetStatusGri
 const VoyagePnLQuickView = lazy(() => import('@/components/dashboard/VoyagePnLQuickView').then(m => ({ default: m.VoyagePnLQuickView })));
 const FleetUtilizationKPI = lazy(() => import('@/components/dashboard/FleetUtilizationKPI').then(m => ({ default: m.FleetUtilizationKPI })));
 const LiveIncidentFeed = lazy(() => import('@/components/dashboard/LiveIncidentFeed').then(m => ({ default: m.LiveIncidentFeed })));
+const CrewCertificationRadar = lazy(() => import('@/components/dashboard/CrewCertificationRadar').then(m => ({ default: m.CrewCertificationRadar })));
 
 const LoadingSkeleton = () => (
   <div className="space-y-4 p-6">
@@ -413,10 +414,15 @@ export default function CommandMegaHub() {
                 </Suspense>
               </div>
 
-              {/* Live Incident Feed */}
-              <Suspense fallback={<Skeleton className="h-64" />}>
-                <LiveIncidentFeed />
-              </Suspense>
+              {/* Crew Certification Radar + Live Incident Feed */}
+              <div className="grid grid-cols-1 lg:grid-cols-2 gap-6">
+                <Suspense fallback={<Skeleton className="h-64" />}>
+                  <CrewCertificationRadar />
+                </Suspense>
+                <Suspense fallback={<Skeleton className="h-64" />}>
+                  <LiveIncidentFeed />
+                </Suspense>
+              </div>
 
               {/* Event System - Central Nervous System */}
               <Suspense fallback={<Skeleton className="h-64" />}>

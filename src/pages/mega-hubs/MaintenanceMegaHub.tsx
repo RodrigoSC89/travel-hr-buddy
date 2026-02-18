@@ -57,6 +57,7 @@ const PMSCalendarView = lazy(() => import('@/components/maintenance/PMSCalendarV
 const MaintenanceBacklogAnalytics = lazy(() => import('@/components/dashboard/MaintenanceBacklogAnalytics').then(m => ({ default: m.MaintenanceBacklogAnalytics })));
 const MaintenanceCostTrend = lazy(() => import('@/components/dashboard/MaintenanceCostTrend').then(m => ({ default: m.MaintenanceCostTrend })));
 const InventoryCriticalityDashboard = lazy(() => import('@/components/dashboard/InventoryCriticalityDashboard').then(m => ({ default: m.InventoryCriticalityDashboard })));
+const EquipmentFailurePredictionMap = lazy(() => import('@/components/dashboard/EquipmentFailurePredictionMap').then(m => ({ default: m.EquipmentFailurePredictionMap })));
 const LoadingSkeleton = () => (
   <div className="space-y-4 p-6">
     <Skeleton className="h-8 w-64" />
@@ -336,6 +337,11 @@ export default function MaintenanceMegaHub() {
                   <DrydockProjectTracker />
                 </Suspense>
               </div>
+
+              {/* Equipment Failure Prediction Map */}
+              <Suspense fallback={<Skeleton className="h-80" />}>
+                <EquipmentFailurePredictionMap />
+              </Suspense>
 
               {/* Maintenance Cost Trend + Inventory Criticality */}
               <div className="grid grid-cols-1 lg:grid-cols-2 gap-6">

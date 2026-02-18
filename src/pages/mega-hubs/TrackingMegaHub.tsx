@@ -41,6 +41,7 @@ const IoTAnomalyDetector = lazy(() => import('@/components/dashboard/IoTAnomalyD
 const SATCOMPerformanceMonitor = lazy(() => import('@/components/dashboard/SATCOMPerformanceMonitor'));
 const VesselETAPredictor = lazy(() => import('@/components/dashboard/VesselETAPredictor'));
 const TrackingKPISummary = lazy(() => import('@/components/dashboard/TrackingKPISummary').then(m => ({ default: m.TrackingKPISummary })));
+const VesselPerformanceSparklines = lazy(() => import('@/components/dashboard/VesselPerformanceSparklines').then(m => ({ default: m.VesselPerformanceSparklines })));
 
 const LoadingSkeleton = () => (
   <div className="space-y-4 p-6">
@@ -317,6 +318,10 @@ export default function TrackingMegaHub() {
                 </Suspense>
               </div>
 
+              {/* Vessel Performance Sparklines */}
+              <Suspense fallback={<Skeleton className="h-64" />}>
+                <VesselPerformanceSparklines />
+              </Suspense>
               {(vesselsLoading || trackingMetrics.totalVessels > 0) && <TrackingTelemetryHub />}
             </TabsContent>
 
