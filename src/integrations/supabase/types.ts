@@ -5013,6 +5013,180 @@ export type Database = {
           },
         ]
       }
+      autonomous_decision_executions: {
+        Row: {
+          action_payload: Json | null
+          approved_at: string | null
+          approved_by: string | null
+          confidence_score: number | null
+          created_at: string | null
+          decision_made: string
+          executed_at: string | null
+          execution_result: Json | null
+          execution_status: string | null
+          feedback_notes: string | null
+          feedback_score: number | null
+          id: string
+          impact_assessment: Json | null
+          organization_id: string | null
+          reasoning: string | null
+          rollback_data: Json | null
+          rolled_back_at: string | null
+          rule_id: string | null
+          trigger_data: Json
+          updated_at: string | null
+          vessel_id: string | null
+        }
+        Insert: {
+          action_payload?: Json | null
+          approved_at?: string | null
+          approved_by?: string | null
+          confidence_score?: number | null
+          created_at?: string | null
+          decision_made: string
+          executed_at?: string | null
+          execution_result?: Json | null
+          execution_status?: string | null
+          feedback_notes?: string | null
+          feedback_score?: number | null
+          id?: string
+          impact_assessment?: Json | null
+          organization_id?: string | null
+          reasoning?: string | null
+          rollback_data?: Json | null
+          rolled_back_at?: string | null
+          rule_id?: string | null
+          trigger_data: Json
+          updated_at?: string | null
+          vessel_id?: string | null
+        }
+        Update: {
+          action_payload?: Json | null
+          approved_at?: string | null
+          approved_by?: string | null
+          confidence_score?: number | null
+          created_at?: string | null
+          decision_made?: string
+          executed_at?: string | null
+          execution_result?: Json | null
+          execution_status?: string | null
+          feedback_notes?: string | null
+          feedback_score?: number | null
+          id?: string
+          impact_assessment?: Json | null
+          organization_id?: string | null
+          reasoning?: string | null
+          rollback_data?: Json | null
+          rolled_back_at?: string | null
+          rule_id?: string | null
+          trigger_data?: Json
+          updated_at?: string | null
+          vessel_id?: string | null
+        }
+        Relationships: [
+          {
+            foreignKeyName: "autonomous_decision_executions_organization_id_fkey"
+            columns: ["organization_id"]
+            isOneToOne: false
+            referencedRelation: "organizations"
+            referencedColumns: ["id"]
+          },
+          {
+            foreignKeyName: "autonomous_decision_executions_rule_id_fkey"
+            columns: ["rule_id"]
+            isOneToOne: false
+            referencedRelation: "autonomous_decision_rules"
+            referencedColumns: ["id"]
+          },
+          {
+            foreignKeyName: "autonomous_decision_executions_vessel_id_fkey"
+            columns: ["vessel_id"]
+            isOneToOne: false
+            referencedRelation: "vessels"
+            referencedColumns: ["id"]
+          },
+        ]
+      }
+      autonomous_decision_rules: {
+        Row: {
+          approval_timeout_hours: number | null
+          auto_execute_if_timeout: boolean | null
+          confidence_threshold: number | null
+          cooldown_minutes: number | null
+          created_at: string | null
+          created_by: string | null
+          decision_logic: Json
+          escalation_chain: Json | null
+          execution_count: number | null
+          id: string
+          is_active: boolean | null
+          last_triggered_at: string | null
+          metadata: Json | null
+          organization_id: string | null
+          priority: number | null
+          requires_human_approval: boolean | null
+          rule_category: string
+          rule_name: string
+          success_count: number | null
+          trigger_conditions: Json
+          updated_at: string | null
+        }
+        Insert: {
+          approval_timeout_hours?: number | null
+          auto_execute_if_timeout?: boolean | null
+          confidence_threshold?: number | null
+          cooldown_minutes?: number | null
+          created_at?: string | null
+          created_by?: string | null
+          decision_logic: Json
+          escalation_chain?: Json | null
+          execution_count?: number | null
+          id?: string
+          is_active?: boolean | null
+          last_triggered_at?: string | null
+          metadata?: Json | null
+          organization_id?: string | null
+          priority?: number | null
+          requires_human_approval?: boolean | null
+          rule_category: string
+          rule_name: string
+          success_count?: number | null
+          trigger_conditions: Json
+          updated_at?: string | null
+        }
+        Update: {
+          approval_timeout_hours?: number | null
+          auto_execute_if_timeout?: boolean | null
+          confidence_threshold?: number | null
+          cooldown_minutes?: number | null
+          created_at?: string | null
+          created_by?: string | null
+          decision_logic?: Json
+          escalation_chain?: Json | null
+          execution_count?: number | null
+          id?: string
+          is_active?: boolean | null
+          last_triggered_at?: string | null
+          metadata?: Json | null
+          organization_id?: string | null
+          priority?: number | null
+          requires_human_approval?: boolean | null
+          rule_category?: string
+          rule_name?: string
+          success_count?: number | null
+          trigger_conditions?: Json
+          updated_at?: string | null
+        }
+        Relationships: [
+          {
+            foreignKeyName: "autonomous_decision_rules_organization_id_fkey"
+            columns: ["organization_id"]
+            isOneToOne: false
+            referencedRelation: "organizations"
+            referencedColumns: ["id"]
+          },
+        ]
+      }
       autonomous_tasks: {
         Row: {
           actions: Json | null
@@ -5774,6 +5948,121 @@ export type Database = {
           },
         ]
       }
+      blockchain_certificates: {
+        Row: {
+          block_number: number | null
+          blockchain_hash: string
+          certificate_id: string | null
+          certificate_number: string | null
+          certificate_type: string
+          created_at: string | null
+          crew_member_id: string | null
+          expiry_date: string | null
+          id: string
+          ipfs_hash: string | null
+          issue_date: string | null
+          issuing_authority: string | null
+          merkle_root: string | null
+          metadata: Json | null
+          organization_id: string | null
+          previous_hash: string | null
+          qr_code_data: string | null
+          revoked: boolean | null
+          revoked_at: string | null
+          revoked_reason: string | null
+          smart_contract_address: string | null
+          token_id: string | null
+          updated_at: string | null
+          verification_count: number | null
+          verification_status: string | null
+          verified_at: string | null
+          verified_by: string | null
+          vessel_id: string | null
+        }
+        Insert: {
+          block_number?: number | null
+          blockchain_hash: string
+          certificate_id?: string | null
+          certificate_number?: string | null
+          certificate_type: string
+          created_at?: string | null
+          crew_member_id?: string | null
+          expiry_date?: string | null
+          id?: string
+          ipfs_hash?: string | null
+          issue_date?: string | null
+          issuing_authority?: string | null
+          merkle_root?: string | null
+          metadata?: Json | null
+          organization_id?: string | null
+          previous_hash?: string | null
+          qr_code_data?: string | null
+          revoked?: boolean | null
+          revoked_at?: string | null
+          revoked_reason?: string | null
+          smart_contract_address?: string | null
+          token_id?: string | null
+          updated_at?: string | null
+          verification_count?: number | null
+          verification_status?: string | null
+          verified_at?: string | null
+          verified_by?: string | null
+          vessel_id?: string | null
+        }
+        Update: {
+          block_number?: number | null
+          blockchain_hash?: string
+          certificate_id?: string | null
+          certificate_number?: string | null
+          certificate_type?: string
+          created_at?: string | null
+          crew_member_id?: string | null
+          expiry_date?: string | null
+          id?: string
+          ipfs_hash?: string | null
+          issue_date?: string | null
+          issuing_authority?: string | null
+          merkle_root?: string | null
+          metadata?: Json | null
+          organization_id?: string | null
+          previous_hash?: string | null
+          qr_code_data?: string | null
+          revoked?: boolean | null
+          revoked_at?: string | null
+          revoked_reason?: string | null
+          smart_contract_address?: string | null
+          token_id?: string | null
+          updated_at?: string | null
+          verification_count?: number | null
+          verification_status?: string | null
+          verified_at?: string | null
+          verified_by?: string | null
+          vessel_id?: string | null
+        }
+        Relationships: [
+          {
+            foreignKeyName: "blockchain_certificates_crew_member_id_fkey"
+            columns: ["crew_member_id"]
+            isOneToOne: false
+            referencedRelation: "crew_members"
+            referencedColumns: ["id"]
+          },
+          {
+            foreignKeyName: "blockchain_certificates_organization_id_fkey"
+            columns: ["organization_id"]
+            isOneToOne: false
+            referencedRelation: "organizations"
+            referencedColumns: ["id"]
+          },
+          {
+            foreignKeyName: "blockchain_certificates_vessel_id_fkey"
+            columns: ["vessel_id"]
+            isOneToOne: false
+            referencedRelation: "vessels"
+            referencedColumns: ["id"]
+          },
+        ]
+      }
       blockchain_ledger: {
         Row: {
           block_number: number
@@ -5858,6 +6147,59 @@ export type Database = {
             columns: ["vessel_id"]
             isOneToOne: false
             referencedRelation: "vessels"
+            referencedColumns: ["id"]
+          },
+        ]
+      }
+      blockchain_verification_log: {
+        Row: {
+          certificate_id: string | null
+          chain_integrity_check: boolean | null
+          created_at: string | null
+          id: string
+          ip_address: unknown
+          location_data: Json | null
+          metadata: Json | null
+          response_time_ms: number | null
+          verification_method: string | null
+          verification_result: string
+          verifier_id: string | null
+          verifier_type: string | null
+        }
+        Insert: {
+          certificate_id?: string | null
+          chain_integrity_check?: boolean | null
+          created_at?: string | null
+          id?: string
+          ip_address?: unknown
+          location_data?: Json | null
+          metadata?: Json | null
+          response_time_ms?: number | null
+          verification_method?: string | null
+          verification_result: string
+          verifier_id?: string | null
+          verifier_type?: string | null
+        }
+        Update: {
+          certificate_id?: string | null
+          chain_integrity_check?: boolean | null
+          created_at?: string | null
+          id?: string
+          ip_address?: unknown
+          location_data?: Json | null
+          metadata?: Json | null
+          response_time_ms?: number | null
+          verification_method?: string | null
+          verification_result?: string
+          verifier_id?: string | null
+          verifier_type?: string | null
+        }
+        Relationships: [
+          {
+            foreignKeyName: "blockchain_verification_log_certificate_id_fkey"
+            columns: ["certificate_id"]
+            isOneToOne: false
+            referencedRelation: "blockchain_certificates"
             referencedColumns: ["id"]
           },
         ]
@@ -13086,6 +13428,109 @@ export type Database = {
           },
         ]
       }
+      crew_wellbeing_predictions: {
+        Row: {
+          alert_triggered: boolean | null
+          burnout_risk_score: number | null
+          communication_frequency: Json | null
+          confidence: number | null
+          contract_remaining_days: number | null
+          contributing_factors: Json | null
+          created_at: string | null
+          crew_member_id: string | null
+          days_on_board: number | null
+          fatigue_risk_score: number | null
+          id: string
+          mental_health_score: number | null
+          ml_model_version: string | null
+          organization_id: string | null
+          overall_wellbeing_score: number | null
+          physical_health_score: number | null
+          prediction_date: string
+          recommended_interventions: Json | null
+          reviewed_at: string | null
+          reviewed_by: string | null
+          risk_factors: Json | null
+          shore_leave_last_date: string | null
+          social_isolation_score: number | null
+          vessel_id: string | null
+        }
+        Insert: {
+          alert_triggered?: boolean | null
+          burnout_risk_score?: number | null
+          communication_frequency?: Json | null
+          confidence?: number | null
+          contract_remaining_days?: number | null
+          contributing_factors?: Json | null
+          created_at?: string | null
+          crew_member_id?: string | null
+          days_on_board?: number | null
+          fatigue_risk_score?: number | null
+          id?: string
+          mental_health_score?: number | null
+          ml_model_version?: string | null
+          organization_id?: string | null
+          overall_wellbeing_score?: number | null
+          physical_health_score?: number | null
+          prediction_date: string
+          recommended_interventions?: Json | null
+          reviewed_at?: string | null
+          reviewed_by?: string | null
+          risk_factors?: Json | null
+          shore_leave_last_date?: string | null
+          social_isolation_score?: number | null
+          vessel_id?: string | null
+        }
+        Update: {
+          alert_triggered?: boolean | null
+          burnout_risk_score?: number | null
+          communication_frequency?: Json | null
+          confidence?: number | null
+          contract_remaining_days?: number | null
+          contributing_factors?: Json | null
+          created_at?: string | null
+          crew_member_id?: string | null
+          days_on_board?: number | null
+          fatigue_risk_score?: number | null
+          id?: string
+          mental_health_score?: number | null
+          ml_model_version?: string | null
+          organization_id?: string | null
+          overall_wellbeing_score?: number | null
+          physical_health_score?: number | null
+          prediction_date?: string
+          recommended_interventions?: Json | null
+          reviewed_at?: string | null
+          reviewed_by?: string | null
+          risk_factors?: Json | null
+          shore_leave_last_date?: string | null
+          social_isolation_score?: number | null
+          vessel_id?: string | null
+        }
+        Relationships: [
+          {
+            foreignKeyName: "crew_wellbeing_predictions_crew_member_id_fkey"
+            columns: ["crew_member_id"]
+            isOneToOne: false
+            referencedRelation: "crew_members"
+            referencedColumns: ["id"]
+          },
+          {
+            foreignKeyName: "crew_wellbeing_predictions_organization_id_fkey"
+            columns: ["organization_id"]
+            isOneToOne: false
+            referencedRelation: "organizations"
+            referencedColumns: ["id"]
+          },
+          {
+            foreignKeyName: "crew_wellbeing_predictions_vessel_id_fkey"
+            columns: ["vessel_id"]
+            isOneToOne: false
+            referencedRelation: "vessels"
+            referencedColumns: ["id"]
+          },
+        ]
+      }
       crew_wellbeing_scores: {
         Row: {
           burnout_prediction_days: number | null
@@ -13813,6 +14258,220 @@ export type Database = {
             columns: ["vessel_id"]
             isOneToOne: false
             referencedRelation: "vessels"
+            referencedColumns: ["id"]
+          },
+        ]
+      }
+      digital_twin_alerts: {
+        Row: {
+          acknowledged_at: string | null
+          acknowledged_by: string | null
+          alert_type: string
+          auto_work_order_created: boolean | null
+          baseline_deviation: Json | null
+          component_id: string | null
+          component_name: string | null
+          confidence: number | null
+          created_at: string | null
+          id: string
+          predicted_failure_date: string | null
+          recommended_action: string | null
+          resolved_at: string | null
+          sensor_readings: Json | null
+          severity: string | null
+          twin_id: string | null
+          work_order_id: string | null
+        }
+        Insert: {
+          acknowledged_at?: string | null
+          acknowledged_by?: string | null
+          alert_type: string
+          auto_work_order_created?: boolean | null
+          baseline_deviation?: Json | null
+          component_id?: string | null
+          component_name?: string | null
+          confidence?: number | null
+          created_at?: string | null
+          id?: string
+          predicted_failure_date?: string | null
+          recommended_action?: string | null
+          resolved_at?: string | null
+          sensor_readings?: Json | null
+          severity?: string | null
+          twin_id?: string | null
+          work_order_id?: string | null
+        }
+        Update: {
+          acknowledged_at?: string | null
+          acknowledged_by?: string | null
+          alert_type?: string
+          auto_work_order_created?: boolean | null
+          baseline_deviation?: Json | null
+          component_id?: string | null
+          component_name?: string | null
+          confidence?: number | null
+          created_at?: string | null
+          id?: string
+          predicted_failure_date?: string | null
+          recommended_action?: string | null
+          resolved_at?: string | null
+          sensor_readings?: Json | null
+          severity?: string | null
+          twin_id?: string | null
+          work_order_id?: string | null
+        }
+        Relationships: [
+          {
+            foreignKeyName: "digital_twin_alerts_twin_id_fkey"
+            columns: ["twin_id"]
+            isOneToOne: false
+            referencedRelation: "digital_twin_models"
+            referencedColumns: ["id"]
+          },
+        ]
+      }
+      digital_twin_models: {
+        Row: {
+          accuracy_score: number | null
+          baseline_parameters: Json | null
+          calibrated_at: string | null
+          calibration_status: string | null
+          component_registry: Json | null
+          created_at: string | null
+          geometry_data: Json | null
+          id: string
+          is_active: boolean | null
+          last_sync_at: string | null
+          model_type: string | null
+          model_version: string
+          organization_id: string | null
+          physics_config: Json | null
+          sensor_mappings: Json | null
+          sync_frequency_seconds: number | null
+          updated_at: string | null
+          vessel_id: string | null
+        }
+        Insert: {
+          accuracy_score?: number | null
+          baseline_parameters?: Json | null
+          calibrated_at?: string | null
+          calibration_status?: string | null
+          component_registry?: Json | null
+          created_at?: string | null
+          geometry_data?: Json | null
+          id?: string
+          is_active?: boolean | null
+          last_sync_at?: string | null
+          model_type?: string | null
+          model_version: string
+          organization_id?: string | null
+          physics_config?: Json | null
+          sensor_mappings?: Json | null
+          sync_frequency_seconds?: number | null
+          updated_at?: string | null
+          vessel_id?: string | null
+        }
+        Update: {
+          accuracy_score?: number | null
+          baseline_parameters?: Json | null
+          calibrated_at?: string | null
+          calibration_status?: string | null
+          component_registry?: Json | null
+          created_at?: string | null
+          geometry_data?: Json | null
+          id?: string
+          is_active?: boolean | null
+          last_sync_at?: string | null
+          model_type?: string | null
+          model_version?: string
+          organization_id?: string | null
+          physics_config?: Json | null
+          sensor_mappings?: Json | null
+          sync_frequency_seconds?: number | null
+          updated_at?: string | null
+          vessel_id?: string | null
+        }
+        Relationships: [
+          {
+            foreignKeyName: "digital_twin_models_organization_id_fkey"
+            columns: ["organization_id"]
+            isOneToOne: false
+            referencedRelation: "organizations"
+            referencedColumns: ["id"]
+          },
+          {
+            foreignKeyName: "digital_twin_models_vessel_id_fkey"
+            columns: ["vessel_id"]
+            isOneToOne: false
+            referencedRelation: "vessels"
+            referencedColumns: ["id"]
+          },
+        ]
+      }
+      digital_twin_simulations: {
+        Row: {
+          actual_values: Json | null
+          completed_at: string | null
+          confidence_level: number | null
+          created_at: string | null
+          created_by: string | null
+          deviation_percent: number | null
+          duration_ms: number | null
+          id: string
+          input_parameters: Json
+          output_results: Json | null
+          predicted_values: Json | null
+          recommendations: Json | null
+          simulation_type: string
+          started_at: string | null
+          status: string | null
+          triggered_by: string | null
+          twin_id: string | null
+        }
+        Insert: {
+          actual_values?: Json | null
+          completed_at?: string | null
+          confidence_level?: number | null
+          created_at?: string | null
+          created_by?: string | null
+          deviation_percent?: number | null
+          duration_ms?: number | null
+          id?: string
+          input_parameters: Json
+          output_results?: Json | null
+          predicted_values?: Json | null
+          recommendations?: Json | null
+          simulation_type: string
+          started_at?: string | null
+          status?: string | null
+          triggered_by?: string | null
+          twin_id?: string | null
+        }
+        Update: {
+          actual_values?: Json | null
+          completed_at?: string | null
+          confidence_level?: number | null
+          created_at?: string | null
+          created_by?: string | null
+          deviation_percent?: number | null
+          duration_ms?: number | null
+          id?: string
+          input_parameters?: Json
+          output_results?: Json | null
+          predicted_values?: Json | null
+          recommendations?: Json | null
+          simulation_type?: string
+          started_at?: string | null
+          status?: string | null
+          triggered_by?: string | null
+          twin_id?: string | null
+        }
+        Relationships: [
+          {
+            foreignKeyName: "digital_twin_simulations_twin_id_fkey"
+            columns: ["twin_id"]
+            isOneToOne: false
+            referencedRelation: "digital_twin_models"
             referencedColumns: ["id"]
           },
         ]
@@ -18640,6 +19299,108 @@ export type Database = {
             foreignKeyName: "fleet_anomalies_vessel_id_fkey"
             columns: ["vessel_id"]
             isOneToOne: false
+            referencedRelation: "vessels"
+            referencedColumns: ["id"]
+          },
+        ]
+      }
+      fleet_digital_passports: {
+        Row: {
+          access_log: Json | null
+          blockchain_anchor: string | null
+          class_history: Json | null
+          commercial_rating: string | null
+          compliance_score: number | null
+          created_at: string | null
+          environmental_record: Json | null
+          flag_history: Json | null
+          id: string
+          insurance_summary: Json | null
+          is_public: boolean | null
+          last_psc_result: Json | null
+          last_vetting_result: Json | null
+          maintenance_score: number | null
+          organization_id: string | null
+          ownership_history: Json | null
+          passport_number: string | null
+          qr_code: string | null
+          rightship_ghi: number | null
+          safety_record: Json | null
+          sanctions_check_status: string | null
+          sanctions_checked_at: string | null
+          shared_with: Json | null
+          updated_at: string | null
+          vessel_id: string | null
+          vessel_lifecycle_data: Json | null
+        }
+        Insert: {
+          access_log?: Json | null
+          blockchain_anchor?: string | null
+          class_history?: Json | null
+          commercial_rating?: string | null
+          compliance_score?: number | null
+          created_at?: string | null
+          environmental_record?: Json | null
+          flag_history?: Json | null
+          id?: string
+          insurance_summary?: Json | null
+          is_public?: boolean | null
+          last_psc_result?: Json | null
+          last_vetting_result?: Json | null
+          maintenance_score?: number | null
+          organization_id?: string | null
+          ownership_history?: Json | null
+          passport_number?: string | null
+          qr_code?: string | null
+          rightship_ghi?: number | null
+          safety_record?: Json | null
+          sanctions_check_status?: string | null
+          sanctions_checked_at?: string | null
+          shared_with?: Json | null
+          updated_at?: string | null
+          vessel_id?: string | null
+          vessel_lifecycle_data?: Json | null
+        }
+        Update: {
+          access_log?: Json | null
+          blockchain_anchor?: string | null
+          class_history?: Json | null
+          commercial_rating?: string | null
+          compliance_score?: number | null
+          created_at?: string | null
+          environmental_record?: Json | null
+          flag_history?: Json | null
+          id?: string
+          insurance_summary?: Json | null
+          is_public?: boolean | null
+          last_psc_result?: Json | null
+          last_vetting_result?: Json | null
+          maintenance_score?: number | null
+          organization_id?: string | null
+          ownership_history?: Json | null
+          passport_number?: string | null
+          qr_code?: string | null
+          rightship_ghi?: number | null
+          safety_record?: Json | null
+          sanctions_check_status?: string | null
+          sanctions_checked_at?: string | null
+          shared_with?: Json | null
+          updated_at?: string | null
+          vessel_id?: string | null
+          vessel_lifecycle_data?: Json | null
+        }
+        Relationships: [
+          {
+            foreignKeyName: "fleet_digital_passports_organization_id_fkey"
+            columns: ["organization_id"]
+            isOneToOne: false
+            referencedRelation: "organizations"
+            referencedColumns: ["id"]
+          },
+          {
+            foreignKeyName: "fleet_digital_passports_vessel_id_fkey"
+            columns: ["vessel_id"]
+            isOneToOne: true
             referencedRelation: "vessels"
             referencedColumns: ["id"]
           },
@@ -45155,6 +45916,107 @@ export type Database = {
           },
         ]
       }
+      smart_charter_contracts: {
+        Row: {
+          activated_at: string | null
+          auto_invoicing: boolean | null
+          auto_laytime_calc: boolean | null
+          blockchain_hash: string | null
+          charter_party_id: string | null
+          contract_type: string
+          created_at: string | null
+          created_by: string | null
+          currency: string | null
+          digital_signatures: Json | null
+          dispute_resolution_mechanism: string | null
+          execution_log: Json | null
+          expires_at: string | null
+          fuel_quality_clause: Json | null
+          id: string
+          off_hire_conditions: Json | null
+          organization_id: string | null
+          parties: Json
+          payment_schedule: Json | null
+          penalty_clauses: Json | null
+          performance_clauses: Json | null
+          status: string | null
+          terminated_at: string | null
+          termination_reason: string | null
+          terms: Json
+          total_value: number | null
+          updated_at: string | null
+          weather_routing_clause: Json | null
+        }
+        Insert: {
+          activated_at?: string | null
+          auto_invoicing?: boolean | null
+          auto_laytime_calc?: boolean | null
+          blockchain_hash?: string | null
+          charter_party_id?: string | null
+          contract_type: string
+          created_at?: string | null
+          created_by?: string | null
+          currency?: string | null
+          digital_signatures?: Json | null
+          dispute_resolution_mechanism?: string | null
+          execution_log?: Json | null
+          expires_at?: string | null
+          fuel_quality_clause?: Json | null
+          id?: string
+          off_hire_conditions?: Json | null
+          organization_id?: string | null
+          parties: Json
+          payment_schedule?: Json | null
+          penalty_clauses?: Json | null
+          performance_clauses?: Json | null
+          status?: string | null
+          terminated_at?: string | null
+          termination_reason?: string | null
+          terms: Json
+          total_value?: number | null
+          updated_at?: string | null
+          weather_routing_clause?: Json | null
+        }
+        Update: {
+          activated_at?: string | null
+          auto_invoicing?: boolean | null
+          auto_laytime_calc?: boolean | null
+          blockchain_hash?: string | null
+          charter_party_id?: string | null
+          contract_type?: string
+          created_at?: string | null
+          created_by?: string | null
+          currency?: string | null
+          digital_signatures?: Json | null
+          dispute_resolution_mechanism?: string | null
+          execution_log?: Json | null
+          expires_at?: string | null
+          fuel_quality_clause?: Json | null
+          id?: string
+          off_hire_conditions?: Json | null
+          organization_id?: string | null
+          parties?: Json
+          payment_schedule?: Json | null
+          penalty_clauses?: Json | null
+          performance_clauses?: Json | null
+          status?: string | null
+          terminated_at?: string | null
+          termination_reason?: string | null
+          terms?: Json
+          total_value?: number | null
+          updated_at?: string | null
+          weather_routing_clause?: Json | null
+        }
+        Relationships: [
+          {
+            foreignKeyName: "smart_charter_contracts_organization_id_fkey"
+            columns: ["organization_id"]
+            isOneToOne: false
+            referencedRelation: "organizations"
+            referencedColumns: ["id"]
+          },
+        ]
+      }
       smart_contracts: {
         Row: {
           blockchain_tx_id: string | null
@@ -54076,6 +54938,267 @@ export type Database = {
           },
           {
             foreignKeyName: "voyages_vessel_id_fkey"
+            columns: ["vessel_id"]
+            isOneToOne: false
+            referencedRelation: "vessels"
+            referencedColumns: ["id"]
+          },
+        ]
+      }
+      vr_participant_performance: {
+        Row: {
+          achievements: Json | null
+          ai_feedback: string | null
+          biometric_data: Json | null
+          communication_score: number | null
+          competency_gaps: Json | null
+          created_at: string | null
+          crew_member_id: string | null
+          decision_accuracy: number | null
+          errors_made: Json | null
+          id: string
+          improvement_areas: string[] | null
+          individual_score: number | null
+          leadership_score: number | null
+          reaction_time_ms: number | null
+          role_assigned: string | null
+          safety_compliance_score: number | null
+          session_id: string | null
+          stress_level_data: Json | null
+        }
+        Insert: {
+          achievements?: Json | null
+          ai_feedback?: string | null
+          biometric_data?: Json | null
+          communication_score?: number | null
+          competency_gaps?: Json | null
+          created_at?: string | null
+          crew_member_id?: string | null
+          decision_accuracy?: number | null
+          errors_made?: Json | null
+          id?: string
+          improvement_areas?: string[] | null
+          individual_score?: number | null
+          leadership_score?: number | null
+          reaction_time_ms?: number | null
+          role_assigned?: string | null
+          safety_compliance_score?: number | null
+          session_id?: string | null
+          stress_level_data?: Json | null
+        }
+        Update: {
+          achievements?: Json | null
+          ai_feedback?: string | null
+          biometric_data?: Json | null
+          communication_score?: number | null
+          competency_gaps?: Json | null
+          created_at?: string | null
+          crew_member_id?: string | null
+          decision_accuracy?: number | null
+          errors_made?: Json | null
+          id?: string
+          improvement_areas?: string[] | null
+          individual_score?: number | null
+          leadership_score?: number | null
+          reaction_time_ms?: number | null
+          role_assigned?: string | null
+          safety_compliance_score?: number | null
+          session_id?: string | null
+          stress_level_data?: Json | null
+        }
+        Relationships: [
+          {
+            foreignKeyName: "vr_participant_performance_crew_member_id_fkey"
+            columns: ["crew_member_id"]
+            isOneToOne: false
+            referencedRelation: "crew_members"
+            referencedColumns: ["id"]
+          },
+          {
+            foreignKeyName: "vr_participant_performance_session_id_fkey"
+            columns: ["session_id"]
+            isOneToOne: false
+            referencedRelation: "vr_training_sessions"
+            referencedColumns: ["id"]
+          },
+        ]
+      }
+      vr_training_scenarios: {
+        Row: {
+          assets_url: string | null
+          created_at: string | null
+          created_by: string | null
+          description: string | null
+          difficulty_level: string | null
+          environment_config: Json | null
+          equipment_required: string[] | null
+          id: string
+          is_published: boolean | null
+          max_duration_minutes: number | null
+          max_participants: number | null
+          min_participants: number | null
+          objectives: Json | null
+          organization_id: string | null
+          pass_score: number | null
+          regulatory_reference: string | null
+          scenario_type: string
+          scene_data: Json | null
+          scoring_criteria: Json | null
+          title: string
+          updated_at: string | null
+          version: number | null
+          vessel_type: string | null
+        }
+        Insert: {
+          assets_url?: string | null
+          created_at?: string | null
+          created_by?: string | null
+          description?: string | null
+          difficulty_level?: string | null
+          environment_config?: Json | null
+          equipment_required?: string[] | null
+          id?: string
+          is_published?: boolean | null
+          max_duration_minutes?: number | null
+          max_participants?: number | null
+          min_participants?: number | null
+          objectives?: Json | null
+          organization_id?: string | null
+          pass_score?: number | null
+          regulatory_reference?: string | null
+          scenario_type: string
+          scene_data?: Json | null
+          scoring_criteria?: Json | null
+          title: string
+          updated_at?: string | null
+          version?: number | null
+          vessel_type?: string | null
+        }
+        Update: {
+          assets_url?: string | null
+          created_at?: string | null
+          created_by?: string | null
+          description?: string | null
+          difficulty_level?: string | null
+          environment_config?: Json | null
+          equipment_required?: string[] | null
+          id?: string
+          is_published?: boolean | null
+          max_duration_minutes?: number | null
+          max_participants?: number | null
+          min_participants?: number | null
+          objectives?: Json | null
+          organization_id?: string | null
+          pass_score?: number | null
+          regulatory_reference?: string | null
+          scenario_type?: string
+          scene_data?: Json | null
+          scoring_criteria?: Json | null
+          title?: string
+          updated_at?: string | null
+          version?: number | null
+          vessel_type?: string | null
+        }
+        Relationships: [
+          {
+            foreignKeyName: "vr_training_scenarios_organization_id_fkey"
+            columns: ["organization_id"]
+            isOneToOne: false
+            referencedRelation: "organizations"
+            referencedColumns: ["id"]
+          },
+        ]
+      }
+      vr_training_sessions: {
+        Row: {
+          after_action_review: string | null
+          completed_at: string | null
+          compliance_credit: boolean | null
+          created_at: string | null
+          duration_minutes: number | null
+          emergency_type: string | null
+          id: string
+          instructor_id: string | null
+          instructor_notes: string | null
+          metadata: Json | null
+          organization_id: string | null
+          overall_score: number | null
+          pass_fail: string | null
+          recording_url: string | null
+          scenario_id: string | null
+          scheduled_at: string | null
+          session_status: string | null
+          started_at: string | null
+          stcw_code: string | null
+          updated_at: string | null
+          vessel_id: string | null
+          weather_simulation: Json | null
+        }
+        Insert: {
+          after_action_review?: string | null
+          completed_at?: string | null
+          compliance_credit?: boolean | null
+          created_at?: string | null
+          duration_minutes?: number | null
+          emergency_type?: string | null
+          id?: string
+          instructor_id?: string | null
+          instructor_notes?: string | null
+          metadata?: Json | null
+          organization_id?: string | null
+          overall_score?: number | null
+          pass_fail?: string | null
+          recording_url?: string | null
+          scenario_id?: string | null
+          scheduled_at?: string | null
+          session_status?: string | null
+          started_at?: string | null
+          stcw_code?: string | null
+          updated_at?: string | null
+          vessel_id?: string | null
+          weather_simulation?: Json | null
+        }
+        Update: {
+          after_action_review?: string | null
+          completed_at?: string | null
+          compliance_credit?: boolean | null
+          created_at?: string | null
+          duration_minutes?: number | null
+          emergency_type?: string | null
+          id?: string
+          instructor_id?: string | null
+          instructor_notes?: string | null
+          metadata?: Json | null
+          organization_id?: string | null
+          overall_score?: number | null
+          pass_fail?: string | null
+          recording_url?: string | null
+          scenario_id?: string | null
+          scheduled_at?: string | null
+          session_status?: string | null
+          started_at?: string | null
+          stcw_code?: string | null
+          updated_at?: string | null
+          vessel_id?: string | null
+          weather_simulation?: Json | null
+        }
+        Relationships: [
+          {
+            foreignKeyName: "vr_training_sessions_organization_id_fkey"
+            columns: ["organization_id"]
+            isOneToOne: false
+            referencedRelation: "organizations"
+            referencedColumns: ["id"]
+          },
+          {
+            foreignKeyName: "vr_training_sessions_scenario_id_fkey"
+            columns: ["scenario_id"]
+            isOneToOne: false
+            referencedRelation: "vr_training_scenarios"
+            referencedColumns: ["id"]
+          },
+          {
+            foreignKeyName: "vr_training_sessions_vessel_id_fkey"
             columns: ["vessel_id"]
             isOneToOne: false
             referencedRelation: "vessels"
