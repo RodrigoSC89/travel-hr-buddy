@@ -35618,6 +35618,117 @@ export type Database = {
           },
         ]
       }
+      pi_claims: {
+        Row: {
+          claim_number: string | null
+          claim_type: string
+          claimant_name: string | null
+          claimant_type: string | null
+          correspondents: Json | null
+          created_at: string
+          currency: string | null
+          deductible: number | null
+          description: string | null
+          estimated_amount: number | null
+          handler_email: string | null
+          handler_name: string | null
+          id: string
+          incident_date: string
+          incident_location: string | null
+          legal_counsel: string | null
+          limitation_date: string | null
+          notes: string | null
+          organization_id: string | null
+          paid_amount: number | null
+          pi_club: string | null
+          priority: string | null
+          recovered_amount: number | null
+          reserve_amount: number | null
+          settlement_date: string | null
+          status: string | null
+          survey_reports: Json | null
+          updated_at: string
+          vessel_id: string | null
+        }
+        Insert: {
+          claim_number?: string | null
+          claim_type: string
+          claimant_name?: string | null
+          claimant_type?: string | null
+          correspondents?: Json | null
+          created_at?: string
+          currency?: string | null
+          deductible?: number | null
+          description?: string | null
+          estimated_amount?: number | null
+          handler_email?: string | null
+          handler_name?: string | null
+          id?: string
+          incident_date: string
+          incident_location?: string | null
+          legal_counsel?: string | null
+          limitation_date?: string | null
+          notes?: string | null
+          organization_id?: string | null
+          paid_amount?: number | null
+          pi_club?: string | null
+          priority?: string | null
+          recovered_amount?: number | null
+          reserve_amount?: number | null
+          settlement_date?: string | null
+          status?: string | null
+          survey_reports?: Json | null
+          updated_at?: string
+          vessel_id?: string | null
+        }
+        Update: {
+          claim_number?: string | null
+          claim_type?: string
+          claimant_name?: string | null
+          claimant_type?: string | null
+          correspondents?: Json | null
+          created_at?: string
+          currency?: string | null
+          deductible?: number | null
+          description?: string | null
+          estimated_amount?: number | null
+          handler_email?: string | null
+          handler_name?: string | null
+          id?: string
+          incident_date?: string
+          incident_location?: string | null
+          legal_counsel?: string | null
+          limitation_date?: string | null
+          notes?: string | null
+          organization_id?: string | null
+          paid_amount?: number | null
+          pi_club?: string | null
+          priority?: string | null
+          recovered_amount?: number | null
+          reserve_amount?: number | null
+          settlement_date?: string | null
+          status?: string | null
+          survey_reports?: Json | null
+          updated_at?: string
+          vessel_id?: string | null
+        }
+        Relationships: [
+          {
+            foreignKeyName: "pi_claims_organization_id_fkey"
+            columns: ["organization_id"]
+            isOneToOne: false
+            referencedRelation: "organizations"
+            referencedColumns: ["id"]
+          },
+          {
+            foreignKeyName: "pi_claims_vessel_id_fkey"
+            columns: ["vessel_id"]
+            isOneToOne: false
+            referencedRelation: "vessels"
+            referencedColumns: ["id"]
+          },
+        ]
+      }
       plan_modules: {
         Row: {
           created_at: string | null
@@ -36149,6 +36260,188 @@ export type Database = {
             columns: ["vessel_id"]
             isOneToOne: false
             referencedRelation: "vessels"
+            referencedColumns: ["id"]
+          },
+        ]
+      }
+      pool_arrangements: {
+        Row: {
+          adjustment_factor: number | null
+          base_tcein: number | null
+          created_at: string
+          currency: string | null
+          dwt_range: string | null
+          eco_rating: string | null
+          entry_date: string | null
+          exit_date: string | null
+          gross_revenue: number | null
+          ice_class: string | null
+          id: string
+          net_distribution: number | null
+          notes: string | null
+          organization_id: string | null
+          period_end: string | null
+          period_start: string | null
+          pool_distribution_pct: number | null
+          pool_expenses: number | null
+          pool_manager: string | null
+          pool_name: string
+          pool_points: number | null
+          pool_type: string | null
+          status: string | null
+          updated_at: string
+          vessel_class: string | null
+          vessel_id: string | null
+        }
+        Insert: {
+          adjustment_factor?: number | null
+          base_tcein?: number | null
+          created_at?: string
+          currency?: string | null
+          dwt_range?: string | null
+          eco_rating?: string | null
+          entry_date?: string | null
+          exit_date?: string | null
+          gross_revenue?: number | null
+          ice_class?: string | null
+          id?: string
+          net_distribution?: number | null
+          notes?: string | null
+          organization_id?: string | null
+          period_end?: string | null
+          period_start?: string | null
+          pool_distribution_pct?: number | null
+          pool_expenses?: number | null
+          pool_manager?: string | null
+          pool_name: string
+          pool_points?: number | null
+          pool_type?: string | null
+          status?: string | null
+          updated_at?: string
+          vessel_class?: string | null
+          vessel_id?: string | null
+        }
+        Update: {
+          adjustment_factor?: number | null
+          base_tcein?: number | null
+          created_at?: string
+          currency?: string | null
+          dwt_range?: string | null
+          eco_rating?: string | null
+          entry_date?: string | null
+          exit_date?: string | null
+          gross_revenue?: number | null
+          ice_class?: string | null
+          id?: string
+          net_distribution?: number | null
+          notes?: string | null
+          organization_id?: string | null
+          period_end?: string | null
+          period_start?: string | null
+          pool_distribution_pct?: number | null
+          pool_expenses?: number | null
+          pool_manager?: string | null
+          pool_name?: string
+          pool_points?: number | null
+          pool_type?: string | null
+          status?: string | null
+          updated_at?: string
+          vessel_class?: string | null
+          vessel_id?: string | null
+        }
+        Relationships: [
+          {
+            foreignKeyName: "pool_arrangements_organization_id_fkey"
+            columns: ["organization_id"]
+            isOneToOne: false
+            referencedRelation: "organizations"
+            referencedColumns: ["id"]
+          },
+          {
+            foreignKeyName: "pool_arrangements_vessel_id_fkey"
+            columns: ["vessel_id"]
+            isOneToOne: false
+            referencedRelation: "vessels"
+            referencedColumns: ["id"]
+          },
+        ]
+      }
+      pool_settlements: {
+        Row: {
+          address_commission: number | null
+          approved_at: string | null
+          approved_by: string | null
+          created_at: string
+          currency: string | null
+          earning_days: number | null
+          gross_pool_revenue: number | null
+          id: string
+          net_settlement: number | null
+          off_hire_days: number | null
+          period_end: string
+          period_start: string
+          pool_avg_tce: number | null
+          pool_id: string
+          pool_management_fee: number | null
+          settlement_period: string | null
+          status: string | null
+          tce_achieved: number | null
+          trading_days: number | null
+          variance_to_avg: number | null
+          vessel_share: number | null
+        }
+        Insert: {
+          address_commission?: number | null
+          approved_at?: string | null
+          approved_by?: string | null
+          created_at?: string
+          currency?: string | null
+          earning_days?: number | null
+          gross_pool_revenue?: number | null
+          id?: string
+          net_settlement?: number | null
+          off_hire_days?: number | null
+          period_end: string
+          period_start: string
+          pool_avg_tce?: number | null
+          pool_id: string
+          pool_management_fee?: number | null
+          settlement_period?: string | null
+          status?: string | null
+          tce_achieved?: number | null
+          trading_days?: number | null
+          variance_to_avg?: number | null
+          vessel_share?: number | null
+        }
+        Update: {
+          address_commission?: number | null
+          approved_at?: string | null
+          approved_by?: string | null
+          created_at?: string
+          currency?: string | null
+          earning_days?: number | null
+          gross_pool_revenue?: number | null
+          id?: string
+          net_settlement?: number | null
+          off_hire_days?: number | null
+          period_end?: string
+          period_start?: string
+          pool_avg_tce?: number | null
+          pool_id?: string
+          pool_management_fee?: number | null
+          settlement_period?: string | null
+          status?: string | null
+          tce_achieved?: number | null
+          trading_days?: number | null
+          variance_to_avg?: number | null
+          vessel_share?: number | null
+        }
+        Relationships: [
+          {
+            foreignKeyName: "pool_settlements_pool_id_fkey"
+            columns: ["pool_id"]
+            isOneToOne: false
+            referencedRelation: "pool_arrangements"
             referencedColumns: ["id"]
           },
         ]
