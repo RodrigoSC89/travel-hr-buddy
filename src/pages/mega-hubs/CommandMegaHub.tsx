@@ -57,6 +57,7 @@ const PredictiveCrewTurnover = lazy(() => import('@/components/dashboard/Predict
 const ContractExpiryRadar = lazy(() => import('@/components/dashboard/ContractExpiryRadar'));
 const FleetRiskHeatmap = lazy(() => import('@/components/dashboard/FleetRiskHeatmap'));
 const SystemEventsPanel = lazy(() => import('@/components/dashboard/SystemEventsPanel'));
+const FleetKPISummaryCards = lazy(() => import('@/components/dashboard/FleetKPISummaryCards').then(m => ({ default: m.FleetKPISummaryCards })));
 
 const LoadingSkeleton = () => (
   <div className="space-y-4 p-6">
@@ -249,6 +250,11 @@ export default function CommandMegaHub() {
                   </button>
                 ))}
               </div>
+
+              {/* Fleet KPI Summary Cards */}
+              <Suspense fallback={<Skeleton className="h-24" />}>
+                <FleetKPISummaryCards />
+              </Suspense>
 
               {/* System Health KPIs - Always visible */}
               <SystemHealthKPIs />

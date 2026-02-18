@@ -53,6 +53,7 @@ const SupplyChainIntelligence = lazy(() => import('@/components/dashboard/Supply
 const AssetIntegrityMatrix = lazy(() => import('@/components/dashboard/AssetIntegrityMatrix'));
 const DrydockCostOptimizer = lazy(() => import('@/components/dashboard/DrydockCostOptimizer'));
 const PMSCalendarView = lazy(() => import('@/components/maintenance/PMSCalendarView').then(m => ({ default: m.PMSCalendarView })));
+const MaintenanceBacklogAnalytics = lazy(() => import('@/components/dashboard/MaintenanceBacklogAnalytics').then(m => ({ default: m.MaintenanceBacklogAnalytics })));
 const LoadingSkeleton = () => (
   <div className="space-y-4 p-6">
     <Skeleton className="h-8 w-64" />
@@ -292,6 +293,11 @@ export default function MaintenanceMegaHub() {
 
               {/* 🆕 Wave 13: Equipment Health Matrix */}
               <EquipmentHealthMatrix />
+
+              {/* Maintenance Backlog Analytics */}
+              <Suspense fallback={<Skeleton className="h-64" />}>
+                <MaintenanceBacklogAnalytics />
+              </Suspense>
 
               {/* 🆕 Wave 14: Backlog Aging + Spare Parts Criticality */}
               <div className="grid grid-cols-1 lg:grid-cols-2 gap-4">
