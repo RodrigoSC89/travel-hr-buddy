@@ -42,6 +42,8 @@ const PerformanceMetrics = lazy(() => import('@/components/performance/Performan
 const EnhancedPresence = lazy(() => import('@/components/collaboration/EnhancedPresence').then(m => ({ default: m.EnhancedPresence })));
 const OperationalRadar = lazy(() => import('@/components/dashboard/OperationalRadar'));
 const SituationRoom = lazy(() => import('@/components/dashboard/SituationRoom'));
+const FleetDigitalTwinMap = lazy(() => import('@/components/dashboard/FleetDigitalTwinMap'));
+const AIDecisionEngine = lazy(() => import('@/components/dashboard/AIDecisionEngine'));
 
 const LoadingSkeleton = () => (
   <div className="space-y-4 p-6">
@@ -301,6 +303,16 @@ export default function CommandMegaHub() {
                     showFilters
                   />
                 </div>
+              </div>
+
+              {/* Global Intelligence Network */}
+              <div className="grid grid-cols-1 lg:grid-cols-2 gap-6">
+                <Suspense fallback={<Skeleton className="h-[500px]" />}>
+                  <FleetDigitalTwinMap />
+                </Suspense>
+                <Suspense fallback={<Skeleton className="h-[500px]" />}>
+                  <AIDecisionEngine />
+                </Suspense>
               </div>
 
               {/* Full Dashboard below */}
