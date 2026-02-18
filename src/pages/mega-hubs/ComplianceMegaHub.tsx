@@ -19,7 +19,7 @@ import { Select, SelectContent, SelectItem, SelectTrigger, SelectValue } from '@
 import { Button } from '@/components/ui/button';
 import { Label } from '@/components/ui/label';
 import { Badge } from '@/components/ui/badge';
-import { Shield, BarChart3, Bot, Award, Target, AlertTriangle, FileText, Lock, Plus, Download, ClipboardCheck, Wifi, Brain } from 'lucide-react';
+import { Shield, BarChart3, Bot, Award, Target, AlertTriangle, FileText, Lock, Plus, Download, ClipboardCheck, Wifi, Brain, HardHat, ClipboardList } from 'lucide-react';
 import { Skeleton } from '@/components/ui/skeleton';
 import type { LucideIcon } from 'lucide-react';
 import { EnhancedActionBar } from '@/components/ui/world-class/EnhancedActionBar';
@@ -44,6 +44,8 @@ const DiagnosticNCsPage = lazy(() => import('@/pages/DiagnosticNCsPage'));
 const RegulationsV2 = lazy(() => import('@/pages/DiagnosticReportsPage'));
 const SecurityCenter = lazy(() => import('@/pages/SecurityCenter'));
 const ComplianceAIHub = lazy(() => import('@/components/compliance/ai/ComplianceAIHub'));
+const LOTOProceduresManager = lazy(() => import('@/components/safety/LOTOProceduresManager').then(m => ({ default: m.LOTOProceduresManager })));
+const JSATemplatesManager = lazy(() => import('@/components/safety/JSATemplatesManager').then(m => ({ default: m.JSATemplatesManager })));
 
 // ═══════════════════════════════════════════════════════════
 // 12 AUDITORIAS MARÍTIMAS COMPLETAS - ZERO SUPRESSÃO
@@ -95,6 +97,8 @@ const tabConfig: TabConfig[] = [
   { id: 'ncs-capas', label: 'NCs & CAPAs', icon: AlertTriangle },
   { id: 'regulations', label: 'Regulations', icon: FileText },
   { id: 'security', label: 'Security', icon: Lock },
+  { id: 'loto', label: 'LOTO', icon: HardHat },
+  { id: 'jsa', label: 'JSA', icon: ClipboardList },
   { id: 'ai-hub', label: '🧠 IA Compliance', icon: Brain },
 ];
 
@@ -391,6 +395,14 @@ export default function ComplianceMegaHub() {
             
             <TabsContent value="security" className="mt-0">
               <SecurityCenter />
+            </TabsContent>
+
+            <TabsContent value="loto" className="mt-0">
+              <LOTOProceduresManager />
+            </TabsContent>
+
+            <TabsContent value="jsa" className="mt-0">
+              <JSATemplatesManager />
             </TabsContent>
 
             <TabsContent value="ai-hub" className="mt-0">

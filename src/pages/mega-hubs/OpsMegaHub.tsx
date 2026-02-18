@@ -11,7 +11,7 @@ import React, { Suspense, lazy, useState, useMemo, useCallback } from 'react';
 import { useSearchParams } from 'react-router-dom';
 import { Tabs, TabsContent, TabsList, TabsTrigger } from '@/components/ui/tabs';
 import { Badge } from '@/components/ui/badge';
-import { Compass, Anchor, Ship, Map, Target, Package, FileText, Plus, CheckCircle, Wifi, Download, Brain } from 'lucide-react';
+import { Compass, Anchor, Ship, Map, Target, Package, FileText, Plus, CheckCircle, Wifi, Download, Brain, Building2 } from 'lucide-react';
 import { Skeleton } from '@/components/ui/skeleton';
 import { EnhancedActionBar } from '@/components/ui/world-class/EnhancedActionBar';
 import { WorkflowStatusBar } from '@/components/ui/world-class/WorkflowStatusBar';
@@ -32,6 +32,7 @@ const MissionCommandCenter = lazy(() => import('@/modules/operations/components/
 const LogisticsCommandPage = lazy(() => import('@/pages/ai/VoyageLogisticsAIPage'));
 const VesselContractsUnified = lazy(() => import('@/pages/CharterPartyPage'));
 const OperationsAIHub = lazy(() => import('@/components/operations/ai/OperationsAIHub'));
+const ManningAgentPortal = lazy(() => import('@/components/crew/ManningAgentPortal').then(m => ({ default: m.ManningAgentPortal })));
 
 const LoadingSkeleton = () => (
   <div className="space-y-4 p-6">
@@ -53,6 +54,7 @@ const tabConfig = [
   { id: 'missions', label: 'Missions', icon: Target },
   { id: 'logistics', label: 'Logistics', icon: Package },
   { id: 'contracts', label: 'Contracts', icon: FileText },
+  { id: 'manning', label: 'Manning Agents', icon: Building2 },
   { id: 'ai-copilot', label: '🧠 IA Copiloto', icon: Brain },
 ];
 
@@ -266,6 +268,10 @@ export default function OpsMegaHub() {
             
             <TabsContent value="contracts" className="mt-0">
               <VesselContractsUnified />
+            </TabsContent>
+
+            <TabsContent value="manning" className="mt-0">
+              <ManningAgentPortal />
             </TabsContent>
 
             <TabsContent value="ai-copilot" className="mt-0">

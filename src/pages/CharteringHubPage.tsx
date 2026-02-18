@@ -18,8 +18,9 @@ import { Dialog, DialogContent, DialogHeader, DialogTitle, DialogTrigger, Dialog
 import { toast } from "sonner";
 import {
   Anchor, Ship, FileText, DollarSign, Plus, Search,
-  Filter, TrendingUp, Globe, Package, type LucideIcon
+  Filter, TrendingUp, Globe, Package, Handshake, type LucideIcon
 } from "lucide-react";
+import { FixtureNegotiationWorkflow } from "@/components/commercial/FixtureNegotiationWorkflow";
 
 interface CharterParty {
   id: string; charter_number: string; vessel_id: string | null;
@@ -301,6 +302,7 @@ export default function CharteringHubPage() {
 
   const tabs: ModuleTab[] = [
     { id: "charters", label: "Charter Parties", icon: FileText, content: <CharterPartiesTab />, badge: stats.active },
+    { id: "fixture-negotiation", label: "Fixture Negotiation", icon: Handshake, content: <FixtureNegotiationWorkflow /> },
   ];
 
   return (

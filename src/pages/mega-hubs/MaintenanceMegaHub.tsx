@@ -17,7 +17,7 @@ import { Select, SelectContent, SelectItem, SelectTrigger, SelectValue } from '@
 import { Button } from '@/components/ui/button';
 import { Label } from '@/components/ui/label';
 import { Badge } from '@/components/ui/badge';
-import { Wrench, Shield, Brain, Anchor, Fuel, Cpu, Trash2, Leaf, Calendar, Plus, Download, Wifi, Sparkles } from 'lucide-react';
+import { Wrench, Shield, Brain, Anchor, Fuel, Cpu, Trash2, Leaf, Calendar, Plus, Download, Wifi, Sparkles, BarChart3, Radio } from 'lucide-react';
 import { Skeleton } from '@/components/ui/skeleton';
 import { EnhancedActionBar } from '@/components/ui/world-class/EnhancedActionBar';
 import { WorkflowStatusBar } from '@/components/ui/world-class/WorkflowStatusBar';
@@ -40,7 +40,8 @@ const ESGEmissionsPremium = lazy(() => import('@/pages/ESGEmissionsPremium'));
 const MaintenanceAIHub = lazy(() => import('@/components/maintenance/ai/MaintenanceAIHub'));
 const SparePartsInventory = lazy(() => import('@/components/maintenance/SparePartsInventory'));
 const PMSEquipmentTree = lazy(() => import('@/components/maintenance/PMSEquipmentTree'));
-
+const DryDockGanttChart = lazy(() => import('@/components/maintenance/DryDockGanttChart').then(m => ({ default: m.DryDockGanttChart })));
+const SensorLogbookManager = lazy(() => import('@/components/logbook/SensorLogbookManager').then(m => ({ default: m.SensorLogbookManager })));
 const LoadingSkeleton = () => (
   <div className="space-y-4 p-6">
     <Skeleton className="h-8 w-64" />
@@ -64,6 +65,8 @@ const tabConfig = [
   { id: 'digital-twin', label: 'Digital Twin', icon: Cpu },
   { id: 'waste-marpol', label: 'MARPOL & Waste', icon: Trash2 },
   { id: 'esg', label: 'ESG Emissions', icon: Leaf },
+  { id: 'gantt', label: 'Gantt Chart', icon: BarChart3 },
+  { id: 'sensor-logbook', label: 'Sensor Logbook', icon: Radio },
   { id: 'ai-hub', label: '🧠 IA Hub', icon: Sparkles },
 ];
 
@@ -347,6 +350,14 @@ export default function MaintenanceMegaHub() {
             
             <TabsContent value="esg" className="mt-0">
               <ESGEmissionsPremium />
+            </TabsContent>
+
+            <TabsContent value="gantt" className="mt-0">
+              <DryDockGanttChart />
+            </TabsContent>
+
+            <TabsContent value="sensor-logbook" className="mt-0">
+              <SensorLogbookManager />
             </TabsContent>
 
             <TabsContent value="ai-hub" className="mt-0">
