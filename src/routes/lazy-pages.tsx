@@ -52,7 +52,7 @@ export const MedicalInfirmary = lazy(() => import("@/modules/medical-infirmary")
 export const EnhancedWasteManagement = lazy(() => import("@/pages/advanced/MARPOLTrackerPage"));
 export const CentralComandoAprimorada = lazy(() => import("@/pages/dashboard/CentralComandoAprimorada"));
 export const MedicalInfirmaryEnhanced = lazy(() => import("@/pages/MedicalInfirmaryEnhanced"));
-export const SatcomDashboardEnhanced = lazy(() => import("@/pages/TelemetriaCommand"));
+export const SatcomDashboardEnhanced = lazy(() => import("@/modules/nauti-satellite"));
 
 // ============================================
 // MANUTENÇÃO
