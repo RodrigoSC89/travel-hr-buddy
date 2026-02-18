@@ -17178,6 +17178,123 @@ export type Database = {
           },
         ]
       }
+      eexi_calculations: {
+        Row: {
+          aux_engine_power_kw: number | null
+          calculation_date: string
+          cf_aux: number | null
+          cf_main: number | null
+          class_society: string | null
+          compliance_status: string | null
+          created_at: string
+          created_by: string | null
+          dwt: number | null
+          eedi_equivalent: number | null
+          eexi_attained: number | null
+          eexi_required: number | null
+          epla_applied: boolean | null
+          gt: number | null
+          id: string
+          imo_number: string | null
+          main_engine_power_kw: number | null
+          mepc_reference: string | null
+          notes: string | null
+          organization_id: string | null
+          reduction_factor_pct: number | null
+          reference_speed_knots: number | null
+          sfc_aux_g_kwh: number | null
+          sfc_main_g_kwh: number | null
+          shaft_power_limitation_pct: number | null
+          ship_type: string | null
+          technical_file_url: string | null
+          updated_at: string
+          verification_date: string | null
+          verified_by: string | null
+          vessel_id: string | null
+        }
+        Insert: {
+          aux_engine_power_kw?: number | null
+          calculation_date?: string
+          cf_aux?: number | null
+          cf_main?: number | null
+          class_society?: string | null
+          compliance_status?: string | null
+          created_at?: string
+          created_by?: string | null
+          dwt?: number | null
+          eedi_equivalent?: number | null
+          eexi_attained?: number | null
+          eexi_required?: number | null
+          epla_applied?: boolean | null
+          gt?: number | null
+          id?: string
+          imo_number?: string | null
+          main_engine_power_kw?: number | null
+          mepc_reference?: string | null
+          notes?: string | null
+          organization_id?: string | null
+          reduction_factor_pct?: number | null
+          reference_speed_knots?: number | null
+          sfc_aux_g_kwh?: number | null
+          sfc_main_g_kwh?: number | null
+          shaft_power_limitation_pct?: number | null
+          ship_type?: string | null
+          technical_file_url?: string | null
+          updated_at?: string
+          verification_date?: string | null
+          verified_by?: string | null
+          vessel_id?: string | null
+        }
+        Update: {
+          aux_engine_power_kw?: number | null
+          calculation_date?: string
+          cf_aux?: number | null
+          cf_main?: number | null
+          class_society?: string | null
+          compliance_status?: string | null
+          created_at?: string
+          created_by?: string | null
+          dwt?: number | null
+          eedi_equivalent?: number | null
+          eexi_attained?: number | null
+          eexi_required?: number | null
+          epla_applied?: boolean | null
+          gt?: number | null
+          id?: string
+          imo_number?: string | null
+          main_engine_power_kw?: number | null
+          mepc_reference?: string | null
+          notes?: string | null
+          organization_id?: string | null
+          reduction_factor_pct?: number | null
+          reference_speed_knots?: number | null
+          sfc_aux_g_kwh?: number | null
+          sfc_main_g_kwh?: number | null
+          shaft_power_limitation_pct?: number | null
+          ship_type?: string | null
+          technical_file_url?: string | null
+          updated_at?: string
+          verification_date?: string | null
+          verified_by?: string | null
+          vessel_id?: string | null
+        }
+        Relationships: [
+          {
+            foreignKeyName: "eexi_calculations_organization_id_fkey"
+            columns: ["organization_id"]
+            isOneToOne: false
+            referencedRelation: "organizations"
+            referencedColumns: ["id"]
+          },
+          {
+            foreignKeyName: "eexi_calculations_vessel_id_fkey"
+            columns: ["vessel_id"]
+            isOneToOne: false
+            referencedRelation: "vessels"
+            referencedColumns: ["id"]
+          },
+        ]
+      }
       email_queue: {
         Row: {
           attempts: number | null
@@ -18344,6 +18461,78 @@ export type Database = {
           user_id?: string | null
         }
         Relationships: []
+      }
+      eu_ets_allowances: {
+        Row: {
+          allowance_price_eur: number | null
+          allowances_purchased: number | null
+          allowances_required: number | null
+          allowances_surrendered: number | null
+          compliance_status: string | null
+          created_at: string
+          created_by: string | null
+          id: string
+          notes: string | null
+          organization_id: string | null
+          surrender_deadline: string | null
+          total_cost_eur: number | null
+          total_emissions_tco2: number | null
+          updated_at: string
+          vessel_id: string | null
+          year: number
+        }
+        Insert: {
+          allowance_price_eur?: number | null
+          allowances_purchased?: number | null
+          allowances_required?: number | null
+          allowances_surrendered?: number | null
+          compliance_status?: string | null
+          created_at?: string
+          created_by?: string | null
+          id?: string
+          notes?: string | null
+          organization_id?: string | null
+          surrender_deadline?: string | null
+          total_cost_eur?: number | null
+          total_emissions_tco2?: number | null
+          updated_at?: string
+          vessel_id?: string | null
+          year: number
+        }
+        Update: {
+          allowance_price_eur?: number | null
+          allowances_purchased?: number | null
+          allowances_required?: number | null
+          allowances_surrendered?: number | null
+          compliance_status?: string | null
+          created_at?: string
+          created_by?: string | null
+          id?: string
+          notes?: string | null
+          organization_id?: string | null
+          surrender_deadline?: string | null
+          total_cost_eur?: number | null
+          total_emissions_tco2?: number | null
+          updated_at?: string
+          vessel_id?: string | null
+          year?: number
+        }
+        Relationships: [
+          {
+            foreignKeyName: "eu_ets_allowances_organization_id_fkey"
+            columns: ["organization_id"]
+            isOneToOne: false
+            referencedRelation: "organizations"
+            referencedColumns: ["id"]
+          },
+          {
+            foreignKeyName: "eu_ets_allowances_vessel_id_fkey"
+            columns: ["vessel_id"]
+            isOneToOne: false
+            referencedRelation: "vessels"
+            referencedColumns: ["id"]
+          },
+        ]
       }
       eu_ets_tracking: {
         Row: {
@@ -19817,6 +20006,102 @@ export type Database = {
             columns: ["voyage_id"]
             isOneToOne: false
             referencedRelation: "voyage_plans"
+            referencedColumns: ["id"]
+          },
+        ]
+      }
+      fuel_eu_compliance: {
+        Row: {
+          ammonia_percentage: number | null
+          biofuel_percentage: number | null
+          compliance_balance: number | null
+          compliance_status: string | null
+          created_at: string
+          created_by: string | null
+          fueleu_document_url: string | null
+          ghg_intensity_actual: number | null
+          ghg_intensity_reference: number | null
+          ghg_intensity_target: number | null
+          hydrogen_percentage: number | null
+          id: string
+          lng_percentage: number | null
+          methanol_percentage: number | null
+          notes: string | null
+          organization_id: string | null
+          penalty_amount_eur: number | null
+          pooling_partner_id: string | null
+          reporting_year: number
+          shore_power_compliance: boolean | null
+          shore_power_hours: number | null
+          surplus_deficit_grams: number | null
+          updated_at: string
+          vessel_id: string | null
+        }
+        Insert: {
+          ammonia_percentage?: number | null
+          biofuel_percentage?: number | null
+          compliance_balance?: number | null
+          compliance_status?: string | null
+          created_at?: string
+          created_by?: string | null
+          fueleu_document_url?: string | null
+          ghg_intensity_actual?: number | null
+          ghg_intensity_reference?: number | null
+          ghg_intensity_target?: number | null
+          hydrogen_percentage?: number | null
+          id?: string
+          lng_percentage?: number | null
+          methanol_percentage?: number | null
+          notes?: string | null
+          organization_id?: string | null
+          penalty_amount_eur?: number | null
+          pooling_partner_id?: string | null
+          reporting_year: number
+          shore_power_compliance?: boolean | null
+          shore_power_hours?: number | null
+          surplus_deficit_grams?: number | null
+          updated_at?: string
+          vessel_id?: string | null
+        }
+        Update: {
+          ammonia_percentage?: number | null
+          biofuel_percentage?: number | null
+          compliance_balance?: number | null
+          compliance_status?: string | null
+          created_at?: string
+          created_by?: string | null
+          fueleu_document_url?: string | null
+          ghg_intensity_actual?: number | null
+          ghg_intensity_reference?: number | null
+          ghg_intensity_target?: number | null
+          hydrogen_percentage?: number | null
+          id?: string
+          lng_percentage?: number | null
+          methanol_percentage?: number | null
+          notes?: string | null
+          organization_id?: string | null
+          penalty_amount_eur?: number | null
+          pooling_partner_id?: string | null
+          reporting_year?: number
+          shore_power_compliance?: boolean | null
+          shore_power_hours?: number | null
+          surplus_deficit_grams?: number | null
+          updated_at?: string
+          vessel_id?: string | null
+        }
+        Relationships: [
+          {
+            foreignKeyName: "fuel_eu_compliance_organization_id_fkey"
+            columns: ["organization_id"]
+            isOneToOne: false
+            referencedRelation: "organizations"
+            referencedColumns: ["id"]
+          },
+          {
+            foreignKeyName: "fuel_eu_compliance_vessel_id_fkey"
+            columns: ["vessel_id"]
+            isOneToOne: false
+            referencedRelation: "vessels"
             referencedColumns: ["id"]
           },
         ]
@@ -25389,6 +25674,7 @@ export type Database = {
           invoice_number: string | null
           invoice_type: string | null
           issued_at: string | null
+          laytime_calculation_id: string | null
           laytime_id: string | null
           line_items: Json | null
           metadata: Json | null
@@ -25422,6 +25708,7 @@ export type Database = {
           invoice_number?: string | null
           invoice_type?: string | null
           issued_at?: string | null
+          laytime_calculation_id?: string | null
           laytime_id?: string | null
           line_items?: Json | null
           metadata?: Json | null
@@ -25455,6 +25742,7 @@ export type Database = {
           invoice_number?: string | null
           invoice_type?: string | null
           issued_at?: string | null
+          laytime_calculation_id?: string | null
           laytime_id?: string | null
           line_items?: Json | null
           metadata?: Json | null
@@ -25484,6 +25772,13 @@ export type Database = {
             columns: ["charterer_id"]
             isOneToOne: false
             referencedRelation: "organizations"
+            referencedColumns: ["id"]
+          },
+          {
+            foreignKeyName: "invoices_laytime_calculation_id_fkey"
+            columns: ["laytime_calculation_id"]
+            isOneToOne: false
+            referencedRelation: "laytime_calculations"
             referencedColumns: ["id"]
           },
           {
@@ -28518,6 +28813,7 @@ export type Database = {
           verified_at: string | null
           verified_by: string | null
           vessel_id: string | null
+          work_order_number: string | null
           work_order_ref: string | null
         }
         Insert: {
@@ -28555,6 +28851,7 @@ export type Database = {
           verified_at?: string | null
           verified_by?: string | null
           vessel_id?: string | null
+          work_order_number?: string | null
           work_order_ref?: string | null
         }
         Update: {
@@ -28592,6 +28889,7 @@ export type Database = {
           verified_at?: string | null
           verified_by?: string | null
           vessel_id?: string | null
+          work_order_number?: string | null
           work_order_ref?: string | null
         }
         Relationships: [
@@ -40322,6 +40620,7 @@ export type Database = {
           deficiency_codes: Json | null
           detention: boolean | null
           detention_duration_days: number | null
+          detention_duration_hours: number | null
           detention_reason: string | null
           follow_up_inspection_date: string | null
           id: string
@@ -40347,6 +40646,7 @@ export type Database = {
           deficiency_codes?: Json | null
           detention?: boolean | null
           detention_duration_days?: number | null
+          detention_duration_hours?: number | null
           detention_reason?: string | null
           follow_up_inspection_date?: string | null
           id?: string
@@ -40372,6 +40672,7 @@ export type Database = {
           deficiency_codes?: Json | null
           detention?: boolean | null
           detention_duration_days?: number | null
+          detention_duration_hours?: number | null
           detention_reason?: string | null
           follow_up_inspection_date?: string | null
           id?: string
@@ -53897,6 +54198,7 @@ export type Database = {
           eexi_attained: number | null
           eexi_compliant: boolean | null
           eexi_required: number | null
+          eexi_technical_file: string | null
           epla_applied: boolean | null
           eta: string | null
           flag: string | null
@@ -53935,6 +54237,7 @@ export type Database = {
           eexi_attained?: number | null
           eexi_compliant?: boolean | null
           eexi_required?: number | null
+          eexi_technical_file?: string | null
           epla_applied?: boolean | null
           eta?: string | null
           flag?: string | null
@@ -53973,6 +54276,7 @@ export type Database = {
           eexi_attained?: number | null
           eexi_compliant?: boolean | null
           eexi_required?: number | null
+          eexi_technical_file?: string | null
           epla_applied?: boolean | null
           eta?: string | null
           flag?: string | null
