@@ -54,6 +54,7 @@ const VettingReadinessCenter = lazy(() => import('@/components/dashboard/Vetting
 const RegulatoryRadarLive = lazy(() => import('@/components/dashboard/RegulatoryRadarLive'));
 const ISMGapAnalyzer = lazy(() => import('@/components/dashboard/ISMGapAnalyzer'));
 const PSCDetentionPredictor = lazy(() => import('@/components/dashboard/PSCDetentionPredictor'));
+const ComplianceEventsMonitor = lazy(() => import('@/components/compliance/ComplianceEventsMonitor'));
 
 // ═══════════════════════════════════════════════════════════
 // 12 AUDITORIAS MARÍTIMAS COMPLETAS - ZERO SUPRESSÃO
@@ -354,6 +355,11 @@ export default function ComplianceMegaHub() {
                   onPrimaryAction={handleNewAudit} 
                 />
               )}
+
+              {/* Real-time Compliance Events Monitor */}
+              <Suspense fallback={<Skeleton className="h-64" />}>
+                <ComplianceEventsMonitor />
+              </Suspense>
 
               {/* Wave 18: Compliance Intelligence Panels */}
               <div className="grid grid-cols-1 lg:grid-cols-2 gap-6">

@@ -56,6 +56,7 @@ const FleetROICommand = lazy(() => import('@/components/dashboard/FleetROIComman
 const PredictiveCrewTurnover = lazy(() => import('@/components/dashboard/PredictiveCrewTurnover'));
 const ContractExpiryRadar = lazy(() => import('@/components/dashboard/ContractExpiryRadar'));
 const FleetRiskHeatmap = lazy(() => import('@/components/dashboard/FleetRiskHeatmap'));
+const SystemEventsPanel = lazy(() => import('@/components/dashboard/SystemEventsPanel'));
 
 const LoadingSkeleton = () => (
   <div className="space-y-4 p-6">
@@ -386,6 +387,11 @@ export default function CommandMegaHub() {
                   <ContractExpiryRadar />
                 </Suspense>
               </div>
+
+              {/* Event System - Central Nervous System */}
+              <Suspense fallback={<Skeleton className="h-64" />}>
+                <SystemEventsPanel />
+              </Suspense>
 
               {/* Full Dashboard below */}
               <EnhancedUnifiedDashboard />
