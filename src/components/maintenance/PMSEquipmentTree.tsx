@@ -3,8 +3,9 @@
  * Equipment hierarchy from real data, running hours, job cards with full CRUD
  */
 import React, { useState, useMemo } from 'react';
-import { useQuery, useMutation, useQueryClient } from '@tanstack/react-query';
+import { useQuery, useQueryClient } from '@tanstack/react-query';
 import { supabase } from '@/integrations/supabase/client';
+import { useCreateMaintenanceTask, useUpdateMaintenanceTaskStatus } from '@/hooks/useModuleHooks';
 import { Card, CardContent, CardHeader, CardTitle } from '@/components/ui/card';
 import { Button } from '@/components/ui/button';
 import { Input } from '@/components/ui/input';
@@ -76,38 +77,23 @@ export default function PMSEquipmentTree() {
     staleTime: 30000,
   });
 
-  const createJobMutation = useMutation({
-    mutationFn: async (data: typeof newJob) => {
-      const vesselId = vessels.length > 0 ? vessels[0].id : null;
-      const { error } = await supabase.from('maintenance_tasks').insert({
-        title: data.title, component_name: data.component_name,
-        priority: data.priority, due_date: data.due_date || null,
-        description: data.description, status: 'pending',
-        vessel_id: vesselId,
-      });
-      if (error) throw error;
-    },
-    onSuccess: () => {
-      queryClient.invalidateQueries({ queryKey: ['pms-job-cards'] });
-      toast.success('Ordem de serviço criada');
-      setNewJobDialog(false);
-      setNewJob({ title: '', component_name: '', priority: 'medium', due_date: '', description: '' });
-    },
-    onError: () => toast.error('Erro ao criar OS'),
-  });
+  const createJobMutationHook = useCreateMaintenanceTask();
+  const updateJobMutation = useUpdateMaintenanceTaskStatus();
 
-  const updateJobMutation = useMutation({
-    mutationFn: async ({ id, status }: { id: string; status: string }) => {
-      const updates: any = { status };
-      if (status === 'completed') updates.completed_date = new Date().toISOString();
-      const { error } = await supabase.from('maintenance_tasks').update(updates).eq('id', id);
-      if (error) throw error;
-    },
-    onSuccess: () => {
-      queryClient.invalidateQueries({ queryKey: ['pms-job-cards'] });
-      toast.success('Status atualizado');
-    },
-  });
+  const handleCreateJob = (data: typeof newJob) => {
+    const vesselId = vessels.length > 0 ? vessels[0].id : null;
+    createJobMutationHook.mutate({
+      title: data.title, component_name: data.component_name,
+      priority: data.priority, due_date: data.due_date || null,
+      description: data.description, status: 'pending',
+      vessel_id: vesselId,
+    }, {
+      onSuccess: () => {
+        setNewJobDialog(false);
+        setNewJob({ title: '', component_name: '', priority: 'medium', due_date: '', description: '' });
+      },
+    });
+  };
 
   // Build equipment tree from REAL component names
   const equipmentTree = useMemo(() => {
@@ -362,8 +348,8 @@ export default function PMSEquipmentTree() {
           </div>
           <DialogFooter>
             <Button variant="outline" onClick={() => setNewJobDialog(false)}>Cancelar</Button>
-            <Button onClick={() => createJobMutation.mutate(newJob)} disabled={!newJob.title || createJobMutation.isPending}>
-              {createJobMutation.isPending && <Loader2 className="h-4 w-4 mr-2 animate-spin" />}Criar OS
+            <Button onClick={() => handleCreateJob(newJob)} disabled={!newJob.title || createJobMutationHook.isPending}>
+              {createJobMutationHook.isPending && <Loader2 className="h-4 w-4 mr-2 animate-spin" />}Criar OS
             </Button>
           </DialogFooter>
         </DialogContent>

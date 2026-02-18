@@ -3,8 +3,9 @@
  * PRODUCTION: Wired to Supabase peotram_nc_actions
  */
 import React, { useState, useMemo } from "react";
-import { useQuery, useMutation, useQueryClient } from "@tanstack/react-query";
+import { useQuery, useQueryClient } from "@tanstack/react-query";
 import { supabase } from "@/integrations/supabase/client";
+import { useCreateNC, useUpdateNCStatus } from "@/hooks/useModuleHooks";
 import { Card, CardContent } from "@/components/ui/card";
 import { Badge } from "@/components/ui/badge";
 import { Button } from "@/components/ui/button";
@@ -76,37 +77,8 @@ export function PeotramNCActionPlan() {
     },
   });
 
-  const addNC = useMutation({
-    mutationFn: async (nc: Partial<NCActionItem>) => {
-      const { error } = await (supabase.from as Function)('peotram_nc_actions').insert(nc);
-      if (error) throw error;
-    },
-    onSuccess: () => {
-      queryClient.invalidateQueries({ queryKey: ['peotram-nc-actions'] });
-      toast.success('NC registrada com sucesso');
-      setShowAdd(false);
-    },
-  });
-
-  const updateStatus = useMutation({
-    mutationFn: async ({ id, status }: { id: string; status: NCStatus }) => {
-      const updates: any = {
-        status,
-        updated_at: new Date().toISOString(),
-      };
-      if (status === 'closed') {
-        updates.closed_at = new Date().toISOString().split('T')[0];
-        updates.percent_complete = 100;
-      }
-      const { error } = await (supabase.from as Function)('peotram_nc_actions')
-        .update(updates as never).eq('id', id);
-      if (error) throw error;
-    },
-    onSuccess: () => {
-      queryClient.invalidateQueries({ queryKey: ['peotram-nc-actions'] });
-      toast.success('Status da NC atualizado');
-    },
-  });
+  const addNC = useCreateNC();
+  const updateStatus = useUpdateNCStatus();
 
   const filtered = useMemo(() => ncs.filter(nc =>
     (filterStatus === "all" || nc.status === filterStatus) &&

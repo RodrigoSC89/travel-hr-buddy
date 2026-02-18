@@ -3,8 +3,9 @@
  * Embark/disembark timeline, pool availability, vessel assignment, fatigue monitoring
  */
 import React, { useState, useMemo } from 'react';
-import { useQuery, useMutation, useQueryClient } from '@tanstack/react-query';
+import { useQuery, useQueryClient } from '@tanstack/react-query';
 import { supabase } from '@/integrations/supabase/client';
+import { useAssignCrewToVessel } from '@/hooks/useModuleHooks';
 import { Card, CardContent, CardHeader, CardTitle } from '@/components/ui/card';
 import { Button } from '@/components/ui/button';
 import { Input } from '@/components/ui/input';
@@ -94,21 +95,8 @@ export default function CrewPoolPlanner() {
     staleTime: 60000,
   });
 
-  // Assign crew to vessel
-  const assignMutation = useMutation({
-    mutationFn: async ({ crewId, vesselId }: { crewId: string; vesselId: string }) => {
-      const { error } = await supabase.from('crew_members')
-        .update({ vessel_id: vesselId, status: 'active', contract_start: new Date().toISOString() })
-        .eq('id', crewId);
-      if (error) throw error;
-    },
-    onSuccess: () => {
-      queryClient.invalidateQueries({ queryKey: ['crew-pool-planner'] });
-      toast.success('Tripulante designado com sucesso');
-      setAssignDialog(false);
-    },
-    onError: () => toast.error('Erro ao designar tripulante'),
-  });
+  // Assign crew to vessel — integrated pipeline
+  const assignMutation = useAssignCrewToVessel();
 
   const metrics = useMemo(() => {
     const total = crew.length;

@@ -12,8 +12,9 @@ import { Dialog, DialogContent, DialogHeader, DialogTitle, DialogFooter } from "
 import { Table, TableBody, TableCell, TableHead, TableHeader, TableRow } from "@/components/ui/table";
 import { Award, Plus, Search, Calendar, AlertTriangle, CheckCircle2, Edit, Trash2, Download, RefreshCw, Loader2 } from "lucide-react";
 import { useToast } from "@/hooks/use-toast";
-import { useQuery, useMutation, useQueryClient } from "@tanstack/react-query";
+import { useQuery, useQueryClient } from "@tanstack/react-query";
 import { supabase } from "@/integrations/supabase/client";
+import { useCreateCrewCertification, useDeleteCrewCertification } from "@/hooks/useModuleHooks";
 import { differenceInDays } from "date-fns";
 
 interface CrewMember {
@@ -69,38 +70,25 @@ export const CrewCertificationsPanel: React.FC<CrewCertificationsPanelProps> = (
     },
   });
 
-  const createMutation = useMutation({
-    mutationFn: async () => {
-      const { error } = await supabase.from("maritime_certificates").insert([{
-        crew_member_id: newCert.crewId,
-        certificate_type: newCert.type,
-        issue_date: newCert.issueDate || new Date().toISOString().split("T")[0],
-        expiry_date: newCert.expiryDate || new Date(Date.now() + 365 * 86400000).toISOString().split("T")[0],
-        issuing_authority: newCert.issuer,
-        certificate_number: newCert.number,
-        status: "active",
-      }]);
-      if (error) throw error;
-    },
-    onSuccess: () => {
-      queryClient.invalidateQueries({ queryKey: ["crew-certifications-panel"] });
-      setShowNewDialog(false);
-      setNewCert({ crewId: "", type: "", issueDate: "", expiryDate: "", issuer: "", number: "" });
-      toast({ title: "✅ Certificação adicionada" });
-    },
-    onError: () => toast({ title: "Erro ao salvar", variant: "destructive" }),
-  });
+  const createCertMutation = useCreateCrewCertification();
+  const deleteCertMutation = useDeleteCrewCertification();
 
-  const deleteMutation = useMutation({
-    mutationFn: async (id: string) => {
-      const { error } = await supabase.from("maritime_certificates").delete().eq("id", id);
-      if (error) throw error;
-    },
-    onSuccess: () => {
-      queryClient.invalidateQueries({ queryKey: ["crew-certifications-panel"] });
-      toast({ title: "Certificação removida" });
-    },
-  });
+  const handleCreate = () => {
+    createCertMutation.mutate({
+      crew_member_id: newCert.crewId,
+      certificate_type: newCert.type,
+      issue_date: newCert.issueDate || new Date().toISOString().split("T")[0],
+      expiry_date: newCert.expiryDate || new Date(Date.now() + 365 * 86400000).toISOString().split("T")[0],
+      issuing_authority: newCert.issuer,
+      certificate_number: newCert.number,
+      status: "active",
+    }, {
+      onSuccess: () => {
+        setShowNewDialog(false);
+        setNewCert({ crewId: "", type: "", issueDate: "", expiryDate: "", issuer: "", number: "" });
+      },
+    });
+  };
 
   const filteredCerts = certifications.filter(cert => {
     const matchesSearch = cert.crewName.toLowerCase().includes(searchTerm.toLowerCase()) ||
@@ -198,7 +186,7 @@ export const CrewCertificationsPanel: React.FC<CrewCertificationsPanelProps> = (
                   </Badge>
                 </TableCell>
                 <TableCell className="text-right">
-                  <Button size="sm" variant="ghost" onClick={() => deleteMutation.mutate(cert.id)}>
+                  <Button size="sm" variant="ghost" onClick={() => deleteCertMutation.mutate(cert.id)}>
                     <Trash2 className="h-4 w-4" />
                   </Button>
                 </TableCell>
@@ -243,7 +231,7 @@ export const CrewCertificationsPanel: React.FC<CrewCertificationsPanelProps> = (
           </div>
           <DialogFooter>
             <Button variant="outline" onClick={() => setShowNewDialog(false)}>Cancelar</Button>
-            <Button onClick={() => createMutation.mutate()} disabled={createMutation.isPending}>{createMutation.isPending ? "Salvando..." : "Adicionar"}</Button>
+            <Button onClick={() => handleCreate()} disabled={createCertMutation.isPending}>{createCertMutation.isPending ? "Salvando..." : "Adicionar"}</Button>
           </DialogFooter>
         </DialogContent>
       </Dialog>

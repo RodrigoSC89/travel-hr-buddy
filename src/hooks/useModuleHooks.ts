@@ -987,3 +987,260 @@ export function useCreatePurchaseRequisition() {
     errorMessage: "Erro ao criar requisição",
   });
 }
+
+// ════════════════════════════════════════════
+// SAFETY — JSA TEMPLATES
+// ════════════════════════════════════════════
+
+export function useCreateJSATemplate() {
+  return useIntegratedMutation<Record<string, unknown>, any>({
+    mutationFn: async (input) => {
+      const { supabase } = await import("@/integrations/supabase/client");
+      const { data, error } = await (supabase.from as Function)('jsa_templates').insert(input).select().single();
+      if (error) throw error;
+      return data;
+    },
+    eventType: "safety.jsa.template_created",
+    entityType: "document" as any,
+    getEntityId: (out) => out.id,
+    buildPayload: (_in, out) => ({ template_id: out.id, title: out.title, job_type: out.job_type, risk_level: out.risk_level }),
+    invalidateKeys: [["jsa-templates"]],
+    successMessage: "JSA template criado",
+    errorMessage: "Erro ao criar template JSA",
+  });
+}
+
+// ════════════════════════════════════════════
+// SAFETY — PEOTRAM NC ACTION PLAN
+// ════════════════════════════════════════════
+
+export function useCreateNC() {
+  return useIntegratedMutation<Record<string, unknown>, any>({
+    mutationFn: async (input) => {
+      const { supabase } = await import("@/integrations/supabase/client");
+      const { data, error } = await (supabase.from as Function)('peotram_nc_actions').insert(input).select().single();
+      if (error) throw error;
+      return data;
+    },
+    eventType: "safety.nc.created",
+    entityType: "finding" as any,
+    getEntityId: (out) => out.id,
+    buildPayload: (_in, out) => ({ nc_id: out.id, nc_number: out.nc_number, priority: out.priority }),
+    invalidateKeys: [["peotram-nc-actions"]],
+    successMessage: "NC registrada com sucesso",
+    errorMessage: "Erro ao registrar NC",
+  });
+}
+
+export function useUpdateNCStatus() {
+  return useIntegratedMutation<{ id: string; status: string; extraUpdates?: Record<string, unknown> }, any>({
+    mutationFn: async ({ id, status, extraUpdates }) => {
+      const { supabase } = await import("@/integrations/supabase/client");
+      const updates: any = { status, updated_at: new Date().toISOString(), ...extraUpdates };
+      if (status === 'closed') { updates.closed_at = new Date().toISOString().split('T')[0]; updates.percent_complete = 100; }
+      const { data, error } = await (supabase.from as Function)('peotram_nc_actions').update(updates).eq('id', id).select().single();
+      if (error) throw error;
+      return data;
+    },
+    eventType: "safety.nc.status_changed",
+    entityType: "finding" as any,
+    getEntityId: (out) => out.id,
+    buildPayload: (input, out) => ({ nc_id: input.id, status: input.status, nc_number: out.nc_number }),
+    invalidateKeys: [["peotram-nc-actions"]],
+    successMessage: "Status da NC atualizado",
+    errorMessage: "Erro ao atualizar NC",
+  });
+}
+
+// ════════════════════════════════════════════
+// HULL INTEGRITY
+// ════════════════════════════════════════════
+
+export function useCreateHullInspection() {
+  return useIntegratedMutation<Record<string, unknown>, any>({
+    mutationFn: async (input) => {
+      const { supabase } = await import("@/integrations/supabase/client");
+      const { data, error } = await (supabase.from as Function)('hull_integrity_records').insert(input).select().single();
+      if (error) throw error;
+      return data;
+    },
+    eventType: "maintenance.hull.inspection_created",
+    entityType: "inspection" as any,
+    getEntityId: (out) => out.id,
+    buildPayload: (_in, out) => ({ inspection_id: out.id, zone: out.zone, type: out.inspection_type }),
+    invalidateKeys: [["hull-inspections"]],
+    successMessage: "Inspeção registrada!",
+    errorMessage: "Erro ao registrar inspeção",
+  });
+}
+
+export function useCreateHullFinding() {
+  return useIntegratedMutation<Record<string, unknown>, any>({
+    mutationFn: async (input) => {
+      const { supabase } = await import("@/integrations/supabase/client");
+      const { data, error } = await (supabase.from as Function)('hull_integrity_records').insert(input).select().single();
+      if (error) throw error;
+      return data;
+    },
+    eventType: "maintenance.hull.finding_created",
+    entityType: "finding" as any,
+    getEntityId: (out) => out.id,
+    buildPayload: (_in, out) => ({ finding_id: out.id, type: out.corrosion_type, severity: out.severity }),
+    invalidateKeys: [["hull-inspections"]],
+    successMessage: "Achado registrado!",
+    errorMessage: "Erro ao registrar achado",
+  });
+}
+
+// ════════════════════════════════════════════
+// CREW — POOL ASSIGNMENT
+// ════════════════════════════════════════════
+
+export function useAssignCrewToVessel() {
+  return useIntegratedMutation<{ crewId: string; vesselId: string }, any>({
+    mutationFn: async ({ crewId, vesselId }) => {
+      const { supabase } = await import("@/integrations/supabase/client");
+      const { data, error } = await supabase.from('crew_members')
+        .update({ vessel_id: vesselId, status: 'active', contract_start: new Date().toISOString() } as any)
+        .eq('id', crewId).select().single();
+      if (error) throw error;
+      return data;
+    },
+    eventType: "people.crew.assigned",
+    entityType: "crew_member",
+    getEntityId: (out) => out.id,
+    buildPayload: (input, out) => ({ crew_id: input.crewId, vessel_id: input.vesselId, name: out.full_name }),
+    invalidateKeys: [["crew-pool-planner"], ["crew"]],
+    successMessage: "Tripulante designado com sucesso",
+    errorMessage: "Erro ao designar tripulante",
+  });
+}
+
+// ════════════════════════════════════════════
+// CREW — CERTIFICATIONS
+// ════════════════════════════════════════════
+
+export function useCreateCrewCertification() {
+  return useIntegratedMutation<Record<string, unknown>, any>({
+    mutationFn: async (input) => {
+      const { supabase } = await import("@/integrations/supabase/client");
+      const { data, error } = await supabase.from('maritime_certificates')
+        .insert(input as any).select().single();
+      if (error) throw error;
+      return data;
+    },
+    eventType: "people.certification.created",
+    entityType: "certificate" as any,
+    getEntityId: (out) => out.id,
+    buildPayload: (_in, out) => ({ cert_id: out.id, type: out.certificate_type, crew_id: out.crew_member_id }),
+    invalidateKeys: [["crew-certifications-panel"]],
+    successMessage: "Certificação adicionada",
+    errorMessage: "Erro ao salvar certificação",
+  });
+}
+
+export function useDeleteCrewCertification() {
+  return useIntegratedMutation<string, any>({
+    mutationFn: async (id) => {
+      const { supabase } = await import("@/integrations/supabase/client");
+      const { error } = await supabase.from('maritime_certificates').delete().eq('id', id);
+      if (error) throw error;
+      return { id };
+    },
+    eventType: "people.certification.deleted",
+    entityType: "certificate" as any,
+    getEntityId: (out) => out.id,
+    buildPayload: (_in, out) => ({ cert_id: out.id }),
+    invalidateKeys: [["crew-certifications-panel"]],
+    successMessage: "Certificação removida",
+    errorMessage: "Erro ao remover certificação",
+  });
+}
+
+// ════════════════════════════════════════════
+// PMS — MAINTENANCE TASKS (Job Cards)
+// ════════════════════════════════════════════
+
+export function useCreateMaintenanceTask() {
+  return useIntegratedMutation<Record<string, unknown>, any>({
+    mutationFn: async (input) => {
+      const { supabase } = await import("@/integrations/supabase/client");
+      const { data, error } = await supabase.from('maintenance_tasks')
+        .insert(input as any).select().single();
+      if (error) throw error;
+      return data;
+    },
+    eventType: "maintenance.task.created",
+    entityType: "work_order",
+    getEntityId: (out) => out.id,
+    buildPayload: (_in, out) => ({ task_id: out.id, title: out.title, priority: out.priority }),
+    invalidateKeys: [["pms-job-cards"]],
+    successMessage: "Ordem de serviço criada",
+    errorMessage: "Erro ao criar OS",
+  });
+}
+
+export function useUpdateMaintenanceTaskStatus() {
+  return useIntegratedMutation<{ id: string; status: string }, any>({
+    mutationFn: async ({ id, status }) => {
+      const { supabase } = await import("@/integrations/supabase/client");
+      const updates: any = { status };
+      if (status === 'completed') updates.completed_date = new Date().toISOString();
+      const { data, error } = await supabase.from('maintenance_tasks')
+        .update(updates).eq('id', id).select().single();
+      if (error) throw error;
+      return data;
+    },
+    eventType: "maintenance.task.status_changed",
+    entityType: "work_order",
+    getEntityId: (out) => out.id,
+    buildPayload: (input) => ({ task_id: input.id, status: input.status }),
+    invalidateKeys: [["pms-job-cards"]],
+    successMessage: "Status atualizado",
+    errorMessage: "Erro ao atualizar status",
+  });
+}
+
+// ════════════════════════════════════════════
+// AI — INSIGHTS
+// ════════════════════════════════════════════
+
+export function useMarkInsightRead() {
+  return useIntegratedMutation<string, any>({
+    mutationFn: async (id) => {
+      const { supabase } = await import("@/integrations/supabase/client");
+      const { data, error } = await supabase.from('ai_insights')
+        .update({ status: 'read' }).eq('id', id).select().single();
+      if (error) throw error;
+      return data;
+    },
+    eventType: "ai.insight.read",
+    entityType: "ai_decision" as any,
+    getEntityId: (out) => out.id,
+    buildPayload: (_in, out) => ({ insight_id: out.id, title: out.title }),
+    invalidateKeys: [["advanced-ai-insights"]],
+    successMessage: undefined,
+    errorMessage: "Erro ao marcar insight",
+  });
+}
+
+// ════════════════════════════════════════════
+// PEOTRAM — BENCHMARKING SEED
+// ════════════════════════════════════════════
+
+export function useSeedBenchmarkScores() {
+  return useIntegratedMutation<Record<string, unknown>[], any>({
+    mutationFn: async (rows) => {
+      const { supabase } = await import("@/integrations/supabase/client");
+      const { data, error } = await (supabase.from as Function)('peotram_vessel_scores').upsert(rows).select();
+      if (error) throw error;
+      return data;
+    },
+    eventType: "peotram.benchmarking.seeded",
+    entityType: "vessel" as any,
+    buildPayload: (_in, out) => ({ count: out?.length ?? 0 }),
+    invalidateKeys: [["peotram-vessel-scores"]],
+    successMessage: "Scores de benchmarking inicializados",
+    errorMessage: "Erro ao inicializar scores",
+  });
+}

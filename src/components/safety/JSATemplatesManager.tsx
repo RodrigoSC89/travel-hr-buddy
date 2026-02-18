@@ -4,8 +4,9 @@
  * BEATS: ToolKitX (JSA + standardized templates)
  */
 import React, { useState } from 'react';
-import { useQuery, useMutation, useQueryClient } from '@tanstack/react-query';
+import { useQuery, useQueryClient } from '@tanstack/react-query';
 import { supabase } from '@/integrations/supabase/client';
+import { useCreateJSATemplate } from '@/hooks/useModuleHooks';
 import { Card, CardContent, CardHeader, CardTitle } from '@/components/ui/card';
 import { Button } from '@/components/ui/button';
 import { Badge } from '@/components/ui/badge';
@@ -53,17 +54,7 @@ export function JSATemplatesManager() {
     },
   });
 
-  const createMutation = useMutation({
-    mutationFn: async (form: Record<string, unknown>) => {
-      const { error } = await (supabase.from as Function)('jsa_templates').insert(form);
-      if (error) throw error;
-    },
-    onSuccess: () => {
-      queryClient.invalidateQueries({ queryKey: ['jsa-templates'] });
-      toast.success('JSA template criado');
-      setCreateOpen(false);
-    },
-  });
+  const createMutation = useCreateJSATemplate();
 
   const filtered = selectedType === 'all' ? templates : templates.filter((t: Record<string, unknown>) => t.job_type === selectedType);
 
