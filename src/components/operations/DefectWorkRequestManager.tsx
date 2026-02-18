@@ -1,11 +1,11 @@
 /**
- * Defect & Work Request Manager v2 with CAPA, Aging Analysis, Export, Trend Charts
+ * Defect & Work Request Manager v3 — MTBF/MTTR, Trend Lines, Vessel Heatmap
  * Benchmarks: BASSnet, DNV ShipManager, TM Master
  */
 import React, { useState, useMemo } from 'react';
 import { useQuery, useMutation, useQueryClient } from '@tanstack/react-query';
 import { supabase } from '@/integrations/supabase/client';
-import { Card, CardContent, CardHeader, CardTitle } from '@/components/ui/card';
+import { Card, CardContent, CardHeader, CardTitle, CardDescription } from '@/components/ui/card';
 import { Button } from '@/components/ui/button';
 import { Input } from '@/components/ui/input';
 import { Badge } from '@/components/ui/badge';
@@ -19,12 +19,13 @@ import { Progress } from '@/components/ui/progress';
 import { toast } from 'sonner';
 import {
   AlertTriangle, Plus, Wrench, CheckCircle, Clock, Search, Filter,
-  FileText, Shield, ArrowRight, Eye, Target, Download, BarChart3, TrendingUp
+  FileText, Shield, ArrowRight, Eye, Target, Download, BarChart3, TrendingUp,
+  Activity, Gauge, Ship
 } from 'lucide-react';
-import { differenceInDays, format } from 'date-fns';
+import { differenceInDays, format, subMonths, startOfMonth, endOfMonth } from 'date-fns';
 import {
   ResponsiveContainer, BarChart, Bar, XAxis, YAxis, CartesianGrid, Tooltip,
-  PieChart, Pie, Cell, Legend,
+  PieChart, Pie, Cell, Legend, LineChart, Line, ComposedChart, Area,
 } from 'recharts';
 
 const CATEGORIES = ['mechanical', 'electrical', 'structural', 'piping', 'safety', 'navigation', 'accommodation'];
@@ -65,7 +66,7 @@ export default function DefectWorkRequestManager() {
       let query = (supabase.from as Function)('defect_work_requests')
         .select('*, vessels:vessel_id(name)')
         .order('created_at', { ascending: false })
-        .limit(200);
+        .limit(500);
       if (filterStatus !== 'all') query = query.eq('status', filterStatus);
       if (filterPriority !== 'all') query = query.eq('priority', filterPriority);
       const { data, error } = await query;
@@ -125,8 +126,18 @@ export default function DefectWorkRequestManager() {
   const openCount = defects.filter((d: any) => d.status === 'open').length;
   const criticalCount = defects.filter((d: any) => d.priority === 'critical' && d.status !== 'closed').length;
   const capaOpen = defects.filter((d: any) => d.capa_status === 'in-progress' || d.capa_status === 'pending').length;
-  const closedCount = defects.filter((d: any) => d.status === 'closed').length;
+  const closedCount = defects.filter((d: any) => d.status === 'closed' || d.status === 'completed' || d.status === 'verified').length;
   const closureRate = defects.length > 0 ? Math.round((closedCount / defects.length) * 100) : 0;
+
+  // MTTR calculation (avg days open→closed)
+  const mttrDays = useMemo(() => {
+    const closed = defects.filter((d: any) => d.completed_date && (d.reported_date || d.created_at));
+    if (closed.length === 0) return 0;
+    const totalDays = closed.reduce((sum: number, d: any) => {
+      return sum + differenceInDays(new Date(d.completed_date), new Date(d.reported_date || d.created_at));
+    }, 0);
+    return Math.round(totalDays / closed.length);
+  }, [defects]);
 
   // Aging analysis
   const agingData = useMemo(() => {
@@ -157,6 +168,44 @@ export default function DefectWorkRequestManager() {
     return Object.entries(counts).map(([name, value]) => ({ name, value }));
   }, [defects]);
 
+  // Monthly trend (last 6 months)
+  const monthlyTrend = useMemo(() => {
+    const now = new Date();
+    return Array.from({ length: 6 }, (_, i) => {
+      const m = subMonths(now, 5 - i);
+      const mStart = startOfMonth(m);
+      const mEnd = endOfMonth(m);
+      const opened = defects.filter((d: any) => {
+        const dt = new Date(d.created_at);
+        return dt >= mStart && dt <= mEnd;
+      }).length;
+      const closed = defects.filter((d: any) => {
+        if (!d.completed_date) return false;
+        const dt = new Date(d.completed_date);
+        return dt >= mStart && dt <= mEnd;
+      }).length;
+      return {
+        month: format(m, 'MMM yy'),
+        opened,
+        closed,
+        net: opened - closed,
+      };
+    });
+  }, [defects]);
+
+  // Vessel heatmap data
+  const vesselHeatmap = useMemo(() => {
+    const byVessel: Record<string, { name: string; total: number; critical: number; open: number }> = {};
+    defects.forEach((d: any) => {
+      const vName = d.vessels?.name || 'Unassigned';
+      if (!byVessel[vName]) byVessel[vName] = { name: vName, total: 0, critical: 0, open: 0 };
+      byVessel[vName].total++;
+      if (d.priority === 'critical' || d.priority === 'high') byVessel[vName].critical++;
+      if (!['closed', 'completed', 'verified'].includes(d.status)) byVessel[vName].open++;
+    });
+    return Object.values(byVessel).sort((a, b) => b.total - a.total).slice(0, 10);
+  }, [defects]);
+
   const handleExport = () => {
     const csv = [
       ["Number", "Title", "Vessel", "Category", "Priority", "Status", "Source", "Reported", "Target"].join(","),
@@ -182,7 +231,7 @@ export default function DefectWorkRequestManager() {
             <Wrench className="h-6 w-6 text-primary" />
             Defect Log & Work Requests
           </h2>
-          <p className="text-muted-foreground">Gestão de defeitos com CAPA e aging — Padrão BASSnet/DNV</p>
+          <p className="text-muted-foreground">CAPA tracking • MTTR analytics • Vessel heatmap — Padrão BASSnet/DNV</p>
         </div>
         <div className="flex gap-2">
           <Button variant="outline" size="sm" onClick={handleExport}><Download className="h-4 w-4 mr-1" /> Export</Button>
@@ -191,9 +240,9 @@ export default function DefectWorkRequestManager() {
       </div>
 
       {/* KPIs */}
-      <div className="grid grid-cols-2 md:grid-cols-5 gap-4">
+      <div className="grid grid-cols-2 md:grid-cols-6 gap-4">
         <Card><CardContent className="p-4 text-center">
-          <AlertTriangle className="h-5 w-5 mx-auto mb-1 text-warning" />
+          <AlertTriangle className="h-5 w-5 mx-auto mb-1 text-yellow-500" />
           <div className="text-2xl font-bold">{openCount}</div>
           <div className="text-xs text-muted-foreground">Abertos</div>
         </CardContent></Card>
@@ -203,12 +252,12 @@ export default function DefectWorkRequestManager() {
           <div className="text-xs text-muted-foreground">Críticos</div>
         </CardContent></Card>
         <Card><CardContent className="p-4 text-center">
-          <Shield className="h-5 w-5 mx-auto mb-1 text-info" />
+          <Shield className="h-5 w-5 mx-auto mb-1 text-blue-400" />
           <div className="text-2xl font-bold">{capaOpen}</div>
           <div className="text-xs text-muted-foreground">CAPA Pendentes</div>
         </CardContent></Card>
         <Card><CardContent className="p-4 text-center">
-          <CheckCircle className="h-5 w-5 mx-auto mb-1 text-success" />
+          <CheckCircle className="h-5 w-5 mx-auto mb-1 text-emerald-500" />
           <div className="text-2xl font-bold">{closedCount}</div>
           <div className="text-xs text-muted-foreground">Fechados</div>
         </CardContent></Card>
@@ -218,6 +267,11 @@ export default function DefectWorkRequestManager() {
           <div className="text-sm font-bold mt-1">{closureRate}%</div>
           <div className="text-xs text-muted-foreground">Closure Rate</div>
         </CardContent></Card>
+        <Card className="border-primary/30"><CardContent className="p-4 text-center">
+          <Gauge className="h-5 w-5 mx-auto mb-1 text-primary" />
+          <div className="text-2xl font-bold text-primary">{mttrDays}d</div>
+          <div className="text-xs text-muted-foreground">MTTR (avg)</div>
+        </CardContent></Card>
       </div>
 
       <Tabs value={activeTab} onValueChange={setActiveTab}>
@@ -225,10 +279,11 @@ export default function DefectWorkRequestManager() {
           <TabsTrigger value="list">Defects ({defects.length})</TabsTrigger>
           <TabsTrigger value="analytics">Analytics</TabsTrigger>
           <TabsTrigger value="aging">Aging</TabsTrigger>
+          <TabsTrigger value="trends">Trends</TabsTrigger>
+          <TabsTrigger value="vessels">Vessel Heatmap</TabsTrigger>
         </TabsList>
 
         <TabsContent value="list" className="mt-4 space-y-4">
-          {/* Filters */}
           <div className="flex flex-wrap gap-3">
             <div className="flex-1 min-w-[200px]">
               <Input placeholder="Buscar por título ou número..." value={search} onChange={e => setSearch(e.target.value)} />
@@ -350,6 +405,74 @@ export default function DefectWorkRequestManager() {
                 <span className="flex items-center gap-1"><div className="w-2 h-2 rounded-full" style={{ background: "hsl(35,80%,55%)" }} /> Attention</span>
                 <span className="flex items-center gap-1"><div className="w-2 h-2 rounded-full" style={{ background: "hsl(0,70%,55%)" }} /> Critical</span>
               </div>
+            </CardContent>
+          </Card>
+        </TabsContent>
+
+        {/* NEW: Trends Tab */}
+        <TabsContent value="trends" className="mt-4">
+          <Card>
+            <CardHeader>
+              <CardTitle className="text-base flex items-center gap-2"><TrendingUp className="h-4 w-4" /> Monthly Defect Trend (6 months)</CardTitle>
+              <CardDescription>Opened vs Closed defects per month</CardDescription>
+            </CardHeader>
+            <CardContent>
+              <ResponsiveContainer width="100%" height={280}>
+                <ComposedChart data={monthlyTrend}>
+                  <CartesianGrid strokeDasharray="3 3" opacity={0.3} />
+                  <XAxis dataKey="month" fontSize={11} />
+                  <YAxis fontSize={11} />
+                  <Tooltip />
+                  <Legend />
+                  <Bar dataKey="opened" name="Opened" fill="hsl(0,70%,55%)" radius={[4,4,0,0]} />
+                  <Bar dataKey="closed" name="Closed" fill="hsl(160,60%,45%)" radius={[4,4,0,0]} />
+                  <Line type="monotone" dataKey="net" name="Net (O-C)" stroke="hsl(var(--primary))" strokeWidth={2} />
+                </ComposedChart>
+              </ResponsiveContainer>
+            </CardContent>
+          </Card>
+        </TabsContent>
+
+        {/* NEW: Vessel Heatmap Tab */}
+        <TabsContent value="vessels" className="mt-4">
+          <Card>
+            <CardHeader>
+              <CardTitle className="text-base flex items-center gap-2"><Ship className="h-4 w-4" /> Vessel Defect Heatmap</CardTitle>
+              <CardDescription>Top 10 vessels by defect volume</CardDescription>
+            </CardHeader>
+            <CardContent>
+              {vesselHeatmap.length === 0 ? (
+                <p className="text-center py-8 text-muted-foreground">No vessel data available</p>
+              ) : (
+                <div className="space-y-3">
+                  {vesselHeatmap.map(v => (
+                    <div key={v.name}>
+                      <div className="flex justify-between text-sm mb-1">
+                        <span className="font-medium">{v.name}</span>
+                        <div className="flex items-center gap-3 text-xs text-muted-foreground">
+                          <span>{v.total} total</span>
+                          <span className="text-destructive">{v.critical} crit/high</span>
+                          <span className="text-yellow-500">{v.open} open</span>
+                        </div>
+                      </div>
+                      <div className="flex gap-1 h-3">
+                        {v.open > 0 && (
+                          <div className="bg-yellow-500/70 rounded-sm" style={{ width: `${(v.open / v.total) * 100}%` }} title={`${v.open} open`} />
+                        )}
+                        {v.critical > 0 && (
+                          <div className="bg-destructive/70 rounded-sm" style={{ width: `${(v.critical / v.total) * 100}%` }} title={`${v.critical} critical/high`} />
+                        )}
+                        <div className="bg-emerald-500/40 rounded-sm flex-1" title={`${v.total - v.open} resolved`} />
+                      </div>
+                    </div>
+                  ))}
+                  <div className="flex gap-4 mt-4 text-xs text-muted-foreground">
+                    <span className="flex items-center gap-1"><div className="w-2 h-2 rounded-full bg-yellow-500/70" /> Open</span>
+                    <span className="flex items-center gap-1"><div className="w-2 h-2 rounded-full bg-destructive/70" /> Critical/High</span>
+                    <span className="flex items-center gap-1"><div className="w-2 h-2 rounded-full bg-emerald-500/40" /> Resolved</span>
+                  </div>
+                </div>
+              )}
             </CardContent>
           </Card>
         </TabsContent>
