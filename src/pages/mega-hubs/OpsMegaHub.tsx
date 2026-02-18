@@ -37,6 +37,8 @@ const VoyagePerformanceAnalytics = lazy(() => import('@/components/dashboard/Voy
 const FleetUtilizationMatrix = lazy(() => import('@/components/dashboard/FleetUtilizationMatrix'));
 const CrewWellbeingDashboard = lazy(() => import('@/components/dashboard/CrewWellbeingDashboard'));
 const CompetencyGapAnalyzer = lazy(() => import('@/components/dashboard/CompetencyGapAnalyzer'));
+const FuelEfficiencyAnalytics = lazy(() => import('@/components/dashboard/FuelEfficiencyAnalytics'));
+const CargoPerformanceDashboard = lazy(() => import('@/components/dashboard/CargoPerformanceDashboard'));
 const LoadingSkeleton = () => (
   <div className="space-y-4 p-6">
     <Skeleton className="h-8 w-64" />
@@ -264,6 +266,16 @@ export default function OpsMegaHub() {
                   <CompetencyGapAnalyzer />
                 </Suspense>
               </div>
+              {/* Wave 23: Fuel & Cargo Intelligence */}
+              <div className="grid grid-cols-1 lg:grid-cols-2 gap-6">
+                <Suspense fallback={<Skeleton className="h-[500px]" />}>
+                  <FuelEfficiencyAnalytics />
+                </Suspense>
+                <Suspense fallback={<Skeleton className="h-[500px]" />}>
+                  <CargoPerformanceDashboard />
+                </Suspense>
+              </div>
+
               {/* Original Operations Hub */}
               {(isLoading || metrics.totalVessels > 0) && <OperationsCommandHub />}
             </TabsContent>
