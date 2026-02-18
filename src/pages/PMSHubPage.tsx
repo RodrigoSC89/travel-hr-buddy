@@ -21,8 +21,9 @@ import {
   Wrench, Settings2, Layers, ClipboardList, Timer,
   Plus, ChevronRight, AlertTriangle, CheckCircle2,
   Clock, Gauge, Search, Filter, Play, Pause,
-  FileCheck, ArrowRight, type LucideIcon
+  FileCheck, ArrowRight, Calendar, type LucideIcon
 } from "lucide-react";
+import { PMSCalendarView } from "@/components/maintenance/PMSCalendarView";
 
 // ============================================
 // TYPES
@@ -664,6 +665,12 @@ export default function PMSHubPage() {
       icon: ClipboardList,
       content: <WorkOrdersPanel />,
       badge: stats.activeWO,
+    },
+    {
+      id: "calendar",
+      label: "Calendar",
+      icon: Timer,
+      content: <PMSCalendarView />,
     },
     {
       id: "running-hours",
