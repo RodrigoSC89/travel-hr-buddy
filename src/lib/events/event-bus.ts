@@ -235,6 +235,18 @@ export const EVENT_TYPES = {
   // Task Management
   'operations.task.created': 'operations.task.created',
   'operations.task.updated': 'operations.task.updated',
+  // Smart Resolution targets (completed/closed/approved variants)
+  'maintenance.task.completed': 'maintenance.task.completed',
+  'compliance.nc.closed': 'compliance.nc.closed',
+  'compliance.internal_audit.approved': 'compliance.internal_audit.approved',
+  'finance.invoice.completed': 'finance.invoice.completed',
+  'maintenance.work_order.approved': 'maintenance.work_order.approved',
+  'safety.incident.closed': 'safety.incident.closed',
+  'safety.drill.approved': 'safety.drill.approved',
+  'fleet.downtime.closed': 'fleet.downtime.closed',
+  'operations.cargo.completed': 'operations.cargo.completed',
+  'compliance.class_survey.completed': 'compliance.class_survey.completed',
+  'compliance.class_survey.approved': 'compliance.class_survey.approved',
 } as const;
 
 export type EventType = keyof typeof EVENT_TYPES;

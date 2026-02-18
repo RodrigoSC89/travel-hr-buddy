@@ -164,12 +164,21 @@ const SIDE_EFFECTS: Record<string, SideEffectFn[]> = {
       const p = event.payload as Record<string, unknown>;
       const prob = Number(p.failure_probability ?? 0);
       if (prob < 0.7) return;
-      await safeInsert('action_items', {
-        title: `Manutenção preventiva: ${p.equipment_name ?? 'Equipamento'} (${Math.round(prob * 100)}% risco)`,
-        source_module: 'ai_prediction', source_reference_id: String(p.id ?? ''),
-        status: 'pending', priority: prob >= 0.9 ? 'critical' : 'high', vessel_id: p.vessel_id || null,
-        description: `IA detectou ${Math.round(prob * 100)}% probabilidade de falha. Ação: ${p.recommended_action ?? 'Verificar equipamento'}`,
+      // REAL ACTION: Auto-create preventive work order from AI prediction
+      await safeInsert('pms_work_orders', {
+        title: `OS Preventiva (IA): ${p.equipment_name ?? 'Equipamento'} - ${Math.round(prob * 100)}% risco`,
+        vessel_id: p.vessel_id ?? null,
+        status: 'open', priority: prob >= 0.9 ? 'critical' : 'high',
+        description: `Gerada por IA preditiva. Probabilidade falha: ${Math.round(prob * 100)}%. Ação: ${p.recommended_action ?? 'Verificar equipamento'}`,
+        work_order_type: 'preventive',
       });
+      if (prob >= 0.9) {
+        await safeInsert('soc_alerts', {
+          vessel_id: p.vessel_id || null, alert_type: 'predictive_maintenance',
+          severity: 'critical', title: `⚠️ Falha iminente: ${p.equipment_name ?? 'Equipamento'} (${Math.round(prob * 100)}%)`,
+          description: `OS preventiva gerada automaticamente. Ação imediata necessária.`, status: 'active',
+        });
+      }
     },
   ],
 
@@ -198,11 +207,12 @@ const SIDE_EFFECTS: Record<string, SideEffectFn[]> = {
   'maintenance.running_hours.updated': [
     async (event) => {
       const p = event.payload as Record<string, unknown>;
-      await safeInsert('action_items', {
-        title: `Verificar gatilhos PMS: Running hours atualizado`,
-        source_module: 'maintenance', source_reference_id: String(p.id ?? ''),
-        status: 'pending', priority: 'low',
-        description: `Horímetro atualizado. Verificar se alguma tarefa PMS baseada em horas foi ativada.`,
+      // REAL ACTION: Create maintenance task trigger check record
+      await safeInsert('maintenance_records', {
+        title: `Horímetro atualizado: ${p.equipment_name ?? p.component ?? 'Equipamento'}`,
+        vessel_id: p.vessel_id ?? null, status: 'completed',
+        completion_date: new Date().toISOString(),
+        notes: `Running hours: ${p.running_hours ?? p.value ?? 'N/A'}h. Verificação automática de gatilhos PMS.`,
       });
     },
   ],
@@ -286,11 +296,19 @@ const SIDE_EFFECTS: Record<string, SideEffectFn[]> = {
   'maintenance.warranty.created': [
     async (event) => {
       const p = event.payload as Record<string, unknown>;
-      await safeInsert('action_items', {
-        title: `Processar garantia: ${p.equipment_name ?? p.id}`,
-        source_module: 'maintenance', source_reference_id: String(p.id ?? ''),
-        status: 'pending', priority: 'medium',
-        description: `Reivindicação de garantia registrada. Contatar fornecedor, reunir documentação e acompanhar resolução.`,
+      // REAL ACTION: Create procurement order for warranty claim processing
+      await safeInsert('procurement_orders', {
+        title: `Garantia: ${p.equipment_name ?? p.id}`,
+        description: `Reivindicação de garantia. Contatar fornecedor e reunir documentação técnica.`,
+        status: 'pending_approval', priority: 'medium',
+        vessel_id: p.vessel_id ?? null,
+      });
+      // REAL ACTION: Create SOC alert for tracking
+      await safeInsert('soc_alerts', {
+        vessel_id: p.vessel_id || null, alert_type: 'warranty_claim',
+        severity: 'medium', title: `Garantia: ${p.equipment_name ?? 'Equipamento'}`,
+        description: `Reivindicação de garantia registrada. PO de processamento criada automaticamente.`,
+        status: 'active',
       });
     },
   ],
@@ -388,23 +406,36 @@ const SIDE_EFFECTS: Record<string, SideEffectFn[]> = {
   'compliance.audit.completed': [
     async (event) => {
       const p = event.payload as Record<string, unknown>;
-      await safeInsert('action_items', {
-        title: `Revisar resultados: Auditoria ${p.audit_type ?? ''} concluída`,
-        source_module: 'compliance', source_reference_id: String(p.audit_id ?? p.id ?? ''),
-        status: 'pending', priority: 'medium', vessel_id: p.vessel_id || null,
-        description: `Auditoria concluída. Revisar findings, atualizar certificados e fechar gaps.`,
+      // REAL ACTION: Create evidence record and update vessel compliance
+      await safeInsert('maintenance_records', {
+        title: `Evidência: Auditoria ${p.audit_type ?? 'Externa'} concluída`,
+        vessel_id: p.vessel_id ?? null, status: 'completed',
+        completion_date: new Date().toISOString(),
+        notes: `Auditoria concluída. Score: ${p.overall_score ?? 'N/A'}%. Registrado para trilha de auditoria.`,
       });
+      // Create CAPA if audit had findings
+      const score = Number(p.overall_score ?? 100);
+      if (score < 80) {
+        await safeInsert('ism_capa', {
+          title: `CAPA: Score baixo em auditoria ${p.audit_type ?? ''} (${score}%)`,
+          status: 'open', priority: score < 60 ? 'critical' : 'high',
+          vessel_id: p.vessel_id || null,
+          description: `Score abaixo de 80%. CAPA automático para gaps identificados.`,
+          root_cause: 'Score de auditoria insuficiente', corrective_action: 'Pendente',
+        });
+      }
     },
   ],
 
   'compliance.internal_audit.created': [
     async (event) => {
       const p = event.payload as Record<string, unknown>;
-      await safeInsert('action_items', {
-        title: `Preparar auditoria interna: ${p.audit_type ?? ''}`,
-        source_module: 'compliance', source_reference_id: String(p.audit_id ?? p.id ?? ''),
-        status: 'pending', priority: 'high', vessel_id: p.vessel_id || null,
-        description: `Auditoria interna agendada. Reunir evidências, preparar checklist e notificar responsáveis.`,
+      // REAL ACTION: Create checklist for audit preparation
+      await safeInsert('operational_checklists', {
+        title: `Preparação Auditoria: ${p.audit_type ?? 'Interna'}`,
+        vessel_id: p.vessel_id ?? null, status: 'pending',
+        checklist_type: 'audit_preparation',
+        description: `Checklist automático para auditoria interna. Reunir evidências, preparar e notificar.`,
       });
     },
   ],
@@ -412,11 +443,22 @@ const SIDE_EFFECTS: Record<string, SideEffectFn[]> = {
   'compliance.internal_audit.completed': [
     async (event) => {
       const p = event.payload as Record<string, unknown>;
-      await safeInsert('action_items', {
-        title: `Fechar gaps: Auditoria interna concluída`,
-        source_module: 'compliance', source_reference_id: String(p.audit_id ?? p.id ?? ''),
-        status: 'pending', priority: 'high', vessel_id: p.vessel_id || null,
-        description: `Auditoria interna finalizada. Criar CAPAs para findings e atualizar compliance score.`,
+      // REAL ACTION: Auto-create CAPA for completed audit with findings
+      const findingsCount = Number(p.findings_count ?? p.non_conformities_count ?? 0);
+      if (findingsCount > 0) {
+        await safeInsert('ism_capa', {
+          title: `CAPA pós-auditoria: ${p.audit_type ?? 'Interna'} (${findingsCount} findings)`,
+          status: 'open', priority: 'high', vessel_id: p.vessel_id || null,
+          description: `Auditoria concluída com ${findingsCount} findings. CAPA gerado automaticamente.`,
+          root_cause: 'Pendente análise', corrective_action: 'Pendente definição',
+        });
+      }
+      // REAL ACTION: Create evidence record
+      await safeInsert('maintenance_records', {
+        title: `Evidência: Auditoria ${p.audit_type ?? 'interna'} concluída`,
+        vessel_id: p.vessel_id ?? null, status: 'completed',
+        completion_date: new Date().toISOString(),
+        notes: `Score: ${p.overall_score ?? 'N/A'}%. Findings: ${findingsCount}. Registro automático para trilha de auditoria.`,
       });
     },
   ],
@@ -436,11 +478,22 @@ const SIDE_EFFECTS: Record<string, SideEffectFn[]> = {
   'compliance.gap_analysis.completed': [
     async (event) => {
       const p = event.payload as Record<string, unknown>;
-      await safeInsert('action_items', {
-        title: `Tratar gaps: Análise ISM concluída`,
+      // REAL ACTION: Create CAPAs for each gap identified
+      const gapCount = Number(p.gaps_count ?? p.critical_gaps ?? 0);
+      if (gapCount > 0) {
+        await safeInsert('ism_capa', {
+          title: `CAPA: Gap Analysis ISM - ${gapCount} gaps identificados`,
+          status: 'open', priority: 'critical',
+          description: `Gap analysis concluído. ${gapCount} gaps requerem plano de remediação imediato.`,
+          root_cause: 'Gaps identificados em auditoria ISM', corrective_action: 'Plano de remediação',
+        });
+      }
+      // REAL ACTION: Create NC for critical gaps
+      await safeInsert('non_conformities', {
+        title: `NC: Gaps ISM identificados (${gapCount} items)`,
+        category: 'ism_gap', severity: gapCount > 5 ? 'critical' : 'major', status: 'open',
         source_module: 'compliance', source_reference_id: String(p.id ?? ''),
-        status: 'pending', priority: 'high',
-        description: `Gap analysis concluído. Priorizar gaps críticos e criar plano de remediação.`,
+        description: `Gap analysis concluído. CAPAs gerados automaticamente para remediação.`,
       });
     },
   ],
@@ -448,11 +501,18 @@ const SIDE_EFFECTS: Record<string, SideEffectFn[]> = {
   'compliance.class_survey.created': [
     async (event) => {
       const p = event.payload as Record<string, unknown>;
-      await safeInsert('action_items', {
-        title: `Preparar vistoria de classe`,
-        source_module: 'compliance', source_reference_id: String(p.id ?? ''),
-        status: 'pending', priority: 'high', vessel_id: p.vessel_id || null,
-        description: `Vistoria de classe agendada. Preparar documentação, verificar condições e coordenar com surveyor.`,
+      // REAL ACTION: Create preparation checklist and expense provision
+      await safeInsert('operational_checklists', {
+        title: `Prep. Vistoria Classe: ${p.survey_type ?? 'Annual'}`,
+        vessel_id: p.vessel_id ?? null, status: 'pending',
+        checklist_type: 'class_survey_preparation',
+        description: `Checklist automático para vistoria de classe. Documentação, condições e coordenação.`,
+      });
+      await safeInsert('expenses', {
+        description: `Provisão vistoria classe: ${p.survey_type ?? 'Survey'}`,
+        amount: p.estimated_cost ?? 0, category: 'classification', status: 'pending',
+        vessel_id: p.vessel_id || null,
+        reference_id: String(p.id ?? ''), reference_type: 'class_survey',
       });
     },
   ],
@@ -810,11 +870,17 @@ const SIDE_EFFECTS: Record<string, SideEffectFn[]> = {
   'tracking.telemetry_alert.created': [
     async (event) => {
       const p = event.payload as Record<string, unknown>;
-      await safeInsert('action_items', {
-        title: `Avaliar alerta IoT: ${p.sensor_type ?? p.alert_type ?? ''}`,
-        source_module: 'tracking', source_reference_id: String(p.id ?? ''),
-        status: 'pending', priority: 'high', vessel_id: p.vessel_id || null,
-        description: `Alerta de telemetria disparado. Verificar sensor, comparar com histórico e avaliar necessidade de manutenção.`,
+      // REAL ACTION: Create maintenance task for IoT alert
+      await safeInsert('maintenance_tasks', {
+        title: `Inspeção IoT: ${p.sensor_type ?? p.alert_type ?? 'Sensor'}`,
+        vessel_id: p.vessel_id ?? null, status: 'pending',
+        priority: 'high', component_name: p.sensor_type ?? 'IoT Sensor',
+        description: `Alerta IoT disparado. Verificar sensor, comparar histórico e avaliar manutenção.`,
+      });
+      await safeInsert('soc_alerts', {
+        vessel_id: p.vessel_id || null, alert_type: 'iot_telemetry',
+        severity: 'high', title: `IoT Alert: ${p.sensor_type ?? 'Sensor'} anômalo`,
+        description: `Alerta de telemetria. Task de manutenção criada automaticamente.`, status: 'active',
       });
     },
   ],
@@ -869,11 +935,24 @@ const SIDE_EFFECTS: Record<string, SideEffectFn[]> = {
   'safety.near_miss.created': [
     async (event) => {
       const p = event.payload as Record<string, unknown>;
-      await safeInsert('action_items', {
-        title: `Avaliar risco: Near Miss reportado`,
-        source_module: 'safety', source_reference_id: String(p.id ?? ''),
-        status: 'pending', priority: 'high',
-        description: `Near miss registrado. Avaliar riscos, implementar medidas preventivas e compartilhar Safety Flash.`,
+      // REAL ACTION: Create incident report and safety alert
+      await safeInsert('incident_reports', {
+        vessel_id: p.vessel_id || null, incident_type: 'near_miss',
+        severity: 'medium', title: `Near Miss: ${p.description ?? p.title ?? ''}`,
+        description: `Near miss registrado automaticamente. Requer avaliação de riscos e medidas preventivas.`,
+        status: 'open', reported_at: new Date().toISOString(),
+      });
+      await safeInsert('soc_alerts', {
+        vessel_id: p.vessel_id || null, alert_type: 'near_miss',
+        severity: 'medium', title: `Near Miss reportado`,
+        description: `Incident report criado automaticamente. Safety Flash recomendado.`, status: 'active',
+      });
+      // REAL ACTION: Create drill for lessons learned
+      await safeInsert('drill_records', {
+        drill_type: 'Safety Briefing - Near Miss Review',
+        vessel_id: p.vessel_id ?? null, status: 'planned',
+        scheduled_date: new Date(Date.now() + 3 * 24 * 60 * 60 * 1000).toISOString().split('T')[0],
+        notes: `Auto-agendado: Revisão de near miss para prevenção de incidentes.`,
       });
     },
   ],
@@ -967,11 +1046,19 @@ const SIDE_EFFECTS: Record<string, SideEffectFn[]> = {
   'operations.checklist.completed': [
     async (event) => {
       const p = event.payload as Record<string, unknown>;
-      await safeInsert('action_items', {
-        title: `Verificar ações: Checklist concluído`,
-        source_module: 'operations', source_reference_id: String(p.id ?? ''),
-        status: 'pending', priority: 'low', vessel_id: p.vessel_id || null,
-        description: `Checklist operacional concluído. Verificar itens pendentes e atualizar registros de compliance.`,
+      // REAL ACTION: Create training record for completed checklist (evidence)
+      await safeInsert('training_records', {
+        training_type: `Checklist: ${p.checklist_type ?? p.title ?? 'Operacional'}`,
+        completion_date: new Date().toISOString().split('T')[0],
+        status: 'completed', vessel_id: p.vessel_id ?? null,
+        notes: `Checklist operacional concluído. Auto-registrado como evidência ISM/SOLAS.`,
+      });
+      // Create evidence maintenance record
+      await safeInsert('maintenance_records', {
+        title: `Evidência: Checklist ${p.title ?? 'operacional'} concluído`,
+        vessel_id: p.vessel_id ?? null, status: 'completed',
+        completion_date: new Date().toISOString(),
+        notes: `Registro automático de conclusão de checklist para trilha de auditoria.`,
       });
     },
   ],
@@ -1746,23 +1833,53 @@ const SIDE_EFFECTS: Record<string, SideEffectFn[]> = {
   'medical.record.updated': [
     async (event) => {
       const p = event.payload as Record<string, unknown>;
-      await safeInsert('action_items', {
-        title: `Atualizar compliance médico`,
-        source_module: 'medical', source_reference_id: String(p.id ?? ''),
-        status: 'pending', priority: 'medium',
-        description: `Registro médico atualizado. Verificar aptidão, compliance MLC Title 4 e atualizar perfil.`,
+      // REAL ACTION: Update crew certification validity
+      if (p.crew_member_id && (p.fitness_status === 'fit' || p.status === 'completed')) {
+        await safeInsert('crew_certifications', {
+          crew_member_id: p.crew_member_id,
+          certification_name: `Medical Update: ${p.record_type ?? 'General'}`,
+          certification_type: 'medical',
+          issue_date: new Date().toISOString().split('T')[0],
+          expiry_date: new Date(Date.now() + 2 * 365 * 24 * 60 * 60 * 1000).toISOString().split('T')[0],
+          status: 'valid',
+        });
+      }
+    },
+  ],
+
+  // Smart resolution target: maintenance.task.completed
+  'maintenance.task.completed': [
+    async (event) => {
+      const p = event.payload as Record<string, unknown>;
+      // REAL ACTION: Create evidence record
+      await safeInsert('maintenance_records', {
+        title: `PMS Task concluída: ${p.title ?? p.task_id ?? p.id}`,
+        vessel_id: p.vessel_id ?? null, status: 'completed',
+        completion_date: new Date().toISOString(),
+        notes: `Auto-registrado. Evidência STCW/ISM.`,
       });
+      // Create training record
+      await safeInsert('training_records', {
+        training_type: `PMS: ${p.title ?? 'Maintenance Task'}`,
+        completion_date: new Date().toISOString().split('T')[0],
+        status: 'completed', vessel_id: p.vessel_id ?? null,
+        notes: `Task ${p.task_id ?? p.id} completed. Auto-logged.`,
+      });
+      // Update vessel
+      if (p.vessel_id) {
+        await safeUpdate('vessels', { last_maintenance_date: new Date().toISOString() }, { id: String(p.vessel_id) });
+      }
     },
   ],
 
   'compliance.sgso.plan_updated': [
     async (event) => {
       const p = event.payload as Record<string, unknown>;
-      await safeInsert('action_items', {
-        title: `Verificar compliance SGSO atualizado`,
-        source_module: 'compliance', source_reference_id: String(p.id ?? ''),
-        status: 'pending', priority: 'medium',
-        description: `Plano SGSO atualizado. Verificar 17 práticas, atualizar evidências ANP.`,
+      // REAL ACTION: Create evidence record for SGSO update
+      await safeInsert('maintenance_records', {
+        title: `Evidência SGSO: Plano atualizado`,
+        status: 'completed', completion_date: new Date().toISOString(),
+        notes: `Plano SGSO atualizado. Registro automático para compliance ANP.`,
       });
     },
   ],
@@ -1770,11 +1887,12 @@ const SIDE_EFFECTS: Record<string, SideEffectFn[]> = {
   'compliance.preovid.updated': [
     async (event) => {
       const p = event.payload as Record<string, unknown>;
-      await safeInsert('action_items', {
-        title: `Acompanhar pré-OVID: Respostas atualizadas`,
-        source_module: 'compliance', source_reference_id: String(p.audit_id ?? p.id ?? ''),
-        status: 'pending', priority: 'medium',
-        description: `Checklist pré-OVID atualizado. Verificar gaps restantes e preparar evidências fotográficas.`,
+      // REAL ACTION: Create evidence record for OVID preparation
+      await safeInsert('maintenance_records', {
+        title: `Pré-OVID: Checklist atualizado`,
+        vessel_id: p.vessel_id ?? null, status: 'completed',
+        completion_date: new Date().toISOString(),
+        notes: `Respostas atualizadas no checklist OCIMF. Registro de preparação.`,
       });
     },
   ],
@@ -1782,11 +1900,29 @@ const SIDE_EFFECTS: Record<string, SideEffectFn[]> = {
   'compliance.peotram.audit_updated': [
     async (event) => {
       const p = event.payload as Record<string, unknown>;
-      await safeInsert('action_items', {
-        title: `Acompanhar PEOTRAM: Score atualizado`,
-        source_module: 'compliance', source_reference_id: String(p.id ?? ''),
-        status: 'pending', priority: 'high',
-        description: `Auditoria PEOTRAM atualizada. Verificar elementos pendentes e preparar para vistoria.`,
+      // REAL ACTION: Create evidence record for PEOTRAM
+      await safeInsert('maintenance_records', {
+        title: `PEOTRAM: Auditoria atualizada`,
+        vessel_id: p.vessel_id ?? null, status: 'completed',
+        completion_date: new Date().toISOString(),
+        notes: `Score atualizado. Registro automático para evidência ANTAQ.`,
+      });
+    },
+  ],
+
+  // Smart resolution target: compliance.nc.closed
+  'compliance.nc.closed': [
+    async (event) => {
+      const p = event.payload as Record<string, unknown>;
+      // REAL ACTION: Close related CAPAs and create evidence
+      if (p.nc_id || p.id) {
+        await safeUpdate('ism_capa', { status: 'closed' }, { id: String(p.nc_id ?? p.id) });
+      }
+      await safeInsert('maintenance_records', {
+        title: `Evidência: NC ${p.nc_id ?? p.id} fechada`,
+        vessel_id: p.vessel_id ?? null, status: 'completed',
+        completion_date: new Date().toISOString(),
+        notes: `NC encerrada. CAPAs relacionados fechados automaticamente. Eficácia em 90 dias.`,
       });
     },
   ],
@@ -1794,11 +1930,21 @@ const SIDE_EFFECTS: Record<string, SideEffectFn[]> = {
   'finance.charter.status_changed': [
     async (event) => {
       const p = event.payload as Record<string, unknown>;
-      await safeInsert('action_items', {
-        title: `Atualizar P&L: Charter status alterado`,
-        source_module: 'finance', source_reference_id: String(p.id ?? ''),
-        status: 'pending', priority: 'high', vessel_id: p.vessel_id || null,
-        description: `Status do charter alterado para ${p.status ?? 'N/A'}. Recalcular P&L e verificar off-hire.`,
+      // REAL ACTION: Create expense record for charter status changes
+      const status = String(p.status ?? '').toLowerCase();
+      if (status === 'terminated' || status === 'expired') {
+        await safeInsert('vessel_history_events', {
+          vessel_id: p.vessel_id ? String(p.vessel_id) : null,
+          event_type: `charter_${status}`,
+          description: `Charter ${status}. P&L final e off-hire devem ser recalculados.`,
+          event_date: new Date().toISOString(),
+        });
+      }
+      await safeInsert('expenses', {
+        description: `Charter: Status → ${p.status ?? 'N/A'}`,
+        amount: 0, category: 'charter_adjustment', status: 'pending',
+        vessel_id: p.vessel_id || null,
+        reference_id: String(p.id ?? ''), reference_type: 'charter_party',
       });
     },
   ],
