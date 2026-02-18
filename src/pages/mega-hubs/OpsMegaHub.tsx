@@ -52,6 +52,7 @@ const PortCallTimeline = lazy(() => import('@/components/dashboard/PortCallTimel
 const VoyageWeatherRiskPanel = lazy(() => import('@/components/dashboard/VoyageWeatherRiskPanel').then(m => ({ default: m.VoyageWeatherRiskPanel })));
 const BunkerConsumptionAnalytics = lazy(() => import('@/components/dashboard/BunkerConsumptionAnalytics').then(m => ({ default: m.BunkerConsumptionAnalytics })));
 const CrewRotationTimeline = lazy(() => import('@/components/dashboard/CrewRotationTimeline').then(m => ({ default: m.CrewRotationTimeline })));
+const PortCostIntelligence = lazy(() => import('@/components/dashboard/PortCostIntelligence').then(m => ({ default: m.PortCostIntelligence })));
 const LoadingSkeleton = () => (
   <div className="space-y-4 p-6">
     <Skeleton className="h-8 w-64" />
@@ -352,10 +353,15 @@ export default function OpsMegaHub() {
                   <BunkerConsumptionAnalytics />
                 </Suspense>
               </div>
-              {/* Crew Rotation Timeline */}
-              <Suspense fallback={<Skeleton className="h-80" />}>
-                <CrewRotationTimeline />
-              </Suspense>
+              {/* Crew Rotation Timeline + Port Cost Intelligence */}
+              <div className="grid grid-cols-1 lg:grid-cols-2 gap-6">
+                <Suspense fallback={<Skeleton className="h-80" />}>
+                  <CrewRotationTimeline />
+                </Suspense>
+                <Suspense fallback={<Skeleton className="h-80" />}>
+                  <PortCostIntelligence />
+                </Suspense>
+              </div>
 
               {/* Original Operations Hub */}
               {(isLoading || metrics.totalVessels > 0) && <OperationsCommandHub />}
