@@ -39,6 +39,7 @@ const ApprovalWorkflow = lazy(() => import('@/components/workflows/ApprovalWorkf
 const CrewProductivityPulse = lazy(() => import('@/components/dashboard/CrewProductivityPulse'));
 const DocumentIntelligencePanel = lazy(() => import('@/components/dashboard/DocumentIntelligencePanel'));
 const WorkflowAutomationEngine = lazy(() => import('@/components/dashboard/WorkflowAutomationEngine'));
+const CrewCertificationHeatmap = lazy(() => import('@/components/dashboard/CrewCertificationHeatmap'));
 
 const LoadingSkeleton = () => (
   <div className="space-y-4 p-6">
@@ -312,10 +313,13 @@ export default function WorkbenchMegaHub() {
                 </Suspense>
               </div>
 
-              {/* Wave 30: Workflow Automation */}
+              {/* Wave 30: Workflow Automation + Wave 42: Crew Cert Heatmap */}
               <div className="grid grid-cols-1 lg:grid-cols-2 gap-6">
                 <Suspense fallback={<Skeleton className="h-64" />}>
                   <WorkflowAutomationEngine />
+                </Suspense>
+                <Suspense fallback={<Skeleton className="h-64" />}>
+                  <CrewCertificationHeatmap />
                 </Suspense>
               </div>
 
