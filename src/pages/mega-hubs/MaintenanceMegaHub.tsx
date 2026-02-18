@@ -46,6 +46,8 @@ const EquipmentHealthMatrix = lazy(() => import('@/components/dashboard/Equipmen
 const MaintenanceKPIStrip = lazy(() => import('@/components/dashboard/MaintenanceKPIStrip').then(m => ({ default: m.MaintenanceKPIStrip })));
 const BacklogAgingAnalysis = lazy(() => import('@/components/dashboard/BacklogAgingAnalysis').then(m => ({ default: m.BacklogAgingAnalysis })));
 const SparePartsCriticality = lazy(() => import('@/components/dashboard/SparePartsCriticality').then(m => ({ default: m.SparePartsCriticality })));
+const ReliabilityMetricsPanel = lazy(() => import('@/components/dashboard/ReliabilityMetricsPanel').then(m => ({ default: m.ReliabilityMetricsPanel })));
+const WorkOrderPipeline = lazy(() => import('@/components/dashboard/WorkOrderPipeline').then(m => ({ default: m.WorkOrderPipeline })));
 const LoadingSkeleton = () => (
   <div className="space-y-4 p-6">
     <Skeleton className="h-8 w-64" />
@@ -292,7 +294,12 @@ export default function MaintenanceMegaHub() {
                 <SparePartsCriticality />
               </div>
 
-              {/* Empty state when no data */}
+              {/* 🆕 Wave 15: Reliability Engineering + Work Order Pipeline */}
+              <div className="grid grid-cols-1 lg:grid-cols-2 gap-4">
+                <ReliabilityMetricsPanel />
+                <WorkOrderPipeline />
+              </div>
+
               {!maintLoading && maintMetrics.total === 0 && (
                 <HubEmptyState 
                   hub="maintenance" 
