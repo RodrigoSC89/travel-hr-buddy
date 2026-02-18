@@ -31,9 +31,9 @@ const EnhancedUnifiedDashboard = lazy(() => import('@/components/dashboard/enhan
 const OperationsOverviewPage = lazy(() => import('@/pages/command/OperationsOverviewPage'));
 const ExecutiveDashboardPage = lazy(() => import('@/pages/command/ExecutiveDashboardPage'));
 const NOC = lazy(() => import('@/pages/NOC'));
-const SOCPage = lazy(() => import('@/pages/NOC'));
-const CommunicationCommandCenter = lazy(() => import('@/pages/NOC'));
-const AlertsCommandCenter = lazy(() => import('@/pages/NOC'));
+const SOCPage = lazy(() => import('@/pages/SecurityCenter'));
+const CommunicationCommandCenter = lazy(() => import('@/modules/nauti-comms'));
+const AlertsCommandCenter = lazy(() => import('@/components/fleet/intelligent-alerts'));
 const CommandAIHub = lazy(() => import('@/components/command/ai/CommandAIHub'));
 const CeoCommandDashboard = lazy(() => import('@/components/dashboard/RevolutionaryCEODashboard'));
 const CustomizableDashboardGrid = lazy(() => import('@/components/dashboard/CustomizableDashboardGrid'));
@@ -54,18 +54,18 @@ const LoadingSkeleton = () => (
 );
 
 const tabConfig = [
-  { id: 'overview', label: 'Overview', icon: Compass, path: '/command' },
-  { id: 'operations', label: 'Operations', icon: Activity, path: '/command/operations' },
-  { id: 'executive', label: 'Executive', icon: BarChart3, path: '/command/executive' },
-  { id: 'digital-twin', label: '🚢 Digital Twin', icon: Ship, path: '/command/digital-twin' },
-  { id: 'noc', label: 'NOC 24/7', icon: Eye, path: '/command/noc' },
-  { id: 'soc', label: 'SOC Security', icon: Shield, path: '/command/soc' },
-  { id: 'comms', label: 'Comms', icon: Radio, path: '/command/comms' },
-  { id: 'alerts', label: 'Alerts', icon: Bell, path: '/command/alerts' },
-  { id: 'ai-copilot', label: '🧠 IA Copiloto', icon: Brain, path: '/command/ai' },
-  { id: 'ceo', label: '👔 CEO Dashboard', icon: BarChart3, path: '/command/ceo' },
-  { id: 'my-dashboard', label: '🎯 Meu Dashboard', icon: Activity, path: '/command/my-dashboard' },
-  { id: 'performance', label: '📊 Performance', icon: Gauge, path: '/command/performance' },
+  { id: 'overview', label: 'Overview', icon: Compass },
+  { id: 'operations', label: 'Operations', icon: Activity },
+  { id: 'executive', label: 'Executive', icon: BarChart3 },
+  { id: 'digital-twin', label: '🚢 Digital Twin', icon: Ship },
+  { id: 'noc', label: 'NOC 24/7', icon: Eye },
+  { id: 'soc', label: 'SOC Security', icon: Shield },
+  { id: 'comms', label: 'Comms', icon: Radio },
+  { id: 'alerts', label: 'Alerts', icon: Bell },
+  { id: 'ai-copilot', label: '🧠 IA Copiloto', icon: Brain },
+  { id: 'ceo', label: '👔 CEO Dashboard', icon: BarChart3 },
+  { id: 'my-dashboard', label: '🎯 Meu Dashboard', icon: Activity },
+  { id: 'performance', label: '📊 Performance', icon: Gauge },
 ];
 
 export default function CommandMegaHub() {

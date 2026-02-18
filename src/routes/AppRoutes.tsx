@@ -524,9 +524,9 @@ export const AppRoutes = () => (
       <Route path="/schedule" element={<Navigate to="/operational-calendar" replace />} />
       <Route path="/schedules" element={<Navigate to="/operational-calendar" replace />} />
       <Route path="/missions" element={<Navigate to="/mission-command" replace />} />
-      <Route path="/monitoring" element={<Navigate to="/central-comando" replace />} />
-      <Route path="/testing" element={<Pages.CentralComando />} />
-      <Route path="/qa/preview" element={<Pages.CentralComando />} />
+      <Route path="/monitoring" element={<Navigate to="/command" replace />} />
+      <Route path="/testing" element={<Navigate to="/command" replace />} />
+      <Route path="/qa/preview" element={<Navigate to="/command" replace />} />
 
       {/* DEV ONLY */}
       <Route path="/dev-routes" element={<Pages.DevRoutesDashboard />} />
