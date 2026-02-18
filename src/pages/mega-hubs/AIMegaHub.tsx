@@ -48,6 +48,8 @@ const MultiAgentConsensus = lazy(() => import('@/components/ai/MultiAgentConsens
 const AgentAnalyticsPanel = lazy(() => import('@/components/ai/AgentAnalyticsPanel'));
 const ProactiveMonitoringPanel = lazy(() => import('@/components/ai/ProactiveMonitoringPanel'));
 const AIPredictiveInsights = lazy(() => import('@/components/ai/AIPredictiveInsights'));
+const AIModelPerformanceMatrix = lazy(() => import('@/components/dashboard/AIModelPerformanceMatrix'));
+const AutonomousDecisionTracker = lazy(() => import('@/components/dashboard/AutonomousDecisionTracker'));
 
 const LoadingSkeleton = () => (
   <div className="space-y-4 p-6">
@@ -339,6 +341,16 @@ export default function AIMegaHub() {
                   onPrimaryAction={() => setSearchParams({ tab: 'chat-voice' })} 
                 />
               )}
+
+              {/* Wave 19: AI Intelligence Panels */}
+              <div className="grid grid-cols-1 lg:grid-cols-2 gap-6">
+                <Suspense fallback={<Skeleton className="h-64" />}>
+                  <AIModelPerformanceMatrix />
+                </Suspense>
+                <Suspense fallback={<Skeleton className="h-64" />}>
+                  <AutonomousDecisionTracker />
+                </Suspense>
+              </div>
 
               {(agentsLoading || agentMetrics.totalAgents > 0) && <AIControlTowerHub />}
             </TabsContent>
