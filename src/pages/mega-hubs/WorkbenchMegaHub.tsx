@@ -47,6 +47,7 @@ const CashFlowForecast = lazy(() => import('@/components/dashboard/CashFlowForec
 const CrewOvertimeTracker = lazy(() => import('@/components/dashboard/CrewOvertimeTracker').then(m => ({ default: m.CrewOvertimeTracker })));
 const ProcurementPipelineTracker = lazy(() => import('@/components/dashboard/ProcurementPipelineTracker').then(m => ({ default: m.ProcurementPipelineTracker })));
 const PayrollSummaryDashboard = lazy(() => import('@/components/dashboard/PayrollSummaryDashboard').then(m => ({ default: m.PayrollSummaryDashboard })));
+const DocumentProcessingAnalytics = lazy(() => import('@/components/dashboard/DocumentProcessingAnalytics').then(m => ({ default: m.DocumentProcessingAnalytics })));
 
 const LoadingSkeleton = () => (
   <div className="space-y-4 p-6">
@@ -329,6 +330,11 @@ export default function WorkbenchMegaHub() {
                   <CrewCertificationHeatmap />
                 </Suspense>
               </div>
+
+              {/* Wave 51: Document Processing Analytics */}
+              <Suspense fallback={<Skeleton className="h-64" />}>
+                <DocumentProcessingAnalytics />
+              </Suspense>
 
               <DocumentCenterHub />
             </TabsContent>

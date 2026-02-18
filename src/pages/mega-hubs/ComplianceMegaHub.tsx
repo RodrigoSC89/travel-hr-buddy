@@ -59,6 +59,7 @@ const ComplianceScoreDashboard = lazy(() => import('@/components/dashboard/Compl
 const DocumentExpiryMatrix = lazy(() => import('@/components/dashboard/DocumentExpiryMatrix').then(m => ({ default: m.DocumentExpiryMatrix })));
 const AuditCountdownCards = lazy(() => import('@/components/dashboard/AuditCountdownCards').then(m => ({ default: m.AuditCountdownCards })));
 const SafetyIncidentAnalytics = lazy(() => import('@/components/dashboard/SafetyIncidentAnalytics').then(m => ({ default: m.SafetyIncidentAnalytics })));
+const ComplianceReadinessTimeline = lazy(() => import('@/components/dashboard/ComplianceReadinessTimeline').then(m => ({ default: m.ComplianceReadinessTimeline })));
 
 // ═══════════════════════════════════════════════════════════
 // 12 AUDITORIAS MARÍTIMAS COMPLETAS - ZERO SUPRESSÃO
@@ -430,6 +431,11 @@ export default function ComplianceMegaHub() {
               {/* Safety Incident Analytics */}
               <Suspense fallback={<Skeleton className="h-64" />}>
                 <SafetyIncidentAnalytics />
+              </Suspense>
+
+              {/* Wave 51: Compliance Readiness Timeline */}
+              <Suspense fallback={<Skeleton className="h-64" />}>
+                <ComplianceReadinessTimeline />
               </Suspense>
 
               {(auditsLoading || complianceMetrics.totalAudits > 0) && <ComplianceHubPage />}
