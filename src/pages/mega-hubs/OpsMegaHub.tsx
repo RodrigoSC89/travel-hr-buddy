@@ -47,6 +47,7 @@ const CargoUtilizationOptimizer = lazy(() => import('@/components/dashboard/Carg
 const NoonReportAnalytics = lazy(() => import('@/components/dashboard/NoonReportAnalytics'));
 const WeatherRoutingQuickPanel = lazy(() => import('@/components/operations/WeatherRoutingQuickPanel'));
 const LaytimeQuickPanel = lazy(() => import('@/components/operations/LaytimeQuickPanel'));
+const CertificationExpiryTracker = lazy(() => import('@/components/dashboard/CertificationExpiryTracker').then(m => ({ default: m.CertificationExpiryTracker })));
 const LoadingSkeleton = () => (
   <div className="space-y-4 p-6">
     <Skeleton className="h-8 w-64" />
@@ -327,6 +328,11 @@ export default function OpsMegaHub() {
                   <LaytimeQuickPanel />
                 </Suspense>
               </div>
+
+              {/* Certification Expiry Tracker */}
+              <Suspense fallback={<Skeleton className="h-64" />}>
+                <CertificationExpiryTracker />
+              </Suspense>
 
               {/* Original Operations Hub */}
               {(isLoading || metrics.totalVessels > 0) && <OperationsCommandHub />}

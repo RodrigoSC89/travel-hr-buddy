@@ -55,6 +55,7 @@ const RegulatoryRadarLive = lazy(() => import('@/components/dashboard/Regulatory
 const ISMGapAnalyzer = lazy(() => import('@/components/dashboard/ISMGapAnalyzer'));
 const PSCDetentionPredictor = lazy(() => import('@/components/dashboard/PSCDetentionPredictor'));
 const ComplianceEventsMonitor = lazy(() => import('@/components/compliance/ComplianceEventsMonitor'));
+const ComplianceScoreDashboard = lazy(() => import('@/components/dashboard/ComplianceScoreDashboard').then(m => ({ default: m.ComplianceScoreDashboard })));
 
 // ═══════════════════════════════════════════════════════════
 // 12 AUDITORIAS MARÍTIMAS COMPLETAS - ZERO SUPRESSÃO
@@ -355,6 +356,11 @@ export default function ComplianceMegaHub() {
                   onPrimaryAction={handleNewAudit} 
                 />
               )}
+
+              {/* Compliance Score Dashboard */}
+              <Suspense fallback={<Skeleton className="h-64" />}>
+                <ComplianceScoreDashboard />
+              </Suspense>
 
               {/* Real-time Compliance Events Monitor */}
               <Suspense fallback={<Skeleton className="h-64" />}>
