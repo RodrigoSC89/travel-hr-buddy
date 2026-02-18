@@ -36,6 +36,8 @@ const DocumentsAIHub = lazy(() => import('@/components/documents/ai/DocumentsAIH
 const CrewPoolPlanner = lazy(() => import('@/components/crew/CrewPoolPlanner'));
 const TravelItineraryBuilder = lazy(() => import('@/components/travel/TravelItineraryBuilder'));
 const ApprovalWorkflow = lazy(() => import('@/components/workflows/ApprovalWorkflow'));
+const CrewProductivityPulse = lazy(() => import('@/components/dashboard/CrewProductivityPulse'));
+const DocumentIntelligencePanel = lazy(() => import('@/components/dashboard/DocumentIntelligencePanel'));
 
 const LoadingSkeleton = () => (
   <div className="space-y-4 p-6">
@@ -299,6 +301,16 @@ export default function WorkbenchMegaHub() {
                 showSearch
                 searchPlaceholder="Search documents, templates..."
               />
+              {/* Wave 22: Workbench Intelligence */}
+              <div className="grid grid-cols-1 lg:grid-cols-2 gap-6">
+                <Suspense fallback={<Skeleton className="h-64" />}>
+                  <DocumentIntelligencePanel />
+                </Suspense>
+                <Suspense fallback={<Skeleton className="h-64" />}>
+                  <CrewProductivityPulse />
+                </Suspense>
+              </div>
+
               <DocumentCenterHub />
             </TabsContent>
 

@@ -50,6 +50,8 @@ const FuelIntelligencePanel = lazy(() => import('@/components/dashboard/FuelInte
 const ComplianceNerveCenter = lazy(() => import('@/components/dashboard/ComplianceNerveCenter'));
 const CrewWellnessCommand = lazy(() => import('@/components/dashboard/CrewWellnessCommand'));
 const FinancialCockpit = lazy(() => import('@/components/dashboard/FinancialCockpit'));
+const IncidentResponseTimeline = lazy(() => import('@/components/dashboard/IncidentResponseTimeline'));
+const SystemUptimeMonitor = lazy(() => import('@/components/dashboard/SystemUptimeMonitor'));
 
 const LoadingSkeleton = () => (
   <div className="space-y-4 p-6">
@@ -348,6 +350,16 @@ export default function CommandMegaHub() {
                 </Suspense>
                 <Suspense fallback={<Skeleton className="h-[500px]" />}>
                   <FinancialCockpit />
+                </Suspense>
+              </div>
+
+              {/* Wave 21: Command Intelligence */}
+              <div className="grid grid-cols-1 lg:grid-cols-2 gap-6">
+                <Suspense fallback={<Skeleton className="h-[400px]" />}>
+                  <IncidentResponseTimeline />
+                </Suspense>
+                <Suspense fallback={<Skeleton className="h-[400px]" />}>
+                  <SystemUptimeMonitor />
                 </Suspense>
               </div>
 
