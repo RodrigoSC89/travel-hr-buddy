@@ -3,10 +3,11 @@
  * Substitui dados mockados por dados do Supabase
  */
 
-import { useQuery, useMutation, useQueryClient } from "@tanstack/react-query";
+import { useQuery } from "@tanstack/react-query";
 import { supabase } from "@/integrations/supabase/client";
 import { useEffect, useState } from "react";
 import { useAuth } from "@/contexts/AuthContext";
+import { useMarkNotificationRead, useMarkAllNotificationsRead } from "@/hooks/useModuleHooks";
 
 export interface SystemNotification {
   id: string;
@@ -54,7 +55,6 @@ function mapPriority(severity: string | null): SystemNotification["priority"] {
 }
 
 export function useNotificationsData() {
-  const queryClient = useQueryClient();
   const { user } = useAuth();
   const [realtimeNotifications, setRealtimeNotifications] = useState<SystemNotification[]>([]);
 
@@ -162,54 +162,9 @@ export function useNotificationsData() {
     };
   }, []);
 
-  // Mark as read mutation
-  const markAsRead = useMutation({
-    mutationFn: async (notificationId: string) => {
-      // Try intelligent_notifications first
-      const { error: intError } = await supabase
-        .from("intelligent_notifications")
-        .update({ is_read: true, read_at: new Date().toISOString() })
-        .eq("id", notificationId);
-
-      if (intError) {
-        // Try soc_alerts
-        const { error: alertError } = await supabase
-          .from("soc_alerts")
-          .update({ 
-            acknowledged_at: new Date().toISOString(),
-            acknowledged_by: user?.id 
-          })
-          .eq("id", notificationId);
-
-        if (alertError) throw alertError;
-      }
-    },
-    onSuccess: () => {
-      queryClient.invalidateQueries({ queryKey: ["system-notifications"] });
-    },
-  });
-
-  // Mark all as read
-  const markAllAsRead = useMutation({
-    mutationFn: async () => {
-      await supabase
-        .from("intelligent_notifications")
-        .update({ is_read: true, read_at: new Date().toISOString() })
-        .eq("is_read", false);
-
-      await supabase
-        .from("soc_alerts")
-        .update({ 
-          acknowledged_at: new Date().toISOString(),
-          acknowledged_by: user?.id 
-        })
-        .is("acknowledged_at", null);
-    },
-    onSuccess: () => {
-      queryClient.invalidateQueries({ queryKey: ["system-notifications"] });
-      setRealtimeNotifications([]);
-    },
-  });
+  // Integrated mutations
+  const markReadMutation = useMarkNotificationRead();
+  const markAllReadMutation = useMarkAllNotificationsRead();
 
   // Combine realtime with fetched
   const combinedNotifications = [...realtimeNotifications, ...notifications]
@@ -228,7 +183,7 @@ export function useNotificationsData() {
     notifications: combinedNotifications,
     stats,
     isLoading,
-    markAsRead: (id: string) => markAsRead.mutate(id),
-    markAllAsRead: () => markAllAsRead.mutate(),
+    markAsRead: (id: string) => markReadMutation.mutate(id),
+    markAllAsRead: () => markAllReadMutation.mutate(undefined as any, { onSuccess: () => setRealtimeNotifications([]) }),
   };
 }

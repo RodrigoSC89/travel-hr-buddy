@@ -3,8 +3,9 @@
  * Multi-objective optimization with persistence
  */
 import React, { useState } from "react";
-import { useQuery, useMutation, useQueryClient } from "@tanstack/react-query";
+import { useQuery } from "@tanstack/react-query";
 import { supabase } from "@/integrations/supabase/client";
+import { useSelectVoyageRoute } from "@/hooks/useModuleHooks";
 import { Card, CardContent, CardHeader, CardTitle } from "@/components/ui/card";
 import { Button } from "@/components/ui/button";
 import { Badge } from "@/components/ui/badge";
@@ -31,7 +32,6 @@ interface PortSuggestion {
 
 export function VoyageIntelligenceAI() {
   const { optimize, suggest, isLoading } = useNautilusAI();
-  const queryClient = useQueryClient();
   const [optimizations, setOptimizations] = useState<VoyageOptimization[]>([]);
   const [portSuggestions, setPortSuggestions] = useState<PortSuggestion[]>([]);
 
@@ -54,24 +54,20 @@ export function VoyageIntelligenceAI() {
     departureDate: latestVoyage.departure_date || new Date().toISOString().split('T')[0],
   } : { origin: "Santos, BR", destination: "Rotterdam, NL", vessel: "PSV Atlantic Explorer", cargo: "Deck Cargo", departureDate: "2026-02-20" };
 
-  // Select route => update voyage plan
-  const selectRouteMutation = useMutation({
-    mutationFn: async (opt: VoyageOptimization) => {
+  // Select route => integrated pipeline
+  const selectRouteHook = useSelectVoyageRoute();
+  const selectRouteMutation = {
+    mutate: (opt: VoyageOptimization) => {
       if (latestVoyage) {
-        const { error } = await supabase.from('voyage_plans').update({
-          estimated_distance: opt.distance,
-          estimated_fuel: opt.fuelConsumption,
+        selectRouteHook.mutate({
+          voyageId: latestVoyage.id,
+          distance: opt.distance,
+          fuel: opt.fuelConsumption,
           notes: `Rota IA: ${opt.route} | Score: ${opt.aiScore}% | Custo: $${opt.totalCost}`,
-        }).eq('id', latestVoyage.id);
-        if (error) throw error;
+        });
       }
     },
-    onSuccess: () => {
-      queryClient.invalidateQueries({ queryKey: ['voyage-plans-intelligence'] });
-      toast.success('Rota selecionada e salva no plano de viagem');
-    },
-    onError: () => toast.error('Erro ao salvar rota'),
-  });
+  };
 
   const runVoyageOptimization = async () => {
     try {

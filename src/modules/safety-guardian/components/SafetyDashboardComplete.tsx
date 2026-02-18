@@ -24,10 +24,10 @@ import { useSafetyData } from '../hooks/useSafetyData';
 import { useSafetyAI } from '../hooks/useSafetyAI';
 import type { SafetyIncident, SafetySettings, DDSRecord, SafetyTraining, CrewTrainingDashboard } from '../types';
 import { supabase } from "@/integrations/supabase/client";
-import { useQuery, useMutation, useQueryClient } from "@tanstack/react-query";
+import { useQuery } from "@tanstack/react-query";
+import { useCreateDDS } from "@/hooks/useModuleHooks";
 
 export const SafetyDashboardComplete: React.FC = () => {
-  const queryClient = useQueryClient();
   const [selectedPeriod, setSelectedPeriod] = useState('ytd');
   const [selectedTab, setSelectedTab] = useState('incidents');
   const [reportDialogOpen, setReportDialogOpen] = useState(false);
@@ -125,27 +125,8 @@ export const SafetyDashboardComplete: React.FC = () => {
     staleTime: 60_000,
   });
 
-  // ====== CREATE DDS MUTATION ======
-  const createDDSMutation = useMutation({
-    mutationFn: async (record: Partial<DDSRecord>) => {
-      const { error } = await (supabase.from as Function)("drill_records").insert({
-        drill_type: record.topic,
-        drill_date: record.date || new Date().toISOString(),
-        vessel_name: record.vessel_name,
-        conducted_by: record.conductor,
-        participants_count: record.participants_count || 0,
-        duration_minutes: record.duration_minutes || 15,
-        notes: record.notes,
-        status: "completed",
-      });
-      if (error) throw error;
-    },
-    onSuccess: () => {
-      queryClient.invalidateQueries({ queryKey: ["safety-dds-records"] });
-      toast.success("DDS registrado com sucesso");
-    },
-    onError: (e: any) => toast.error("Erro ao registrar DDS: " + e.message),
-  });
+  // ====== CREATE DDS via integrated pipeline ======
+  const createDDSMutation = useCreateDDS();
 
   // Settings state
   const [settings, setSettings] = useState<SafetySettings>({
@@ -160,7 +141,18 @@ export const SafetyDashboardComplete: React.FC = () => {
   const handleSubmitReport = async (incident: Partial<SafetyIncident>) => { await createIncident(incident); };
   const handleViewDetails = (incident: SafetyIncident) => { setSelectedIncident(incident); setDetailsDialogOpen(true); };
   const handleAnalyzeIncident = async (incident: SafetyIncident) => { setSelectedIncident(incident); setDetailsDialogOpen(true); return analyzeIncident(incident); };
-  const handleCreateDDS = async (record: Partial<DDSRecord>) => { createDDSMutation.mutate(record); };
+  const handleCreateDDS = async (record: Partial<DDSRecord>) => {
+    createDDSMutation.mutate({
+      drill_type: record.topic,
+      drill_date: record.date || new Date().toISOString(),
+      vessel_name: record.vessel_name,
+      conducted_by: record.conductor,
+      participants_count: record.participants_count || 0,
+      duration_minutes: record.duration_minutes || 15,
+      notes: record.notes,
+      status: "completed",
+    });
+  };
   const handleSaveSettings = async (newSettings: SafetySettings) => { setSettings(newSettings); };
   const filteredIncidents = getFilteredIncidents();
 

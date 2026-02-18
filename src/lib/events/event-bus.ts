@@ -124,6 +124,24 @@ export const EVENT_TYPES = {
   'ai.insight.read': 'ai.insight.read',
   // Benchmarking
   'peotram.benchmarking.seeded': 'peotram.benchmarking.seeded',
+  // Alerts (SOC / Telemetry)
+  'alert.acknowledged': 'alert.acknowledged',
+  'alert.resolved': 'alert.resolved',
+  // Notifications
+  'notification.read': 'notification.read',
+  'notification.all_read': 'notification.all_read',
+  // Security
+  'security.finding.fixed': 'security.finding.fixed',
+  // Recruitment
+  'recruitment.stage.changed': 'recruitment.stage.changed',
+  // Safety DDS
+  'safety.dds.created': 'safety.dds.created',
+  // Voyage Intelligence
+  'voyage.route.selected': 'voyage.route.selected',
+  // Running Hours (IoT sensor update)
+  'maintenance.sensor_reading.updated': 'maintenance.sensor_reading.updated',
+  // Telemetry alert create
+  'tracking.telemetry_alert.created': 'tracking.telemetry_alert.created',
 } as const;
 
 export type EventType = keyof typeof EVENT_TYPES;

@@ -129,6 +129,24 @@ const CROSS_MODULE_INVALIDATIONS: Partial<Record<EventType, string[][]>> = {
   'ai.insight.read': [['advanced-ai-insights'], ['ai-insights'], ['dashboard-kpis']],
   // Benchmarking
   'peotram.benchmarking.seeded': [['peotram-vessel-scores'], ['compliance'], ['dashboard-kpis']],
+  // Alerts (SOC / Telemetry)
+  'alert.acknowledged': [['smart-alerts'], ['tracking-alerts'], ['alerts'], ['system-notifications'], ['dashboard-kpis']],
+  'alert.resolved': [['smart-alerts'], ['tracking-alerts'], ['alerts'], ['system-notifications'], ['dashboard-kpis']],
+  // Notifications
+  'notification.read': [['system-notifications'], ['alerts']],
+  'notification.all_read': [['system-notifications'], ['alerts']],
+  // Security
+  'security.finding.fixed': [['security-findings'], ['compliance'], ['alerts'], ['dashboard-kpis']],
+  // Recruitment
+  'recruitment.stage.changed': [['recruitment-candidatos'], ['recruitment-vagas'], ['crew'], ['dashboard-kpis']],
+  // Safety DDS
+  'safety.dds.created': [['safety-dds-records'], ['safety'], ['compliance'], ['training'], ['dashboard-kpis']],
+  // Voyage Intelligence
+  'voyage.route.selected': [['voyage-plans-intelligence'], ['voyages'], ['voyage-pnl'], ['fleet'], ['dashboard-kpis']],
+  // Running Hours (IoT)
+  'maintenance.sensor_reading.updated': [['running-hours'], ['maintenance'], ['pms_work_orders'], ['tracking-sensors'], ['dashboard-kpis']],
+  // Telemetry alert create
+  'tracking.telemetry_alert.created': [['tracking-alerts'], ['alerts'], ['smart-alerts'], ['dashboard-kpis']],
 };
 
 export function useIntegratedMutation<TInput, TOutput>(

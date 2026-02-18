@@ -3,10 +3,11 @@
  * Substitui mockAlerts por dados reais do Supabase
  */
 
-import { useQuery, useMutation, useQueryClient } from '@tanstack/react-query';
+import { useQuery } from '@tanstack/react-query';
 import { supabase } from '@/integrations/supabase/client';
 import { toast } from 'sonner';
 import { useToast } from '@/hooks/use-toast';
+import { useAcknowledgeAlertIntegrated, useResolveAlertIntegrated } from '@/hooks/useModuleHooks';
 
 export interface SmartAlert {
   id: string;
@@ -90,7 +91,6 @@ function mapAlertToSmartAlert(alert: RawAlert): SmartAlert {
 }
 
 export function useAlertsRealData() {
-  const queryClient = useQueryClient();
   const { toast: shadcnToast } = useToast();
 
   // Fetch alerts from telemetry_alerts table
@@ -226,52 +226,9 @@ export function useAlertsRealData() {
     staleTime: 60000,
   });
 
-  // Acknowledge alert mutation
-  const acknowledgeAlert = useMutation({
-    mutationFn: async (alertId: string) => {
-      const { error } = await supabase
-        .from('telemetry_alerts')
-        .update({ acknowledged: true, acknowledged_at: new Date().toISOString() })
-        .eq('id', alertId);
-
-      if (error) {
-        // Acknowledged locally if table update fails
-      }
-
-      return alertId;
-    },
-    onSuccess: (alertId) => {
-      queryClient.setQueryData(['smart-alerts'], (old: SmartAlert[] = []) =>
-        old.map(a => a.id === alertId ? { ...a, status: 'acknowledged' } : a)
-      );
-      toast.success('Alerta reconhecido');
-    },
-  });
-
-  // Resolve alert mutation
-  const resolveAlert = useMutation({
-    mutationFn: async (alertId: string) => {
-      const { error } = await supabase
-        .from('telemetry_alerts')
-        .update({ resolved: true, resolved_at: new Date().toISOString() })
-        .eq('id', alertId);
-
-      if (error) {
-        // Resolved locally if table update fails
-      }
-
-      return alertId;
-    },
-    onSuccess: (alertId) => {
-      queryClient.setQueryData(['smart-alerts'], (old: SmartAlert[] = []) =>
-        old.map(a => a.id === alertId ? { ...a, status: 'resolved', resolved_at: new Date().toISOString() } : a)
-      );
-      shadcnToast({
-        title: '✅ Alerta Resolvido',
-        description: 'O alerta foi marcado como resolvido.',
-      });
-    },
-  });
+  // Integrated mutations
+  const ackMutation = useAcknowledgeAlertIntegrated();
+  const resolveMutation = useResolveAlertIntegrated();
 
   // Export alerts
   const exportAlerts = () => {
@@ -308,8 +265,8 @@ export function useAlertsRealData() {
     isLoading,
     error,
     refetch,
-    acknowledgeAlert: acknowledgeAlert.mutate,
-    resolveAlert: resolveAlert.mutate,
+    acknowledgeAlert: (id: string) => ackMutation.mutate(id),
+    resolveAlert: (id: string) => resolveMutation.mutate(id),
     exportAlerts,
     stats: {
       critical: alerts.filter(a => a.type === 'critical').length,

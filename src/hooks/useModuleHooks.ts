@@ -1244,3 +1244,251 @@ export function useSeedBenchmarkScores() {
     errorMessage: "Erro ao inicializar scores",
   });
 }
+
+// ════════════════════════════════════════════
+// ALERTS — ACKNOWLEDGE / RESOLVE (SOC + Telemetry)
+// ════════════════════════════════════════════
+
+export function useAcknowledgeAlertIntegrated() {
+  return useIntegratedMutation<string, any>({
+    mutationFn: async (alertId) => {
+      const { supabase } = await import("@/integrations/supabase/client");
+      // Try telemetry_alerts first
+      const { error } = await supabase.from('telemetry_alerts')
+        .update({ acknowledged: true, acknowledged_at: new Date().toISOString() })
+        .eq('id', alertId);
+      if (error) {
+        // Fallback: soc_alerts
+        const { error: socErr } = await supabase.from('soc_alerts')
+          .update({ acknowledged_at: new Date().toISOString(), acknowledged_by: (await supabase.auth.getUser()).data.user?.id })
+          .eq('id', alertId);
+        if (socErr) throw socErr;
+      }
+      return { id: alertId };
+    },
+    eventType: "alert.acknowledged",
+    entityType: "alert",
+    getEntityId: (out) => out.id,
+    buildPayload: (_in, out) => ({ alert_id: out.id }),
+    invalidateKeys: [["smart-alerts"], ["tracking-alerts"]],
+    successMessage: "Alerta reconhecido",
+    errorMessage: "Erro ao reconhecer alerta",
+  });
+}
+
+export function useResolveAlertIntegrated() {
+  return useIntegratedMutation<string, any>({
+    mutationFn: async (alertId) => {
+      const { supabase } = await import("@/integrations/supabase/client");
+      const { error } = await supabase.from('telemetry_alerts')
+        .update({ resolved: true, resolved_at: new Date().toISOString() })
+        .eq('id', alertId);
+      if (error) {
+        const { error: socErr } = await supabase.from('soc_alerts')
+          .update({ resolved_at: new Date().toISOString() })
+          .eq('id', alertId);
+        if (socErr) throw socErr;
+      }
+      return { id: alertId };
+    },
+    eventType: "alert.resolved",
+    entityType: "alert",
+    getEntityId: (out) => out.id,
+    buildPayload: (_in, out) => ({ alert_id: out.id }),
+    invalidateKeys: [["smart-alerts"], ["tracking-alerts"]],
+    successMessage: "Alerta resolvido",
+    errorMessage: "Erro ao resolver alerta",
+  });
+}
+
+// ════════════════════════════════════════════
+// NOTIFICATIONS — MARK READ
+// ════════════════════════════════════════════
+
+export function useMarkNotificationRead() {
+  return useIntegratedMutation<string, any>({
+    mutationFn: async (notificationId) => {
+      const { supabase } = await import("@/integrations/supabase/client");
+      const { error } = await supabase.from("intelligent_notifications")
+        .update({ is_read: true, read_at: new Date().toISOString() })
+        .eq("id", notificationId);
+      if (error) {
+        const userId = (await supabase.auth.getUser()).data.user?.id;
+        await supabase.from("soc_alerts")
+          .update({ acknowledged_at: new Date().toISOString(), acknowledged_by: userId })
+          .eq("id", notificationId);
+      }
+      return { id: notificationId };
+    },
+    eventType: "notification.read",
+    entityType: "notification" as any,
+    getEntityId: (out) => out.id,
+    buildPayload: (_in, out) => ({ notification_id: out.id }),
+    invalidateKeys: [["system-notifications"]],
+  });
+}
+
+export function useMarkAllNotificationsRead() {
+  return useIntegratedMutation<void, any>({
+    mutationFn: async () => {
+      const { supabase } = await import("@/integrations/supabase/client");
+      const userId = (await supabase.auth.getUser()).data.user?.id;
+      await supabase.from("intelligent_notifications")
+        .update({ is_read: true, read_at: new Date().toISOString() })
+        .eq("is_read", false);
+      await supabase.from("soc_alerts")
+        .update({ acknowledged_at: new Date().toISOString(), acknowledged_by: userId })
+        .is("acknowledged_at", null);
+      return { success: true };
+    },
+    eventType: "notification.all_read",
+    entityType: "notification" as any,
+    buildPayload: () => ({ all: true }),
+    invalidateKeys: [["system-notifications"]],
+    successMessage: "Todas notificações lidas",
+  });
+}
+
+// ════════════════════════════════════════════
+// SECURITY — MARK FINDING FIXED
+// ════════════════════════════════════════════
+
+export function useFixSecurityFinding() {
+  return useIntegratedMutation<string, any>({
+    mutationFn: async (findingId) => {
+      const { supabase } = await import("@/integrations/supabase/client");
+      const { error } = await supabase.from("telemetry_alerts")
+        .update({ acknowledged: true })
+        .eq("id", findingId);
+      if (error) throw error;
+      return { id: findingId };
+    },
+    eventType: "security.finding.fixed",
+    entityType: "finding" as any,
+    getEntityId: (out) => out.id,
+    buildPayload: (_in, out) => ({ finding_id: out.id }),
+    invalidateKeys: [["security-findings"]],
+    successMessage: "Finding marcado como corrigido",
+    errorMessage: "Erro ao atualizar finding",
+  });
+}
+
+// ════════════════════════════════════════════
+// RECRUITMENT — STAGE CHANGE
+// ════════════════════════════════════════════
+
+export function useUpdateRecruitmentStage() {
+  return useIntegratedMutation<{ candidatoId: string; novaEtapa: string }, any>({
+    mutationFn: async ({ candidatoId, novaEtapa }) => {
+      const { supabase } = await import("@/integrations/supabase/client");
+      await supabase.from("logs").insert({
+        module: "recruitment",
+        level: "info",
+        message: `Candidato ${candidatoId} movido para ${novaEtapa}`,
+        metadata: { candidato_id: candidatoId, nova_etapa: novaEtapa },
+      } as any);
+      return { candidatoId, novaEtapa };
+    },
+    eventType: "recruitment.stage.changed",
+    entityType: "crew_member" as any,
+    buildPayload: (input) => ({ candidato_id: input.candidatoId, nova_etapa: input.novaEtapa }),
+    invalidateKeys: [["recruitment-candidatos"]],
+    successMessage: "Etapa atualizada",
+    errorMessage: "Erro ao atualizar etapa",
+  });
+}
+
+// ════════════════════════════════════════════
+// SAFETY — DDS (Drill / Dialog)
+// ════════════════════════════════════════════
+
+export function useCreateDDS() {
+  return useIntegratedMutation<Record<string, unknown>, any>({
+    mutationFn: async (input) => {
+      const { supabase } = await import("@/integrations/supabase/client");
+      const { data, error } = await (supabase.from as Function)("drill_records").insert(input).select().single();
+      if (error) throw error;
+      return data;
+    },
+    eventType: "safety.dds.created",
+    entityType: "drill" as any,
+    getEntityId: (out) => out.id,
+    buildPayload: (_in, out) => ({ drill_id: out.id, drill_type: out.drill_type }),
+    invalidateKeys: [["safety-dds-records"]],
+    successMessage: "DDS registrado com sucesso",
+    errorMessage: "Erro ao registrar DDS",
+  });
+}
+
+// ════════════════════════════════════════════
+// VOYAGE — ROUTE SELECTION
+// ════════════════════════════════════════════
+
+export function useSelectVoyageRoute() {
+  return useIntegratedMutation<{ voyageId: string; distance: number; fuel: number; notes: string }, any>({
+    mutationFn: async (input) => {
+      const { supabase } = await import("@/integrations/supabase/client");
+      const { data, error } = await supabase.from('voyage_plans').update({
+        estimated_distance: input.distance,
+        estimated_fuel: input.fuel,
+        notes: input.notes,
+      }).eq('id', input.voyageId).select().single();
+      if (error) throw error;
+      return data;
+    },
+    eventType: "voyage.route.selected",
+    entityType: "voyage",
+    getEntityId: (out) => out.id,
+    buildPayload: (input) => ({ voyage_id: input.voyageId, distance: input.distance }),
+    invalidateKeys: [["voyage-plans-intelligence"], ["voyages"]],
+    successMessage: "Rota selecionada e salva no plano de viagem",
+    errorMessage: "Erro ao salvar rota",
+  });
+}
+
+// ════════════════════════════════════════════
+// MAINTENANCE — IoT SENSOR READING UPDATE
+// ════════════════════════════════════════════
+
+export function useUpdateSensorReading() {
+  return useIntegratedMutation<{ sensorId: string; value: number }, any>({
+    mutationFn: async (input) => {
+      const { supabase } = await import("@/integrations/supabase/client");
+      const { data, error } = await supabase.from('iot_sensors')
+        .update({ current_value: input.value, last_reading_at: new Date().toISOString() })
+        .eq('id', input.sensorId).select().single();
+      if (error) throw error;
+      return data;
+    },
+    eventType: "maintenance.sensor_reading.updated",
+    entityType: "equipment" as any,
+    getEntityId: (out) => out.id,
+    buildPayload: (input) => ({ sensor_id: input.sensorId, value: input.value }),
+    invalidateKeys: [["running-hours"], ["tracking-sensors"]],
+    successMessage: "Leitura atualizada",
+    errorMessage: "Erro ao atualizar leitura",
+  });
+}
+
+// ════════════════════════════════════════════
+// TRACKING — CREATE TELEMETRY ALERT
+// ════════════════════════════════════════════
+
+export function useCreateTelemetryAlert() {
+  return useIntegratedMutation<Record<string, unknown>, any>({
+    mutationFn: async (input) => {
+      const { supabase } = await import("@/integrations/supabase/client");
+      const { data, error } = await supabase.from('telemetry_alerts')
+        .insert(input as any).select().single();
+      if (error) throw error;
+      return data;
+    },
+    eventType: "tracking.telemetry_alert.created",
+    entityType: "alert",
+    getEntityId: (out) => out.id,
+    buildPayload: (_in, out) => ({ alert_id: out.id, severity: out.severity }),
+    invalidateKeys: [["tracking-alerts"]],
+    successMessage: "Alerta criado",
+    errorMessage: "Erro ao criar alerta",
+  });
+}

@@ -4,8 +4,9 @@
  * Features: Equipment counters, PMS triggers, overdue alerts, trend charts
  */
 import React, { useState } from 'react';
-import { useQuery, useMutation, useQueryClient } from '@tanstack/react-query';
+import { useQuery } from '@tanstack/react-query';
 import { supabase } from '@/integrations/supabase/client';
+import { useUpdateSensorReading } from '@/hooks/useModuleHooks';
 import { Card, CardContent, CardHeader, CardTitle } from '@/components/ui/card';
 import { Button } from '@/components/ui/button';
 import { Input } from '@/components/ui/input';
@@ -42,7 +43,6 @@ export function RunningHoursTracker() {
   const [updateOpen, setUpdateOpen] = useState(false);
   const [selectedId, setSelectedId] = useState('');
   const [newReading, setNewReading] = useState('');
-  const queryClient = useQueryClient();
 
   const { data: vessels = [] } = useQuery({
     queryKey: ['rh-vessels'],
@@ -89,24 +89,14 @@ export function RunningHoursTracker() {
     },
   });
 
-  const updateReading = useMutation({
-    mutationFn: async () => {
-      const { error } = await supabase
-        .from('iot_sensors')
-        .update({
-          current_value: parseFloat(newReading),
-          last_reading_at: new Date().toISOString(),
-        })
-        .eq('id', selectedId);
-      if (error) throw error;
-    },
-    onSuccess: () => {
-      toast.success('Leitura atualizada');
-      queryClient.invalidateQueries({ queryKey: ['running-hours'] });
-      setUpdateOpen(false);
-    },
-    onError: () => toast.error('Erro ao atualizar leitura'),
-  });
+  const updateReadingMutation = useUpdateSensorReading();
+  const updateReading = {
+    mutate: () => updateReadingMutation.mutate(
+      { sensorId: selectedId, value: parseFloat(newReading) },
+      { onSuccess: () => setUpdateOpen(false) }
+    ),
+    isPending: updateReadingMutation.isPending,
+  };
 
   const overdueCount = counters.filter(c => c.status === 'overdue').length;
   const warningCount = counters.filter(c => c.status === 'warning').length;
