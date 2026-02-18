@@ -5,8 +5,9 @@
 import { useState } from 'react';
 import { motion } from 'framer-motion';
 import { staggerContainer, fadeUp } from '@/lib/animations/motion-variants';
-import { useQuery, useMutation, useQueryClient } from '@tanstack/react-query';
+import { useQuery, useQueryClient } from '@tanstack/react-query';
 import { supabase } from '@/integrations/supabase/client';
+import { useCreateCrewMember } from '@/hooks/useModuleHooks';
 import { Card, CardContent, CardHeader, CardTitle } from '@/components/ui/card';
 import { Button } from '@/components/ui/button';
 import { Input } from '@/components/ui/input';
@@ -85,8 +86,9 @@ export default function CrewSchedulerPage() {
     },
   });
 
-  const addCrewMutation = useMutation({
-    mutationFn: async (crew: typeof newCrewMember) => {
+  const createCrewHook = useCreateCrewMember();
+  const addCrewMutation = {
+    mutate: (crew: typeof newCrewMember) => {
       const validation = addCrewFormSchema.safeParse({
         full_name: crew.name, rank: crew.rank, nationality: 'BR', status: crew.status,
       });
@@ -94,31 +96,26 @@ export default function CrewSchedulerPage() {
         const errors: Record<string, string> = {};
         validation.error.issues.forEach(issue => { errors[issue.path[0] as string] = issue.message; });
         setFormErrors(errors);
-        throw new Error('Validação falhou');
+        return;
       }
       setFormErrors({});
-      const { error } = await supabase.from('crew_members').insert([{
+      createCrewHook.mutateAsync({
         full_name: crew.name,
-        employee_id: `EMP-${Date.now().toString(36).toUpperCase()}`,
         position: crew.rank,
         rank: crew.rank,
         nationality: 'BR',
         status: crew.status === 'available' ? 'available' : crew.status === 'training' ? 'training' : 'active',
-      }]);
-      if (error) throw error;
-      return crew;
+      }).then(() => {
+        queryClient.invalidateQueries({ queryKey: ['crew-scheduler'] });
+        setIsDialogOpen(false);
+        setFormErrors({});
+        setNewCrewMember({ name: '', rank: 'AB', status: 'available' });
+      }).catch((err) => {
+        if (err.message !== 'Validação falhou') toast.error('Erro ao adicionar tripulante');
+      });
     },
-    onSuccess: () => {
-      queryClient.invalidateQueries({ queryKey: ['crew-scheduler'] });
-      toast.success('Tripulante adicionado com sucesso');
-      setIsDialogOpen(false);
-      setFormErrors({});
-      setNewCrewMember({ name: '', rank: 'AB', status: 'available' });
-    },
-    onError: (err) => {
-      if (err.message !== 'Validação falhou') toast.error('Erro ao adicionar tripulante');
-    },
-  });
+    isPending: createCrewHook.isPending,
+  };
 
   const filteredCrew = crewMembers?.filter(c =>
     c.name.toLowerCase().includes(searchTerm.toLowerCase()) ||

@@ -25,7 +25,9 @@ export const EVENT_TYPES = {
   // Maintenance
   'maintenance.work_order.created': 'maintenance.work_order.created',
   'maintenance.work_order.completed': 'maintenance.work_order.completed',
+  'maintenance.work_order.status_changed': 'maintenance.work_order.status_changed',
   'maintenance.task.overdue': 'maintenance.task.overdue',
+  'maintenance.system.created': 'maintenance.system.created',
   // Compliance
   'compliance.audit.created': 'compliance.audit.created',
   'compliance.audit.completed': 'compliance.audit.completed',
@@ -33,6 +35,9 @@ export const EVENT_TYPES = {
   'compliance.finding.closed': 'compliance.finding.closed',
   'compliance.certificate.expiring': 'compliance.certificate.expiring',
   'compliance.certificate.expired': 'compliance.certificate.expired',
+  'compliance.gap_analysis.completed': 'compliance.gap_analysis.completed',
+  'compliance.capa.created': 'compliance.capa.created',
+  'compliance.capa.closed': 'compliance.capa.closed',
   // Tracking
   'tracking.position.updated': 'tracking.position.updated',
   'tracking.alert.created': 'tracking.alert.created',
@@ -43,11 +48,15 @@ export const EVENT_TYPES = {
   'finance.invoice.approved': 'finance.invoice.approved',
   'finance.po.approved': 'finance.po.approved',
   'finance.po.created': 'finance.po.created',
+  'finance.charter.created': 'finance.charter.created',
+  'finance.charter.status_changed': 'finance.charter.status_changed',
+  'finance.ets.record_created': 'finance.ets.record_created',
   // People
   'people.rotation.published': 'people.rotation.published',
   'people.certification.expiring': 'people.certification.expiring',
   'people.medical.fitness_updated': 'people.medical.fitness_updated',
   'people.training.completed': 'people.training.completed',
+  'people.crew.created': 'people.crew.created',
   // Documents
   'document.created': 'document.created',
   'document.version.created': 'document.version.created',

@@ -4,8 +4,9 @@
  */
 
 import { useState, useMemo } from "react";
-import { useQuery, useMutation, useQueryClient } from "@tanstack/react-query";
+import { useQuery, useQueryClient } from "@tanstack/react-query";
 import { supabase } from "@/integrations/supabase/client";
+import { useCreateETSRecord } from "@/hooks/useModuleHooks";
 import { PremiumModuleShell, type ModuleTab } from "@/components/ui/premium-module-kit/PremiumModuleShell";
 import { SmartKPIGrid } from "@/components/ui/premium-module-kit/SmartKPIGrid";
 import { Card, CardContent, CardHeader, CardTitle } from "@/components/ui/card";
@@ -66,33 +67,29 @@ function ETSOverviewTab() {
     return { totalCO2, etsCO2, totalCost, allowancesNeeded, allowancesBought, fueleuPenalty, count: records.length };
   }, [records]);
 
-  const createRecord = useMutation({
-    mutationFn: async (rec: any) => {
-      // Calculate ETS percentage based on year
+  const createRecordHook = useCreateETSRecord();
+  const createRecord = {
+    mutate: (rec: any) => {
       const etsPercentage = year <= 2024 ? 40 : year === 2025 ? 70 : 100;
       const voyageMultiplier = rec.voyage_type === "intra_eu" ? 1.0 : rec.voyage_type === "non_eu" ? 0 : 0.5;
       const co2Subject = rec.total_co2_mt * voyageMultiplier;
       const allowancesReq = Math.ceil(co2Subject * (etsPercentage / 100));
       const cost = allowancesReq * (rec.allowance_price_eur || 80);
 
-      const { error } = await supabase.from("eu_ets_tracking" as any).insert({
+      createRecordHook.mutateAsync({
         ...rec,
         reporting_year: year,
         ets_percentage: etsPercentage,
         co2_subject_to_ets: co2Subject,
         allowances_required: allowancesReq,
         total_cost_eur: cost,
-        status: "calculated",
-      } as any);
-      if (error) throw error;
+      }).then(() => {
+        queryClient.invalidateQueries({ queryKey: ["eu_ets_tracking"] });
+        setShowCreate(false);
+      });
     },
-    onSuccess: () => {
-      queryClient.invalidateQueries({ queryKey: ["eu_ets_tracking"] });
-      toast.success("Registro ETS criado");
-      setShowCreate(false);
-    },
-    onError: () => toast.error("Erro ao criar registro"),
-  });
+    isPending: createRecordHook.isPending,
+  };
 
   const etsPhaseIn = year <= 2024 ? 40 : year === 2025 ? 70 : 100;
 

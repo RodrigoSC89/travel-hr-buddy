@@ -4,8 +4,10 @@
  */
 
 import { useState, useMemo } from "react";
-import { useQuery, useMutation, useQueryClient } from "@tanstack/react-query";
+import { useQuery, useQueryClient } from "@tanstack/react-query";
 import { supabase } from "@/integrations/supabase/client";
+import { useCreateCharterParty, useUpdateCharterStatus } from "@/hooks/useModuleHooks";
+import { CrossModulePanel } from "@/components/integration";
 import { PremiumModuleShell, type ModuleTab } from "@/components/ui/premium-module-kit/PremiumModuleShell";
 import { SmartKPIGrid } from "@/components/ui/premium-module-kit/SmartKPIGrid";
 import { Card, CardContent, CardHeader, CardTitle } from "@/components/ui/card";
@@ -84,33 +86,26 @@ function CharterPartiesTab() {
     );
   }, [charters, search]);
 
-  const createCP = useMutation({
-    mutationFn: async (cp: any) => {
-      const { error } = await supabase.from("charter_parties" as any).insert({
-        ...cp,
-        charter_number: `CP-${Date.now().toString(36).toUpperCase()}`,
-        status: "negotiating",
-      } as any);
-      if (error) throw error;
+  const createCPHook = useCreateCharterParty();
+  const createCP = {
+    mutate: (cp: any) => {
+      createCPHook.mutateAsync(cp).then(() => {
+        queryClient.invalidateQueries({ queryKey: ["charter_parties"] });
+        setShowCreate(false);
+      });
     },
-    onSuccess: () => {
-      queryClient.invalidateQueries({ queryKey: ["charter_parties"] });
-      toast.success("Charter Party criada");
-      setShowCreate(false);
-    },
-    onError: () => toast.error("Erro ao criar Charter Party"),
-  });
+    isPending: createCPHook.isPending,
+  };
 
-  const updateStatus = useMutation({
-    mutationFn: async ({ id, status }: { id: string; status: string }) => {
-      const { error } = await supabase.from("charter_parties" as any).update({ status } as any).eq("id", id);
-      if (error) throw error;
+  const updateStatusHook = useUpdateCharterStatus();
+  const updateStatus = {
+    mutate: ({ id, status }: { id: string; status: string }) => {
+      updateStatusHook.mutateAsync({ id, status }).then(() => {
+        queryClient.invalidateQueries({ queryKey: ["charter_parties"] });
+      });
     },
-    onSuccess: () => {
-      queryClient.invalidateQueries({ queryKey: ["charter_parties"] });
-      toast.success("Status atualizado");
-    },
-  });
+    isPending: updateStatusHook.isPending,
+  };
 
   return (
     <div className="space-y-4">

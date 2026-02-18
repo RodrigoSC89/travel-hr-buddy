@@ -12,3 +12,8 @@ export { DocumentsService } from './documents-service';
 export { TrackingService } from './tracking-service';
 export { PeopleService } from './people-service';
 export { AIService } from './ai-service';
+export { PMSService } from './pms-service';
+export { CharteringService } from './chartering-service';
+export { ISMService } from './ism-service';
+export { CrewService } from './crew-service';
+export { ETSService } from './ets-service';

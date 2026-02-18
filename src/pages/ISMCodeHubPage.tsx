@@ -4,8 +4,10 @@
  */
 
 import { useState, useMemo } from "react";
-import { useQuery, useMutation, useQueryClient } from "@tanstack/react-query";
+import { useQuery, useQueryClient } from "@tanstack/react-query";
 import { supabase } from "@/integrations/supabase/client";
+import { useRunISMGapAnalysis, useCreateISMCAPA, useUpdateISMCAPAStatus } from "@/hooks/useModuleHooks";
+import { CrossModulePanel } from "@/components/integration";
 import { PremiumModuleShell, type ModuleTab } from "@/components/ui/premium-module-kit/PremiumModuleShell";
 import { SmartKPIGrid } from "@/components/ui/premium-module-kit/SmartKPIGrid";
 import { Card, CardContent, CardHeader, CardTitle, CardDescription } from "@/components/ui/card";
@@ -186,30 +188,22 @@ function GapAnalysisTab() {
   const { data: gaps = [] } = useISMGapAnalysis();
   const queryClient = useQueryClient();
 
-  const runAssessment = useMutation({
-    mutationFn: async (elementId: string) => {
-      // Simulate a gap analysis assessment
-      const score = Math.floor(Math.random() * 60) + 40; // 40-100
+  const runAssessmentHook = useRunISMGapAnalysis();
+  const runAssessment = {
+    mutate: (elementId: string) => {
+      const score = Math.floor(Math.random() * 60) + 40;
       const totalReqs = Math.floor(Math.random() * 10) + 5;
       const metReqs = Math.round((score / 100) * totalReqs);
       const status = score >= 80 ? "compliant" : score >= 50 ? "partial" : "non_compliant";
-      
-      const { error } = await supabase.from("ism_gap_analysis" as any).insert({
-        element_id: elementId,
-        compliance_score: score,
-        total_requirements: totalReqs,
-        met_requirements: metReqs,
-        status,
-        last_assessed_at: new Date().toISOString(),
-        assessed_by: "Sistema",
-      } as any);
-      if (error) throw error;
+      runAssessmentHook.mutateAsync({
+        elementId,
+        data: { compliance_score: score, total_requirements: totalReqs, met_requirements: metReqs, status, assessed_by: "Sistema" },
+      }).then(() => {
+        queryClient.invalidateQueries({ queryKey: ["ism_gap_analysis"] });
+      });
     },
-    onSuccess: () => {
-      queryClient.invalidateQueries({ queryKey: ["ism_gap_analysis"] });
-      toast.success("Avaliação concluída");
-    },
-  });
+    isPending: runAssessmentHook.isPending,
+  };
 
   const overallScore = useMemo(() => {
     if (gaps.length === 0) return 0;
@@ -307,31 +301,26 @@ function CAPAWorkflow() {
   const { data: capas = [], isLoading } = useISMCAPAs(statusFilter);
   const { data: elements = [] } = useISMElements();
 
-  const createCAPA = useMutation({
-    mutationFn: async (capa: any) => {
-      const { error } = await supabase.from("ism_capa" as any).insert(capa);
-      if (error) throw error;
+  const createCAPAHook = useCreateISMCAPA();
+  const createCAPA = {
+    mutate: (capa: any) => {
+      createCAPAHook.mutateAsync(capa).then(() => {
+        queryClient.invalidateQueries({ queryKey: ["ism_capa"] });
+        setShowCreate(false);
+      });
     },
-    onSuccess: () => {
-      queryClient.invalidateQueries({ queryKey: ["ism_capa"] });
-      toast.success("CAPA criada");
-      setShowCreate(false);
-    },
-    onError: () => toast.error("Erro ao criar CAPA"),
-  });
+    isPending: createCAPAHook.isPending,
+  };
 
-  const updateStatus = useMutation({
-    mutationFn: async ({ id, status }: { id: string; status: string }) => {
-      const updates: any = { status };
-      if (status === "closed") updates.completion_date = new Date().toISOString().split("T")[0];
-      const { error } = await supabase.from("ism_capa" as any).update(updates).eq("id", id);
-      if (error) throw error;
+  const updateStatusHook = useUpdateISMCAPAStatus();
+  const updateStatus = {
+    mutate: ({ id, status }: { id: string; status: string }) => {
+      updateStatusHook.mutateAsync({ id, status }).then(() => {
+        queryClient.invalidateQueries({ queryKey: ["ism_capa"] });
+      });
     },
-    onSuccess: () => {
-      queryClient.invalidateQueries({ queryKey: ["ism_capa"] });
-      toast.success("Status CAPA atualizado");
-    },
-  });
+    isPending: updateStatusHook.isPending,
+  };
 
   const getNextStatus = (current: string): string | null => {
     const flow = ["open", "in_progress", "implemented", "verified", "closed"];
