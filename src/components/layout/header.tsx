@@ -1,6 +1,6 @@
 /**
- * Header v11.1 - World-Class Maritime Command Bar (i18n)
- * Premium header with glassmorphism, breadcrumbs, and status indicators
+ * Header v12 - World-Class Maritime Command Bar (i18n)
+ * Premium header with glassmorphism, breadcrumbs, vessel context, and status indicators
  */
 import type { FC } from "react";
 import { useTranslation } from "react-i18next";
@@ -12,6 +12,7 @@ import { UserMenu } from "@/components/auth/user-menu";
 import { LanguageSelector } from "@/components/ui/LanguageSelector";
 import { SimpleGlobalSearch } from "@/components/ui/simple-global-search";
 import { OrganizationSelector } from "@/components/admin/organization-selector";
+import { VesselContextSelector } from "@/components/layout/VesselContextSelector";
 import { useHighContrastTheme } from "@/hooks/useHighContrastTheme";
 import { useNavigate, useLocation } from "react-router-dom";
 import { Settings, Menu, Command, ChevronRight, Home } from "lucide-react";
@@ -175,6 +176,7 @@ export const Header: FC = () => {
               </>
             ) : (
               <>
+                <VesselContextSelector />
                 <LanguageSelector />
                 <OrganizationSelector />
                 <span data-tour="header-notifications"><RealTimeNotificationCenter /></span>
