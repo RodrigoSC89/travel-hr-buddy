@@ -40,6 +40,7 @@ const CrewProductivityPulse = lazy(() => import('@/components/dashboard/CrewProd
 const DocumentIntelligencePanel = lazy(() => import('@/components/dashboard/DocumentIntelligencePanel'));
 const WorkflowAutomationEngine = lazy(() => import('@/components/dashboard/WorkflowAutomationEngine'));
 const CrewCertificationHeatmap = lazy(() => import('@/components/dashboard/CrewCertificationHeatmap'));
+const PayrollIntelligence = lazy(() => import('@/components/dashboard/PayrollIntelligence'));
 
 const LoadingSkeleton = () => (
   <div className="space-y-4 p-6">
@@ -465,6 +466,12 @@ export default function WorkbenchMegaHub() {
                 showSearch
                 searchPlaceholder="Search transactions, invoices..."
               />
+              {/* Wave 46: Payroll Intelligence */}
+              <div className="grid grid-cols-1 lg:grid-cols-2 gap-6">
+                <Suspense fallback={<Skeleton className="h-64" />}>
+                  <PayrollIntelligence />
+                </Suspense>
+              </div>
               <FinanceHub />
             </TabsContent>
 

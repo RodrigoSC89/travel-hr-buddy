@@ -38,6 +38,7 @@ const TelemetryHealthMatrix = lazy(() => import('@/components/dashboard/Telemetr
 const FleetPositionIntelligence = lazy(() => import('@/components/dashboard/FleetPositionIntelligence'));
 const GeofenceIntelligence = lazy(() => import('@/components/dashboard/GeofenceIntelligence'));
 const IoTAnomalyDetector = lazy(() => import('@/components/dashboard/IoTAnomalyDetector'));
+const SATCOMPerformanceMonitor = lazy(() => import('@/components/dashboard/SATCOMPerformanceMonitor'));
 
 const LoadingSkeleton = () => (
   <div className="space-y-4 p-6">
@@ -296,6 +297,13 @@ export default function TrackingMegaHub() {
                 </Suspense>
                 <Suspense fallback={<Skeleton className="h-64" />}>
                   <IoTAnomalyDetector />
+                </Suspense>
+              </div>
+
+              {/* Wave 45: SATCOM Performance */}
+              <div className="grid grid-cols-1 lg:grid-cols-2 gap-6">
+                <Suspense fallback={<Skeleton className="h-64" />}>
+                  <SATCOMPerformanceMonitor />
                 </Suspense>
               </div>
 
