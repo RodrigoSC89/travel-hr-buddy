@@ -48,6 +48,8 @@ const PredictiveCommandCenter = lazy(() => import('@/components/dashboard/Predic
 const AutonomousFleetOptimizer = lazy(() => import('@/components/dashboard/AutonomousFleetOptimizer'));
 const FuelIntelligencePanel = lazy(() => import('@/components/dashboard/FuelIntelligencePanel'));
 const ComplianceNerveCenter = lazy(() => import('@/components/dashboard/ComplianceNerveCenter'));
+const CrewWellnessCommand = lazy(() => import('@/components/dashboard/CrewWellnessCommand'));
+const FinancialCockpit = lazy(() => import('@/components/dashboard/FinancialCockpit'));
 
 const LoadingSkeleton = () => (
   <div className="space-y-4 p-6">
@@ -336,6 +338,16 @@ export default function CommandMegaHub() {
                 </Suspense>
                 <Suspense fallback={<Skeleton className="h-[500px]" />}>
                   <ComplianceNerveCenter />
+                </Suspense>
+              </div>
+
+              {/* Wave 12: Crew Wellness & Financial Cockpit */}
+              <div className="grid grid-cols-1 lg:grid-cols-2 gap-6">
+                <Suspense fallback={<Skeleton className="h-[500px]" />}>
+                  <CrewWellnessCommand />
+                </Suspense>
+                <Suspense fallback={<Skeleton className="h-[500px]" />}>
+                  <FinancialCockpit />
                 </Suspense>
               </div>
 
