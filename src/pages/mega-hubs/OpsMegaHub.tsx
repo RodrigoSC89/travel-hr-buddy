@@ -57,6 +57,8 @@ const FleetFuelEfficiencyTracker = lazy(() => import('@/components/dashboard/Fle
 const CrewOvertimeTracker = lazy(() => import('@/components/dashboard/CrewOvertimeTracker').then(m => ({ default: m.CrewOvertimeTracker })));
 const CharterPartyPerformance = lazy(() => import('@/components/dashboard/CharterPartyPerformance').then(m => ({ default: m.CharterPartyPerformance })));
 const CrewRotationOverview = lazy(() => import('@/components/dashboard/CrewRotationOverview').then(m => ({ default: m.CrewRotationOverview })));
+const CrewFatigueRiskMonitor = lazy(() => import('@/components/dashboard/CrewFatigueRiskMonitor').then(m => ({ default: m.CrewFatigueRiskMonitor })));
+const VoyageTCEPerformance = lazy(() => import('@/components/dashboard/VoyageTCEPerformance').then(m => ({ default: m.VoyageTCEPerformance })));
 const LoadingSkeleton = () => (
   <div className="space-y-4 p-6">
     <Skeleton className="h-8 w-64" />
@@ -386,6 +388,16 @@ export default function OpsMegaHub() {
               <Suspense fallback={<Skeleton className="h-80" />}>
                 <CrewRotationOverview />
               </Suspense>
+
+              {/* Wave 53: Fatigue Risk + TCE Performance */}
+              <div className="grid grid-cols-1 lg:grid-cols-2 gap-6">
+                <Suspense fallback={<Skeleton className="h-80" />}>
+                  <CrewFatigueRiskMonitor />
+                </Suspense>
+                <Suspense fallback={<Skeleton className="h-80" />}>
+                  <VoyageTCEPerformance />
+                </Suspense>
+              </div>
 
               {/* Original Operations Hub */}
               {(isLoading || metrics.totalVessels > 0) && <OperationsCommandHub />}
