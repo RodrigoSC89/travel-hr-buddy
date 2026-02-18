@@ -54,6 +54,9 @@ const BunkerConsumptionAnalytics = lazy(() => import('@/components/dashboard/Bun
 const CrewRotationTimeline = lazy(() => import('@/components/dashboard/CrewRotationTimeline').then(m => ({ default: m.CrewRotationTimeline })));
 const PortCostIntelligence = lazy(() => import('@/components/dashboard/PortCostIntelligence').then(m => ({ default: m.PortCostIntelligence })));
 const FleetFuelEfficiencyTracker = lazy(() => import('@/components/dashboard/FleetFuelEfficiencyTracker').then(m => ({ default: m.FleetFuelEfficiencyTracker })));
+const CrewOvertimeTracker = lazy(() => import('@/components/dashboard/CrewOvertimeTracker').then(m => ({ default: m.CrewOvertimeTracker })));
+const CharterPartyPerformance = lazy(() => import('@/components/dashboard/CharterPartyPerformance').then(m => ({ default: m.CharterPartyPerformance })));
+const CrewRotationOverview = lazy(() => import('@/components/dashboard/CrewRotationOverview').then(m => ({ default: m.CrewRotationOverview })));
 const LoadingSkeleton = () => (
   <div className="space-y-4 p-6">
     <Skeleton className="h-8 w-64" />
@@ -367,6 +370,21 @@ export default function OpsMegaHub() {
               {/* Wave 51: Fleet Fuel Efficiency */}
               <Suspense fallback={<Skeleton className="h-80" />}>
                 <FleetFuelEfficiencyTracker />
+              </Suspense>
+
+              {/* Wave 52: Commercial & Crew Intelligence */}
+              <div className="grid grid-cols-1 lg:grid-cols-2 gap-6">
+                <Suspense fallback={<Skeleton className="h-80" />}>
+                  <CharterPartyPerformance />
+                </Suspense>
+                <Suspense fallback={<Skeleton className="h-80" />}>
+                  <CrewOvertimeTracker />
+                </Suspense>
+              </div>
+
+              {/* Wave 52: Crew Rotation Overview */}
+              <Suspense fallback={<Skeleton className="h-80" />}>
+                <CrewRotationOverview />
               </Suspense>
 
               {/* Original Operations Hub */}
