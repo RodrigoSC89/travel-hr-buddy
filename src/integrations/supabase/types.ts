@@ -10633,6 +10633,109 @@ export type Database = {
           },
         ]
       }
+      crew_competency_matrix: {
+        Row: {
+          assessed_by: string | null
+          assessment_date: string | null
+          assessment_method: string | null
+          competency_category: string
+          competency_name: string
+          created_at: string | null
+          crew_member_id: string | null
+          current_level: string | null
+          endorsements: Json | null
+          evidence_documents: Json | null
+          gap_analysis: string | null
+          id: string
+          metadata: Json | null
+          next_assessment_date: string | null
+          organization_id: string | null
+          required_level: string | null
+          score: number | null
+          sea_service_months: number | null
+          simulator_hours: number | null
+          status: string | null
+          stcw_reference: string | null
+          training_plan: string | null
+          updated_at: string | null
+          vessel_id: string | null
+        }
+        Insert: {
+          assessed_by?: string | null
+          assessment_date?: string | null
+          assessment_method?: string | null
+          competency_category: string
+          competency_name: string
+          created_at?: string | null
+          crew_member_id?: string | null
+          current_level?: string | null
+          endorsements?: Json | null
+          evidence_documents?: Json | null
+          gap_analysis?: string | null
+          id?: string
+          metadata?: Json | null
+          next_assessment_date?: string | null
+          organization_id?: string | null
+          required_level?: string | null
+          score?: number | null
+          sea_service_months?: number | null
+          simulator_hours?: number | null
+          status?: string | null
+          stcw_reference?: string | null
+          training_plan?: string | null
+          updated_at?: string | null
+          vessel_id?: string | null
+        }
+        Update: {
+          assessed_by?: string | null
+          assessment_date?: string | null
+          assessment_method?: string | null
+          competency_category?: string
+          competency_name?: string
+          created_at?: string | null
+          crew_member_id?: string | null
+          current_level?: string | null
+          endorsements?: Json | null
+          evidence_documents?: Json | null
+          gap_analysis?: string | null
+          id?: string
+          metadata?: Json | null
+          next_assessment_date?: string | null
+          organization_id?: string | null
+          required_level?: string | null
+          score?: number | null
+          sea_service_months?: number | null
+          simulator_hours?: number | null
+          status?: string | null
+          stcw_reference?: string | null
+          training_plan?: string | null
+          updated_at?: string | null
+          vessel_id?: string | null
+        }
+        Relationships: [
+          {
+            foreignKeyName: "crew_competency_matrix_crew_member_id_fkey"
+            columns: ["crew_member_id"]
+            isOneToOne: false
+            referencedRelation: "crew_members"
+            referencedColumns: ["id"]
+          },
+          {
+            foreignKeyName: "crew_competency_matrix_organization_id_fkey"
+            columns: ["organization_id"]
+            isOneToOne: false
+            referencedRelation: "organizations"
+            referencedColumns: ["id"]
+          },
+          {
+            foreignKeyName: "crew_competency_matrix_vessel_id_fkey"
+            columns: ["vessel_id"]
+            isOneToOne: false
+            referencedRelation: "vessels"
+            referencedColumns: ["id"]
+          },
+        ]
+      }
       crew_contracts: {
         Row: {
           base_salary: number | null
@@ -36544,6 +36647,165 @@ export type Database = {
           },
           {
             foreignKeyName: "port_calls_vessel_id_fkey"
+            columns: ["vessel_id"]
+            isOneToOne: false
+            referencedRelation: "vessels"
+            referencedColumns: ["id"]
+          },
+        ]
+      }
+      port_cost_estimates: {
+        Row: {
+          agency_fees: number | null
+          agent_name: string | null
+          agent_reference: string | null
+          berth_hire: number | null
+          bunker_cost: number | null
+          call_type: string | null
+          canal_dues: number | null
+          cargo_handling: number | null
+          confidence_score: number | null
+          country: string | null
+          created_at: string | null
+          currency: string | null
+          customs_fees: number | null
+          da_number: string | null
+          da_status: string | null
+          estimated_arrival: string | null
+          estimated_departure: string | null
+          exchange_rate: number | null
+          fresh_water: number | null
+          health_clearance: number | null
+          historical_average: number | null
+          id: string
+          immigration_fees: number | null
+          lighthouse_dues: number | null
+          metadata: Json | null
+          mooring: number | null
+          notes: string | null
+          organization_id: string | null
+          other_costs: number | null
+          pilotage: number | null
+          port_code: string | null
+          port_dues: number | null
+          port_name: string
+          provisions: number | null
+          region: string | null
+          stay_duration_hours: number | null
+          stevedoring: number | null
+          total_actual: number | null
+          total_estimated: number | null
+          towage: number | null
+          updated_at: string | null
+          variance_percent: number | null
+          vessel_id: string | null
+          voyage_id: string | null
+          waste_disposal: number | null
+        }
+        Insert: {
+          agency_fees?: number | null
+          agent_name?: string | null
+          agent_reference?: string | null
+          berth_hire?: number | null
+          bunker_cost?: number | null
+          call_type?: string | null
+          canal_dues?: number | null
+          cargo_handling?: number | null
+          confidence_score?: number | null
+          country?: string | null
+          created_at?: string | null
+          currency?: string | null
+          customs_fees?: number | null
+          da_number?: string | null
+          da_status?: string | null
+          estimated_arrival?: string | null
+          estimated_departure?: string | null
+          exchange_rate?: number | null
+          fresh_water?: number | null
+          health_clearance?: number | null
+          historical_average?: number | null
+          id?: string
+          immigration_fees?: number | null
+          lighthouse_dues?: number | null
+          metadata?: Json | null
+          mooring?: number | null
+          notes?: string | null
+          organization_id?: string | null
+          other_costs?: number | null
+          pilotage?: number | null
+          port_code?: string | null
+          port_dues?: number | null
+          port_name: string
+          provisions?: number | null
+          region?: string | null
+          stay_duration_hours?: number | null
+          stevedoring?: number | null
+          total_actual?: number | null
+          total_estimated?: number | null
+          towage?: number | null
+          updated_at?: string | null
+          variance_percent?: number | null
+          vessel_id?: string | null
+          voyage_id?: string | null
+          waste_disposal?: number | null
+        }
+        Update: {
+          agency_fees?: number | null
+          agent_name?: string | null
+          agent_reference?: string | null
+          berth_hire?: number | null
+          bunker_cost?: number | null
+          call_type?: string | null
+          canal_dues?: number | null
+          cargo_handling?: number | null
+          confidence_score?: number | null
+          country?: string | null
+          created_at?: string | null
+          currency?: string | null
+          customs_fees?: number | null
+          da_number?: string | null
+          da_status?: string | null
+          estimated_arrival?: string | null
+          estimated_departure?: string | null
+          exchange_rate?: number | null
+          fresh_water?: number | null
+          health_clearance?: number | null
+          historical_average?: number | null
+          id?: string
+          immigration_fees?: number | null
+          lighthouse_dues?: number | null
+          metadata?: Json | null
+          mooring?: number | null
+          notes?: string | null
+          organization_id?: string | null
+          other_costs?: number | null
+          pilotage?: number | null
+          port_code?: string | null
+          port_dues?: number | null
+          port_name?: string
+          provisions?: number | null
+          region?: string | null
+          stay_duration_hours?: number | null
+          stevedoring?: number | null
+          total_actual?: number | null
+          total_estimated?: number | null
+          towage?: number | null
+          updated_at?: string | null
+          variance_percent?: number | null
+          vessel_id?: string | null
+          voyage_id?: string | null
+          waste_disposal?: number | null
+        }
+        Relationships: [
+          {
+            foreignKeyName: "port_cost_estimates_organization_id_fkey"
+            columns: ["organization_id"]
+            isOneToOne: false
+            referencedRelation: "organizations"
+            referencedColumns: ["id"]
+          },
+          {
+            foreignKeyName: "port_cost_estimates_vessel_id_fkey"
             columns: ["vessel_id"]
             isOneToOne: false
             referencedRelation: "vessels"
