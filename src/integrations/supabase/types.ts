@@ -9942,6 +9942,126 @@ export type Database = {
           },
         ]
       }
+      contract_nlp_analysis: {
+        Row: {
+          charter_party_id: string | null
+          clauses_extracted: Json | null
+          compared_with_id: string | null
+          comparison_diff: Json | null
+          confidence: number | null
+          contract_type: string | null
+          created_at: string | null
+          currency: string | null
+          deviation_from_standard: Json | null
+          document_id: string | null
+          document_name: string
+          entities: Json | null
+          form_type: string | null
+          id: string
+          key_terms: Json | null
+          language: string | null
+          missing_standard_clauses: string[] | null
+          model_used: string | null
+          obligations: Json | null
+          organization_id: string | null
+          overall_risk_score: number | null
+          payment_terms: string | null
+          penalty_clauses: Json | null
+          processing_time_ms: number | null
+          reviewed_by: string | null
+          reviewer_notes: string | null
+          risk_clauses: Json | null
+          status: string | null
+          tokens_used: number | null
+          total_contract_value: number | null
+          total_pages: number | null
+          updated_at: string | null
+        }
+        Insert: {
+          charter_party_id?: string | null
+          clauses_extracted?: Json | null
+          compared_with_id?: string | null
+          comparison_diff?: Json | null
+          confidence?: number | null
+          contract_type?: string | null
+          created_at?: string | null
+          currency?: string | null
+          deviation_from_standard?: Json | null
+          document_id?: string | null
+          document_name: string
+          entities?: Json | null
+          form_type?: string | null
+          id?: string
+          key_terms?: Json | null
+          language?: string | null
+          missing_standard_clauses?: string[] | null
+          model_used?: string | null
+          obligations?: Json | null
+          organization_id?: string | null
+          overall_risk_score?: number | null
+          payment_terms?: string | null
+          penalty_clauses?: Json | null
+          processing_time_ms?: number | null
+          reviewed_by?: string | null
+          reviewer_notes?: string | null
+          risk_clauses?: Json | null
+          status?: string | null
+          tokens_used?: number | null
+          total_contract_value?: number | null
+          total_pages?: number | null
+          updated_at?: string | null
+        }
+        Update: {
+          charter_party_id?: string | null
+          clauses_extracted?: Json | null
+          compared_with_id?: string | null
+          comparison_diff?: Json | null
+          confidence?: number | null
+          contract_type?: string | null
+          created_at?: string | null
+          currency?: string | null
+          deviation_from_standard?: Json | null
+          document_id?: string | null
+          document_name?: string
+          entities?: Json | null
+          form_type?: string | null
+          id?: string
+          key_terms?: Json | null
+          language?: string | null
+          missing_standard_clauses?: string[] | null
+          model_used?: string | null
+          obligations?: Json | null
+          organization_id?: string | null
+          overall_risk_score?: number | null
+          payment_terms?: string | null
+          penalty_clauses?: Json | null
+          processing_time_ms?: number | null
+          reviewed_by?: string | null
+          reviewer_notes?: string | null
+          risk_clauses?: Json | null
+          status?: string | null
+          tokens_used?: number | null
+          total_contract_value?: number | null
+          total_pages?: number | null
+          updated_at?: string | null
+        }
+        Relationships: [
+          {
+            foreignKeyName: "contract_nlp_analysis_charter_party_id_fkey"
+            columns: ["charter_party_id"]
+            isOneToOne: false
+            referencedRelation: "charter_parties"
+            referencedColumns: ["id"]
+          },
+          {
+            foreignKeyName: "contract_nlp_analysis_organization_id_fkey"
+            columns: ["organization_id"]
+            isOneToOne: false
+            referencedRelation: "organizations"
+            referencedColumns: ["id"]
+          },
+        ]
+      }
       conversation_participants: {
         Row: {
           conversation_id: string
@@ -24510,6 +24630,220 @@ export type Database = {
           },
         ]
       }
+      iot_anomaly_detections: {
+        Row: {
+          acknowledged_at: string | null
+          acknowledged_by: string | null
+          anomaly_end: string | null
+          anomaly_start: string | null
+          anomaly_type: string
+          auto_action_taken: string | null
+          baseline_mean: number | null
+          baseline_std: number | null
+          confidence: number | null
+          contributing_factors: Json | null
+          created_at: string | null
+          detected_at: string
+          detection_model: string | null
+          deviation_pct: number | null
+          duration_minutes: number | null
+          equipment_id: string | null
+          expected_value: number | null
+          false_positive: boolean | null
+          feature_vector: Json | null
+          id: string
+          model_version: string | null
+          organization_id: string | null
+          prediction_id: string | null
+          resolution: string | null
+          resolved_at: string | null
+          sensor_id: string | null
+          sensor_type: string | null
+          sensor_value: number | null
+          severity: string | null
+          vessel_id: string | null
+          work_order_created: string | null
+        }
+        Insert: {
+          acknowledged_at?: string | null
+          acknowledged_by?: string | null
+          anomaly_end?: string | null
+          anomaly_start?: string | null
+          anomaly_type: string
+          auto_action_taken?: string | null
+          baseline_mean?: number | null
+          baseline_std?: number | null
+          confidence?: number | null
+          contributing_factors?: Json | null
+          created_at?: string | null
+          detected_at?: string
+          detection_model?: string | null
+          deviation_pct?: number | null
+          duration_minutes?: number | null
+          equipment_id?: string | null
+          expected_value?: number | null
+          false_positive?: boolean | null
+          feature_vector?: Json | null
+          id?: string
+          model_version?: string | null
+          organization_id?: string | null
+          prediction_id?: string | null
+          resolution?: string | null
+          resolved_at?: string | null
+          sensor_id?: string | null
+          sensor_type?: string | null
+          sensor_value?: number | null
+          severity?: string | null
+          vessel_id?: string | null
+          work_order_created?: string | null
+        }
+        Update: {
+          acknowledged_at?: string | null
+          acknowledged_by?: string | null
+          anomaly_end?: string | null
+          anomaly_start?: string | null
+          anomaly_type?: string
+          auto_action_taken?: string | null
+          baseline_mean?: number | null
+          baseline_std?: number | null
+          confidence?: number | null
+          contributing_factors?: Json | null
+          created_at?: string | null
+          detected_at?: string
+          detection_model?: string | null
+          deviation_pct?: number | null
+          duration_minutes?: number | null
+          equipment_id?: string | null
+          expected_value?: number | null
+          false_positive?: boolean | null
+          feature_vector?: Json | null
+          id?: string
+          model_version?: string | null
+          organization_id?: string | null
+          prediction_id?: string | null
+          resolution?: string | null
+          resolved_at?: string | null
+          sensor_id?: string | null
+          sensor_type?: string | null
+          sensor_value?: number | null
+          severity?: string | null
+          vessel_id?: string | null
+          work_order_created?: string | null
+        }
+        Relationships: [
+          {
+            foreignKeyName: "iot_anomaly_detections_organization_id_fkey"
+            columns: ["organization_id"]
+            isOneToOne: false
+            referencedRelation: "organizations"
+            referencedColumns: ["id"]
+          },
+          {
+            foreignKeyName: "iot_anomaly_detections_prediction_id_fkey"
+            columns: ["prediction_id"]
+            isOneToOne: false
+            referencedRelation: "ai_maintenance_predictions"
+            referencedColumns: ["id"]
+          },
+          {
+            foreignKeyName: "iot_anomaly_detections_vessel_id_fkey"
+            columns: ["vessel_id"]
+            isOneToOne: false
+            referencedRelation: "vessels"
+            referencedColumns: ["id"]
+          },
+        ]
+      }
+      iot_anomaly_rules: {
+        Row: {
+          alert_channels: string[] | null
+          auto_action: string | null
+          condition_type: string
+          cooldown_minutes: number | null
+          correlation_min: number | null
+          correlation_sensor: string | null
+          created_at: string | null
+          equipment_type: string | null
+          id: string
+          is_active: boolean | null
+          last_triggered_at: string | null
+          organization_id: string | null
+          rate_threshold: number | null
+          rule_name: string
+          sensor_type: string
+          severity: string | null
+          threshold_max: number | null
+          threshold_min: number | null
+          threshold_value: number | null
+          trigger_count: number | null
+          updated_at: string | null
+          vessel_id: string | null
+        }
+        Insert: {
+          alert_channels?: string[] | null
+          auto_action?: string | null
+          condition_type: string
+          cooldown_minutes?: number | null
+          correlation_min?: number | null
+          correlation_sensor?: string | null
+          created_at?: string | null
+          equipment_type?: string | null
+          id?: string
+          is_active?: boolean | null
+          last_triggered_at?: string | null
+          organization_id?: string | null
+          rate_threshold?: number | null
+          rule_name: string
+          sensor_type: string
+          severity?: string | null
+          threshold_max?: number | null
+          threshold_min?: number | null
+          threshold_value?: number | null
+          trigger_count?: number | null
+          updated_at?: string | null
+          vessel_id?: string | null
+        }
+        Update: {
+          alert_channels?: string[] | null
+          auto_action?: string | null
+          condition_type?: string
+          cooldown_minutes?: number | null
+          correlation_min?: number | null
+          correlation_sensor?: string | null
+          created_at?: string | null
+          equipment_type?: string | null
+          id?: string
+          is_active?: boolean | null
+          last_triggered_at?: string | null
+          organization_id?: string | null
+          rate_threshold?: number | null
+          rule_name?: string
+          sensor_type?: string
+          severity?: string | null
+          threshold_max?: number | null
+          threshold_min?: number | null
+          threshold_value?: number | null
+          trigger_count?: number | null
+          updated_at?: string | null
+          vessel_id?: string | null
+        }
+        Relationships: [
+          {
+            foreignKeyName: "iot_anomaly_rules_organization_id_fkey"
+            columns: ["organization_id"]
+            isOneToOne: false
+            referencedRelation: "organizations"
+            referencedColumns: ["id"]
+          },
+          {
+            foreignKeyName: "iot_anomaly_rules_vessel_id_fkey"
+            columns: ["vessel_id"]
+            isOneToOne: false
+            referencedRelation: "vessels"
+            referencedColumns: ["id"]
+          },
+        ]
+      }
       iot_sensor_alerts: {
         Row: {
           acknowledged_at: string | null
@@ -29002,6 +29336,274 @@ export type Database = {
             columns: ["vessel_id"]
             isOneToOne: false
             referencedRelation: "vessels"
+            referencedColumns: ["id"]
+          },
+        ]
+      }
+      ml_feature_store: {
+        Row: {
+          computation_logic: string | null
+          created_at: string | null
+          data_type: string
+          description: string | null
+          feature_group: string
+          feature_name: string
+          id: string
+          is_active: boolean | null
+          last_computed_at: string | null
+          organization_id: string | null
+          refresh_frequency: string | null
+          source_tables: string[] | null
+          statistics: Json | null
+          updated_at: string | null
+        }
+        Insert: {
+          computation_logic?: string | null
+          created_at?: string | null
+          data_type: string
+          description?: string | null
+          feature_group: string
+          feature_name: string
+          id?: string
+          is_active?: boolean | null
+          last_computed_at?: string | null
+          organization_id?: string | null
+          refresh_frequency?: string | null
+          source_tables?: string[] | null
+          statistics?: Json | null
+          updated_at?: string | null
+        }
+        Update: {
+          computation_logic?: string | null
+          created_at?: string | null
+          data_type?: string
+          description?: string | null
+          feature_group?: string
+          feature_name?: string
+          id?: string
+          is_active?: boolean | null
+          last_computed_at?: string | null
+          organization_id?: string | null
+          refresh_frequency?: string | null
+          source_tables?: string[] | null
+          statistics?: Json | null
+          updated_at?: string | null
+        }
+        Relationships: [
+          {
+            foreignKeyName: "ml_feature_store_organization_id_fkey"
+            columns: ["organization_id"]
+            isOneToOne: false
+            referencedRelation: "organizations"
+            referencedColumns: ["id"]
+          },
+        ]
+      }
+      ml_model_registry: {
+        Row: {
+          accuracy: number | null
+          approved_by: string | null
+          artifact_url: string | null
+          auc_roc: number | null
+          avg_inference_ms: number | null
+          bias_assessment: Json | null
+          created_at: string | null
+          deployed_at: string | null
+          domain: string
+          explainability_method: string | null
+          f1_score: number | null
+          framework: string | null
+          hyperparameters: Json | null
+          id: string
+          input_schema: Json | null
+          mae: number | null
+          model_name: string
+          model_type: string
+          model_version: string
+          organization_id: string | null
+          output_schema: Json | null
+          precision_score: number | null
+          recall: number | null
+          retired_at: string | null
+          rmse: number | null
+          serving_endpoint: string | null
+          status: string | null
+          total_predictions: number | null
+          training_dataset_id: string | null
+          updated_at: string | null
+        }
+        Insert: {
+          accuracy?: number | null
+          approved_by?: string | null
+          artifact_url?: string | null
+          auc_roc?: number | null
+          avg_inference_ms?: number | null
+          bias_assessment?: Json | null
+          created_at?: string | null
+          deployed_at?: string | null
+          domain: string
+          explainability_method?: string | null
+          f1_score?: number | null
+          framework?: string | null
+          hyperparameters?: Json | null
+          id?: string
+          input_schema?: Json | null
+          mae?: number | null
+          model_name: string
+          model_type: string
+          model_version: string
+          organization_id?: string | null
+          output_schema?: Json | null
+          precision_score?: number | null
+          recall?: number | null
+          retired_at?: string | null
+          rmse?: number | null
+          serving_endpoint?: string | null
+          status?: string | null
+          total_predictions?: number | null
+          training_dataset_id?: string | null
+          updated_at?: string | null
+        }
+        Update: {
+          accuracy?: number | null
+          approved_by?: string | null
+          artifact_url?: string | null
+          auc_roc?: number | null
+          avg_inference_ms?: number | null
+          bias_assessment?: Json | null
+          created_at?: string | null
+          deployed_at?: string | null
+          domain?: string
+          explainability_method?: string | null
+          f1_score?: number | null
+          framework?: string | null
+          hyperparameters?: Json | null
+          id?: string
+          input_schema?: Json | null
+          mae?: number | null
+          model_name?: string
+          model_type?: string
+          model_version?: string
+          organization_id?: string | null
+          output_schema?: Json | null
+          precision_score?: number | null
+          recall?: number | null
+          retired_at?: string | null
+          rmse?: number | null
+          serving_endpoint?: string | null
+          status?: string | null
+          total_predictions?: number | null
+          training_dataset_id?: string | null
+          updated_at?: string | null
+        }
+        Relationships: [
+          {
+            foreignKeyName: "ml_model_registry_organization_id_fkey"
+            columns: ["organization_id"]
+            isOneToOne: false
+            referencedRelation: "organizations"
+            referencedColumns: ["id"]
+          },
+        ]
+      }
+      ml_training_runs: {
+        Row: {
+          batch_size: number | null
+          completed_at: string | null
+          confusion_matrix: Json | null
+          created_at: string | null
+          epochs: number | null
+          error_message: string | null
+          feature_columns: Json | null
+          feature_importance: Json | null
+          id: string
+          learning_rate: number | null
+          logs_url: string | null
+          loss_function: string | null
+          model_id: string | null
+          optimizer: string | null
+          organization_id: string | null
+          run_number: number
+          started_at: string | null
+          status: string | null
+          target_column: string | null
+          test_metrics: Json | null
+          test_samples: number | null
+          train_loss: number | null
+          training_duration_s: number | null
+          training_samples: number | null
+          val_loss: number | null
+          validation_samples: number | null
+        }
+        Insert: {
+          batch_size?: number | null
+          completed_at?: string | null
+          confusion_matrix?: Json | null
+          created_at?: string | null
+          epochs?: number | null
+          error_message?: string | null
+          feature_columns?: Json | null
+          feature_importance?: Json | null
+          id?: string
+          learning_rate?: number | null
+          logs_url?: string | null
+          loss_function?: string | null
+          model_id?: string | null
+          optimizer?: string | null
+          organization_id?: string | null
+          run_number: number
+          started_at?: string | null
+          status?: string | null
+          target_column?: string | null
+          test_metrics?: Json | null
+          test_samples?: number | null
+          train_loss?: number | null
+          training_duration_s?: number | null
+          training_samples?: number | null
+          val_loss?: number | null
+          validation_samples?: number | null
+        }
+        Update: {
+          batch_size?: number | null
+          completed_at?: string | null
+          confusion_matrix?: Json | null
+          created_at?: string | null
+          epochs?: number | null
+          error_message?: string | null
+          feature_columns?: Json | null
+          feature_importance?: Json | null
+          id?: string
+          learning_rate?: number | null
+          logs_url?: string | null
+          loss_function?: string | null
+          model_id?: string | null
+          optimizer?: string | null
+          organization_id?: string | null
+          run_number?: number
+          started_at?: string | null
+          status?: string | null
+          target_column?: string | null
+          test_metrics?: Json | null
+          test_samples?: number | null
+          train_loss?: number | null
+          training_duration_s?: number | null
+          training_samples?: number | null
+          val_loss?: number | null
+          validation_samples?: number | null
+        }
+        Relationships: [
+          {
+            foreignKeyName: "ml_training_runs_model_id_fkey"
+            columns: ["model_id"]
+            isOneToOne: false
+            referencedRelation: "ml_model_registry"
+            referencedColumns: ["id"]
+          },
+          {
+            foreignKeyName: "ml_training_runs_organization_id_fkey"
+            columns: ["organization_id"]
+            isOneToOne: false
+            referencedRelation: "organizations"
             referencedColumns: ["id"]
           },
         ]
@@ -40393,6 +40995,197 @@ export type Database = {
             columns: ["voyage_id"]
             isOneToOne: false
             referencedRelation: "voyage_plans"
+            referencedColumns: ["id"]
+          },
+        ]
+      }
+      route_optimization_requests: {
+        Row: {
+          air_draft_meters: number | null
+          avoid_zones: Json | null
+          beam_meters: number | null
+          canal_preferences: Json | null
+          created_at: string | null
+          departure_window_end: string | null
+          departure_window_start: string | null
+          destination_lat: number | null
+          destination_lng: number | null
+          destination_port: string
+          draft_meters: number | null
+          eca_zones: Json | null
+          eco_speed_knots: number | null
+          ice_class: string | null
+          id: string
+          max_speed_knots: number | null
+          max_wave_height_m: number | null
+          max_wind_speed_knots: number | null
+          organization_id: string | null
+          origin_lat: number | null
+          origin_lng: number | null
+          origin_port: string
+          required_arrival: string | null
+          status: string | null
+          vessel_id: string | null
+          voyage_id: string | null
+          weight_emissions: number | null
+          weight_fuel_cost: number | null
+          weight_safety: number | null
+          weight_time: number | null
+        }
+        Insert: {
+          air_draft_meters?: number | null
+          avoid_zones?: Json | null
+          beam_meters?: number | null
+          canal_preferences?: Json | null
+          created_at?: string | null
+          departure_window_end?: string | null
+          departure_window_start?: string | null
+          destination_lat?: number | null
+          destination_lng?: number | null
+          destination_port: string
+          draft_meters?: number | null
+          eca_zones?: Json | null
+          eco_speed_knots?: number | null
+          ice_class?: string | null
+          id?: string
+          max_speed_knots?: number | null
+          max_wave_height_m?: number | null
+          max_wind_speed_knots?: number | null
+          organization_id?: string | null
+          origin_lat?: number | null
+          origin_lng?: number | null
+          origin_port: string
+          required_arrival?: string | null
+          status?: string | null
+          vessel_id?: string | null
+          voyage_id?: string | null
+          weight_emissions?: number | null
+          weight_fuel_cost?: number | null
+          weight_safety?: number | null
+          weight_time?: number | null
+        }
+        Update: {
+          air_draft_meters?: number | null
+          avoid_zones?: Json | null
+          beam_meters?: number | null
+          canal_preferences?: Json | null
+          created_at?: string | null
+          departure_window_end?: string | null
+          departure_window_start?: string | null
+          destination_lat?: number | null
+          destination_lng?: number | null
+          destination_port?: string
+          draft_meters?: number | null
+          eca_zones?: Json | null
+          eco_speed_knots?: number | null
+          ice_class?: string | null
+          id?: string
+          max_speed_knots?: number | null
+          max_wave_height_m?: number | null
+          max_wind_speed_knots?: number | null
+          organization_id?: string | null
+          origin_lat?: number | null
+          origin_lng?: number | null
+          origin_port?: string
+          required_arrival?: string | null
+          status?: string | null
+          vessel_id?: string | null
+          voyage_id?: string | null
+          weight_emissions?: number | null
+          weight_fuel_cost?: number | null
+          weight_safety?: number | null
+          weight_time?: number | null
+        }
+        Relationships: [
+          {
+            foreignKeyName: "route_optimization_requests_organization_id_fkey"
+            columns: ["organization_id"]
+            isOneToOne: false
+            referencedRelation: "organizations"
+            referencedColumns: ["id"]
+          },
+          {
+            foreignKeyName: "route_optimization_requests_vessel_id_fkey"
+            columns: ["vessel_id"]
+            isOneToOne: false
+            referencedRelation: "vessels"
+            referencedColumns: ["id"]
+          },
+        ]
+      }
+      route_optimization_results: {
+        Row: {
+          co2_emissions_mt: number | null
+          created_at: string | null
+          eca_fuel_mt: number | null
+          estimated_duration_hours: number | null
+          fuel_consumption_mt: number | null
+          fuel_cost_usd: number | null
+          id: string
+          is_recommended: boolean | null
+          max_encountered_wave_m: number | null
+          max_encountered_wind_kts: number | null
+          overall_score: number | null
+          request_id: string | null
+          route_name: string
+          total_cost_usd: number | null
+          total_distance_nm: number | null
+          vs_shortest_fuel_saving_pct: number | null
+          vs_shortest_time_diff_hours: number | null
+          waypoints: Json | null
+          weather_risk_score: number | null
+          weather_windows: Json | null
+        }
+        Insert: {
+          co2_emissions_mt?: number | null
+          created_at?: string | null
+          eca_fuel_mt?: number | null
+          estimated_duration_hours?: number | null
+          fuel_consumption_mt?: number | null
+          fuel_cost_usd?: number | null
+          id?: string
+          is_recommended?: boolean | null
+          max_encountered_wave_m?: number | null
+          max_encountered_wind_kts?: number | null
+          overall_score?: number | null
+          request_id?: string | null
+          route_name: string
+          total_cost_usd?: number | null
+          total_distance_nm?: number | null
+          vs_shortest_fuel_saving_pct?: number | null
+          vs_shortest_time_diff_hours?: number | null
+          waypoints?: Json | null
+          weather_risk_score?: number | null
+          weather_windows?: Json | null
+        }
+        Update: {
+          co2_emissions_mt?: number | null
+          created_at?: string | null
+          eca_fuel_mt?: number | null
+          estimated_duration_hours?: number | null
+          fuel_consumption_mt?: number | null
+          fuel_cost_usd?: number | null
+          id?: string
+          is_recommended?: boolean | null
+          max_encountered_wave_m?: number | null
+          max_encountered_wind_kts?: number | null
+          overall_score?: number | null
+          request_id?: string | null
+          route_name?: string
+          total_cost_usd?: number | null
+          total_distance_nm?: number | null
+          vs_shortest_fuel_saving_pct?: number | null
+          vs_shortest_time_diff_hours?: number | null
+          waypoints?: Json | null
+          weather_risk_score?: number | null
+          weather_windows?: Json | null
+        }
+        Relationships: [
+          {
+            foreignKeyName: "route_optimization_results_request_id_fkey"
+            columns: ["request_id"]
+            isOneToOne: false
+            referencedRelation: "route_optimization_requests"
             referencedColumns: ["id"]
           },
         ]
