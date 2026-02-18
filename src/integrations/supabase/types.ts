@@ -22901,6 +22901,144 @@ export type Database = {
           },
         ]
       }
+      imo_dcs_reports: {
+        Row: {
+          aer: number | null
+          classification_society: string | null
+          created_at: string | null
+          deadweight: number | null
+          distance_travelled_nm: number | null
+          dwt_distance: number | null
+          eeoi: number | null
+          ethanol_mt: number | null
+          flag_state: string | null
+          gross_tonnage: number | null
+          hfo_mt: number | null
+          hours_underway: number | null
+          id: string
+          imo_confirmation_number: string | null
+          imo_number: string
+          lfo_mt: number | null
+          lng_mt: number | null
+          lpg_mt: number | null
+          mdo_mt: number | null
+          methanol_mt: number | null
+          mgo_mt: number | null
+          net_tonnage: number | null
+          notes: string | null
+          organization_id: string | null
+          other_fuel_mt: number | null
+          reporting_year: number
+          soc_expiry_date: string | null
+          soc_issued_date: string | null
+          statement_of_compliance: string | null
+          status: string | null
+          submission_date: string | null
+          total_co2_mt: number | null
+          total_fuel_mt: number | null
+          updated_at: string | null
+          verification_date: string | null
+          verified_by_org: string | null
+          vessel_id: string | null
+          vessel_type: string | null
+        }
+        Insert: {
+          aer?: number | null
+          classification_society?: string | null
+          created_at?: string | null
+          deadweight?: number | null
+          distance_travelled_nm?: number | null
+          dwt_distance?: number | null
+          eeoi?: number | null
+          ethanol_mt?: number | null
+          flag_state?: string | null
+          gross_tonnage?: number | null
+          hfo_mt?: number | null
+          hours_underway?: number | null
+          id?: string
+          imo_confirmation_number?: string | null
+          imo_number: string
+          lfo_mt?: number | null
+          lng_mt?: number | null
+          lpg_mt?: number | null
+          mdo_mt?: number | null
+          methanol_mt?: number | null
+          mgo_mt?: number | null
+          net_tonnage?: number | null
+          notes?: string | null
+          organization_id?: string | null
+          other_fuel_mt?: number | null
+          reporting_year: number
+          soc_expiry_date?: string | null
+          soc_issued_date?: string | null
+          statement_of_compliance?: string | null
+          status?: string | null
+          submission_date?: string | null
+          total_co2_mt?: number | null
+          total_fuel_mt?: number | null
+          updated_at?: string | null
+          verification_date?: string | null
+          verified_by_org?: string | null
+          vessel_id?: string | null
+          vessel_type?: string | null
+        }
+        Update: {
+          aer?: number | null
+          classification_society?: string | null
+          created_at?: string | null
+          deadweight?: number | null
+          distance_travelled_nm?: number | null
+          dwt_distance?: number | null
+          eeoi?: number | null
+          ethanol_mt?: number | null
+          flag_state?: string | null
+          gross_tonnage?: number | null
+          hfo_mt?: number | null
+          hours_underway?: number | null
+          id?: string
+          imo_confirmation_number?: string | null
+          imo_number?: string
+          lfo_mt?: number | null
+          lng_mt?: number | null
+          lpg_mt?: number | null
+          mdo_mt?: number | null
+          methanol_mt?: number | null
+          mgo_mt?: number | null
+          net_tonnage?: number | null
+          notes?: string | null
+          organization_id?: string | null
+          other_fuel_mt?: number | null
+          reporting_year?: number
+          soc_expiry_date?: string | null
+          soc_issued_date?: string | null
+          statement_of_compliance?: string | null
+          status?: string | null
+          submission_date?: string | null
+          total_co2_mt?: number | null
+          total_fuel_mt?: number | null
+          updated_at?: string | null
+          verification_date?: string | null
+          verified_by_org?: string | null
+          vessel_id?: string | null
+          vessel_type?: string | null
+        }
+        Relationships: [
+          {
+            foreignKeyName: "imo_dcs_reports_organization_id_fkey"
+            columns: ["organization_id"]
+            isOneToOne: false
+            referencedRelation: "organizations"
+            referencedColumns: ["id"]
+          },
+          {
+            foreignKeyName: "imo_dcs_reports_vessel_id_fkey"
+            columns: ["vessel_id"]
+            isOneToOne: false
+            referencedRelation: "vessels"
+            referencedColumns: ["id"]
+          },
+        ]
+      }
       impa_spare_parts: {
         Row: {
           category: string
@@ -24237,19 +24375,30 @@ export type Database = {
         Row: {
           category: string | null
           created_at: string
+          criticality: string | null
           currency: string | null
           description: string | null
+          drawing_number: string | null
+          equipment_id: string | null
           id: string
+          impa_code: string | null
           is_critical: boolean | null
+          issa_code: string | null
           item_code: string
+          last_ordered_at: string | null
+          lead_time_days: number | null
           location: string | null
+          maker_name: string | null
+          maker_reference: string | null
           max_quantity: number | null
           metadata: Json | null
           min_quantity: number | null
           name: string
           notes: string | null
           organization_id: string | null
+          part_number: string | null
           quantity: number | null
+          reorder_point: number | null
           status: string | null
           supplier_name: string | null
           unit: string | null
@@ -24260,19 +24409,30 @@ export type Database = {
         Insert: {
           category?: string | null
           created_at?: string
+          criticality?: string | null
           currency?: string | null
           description?: string | null
+          drawing_number?: string | null
+          equipment_id?: string | null
           id?: string
+          impa_code?: string | null
           is_critical?: boolean | null
+          issa_code?: string | null
           item_code: string
+          last_ordered_at?: string | null
+          lead_time_days?: number | null
           location?: string | null
+          maker_name?: string | null
+          maker_reference?: string | null
           max_quantity?: number | null
           metadata?: Json | null
           min_quantity?: number | null
           name: string
           notes?: string | null
           organization_id?: string | null
+          part_number?: string | null
           quantity?: number | null
+          reorder_point?: number | null
           status?: string | null
           supplier_name?: string | null
           unit?: string | null
@@ -24283,19 +24443,30 @@ export type Database = {
         Update: {
           category?: string | null
           created_at?: string
+          criticality?: string | null
           currency?: string | null
           description?: string | null
+          drawing_number?: string | null
+          equipment_id?: string | null
           id?: string
+          impa_code?: string | null
           is_critical?: boolean | null
+          issa_code?: string | null
           item_code?: string
+          last_ordered_at?: string | null
+          lead_time_days?: number | null
           location?: string | null
+          maker_name?: string | null
+          maker_reference?: string | null
           max_quantity?: number | null
           metadata?: Json | null
           min_quantity?: number | null
           name?: string
           notes?: string | null
           organization_id?: string | null
+          part_number?: string | null
           quantity?: number | null
+          reorder_point?: number | null
           status?: string | null
           supplier_name?: string | null
           unit?: string | null
@@ -24443,6 +24614,8 @@ export type Database = {
         Row: {
           approved_at: string | null
           approved_by: string | null
+          bank_details: Json | null
+          charter_party_id: string | null
           charterer_id: string | null
           created_at: string
           created_by: string | null
@@ -24453,12 +24626,16 @@ export type Database = {
           erp_sync_status: string | null
           id: string
           invoice_number: string | null
+          invoice_type: string | null
           issued_at: string | null
+          laytime_id: string | null
+          line_items: Json | null
           metadata: Json | null
           notes: string | null
           organization_id: string | null
           paid_at: string | null
           payment_terms: string | null
+          remittance_reference: string | null
           status: Database["public"]["Enums"]["invoice_status"]
           subtotal: number
           tax_amount: number
@@ -24470,6 +24647,8 @@ export type Database = {
         Insert: {
           approved_at?: string | null
           approved_by?: string | null
+          bank_details?: Json | null
+          charter_party_id?: string | null
           charterer_id?: string | null
           created_at?: string
           created_by?: string | null
@@ -24480,12 +24659,16 @@ export type Database = {
           erp_sync_status?: string | null
           id?: string
           invoice_number?: string | null
+          invoice_type?: string | null
           issued_at?: string | null
+          laytime_id?: string | null
+          line_items?: Json | null
           metadata?: Json | null
           notes?: string | null
           organization_id?: string | null
           paid_at?: string | null
           payment_terms?: string | null
+          remittance_reference?: string | null
           status?: Database["public"]["Enums"]["invoice_status"]
           subtotal?: number
           tax_amount?: number
@@ -24497,6 +24680,8 @@ export type Database = {
         Update: {
           approved_at?: string | null
           approved_by?: string | null
+          bank_details?: Json | null
+          charter_party_id?: string | null
           charterer_id?: string | null
           created_at?: string
           created_by?: string | null
@@ -24507,12 +24692,16 @@ export type Database = {
           erp_sync_status?: string | null
           id?: string
           invoice_number?: string | null
+          invoice_type?: string | null
           issued_at?: string | null
+          laytime_id?: string | null
+          line_items?: Json | null
           metadata?: Json | null
           notes?: string | null
           organization_id?: string | null
           paid_at?: string | null
           payment_terms?: string | null
+          remittance_reference?: string | null
           status?: Database["public"]["Enums"]["invoice_status"]
           subtotal?: number
           tax_amount?: number
@@ -24522,6 +24711,13 @@ export type Database = {
           voyage_id?: string | null
         }
         Relationships: [
+          {
+            foreignKeyName: "invoices_charter_party_id_fkey"
+            columns: ["charter_party_id"]
+            isOneToOne: false
+            referencedRelation: "charter_parties"
+            referencedColumns: ["id"]
+          },
           {
             foreignKeyName: "invoices_charterer_id_fkey"
             columns: ["charterer_id"]
@@ -27528,6 +27724,9 @@ export type Database = {
       maintenance_tasks: {
         Row: {
           actual_hours: number | null
+          approval_status: string | null
+          approved_at: string | null
+          approved_by: string | null
           assigned_to: string | null
           attachments: Json | null
           completed_date: string | null
@@ -27545,17 +27744,26 @@ export type Database = {
           organization_id: string | null
           parts_cost: number | null
           parts_required: Json | null
+          pms_component_id: string | null
+          pms_job_id: string | null
           priority: string | null
+          rejection_reason: string | null
           scheduled_date: string | null
           status: string | null
           task_type: string | null
           title: string
           total_cost: number | null
           updated_at: string
+          verified_at: string | null
+          verified_by: string | null
           vessel_id: string | null
+          work_order_ref: string | null
         }
         Insert: {
           actual_hours?: number | null
+          approval_status?: string | null
+          approved_at?: string | null
+          approved_by?: string | null
           assigned_to?: string | null
           attachments?: Json | null
           completed_date?: string | null
@@ -27573,17 +27781,26 @@ export type Database = {
           organization_id?: string | null
           parts_cost?: number | null
           parts_required?: Json | null
+          pms_component_id?: string | null
+          pms_job_id?: string | null
           priority?: string | null
+          rejection_reason?: string | null
           scheduled_date?: string | null
           status?: string | null
           task_type?: string | null
           title: string
           total_cost?: number | null
           updated_at?: string
+          verified_at?: string | null
+          verified_by?: string | null
           vessel_id?: string | null
+          work_order_ref?: string | null
         }
         Update: {
           actual_hours?: number | null
+          approval_status?: string | null
+          approved_at?: string | null
+          approved_by?: string | null
           assigned_to?: string | null
           attachments?: Json | null
           completed_date?: string | null
@@ -27601,14 +27818,20 @@ export type Database = {
           organization_id?: string | null
           parts_cost?: number | null
           parts_required?: Json | null
+          pms_component_id?: string | null
+          pms_job_id?: string | null
           priority?: string | null
+          rejection_reason?: string | null
           scheduled_date?: string | null
           status?: string | null
           task_type?: string | null
           title?: string
           total_cost?: number | null
           updated_at?: string
+          verified_at?: string | null
+          verified_by?: string | null
           vessel_id?: string | null
+          work_order_ref?: string | null
         }
         Relationships: [
           {
@@ -27616,6 +27839,20 @@ export type Database = {
             columns: ["organization_id"]
             isOneToOne: false
             referencedRelation: "organizations"
+            referencedColumns: ["id"]
+          },
+          {
+            foreignKeyName: "maintenance_tasks_pms_component_id_fkey"
+            columns: ["pms_component_id"]
+            isOneToOne: false
+            referencedRelation: "pms_components"
+            referencedColumns: ["id"]
+          },
+          {
+            foreignKeyName: "maintenance_tasks_pms_job_id_fkey"
+            columns: ["pms_job_id"]
+            isOneToOne: false
+            referencedRelation: "pms_jobs"
             referencedColumns: ["id"]
           },
           {
@@ -31474,6 +31711,8 @@ export type Database = {
         Row: {
           action_deadline: string | null
           assigned_to: string | null
+          auto_action_item_id: string | null
+          capa_id: string | null
           category: string | null
           closed_date: string | null
           corrective_action: string | null
@@ -31481,9 +31720,11 @@ export type Database = {
           description: string | null
           due_date: string | null
           effectiveness_notes: string | null
+          effectiveness_review_date: string | null
           effectiveness_verified: boolean | null
           evidence_files: Json | null
           id: string
+          ism_element_id: string | null
           metadata: Json | null
           nc_number: string | null
           organization_id: string | null
@@ -31508,6 +31749,8 @@ export type Database = {
         Insert: {
           action_deadline?: string | null
           assigned_to?: string | null
+          auto_action_item_id?: string | null
+          capa_id?: string | null
           category?: string | null
           closed_date?: string | null
           corrective_action?: string | null
@@ -31515,9 +31758,11 @@ export type Database = {
           description?: string | null
           due_date?: string | null
           effectiveness_notes?: string | null
+          effectiveness_review_date?: string | null
           effectiveness_verified?: boolean | null
           evidence_files?: Json | null
           id?: string
+          ism_element_id?: string | null
           metadata?: Json | null
           nc_number?: string | null
           organization_id?: string | null
@@ -31542,6 +31787,8 @@ export type Database = {
         Update: {
           action_deadline?: string | null
           assigned_to?: string | null
+          auto_action_item_id?: string | null
+          capa_id?: string | null
           category?: string | null
           closed_date?: string | null
           corrective_action?: string | null
@@ -31549,9 +31796,11 @@ export type Database = {
           description?: string | null
           due_date?: string | null
           effectiveness_notes?: string | null
+          effectiveness_review_date?: string | null
           effectiveness_verified?: boolean | null
           evidence_files?: Json | null
           id?: string
+          ism_element_id?: string | null
           metadata?: Json | null
           nc_number?: string | null
           organization_id?: string | null
@@ -31574,6 +31823,27 @@ export type Database = {
           vessel_id?: string | null
         }
         Relationships: [
+          {
+            foreignKeyName: "non_conformities_auto_action_item_id_fkey"
+            columns: ["auto_action_item_id"]
+            isOneToOne: false
+            referencedRelation: "action_items"
+            referencedColumns: ["id"]
+          },
+          {
+            foreignKeyName: "non_conformities_capa_id_fkey"
+            columns: ["capa_id"]
+            isOneToOne: false
+            referencedRelation: "ism_capa"
+            referencedColumns: ["id"]
+          },
+          {
+            foreignKeyName: "non_conformities_ism_element_id_fkey"
+            columns: ["ism_element_id"]
+            isOneToOne: false
+            referencedRelation: "ism_elements"
+            referencedColumns: ["id"]
+          },
           {
             foreignKeyName: "non_conformities_organization_id_fkey"
             columns: ["organization_id"]
@@ -37377,40 +37647,52 @@ export type Database = {
       }
       pms_running_hours_triggers: {
         Row: {
+          auto_create_wo: boolean | null
           auto_create_work_order: boolean | null
           component_id: string
+          cooldown_hours: number | null
           created_at: string
           id: string
           is_active: boolean | null
           job_id: string
           last_triggered_at: string | null
           last_triggered_hours: number | null
+          notification_channels: string[] | null
           sensor_id: string | null
           threshold_hours: number
+          trigger_count: number | null
         }
         Insert: {
+          auto_create_wo?: boolean | null
           auto_create_work_order?: boolean | null
           component_id: string
+          cooldown_hours?: number | null
           created_at?: string
           id?: string
           is_active?: boolean | null
           job_id: string
           last_triggered_at?: string | null
           last_triggered_hours?: number | null
+          notification_channels?: string[] | null
           sensor_id?: string | null
           threshold_hours: number
+          trigger_count?: number | null
         }
         Update: {
+          auto_create_wo?: boolean | null
           auto_create_work_order?: boolean | null
           component_id?: string
+          cooldown_hours?: number | null
           created_at?: string
           id?: string
           is_active?: boolean | null
           job_id?: string
           last_triggered_at?: string | null
           last_triggered_hours?: number | null
+          notification_channels?: string[] | null
           sensor_id?: string | null
           threshold_hours?: number
+          trigger_count?: number | null
         }
         Relationships: [
           {
@@ -37559,20 +37841,27 @@ export type Database = {
           component_id: string | null
           created_at: string
           description: string | null
+          downtime_hours: number | null
           estimated_cost: number | null
           findings: string | null
           id: string
           is_class_related: boolean | null
           job_id: string | null
           organization_id: string | null
+          permit_to_work_id: string | null
           permit_to_work_required: boolean | null
+          photos_after: Json | null
+          photos_before: Json | null
           planned_end: string | null
           planned_start: string | null
           priority: string
+          quality_check: Json | null
           recommendations: string | null
+          rejection_reason: string | null
           risk_assessment_done: boolean | null
           running_hours_at_completion: number | null
           running_hours_at_start: number | null
+          safety_precautions: string | null
           source_reference_id: string | null
           spare_parts_used: Json | null
           status: string
@@ -37598,20 +37887,27 @@ export type Database = {
           component_id?: string | null
           created_at?: string
           description?: string | null
+          downtime_hours?: number | null
           estimated_cost?: number | null
           findings?: string | null
           id?: string
           is_class_related?: boolean | null
           job_id?: string | null
           organization_id?: string | null
+          permit_to_work_id?: string | null
           permit_to_work_required?: boolean | null
+          photos_after?: Json | null
+          photos_before?: Json | null
           planned_end?: string | null
           planned_start?: string | null
           priority?: string
+          quality_check?: Json | null
           recommendations?: string | null
+          rejection_reason?: string | null
           risk_assessment_done?: boolean | null
           running_hours_at_completion?: number | null
           running_hours_at_start?: number | null
+          safety_precautions?: string | null
           source_reference_id?: string | null
           spare_parts_used?: Json | null
           status?: string
@@ -37637,20 +37933,27 @@ export type Database = {
           component_id?: string | null
           created_at?: string
           description?: string | null
+          downtime_hours?: number | null
           estimated_cost?: number | null
           findings?: string | null
           id?: string
           is_class_related?: boolean | null
           job_id?: string | null
           organization_id?: string | null
+          permit_to_work_id?: string | null
           permit_to_work_required?: boolean | null
+          photos_after?: Json | null
+          photos_before?: Json | null
           planned_end?: string | null
           planned_start?: string | null
           priority?: string
+          quality_check?: Json | null
           recommendations?: string | null
+          rejection_reason?: string | null
           risk_assessment_done?: boolean | null
           running_hours_at_completion?: number | null
           running_hours_at_start?: number | null
+          safety_precautions?: string | null
           source_reference_id?: string | null
           spare_parts_used?: Json | null
           status?: string
@@ -39255,54 +39558,75 @@ export type Database = {
         Row: {
           created_at: string | null
           deficiencies_count: number | null
+          deficiency_codes: Json | null
           detention: boolean | null
+          detention_duration_days: number | null
           detention_reason: string | null
+          follow_up_inspection_date: string | null
           id: string
           inspection_date: string
           inspection_focus: string[] | null
           inspection_type: string | null
+          mou_region: string | null
           organization_id: string | null
           port_country: string
           port_name: string
           port_state_authority: string | null
+          rectification_completed: string | null
+          rectification_deadline: string | null
           report_file_path: string | null
           risk_score: number | null
+          ship_risk_profile: string | null
           updated_at: string | null
           vessel_id: string | null
         }
         Insert: {
           created_at?: string | null
           deficiencies_count?: number | null
+          deficiency_codes?: Json | null
           detention?: boolean | null
+          detention_duration_days?: number | null
           detention_reason?: string | null
+          follow_up_inspection_date?: string | null
           id?: string
           inspection_date: string
           inspection_focus?: string[] | null
           inspection_type?: string | null
+          mou_region?: string | null
           organization_id?: string | null
           port_country: string
           port_name: string
           port_state_authority?: string | null
+          rectification_completed?: string | null
+          rectification_deadline?: string | null
           report_file_path?: string | null
           risk_score?: number | null
+          ship_risk_profile?: string | null
           updated_at?: string | null
           vessel_id?: string | null
         }
         Update: {
           created_at?: string | null
           deficiencies_count?: number | null
+          deficiency_codes?: Json | null
           detention?: boolean | null
+          detention_duration_days?: number | null
           detention_reason?: string | null
+          follow_up_inspection_date?: string | null
           id?: string
           inspection_date?: string
           inspection_focus?: string[] | null
           inspection_type?: string | null
+          mou_region?: string | null
           organization_id?: string | null
           port_country?: string
           port_name?: string
           port_state_authority?: string | null
+          rectification_completed?: string | null
+          rectification_deadline?: string | null
           report_file_path?: string | null
           risk_score?: number | null
+          ship_risk_profile?: string | null
           updated_at?: string | null
           vessel_id?: string | null
         }
@@ -44449,17 +44773,23 @@ export type Database = {
         Row: {
           chapter_name: string | null
           chapter_number: number
+          company_response: string | null
           completion_date: string | null
           corrective_action: string | null
+          corrective_action_completed: string | null
+          corrective_action_due: string | null
           created_at: string
           description: string | null
           evidence_provided: string | null
           finding_type: string | null
           id: string
           inspection_id: string
+          inspector_comment: string | null
           photos: Json | null
+          question_id: string | null
           question_ref: string | null
           question_text: string | null
+          response_status: string | null
           root_cause: string | null
           severity: string | null
           status: string | null
@@ -44469,17 +44799,23 @@ export type Database = {
         Insert: {
           chapter_name?: string | null
           chapter_number: number
+          company_response?: string | null
           completion_date?: string | null
           corrective_action?: string | null
+          corrective_action_completed?: string | null
+          corrective_action_due?: string | null
           created_at?: string
           description?: string | null
           evidence_provided?: string | null
           finding_type?: string | null
           id?: string
           inspection_id: string
+          inspector_comment?: string | null
           photos?: Json | null
+          question_id?: string | null
           question_ref?: string | null
           question_text?: string | null
+          response_status?: string | null
           root_cause?: string | null
           severity?: string | null
           status?: string | null
@@ -44489,17 +44825,23 @@ export type Database = {
         Update: {
           chapter_name?: string | null
           chapter_number?: number
+          company_response?: string | null
           completion_date?: string | null
           corrective_action?: string | null
+          corrective_action_completed?: string | null
+          corrective_action_due?: string | null
           created_at?: string
           description?: string | null
           evidence_provided?: string | null
           finding_type?: string | null
           id?: string
           inspection_id?: string
+          inspector_comment?: string | null
           photos?: Json | null
+          question_id?: string | null
           question_ref?: string | null
           question_text?: string | null
+          response_status?: string | null
           root_cause?: string | null
           severity?: string | null
           status?: string | null
@@ -44512,6 +44854,13 @@ export type Database = {
             columns: ["inspection_id"]
             isOneToOne: false
             referencedRelation: "sire2_inspections"
+            referencedColumns: ["id"]
+          },
+          {
+            foreignKeyName: "sire2_findings_question_id_fkey"
+            columns: ["question_id"]
+            isOneToOne: false
+            referencedRelation: "sire2_question_bank"
             referencedColumns: ["id"]
           },
         ]
@@ -44617,6 +44966,75 @@ export type Database = {
             referencedColumns: ["id"]
           },
         ]
+      }
+      sire2_question_bank: {
+        Row: {
+          applicable_vessel_types: string[] | null
+          best_practice: string | null
+          chapter_number: number
+          chapter_title: string
+          common_findings: string[] | null
+          created_at: string | null
+          expected_evidence: string[] | null
+          guidance_notes: string | null
+          id: string
+          is_active: boolean | null
+          is_critical: boolean | null
+          ism_element_ref: string | null
+          kpi_category: string | null
+          question_code: string
+          question_text: string
+          question_type: string | null
+          regulatory_reference: string | null
+          risk_weight: number | null
+          section_number: string | null
+          updated_at: string | null
+        }
+        Insert: {
+          applicable_vessel_types?: string[] | null
+          best_practice?: string | null
+          chapter_number: number
+          chapter_title: string
+          common_findings?: string[] | null
+          created_at?: string | null
+          expected_evidence?: string[] | null
+          guidance_notes?: string | null
+          id?: string
+          is_active?: boolean | null
+          is_critical?: boolean | null
+          ism_element_ref?: string | null
+          kpi_category?: string | null
+          question_code: string
+          question_text: string
+          question_type?: string | null
+          regulatory_reference?: string | null
+          risk_weight?: number | null
+          section_number?: string | null
+          updated_at?: string | null
+        }
+        Update: {
+          applicable_vessel_types?: string[] | null
+          best_practice?: string | null
+          chapter_number?: number
+          chapter_title?: string
+          common_findings?: string[] | null
+          created_at?: string | null
+          expected_evidence?: string[] | null
+          guidance_notes?: string | null
+          id?: string
+          is_active?: boolean | null
+          is_critical?: boolean | null
+          ism_element_ref?: string | null
+          kpi_category?: string | null
+          question_code?: string
+          question_text?: string
+          question_type?: string | null
+          regulatory_reference?: string | null
+          risk_weight?: number | null
+          section_number?: string | null
+          updated_at?: string | null
+        }
+        Relationships: []
       }
       siscomex_audit_log: {
         Row: {
@@ -52605,13 +53023,19 @@ export type Database = {
       }
       vessels: {
         Row: {
+          aux_engine_power_kw: number | null
           beam: number | null
           capacity: number | null
           created_at: string | null
           current_fuel_level: number | null
           current_location: string | null
           current_port_id: string | null
+          design_speed_knots: number | null
           draft: number | null
+          eexi_attained: number | null
+          eexi_compliant: boolean | null
+          eexi_required: number | null
+          epla_applied: boolean | null
           eta: string | null
           flag: string | null
           flag_state: string
@@ -52621,24 +53045,35 @@ export type Database = {
           imo_number: string | null
           last_maintenance_date: string | null
           length: number | null
+          main_engine_power_kw: number | null
+          main_engine_rpm: number | null
+          main_engine_type: string | null
           metadata: Json | null
           name: string
           next_maintenance_date: string | null
           next_port: string | null
           operational_hours: number | null
           organization_id: string | null
+          reference_speed_knots: number | null
+          shaft_generator_kw: number | null
           status: string | null
           updated_at: string | null
           vessel_type: string
         }
         Insert: {
+          aux_engine_power_kw?: number | null
           beam?: number | null
           capacity?: number | null
           created_at?: string | null
           current_fuel_level?: number | null
           current_location?: string | null
           current_port_id?: string | null
+          design_speed_knots?: number | null
           draft?: number | null
+          eexi_attained?: number | null
+          eexi_compliant?: boolean | null
+          eexi_required?: number | null
+          epla_applied?: boolean | null
           eta?: string | null
           flag?: string | null
           flag_state: string
@@ -52648,24 +53083,35 @@ export type Database = {
           imo_number?: string | null
           last_maintenance_date?: string | null
           length?: number | null
+          main_engine_power_kw?: number | null
+          main_engine_rpm?: number | null
+          main_engine_type?: string | null
           metadata?: Json | null
           name: string
           next_maintenance_date?: string | null
           next_port?: string | null
           operational_hours?: number | null
           organization_id?: string | null
+          reference_speed_knots?: number | null
+          shaft_generator_kw?: number | null
           status?: string | null
           updated_at?: string | null
           vessel_type: string
         }
         Update: {
+          aux_engine_power_kw?: number | null
           beam?: number | null
           capacity?: number | null
           created_at?: string | null
           current_fuel_level?: number | null
           current_location?: string | null
           current_port_id?: string | null
+          design_speed_knots?: number | null
           draft?: number | null
+          eexi_attained?: number | null
+          eexi_compliant?: boolean | null
+          eexi_required?: number | null
+          epla_applied?: boolean | null
           eta?: string | null
           flag?: string | null
           flag_state?: string
@@ -52675,12 +53121,17 @@ export type Database = {
           imo_number?: string | null
           last_maintenance_date?: string | null
           length?: number | null
+          main_engine_power_kw?: number | null
+          main_engine_rpm?: number | null
+          main_engine_type?: string | null
           metadata?: Json | null
           name?: string
           next_maintenance_date?: string | null
           next_port?: string | null
           operational_hours?: number | null
           organization_id?: string | null
+          reference_speed_knots?: number | null
+          shaft_generator_kw?: number | null
           status?: string | null
           updated_at?: string | null
           vessel_type?: string
