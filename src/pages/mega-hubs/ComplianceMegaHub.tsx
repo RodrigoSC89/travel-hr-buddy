@@ -57,6 +57,7 @@ const PSCDetentionPredictor = lazy(() => import('@/components/dashboard/PSCDeten
 const ComplianceEventsMonitor = lazy(() => import('@/components/compliance/ComplianceEventsMonitor'));
 const ComplianceScoreDashboard = lazy(() => import('@/components/dashboard/ComplianceScoreDashboard').then(m => ({ default: m.ComplianceScoreDashboard })));
 const DocumentExpiryMatrix = lazy(() => import('@/components/dashboard/DocumentExpiryMatrix').then(m => ({ default: m.DocumentExpiryMatrix })));
+const AuditCountdownCards = lazy(() => import('@/components/dashboard/AuditCountdownCards').then(m => ({ default: m.AuditCountdownCards })));
 
 // ═══════════════════════════════════════════════════════════
 // 12 AUDITORIAS MARÍTIMAS COMPLETAS - ZERO SUPRESSÃO
@@ -358,10 +359,15 @@ export default function ComplianceMegaHub() {
                 />
               )}
 
-              {/* Compliance Score Dashboard */}
-              <Suspense fallback={<Skeleton className="h-64" />}>
-                <ComplianceScoreDashboard />
-              </Suspense>
+              {/* Audit Countdown + Compliance Score */}
+              <div className="grid grid-cols-1 lg:grid-cols-2 gap-6">
+                <Suspense fallback={<Skeleton className="h-64" />}>
+                  <AuditCountdownCards />
+                </Suspense>
+                <Suspense fallback={<Skeleton className="h-64" />}>
+                  <ComplianceScoreDashboard />
+                </Suspense>
+              </div>
 
               {/* Document & Certificate Expiry Matrix */}
               <Suspense fallback={<Skeleton className="h-64" />}>
