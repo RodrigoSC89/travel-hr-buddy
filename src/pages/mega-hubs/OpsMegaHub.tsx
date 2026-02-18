@@ -39,6 +39,8 @@ const CrewWellbeingDashboard = lazy(() => import('@/components/dashboard/CrewWel
 const CompetencyGapAnalyzer = lazy(() => import('@/components/dashboard/CompetencyGapAnalyzer'));
 const FuelEfficiencyAnalytics = lazy(() => import('@/components/dashboard/FuelEfficiencyAnalytics'));
 const CargoPerformanceDashboard = lazy(() => import('@/components/dashboard/CargoPerformanceDashboard'));
+const WeatherRoutingIntelligence = lazy(() => import('@/components/dashboard/WeatherRoutingIntelligence'));
+const PortPerformanceAnalytics = lazy(() => import('@/components/dashboard/PortPerformanceAnalytics'));
 const LoadingSkeleton = () => (
   <div className="space-y-4 p-6">
     <Skeleton className="h-8 w-64" />
@@ -273,6 +275,16 @@ export default function OpsMegaHub() {
                 </Suspense>
                 <Suspense fallback={<Skeleton className="h-[500px]" />}>
                   <CargoPerformanceDashboard />
+                </Suspense>
+              </div>
+
+              {/* Wave 26: Weather & Port Intelligence */}
+              <div className="grid grid-cols-1 lg:grid-cols-2 gap-6">
+                <Suspense fallback={<Skeleton className="h-[500px]" />}>
+                  <WeatherRoutingIntelligence />
+                </Suspense>
+                <Suspense fallback={<Skeleton className="h-[500px]" />}>
+                  <PortPerformanceAnalytics />
                 </Suspense>
               </div>
 
