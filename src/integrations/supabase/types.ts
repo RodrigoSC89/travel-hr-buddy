@@ -45581,6 +45581,148 @@ export type Database = {
           },
         ]
       }
+      tc_hire_statements: {
+        Row: {
+          address_commission: number | null
+          address_commission_pct: number | null
+          anti_technicality_clause: boolean | null
+          broker_commission: number | null
+          broker_commission_pct: number | null
+          bunker_deduction: number | null
+          charter_form: string | null
+          charter_party_id: string | null
+          created_at: string | null
+          currency: string | null
+          daily_hire_rate: number
+          deduction_details: Json | null
+          dispute_details: string | null
+          exchange_rate: number | null
+          gross_hire: number | null
+          hire_days: number | null
+          id: string
+          invoice_number: string | null
+          metadata: Json | null
+          net_hire: number | null
+          notes: string | null
+          off_hire_amount: number | null
+          off_hire_days: number | null
+          off_hire_reasons: Json | null
+          organization_id: string | null
+          other_deductions: number | null
+          payment_date: string | null
+          payment_due_date: string | null
+          payment_reference: string | null
+          payment_status: string | null
+          period_from: string
+          period_to: string
+          statement_number: string
+          status: string | null
+          updated_at: string | null
+          vessel_id: string | null
+          withdrawal_notice_hours: number | null
+        }
+        Insert: {
+          address_commission?: number | null
+          address_commission_pct?: number | null
+          anti_technicality_clause?: boolean | null
+          broker_commission?: number | null
+          broker_commission_pct?: number | null
+          bunker_deduction?: number | null
+          charter_form?: string | null
+          charter_party_id?: string | null
+          created_at?: string | null
+          currency?: string | null
+          daily_hire_rate: number
+          deduction_details?: Json | null
+          dispute_details?: string | null
+          exchange_rate?: number | null
+          gross_hire?: number | null
+          hire_days?: number | null
+          id?: string
+          invoice_number?: string | null
+          metadata?: Json | null
+          net_hire?: number | null
+          notes?: string | null
+          off_hire_amount?: number | null
+          off_hire_days?: number | null
+          off_hire_reasons?: Json | null
+          organization_id?: string | null
+          other_deductions?: number | null
+          payment_date?: string | null
+          payment_due_date?: string | null
+          payment_reference?: string | null
+          payment_status?: string | null
+          period_from: string
+          period_to: string
+          statement_number: string
+          status?: string | null
+          updated_at?: string | null
+          vessel_id?: string | null
+          withdrawal_notice_hours?: number | null
+        }
+        Update: {
+          address_commission?: number | null
+          address_commission_pct?: number | null
+          anti_technicality_clause?: boolean | null
+          broker_commission?: number | null
+          broker_commission_pct?: number | null
+          bunker_deduction?: number | null
+          charter_form?: string | null
+          charter_party_id?: string | null
+          created_at?: string | null
+          currency?: string | null
+          daily_hire_rate?: number
+          deduction_details?: Json | null
+          dispute_details?: string | null
+          exchange_rate?: number | null
+          gross_hire?: number | null
+          hire_days?: number | null
+          id?: string
+          invoice_number?: string | null
+          metadata?: Json | null
+          net_hire?: number | null
+          notes?: string | null
+          off_hire_amount?: number | null
+          off_hire_days?: number | null
+          off_hire_reasons?: Json | null
+          organization_id?: string | null
+          other_deductions?: number | null
+          payment_date?: string | null
+          payment_due_date?: string | null
+          payment_reference?: string | null
+          payment_status?: string | null
+          period_from?: string
+          period_to?: string
+          statement_number?: string
+          status?: string | null
+          updated_at?: string | null
+          vessel_id?: string | null
+          withdrawal_notice_hours?: number | null
+        }
+        Relationships: [
+          {
+            foreignKeyName: "tc_hire_statements_charter_party_id_fkey"
+            columns: ["charter_party_id"]
+            isOneToOne: false
+            referencedRelation: "charter_parties"
+            referencedColumns: ["id"]
+          },
+          {
+            foreignKeyName: "tc_hire_statements_organization_id_fkey"
+            columns: ["organization_id"]
+            isOneToOne: false
+            referencedRelation: "organizations"
+            referencedColumns: ["id"]
+          },
+          {
+            foreignKeyName: "tc_hire_statements_vessel_id_fkey"
+            columns: ["vessel_id"]
+            isOneToOne: false
+            referencedRelation: "vessels"
+            referencedColumns: ["id"]
+          },
+        ]
+      }
       team_dynamics: {
         Row: {
           assessment_date: string | null
