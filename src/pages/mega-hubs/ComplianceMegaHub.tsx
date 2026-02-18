@@ -38,7 +38,7 @@ import { toast } from 'sonner';
 const ComplianceHubPage = lazy(() => import('@/pages/ComplianceRoadmapPage'));
 const AgentsDashboard = lazy(() => import('@/pages/audit-agents/AgentsDashboard'));
 const DiagnosticCertificatesPage = lazy(() => import('@/pages/DiagnosticCertificatesPage'));
-const RiskMatrixV2 = lazy(() => import('@/pages/DiagnosticNCsPage'));
+const RiskMatrixV2 = lazy(() => import('@/pages/DiagnosticDashboardPage'));
 const DiagnosticNCsPage = lazy(() => import('@/pages/DiagnosticNCsPage'));
 const RegulationsV2 = lazy(() => import('@/pages/ComplianceRoadmapPage'));
 const SecurityCenter = lazy(() => import('@/pages/SecurityCenter'));

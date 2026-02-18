@@ -28,10 +28,10 @@ import { toast } from 'sonner';
 const TrackingTelemetryHub = lazy(() => import('@/pages/TelemetriaCommand'));
 const RealTimeTrackingPage = lazy(() => import('@/pages/tracking/RealTimeTrackingPage'));
 const AISTrackerPage = lazy(() => import('@/pages/AISTrackerPage'));
-const SatcomDashboardEnhanced = lazy(() => import('@/pages/TelemetriaCommand'));
+const SatcomDashboardEnhanced = lazy(() => import('@/modules/nauti-satellite'));
 const WeatherIntelligencePage = lazy(() => import('@/pages/advanced/WeatherIntelligencePage'));
-const AlertsCommandCenter = lazy(() => import('@/pages/TelemetriaCommand'));
-const PredictiveTelemetry = lazy(() => import('@/pages/TelemetriaCommand'));
+const AlertsCommandCenter = lazy(() => import('@/pages/tracking/TrackingAlerts'));
+const PredictiveTelemetry = lazy(() => import('@/pages/PredictiveMaintenancePage'));
 const TrackingAIHub = lazy(() => import('@/components/tracking/ai/TrackingAIHub'));
 
 const LoadingSkeleton = () => (
