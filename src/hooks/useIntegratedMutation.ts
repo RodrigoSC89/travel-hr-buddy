@@ -74,6 +74,22 @@ const CROSS_MODULE_INVALIDATIONS: Partial<Record<EventType, string[][]>> = {
   'document.linked': [['documents'], ['entity-documents'], ['related-records']],
   'ai.decision.logged': [['ai-decisions'], ['ai-audit']],
   'ai.suggestion.accepted': [['ai-suggestions'], ['maintenance'], ['compliance'], ['finance']],
+  // Feedback & Training
+  'feedback.submitted': [['app-metrics'], ['ai_feedback_scores'], ['dashboard-kpis']],
+  'training.session.created': [['ai-training-sessions'], ['training'], ['crew'], ['compliance'], ['dashboard-kpis']],
+  'training.session.completed': [['ai-training-sessions'], ['training'], ['crew'], ['compliance'], ['certificates'], ['dashboard-kpis']],
+  // Communication
+  'comms.whatsapp.sent': [['whatsapp-logs'], ['crew'], ['alerts']],
+  'comms.whatsapp.batch_sent': [['whatsapp-logs'], ['crew'], ['alerts']],
+  // Templates
+  'document.template.created': [['document-templates'], ['documents']],
+  'document.template.updated': [['document-templates'], ['documents']],
+  'document.template.deleted': [['document-templates'], ['documents']],
+  // Access Control
+  'access.role.changed': [['admin-user-roles'], ['crew'], ['dashboard-kpis']],
+  // Tracking resolve/delete
+  'tracking.alert.resolved': [['tracking-alerts'], ['alerts'], ['tracking'], ['dashboard-kpis']],
+  'tracking.alert.deleted': [['tracking-alerts'], ['alerts'], ['tracking']],
 };
 
 export function useIntegratedMutation<TInput, TOutput>(

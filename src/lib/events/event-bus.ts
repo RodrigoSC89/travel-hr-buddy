@@ -69,6 +69,22 @@ export const EVENT_TYPES = {
   // System
   'system.integration.error': 'system.integration.error',
   'system.health.degraded': 'system.health.degraded',
+  // Feedback & Training
+  'feedback.submitted': 'feedback.submitted',
+  'training.session.created': 'training.session.created',
+  'training.session.completed': 'training.session.completed',
+  // Communication
+  'comms.whatsapp.sent': 'comms.whatsapp.sent',
+  'comms.whatsapp.batch_sent': 'comms.whatsapp.batch_sent',
+  // Templates
+  'document.template.created': 'document.template.created',
+  'document.template.updated': 'document.template.updated',
+  'document.template.deleted': 'document.template.deleted',
+  // Access Control
+  'access.role.changed': 'access.role.changed',
+  // Tracking (resolve/delete)
+  'tracking.alert.resolved': 'tracking.alert.resolved',
+  'tracking.alert.deleted': 'tracking.alert.deleted',
 } as const;
 
 export type EventType = keyof typeof EVENT_TYPES;

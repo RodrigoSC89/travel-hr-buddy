@@ -17,7 +17,8 @@ import { Textarea } from '@/components/ui/textarea';
 import { Skeleton } from '@/components/ui/skeleton';
 import { toast } from 'sonner';
 import { supabase } from '@/integrations/supabase/client';
-import { useQuery, useMutation, useQueryClient } from '@tanstack/react-query';
+import { useQuery, useQueryClient } from '@tanstack/react-query';
+import { useCreateTrainingSession, useCompleteTrainingSession } from '@/hooks/useModuleHooks';
 
 // Maritime training modules
 const TRAINING_MODULES = [
@@ -129,91 +130,56 @@ const AITraining: React.FC = () => {
 
   const [selectedCrewId, setSelectedCrewId] = useState('');
 
-  // Create training session
-  const createSession = useMutation({
-    mutationFn: async () => {
+  // ✅ INTEGRATED — Create training session via event bus
+  const createSessionHook = useCreateTrainingSession();
+  const createSession = {
+    mutate: () => {
       if (!newTopic.trim() || !newModule) {
-        throw new Error('Preencha o tópico e módulo');
+        toast.error('Preencha o tópico e módulo');
+        return;
       }
       if (!orgId) {
-        throw new Error('Organização não encontrada. Verifique se seu usuário está vinculado a uma organização.');
+        toast.error('Organização não encontrada.');
+        return;
       }
 
-      // Try to generate AI content via edge function
-      let aiContent = null;
-      try {
-        const { data, error } = await supabase.functions.invoke('generate-training-module', {
-          body: {
-            gapDetected: newTopic,
-            normReference: TRAINING_MODULES.find(m => m.value === newModule)?.label || newModule,
-          },
-        });
-        if (!error && data?.success) {
-          aiContent = data.module;
-        }
-      } catch {
-        // AI generation is optional - continue without it
-      }
+      // Try AI content generation first, then insert
+      (async () => {
+        let aiContent = null;
+        try {
+          const { data, error } = await supabase.functions.invoke('generate-training-module', {
+            body: { gapDetected: newTopic, normReference: TRAINING_MODULES.find(m => m.value === newModule)?.label || newModule },
+          });
+          if (!error && data?.success) aiContent = data.module;
+        } catch { /* optional */ }
 
-      const { data, error } = await supabase
-        .from('ai_training_sessions')
-        .insert({
+        createSessionHook.mutate({
           topic: newTopic,
           session_type: newModule,
           organization_id: orgId,
           crew_member_id: selectedCrewId || null,
           difficulty_level: newDifficulty,
           status: 'in_progress',
-          content: aiContent ? {
-            module: newModule,
-            training_content: aiContent.training_content,
-            quiz_data: aiContent.quiz,
-            context: newContext || null,
-          } : {
-            module: newModule,
-            context: newContext || null,
-          },
+          content: aiContent ? { module: newModule, training_content: aiContent.training_content, quiz_data: aiContent.quiz, context: newContext || null } : { module: newModule, context: newContext || null },
           started_at: new Date().toISOString(),
-        })
-        .select()
-        .single();
+        }, {
+          onSuccess: () => {
+            setIsCreateOpen(false);
+            setNewTopic(''); setNewModule(''); setNewDifficulty('medium'); setNewContext(''); setSelectedCrewId('');
+          },
+        });
+      })();
+    },
+    isPending: createSessionHook.isPending,
+  };
 
-      if (error) throw error;
-      return data;
+  // ✅ INTEGRATED — Complete session via event bus
+  const completeSessionHook = useCompleteTrainingSession();
+  const completeSession = {
+    mutate: ({ id, score }: { id: string; score: number }) => {
+      completeSessionHook.mutate({ id, score });
     },
-    onSuccess: () => {
-      queryClient.invalidateQueries({ queryKey: ['ai-training-sessions'] });
-      toast.success('Sessão de treinamento criada com sucesso');
-      setIsCreateOpen(false);
-      setNewTopic('');
-      setNewModule('');
-      setNewDifficulty('medium');
-      setNewContext('');
-      setSelectedCrewId('');
-    },
-    onError: (error: Error) => {
-      toast.error(error.message || 'Erro ao criar sessão');
-    },
-  });
-
-  // Complete a session
-  const completeSession = useMutation({
-    mutationFn: async ({ id, score }: { id: string; score: number }) => {
-      const { error } = await supabase
-        .from('ai_training_sessions')
-        .update({
-          status: score >= 70 ? 'completed' : 'failed',
-          final_score: score,
-          completed_at: new Date().toISOString(),
-        })
-        .eq('id', id);
-      if (error) throw error;
-    },
-    onSuccess: () => {
-      queryClient.invalidateQueries({ queryKey: ['ai-training-sessions'] });
-      toast.success('Sessão atualizada');
-    },
-  });
+  };
 
   // Calculate stats
   const stats = useMemo(() => {

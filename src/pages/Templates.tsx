@@ -22,7 +22,8 @@ import {
 import { toast } from "sonner";
 import { supabase } from "@/integrations/supabase/client";
 import { motion, AnimatePresence } from "framer-motion";
-import { useQuery, useMutation, useQueryClient } from "@tanstack/react-query";
+import { useQuery, useQueryClient } from "@tanstack/react-query";
+import { useCreateTemplate, useUpdateTemplate, useDeleteTemplate } from "@/hooks/useModuleHooks";
 
 interface Template {
   id: string;
@@ -98,54 +99,36 @@ const Templates = () => {
     },
   });
 
-  // Create mutation
-  const createMutation = useMutation({
-    mutationFn: async (data: typeof newTemplate) => {
-      const { error } = await supabase.from("ai_document_templates").insert({
-        title: data.name,
-        content: data.content,
-        template_type: data.type,
-        tags: [data.category],
+  // ✅ INTEGRATED — Create template via event bus
+  const createTemplateHook = useCreateTemplate();
+  const createMutation = {
+    mutate: (data: typeof newTemplate) => {
+      createTemplateHook.mutate({ title: data.name, content: data.content, type: data.type, tags: [data.category] }, {
+        onSuccess: () => {
+          setShowCreateDialog(false);
+          setNewTemplate({ name: "", description: "", category: "operations", type: "report", content: "" });
+        },
       });
-      if (error) throw error;
     },
-    onSuccess: () => {
-      queryClient.invalidateQueries({ queryKey: ["document-templates"] });
-      setShowCreateDialog(false);
-      setNewTemplate({ name: "", description: "", category: "operations", type: "report", content: "" });
-      toast.success("Template criado com sucesso");
-    },
-  });
+    isPending: createTemplateHook.isPending,
+  };
 
-  // Update mutation
-  const updateMutation = useMutation({
-    mutationFn: async ({ id, data }: { id: string; data: typeof newTemplate }) => {
-      const { error } = await supabase.from("ai_document_templates").update({
-        title: data.name,
-        content: data.content,
-        template_type: data.type,
-        tags: [data.category],
-      }).eq("id", id);
-      if (error) throw error;
+  // ✅ INTEGRATED — Update template via event bus
+  const updateTemplateHook = useUpdateTemplate();
+  const updateMutation = {
+    mutate: ({ id, data }: { id: string; data: typeof newTemplate }) => {
+      updateTemplateHook.mutate({ id, title: data.name, content: data.content, type: data.type, tags: [data.category] }, {
+        onSuccess: () => setShowEditDialog(false),
+      });
     },
-    onSuccess: () => {
-      queryClient.invalidateQueries({ queryKey: ["document-templates"] });
-      setShowEditDialog(false);
-      toast.success("Template atualizado");
-    },
-  });
+    isPending: updateTemplateHook.isPending,
+  };
 
-  // Delete mutation
-  const deleteMutation = useMutation({
-    mutationFn: async (id: string) => {
-      const { error } = await supabase.from("ai_document_templates").delete().eq("id", id);
-      if (error) throw error;
-    },
-    onSuccess: () => {
-      queryClient.invalidateQueries({ queryKey: ["document-templates"] });
-      toast.success("Template removido");
-    },
-  });
+  // ✅ INTEGRATED — Delete template via event bus
+  const deleteTemplateHook = useDeleteTemplate();
+  const deleteMutation = {
+    mutate: (id: string) => deleteTemplateHook.mutate(id),
+  };
 
   const filteredTemplates = useMemo(() => {
     return templates.filter((template) => {

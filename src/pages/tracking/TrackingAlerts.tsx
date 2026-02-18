@@ -13,9 +13,9 @@ import { Label } from "@/components/ui/label";
 import { Textarea } from "@/components/ui/textarea";
 import { Bell, Plus, CheckCircle, AlertTriangle, Search, Loader2, MapPin, Ship, Trash2 } from "lucide-react";
 import { toast } from "sonner";
-import { useQuery, useMutation, useQueryClient } from "@tanstack/react-query";
+import { useQuery, useQueryClient } from "@tanstack/react-query";
 import { supabase } from "@/integrations/supabase/client";
-import { useCreateTrackingAlert } from "@/hooks/useModuleHooks";
+import { useCreateTrackingAlert, useResolveTrackingAlert, useDeleteTrackingAlert } from "@/hooks/useModuleHooks";
 
 const ALERT_TYPES = [
   { value: "geofence", label: "Geofence", icon: "🗺️" },
@@ -69,37 +69,30 @@ export default function TrackingAlerts() {
 
   // ✅ CREATE — via integrated domain service (publishes event + audit)
   const createAlertHook = useCreateTrackingAlert();
-  const createMutation = useMutation({
-    mutationFn: async (alert: typeof newAlert & { vessel_id?: string }) => {
-      await createAlertHook.mutateAsync({
+  const createMutation = {
+    mutate: (alert: typeof newAlert & { vessel_id?: string }) => {
+      createAlertHook.mutate({
         title: alert.title, description: alert.description,
         alert_type: alert.alert_type, severity: alert.severity,
         latitude: alert.latitude ? parseFloat(alert.latitude) : null,
         longitude: alert.longitude ? parseFloat(alert.longitude) : null,
         vessel_id: alert.vessel_id || null,
-      });
+      }, { onSuccess: () => setShowCreateDialog(false) });
     },
-    onSuccess: () => { queryClient.invalidateQueries({ queryKey: ["tracking-alerts"] }); setShowCreateDialog(false); },
-    onError: () => toast.error("Erro ao criar alerta"),
-  });
+    isPending: createAlertHook.isPending,
+  };
 
-  // ✅ RESOLVE
-  const resolveMutation = useMutation({
-    mutationFn: async (id: string) => {
-      const { error } = await supabase.from("tracking_alerts").update({ is_resolved: true, resolved_at: new Date().toISOString() }).eq("id", id);
-      if (error) throw error;
-    },
-    onSuccess: () => { queryClient.invalidateQueries({ queryKey: ["tracking-alerts"] }); toast.success("Alerta resolvido"); },
-  });
+  // ✅ RESOLVE — via integrated hook (publishes tracking.alert.resolved event)
+  const resolveAlertHook = useResolveTrackingAlert();
+  const resolveMutation = {
+    mutate: (id: string) => resolveAlertHook.mutate(id),
+  };
 
-  // ✅ DELETE
-  const deleteMutation = useMutation({
-    mutationFn: async (id: string) => {
-      const { error } = await supabase.from("tracking_alerts").delete().eq("id", id);
-      if (error) throw error;
-    },
-    onSuccess: () => { queryClient.invalidateQueries({ queryKey: ["tracking-alerts"] }); toast.success("Alerta removido"); },
-  });
+  // ✅ DELETE — via integrated hook (publishes tracking.alert.deleted event)
+  const deleteAlertHook = useDeleteTrackingAlert();
+  const deleteMutation = {
+    mutate: (id: string) => deleteAlertHook.mutate(id),
+  };
 
   // eslint-disable-next-line @typescript-eslint/no-explicit-any -- dynamic Supabase join rows
   const typedAlerts = alerts as any[];

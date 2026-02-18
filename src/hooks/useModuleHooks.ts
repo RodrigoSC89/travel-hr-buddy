@@ -408,3 +408,260 @@ export function useCreateETSRecord() {
     errorMessage: "Erro ao criar registro ETS",
   });
 }
+
+// ════════════════════════════════════════════
+// FEEDBACK
+// ════════════════════════════════════════════
+
+export function useSubmitFeedback() {
+  return useIntegratedMutation<{ type: string; comment: string; score: number }, any>({
+    mutationFn: async (input) => {
+      const userId = (await (await import("@/integrations/supabase/client")).supabase.auth.getUser()).data.user?.id;
+      const { data, error } = await (await import("@/integrations/supabase/client")).supabase
+        .from('ai_feedback_scores')
+        .insert({
+          command_type: input.type,
+          command_data: { content: input.comment },
+          self_score: input.score,
+          feedback_data: { type: input.type, comment: input.comment },
+          user_id: userId,
+        })
+        .select()
+        .single();
+      if (error) throw error;
+      return data;
+    },
+    eventType: "feedback.submitted",
+    entityType: "feedback" as any,
+    getEntityId: (out) => out.id,
+    buildPayload: (input) => ({ type: input.type, score: input.score }),
+    invalidateKeys: [["app-metrics"]],
+    successMessage: "Feedback enviado!",
+    errorMessage: "Erro ao enviar feedback",
+  });
+}
+
+// ════════════════════════════════════════════
+// AI TRAINING
+// ════════════════════════════════════════════
+
+export function useCreateTrainingSession() {
+  return useIntegratedMutation<Record<string, unknown>, any>({
+    mutationFn: async (input) => {
+      const { supabase } = await import("@/integrations/supabase/client");
+      const { data, error } = await supabase
+        .from('ai_training_sessions')
+        .insert(input as any)
+        .select()
+        .single();
+      if (error) throw error;
+      return data;
+    },
+    eventType: "training.session.created",
+    entityType: "training" as any,
+    getEntityId: (out) => out.id,
+    buildPayload: (_in, out) => ({ session_id: out.id, topic: out.topic, module: out.session_type }),
+    invalidateKeys: [["ai-training-sessions"], ["training"]],
+    successMessage: "Sessão de treinamento criada",
+    errorMessage: "Erro ao criar sessão",
+  });
+}
+
+export function useCompleteTrainingSession() {
+  return useIntegratedMutation<{ id: string; score: number }, any>({
+    mutationFn: async ({ id, score }) => {
+      const { supabase } = await import("@/integrations/supabase/client");
+      const { data, error } = await supabase
+        .from('ai_training_sessions')
+        .update({
+          status: score >= 70 ? 'completed' : 'failed',
+          final_score: score,
+          completed_at: new Date().toISOString(),
+        })
+        .eq('id', id)
+        .select()
+        .single();
+      if (error) throw error;
+      return data;
+    },
+    eventType: "training.session.completed",
+    entityType: "training" as any,
+    getEntityId: (out) => out.id,
+    buildPayload: (_in, out) => ({ session_id: out.id, score: out.final_score, status: out.status }),
+    invalidateKeys: [["ai-training-sessions"], ["training"], ["compliance"]],
+    successMessage: "Sessão atualizada",
+    errorMessage: "Erro ao atualizar sessão",
+  });
+}
+
+// ════════════════════════════════════════════
+// WHATSAPP / COMMUNICATIONS
+// ════════════════════════════════════════════
+
+export function useSendWhatsApp() {
+  return useIntegratedMutation<{ to: string; message: string }, any>({
+    mutationFn: async (input) => {
+      const { supabase } = await import("@/integrations/supabase/client");
+      const { data, error } = await supabase.functions.invoke("twilio-send-whatsapp", { body: input });
+      if (error) throw error;
+      return data;
+    },
+    eventType: "comms.whatsapp.sent",
+    entityType: "communication" as any,
+    buildPayload: (input) => ({ recipient: input.to }),
+    invalidateKeys: [["whatsapp-logs"]],
+    successMessage: "Mensagem WhatsApp enviada!",
+    errorMessage: "Erro ao enviar WhatsApp",
+  });
+}
+
+export function useSendWhatsAppBatch() {
+  return useIntegratedMutation<{ recipients: string[]; message: string }, any>({
+    mutationFn: async (input) => {
+      const { supabase } = await import("@/integrations/supabase/client");
+      const results = await Promise.allSettled(
+        input.recipients.map(to => supabase.functions.invoke("twilio-send-whatsapp", { body: { to, message: input.message } }))
+      );
+      const failed = results.filter(r => r.status === "rejected").length;
+      if (failed > 0) throw new Error(`${failed} mensagens falharam`);
+      return { sent: input.recipients.length - failed, failed };
+    },
+    eventType: "comms.whatsapp.batch_sent",
+    entityType: "communication" as any,
+    buildPayload: (input) => ({ count: input.recipients.length }),
+    invalidateKeys: [["whatsapp-logs"]],
+    successMessage: "Mensagens enviadas!",
+    errorMessage: "Erro no envio em lote",
+  });
+}
+
+// ════════════════════════════════════════════
+// TEMPLATES
+// ════════════════════════════════════════════
+
+export function useCreateTemplate() {
+  return useIntegratedMutation<{ title: string; content: string; type: string; tags: string[] }, any>({
+    mutationFn: async (input) => {
+      const { supabase } = await import("@/integrations/supabase/client");
+      const { data, error } = await supabase.from("ai_document_templates")
+        .insert({ title: input.title, content: input.content, template_type: input.type, tags: input.tags })
+        .select().single();
+      if (error) throw error;
+      return data;
+    },
+    eventType: "document.template.created",
+    entityType: "document",
+    getEntityId: (out) => out.id,
+    buildPayload: (_in, out) => ({ template_id: out.id, title: out.title }),
+    invalidateKeys: [["document-templates"]],
+    successMessage: "Template criado com sucesso",
+    errorMessage: "Erro ao criar template",
+  });
+}
+
+export function useUpdateTemplate() {
+  return useIntegratedMutation<{ id: string; title: string; content: string; type: string; tags: string[] }, any>({
+    mutationFn: async (input) => {
+      const { supabase } = await import("@/integrations/supabase/client");
+      const { data, error } = await supabase.from("ai_document_templates")
+        .update({ title: input.title, content: input.content, template_type: input.type, tags: input.tags })
+        .eq("id", input.id).select().single();
+      if (error) throw error;
+      return data;
+    },
+    eventType: "document.template.updated",
+    entityType: "document",
+    getEntityId: (out) => out.id,
+    buildPayload: (input) => ({ template_id: input.id }),
+    invalidateKeys: [["document-templates"]],
+    successMessage: "Template atualizado",
+    errorMessage: "Erro ao atualizar template",
+  });
+}
+
+export function useDeleteTemplate() {
+  return useIntegratedMutation<string, any>({
+    mutationFn: async (id) => {
+      const { supabase } = await import("@/integrations/supabase/client");
+      const { error } = await supabase.from("ai_document_templates").delete().eq("id", id);
+      if (error) throw error;
+      return { id };
+    },
+    eventType: "document.template.deleted",
+    entityType: "document",
+    getEntityId: (out) => out.id,
+    buildPayload: (_in, out) => ({ template_id: out.id }),
+    invalidateKeys: [["document-templates"]],
+    successMessage: "Template removido",
+    errorMessage: "Erro ao remover template",
+  });
+}
+
+// ════════════════════════════════════════════
+// ROLE MANAGEMENT
+// ════════════════════════════════════════════
+
+export function useUpdateUserRole() {
+  return useIntegratedMutation<{ userId: string; newRole: string }, any>({
+    mutationFn: async (input) => {
+      const { supabase } = await import("@/integrations/supabase/client");
+      const { data, error } = await supabase
+        .from("user_roles")
+        .update({ role: input.newRole } as any)
+        .eq("user_id", input.userId)
+        .select()
+        .single();
+      if (error) throw error;
+      return data;
+    },
+    eventType: "access.role.changed",
+    entityType: "user" as any,
+    getEntityId: (out) => out.user_id,
+    buildPayload: (input) => ({ user_id: input.userId, new_role: input.newRole }),
+    invalidateKeys: [["admin-user-roles"]],
+    successMessage: "Role atualizado com sucesso",
+    errorMessage: "Erro ao atualizar role",
+  });
+}
+
+// ════════════════════════════════════════════
+// TRACKING (Resolve / Delete)
+// ════════════════════════════════════════════
+
+export function useResolveTrackingAlert() {
+  return useIntegratedMutation<string, any>({
+    mutationFn: async (id) => {
+      const { supabase } = await import("@/integrations/supabase/client");
+      const { data, error } = await supabase.from("tracking_alerts")
+        .update({ is_resolved: true, resolved_at: new Date().toISOString() })
+        .eq("id", id).select().single();
+      if (error) throw error;
+      return data;
+    },
+    eventType: "tracking.alert.resolved",
+    entityType: "alert",
+    getEntityId: (out) => out.id,
+    buildPayload: (_in, out) => ({ alert_id: out.id }),
+    invalidateKeys: [["tracking-alerts"], ["alerts"], ["tracking"]],
+    successMessage: "Alerta resolvido",
+    errorMessage: "Erro ao resolver alerta",
+  });
+}
+
+export function useDeleteTrackingAlert() {
+  return useIntegratedMutation<string, any>({
+    mutationFn: async (id) => {
+      const { supabase } = await import("@/integrations/supabase/client");
+      const { error } = await supabase.from("tracking_alerts").delete().eq("id", id);
+      if (error) throw error;
+      return { id };
+    },
+    eventType: "tracking.alert.deleted",
+    entityType: "alert",
+    getEntityId: (out) => out.id,
+    buildPayload: (_in, out) => ({ alert_id: out.id }),
+    invalidateKeys: [["tracking-alerts"], ["alerts"], ["tracking"]],
+    successMessage: "Alerta removido",
+    errorMessage: "Erro ao remover alerta",
+  });
+}

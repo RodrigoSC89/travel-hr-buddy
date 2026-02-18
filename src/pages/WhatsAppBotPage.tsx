@@ -3,7 +3,7 @@
  * (~120 lines from 489)
  */
 import React from "react";
-import { useQuery, useMutation, useQueryClient } from "@tanstack/react-query";
+import { useQuery } from "@tanstack/react-query";
 import { supabase } from "@/integrations/supabase/client";
 import { Card, CardContent, CardHeader, CardTitle } from "@/components/ui/card";
 import { Badge } from "@/components/ui/badge";
@@ -14,6 +14,7 @@ import {
   AlertTriangle, Shield, FileText, Ship
 } from "lucide-react";
 import { WhatsAppTabs } from "./whatsapp/WhatsAppTabs";
+import { useSendWhatsApp, useSendWhatsAppBatch } from "@/hooks/useModuleHooks";
 
 const MESSAGE_TEMPLATES = [
   { id: "cert-expiry", icon: AlertTriangle, label: "Certificate Expiring", template: "⚠️ ALERTA: Seu certificado {{cert_type}} vence em {{days}} dias. Agende renovação o mais breve possível. — Nauti One" },
@@ -24,8 +25,6 @@ const MESSAGE_TEMPLATES = [
 ];
 
 export default function WhatsAppBotPage() {
-  const queryClient = useQueryClient();
-
   const { data: crewMembers = [] } = useQuery({
     queryKey: ["crew-whatsapp"],
     queryFn: async () => {
@@ -42,26 +41,11 @@ export default function WhatsAppBotPage() {
     },
   });
 
-  const sendMessage = useMutation({
-    mutationFn: async (payload: { to: string; message: string }) => {
-      const { data, error } = await supabase.functions.invoke("twilio-send-whatsapp", { body: payload });
-      if (error) throw error;
-      return data;
-    },
-    onSuccess: () => { toast.success("Mensagem WhatsApp enviada com sucesso!"); queryClient.invalidateQueries({ queryKey: ["whatsapp-logs"] }); },
-    onError: (err: Error) => { toast.error(`Erro ao enviar: ${err.message}`); },
-  });
+  // ✅ INTEGRATED — publishes comms.whatsapp.sent event + audit trail
+  const sendMessage = useSendWhatsApp();
 
-  const sendBatch = useMutation({
-    mutationFn: async (payload: { recipients: string[]; message: string }) => {
-      const results = await Promise.allSettled(payload.recipients.map((to) => supabase.functions.invoke("twilio-send-whatsapp", { body: { to, message: payload.message } })));
-      const failed = results.filter((r) => r.status === "rejected").length;
-      if (failed > 0) throw new Error(`${failed} mensagens falharam`);
-      return results;
-    },
-    onSuccess: (_, vars) => { toast.success(`${vars.recipients.length} mensagens enviadas!`); queryClient.invalidateQueries({ queryKey: ["whatsapp-logs"] }); },
-    onError: (err: Error) => { toast.error(err.message); },
-  });
+  // ✅ INTEGRATED — publishes comms.whatsapp.batch_sent event
+  const sendBatch = useSendWhatsAppBatch();
 
   const handleSend = (data: { phoneNumber?: string; message: string; selectedCrew?: string[] }) => {
     if (!data.message.trim()) return toast.error("Mensagem é obrigatória");
