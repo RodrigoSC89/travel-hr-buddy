@@ -17,6 +17,11 @@ import {
   TrackingService,
   PeopleService,
   AIService,
+  PMSService,
+  CharteringService,
+  ISMService,
+  CrewService,
+  ETSService,
 } from "@/services/domain";
 import type { EntityType } from "@/lib/domain/types";
 
@@ -251,5 +256,155 @@ export function useRejectAISuggestion() {
     invalidateKeys: [["ai-suggestions"], ["ai-decisions"]],
     successMessage: "Sugestão IA rejeitada",
     errorMessage: "Erro ao rejeitar sugestão",
+  });
+}
+
+// ════════════════════════════════════════════
+// PMS (Planned Maintenance System)
+// ════════════════════════════════════════════
+
+export function useCreatePMSSystem() {
+  return useIntegratedMutation<Record<string, unknown>, any>({
+    mutationFn: (input) => PMSService.createSystem(input),
+    eventType: "maintenance.system.created",
+    entityType: "work_order",
+    getEntityId: (out) => out.id,
+    buildPayload: (_in, out) => ({ system_id: out.id, name: out.name, code: out.code }),
+    invalidateKeys: [["pms_systems"], ["maintenance"]],
+    successMessage: "Sistema PMS adicionado",
+    errorMessage: "Erro ao adicionar sistema",
+  });
+}
+
+export function useCreatePMSWorkOrder() {
+  return useIntegratedMutation<Record<string, unknown>, any>({
+    mutationFn: (input) => PMSService.createWorkOrder(input),
+    eventType: "maintenance.work_order.created",
+    entityType: "work_order",
+    getEntityId: (out) => out.id,
+    buildPayload: (_in, out) => ({ work_order_id: out.id, wo_number: out.work_order_number, priority: out.priority }),
+    invalidateKeys: [["pms_work_orders"], ["maintenance"], ["work-orders"]],
+    successMessage: "Work Order criada",
+    errorMessage: "Erro ao criar Work Order",
+  });
+}
+
+export function useUpdatePMSWorkOrderStatus() {
+  return useIntegratedMutation<{ id: string; status: string }, any>({
+    mutationFn: ({ id, status }) => PMSService.updateWorkOrderStatus(id, status),
+    eventType: "maintenance.work_order.status_changed",
+    entityType: "work_order",
+    getEntityId: (out) => out.id,
+    buildPayload: (input) => ({ work_order_id: input.id, status: input.status }),
+    invalidateKeys: [["pms_work_orders"], ["maintenance"], ["work-orders"], ["compliance"]],
+    successMessage: "Status atualizado",
+    errorMessage: "Erro ao atualizar status",
+  });
+}
+
+// ════════════════════════════════════════════
+// CHARTERING
+// ════════════════════════════════════════════
+
+export function useCreateCharterParty() {
+  return useIntegratedMutation<Record<string, unknown>, any>({
+    mutationFn: (input) => CharteringService.createCharterParty(input),
+    eventType: "finance.charter.created",
+    entityType: "charter_party",
+    getEntityId: (out) => out.id,
+    buildPayload: (_in, out) => ({ charter_id: out.id, charter_type: out.charter_type, charterer: out.charterer_name }),
+    invalidateKeys: [["charter_parties"], ["finance"], ["voyages"]],
+    successMessage: "Charter Party criada",
+    errorMessage: "Erro ao criar Charter Party",
+  });
+}
+
+export function useUpdateCharterStatus() {
+  return useIntegratedMutation<{ id: string; status: string }, any>({
+    mutationFn: ({ id, status }) => CharteringService.updateStatus(id, status),
+    eventType: "finance.charter.status_changed",
+    entityType: "charter_party",
+    getEntityId: (out) => out.id,
+    buildPayload: (input) => ({ charter_id: input.id, status: input.status }),
+    invalidateKeys: [["charter_parties"], ["finance"]],
+    successMessage: "Status do charter atualizado",
+    errorMessage: "Erro ao atualizar status",
+  });
+}
+
+// ════════════════════════════════════════════
+// ISM COMPLIANCE
+// ════════════════════════════════════════════
+
+export function useRunISMGapAnalysis() {
+  return useIntegratedMutation<{ elementId: string; data: Record<string, unknown> }, any>({
+    mutationFn: ({ elementId, data }) => ISMService.runGapAnalysis(elementId, data),
+    eventType: "compliance.gap_analysis.completed",
+    entityType: "audit",
+    getEntityId: (out) => out.id,
+    buildPayload: (_in, out) => ({ gap_id: out.id, score: out.compliance_score, status: out.status }),
+    invalidateKeys: [["ism_gap_analysis"], ["compliance"]],
+    successMessage: "Avaliação ISM concluída",
+    errorMessage: "Erro na avaliação",
+  });
+}
+
+export function useCreateISMCAPA() {
+  return useIntegratedMutation<Record<string, unknown>, any>({
+    mutationFn: (input) => ISMService.createCAPA(input),
+    eventType: "compliance.capa.created",
+    entityType: "capa",
+    getEntityId: (out) => out.id,
+    buildPayload: (_in, out) => ({ capa_id: out.id }),
+    invalidateKeys: [["ism_capa"], ["compliance"], ["findings"]],
+    successMessage: "CAPA criada",
+    errorMessage: "Erro ao criar CAPA",
+  });
+}
+
+export function useUpdateISMCAPAStatus() {
+  return useIntegratedMutation<{ id: string; status: string }, any>({
+    mutationFn: ({ id, status }) => ISMService.updateCAPAStatus(id, status),
+    eventType: "compliance.capa.closed",
+    entityType: "capa",
+    getEntityId: (out) => out.id,
+    buildPayload: (input) => ({ capa_id: input.id, status: input.status }),
+    invalidateKeys: [["ism_capa"], ["compliance"]],
+    successMessage: "Status CAPA atualizado",
+    errorMessage: "Erro ao atualizar CAPA",
+  });
+}
+
+// ════════════════════════════════════════════
+// CREW
+// ════════════════════════════════════════════
+
+export function useCreateCrewMember() {
+  return useIntegratedMutation<Record<string, unknown>, any>({
+    mutationFn: (input) => CrewService.createCrewMember(input),
+    eventType: "people.crew.created",
+    entityType: "crew_member",
+    getEntityId: (out) => out.id,
+    buildPayload: (_in, out) => ({ crew_id: out.id, name: out.full_name, rank: out.rank }),
+    invalidateKeys: [["crew"], ["crew-scheduler"], ["rotations"]],
+    successMessage: "Tripulante adicionado com sucesso",
+    errorMessage: "Erro ao adicionar tripulante",
+  });
+}
+
+// ════════════════════════════════════════════
+// EU ETS / EMISSIONS
+// ════════════════════════════════════════════
+
+export function useCreateETSRecord() {
+  return useIntegratedMutation<Record<string, unknown>, any>({
+    mutationFn: (input) => ETSService.createRecord(input),
+    eventType: "finance.ets.record_created",
+    entityType: "expense",
+    getEntityId: (out) => out.id,
+    buildPayload: (_in, out) => ({ record_id: out.id, co2: out.total_co2_mt, cost: out.total_cost_eur }),
+    invalidateKeys: [["eu_ets_tracking"], ["finance"], ["compliance"]],
+    successMessage: "Registro ETS criado",
+    errorMessage: "Erro ao criar registro ETS",
   });
 }

@@ -4,8 +4,10 @@
  */
 
 import { useState, useMemo } from "react";
-import { useQuery, useMutation, useQueryClient } from "@tanstack/react-query";
+import { useQuery, useQueryClient } from "@tanstack/react-query";
 import { supabase } from "@/integrations/supabase/client";
+import { useCreatePMSSystem, useCreatePMSWorkOrder, useUpdatePMSWorkOrderStatus } from "@/hooks/useModuleHooks";
+import { CrossModulePanel } from "@/components/integration";
 import { PremiumModuleShell, type ModuleTab } from "@/components/ui/premium-module-kit/PremiumModuleShell";
 import { SmartKPIGrid } from "@/components/ui/premium-module-kit/SmartKPIGrid";
 import { Card, CardContent, CardHeader, CardTitle, CardDescription } from "@/components/ui/card";
@@ -173,18 +175,16 @@ function HierarchyBrowser() {
   const { data: components = [] } = usePMSComponents(selectedSubsystem);
   const { data: jobs = [] } = usePMSJobs(selectedComponent);
 
-  const addSystem = useMutation({
-    mutationFn: async (system: { code: string; name: string; system_type: string; is_critical: boolean }) => {
-      const { error } = await supabase.from("pms_systems" as any).insert(system as any);
-      if (error) throw error;
+  const createSystemHook = useCreatePMSSystem();
+  const addSystem = {
+    mutate: (system: { code: string; name: string; system_type: string; is_critical: boolean }) => {
+      createSystemHook.mutateAsync(system).then(() => {
+        queryClient.invalidateQueries({ queryKey: ["pms_systems"] });
+        setShowAddSystem(false);
+      });
     },
-    onSuccess: () => {
-      queryClient.invalidateQueries({ queryKey: ["pms_systems"] });
-      toast.success("Sistema adicionado");
-      setShowAddSystem(false);
-    },
-    onError: () => toast.error("Erro ao adicionar sistema"),
-  });
+    isPending: createSystemHook.isPending,
+  };
 
   return (
     <div className="space-y-4">
@@ -359,38 +359,26 @@ function WorkOrdersPanel() {
     );
   }, [workOrders, search]);
 
-  const updateStatus = useMutation({
-    mutationFn: async ({ id, status }: { id: string; status: string }) => {
-      const updates: any = { status };
-      if (status === "in_progress") updates.actual_start = new Date().toISOString();
-      if (status === "completed") updates.actual_end = new Date().toISOString();
-      const { error } = await supabase.from("pms_work_orders" as any).update(updates).eq("id", id);
-      if (error) throw error;
+  const updateStatusHook = useUpdatePMSWorkOrderStatus();
+  const updateStatus = {
+    mutate: ({ id, status }: { id: string; status: string }) => {
+      updateStatusHook.mutateAsync({ id, status }).then(() => {
+        queryClient.invalidateQueries({ queryKey: ["pms_work_orders"] });
+      });
     },
-    onSuccess: () => {
-      queryClient.invalidateQueries({ queryKey: ["pms_work_orders"] });
-      toast.success("Status atualizado");
-    },
-  });
+    isPending: updateStatusHook.isPending,
+  };
 
-  const createWO = useMutation({
-    mutationFn: async (wo: { title: string; priority: string; work_order_type: string; description: string }) => {
-      const woNumber = `WO-${Date.now().toString(36).toUpperCase()}`;
-      const { error } = await supabase.from("pms_work_orders" as any).insert({
-        ...wo,
-        work_order_number: woNumber,
-        status: "draft",
-        triggered_by: "manual",
-      } as any);
-      if (error) throw error;
+  const createWOHook = useCreatePMSWorkOrder();
+  const createWO = {
+    mutate: (wo: { title: string; priority: string; work_order_type: string; description: string }) => {
+      createWOHook.mutateAsync(wo).then(() => {
+        queryClient.invalidateQueries({ queryKey: ["pms_work_orders"] });
+        setShowCreate(false);
+      });
     },
-    onSuccess: () => {
-      queryClient.invalidateQueries({ queryKey: ["pms_work_orders"] });
-      toast.success("Work Order criada");
-      setShowCreate(false);
-    },
-    onError: () => toast.error("Erro ao criar Work Order"),
-  });
+    isPending: createWOHook.isPending,
+  };
 
   const getNextStatus = (current: string): string | null => {
     const flow = ["draft", "planned", "approved", "in_progress", "pending_parts", "completed", "verified", "closed"];

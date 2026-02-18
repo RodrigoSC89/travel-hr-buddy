@@ -163,28 +163,23 @@ export default function MaintenanceMegaHub() {
 
   const handleSubmitWorkOrder = useCallback(async () => {
     if (!woForm.title) { toast.error('Título obrigatório'); return; }
-    const { data, error } = await supabase.from('maintenance_tasks').insert({
-      title: woForm.title,
-      description: woForm.description || null,
-      component_name: woForm.component || null,
-      priority: woForm.priority,
-      status: 'pending',
-      vessel_id: woForm.vessel_id || null,
-    }).select().single();
-    if (error) { toast.error('Erro ao criar OS: ' + error.message); return; }
-    toast.success('Ordem de Serviço criada');
-    // Publish cross-module event
-    publishEvent({
-      type: 'maintenance.work_order.created',
-      payload: { task_id: data?.id, title: woForm.title, vessel_id: woForm.vessel_id, priority: woForm.priority },
-      sourceEntityType: 'maintenance_task',
-      sourceEntityId: data?.id,
-    });
-    queryClient.invalidateQueries({ queryKey: ['maintenance-records-hub'] });
-    queryClient.invalidateQueries({ queryKey: ['maintenance'] });
-    queryClient.invalidateQueries({ queryKey: ['dashboard-kpis'] });
-    setWoDialogOpen(false);
-    setWoForm({ vessel_id: '', component: '', title: '', description: '', priority: 'medium' });
+    try {
+      const { PMSService } = await import('@/services/domain/pms-service');
+      await PMSService.createWorkOrder({
+        title: woForm.title,
+        description: woForm.description || null,
+        component_name: woForm.component || null,
+        priority: woForm.priority,
+        vessel_id: woForm.vessel_id || null,
+      });
+      queryClient.invalidateQueries({ queryKey: ['maintenance-records-hub'] });
+      queryClient.invalidateQueries({ queryKey: ['maintenance'] });
+      queryClient.invalidateQueries({ queryKey: ['dashboard-kpis'] });
+      setWoDialogOpen(false);
+      setWoForm({ vessel_id: '', component: '', title: '', description: '', priority: 'medium' });
+    } catch (err: any) {
+      toast.error('Erro ao criar OS: ' + (err?.message || ''));
+    }
   }, [woForm, queryClient]);
 
   const handleExport = useCallback(async () => {
