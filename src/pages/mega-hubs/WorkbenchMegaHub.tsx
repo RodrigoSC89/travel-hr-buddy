@@ -43,6 +43,7 @@ const CrewCertificationHeatmap = lazy(() => import('@/components/dashboard/CrewC
 const PayrollIntelligence = lazy(() => import('@/components/dashboard/PayrollIntelligence'));
 const CrewRotationOverview = lazy(() => import('@/components/dashboard/CrewRotationOverview').then(m => ({ default: m.CrewRotationOverview })));
 const CrewCompetencyRadar = lazy(() => import('@/components/dashboard/CrewCompetencyRadar').then(m => ({ default: m.CrewCompetencyRadar })));
+const CashFlowForecast = lazy(() => import('@/components/dashboard/CashFlowForecast').then(m => ({ default: m.CashFlowForecast })));
 
 const LoadingSkeleton = () => (
   <div className="space-y-4 p-6">
@@ -477,6 +478,10 @@ export default function WorkbenchMegaHub() {
                 showSearch
                 searchPlaceholder="Search transactions, invoices..."
               />
+              {/* Cash Flow Forecast */}
+              <Suspense fallback={<Skeleton className="h-64" />}>
+                <CashFlowForecast />
+              </Suspense>
               {/* Wave 46: Payroll Intelligence */}
               <div className="grid grid-cols-1 lg:grid-cols-2 gap-6">
                 <Suspense fallback={<Skeleton className="h-64" />}>

@@ -56,6 +56,7 @@ const ISMGapAnalyzer = lazy(() => import('@/components/dashboard/ISMGapAnalyzer'
 const PSCDetentionPredictor = lazy(() => import('@/components/dashboard/PSCDetentionPredictor'));
 const ComplianceEventsMonitor = lazy(() => import('@/components/compliance/ComplianceEventsMonitor'));
 const ComplianceScoreDashboard = lazy(() => import('@/components/dashboard/ComplianceScoreDashboard').then(m => ({ default: m.ComplianceScoreDashboard })));
+const DocumentExpiryMatrix = lazy(() => import('@/components/dashboard/DocumentExpiryMatrix').then(m => ({ default: m.DocumentExpiryMatrix })));
 
 // ═══════════════════════════════════════════════════════════
 // 12 AUDITORIAS MARÍTIMAS COMPLETAS - ZERO SUPRESSÃO
@@ -360,6 +361,11 @@ export default function ComplianceMegaHub() {
               {/* Compliance Score Dashboard */}
               <Suspense fallback={<Skeleton className="h-64" />}>
                 <ComplianceScoreDashboard />
+              </Suspense>
+
+              {/* Document & Certificate Expiry Matrix */}
+              <Suspense fallback={<Skeleton className="h-64" />}>
+                <DocumentExpiryMatrix />
               </Suspense>
 
               {/* Real-time Compliance Events Monitor */}

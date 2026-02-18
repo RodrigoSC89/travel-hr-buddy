@@ -49,6 +49,8 @@ const WeatherRoutingQuickPanel = lazy(() => import('@/components/operations/Weat
 const LaytimeQuickPanel = lazy(() => import('@/components/operations/LaytimeQuickPanel'));
 const CertificationExpiryTracker = lazy(() => import('@/components/dashboard/CertificationExpiryTracker').then(m => ({ default: m.CertificationExpiryTracker })));
 const PortCallTimeline = lazy(() => import('@/components/dashboard/PortCallTimeline').then(m => ({ default: m.PortCallTimeline })));
+const VoyageWeatherRiskPanel = lazy(() => import('@/components/dashboard/VoyageWeatherRiskPanel').then(m => ({ default: m.VoyageWeatherRiskPanel })));
+const BunkerConsumptionAnalytics = lazy(() => import('@/components/dashboard/BunkerConsumptionAnalytics').then(m => ({ default: m.BunkerConsumptionAnalytics })));
 const LoadingSkeleton = () => (
   <div className="space-y-4 p-6">
     <Skeleton className="h-8 w-64" />
@@ -340,6 +342,15 @@ export default function OpsMegaHub() {
                 </Suspense>
               </div>
 
+              {/* Weather Risk + Bunker Consumption */}
+              <div className="grid grid-cols-1 lg:grid-cols-2 gap-6">
+                <Suspense fallback={<Skeleton className="h-80" />}>
+                  <VoyageWeatherRiskPanel />
+                </Suspense>
+                <Suspense fallback={<Skeleton className="h-80" />}>
+                  <BunkerConsumptionAnalytics />
+                </Suspense>
+              </div>
               {/* Original Operations Hub */}
               {(isLoading || metrics.totalVessels > 0) && <OperationsCommandHub />}
             </TabsContent>
