@@ -63,6 +63,7 @@ const VoyagePnLQuickView = lazy(() => import('@/components/dashboard/VoyagePnLQu
 const FleetUtilizationKPI = lazy(() => import('@/components/dashboard/FleetUtilizationKPI').then(m => ({ default: m.FleetUtilizationKPI })));
 const LiveIncidentFeed = lazy(() => import('@/components/dashboard/LiveIncidentFeed').then(m => ({ default: m.LiveIncidentFeed })));
 const CrewCertificationRadar = lazy(() => import('@/components/dashboard/CrewCertificationRadar').then(m => ({ default: m.CrewCertificationRadar })));
+const PIClaimsIntelligence = lazy(() => import('@/components/dashboard/PIClaimsIntelligence').then(m => ({ default: m.PIClaimsIntelligence })));
 
 const LoadingSkeleton = () => (
   <div className="space-y-4 p-6">
@@ -427,6 +428,11 @@ export default function CommandMegaHub() {
               {/* Event System - Central Nervous System */}
               <Suspense fallback={<Skeleton className="h-64" />}>
                 <SystemEventsPanel />
+              </Suspense>
+
+              {/* Wave 53: P&I Claims Intelligence */}
+              <Suspense fallback={<Skeleton className="h-80" />}>
+                <PIClaimsIntelligence />
               </Suspense>
 
               {/* Full Dashboard below */}

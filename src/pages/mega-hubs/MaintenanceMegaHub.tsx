@@ -59,6 +59,7 @@ const MaintenanceCostTrend = lazy(() => import('@/components/dashboard/Maintenan
 const InventoryCriticalityDashboard = lazy(() => import('@/components/dashboard/InventoryCriticalityDashboard').then(m => ({ default: m.InventoryCriticalityDashboard })));
 const EquipmentFailurePredictionMap = lazy(() => import('@/components/dashboard/EquipmentFailurePredictionMap').then(m => ({ default: m.EquipmentFailurePredictionMap })));
 const WarrantyClaimsTracker = lazy(() => import('@/components/dashboard/WarrantyClaimsTracker').then(m => ({ default: m.WarrantyClaimsTracker })));
+const SparePartsIntelligence = lazy(() => import('@/components/dashboard/SparePartsIntelligence').then(m => ({ default: m.SparePartsIntelligence })));
 const LoadingSkeleton = () => (
   <div className="space-y-4 p-6">
     <Skeleton className="h-8 w-64" />
@@ -357,6 +358,11 @@ export default function MaintenanceMegaHub() {
               {/* Wave 51: Warranty Claims Tracker */}
               <Suspense fallback={<Skeleton className="h-80" />}>
                 <WarrantyClaimsTracker />
+              </Suspense>
+
+              {/* Wave 53: Spare Parts Inventory Intelligence */}
+              <Suspense fallback={<Skeleton className="h-80" />}>
+                <SparePartsIntelligence />
               </Suspense>
 
               {!maintLoading && maintMetrics.total === 0 && (
