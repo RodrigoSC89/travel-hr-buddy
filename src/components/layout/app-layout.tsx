@@ -16,20 +16,25 @@ import EnhancedNotifications from "@/components/ui/enhanced-notifications";
 import { useSessionSecurity } from "@/hooks/useSessionSecurity";
 import { useCrossModuleAutomation } from "@/hooks/useCrossModuleAutomation";
 import { useRealtimeAlerts } from "@/hooks/useRealtimeAlerts";
+import { useGlobalShortcuts } from "@/hooks/useGlobalShortcuts";
 
 // Lazy load offline components
 const OfflineStatusBar = lazy(() => 
   import('@/components/offline/OfflineStatusBar').then(m => ({ default: m.OfflineStatusBar }))
+);
+const QuickActionFAB = lazy(() => 
+  import('@/components/ui/QuickActionFAB').then(m => ({ default: m.QuickActionFAB }))
 );
 
 export const AppLayout: FC = () => {
   const { isSearchOpen, setIsSearchOpen } = useSystemActions();
   const [isNotificationsOpen, setIsNotificationsOpen] = useState(false);
 
-  // Global security & automation hooks
+  // Global security, automation & shortcuts hooks
   useSessionSecurity({ idleTimeoutMs: 30 * 60 * 1000 });
   const { criticalCount } = useCrossModuleAutomation();
   useRealtimeAlerts();
+  useGlobalShortcuts();
 
   return (
     <ThemeProvider defaultTheme="dark" storageKey="nautilus-ui-theme">
@@ -66,6 +71,10 @@ export const AppLayout: FC = () => {
               isOpen={isNotificationsOpen}
               onClose={() => setIsNotificationsOpen(false)}
             />
+            {/* Quick Action FAB */}
+            <Suspense fallback={null}>
+              <QuickActionFAB />
+            </Suspense>
             
             {/* Toast Notifications — single instance in App.tsx */}
           </div>
