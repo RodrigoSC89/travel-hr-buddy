@@ -142,6 +142,99 @@ export const EVENT_TYPES = {
   'maintenance.sensor_reading.updated': 'maintenance.sensor_reading.updated',
   // Telemetry alert create
   'tracking.telemetry_alert.created': 'tracking.telemetry_alert.created',
+  // ═══════ WAVE 63 — FULL COVERAGE ═══════
+  // Non-Conformities
+  'compliance.nc.created': 'compliance.nc.created',
+  'compliance.nc.status_changed': 'compliance.nc.status_changed',
+  // Internal Audits
+  'compliance.internal_audit.created': 'compliance.internal_audit.created',
+  'compliance.internal_audit.completed': 'compliance.internal_audit.completed',
+  // Checklists
+  'operations.checklist.created': 'operations.checklist.created',
+  'operations.checklist.completed': 'operations.checklist.completed',
+  // Drills / Safety
+  'safety.drill.created': 'safety.drill.created',
+  'safety.drill.completed': 'safety.drill.completed',
+  'safety.incident.created': 'safety.incident.created',
+  'safety.incident.updated': 'safety.incident.updated',
+  'safety.near_miss.created': 'safety.near_miss.created',
+  // Finance expanded
+  'finance.expense.created': 'finance.expense.created',
+  'finance.expense.updated': 'finance.expense.updated',
+  'finance.transaction.created': 'finance.transaction.created',
+  'finance.budget.created': 'finance.budget.created',
+  'finance.budget.updated': 'finance.budget.updated',
+  'finance.payroll.created': 'finance.payroll.created',
+  // HR / People expanded
+  'people.leave.requested': 'people.leave.requested',
+  'people.leave.approved': 'people.leave.approved',
+  'people.evaluation.created': 'people.evaluation.created',
+  'people.wellness.updated': 'people.wellness.updated',
+  'people.climate.response': 'people.climate.response',
+  'people.onboarding.started': 'people.onboarding.started',
+  // Procurement expanded
+  'procurement.supplier.created': 'procurement.supplier.created',
+  'procurement.supplier.updated': 'procurement.supplier.updated',
+  'procurement.order.received': 'procurement.order.received',
+  // Operations expanded
+  'operations.cargo.created': 'operations.cargo.created',
+  'operations.cargo.updated': 'operations.cargo.updated',
+  'operations.bunker.created': 'operations.bunker.created',
+  'operations.ballast.created': 'operations.ballast.created',
+  // Communication
+  'comms.message.sent': 'comms.message.sent',
+  'comms.notification.created': 'comms.notification.created',
+  // Maintenance expanded
+  'maintenance.record.created': 'maintenance.record.created',
+  'maintenance.record.updated': 'maintenance.record.updated',
+  'maintenance.drydock.created': 'maintenance.drydock.created',
+  'maintenance.drydock.updated': 'maintenance.drydock.updated',
+  'maintenance.defect.created': 'maintenance.defect.created',
+  'maintenance.warranty.created': 'maintenance.warranty.created',
+  // Analytics / Reporting
+  'analytics.report.generated': 'analytics.report.generated',
+  'analytics.dashboard.updated': 'analytics.dashboard.updated',
+  // Automation
+  'automation.workflow.created': 'automation.workflow.created',
+  'automation.workflow.executed': 'automation.workflow.executed',
+  // Medical
+  'medical.record.created': 'medical.record.created',
+  'medical.record.updated': 'medical.record.updated',
+  // Calendar
+  'calendar.event.created': 'calendar.event.created',
+  'calendar.event.updated': 'calendar.event.updated',
+  // SGSO / ISM
+  'compliance.sgso.plan_created': 'compliance.sgso.plan_created',
+  'compliance.sgso.plan_updated': 'compliance.sgso.plan_updated',
+  // Emissions / Environmental
+  'environmental.emissions.created': 'environmental.emissions.created',
+  'environmental.emissions.updated': 'environmental.emissions.updated',
+  // PREOVID / Inspections
+  'compliance.preovid.created': 'compliance.preovid.created',
+  'compliance.preovid.updated': 'compliance.preovid.updated',
+  // PEOTRAM
+  'compliance.peotram.audit_created': 'compliance.peotram.audit_created',
+  'compliance.peotram.audit_updated': 'compliance.peotram.audit_updated',
+  // Reservations / Travel
+  'travel.reservation.created': 'travel.reservation.created',
+  'travel.reservation.updated': 'travel.reservation.updated',
+  // Vessel Downtime
+  'fleet.downtime.created': 'fleet.downtime.created',
+  'fleet.downtime.updated': 'fleet.downtime.updated',
+  // CBT (Computer Based Training)
+  'training.cbt.started': 'training.cbt.started',
+  'training.cbt.completed': 'training.cbt.completed',
+  // Manning Agents
+  'recruitment.candidate.created': 'recruitment.candidate.created',
+  'recruitment.candidate.updated': 'recruitment.candidate.updated',
+  // IoT / Telemetry
+  'iot.sensor_data.created': 'iot.sensor_data.created',
+  // Contracts
+  'finance.contract.created': 'finance.contract.created',
+  'finance.contract.updated': 'finance.contract.updated',
+  // Task Management
+  'operations.task.created': 'operations.task.created',
+  'operations.task.updated': 'operations.task.updated',
 } as const;
 
 export type EventType = keyof typeof EVENT_TYPES;
