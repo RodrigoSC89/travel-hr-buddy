@@ -40,6 +40,8 @@ const CustomizableDashboardGrid = lazy(() => import('@/components/dashboard/Cust
 const VesselDigitalTwin = lazy(() => import('@/components/three/VesselDigitalTwin').then(m => ({ default: m.VesselDigitalTwin })));
 const PerformanceMetrics = lazy(() => import('@/components/performance/PerformanceMetrics').then(m => ({ default: m.PerformanceMetrics })));
 const EnhancedPresence = lazy(() => import('@/components/collaboration/EnhancedPresence').then(m => ({ default: m.EnhancedPresence })));
+const OperationalRadar = lazy(() => import('@/components/dashboard/OperationalRadar'));
+const SituationRoom = lazy(() => import('@/components/dashboard/SituationRoom'));
 
 const LoadingSkeleton = () => (
   <div className="space-y-4 p-6">
@@ -276,12 +278,22 @@ export default function CommandMegaHub() {
                 variant="horizontal"
               />
 
-              {/* Main Content with Timeline */}
+              {/* Mission Control Grid */}
               <div className="grid grid-cols-1 lg:grid-cols-3 gap-6">
-                <div className="lg:col-span-2">
-                  <EnhancedUnifiedDashboard />
+                {/* Operational Radar */}
+                <div className="lg:col-span-1">
+                  <Suspense fallback={<Skeleton className="h-[400px]" />}>
+                    <OperationalRadar />
+                  </Suspense>
                 </div>
-              <div className="lg:col-span-1">
+                {/* Situation Room */}
+                <div className="lg:col-span-1">
+                  <Suspense fallback={<Skeleton className="h-[400px]" />}>
+                    <SituationRoom />
+                  </Suspense>
+                </div>
+                {/* Activity Feed */}
+                <div className="lg:col-span-1">
                   <PremiumTimeline
                     title="Activity Feed"
                     events={commandTimelineEvents}
@@ -290,6 +302,9 @@ export default function CommandMegaHub() {
                   />
                 </div>
               </div>
+
+              {/* Full Dashboard below */}
+              <EnhancedUnifiedDashboard />
 
               {/* Modules Overview - Always visible */}
               <SystemModulesOverview />
