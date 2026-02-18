@@ -48,6 +48,7 @@ const NoonReportAnalytics = lazy(() => import('@/components/dashboard/NoonReport
 const WeatherRoutingQuickPanel = lazy(() => import('@/components/operations/WeatherRoutingQuickPanel'));
 const LaytimeQuickPanel = lazy(() => import('@/components/operations/LaytimeQuickPanel'));
 const CertificationExpiryTracker = lazy(() => import('@/components/dashboard/CertificationExpiryTracker').then(m => ({ default: m.CertificationExpiryTracker })));
+const PortCallTimeline = lazy(() => import('@/components/dashboard/PortCallTimeline').then(m => ({ default: m.PortCallTimeline })));
 const LoadingSkeleton = () => (
   <div className="space-y-4 p-6">
     <Skeleton className="h-8 w-64" />
@@ -329,10 +330,15 @@ export default function OpsMegaHub() {
                 </Suspense>
               </div>
 
-              {/* Certification Expiry Tracker */}
-              <Suspense fallback={<Skeleton className="h-64" />}>
-                <CertificationExpiryTracker />
-              </Suspense>
+              {/* Certification Expiry + Port Call Timeline */}
+              <div className="grid grid-cols-1 lg:grid-cols-2 gap-6">
+                <Suspense fallback={<Skeleton className="h-80" />}>
+                  <CertificationExpiryTracker />
+                </Suspense>
+                <Suspense fallback={<Skeleton className="h-80" />}>
+                  <PortCallTimeline />
+                </Suspense>
+              </div>
 
               {/* Original Operations Hub */}
               {(isLoading || metrics.totalVessels > 0) && <OperationsCommandHub />}

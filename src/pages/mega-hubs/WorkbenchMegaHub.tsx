@@ -42,6 +42,7 @@ const WorkflowAutomationEngine = lazy(() => import('@/components/dashboard/Workf
 const CrewCertificationHeatmap = lazy(() => import('@/components/dashboard/CrewCertificationHeatmap'));
 const PayrollIntelligence = lazy(() => import('@/components/dashboard/PayrollIntelligence'));
 const CrewRotationOverview = lazy(() => import('@/components/dashboard/CrewRotationOverview').then(m => ({ default: m.CrewRotationOverview })));
+const CrewCompetencyRadar = lazy(() => import('@/components/dashboard/CrewCompetencyRadar').then(m => ({ default: m.CrewCompetencyRadar })));
 
 const LoadingSkeleton = () => (
   <div className="space-y-4 p-6">
@@ -402,10 +403,15 @@ export default function WorkbenchMegaHub() {
                 steps={crewWorkflowSteps}
                 variant="horizontal"
               />
-              {/* Crew Rotation Overview */}
-              <Suspense fallback={<Skeleton className="h-64" />}>
-                <CrewRotationOverview />
-              </Suspense>
+              {/* Crew Rotation + Competency Radar */}
+              <div className="grid grid-cols-1 lg:grid-cols-2 gap-6">
+                <Suspense fallback={<Skeleton className="h-80" />}>
+                  <CrewRotationOverview />
+                </Suspense>
+                <Suspense fallback={<Skeleton className="h-80" />}>
+                  <CrewCompetencyRadar />
+                </Suspense>
+              </div>
               <PeopleHub />
             </TabsContent>
 

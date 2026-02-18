@@ -59,6 +59,7 @@ const FleetRiskHeatmap = lazy(() => import('@/components/dashboard/FleetRiskHeat
 const SystemEventsPanel = lazy(() => import('@/components/dashboard/SystemEventsPanel'));
 const FleetKPISummaryCards = lazy(() => import('@/components/dashboard/FleetKPISummaryCards').then(m => ({ default: m.FleetKPISummaryCards })));
 const FleetStatusGrid = lazy(() => import('@/components/dashboard/FleetStatusGrid').then(m => ({ default: m.FleetStatusGrid })));
+const VoyagePnLQuickView = lazy(() => import('@/components/dashboard/VoyagePnLQuickView').then(m => ({ default: m.VoyagePnLQuickView })));
 
 const LoadingSkeleton = () => (
   <div className="space-y-4 p-6">
@@ -395,10 +396,15 @@ export default function CommandMegaHub() {
                 </Suspense>
               </div>
 
-              {/* Fleet Status Grid - Real-time vessel health */}
-              <Suspense fallback={<Skeleton className="h-64" />}>
-                <FleetStatusGrid />
-              </Suspense>
+              {/* Voyage P&L Quick View + Fleet Status Grid */}
+              <div className="grid grid-cols-1 lg:grid-cols-2 gap-6">
+                <Suspense fallback={<Skeleton className="h-80" />}>
+                  <VoyagePnLQuickView />
+                </Suspense>
+                <Suspense fallback={<Skeleton className="h-80" />}>
+                  <FleetStatusGrid />
+                </Suspense>
+              </div>
 
               {/* Event System - Central Nervous System */}
               <Suspense fallback={<Skeleton className="h-64" />}>
