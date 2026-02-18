@@ -14,7 +14,8 @@ import { Dialog, DialogContent, DialogHeader, DialogTitle, DialogTrigger } from 
 import { Label } from '@/components/ui/label';
 import { useToast } from '@/hooks/use-toast';
 import { supabase } from '@/integrations/supabase/client';
-import { useQuery, useMutation, useQueryClient } from '@tanstack/react-query';
+import { useQuery } from '@tanstack/react-query';
+import { useCreateLogbookEntry, useDeleteLogbookEntry } from '@/hooks/useModuleHooks';
 import {
   BookOpen, Clock, AlertTriangle, CheckCircle, Users,
   Navigation, Shield, Activity, Plus, ArrowRightLeft, Trash2, Loader2
@@ -60,7 +61,8 @@ export function PeoDPLogbook() {
   const [filter, setFilter] = useState<EventType | 'all'>('all');
   const [dialogOpen, setDialogOpen] = useState(false);
   const { toast } = useToast();
-  const queryClient = useQueryClient();
+  const createEntry = useCreateLogbookEntry();
+  const deleteEntry = useDeleteLogbookEntry();
 
   // Form state
   const [form, setForm] = useState({
@@ -91,44 +93,30 @@ export function PeoDPLogbook() {
     },
   });
 
-  // Create entry
-  const createMutation = useMutation({
-    mutationFn: async () => {
-      const { error } = await supabase.from('peodp_logbook_entries').insert({
-        event_type: form.event_type,
-        severity: form.severity,
-        dpo_name: form.dpo_name,
-        title: form.title,
-        description: form.description,
-        dp_mode: form.dp_mode || null,
-        thrusters_active: form.thrusters_active ? Number(form.thrusters_active) : null,
-        wind_speed: form.wind_speed ? Number(form.wind_speed) : null,
-        wave_height: form.wave_height ? Number(form.wave_height) : null,
-        heading: form.heading ? Number(form.heading) : null,
-        excursion: form.excursion ? Number(form.excursion) : null,
-      });
-      if (error) throw error;
-    },
-    onSuccess: () => {
-      queryClient.invalidateQueries({ queryKey: ['peodp-logbook'] });
-      setDialogOpen(false);
-      setForm({ event_type: 'operation', severity: 'info', dpo_name: '', title: '', description: '', dp_mode: '', thrusters_active: '', wind_speed: '', wave_height: '', heading: '', excursion: '' });
-      toast({ title: 'Entrada registrada', description: 'Logbook atualizado com sucesso' });
-    },
-    onError: () => toast({ title: 'Erro', description: 'Falha ao salvar entrada', variant: 'destructive' }),
-  });
+  const handleCreate = () => {
+    createEntry.mutate({
+      event_type: form.event_type,
+      severity: form.severity,
+      dpo_name: form.dpo_name,
+      title: form.title,
+      description: form.description,
+      dp_mode: form.dp_mode || null,
+      thrusters_active: form.thrusters_active ? Number(form.thrusters_active) : null,
+      wind_speed: form.wind_speed ? Number(form.wind_speed) : null,
+      wave_height: form.wave_height ? Number(form.wave_height) : null,
+      heading: form.heading ? Number(form.heading) : null,
+      excursion: form.excursion ? Number(form.excursion) : null,
+    }, {
+      onSuccess: () => {
+        setDialogOpen(false);
+        setForm({ event_type: 'operation', severity: 'info', dpo_name: '', title: '', description: '', dp_mode: '', thrusters_active: '', wind_speed: '', wave_height: '', heading: '', excursion: '' });
+      },
+    });
+  };
 
-  // Delete entry
-  const deleteMutation = useMutation({
-    mutationFn: async (id: string) => {
-      const { error } = await supabase.from('peodp_logbook_entries').delete().eq('id', id);
-      if (error) throw error;
-    },
-    onSuccess: () => {
-      queryClient.invalidateQueries({ queryKey: ['peodp-logbook'] });
-      toast({ title: 'Entrada removida' });
-    },
-  });
+  const handleDelete = (id: string) => {
+    deleteEntry.mutate(id);
+  };
 
   const filtered = filter === 'all' ? entries : entries.filter((e: Record<string, unknown>) => e.event_type === filter);
   const incidents = entries.filter((e: Record<string, unknown>) => e.event_type === 'incident').length;
@@ -222,8 +210,8 @@ export function PeoDPLogbook() {
                       <Input type="number" value={form.heading} onChange={e => setForm(p => ({ ...p, heading: e.target.value }))} />
                     </div>
                   </div>
-                  <Button onClick={() => createMutation.mutate()} disabled={!form.title || !form.dpo_name || createMutation.isPending}>
-                    {createMutation.isPending ? <Loader2 className="h-4 w-4 animate-spin mr-2" /> : <Plus className="h-4 w-4 mr-2" />}
+                  <Button onClick={handleCreate} disabled={!form.title || !form.dpo_name || createEntry.isPending}>
+                    {createEntry.isPending ? <Loader2 className="h-4 w-4 animate-spin mr-2" /> : <Plus className="h-4 w-4 mr-2" />}
                     Registrar Entrada
                   </Button>
                 </div>
@@ -326,7 +314,7 @@ export function PeoDPLogbook() {
                         {entry.excursion != null && <Badge variant="outline" className="text-[10px]">Excursion: {String(entry.excursion)}m</Badge>}
                       </div>
                     </div>
-                    <Button variant="ghost" size="icon" className="shrink-0 text-muted-foreground hover:text-destructive" onClick={() => deleteMutation.mutate(entry.id as string)} aria-label="Excluir entrada do logbook" title="Excluir">
+                    <Button variant="ghost" size="icon" className="shrink-0 text-muted-foreground hover:text-destructive" onClick={() => handleDelete(entry.id as string)} aria-label="Excluir entrada do logbook" title="Excluir">
                       <Trash2 className="h-4 w-4" />
                     </Button>
                   </div>

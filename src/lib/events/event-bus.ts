@@ -85,6 +85,27 @@ export const EVENT_TYPES = {
   // Tracking (resolve/delete)
   'tracking.alert.resolved': 'tracking.alert.resolved',
   'tracking.alert.deleted': 'tracking.alert.deleted',
+  // PEO-DP Operations
+  'peodp.logbook.entry_created': 'peodp.logbook.entry_created',
+  'peodp.logbook.entry_deleted': 'peodp.logbook.entry_deleted',
+  'peodp.fmea.item_created': 'peodp.fmea.item_created',
+  'peodp.fmea.item_updated': 'peodp.fmea.item_updated',
+  'peodp.fmea.item_deleted': 'peodp.fmea.item_deleted',
+  // Fleet / Vessel History
+  'fleet.history.event_created': 'fleet.history.event_created',
+  'fleet.history.event_deleted': 'fleet.history.event_deleted',
+  // Maintenance (Spare Parts, Running Hours, Predictions)
+  'maintenance.spare_part.added': 'maintenance.spare_part.added',
+  'maintenance.running_hours.updated': 'maintenance.running_hours.updated',
+  'maintenance.prediction.created': 'maintenance.prediction.created',
+  // Compliance (Class Surveys, MARPOL)
+  'compliance.class_survey.created': 'compliance.class_survey.created',
+  'compliance.class_survey.updated': 'compliance.class_survey.updated',
+  'compliance.class_survey.deleted': 'compliance.class_survey.deleted',
+  'compliance.marpol.entry_created': 'compliance.marpol.entry_created',
+  // Procurement
+  'procurement.requisition.created': 'procurement.requisition.created',
+  'procurement.requisition.approved': 'procurement.requisition.approved',
 } as const;
 
 export type EventType = keyof typeof EVENT_TYPES;
