@@ -665,3 +665,325 @@ export function useDeleteTrackingAlert() {
     errorMessage: "Erro ao remover alerta",
   });
 }
+
+// ════════════════════════════════════════════
+// PEO-DP LOGBOOK
+// ════════════════════════════════════════════
+
+export function useCreateLogbookEntry() {
+  return useIntegratedMutation<Record<string, unknown>, any>({
+    mutationFn: async (input) => {
+      const { supabase } = await import("@/integrations/supabase/client");
+      const { data, error } = await supabase.from('peodp_logbook_entries')
+        .insert(input as any).select().single();
+      if (error) throw error;
+      return data;
+    },
+    eventType: "peodp.logbook.entry_created",
+    entityType: "logbook_entry" as any,
+    getEntityId: (out) => out.id,
+    buildPayload: (_in, out) => ({ entry_id: out.id, event_type: out.event_type, severity: out.severity }),
+    invalidateKeys: [["peodp-logbook"]],
+    successMessage: "Entrada registrada no logbook",
+    errorMessage: "Erro ao salvar entrada",
+  });
+}
+
+export function useDeleteLogbookEntry() {
+  return useIntegratedMutation<string, any>({
+    mutationFn: async (id) => {
+      const { supabase } = await import("@/integrations/supabase/client");
+      const { error } = await supabase.from('peodp_logbook_entries').delete().eq('id', id);
+      if (error) throw error;
+      return { id };
+    },
+    eventType: "peodp.logbook.entry_deleted",
+    entityType: "logbook_entry" as any,
+    getEntityId: (out) => out.id,
+    buildPayload: (_in, out) => ({ entry_id: out.id }),
+    invalidateKeys: [["peodp-logbook"]],
+    successMessage: "Entrada removida",
+    errorMessage: "Erro ao remover entrada",
+  });
+}
+
+// ════════════════════════════════════════════
+// PEO-DP FMEA
+// ════════════════════════════════════════════
+
+export function useCreateFMEAItem() {
+  return useIntegratedMutation<Record<string, unknown>, any>({
+    mutationFn: async (input) => {
+      const { supabase } = await import("@/integrations/supabase/client");
+      const { data, error } = await supabase.from('peodp_fmea_items')
+        .insert(input as any).select().single();
+      if (error) throw error;
+      return data;
+    },
+    eventType: "peodp.fmea.item_created",
+    entityType: "fmea_item" as any,
+    getEntityId: (out) => out.id,
+    buildPayload: (_in, out) => ({ item_id: out.id, component: out.component_name, rpn: out.rpn }),
+    invalidateKeys: [["peodp-fmea"]],
+    successMessage: "Item FMEA adicionado",
+    errorMessage: "Erro ao adicionar item FMEA",
+  });
+}
+
+export function useUpdateFMEAItem() {
+  return useIntegratedMutation<{ id: string; updates: Record<string, unknown> }, any>({
+    mutationFn: async ({ id, updates }) => {
+      const { supabase } = await import("@/integrations/supabase/client");
+      const { data, error } = await supabase.from('peodp_fmea_items')
+        .update(updates as any).eq('id', id).select().single();
+      if (error) throw error;
+      return data;
+    },
+    eventType: "peodp.fmea.item_updated",
+    entityType: "fmea_item" as any,
+    getEntityId: (out) => out.id,
+    buildPayload: (input) => ({ item_id: input.id }),
+    invalidateKeys: [["peodp-fmea"]],
+    successMessage: "Item FMEA atualizado",
+    errorMessage: "Erro ao atualizar item FMEA",
+  });
+}
+
+export function useDeleteFMEAItem() {
+  return useIntegratedMutation<string, any>({
+    mutationFn: async (id) => {
+      const { supabase } = await import("@/integrations/supabase/client");
+      const { error } = await supabase.from('peodp_fmea_items').delete().eq('id', id);
+      if (error) throw error;
+      return { id };
+    },
+    eventType: "peodp.fmea.item_deleted",
+    entityType: "fmea_item" as any,
+    getEntityId: (out) => out.id,
+    buildPayload: (_in, out) => ({ item_id: out.id }),
+    invalidateKeys: [["peodp-fmea"]],
+    successMessage: "Item FMEA removido",
+    errorMessage: "Erro ao remover item FMEA",
+  });
+}
+
+// ════════════════════════════════════════════
+// FLEET — VESSEL HISTORY
+// ════════════════════════════════════════════
+
+export function useCreateVesselHistoryEvent() {
+  return useIntegratedMutation<Record<string, unknown>, any>({
+    mutationFn: async (input) => {
+      const { supabase } = await import("@/integrations/supabase/client");
+      const { data, error } = await supabase.from('navigation_history')
+        .insert(input as any).select().single();
+      if (error) throw error;
+      return data;
+    },
+    eventType: "fleet.history.event_created",
+    entityType: "vessel",
+    getEntityId: (out) => out.id,
+    buildPayload: (_in, out) => ({ event_id: out.id, vessel_id: out.vessel_id, event_type: out.event_type }),
+    invalidateKeys: [["vessel-history"]],
+    successMessage: "Evento registrado no histórico",
+    errorMessage: "Erro ao registrar evento",
+  });
+}
+
+export function useDeleteVesselHistoryEvent() {
+  return useIntegratedMutation<string, any>({
+    mutationFn: async (id) => {
+      const { supabase } = await import("@/integrations/supabase/client");
+      const { error } = await supabase.from('navigation_history').delete().eq('id', id);
+      if (error) throw error;
+      return { id };
+    },
+    eventType: "fleet.history.event_deleted",
+    entityType: "vessel",
+    getEntityId: (out) => out.id,
+    buildPayload: (_in, out) => ({ event_id: out.id }),
+    invalidateKeys: [["vessel-history"]],
+    successMessage: "Evento removido",
+    errorMessage: "Erro ao remover evento",
+  });
+}
+
+// ════════════════════════════════════════════
+// MAINTENANCE — SPARE PARTS
+// ════════════════════════════════════════════
+
+export function useAddSparePart() {
+  return useIntegratedMutation<Record<string, unknown>, any>({
+    mutationFn: async (input) => {
+      const { supabase } = await import("@/integrations/supabase/client");
+      const { data, error } = await supabase.from('inventory_items')
+        .insert(input as any).select().single();
+      if (error) throw error;
+      return data;
+    },
+    eventType: "maintenance.spare_part.added",
+    entityType: "inventory_item" as any,
+    getEntityId: (out) => out.id,
+    buildPayload: (_in, out) => ({ item_id: out.id, name: out.name, quantity: out.quantity }),
+    invalidateKeys: [["inventory"], ["spare-parts"]],
+    successMessage: "Peça adicionada ao inventário",
+    errorMessage: "Erro ao adicionar peça",
+  });
+}
+
+// ════════════════════════════════════════════
+// MAINTENANCE — RUNNING HOURS
+// ════════════════════════════════════════════
+
+export function useUpdateRunningHours() {
+  return useIntegratedMutation<{ equipmentId: string; hours: number; vesselId?: string }, any>({
+    mutationFn: async (input) => {
+      const { supabase } = await import("@/integrations/supabase/client");
+      const { data, error } = await (supabase.from as Function)('pms_running_hours_triggers')
+        .insert({
+          equipment_id: input.equipmentId,
+          current_hours: input.hours,
+          vessel_id: input.vesselId,
+          recorded_at: new Date().toISOString(),
+        }).select().single();
+      if (error) throw error;
+      return data;
+    },
+    eventType: "maintenance.running_hours.updated",
+    entityType: "equipment" as any,
+    getEntityId: (out) => out.id,
+    buildPayload: (input) => ({ equipment_id: input.equipmentId, hours: input.hours }),
+    invalidateKeys: [["running-hours"], ["maintenance"]],
+    successMessage: "Horas de funcionamento atualizadas",
+    errorMessage: "Erro ao atualizar horas",
+  });
+}
+
+// ════════════════════════════════════════════
+// MAINTENANCE — PREDICTIVE
+// ════════════════════════════════════════════
+
+export function useCreateMaintenancePrediction() {
+  return useIntegratedMutation<Record<string, unknown>, any>({
+    mutationFn: async (input) => {
+      const { supabase } = await import("@/integrations/supabase/client");
+      const { data, error } = await supabase.from('ai_maintenance_predictions')
+        .insert(input as any).select().single();
+      if (error) throw error;
+      return data;
+    },
+    eventType: "maintenance.prediction.created",
+    entityType: "prediction" as any,
+    getEntityId: (out) => out.id,
+    buildPayload: (_in, out) => ({ prediction_id: out.id, equipment: out.equipment_name, probability: out.failure_probability }),
+    invalidateKeys: [["ai-predictions"], ["maintenance"]],
+    successMessage: "Predição de manutenção criada",
+    errorMessage: "Erro ao criar predição",
+  });
+}
+
+// ════════════════════════════════════════════
+// COMPLIANCE — CLASS SURVEYS
+// ════════════════════════════════════════════
+
+export function useCreateClassSurvey() {
+  return useIntegratedMutation<Record<string, unknown>, any>({
+    mutationFn: async (input) => {
+      const { supabase } = await import("@/integrations/supabase/client");
+      const { data, error } = await (supabase.from as Function)('class_surveys')
+        .insert(input).select().single();
+      if (error) throw error;
+      return data;
+    },
+    eventType: "compliance.class_survey.created",
+    entityType: "survey" as any,
+    getEntityId: (out) => out.id,
+    buildPayload: (_in, out) => ({ survey_id: out.id, survey_type: out.survey_type, status: out.status }),
+    invalidateKeys: [["class-surveys"], ["compliance"]],
+    successMessage: "Vistoria de classe criada",
+    errorMessage: "Erro ao criar vistoria",
+  });
+}
+
+export function useUpdateClassSurvey() {
+  return useIntegratedMutation<{ id: string; updates: Record<string, unknown> }, any>({
+    mutationFn: async ({ id, updates }) => {
+      const { supabase } = await import("@/integrations/supabase/client");
+      const { data, error } = await (supabase.from as Function)('class_surveys')
+        .update(updates).eq('id', id).select().single();
+      if (error) throw error;
+      return data;
+    },
+    eventType: "compliance.class_survey.updated",
+    entityType: "survey" as any,
+    getEntityId: (out) => out.id,
+    buildPayload: (input) => ({ survey_id: input.id }),
+    invalidateKeys: [["class-surveys"], ["compliance"]],
+    successMessage: "Vistoria atualizada",
+    errorMessage: "Erro ao atualizar vistoria",
+  });
+}
+
+export function useDeleteClassSurvey() {
+  return useIntegratedMutation<string, any>({
+    mutationFn: async (id) => {
+      const { supabase } = await import("@/integrations/supabase/client");
+      const { error } = await (supabase.from as Function)('class_surveys').delete().eq('id', id);
+      if (error) throw error;
+      return { id };
+    },
+    eventType: "compliance.class_survey.deleted",
+    entityType: "survey" as any,
+    getEntityId: (out) => out.id,
+    buildPayload: (_in, out) => ({ survey_id: out.id }),
+    invalidateKeys: [["class-surveys"], ["compliance"]],
+    successMessage: "Vistoria removida",
+    errorMessage: "Erro ao remover vistoria",
+  });
+}
+
+// ════════════════════════════════════════════
+// COMPLIANCE — MARPOL
+// ════════════════════════════════════════════
+
+export function useCreateMARPOLEntry() {
+  return useIntegratedMutation<Record<string, unknown>, any>({
+    mutationFn: async (input) => {
+      const { supabase } = await import("@/integrations/supabase/client");
+      const { data, error } = await supabase.from('logs')
+        .insert(input as any).select().single();
+      if (error) throw error;
+      return data;
+    },
+    eventType: "compliance.marpol.entry_created",
+    entityType: "marpol_entry" as any,
+    getEntityId: (out) => out.id,
+    buildPayload: (_in, out) => ({ entry_id: out.id, module: out.module }),
+    invalidateKeys: [["marpol-logs"], ["compliance"]],
+    successMessage: "Registro MARPOL salvo",
+    errorMessage: "Erro ao salvar registro MARPOL",
+  });
+}
+
+// ════════════════════════════════════════════
+// PROCUREMENT — PURCHASE REQUISITIONS
+// ════════════════════════════════════════════
+
+export function useCreatePurchaseRequisition() {
+  return useIntegratedMutation<Record<string, unknown>, any>({
+    mutationFn: async (input) => {
+      const { supabase } = await import("@/integrations/supabase/client");
+      const { data, error } = await supabase.from('purchase_requisitions')
+        .insert(input as any).select().single();
+      if (error) throw error;
+      return data;
+    },
+    eventType: "procurement.requisition.created",
+    entityType: "purchase_requisition" as any,
+    getEntityId: (out) => out.id,
+    buildPayload: (_in, out) => ({ pr_id: out.id, pr_number: out.pr_number, status: out.status }),
+    invalidateKeys: [["purchase-requisitions"], ["procurement"]],
+    successMessage: "Requisição de compra criada",
+    errorMessage: "Erro ao criar requisição",
+  });
+}

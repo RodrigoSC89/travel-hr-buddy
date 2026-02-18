@@ -14,8 +14,9 @@ import { Select, SelectContent, SelectItem, SelectTrigger, SelectValue } from "@
 import { Dialog, DialogContent, DialogHeader, DialogTitle, DialogFooter, DialogDescription } from "@/components/ui/dialog";
 import { ScrollArea } from "@/components/ui/scroll-area";
 import { useToast } from "@/hooks/use-toast";
-import { useQuery, useMutation, useQueryClient } from "@tanstack/react-query";
+import { useQuery } from "@tanstack/react-query";
 import { supabase } from "@/integrations/supabase/client";
+import { useCreateVesselHistoryEvent, useDeleteVesselHistoryEvent } from "@/hooks/useModuleHooks";
 import {
   Ship, Plus, Edit, Trash2, Search, Filter, Download, Calendar,
   MapPin, Wrench, AlertTriangle, FileText, Anchor, Navigation,
@@ -56,7 +57,8 @@ interface VesselHistoryCRUDProps {
 
 export function VesselHistoryCRUD({ vesselId = "v1", vesselName = "MV Atlantic Pioneer" }: VesselHistoryCRUDProps) {
   const { toast } = useToast();
-  const queryClient = useQueryClient();
+  const createEvent = useCreateVesselHistoryEvent();
+  const deleteEvent = useDeleteVesselHistoryEvent();
   const [searchQuery, setSearchQuery] = useState("");
   const [typeFilter, setTypeFilter] = useState<string>("all");
   const [statusFilter, setStatusFilter] = useState<string>("all");
@@ -93,42 +95,31 @@ export function VesselHistoryCRUD({ vesselId = "v1", vesselName = "MV Atlantic P
     },
   });
 
-  // Create mutation
-  const createMutation = useMutation({
-    mutationFn: async () => {
-      const { error } = await supabase.from('navigation_history').insert({
-        vessel_id: vesselId,
-        event_type: formData.type,
-        title: formData.title,
-        description: formData.description,
-        event_date: formData.date || new Date().toISOString(),
-        location: formData.location || null,
-        status: formData.status,
-      } as never);
-      if (error) throw error;
-    },
-    onSuccess: () => {
-      queryClient.invalidateQueries({ queryKey: ['vessel-history'] });
-      setIsAddDialogOpen(false);
-      setFormData({ type: "voyage", title: "", description: "", date: "", location: "", status: "scheduled" });
-      toast({ title: "Evento Adicionado", description: "Registro salvo com sucesso" });
-    },
-    onError: () => toast({ title: "Erro", description: "Falha ao salvar evento", variant: "destructive" }),
-  });
+  const handleCreate = () => {
+    createEvent.mutate({
+      vessel_id: vesselId,
+      event_type: formData.type,
+      title: formData.title,
+      description: formData.description,
+      event_date: formData.date || new Date().toISOString(),
+      location: formData.location || null,
+      status: formData.status,
+    }, {
+      onSuccess: () => {
+        setIsAddDialogOpen(false);
+        setFormData({ type: "voyage", title: "", description: "", date: "", location: "", status: "scheduled" });
+      },
+    });
+  };
 
-  // Delete mutation
-  const deleteMutation = useMutation({
-    mutationFn: async (id: string) => {
-      const { error } = await supabase.from('navigation_history').delete().eq('id', id);
-      if (error) throw error;
-    },
-    onSuccess: () => {
-      queryClient.invalidateQueries({ queryKey: ['vessel-history'] });
-      setIsDeleteDialogOpen(false);
-      setSelectedEvent(null);
-      toast({ title: "Evento Removido", description: "O registro foi excluído" });
-    },
-  });
+  const handleDelete = (id: string) => {
+    deleteEvent.mutate(id, {
+      onSuccess: () => {
+        setIsDeleteDialogOpen(false);
+        setSelectedEvent(null);
+      },
+    });
+  };
 
   const filteredEvents = useMemo(() => {
     return events
@@ -257,8 +248,8 @@ export function VesselHistoryCRUD({ vesselId = "v1", vesselName = "MV Atlantic P
           </div>
           <DialogFooter>
             <Button variant="outline" onClick={() => setIsAddDialogOpen(false)}>Cancelar</Button>
-            <Button onClick={() => createMutation.mutate()} disabled={createMutation.isPending || !formData.title}>
-              {createMutation.isPending && <Loader2 className="h-4 w-4 mr-2 animate-spin" />}Salvar
+            <Button onClick={handleCreate} disabled={createEvent.isPending || !formData.title}>
+              {createEvent.isPending && <Loader2 className="h-4 w-4 mr-2 animate-spin" />}Salvar
             </Button>
           </DialogFooter>
         </DialogContent>
@@ -270,8 +261,8 @@ export function VesselHistoryCRUD({ vesselId = "v1", vesselName = "MV Atlantic P
           <DialogHeader><DialogTitle>Confirmar Exclusão</DialogTitle><DialogDescription>Tem certeza que deseja excluir "{selectedEvent?.title}"?</DialogDescription></DialogHeader>
           <DialogFooter>
             <Button variant="outline" onClick={() => setIsDeleteDialogOpen(false)}>Cancelar</Button>
-            <Button variant="destructive" onClick={() => selectedEvent && deleteMutation.mutate(selectedEvent.id)} disabled={deleteMutation.isPending}>
-              {deleteMutation.isPending && <Loader2 className="h-4 w-4 mr-2 animate-spin" />}Excluir
+            <Button variant="destructive" onClick={() => selectedEvent && handleDelete(selectedEvent.id)} disabled={deleteEvent.isPending}>
+              {deleteEvent.isPending && <Loader2 className="h-4 w-4 mr-2 animate-spin" />}Excluir
             </Button>
           </DialogFooter>
         </DialogContent>

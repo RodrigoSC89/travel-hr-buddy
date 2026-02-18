@@ -11,6 +11,7 @@ import { Shield, CheckCircle2, AlertTriangle, BarChart3, TrendingUp, FileCheck }
 import { useQuery } from "@tanstack/react-query";
 import { supabase } from "@/integrations/supabase/client";
 import { Skeleton } from "@/components/ui/skeleton";
+import { CrossModulePanel } from "@/components/integration";
 
 function useQualityMetrics() {
   return useQuery({
@@ -160,6 +161,14 @@ const QualityDashboard: React.FC = () => {
             </CardContent>
           </Card>
         </div>
+
+        {/* Cross-Module Integration — Quality ↔ Compliance ↔ Documents */}
+        <CrossModulePanel
+          entityType="audit"
+          entityId="quality-dashboard"
+          showQuickActions={true}
+          showActivityFeed={true}
+        />
       </div>
     </>
   );

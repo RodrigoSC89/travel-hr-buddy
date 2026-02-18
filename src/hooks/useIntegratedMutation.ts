@@ -90,6 +90,27 @@ const CROSS_MODULE_INVALIDATIONS: Partial<Record<EventType, string[][]>> = {
   // Tracking resolve/delete
   'tracking.alert.resolved': [['tracking-alerts'], ['alerts'], ['tracking'], ['dashboard-kpis']],
   'tracking.alert.deleted': [['tracking-alerts'], ['alerts'], ['tracking']],
+  // PEO-DP
+  'peodp.logbook.entry_created': [['peodp-logbook'], ['compliance'], ['peodp'], ['dashboard-kpis']],
+  'peodp.logbook.entry_deleted': [['peodp-logbook'], ['compliance'], ['peodp']],
+  'peodp.fmea.item_created': [['peodp-fmea'], ['compliance'], ['maintenance'], ['dashboard-kpis']],
+  'peodp.fmea.item_updated': [['peodp-fmea'], ['compliance'], ['maintenance']],
+  'peodp.fmea.item_deleted': [['peodp-fmea'], ['compliance'], ['maintenance']],
+  // Fleet History
+  'fleet.history.event_created': [['vessel-history'], ['fleet'], ['vessels'], ['voyages'], ['dashboard-kpis']],
+  'fleet.history.event_deleted': [['vessel-history'], ['fleet'], ['vessels']],
+  // Maintenance extras
+  'maintenance.spare_part.added': [['inventory'], ['spare-parts'], ['maintenance'], ['procurement'], ['dashboard-kpis']],
+  'maintenance.running_hours.updated': [['running-hours'], ['maintenance'], ['pms_work_orders'], ['dashboard-kpis']],
+  'maintenance.prediction.created': [['ai-predictions'], ['maintenance'], ['alerts'], ['dashboard-kpis']],
+  // Compliance extras
+  'compliance.class_survey.created': [['class-surveys'], ['compliance'], ['certificates'], ['dashboard-kpis']],
+  'compliance.class_survey.updated': [['class-surveys'], ['compliance'], ['certificates']],
+  'compliance.class_survey.deleted': [['class-surveys'], ['compliance']],
+  'compliance.marpol.entry_created': [['marpol-logs'], ['compliance'], ['waste-management'], ['dashboard-kpis']],
+  // Procurement
+  'procurement.requisition.created': [['purchase-requisitions'], ['procurement'], ['finance'], ['dashboard-kpis']],
+  'procurement.requisition.approved': [['purchase-requisitions'], ['procurement'], ['finance'], ['expenses']],
 };
 
 export function useIntegratedMutation<TInput, TOutput>(

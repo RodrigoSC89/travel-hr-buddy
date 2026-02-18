@@ -13,6 +13,7 @@ import { supabase } from "@/integrations/supabase/client";
 import { useToast } from "@/hooks/use-toast";
 import { logger } from '@/lib/logger';
 import { ReportsTabs } from "./reports/ReportsTabs";
+import { CrossModulePanel } from "@/components/integration";
 
 interface AnalyticsData {
   totalReports: number;
@@ -124,6 +125,15 @@ const ReportsCommandCenter = () => {
           getTypeLabel={getTypeLabel}
         />
       </Tabs>
+
+      {/* Cross-Module Integration — Reports ↔ Analytics ↔ Compliance */}
+      <CrossModulePanel
+        entityType="document"
+        entityId="reports-center"
+        showQuickActions={true}
+        showActivityFeed={true}
+        className="mt-6"
+      />
     </ModulePageWrapper>
   );
 };
