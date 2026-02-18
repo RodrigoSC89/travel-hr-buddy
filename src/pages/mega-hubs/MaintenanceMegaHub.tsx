@@ -50,6 +50,7 @@ const ReliabilityMetricsPanel = lazy(() => import('@/components/dashboard/Reliab
 const WorkOrderPipeline = lazy(() => import('@/components/dashboard/WorkOrderPipeline').then(m => ({ default: m.WorkOrderPipeline })));
 const PredictiveFailureHeatmap = lazy(() => import('@/components/dashboard/PredictiveFailureHeatmap'));
 const SupplyChainIntelligence = lazy(() => import('@/components/dashboard/SupplyChainIntelligence'));
+const AssetIntegrityMatrix = lazy(() => import('@/components/dashboard/AssetIntegrityMatrix'));
 const LoadingSkeleton = () => (
   <div className="space-y-4 p-6">
     <Skeleton className="h-8 w-64" />
@@ -306,6 +307,13 @@ export default function MaintenanceMegaHub() {
               <div className="grid grid-cols-1 lg:grid-cols-2 gap-4">
                 <PredictiveFailureHeatmap />
                 <SupplyChainIntelligence />
+              </div>
+
+              {/* Wave 32: Asset Integrity Matrix */}
+              <div className="grid grid-cols-1 lg:grid-cols-2 gap-6">
+                <Suspense fallback={<Skeleton className="h-64" />}>
+                  <AssetIntegrityMatrix />
+                </Suspense>
               </div>
 
               {!maintLoading && maintMetrics.total === 0 && (
