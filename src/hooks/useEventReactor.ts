@@ -14,6 +14,7 @@ import { useEffect, useRef } from "react";
 import { useQueryClient } from "@tanstack/react-query";
 import { supabase } from "@/integrations/supabase/client";
 import { localEventBus, type EventType, type DomainEvent } from "@/lib/events/event-bus";
+import { executeSideEffects } from "@/lib/integration/cross-module-side-effects";
 import { toast } from "sonner";
 
 interface EventReaction {
@@ -640,6 +641,11 @@ export function useEventReactor() {
           }
         }
       }
+
+      // Execute cross-module side effects (real business logic actions)
+      executeSideEffects(event).catch(() => {
+        // Side effects are fire-and-forget — never block UI
+      });
     });
 
     // 2. Subscribe to Supabase Realtime for event_outbox changes
@@ -678,6 +684,9 @@ export function useEventReactor() {
               }
             }
           }
+
+          // Execute cross-module side effects for Realtime events too
+          executeSideEffects(domainEvent).catch(() => {});
         }
       )
       .subscribe();

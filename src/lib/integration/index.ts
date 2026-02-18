@@ -5,4 +5,5 @@
 
 export { installAutoIntegration } from './install-auto-integration';
 export { interceptMutation, TABLE_EVENT_MAP } from './auto-integration-interceptor';
+export { executeSideEffects, getSideEffectStats } from './cross-module-side-effects';
 export type { TableEventMapping } from './auto-integration-interceptor';
