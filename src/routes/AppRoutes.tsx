@@ -269,6 +269,8 @@ export const AppRoutes = () => (
       <Route path="/spare-parts" element={<Pages.SparePartsPage />} />
       <Route path="/pms-hub" element={<Pages.PMSHubPage />} />
       <Route path="/ism-code" element={<Pages.ISMCodeHubPage />} />
+      <Route path="/chartering-hub" element={<Pages.CharteringHubPage />} />
+      <Route path="/eu-ets" element={<Pages.EUETSHubPage />} />
       <Route path="/port-costs" element={<Pages.PortCostPage />} />
       <Route path="/crew-competency" element={<Pages.CrewCompetencyPage />} />
       <Route path="/insurance-pi" element={<Pages.InsurancePIPage />} />
