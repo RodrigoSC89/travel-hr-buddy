@@ -54,6 +54,7 @@ const AIModelObservatory = lazy(() => import('@/components/dashboard/AIModelObse
 const RAGKnowledgeMetrics = lazy(() => import('@/components/dashboard/RAGKnowledgeMetrics'));
 const AISwarmOrchestrator = lazy(() => import('@/components/dashboard/AISwarmOrchestrator'));
 const QuickAIPromptPanel = lazy(() => import('@/components/dashboard/QuickAIPromptPanel').then(m => ({ default: m.QuickAIPromptPanel })));
+const AITokenUsageAnalytics = lazy(() => import('@/components/dashboard/AITokenUsageAnalytics').then(m => ({ default: m.AITokenUsageAnalytics })));
 
 const LoadingSkeleton = () => (
   <div className="space-y-4 p-6">
@@ -372,6 +373,11 @@ export default function AIMegaHub() {
                   <AISwarmOrchestrator />
                 </Suspense>
               </div>
+
+              {/* AI Token Usage Analytics */}
+              <Suspense fallback={<Skeleton className="h-64" />}>
+                <AITokenUsageAnalytics />
+              </Suspense>
 
               {/* Quick AI Prompt Panel */}
               <Suspense fallback={<Skeleton className="h-64" />}>

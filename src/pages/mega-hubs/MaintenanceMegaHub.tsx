@@ -56,6 +56,7 @@ const DrydockProjectTracker = lazy(() => import('@/components/dashboard/DrydockP
 const PMSCalendarView = lazy(() => import('@/components/maintenance/PMSCalendarView').then(m => ({ default: m.PMSCalendarView })));
 const MaintenanceBacklogAnalytics = lazy(() => import('@/components/dashboard/MaintenanceBacklogAnalytics').then(m => ({ default: m.MaintenanceBacklogAnalytics })));
 const MaintenanceCostTrend = lazy(() => import('@/components/dashboard/MaintenanceCostTrend').then(m => ({ default: m.MaintenanceCostTrend })));
+const InventoryCriticalityDashboard = lazy(() => import('@/components/dashboard/InventoryCriticalityDashboard').then(m => ({ default: m.InventoryCriticalityDashboard })));
 const LoadingSkeleton = () => (
   <div className="space-y-4 p-6">
     <Skeleton className="h-8 w-64" />
@@ -336,10 +337,15 @@ export default function MaintenanceMegaHub() {
                 </Suspense>
               </div>
 
-              {/* Maintenance Cost Trend */}
-              <Suspense fallback={<Skeleton className="h-80" />}>
-                <MaintenanceCostTrend />
-              </Suspense>
+              {/* Maintenance Cost Trend + Inventory Criticality */}
+              <div className="grid grid-cols-1 lg:grid-cols-2 gap-6">
+                <Suspense fallback={<Skeleton className="h-80" />}>
+                  <MaintenanceCostTrend />
+                </Suspense>
+                <Suspense fallback={<Skeleton className="h-80" />}>
+                  <InventoryCriticalityDashboard />
+                </Suspense>
+              </div>
 
               {!maintLoading && maintMetrics.total === 0 && (
                 <HubEmptyState 
