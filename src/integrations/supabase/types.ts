@@ -49292,6 +49292,72 @@ export type Database = {
         }
         Relationships: []
       }
+      system_events: {
+        Row: {
+          created_at: string
+          error_message: string | null
+          event_type: string
+          id: string
+          organization_id: string | null
+          payload: Json
+          priority: string
+          processed: boolean
+          processed_at: string | null
+          processor_result: Json | null
+          retry_count: number
+          source_module: string
+          source_record_id: string | null
+          vessel_id: string | null
+        }
+        Insert: {
+          created_at?: string
+          error_message?: string | null
+          event_type: string
+          id?: string
+          organization_id?: string | null
+          payload?: Json
+          priority?: string
+          processed?: boolean
+          processed_at?: string | null
+          processor_result?: Json | null
+          retry_count?: number
+          source_module: string
+          source_record_id?: string | null
+          vessel_id?: string | null
+        }
+        Update: {
+          created_at?: string
+          error_message?: string | null
+          event_type?: string
+          id?: string
+          organization_id?: string | null
+          payload?: Json
+          priority?: string
+          processed?: boolean
+          processed_at?: string | null
+          processor_result?: Json | null
+          retry_count?: number
+          source_module?: string
+          source_record_id?: string | null
+          vessel_id?: string | null
+        }
+        Relationships: [
+          {
+            foreignKeyName: "system_events_organization_id_fkey"
+            columns: ["organization_id"]
+            isOneToOne: false
+            referencedRelation: "organizations"
+            referencedColumns: ["id"]
+          },
+          {
+            foreignKeyName: "system_events_vessel_id_fkey"
+            columns: ["vessel_id"]
+            isOneToOne: false
+            referencedRelation: "vessels"
+            referencedColumns: ["id"]
+          },
+        ]
+      }
       system_health: {
         Row: {
           created_at: string | null
@@ -58398,6 +58464,17 @@ export type Database = {
           critical_events_24h: number | null
           failed_logins_24h: number | null
           successful_logins_24h: number | null
+        }
+        Relationships: []
+      }
+      system_events_summary: {
+        Row: {
+          errors: number | null
+          event_type: string | null
+          last_event_at: string | null
+          pending: number | null
+          processed: number | null
+          total: number | null
         }
         Relationships: []
       }
