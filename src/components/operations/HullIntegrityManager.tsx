@@ -4,8 +4,9 @@
  * Thickness readings, coating condition, zone-based inspections
  */
 import React, { useState } from 'react';
-import { useQuery, useMutation, useQueryClient } from '@tanstack/react-query';
+import { useQuery, useQueryClient } from '@tanstack/react-query';
 import { supabase } from '@/integrations/supabase/client';
+import { useCreateHullInspection, useCreateHullFinding } from '@/hooks/useModuleHooks';
 import { Card, CardContent, CardHeader, CardTitle } from '@/components/ui/card';
 import { Button } from '@/components/ui/button';
 import { Input } from '@/components/ui/input';
@@ -61,56 +62,43 @@ export default function HullIntegrityManager() {
   // Findings are embedded in the same table — filter by severity
   const findings = inspections.filter((i: Record<string, unknown>) => i.findings);
 
-  const createInspMutation = useMutation({
-    mutationFn: async (f: typeof inspForm) => {
-      const { error } = await (supabase.from as Function)('hull_integrity_records').insert({
-        vessel_id: f.vessel_id || null,
-        inspection_type: f.inspection_type,
-        zone: f.zone,
-        inspector_name: f.inspector_name || null,
-        coating_condition: f.overall_condition,
-        findings: f.notes || null,
-        status: 'open',
-      });
-      if (error) throw error;
-    },
-    onSuccess: () => {
-      queryClient.invalidateQueries({ queryKey: ['hull-inspections'] });
-      toast.success('Inspeção registrada!');
-      setCreateOpen(false);
-      setInspForm(defaultInspection);
-    },
-    onError: (e: Error) => toast.error(e.message),
-  });
+  const createInspMutationHook = useCreateHullInspection();
+  const createFindingMutationHook = useCreateHullFinding();
 
-  const createFindingMutation = useMutation({
-    mutationFn: async ({ inspectionId, f }: { inspectionId: string; f: typeof findForm }) => {
-      const wastage = f.original_thickness && f.thickness_reading
-        ? (((Number(f.original_thickness) - Number(f.thickness_reading)) / Number(f.original_thickness)) * 100).toFixed(1)
-        : null;
-      const { error } = await (supabase.from as Function)('hull_integrity_records').insert({
-        inspection_type: 'thickness',
-        zone: f.zone,
-        location: f.frame_number || null,
-        plate_thickness_mm: f.thickness_reading ? Number(f.thickness_reading) : null,
-        original_thickness_mm: f.original_thickness ? Number(f.original_thickness) : null,
-        diminution_percent: wastage ? Number(wastage) : null,
-        corrosion_type: f.finding_type,
-        severity: f.priority,
-        findings: f.notes || null,
-        recommended_action: f.repair_method || null,
-        status: 'open',
-      });
-      if (error) throw error;
-    },
-    onSuccess: () => {
-      queryClient.invalidateQueries({ queryKey: ['hull-inspections'] });
-      toast.success('Achado registrado!');
-      setFindingOpen(null);
-      setFindForm(defaultFinding);
-    },
-    onError: (e: Error) => toast.error(e.message),
-  });
+  const handleCreateInspection = (f: typeof inspForm) => {
+    createInspMutationHook.mutate({
+      vessel_id: f.vessel_id || null,
+      inspection_type: f.inspection_type,
+      zone: f.zone,
+      inspector_name: f.inspector_name || null,
+      coating_condition: f.overall_condition,
+      findings: f.notes || null,
+      status: 'open',
+    }, {
+      onSuccess: () => { setCreateOpen(false); setInspForm(defaultInspection); },
+    });
+  };
+
+  const handleCreateFinding = (inspectionId: string, f: typeof findForm) => {
+    const wastage = f.original_thickness && f.thickness_reading
+      ? (((Number(f.original_thickness) - Number(f.thickness_reading)) / Number(f.original_thickness)) * 100).toFixed(1)
+      : null;
+    createFindingMutationHook.mutate({
+      inspection_type: 'thickness',
+      zone: f.zone,
+      location: f.frame_number || null,
+      plate_thickness_mm: f.thickness_reading ? Number(f.thickness_reading) : null,
+      original_thickness_mm: f.original_thickness ? Number(f.original_thickness) : null,
+      diminution_percent: wastage ? Number(wastage) : null,
+      corrosion_type: f.finding_type,
+      severity: f.priority,
+      findings: f.notes || null,
+      recommended_action: f.repair_method || null,
+      status: 'open',
+    }, {
+      onSuccess: () => { setFindingOpen(null); setFindForm(defaultFinding); },
+    });
+  };
 
   const conditionColor: Record<string, string> = { good: 'default', fair: 'secondary', poor: 'destructive', critical: 'destructive' };
   const openFindings = findings.filter((f: any) => f.status === 'open').length;
@@ -246,8 +234,8 @@ export default function HullIntegrityManager() {
               </div>
             </div>
             <div><Label>Notas</Label><Textarea value={inspForm.notes} onChange={e => setInspForm(p => ({ ...p, notes: e.target.value }))} /></div>
-            <Button className="w-full" onClick={() => createInspMutation.mutate(inspForm)} disabled={createInspMutation.isPending || !inspForm.vessel_id}>
-              {createInspMutation.isPending ? 'Salvando...' : 'Registrar Inspeção'}
+            <Button className="w-full" onClick={() => handleCreateInspection(inspForm)} disabled={createInspMutationHook.isPending || !inspForm.vessel_id}>
+              {createInspMutationHook.isPending ? 'Salvando...' : 'Registrar Inspeção'}
             </Button>
           </div>
         </DialogContent>
@@ -295,8 +283,8 @@ export default function HullIntegrityManager() {
             </div>
             <div><Label>Método de Reparo</Label><Input value={findForm.repair_method} onChange={e => setFindForm(p => ({ ...p, repair_method: e.target.value }))} /></div>
             <div><Label>Notas</Label><Textarea value={findForm.notes} onChange={e => setFindForm(p => ({ ...p, notes: e.target.value }))} /></div>
-            <Button className="w-full" onClick={() => findingOpen && createFindingMutation.mutate({ inspectionId: findingOpen, f: findForm })} disabled={createFindingMutation.isPending}>
-              {createFindingMutation.isPending ? 'Salvando...' : 'Adicionar Achado'}
+            <Button className="w-full" onClick={() => findingOpen && handleCreateFinding(findingOpen, findForm)} disabled={createFindingMutationHook.isPending}>
+              {createFindingMutationHook.isPending ? 'Salvando...' : 'Adicionar Achado'}
             </Button>
           </div>
         </DialogContent>

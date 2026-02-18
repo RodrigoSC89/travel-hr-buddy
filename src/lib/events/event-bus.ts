@@ -106,6 +106,24 @@ export const EVENT_TYPES = {
   // Procurement
   'procurement.requisition.created': 'procurement.requisition.created',
   'procurement.requisition.approved': 'procurement.requisition.approved',
+  // Safety / QHSE
+  'safety.jsa.template_created': 'safety.jsa.template_created',
+  'safety.nc.created': 'safety.nc.created',
+  'safety.nc.status_changed': 'safety.nc.status_changed',
+  // Hull Integrity
+  'maintenance.hull.inspection_created': 'maintenance.hull.inspection_created',
+  'maintenance.hull.finding_created': 'maintenance.hull.finding_created',
+  // Crew Operations
+  'people.crew.assigned': 'people.crew.assigned',
+  'people.certification.created': 'people.certification.created',
+  'people.certification.deleted': 'people.certification.deleted',
+  // Maintenance Tasks (PMS)
+  'maintenance.task.created': 'maintenance.task.created',
+  'maintenance.task.status_changed': 'maintenance.task.status_changed',
+  // AI Insights
+  'ai.insight.read': 'ai.insight.read',
+  // Benchmarking
+  'peotram.benchmarking.seeded': 'peotram.benchmarking.seeded',
 } as const;
 
 export type EventType = keyof typeof EVENT_TYPES;

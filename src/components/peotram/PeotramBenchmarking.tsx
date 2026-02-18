@@ -13,8 +13,9 @@ import {
   ArrowUpRight, ArrowDownRight, Minus, Trophy, RefreshCw
 } from 'lucide-react';
 import { toast } from 'sonner';
-import { useQuery, useMutation, useQueryClient } from '@tanstack/react-query';
+import { useQuery, useQueryClient } from '@tanstack/react-query';
 import { supabase } from '@/integrations/supabase/client';
+import { useSeedBenchmarkScores } from '@/hooks/useModuleHooks';
 
 const INDUSTRY_AVG: Record<string, number> = {
   'E1-LGR': 72, 'E2-CL': 68, 'E3-GR': 71, 'E4-OP': 65,
@@ -58,45 +59,38 @@ export function PeotramBenchmarking() {
     },
   });
 
-  const seedMutation = useMutation({
-    mutationFn: async () => {
-      // Get real vessels from DB
-      const { data: vessels } = await supabase.from('vessels').select('id, name, type').limit(10);
-      const vesselList = vessels && vessels.length > 0 ? vessels : [
-        { id: null, name: 'AHTS Netuno I', type: 'AHTS' },
-        { id: null, name: 'PSV Poseidon II', type: 'PSV' },
-        { id: null, name: 'PLSV Tritão III', type: 'PLSV' },
-        { id: null, name: 'RSV Oceano IV', type: 'RSV' },
-      ];
+  const seedMutationHook = useSeedBenchmarkScores();
 
-      const rows = vesselList.map((v: any, idx: number) => {
-        const baseScore = 90 - idx * 6;
-        const elementScores: Record<string, number> = {};
-        Object.keys(INDUSTRY_AVG).forEach((key, ki) => {
-          // Deterministic variation based on vessel index + element index
-          const variation = ((idx * 7 + ki * 3) % 11) - 5;
-          elementScores[key] = Math.min(100, Math.max(50, baseScore + variation));
-        });
-        return {
-          vessel_id: v.id,
-          vessel_name: v.name,
-          vessel_type: v.type,
-          overall_score: baseScore,
-          element_scores: elementScores,
-          trend: idx === 0 ? 'up' : idx === vesselList.length - 1 ? 'down' : 'stable',
-          trend_value: idx === 0 ? 4 : idx === vesselList.length - 1 ? -3 : 0,
-          last_audit_date: new Date().toISOString().split('T')[0],
-          ranking: idx + 1,
-        };
+  const handleSeed = async () => {
+    const { data: vessels } = await supabase.from('vessels').select('id, name, type').limit(10);
+    const vesselList = vessels && vessels.length > 0 ? vessels : [
+      { id: null, name: 'AHTS Netuno I', type: 'AHTS' },
+      { id: null, name: 'PSV Poseidon II', type: 'PSV' },
+      { id: null, name: 'PLSV Tritão III', type: 'PLSV' },
+      { id: null, name: 'RSV Oceano IV', type: 'RSV' },
+    ];
+
+    const rows = vesselList.map((v: any, idx: number) => {
+      const baseScore = 90 - idx * 6;
+      const elementScores: Record<string, number> = {};
+      Object.keys(INDUSTRY_AVG).forEach((key, ki) => {
+        const variation = ((idx * 7 + ki * 3) % 11) - 5;
+        elementScores[key] = Math.min(100, Math.max(50, baseScore + variation));
       });
-      const { error } = await (supabase.from as Function)('peotram_vessel_scores').upsert(rows);
-      if (error) throw error;
-    },
-    onSuccess: () => {
-      queryClient.invalidateQueries({ queryKey: ['peotram-vessel-scores'] });
-      toast.success('Scores de benchmarking inicializados com embarcações reais');
-    },
-  });
+      return {
+        vessel_id: v.id,
+        vessel_name: v.name,
+        vessel_type: v.type,
+        overall_score: baseScore,
+        element_scores: elementScores,
+        trend: idx === 0 ? 'up' : idx === vesselList.length - 1 ? 'down' : 'stable',
+        trend_value: idx === 0 ? 4 : idx === vesselList.length - 1 ? -3 : 0,
+        last_audit_date: new Date().toISOString().split('T')[0],
+        ranking: idx + 1,
+      };
+    });
+    seedMutationHook.mutate(rows);
+  };
 
   const fleetAvg = scores.length > 0 ? Math.round(scores.reduce((a: number, v: any) => a + Number(v.overall_score || 0), 0) / scores.length) : 0;
   const bestVessel = scores[0];
@@ -116,7 +110,7 @@ export function PeotramBenchmarking() {
               <CardDescription>Comparação de scores por embarcação vs média da frota e indústria</CardDescription>
             </div>
             {scores.length === 0 && (
-              <Button size="sm" onClick={() => seedMutation.mutate()} disabled={seedMutation.isPending}>
+              <Button size="sm" onClick={() => handleSeed()} disabled={seedMutationHook.isPending}>
                 <RefreshCw className="h-3 w-3 mr-1" /> Inicializar Scores
               </Button>
             )}

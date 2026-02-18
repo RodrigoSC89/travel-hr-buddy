@@ -2,8 +2,9 @@
  * Advanced AI Insights - Connected to ai_insights table
  */
 import React, { useState } from "react";
-import { useQuery, useMutation, useQueryClient } from "@tanstack/react-query";
+import { useQuery, useQueryClient } from "@tanstack/react-query";
 import { supabase } from "@/integrations/supabase/client";
+import { useMarkInsightRead } from "@/hooks/useModuleHooks";
 import { Card, CardContent, CardDescription, CardHeader, CardTitle } from "@/components/ui/card";
 import { Button } from "@/components/ui/button";
 import { Badge } from "@/components/ui/badge";
@@ -61,12 +62,7 @@ const AdvancedAIInsights = () => {
     staleTime: 60_000,
   });
 
-  const markReadMutation = useMutation({
-    mutationFn: async (dbId: string) => {
-      await supabase.from("ai_insights").update({ status: "read" }).eq("id", dbId);
-    },
-    onSuccess: () => queryClient.invalidateQueries({ queryKey: ["advanced-ai-insights"] }),
-  });
+  const markReadMutation = useMarkInsightRead();
 
   const getImpactConfig = (impact: string) => {
     switch (impact) {

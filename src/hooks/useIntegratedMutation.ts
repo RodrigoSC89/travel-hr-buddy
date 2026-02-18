@@ -111,6 +111,24 @@ const CROSS_MODULE_INVALIDATIONS: Partial<Record<EventType, string[][]>> = {
   // Procurement
   'procurement.requisition.created': [['purchase-requisitions'], ['procurement'], ['finance'], ['dashboard-kpis']],
   'procurement.requisition.approved': [['purchase-requisitions'], ['procurement'], ['finance'], ['expenses']],
+  // Safety / QHSE
+  'safety.jsa.template_created': [['jsa-templates'], ['safety'], ['compliance'], ['dashboard-kpis']],
+  'safety.nc.created': [['peotram-nc-actions'], ['compliance'], ['findings'], ['safety'], ['dashboard-kpis']],
+  'safety.nc.status_changed': [['peotram-nc-actions'], ['compliance'], ['findings'], ['safety'], ['dashboard-kpis']],
+  // Hull Integrity
+  'maintenance.hull.inspection_created': [['hull-inspections'], ['maintenance'], ['compliance'], ['fleet'], ['dashboard-kpis']],
+  'maintenance.hull.finding_created': [['hull-inspections'], ['maintenance'], ['compliance'], ['findings'], ['dashboard-kpis']],
+  // Crew Operations
+  'people.crew.assigned': [['crew-pool-planner'], ['crew'], ['vessels'], ['rotations'], ['dashboard-kpis']],
+  'people.certification.created': [['crew-certifications-panel'], ['certificates'], ['crew'], ['compliance'], ['dashboard-kpis']],
+  'people.certification.deleted': [['crew-certifications-panel'], ['certificates'], ['crew'], ['compliance']],
+  // Maintenance Tasks (PMS)
+  'maintenance.task.created': [['pms-job-cards'], ['maintenance'], ['work-orders'], ['dashboard-kpis']],
+  'maintenance.task.status_changed': [['pms-job-cards'], ['maintenance'], ['work-orders'], ['compliance'], ['dashboard-kpis']],
+  // AI Insights
+  'ai.insight.read': [['advanced-ai-insights'], ['ai-insights'], ['dashboard-kpis']],
+  // Benchmarking
+  'peotram.benchmarking.seeded': [['peotram-vessel-scores'], ['compliance'], ['dashboard-kpis']],
 };
 
 export function useIntegratedMutation<TInput, TOutput>(
