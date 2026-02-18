@@ -10,7 +10,7 @@
 // ============================================
 // CORE MODULES
 // ============================================
-export { default as Dashboard } from "@/pages/CentralComando";
+export { default as Dashboard } from "@/pages/mega-hubs/CommandMegaHub";
 export { default as SystemWatchdog } from "./system-watchdog/SystemWatchdog";
 
 // ============================================
