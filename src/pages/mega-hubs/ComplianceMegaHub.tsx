@@ -36,6 +36,7 @@ import { toast } from 'sonner';
 // LAZY LOAD - SUB-COMPONENTS
 // ═══════════════════════════════════════════════════════════
 const ComplianceHubPage = lazy(() => import('@/pages/ComplianceRoadmapPage'));
+const ComplianceScorecardPage = lazy(() => import('@/pages/ExecutiveCompliancePage'));
 const AgentsDashboard = lazy(() => import('@/pages/audit-agents/AgentsDashboard'));
 const DiagnosticCertificatesPage = lazy(() => import('@/pages/DiagnosticCertificatesPage'));
 const RiskMatrixV2 = lazy(() => import('@/pages/DiagnosticDashboardPage'));
@@ -365,7 +366,7 @@ export default function ComplianceMegaHub() {
             </TabsContent>
             
             <TabsContent value="scorecard" className="mt-0">
-              <ComplianceHubPage />
+              <ComplianceScorecardPage />
             </TabsContent>
             
             <TabsContent value="audit-agents" className="mt-0">

@@ -109,10 +109,10 @@ export const AppRoutes = () => (
       <Route path="/workflow-command" element={<Pages.WorkflowCommandCenter />} />
       <Route path="/ai-journaling" element={<Pages.Documents />} />
       <Route path="/ai-audit" element={<Pages.AIAudit />} />
-      <Route path="/voice-assistant" element={<Pages.AIHubPage />} />
-      <Route path="/voice-assistant-ai" element={<Pages.AIHubPage />} />
-      <Route path="/assistente-voz" element={<Pages.AIHubPage />} />
-      <Route path="/assistant/voice" element={<Pages.AIHubPage />} />
+      <Route path="/voice-assistant" element={<Navigate to="/ai?tab=chat-voice" replace />} />
+      <Route path="/voice-assistant-ai" element={<Navigate to="/ai?tab=chat-voice" replace />} />
+      <Route path="/assistente-voz" element={<Navigate to="/ai?tab=chat-voice" replace />} />
+      <Route path="/assistant/voice" element={<Navigate to="/ai?tab=chat-voice" replace />} />
       
       {/* AI Modules Hub */}
       <Route path="/ai-modules" element={<Pages.AIModulesHubPage />} />
@@ -140,8 +140,8 @@ export const AppRoutes = () => (
       {/* ======== TELEMETRIA & MONITORAMENTO ======== */}
       <Route path="/telemetria" element={<Pages.TelemetriaCommand />} />
       <Route path="/telemetria-command" element={<Pages.TelemetriaCommand />} />
-      <Route path="/predictive-telemetry" element={<Pages.TelemetriaCommand />} />
-      <Route path="/satellite-optimizer" element={<Pages.TelemetriaCommand />} />
+      <Route path="/predictive-telemetry" element={<Pages.PredictiveMaintenancePage />} />
+      <Route path="/satellite-optimizer" element={<Navigate to="/tracking?tab=satcom" replace />} />
       <Route path="/vessel-tracking" element={<Pages.VesselTrackingPage />} />
       <Route path="/tracking/gnss-live" element={<Pages.VesselTrackingPage />} />
       <Route path="/simulador" element={<Navigate to="/maritime-command" replace />} />
