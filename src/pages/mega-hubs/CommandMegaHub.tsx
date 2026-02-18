@@ -52,6 +52,7 @@ const CrewWellnessCommand = lazy(() => import('@/components/dashboard/CrewWellne
 const FinancialCockpit = lazy(() => import('@/components/dashboard/FinancialCockpit'));
 const IncidentResponseTimeline = lazy(() => import('@/components/dashboard/IncidentResponseTimeline'));
 const SystemUptimeMonitor = lazy(() => import('@/components/dashboard/SystemUptimeMonitor'));
+const FleetROICommand = lazy(() => import('@/components/dashboard/FleetROICommand'));
 
 const LoadingSkeleton = () => (
   <div className="space-y-4 p-6">
@@ -360,6 +361,13 @@ export default function CommandMegaHub() {
                 </Suspense>
                 <Suspense fallback={<Skeleton className="h-[400px]" />}>
                   <SystemUptimeMonitor />
+                </Suspense>
+              </div>
+
+              {/* Wave 33: Fleet ROI Command */}
+              <div className="grid grid-cols-1 lg:grid-cols-2 gap-6">
+                <Suspense fallback={<Skeleton className="h-64" />}>
+                  <FleetROICommand />
                 </Suspense>
               </div>
 
