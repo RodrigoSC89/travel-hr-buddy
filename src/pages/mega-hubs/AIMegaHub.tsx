@@ -55,6 +55,7 @@ const RAGKnowledgeMetrics = lazy(() => import('@/components/dashboard/RAGKnowled
 const AISwarmOrchestrator = lazy(() => import('@/components/dashboard/AISwarmOrchestrator'));
 const QuickAIPromptPanel = lazy(() => import('@/components/dashboard/QuickAIPromptPanel').then(m => ({ default: m.QuickAIPromptPanel })));
 const AITokenUsageAnalytics = lazy(() => import('@/components/dashboard/AITokenUsageAnalytics').then(m => ({ default: m.AITokenUsageAnalytics })));
+const AIDecisionAccuracyPanel = lazy(() => import('@/components/dashboard/AIDecisionAccuracyPanel').then(m => ({ default: m.AIDecisionAccuracyPanel })));
 
 const LoadingSkeleton = () => (
   <div className="space-y-4 p-6">
@@ -374,10 +375,15 @@ export default function AIMegaHub() {
                 </Suspense>
               </div>
 
-              {/* AI Token Usage Analytics */}
-              <Suspense fallback={<Skeleton className="h-64" />}>
-                <AITokenUsageAnalytics />
-              </Suspense>
+              {/* AI Token Usage + Decision Accuracy */}
+              <div className="grid grid-cols-1 lg:grid-cols-2 gap-6">
+                <Suspense fallback={<Skeleton className="h-64" />}>
+                  <AITokenUsageAnalytics />
+                </Suspense>
+                <Suspense fallback={<Skeleton className="h-64" />}>
+                  <AIDecisionAccuracyPanel />
+                </Suspense>
+              </div>
 
               {/* Quick AI Prompt Panel */}
               <Suspense fallback={<Skeleton className="h-64" />}>
