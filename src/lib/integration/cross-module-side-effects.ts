@@ -1164,6 +1164,435 @@ const SIDE_EFFECTS: Record<string, SideEffectFn[]> = {
       });
     },
   ],
+  // ═══════════════════════════════════════════════════════════
+  // FINAL WAVE — 100% COVERAGE: Missing event→action links
+  // ═══════════════════════════════════════════════════════════
+
+  'compliance.finding.closed': [
+    async (event) => {
+      const p = event.payload as Record<string, unknown>;
+      await safeInsert('action_items', {
+        title: `Verificar eficácia: Finding encerrado`,
+        source_module: 'compliance', source_reference_id: String(p.finding_id ?? p.id ?? ''),
+        status: 'pending', priority: 'medium', vessel_id: p.vessel_id || null,
+        description: `Finding fechado. Atualizar Risk Matrix, Compliance Score e agendar verificação de eficácia.`,
+      });
+    },
+  ],
+
+  'compliance.capa.closed': [
+    async (event) => {
+      const p = event.payload as Record<string, unknown>;
+      await safeInsert('action_items', {
+        title: `Fechar ciclo CAPA: Verificar evidências`,
+        source_module: 'compliance', source_reference_id: String(p.id ?? ''),
+        status: 'pending', priority: 'high', vessel_id: p.vessel_id || null,
+        description: `CAPA encerrado. Verificar que evidências foram carregadas, treinamento realizado e que a causa raiz foi eliminada.`,
+      });
+    },
+  ],
+
+  'safety.incident.updated': [
+    async (event) => {
+      const p = event.payload as Record<string, unknown>;
+      if (p.status !== 'closed') return;
+      await safeInsert('action_items', {
+        title: `Publicar lições aprendidas: Incidente encerrado`,
+        source_module: 'safety', source_reference_id: String(p.incident_id ?? p.id ?? ''),
+        status: 'pending', priority: 'medium', vessel_id: p.vessel_id || null,
+        description: `Investigação de incidente concluída. Publicar Safety Flash e lições aprendidas para frota.`,
+      });
+    },
+  ],
+
+  'safety.drill.created': [
+    async (event) => {
+      const p = event.payload as Record<string, unknown>;
+      await safeInsert('action_items', {
+        title: `Preparar drill: ${p.drill_type ?? p.title ?? ''}`,
+        source_module: 'safety', source_reference_id: String(p.drill_id ?? p.id ?? ''),
+        status: 'pending', priority: 'high', vessel_id: p.vessel_id || null,
+        description: `Exercício de emergência agendado. Preparar equipamentos, notificar tripulação e registrar participantes.`,
+      });
+    },
+  ],
+
+  'finance.expense.created': [
+    async (event) => {
+      const p = event.payload as Record<string, unknown>;
+      const amount = Number(p.amount ?? 0);
+      if (amount < 50000) return;
+      await safeInsert('action_items', {
+        title: `Aprovar despesa significativa: ${p.category ?? 'N/A'} ($${amount.toLocaleString()})`,
+        source_module: 'finance', source_reference_id: String(p.id ?? ''),
+        status: 'pending', priority: 'critical', vessel_id: p.vessel_id || null,
+        description: `Despesa acima de $50k requer aprovação gerencial. Verificar orçamento e compliance.`,
+      });
+    },
+  ],
+
+  'finance.contract.updated': [
+    async (event) => {
+      const p = event.payload as Record<string, unknown>;
+      await safeInsert('action_items', {
+        title: `Verificar alteração contratual`,
+        source_module: 'finance', source_reference_id: String(p.id ?? ''),
+        status: 'pending', priority: 'medium',
+        description: `Contrato atualizado. Verificar impacto em termos financeiros, prazos e compliance.`,
+      });
+    },
+  ],
+
+  'people.climate.response': [
+    async (event) => {
+      const p = event.payload as Record<string, unknown>;
+      const score = Number(p.overall_score ?? p.satisfaction ?? 10);
+      if (score > 3) return;
+      await safeInsert('action_items', {
+        title: `Clima organizacional: Resposta crítica detectada`,
+        source_module: 'people', source_reference_id: String(p.id ?? ''),
+        status: 'pending', priority: 'high',
+        description: `Score de clima < 4/10. RH deve avaliar, entrevistar confidencialmente e criar plano de ação.`,
+      });
+    },
+  ],
+
+  'people.medical.fitness_updated': [
+    async (event) => {
+      const p = event.payload as Record<string, unknown>;
+      const status = String(p.fitness_status ?? p.status ?? '').toLowerCase();
+      if (status !== 'unfit' && status !== 'restricted') return;
+      await safeInsert('soc_alerts', {
+        vessel_id: p.vessel_id || null, alert_type: 'crew_medical_issue',
+        severity: status === 'unfit' ? 'critical' : 'high',
+        title: `Aptidão médica: Tripulante ${status}`,
+        description: `Tripulante declarado ${status}. Avaliar continuidade a bordo e manning mínimo.`,
+        status: 'active',
+      });
+    },
+  ],
+
+  'people.certification.deleted': [
+    async (event) => {
+      const p = event.payload as Record<string, unknown>;
+      await safeInsert('soc_alerts', {
+        alert_type: 'certificate_deleted', severity: 'high',
+        title: `Certificado removido: ${p.certification_name ?? p.id}`,
+        description: `Certificado excluído do sistema. Verificar validade, backup e impacto em manning.`,
+        status: 'active',
+      });
+    },
+  ],
+
+  'operations.cargo.updated': [
+    async (event) => {
+      const p = event.payload as Record<string, unknown>;
+      if (p.status !== 'completed' && p.status !== 'discharged') return;
+      await safeInsert('action_items', {
+        title: `Finalizar operação de carga: BL e frete`,
+        source_module: 'operations', source_reference_id: String(p.cargo_id ?? p.id ?? ''),
+        status: 'pending', priority: 'medium', vessel_id: p.vessel_id || null,
+        description: `Carga descarregada. Emitir NOR, calcular demurrage/despatch e faturar frete.`,
+      });
+    },
+  ],
+
+  'maintenance.record.created': [
+    async (event) => {
+      const p = event.payload as Record<string, unknown>;
+      await safeInsert('action_items', {
+        title: `Verificar registro de manutenção`,
+        source_module: 'maintenance', source_reference_id: String(p.record_id ?? p.id ?? ''),
+        status: 'pending', priority: 'low', vessel_id: p.vessel_id || null,
+        description: `Registro de manutenção criado. Verificar se OS vinculada foi fechada e compliance atualizado.`,
+      });
+    },
+  ],
+
+  'maintenance.drydock.updated': [
+    async (event) => {
+      const p = event.payload as Record<string, unknown>;
+      if (p.status !== 'completed') return;
+      await safeInsert('action_items', {
+        title: `Doca seca concluída: Atualizar classe e certificados`,
+        source_module: 'maintenance', source_reference_id: String(p.id ?? ''),
+        status: 'pending', priority: 'critical', vessel_id: p.vessel_id || null,
+        description: `Doca seca finalizada. Atualizar certificados de classe, recalcular CII baseline e atualizar P&L.`,
+      });
+      await safeInsert('expenses', {
+        description: `Custo final doca seca: ${p.title ?? ''}`, amount: p.actual_cost ?? p.budget ?? 0,
+        category: 'drydock', status: 'approved', vessel_id: p.vessel_id || null,
+        reference_id: String(p.id ?? ''), reference_type: 'drydock_project',
+      });
+    },
+  ],
+
+  'vessel.updated': [
+    async (event) => {
+      const p = event.payload as Record<string, unknown>;
+      if (!p.operational_status) return;
+      const status = String(p.operational_status).toLowerCase();
+      if (status !== 'laid_up' && status !== 'scrapped') return;
+      await safeInsert('action_items', {
+        title: `Status especial: Embarcação ${status}`,
+        source_module: 'fleet', source_reference_id: String(p.vessel_id ?? p.id ?? ''),
+        status: 'pending', priority: 'critical', vessel_id: String(p.vessel_id ?? p.id ?? ''),
+        description: `Embarcação marcada como ${status}. Cancelar seguros, fechar PMS ativo e desembarcar tripulação.`,
+      });
+    },
+  ],
+
+  'alert.acknowledged': [
+    async (event) => {
+      const p = event.payload as Record<string, unknown>;
+      await safeInsert('action_items', {
+        title: `Acompanhar resolução: Alerta reconhecido`,
+        source_module: 'tracking', source_reference_id: String(p.alert_id ?? p.id ?? ''),
+        status: 'pending', priority: 'medium', vessel_id: p.vessel_id || null,
+        description: `Alerta reconhecido. Monitorar resolução e registrar ações tomadas.`,
+      });
+    },
+  ],
+
+  'comms.message.sent': [
+    async (event) => {
+      const p = event.payload as Record<string, unknown>;
+      if (!p.is_urgent && !p.priority) return;
+      await safeInsert('action_items', {
+        title: `Responder mensagem urgente`,
+        source_module: 'comms', source_reference_id: String(p.id ?? ''),
+        status: 'pending', priority: 'high',
+        description: `Mensagem urgente enviada no canal ${p.channel_id ?? ''}. Garantir resposta e ação.`,
+      });
+    },
+  ],
+
+  'access.role.changed': [
+    async (event) => {
+      const p = event.payload as Record<string, unknown>;
+      await safeInsert('action_items', {
+        title: `Audit: Alteração de permissão`,
+        source_module: 'security', source_reference_id: String(p.user_id ?? p.id ?? ''),
+        status: 'completed', priority: 'medium',
+        description: `Permissão alterada para usuário ${p.user_id ?? ''}. Novo role: ${p.role ?? 'N/A'}. Registrado no audit trail.`,
+      });
+    },
+  ],
+
+  'environmental.emissions.updated': [
+    async (event) => {
+      const p = event.payload as Record<string, unknown>;
+      await safeInsert('action_items', {
+        title: `Recalcular CII: Emissões atualizadas`,
+        source_module: 'environmental', source_reference_id: String(p.id ?? ''),
+        status: 'pending', priority: 'medium', vessel_id: p.vessel_id || null,
+        description: `Dados de emissões atualizados. Recalcular CII rating e verificar exposição EU ETS.`,
+      });
+    },
+  ],
+
+  'compliance.certificate.expired': [
+    async (event) => {
+      const p = event.payload as Record<string, unknown>;
+      await safeInsert('soc_alerts', {
+        vessel_id: p.vessel_id || null, alert_type: 'certificate_expired', severity: 'critical',
+        title: `⚠️ Certificado EXPIRADO: ${p.certificate_type ?? p.cert_type ?? ''}`,
+        description: `Certificado vencido. Tripulante BLOQUEADO para embarque. Compliance MLC/STCW violado.`,
+        status: 'active',
+      });
+      await safeInsert('non_conformities', {
+        title: `NC: Certificado expirado - ${p.certificate_type ?? ''}`,
+        category: 'documentation', severity: 'critical', status: 'open',
+        vessel_id: p.vessel_id || null, source_module: 'compliance',
+        description: `Certificado expirado constitui não-conformidade com MLC/STCW. Ação imediata requerida.`,
+      });
+    },
+  ],
+
+  'tracking.connectivity.degraded': [
+    async (event) => {
+      const p = event.payload as Record<string, unknown>;
+      await safeInsert('action_items', {
+        title: `Investigar conectividade degradada`,
+        source_module: 'tracking', source_reference_id: String(p.vessel_id ?? p.id ?? ''),
+        status: 'pending', priority: 'critical', vessel_id: p.vessel_id || null,
+        description: `Conectividade satelital degradada. Verificar VSAT, ativar fallback e notificar operações.`,
+      });
+    },
+  ],
+
+  'voyage.updated': [
+    async (event) => {
+      const p = event.payload as Record<string, unknown>;
+      if (p.status !== 'completed') return;
+      // Delegate to voyage.completed logic
+      if (!p.vessel_id) return;
+      await safeUpdate('vessels', { operational_status: 'in_port' }, { id: String(p.vessel_id) });
+      await safeInsert('action_items', {
+        title: `Revisar P&L: Viagem concluída`,
+        source_module: 'operations', source_reference_id: String(p.voyage_id ?? p.id ?? ''),
+        status: 'pending', priority: 'medium', vessel_id: String(p.vessel_id),
+        description: `Viagem concluída via update. Calcular P&L final e fechar custos.`,
+      });
+    },
+  ],
+
+  'finance.budget.updated': [
+    async (event) => {
+      const p = event.payload as Record<string, unknown>;
+      await safeInsert('action_items', {
+        title: `Comunicar alteração orçamentária`,
+        source_module: 'finance', source_reference_id: String(p.id ?? ''),
+        status: 'pending', priority: 'medium',
+        description: `Orçamento atualizado. Comunicar aos departamentos afetados e verificar impacto em POs pendentes.`,
+      });
+    },
+  ],
+
+  'procurement.supplier.updated': [
+    async (event) => {
+      const p = event.payload as Record<string, unknown>;
+      const isActive = p.is_active;
+      if (isActive !== false) return;
+      await safeInsert('action_items', {
+        title: `Fornecedor desativado: Verificar POs abertas`,
+        source_module: 'procurement', source_reference_id: String(p.id ?? ''),
+        status: 'pending', priority: 'high',
+        description: `Fornecedor desativado. Verificar POs pendentes, redirecionar pedidos e atualizar contratos.`,
+      });
+    },
+  ],
+
+  'fleet.downtime.updated': [
+    async (event) => {
+      const p = event.payload as Record<string, unknown>;
+      if (p.status !== 'resolved') return;
+      await safeInsert('action_items', {
+        title: `Downtime resolvido: Retomar operações`,
+        source_module: 'fleet', source_reference_id: String(p.id ?? ''),
+        status: 'pending', priority: 'high', vessel_id: p.vessel_id ? String(p.vessel_id) : null,
+        description: `Downtime encerrado. Atualizar charter hire, recalcular off-hire e retomar programação de viagem.`,
+      });
+    },
+  ],
+
+  'training.cbt.started': [
+    async (event) => {
+      const p = event.payload as Record<string, unknown>;
+      await safeInsert('action_items', {
+        title: `Monitorar CBT: Treinamento iniciado`,
+        source_module: 'training', source_reference_id: String(p.id ?? ''),
+        status: 'pending', priority: 'low',
+        description: `Tripulante iniciou Computer Based Training. Monitorar progresso e prazo de conclusão.`,
+      });
+    },
+  ],
+
+  'recruitment.candidate.updated': [
+    async (event) => {
+      const p = event.payload as Record<string, unknown>;
+      if (p.status !== 'approved' && p.stage !== 'hired') return;
+      await safeInsert('action_items', {
+        title: `Candidato aprovado: Criar registro de tripulante`,
+        source_module: 'recruitment', source_reference_id: String(p.id ?? ''),
+        status: 'pending', priority: 'critical',
+        description: `Candidato aprovado. Criar perfil de tripulante, emitir contrato SEA e agendar exame médico.`,
+      });
+    },
+  ],
+
+  'medical.record.updated': [
+    async (event) => {
+      const p = event.payload as Record<string, unknown>;
+      await safeInsert('action_items', {
+        title: `Atualizar compliance médico`,
+        source_module: 'medical', source_reference_id: String(p.id ?? ''),
+        status: 'pending', priority: 'medium',
+        description: `Registro médico atualizado. Verificar aptidão, compliance MLC Title 4 e atualizar perfil.`,
+      });
+    },
+  ],
+
+  'compliance.sgso.plan_updated': [
+    async (event) => {
+      const p = event.payload as Record<string, unknown>;
+      await safeInsert('action_items', {
+        title: `Verificar compliance SGSO atualizado`,
+        source_module: 'compliance', source_reference_id: String(p.id ?? ''),
+        status: 'pending', priority: 'medium',
+        description: `Plano SGSO atualizado. Verificar 17 práticas, atualizar evidências ANP.`,
+      });
+    },
+  ],
+
+  'compliance.preovid.updated': [
+    async (event) => {
+      const p = event.payload as Record<string, unknown>;
+      await safeInsert('action_items', {
+        title: `Acompanhar pré-OVID: Respostas atualizadas`,
+        source_module: 'compliance', source_reference_id: String(p.audit_id ?? p.id ?? ''),
+        status: 'pending', priority: 'medium',
+        description: `Checklist pré-OVID atualizado. Verificar gaps restantes e preparar evidências fotográficas.`,
+      });
+    },
+  ],
+
+  'compliance.peotram.audit_updated': [
+    async (event) => {
+      const p = event.payload as Record<string, unknown>;
+      await safeInsert('action_items', {
+        title: `Acompanhar PEOTRAM: Score atualizado`,
+        source_module: 'compliance', source_reference_id: String(p.id ?? ''),
+        status: 'pending', priority: 'high',
+        description: `Auditoria PEOTRAM atualizada. Verificar elementos pendentes e preparar para vistoria.`,
+      });
+    },
+  ],
+
+  'finance.charter.status_changed': [
+    async (event) => {
+      const p = event.payload as Record<string, unknown>;
+      await safeInsert('action_items', {
+        title: `Atualizar P&L: Charter status alterado`,
+        source_module: 'finance', source_reference_id: String(p.id ?? ''),
+        status: 'pending', priority: 'high', vessel_id: p.vessel_id || null,
+        description: `Status do charter alterado para ${p.status ?? 'N/A'}. Recalcular P&L e verificar off-hire.`,
+      });
+    },
+  ],
+
+  'notification.read': [
+    async () => { /* No side-effect needed, just cache invalidation */ },
+  ],
+
+  'peodp.fmea.item_updated': [
+    async (event) => {
+      const p = event.payload as Record<string, unknown>;
+      await safeInsert('action_items', {
+        title: `Recalcular FMECA: Equipamento DP atualizado`,
+        source_module: 'peodp', source_reference_id: String(p.id ?? ''),
+        status: 'pending', priority: 'high',
+        description: `Equipamento DP atualizado no FMEA. Recalcular criticidade, atualizar ASOG e documentar.`,
+      });
+    },
+  ],
+
+  'peodp.fmea.item_deleted': [
+    async (event) => {
+      const p = event.payload as Record<string, unknown>;
+      await safeInsert('action_items', {
+        title: `Verificar redundância DP: Equipamento removido`,
+        source_module: 'peodp', source_reference_id: String(p.id ?? ''),
+        status: 'pending', priority: 'critical',
+        description: `Equipamento removido do FMEA DP. Verificar impacto na redundância e atualizar ASOG imediatamente.`,
+      });
+    },
+  ],
+
+  'tracking.position.updated': [
+    async () => { /* High-frequency event — no side-effect, handled by cache invalidation only */ },
+  ],
+
 };
 
 // ═══════════════════════════════════════════════════════════
