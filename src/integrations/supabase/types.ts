@@ -23628,6 +23628,353 @@ export type Database = {
           },
         ]
       }
+      ism_capa: {
+        Row: {
+          assigned_to: string | null
+          completion_date: string | null
+          corrective_action: string | null
+          created_at: string
+          description: string | null
+          due_date: string | null
+          element_id: string | null
+          evidence_of_closure: string | null
+          finding_type: string
+          id: string
+          organization_id: string | null
+          preventive_action: string | null
+          priority: string | null
+          requirement_id: string | null
+          root_cause: string | null
+          source: string | null
+          source_reference: string | null
+          status: string
+          title: string
+          updated_at: string
+          verified_at: string | null
+          verified_by: string | null
+          vessel_id: string | null
+        }
+        Insert: {
+          assigned_to?: string | null
+          completion_date?: string | null
+          corrective_action?: string | null
+          created_at?: string
+          description?: string | null
+          due_date?: string | null
+          element_id?: string | null
+          evidence_of_closure?: string | null
+          finding_type: string
+          id?: string
+          organization_id?: string | null
+          preventive_action?: string | null
+          priority?: string | null
+          requirement_id?: string | null
+          root_cause?: string | null
+          source?: string | null
+          source_reference?: string | null
+          status?: string
+          title: string
+          updated_at?: string
+          verified_at?: string | null
+          verified_by?: string | null
+          vessel_id?: string | null
+        }
+        Update: {
+          assigned_to?: string | null
+          completion_date?: string | null
+          corrective_action?: string | null
+          created_at?: string
+          description?: string | null
+          due_date?: string | null
+          element_id?: string | null
+          evidence_of_closure?: string | null
+          finding_type?: string
+          id?: string
+          organization_id?: string | null
+          preventive_action?: string | null
+          priority?: string | null
+          requirement_id?: string | null
+          root_cause?: string | null
+          source?: string | null
+          source_reference?: string | null
+          status?: string
+          title?: string
+          updated_at?: string
+          verified_at?: string | null
+          verified_by?: string | null
+          vessel_id?: string | null
+        }
+        Relationships: [
+          {
+            foreignKeyName: "ism_capa_element_id_fkey"
+            columns: ["element_id"]
+            isOneToOne: false
+            referencedRelation: "ism_elements"
+            referencedColumns: ["id"]
+          },
+          {
+            foreignKeyName: "ism_capa_organization_id_fkey"
+            columns: ["organization_id"]
+            isOneToOne: false
+            referencedRelation: "organizations"
+            referencedColumns: ["id"]
+          },
+          {
+            foreignKeyName: "ism_capa_requirement_id_fkey"
+            columns: ["requirement_id"]
+            isOneToOne: false
+            referencedRelation: "ism_requirements"
+            referencedColumns: ["id"]
+          },
+          {
+            foreignKeyName: "ism_capa_vessel_id_fkey"
+            columns: ["vessel_id"]
+            isOneToOne: false
+            referencedRelation: "vessels"
+            referencedColumns: ["id"]
+          },
+        ]
+      }
+      ism_elements: {
+        Row: {
+          created_at: string
+          description: string | null
+          element_number: number
+          id: string
+          imo_reference: string | null
+          organization_id: string | null
+          title: string
+          updated_at: string
+        }
+        Insert: {
+          created_at?: string
+          description?: string | null
+          element_number: number
+          id?: string
+          imo_reference?: string | null
+          organization_id?: string | null
+          title: string
+          updated_at?: string
+        }
+        Update: {
+          created_at?: string
+          description?: string | null
+          element_number?: number
+          id?: string
+          imo_reference?: string | null
+          organization_id?: string | null
+          title?: string
+          updated_at?: string
+        }
+        Relationships: [
+          {
+            foreignKeyName: "ism_elements_organization_id_fkey"
+            columns: ["organization_id"]
+            isOneToOne: false
+            referencedRelation: "organizations"
+            referencedColumns: ["id"]
+          },
+        ]
+      }
+      ism_evidence: {
+        Row: {
+          created_at: string
+          description: string | null
+          document_id: string | null
+          evidence_type: string
+          file_path: string | null
+          id: string
+          organization_id: string | null
+          requirement_id: string
+          reviewed_at: string | null
+          reviewed_by: string | null
+          score: number | null
+          status: string
+          title: string
+          updated_at: string
+          valid_from: string | null
+          valid_until: string | null
+          vessel_id: string | null
+        }
+        Insert: {
+          created_at?: string
+          description?: string | null
+          document_id?: string | null
+          evidence_type: string
+          file_path?: string | null
+          id?: string
+          organization_id?: string | null
+          requirement_id: string
+          reviewed_at?: string | null
+          reviewed_by?: string | null
+          score?: number | null
+          status?: string
+          title: string
+          updated_at?: string
+          valid_from?: string | null
+          valid_until?: string | null
+          vessel_id?: string | null
+        }
+        Update: {
+          created_at?: string
+          description?: string | null
+          document_id?: string | null
+          evidence_type?: string
+          file_path?: string | null
+          id?: string
+          organization_id?: string | null
+          requirement_id?: string
+          reviewed_at?: string | null
+          reviewed_by?: string | null
+          score?: number | null
+          status?: string
+          title?: string
+          updated_at?: string
+          valid_from?: string | null
+          valid_until?: string | null
+          vessel_id?: string | null
+        }
+        Relationships: [
+          {
+            foreignKeyName: "ism_evidence_organization_id_fkey"
+            columns: ["organization_id"]
+            isOneToOne: false
+            referencedRelation: "organizations"
+            referencedColumns: ["id"]
+          },
+          {
+            foreignKeyName: "ism_evidence_requirement_id_fkey"
+            columns: ["requirement_id"]
+            isOneToOne: false
+            referencedRelation: "ism_requirements"
+            referencedColumns: ["id"]
+          },
+          {
+            foreignKeyName: "ism_evidence_vessel_id_fkey"
+            columns: ["vessel_id"]
+            isOneToOne: false
+            referencedRelation: "vessels"
+            referencedColumns: ["id"]
+          },
+        ]
+      }
+      ism_gap_analysis: {
+        Row: {
+          assessed_by: string | null
+          compliance_score: number | null
+          created_at: string
+          element_id: string
+          gap_details: Json | null
+          id: string
+          last_assessed_at: string | null
+          met_requirements: number | null
+          next_review_date: string | null
+          organization_id: string | null
+          status: string | null
+          total_requirements: number | null
+          updated_at: string
+          vessel_id: string | null
+        }
+        Insert: {
+          assessed_by?: string | null
+          compliance_score?: number | null
+          created_at?: string
+          element_id: string
+          gap_details?: Json | null
+          id?: string
+          last_assessed_at?: string | null
+          met_requirements?: number | null
+          next_review_date?: string | null
+          organization_id?: string | null
+          status?: string | null
+          total_requirements?: number | null
+          updated_at?: string
+          vessel_id?: string | null
+        }
+        Update: {
+          assessed_by?: string | null
+          compliance_score?: number | null
+          created_at?: string
+          element_id?: string
+          gap_details?: Json | null
+          id?: string
+          last_assessed_at?: string | null
+          met_requirements?: number | null
+          next_review_date?: string | null
+          organization_id?: string | null
+          status?: string | null
+          total_requirements?: number | null
+          updated_at?: string
+          vessel_id?: string | null
+        }
+        Relationships: [
+          {
+            foreignKeyName: "ism_gap_analysis_element_id_fkey"
+            columns: ["element_id"]
+            isOneToOne: false
+            referencedRelation: "ism_elements"
+            referencedColumns: ["id"]
+          },
+          {
+            foreignKeyName: "ism_gap_analysis_organization_id_fkey"
+            columns: ["organization_id"]
+            isOneToOne: false
+            referencedRelation: "organizations"
+            referencedColumns: ["id"]
+          },
+          {
+            foreignKeyName: "ism_gap_analysis_vessel_id_fkey"
+            columns: ["vessel_id"]
+            isOneToOne: false
+            referencedRelation: "vessels"
+            referencedColumns: ["id"]
+          },
+        ]
+      }
+      ism_requirements: {
+        Row: {
+          created_at: string
+          description: string | null
+          element_id: string
+          evidence_type: string | null
+          id: string
+          is_mandatory: boolean | null
+          requirement_code: string
+          sort_order: number | null
+          title: string
+        }
+        Insert: {
+          created_at?: string
+          description?: string | null
+          element_id: string
+          evidence_type?: string | null
+          id?: string
+          is_mandatory?: boolean | null
+          requirement_code: string
+          sort_order?: number | null
+          title: string
+        }
+        Update: {
+          created_at?: string
+          description?: string | null
+          element_id?: string
+          evidence_type?: string | null
+          id?: string
+          is_mandatory?: boolean | null
+          requirement_code?: string
+          sort_order?: number | null
+          title?: string
+        }
+        Relationships: [
+          {
+            foreignKeyName: "ism_requirements_element_id_fkey"
+            columns: ["element_id"]
+            isOneToOne: false
+            referencedRelation: "ism_elements"
+            referencedColumns: ["id"]
+          },
+        ]
+      }
       isps_assessments: {
         Row: {
           area: string
