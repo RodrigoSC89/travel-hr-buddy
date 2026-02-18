@@ -33,8 +33,8 @@ export const HealthMonitor = lazy(() => import("@/pages/HealthMonitor"));
 export const MaritimeCommandCenter = lazy(() => import("@/pages/MaritimeCommandCenter"));
 export const FleetCommandCenter = lazy(() => import("@/pages/FleetCommandCenter"));
 export const VoyageCommandCenter = lazy(() => import("@/pages/VoyageCommandCenter"));
-export const MissionCommandCenter = lazy(() => import("@/pages/MaritimeCommandCenter"));
-export const BridgeLink = lazy(() => import("@/pages/MaritimeCommandCenter"));
+export const MissionCommandCenter = lazy(() => import("@/pages/OperationsCommandCenter"));
+export const BridgeLink = lazy(() => import("@/pages/FleetCommandCenter"));
 
 // Digital Twin & Advanced
 export const DigitalTwinPage = lazy(() => import("@/pages/advanced/DigitalTwin3DPage"));
