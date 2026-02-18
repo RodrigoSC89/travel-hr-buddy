@@ -91,9 +91,9 @@ export function TelemetriaTabs({
                     <XAxis dataKey="time" className="text-xs" />
                     <YAxis className="text-xs" />
                     <Tooltip contentStyle={{ backgroundColor: 'hsl(var(--card))', border: '1px solid hsl(var(--border))', borderRadius: '8px' }} />
-                    <Area type="monotone" dataKey="temperature" stroke="#ef4444" fill="#ef444433" name="Temperatura" />
-                    <Area type="monotone" dataKey="pressure" stroke="#3b82f6" fill="#3b82f633" name="Pressão" />
-                    <Area type="monotone" dataKey="fuel_level" stroke="#22c55e" fill="#22c55e33" name="Combustível" />
+                    <Area type="monotone" dataKey="temperature" stroke="hsl(var(--destructive))" fill="hsl(var(--destructive))" fillOpacity={0.13} name="Temperatura" />
+                    <Area type="monotone" dataKey="pressure" stroke="hsl(var(--primary))" fill="hsl(var(--primary))" fillOpacity={0.13} name="Pressão" />
+                    <Area type="monotone" dataKey="fuel_level" stroke="hsl(var(--success))" fill="hsl(var(--success))" fillOpacity={0.13} name="Combustível" />
                   </AreaChart>
                 </ResponsiveContainer>
               </div>
@@ -303,10 +303,10 @@ export function TelemetriaTabs({
                   <XAxis dataKey="time" className="text-xs" />
                   <YAxis className="text-xs" />
                   <Tooltip contentStyle={{ backgroundColor: 'hsl(var(--card))', border: '1px solid hsl(var(--border))', borderRadius: '8px' }} />
-                  <Line type="monotone" dataKey="temperature" stroke="#ef4444" strokeWidth={2} dot={false} name="Temperatura" />
-                  <Line type="monotone" dataKey="pressure" stroke="#3b82f6" strokeWidth={2} dot={false} name="Pressão" />
-                  <Line type="monotone" dataKey="fuel_level" stroke="#22c55e" strokeWidth={2} dot={false} name="Combustível" />
-                  <Line type="monotone" dataKey="vibration" stroke="#a855f7" strokeWidth={2} dot={false} name="Vibração" />
+                  <Line type="monotone" dataKey="temperature" stroke="hsl(var(--destructive))" strokeWidth={2} dot={false} name="Temperatura" />
+                  <Line type="monotone" dataKey="pressure" stroke="hsl(var(--primary))" strokeWidth={2} dot={false} name="Pressão" />
+                  <Line type="monotone" dataKey="fuel_level" stroke="hsl(var(--success))" strokeWidth={2} dot={false} name="Combustível" />
+                  <Line type="monotone" dataKey="vibration" stroke="hsl(var(--accent))" strokeWidth={2} dot={false} name="Vibração" />
                 </LineChart>
               </ResponsiveContainer>
             </div>

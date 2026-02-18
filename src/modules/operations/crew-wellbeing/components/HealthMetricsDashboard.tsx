@@ -222,8 +222,8 @@ export const HealthMetricsDashboard: React.FC = () => {
                   <YAxis domain={[0, 10]} />
                   <Tooltip />
                   <Legend />
-                  <Line type="monotone" dataKey="mood" stroke="#10b981" strokeWidth={2} name="Mood" />
-                  <Line type="monotone" dataKey="stress" stroke="#ef4444" strokeWidth={2} name="Stress" />
+                  <Line type="monotone" dataKey="mood" stroke="hsl(var(--success))" strokeWidth={2} name="Mood" />
+                  <Line type="monotone" dataKey="stress" stroke="hsl(var(--destructive))" strokeWidth={2} name="Stress" />
                 </LineChart>
               </ResponsiveContainer>
             </CardContent>
@@ -242,8 +242,8 @@ export const HealthMetricsDashboard: React.FC = () => {
                   <YAxis yAxisId="right" orientation="right" />
                   <Tooltip />
                   <Legend />
-                  <Line yAxisId="left" type="monotone" dataKey="sleep" stroke="#3b82f6" strokeWidth={2} name="Sleep (hours)" />
-                  <Line yAxisId="right" type="monotone" dataKey="heartRate" stroke="#f59e0b" strokeWidth={2} name="Heart Rate" />
+                  <Line yAxisId="left" type="monotone" dataKey="sleep" stroke="hsl(var(--primary))" strokeWidth={2} name="Sleep (hours)" />
+                  <Line yAxisId="right" type="monotone" dataKey="heartRate" stroke="hsl(var(--warning))" strokeWidth={2} name="Heart Rate" />
                 </LineChart>
               </ResponsiveContainer>
             </CardContent>

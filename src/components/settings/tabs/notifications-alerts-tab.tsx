@@ -94,7 +94,7 @@ export const NotificationsAlertsTab: React.FC<NotificationsAlertsTabProps> = ({
       name: "Comunicação",
       description: "Novas mensagens e atualizações de canais",
       icon: MessageSquare,
-      color: "text-blue-600",
+      color: "text-info",
       enabled: settings.moduleSettings.communication || false
     },
     {
@@ -102,7 +102,7 @@ export const NotificationsAlertsTab: React.FC<NotificationsAlertsTabProps> = ({
       name: "Tripulação",
       description: "Embarques, desembarques e atualizações de pessoal",
       icon: Users,
-      color: "text-green-600",
+      color: "text-success",
       enabled: settings.moduleSettings.crew || false
     },
     {
@@ -110,7 +110,7 @@ export const NotificationsAlertsTab: React.FC<NotificationsAlertsTabProps> = ({
       name: "Embarcações",
       description: "Status das embarcações e manutenções",
       icon: Ship,
-      color: "text-purple-600",
+      color: "text-accent-foreground",
       enabled: settings.moduleSettings.vessels || false
     },
     {
@@ -118,7 +118,7 @@ export const NotificationsAlertsTab: React.FC<NotificationsAlertsTabProps> = ({
       name: "Certificações",
       description: "Vencimentos e renovações de certificados",
       icon: Award,
-      color: "text-orange-600",
+      color: "text-warning",
       enabled: settings.moduleSettings.certificates || false
     }
   ];

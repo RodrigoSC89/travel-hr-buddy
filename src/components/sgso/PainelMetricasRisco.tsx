@@ -167,7 +167,7 @@ export function PainelMetricasRisco() {
                 <Legend />
                 <Bar 
                   dataKey="falhas_criticas" 
-                  fill="#dc2626" 
+                  fill="hsl(var(--destructive))" 
                   name="Falhas Críticas" 
                 />
               </BarChart>
@@ -203,9 +203,9 @@ export function PainelMetricasRisco() {
                 <Line 
                   type="monotone" 
                   dataKey="falhas_criticas" 
-                  stroke="#dc2626" 
+                  stroke="hsl(var(--destructive))" 
                   strokeWidth={2}
-                  dot={{ fill: "#dc2626", r: 4 }}
+                  dot={{ fill: "hsl(var(--destructive))", r: 4 }}
                   name="Falhas Críticas"
                 />
               </LineChart>

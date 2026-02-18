@@ -311,9 +311,9 @@ const SystemPerformanceMonitor = () => {
                   <YAxis />
                   <Tooltip />
                   <Legend />
-                  <Area type="monotone" dataKey="cpu" stackId="1" stroke="#3b82f6" fill="#3b82f6" fillOpacity={0.6} name="CPU %" />
-                  <Area type="monotone" dataKey="memory" stackId="2" stroke="#10b981" fill="#10b981" fillOpacity={0.6} name="Memória %" />
-                  <Area type="monotone" dataKey="network" stackId="3" stroke="#8b5cf6" fill="#8b5cf6" fillOpacity={0.6} name="Rede MB/s" />
+                  <Area type="monotone" dataKey="cpu" stackId="1" stroke="hsl(var(--primary))" fill="hsl(var(--primary))" fillOpacity={0.6} name="CPU %" />
+                  <Area type="monotone" dataKey="memory" stackId="2" stroke="hsl(var(--success))" fill="hsl(var(--success))" fillOpacity={0.6} name="Memória %" />
+                  <Area type="monotone" dataKey="network" stackId="3" stroke="hsl(var(--accent))" fill="hsl(var(--accent))" fillOpacity={0.6} name="Rede MB/s" />
                 </AreaChart>
               </ResponsiveContainer>
             </CardContent>
@@ -329,7 +329,7 @@ const SystemPerformanceMonitor = () => {
               <CardContent>
                 <div className="space-y-4">
                   <div className="text-center">
-                    <p className="text-4xl font-bold text-blue-600">45%</p>
+                    <p className="text-4xl font-bold text-info">45%</p>
                     <p className="text-sm text-muted-foreground">Uso atual</p>
                   </div>
                   <Progress value={45} className="h-3" />
@@ -379,7 +379,7 @@ const SystemPerformanceMonitor = () => {
               <CardContent>
                 <div className="space-y-4">
                   <div className="text-center">
-                    <p className="text-4xl font-bold text-orange-600">55%</p>
+                    <p className="text-4xl font-bold text-warning">55%</p>
                     <p className="text-sm text-muted-foreground">550 GB / 1 TB</p>
                   </div>
                   <Progress value={55} className="h-3" />
@@ -404,7 +404,7 @@ const SystemPerformanceMonitor = () => {
               <CardContent>
                 <div className="space-y-4">
                   <div className="text-center">
-                    <p className="text-4xl font-bold text-purple-600">23</p>
+                    <p className="text-4xl font-bold text-accent-foreground">23</p>
                     <p className="text-sm text-muted-foreground">MB/s</p>
                   </div>
                   <div className="grid grid-cols-2 gap-4 text-sm">
@@ -480,9 +480,9 @@ const SystemPerformanceMonitor = () => {
                   <YAxis />
                   <Tooltip />
                   <Legend />
-                  <Line type="monotone" dataKey="api" stroke="#3b82f6" strokeWidth={2} name="API (ms)" />
-                  <Line type="monotone" dataKey="database" stroke="#10b981" strokeWidth={2} name="Database (ms)" />
-                  <Line type="monotone" dataKey="web" stroke="#f59e0b" strokeWidth={2} name="Web Server (ms)" />
+                  <Line type="monotone" dataKey="api" stroke="hsl(var(--primary))" strokeWidth={2} name="API (ms)" />
+                  <Line type="monotone" dataKey="database" stroke="hsl(var(--success))" strokeWidth={2} name="Database (ms)" />
+                  <Line type="monotone" dataKey="web" stroke="hsl(var(--warning))" strokeWidth={2} name="Web Server (ms)" />
                 </LineChart>
               </ResponsiveContainer>
             </CardContent>

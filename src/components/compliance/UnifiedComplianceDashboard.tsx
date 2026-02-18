@@ -578,11 +578,11 @@ export function UnifiedComplianceDashboard() {
                       }}
                     />
                     <Legend />
-                    <Line type="monotone" dataKey="MLC" stroke="#22c55e" strokeWidth={2} dot={{ r: 4 }} />
-                    <Line type="monotone" dataKey="PEOTRAM" stroke="#3b82f6" strokeWidth={2} dot={{ r: 4 }} />
-                    <Line type="monotone" dataKey="PEO-DP" stroke="#8b5cf6" strokeWidth={2} dot={{ r: 4 }} />
-                    <Line type="monotone" dataKey="SGSO" stroke="#f59e0b" strokeWidth={2} dot={{ r: 4 }} />
-                    <Line type="monotone" dataKey="Pre-OVID" stroke="#ef4444" strokeWidth={2} dot={{ r: 4 }} />
+                    <Line type="monotone" dataKey="MLC" stroke="hsl(var(--success))" strokeWidth={2} dot={{ r: 4 }} />
+                    <Line type="monotone" dataKey="PEOTRAM" stroke="hsl(var(--primary))" strokeWidth={2} dot={{ r: 4 }} />
+                    <Line type="monotone" dataKey="PEO-DP" stroke="hsl(var(--accent))" strokeWidth={2} dot={{ r: 4 }} />
+                    <Line type="monotone" dataKey="SGSO" stroke="hsl(var(--warning))" strokeWidth={2} dot={{ r: 4 }} />
+                    <Line type="monotone" dataKey="Pre-OVID" stroke="hsl(var(--destructive))" strokeWidth={2} dot={{ r: 4 }} />
                   </LineChart>
                 </ResponsiveContainer>
               </div>

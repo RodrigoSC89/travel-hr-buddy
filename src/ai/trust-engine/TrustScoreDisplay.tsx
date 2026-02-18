@@ -150,13 +150,13 @@ export const TrustScoreDisplay: React.FC<TrustScoreDisplayProps> = ({
                     <div className="flex items-center gap-1 text-xs mt-1">
                       {trend > 0 ? (
                         <>
-                          <TrendingUp className="h-3 w-3 text-green-500" />
-                          <span className="text-green-500">+{trend}</span>
+                          <TrendingUp className="h-3 w-3 text-success" />
+                          <span className="text-success">+{trend}</span>
                         </>
                       ) : (
                         <>
-                          <TrendingDown className="h-3 w-3 text-red-500" />
-                          <span className="text-red-500">{trend}</span>
+                          <TrendingDown className="h-3 w-3 text-destructive" />
+                          <span className="text-destructive">{trend}</span>
                         </>
                       )}
                     </div>
@@ -270,11 +270,11 @@ export const TrustScoreDisplay: React.FC<TrustScoreDisplayProps> = ({
                   {idx < history.length - 1 && (
                     <div className="text-xs">
                       {event.score > history[idx + 1].score ? (
-                        <span className="text-green-500">
+                        <span className="text-success">
                           +{event.score - history[idx + 1].score}
                         </span>
                       ) : event.score < history[idx + 1].score ? (
-                        <span className="text-red-500">
+                        <span className="text-destructive">
                           {event.score - history[idx + 1].score}
                         </span>
                       ) : (

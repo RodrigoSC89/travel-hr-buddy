@@ -182,7 +182,7 @@ export const SystemMonitoringDashboard: React.FC = () => {
                   cx="50"
                   cy="50"
                   r="40"
-                  stroke="#e5e7eb"
+                  stroke="hsl(var(--muted))"
                   strokeWidth="8"
                   fill="transparent"
                 />
@@ -199,13 +199,13 @@ export const SystemMonitoringDashboard: React.FC = () => {
                 />
                 <defs>
                   <linearGradient id="gradient" x1="0%" y1="0%" x2="100%" y2="0%">
-                    <stop offset="0%" stopColor="#3b82f6" />
-                    <stop offset="100%" stopColor="#06b6d4" />
+                    <stop offset="0%" stopColor="hsl(var(--primary))" />
+                    <stop offset="100%" stopColor="hsl(var(--info))" />
                   </linearGradient>
                 </defs>
               </svg>
               <div className="absolute inset-0 flex flex-col items-center justify-center">
-                <span className="text-4xl font-bold bg-gradient-to-r from-primary to-cyan-500 bg-clip-text text-transparent">
+                <span className="text-4xl font-bold bg-gradient-to-r from-primary to-info bg-clip-text text-transparent">
                   95.8%
                 </span>
                 <span className="text-sm text-muted-foreground">Health Score</span>

@@ -514,10 +514,10 @@ export function SGACompleto() {
                     <YAxis />
                     <Tooltip />
                     <Legend />
-                    <Bar dataKey="co2" name="CO₂ (ton)" fill="#ef4444" />
-                    <Bar dataKey="nox" name="NOx (ton)" fill="#f97316" />
-                    <Bar dataKey="sox" name="SOx (ton)" fill="#eab308" />
-                    <Bar dataKey="pm" name="PM (ton)" fill="#8b5cf6" />
+                    <Bar dataKey="co2" name="CO₂ (ton)" fill="hsl(var(--destructive))" />
+                    <Bar dataKey="nox" name="NOx (ton)" fill="hsl(var(--warning))" />
+                    <Bar dataKey="sox" name="SOx (ton)" fill="hsl(var(--warning))" />
+                    <Bar dataKey="pm" name="PM (ton)" fill="hsl(var(--accent))" />
                   </BarChart>
                 </ResponsiveContainer>
               </div>

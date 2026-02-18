@@ -262,7 +262,7 @@ export const AdaptiveAIAdvisor: React.FC = () => {
           <Card>
             <CardHeader className="pb-2">
               <CardTitle className="text-lg flex items-center gap-2">
-                <Lightbulb className="h-5 w-5 text-yellow-500" />
+                <Lightbulb className="h-5 w-5 text-warning" />
                 Perguntas Sugeridas
               </CardTitle>
             </CardHeader>
@@ -337,7 +337,7 @@ export const AdaptiveAIAdvisor: React.FC = () => {
             <Card>
               <CardHeader className="pb-2">
                 <CardTitle className="text-lg flex items-center gap-2">
-                  <Star className="h-5 w-5 text-yellow-500" />
+                  <Star className="h-5 w-5 text-warning" />
                   Qualidade da Resposta
                 </CardTitle>
               </CardHeader>

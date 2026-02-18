@@ -24,14 +24,14 @@ export const themeTokens = {
   
   // Status colors with high contrast
   status: {
-    success: "#16C784",      // Bright green
-    successDark: "#059669",  // Dark green for backgrounds
-    warning: "#E9A63D",      // Amber/Orange
-    warningDark: "#B45309",  // Dark orange for backgrounds
-    danger: "#FF4D4F",       // Bright red
-    dangerDark: "#DC2626",   // Dark red for backgrounds
-    info: "#0EA5E9",         // Bright blue
-    infoDark: "#0369A1"      // Dark blue for backgrounds
+    success: "hsl(var(--success))",
+    successDark: "hsl(var(--success) / 0.7)",
+    warning: "hsl(var(--warning))",
+    warningDark: "hsl(var(--warning) / 0.7)",
+    danger: "hsl(var(--destructive))",
+    dangerDark: "hsl(var(--destructive) / 0.7)",
+    info: "hsl(var(--info))",
+    infoDark: "hsl(var(--info) / 0.7)"
   },
   
   // Text weights for enhanced readability

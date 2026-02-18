@@ -392,7 +392,7 @@ export const DPReplaySystem: React.FC = () => {
             <CardContent>
               <div className="grid grid-cols-3 gap-4">
                 <div className="p-3 rounded-lg border bg-card">
-                  <p className="text-sm font-medium text-yellow-500">⚠️ Anomalia Detectada</p>
+                  <p className="text-sm font-medium text-warning">⚠️ Anomalia Detectada</p>
                   <p className="text-xs text-muted-foreground mt-1">Perda de sensor MRU#1 às 02:30:00 - Fallback automático funcionou corretamente, mas recomenda-se inspeção preventiva.</p>
                 </div>
                 <div className="p-3 rounded-lg border bg-card">

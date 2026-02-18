@@ -70,7 +70,7 @@ export function formatPDFContent(
 
   return `
     <div style="font-family: Arial, sans-serif;">
-      <h1 style="color: #1e40af">${title}</h1>
+      <h1 style="color: hsl(var(--primary))">${title}</h1>
       <div>${content}</div>
       <footer>${defaultFooter}</footer>
     </div>

@@ -427,7 +427,7 @@ const ComplianceChecklist = () => {
                     {record.findings && record.findings.length > 0 && (
                       <div className="mb-3">
                         <h4 className="text-sm font-semibold mb-2 flex items-center gap-2">
-                          <AlertTriangle className="h-4 w-4 text-orange-600" />
+                          <AlertTriangle className="h-4 w-4 text-warning" />
                           Findings ({record.findings.length})
                         </h4>
                         <div className="space-y-1">

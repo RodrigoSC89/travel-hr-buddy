@@ -39,7 +39,7 @@ export const OVIDInspectionHistory: React.FC<OVIDInspectionHistoryProps> = ({
   const getStatusBadge = (status: string) => {
     switch (status) {
       case 'completed':
-        return <Badge className="bg-green-500">Concluída</Badge>;
+        return <Badge className="bg-success">Concluída</Badge>;
       case 'in_progress':
         return <Badge variant="secondary">Em Andamento</Badge>;
       case 'cancelled':

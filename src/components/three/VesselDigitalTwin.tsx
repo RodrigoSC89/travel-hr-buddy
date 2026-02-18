@@ -208,7 +208,7 @@ export const VesselDigitalTwin: React.FC<VesselTwinProps> = ({
           </div>
           <div className="flex items-center gap-2">
             <Badge variant="outline" className="gap-1">
-              <Wifi className="h-3 w-3 text-green-500" /> Live
+              <Wifi className="h-3 w-3 text-success" /> Live
             </Badge>
             <Badge variant={warnings > 0 ? "destructive" : "secondary"} className="gap-1">
               {statusConfig[status].icon}
@@ -262,7 +262,7 @@ export const VesselDigitalTwin: React.FC<VesselTwinProps> = ({
           <div className="absolute top-3 right-3 bg-background/80 backdrop-blur-md rounded-lg px-3 py-2 text-xs">
             <span className="text-muted-foreground">{sensors.length} sensores</span>
             {warnings > 0 && (
-              <span className="ml-2 text-yellow-500 font-medium">{warnings} alertas</span>
+              <span className="ml-2 text-warning font-medium">{warnings} alertas</span>
             )}
           </div>
 

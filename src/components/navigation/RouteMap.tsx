@@ -545,19 +545,19 @@ export function RouteMap({
         {/* Legend */}
         <div className="absolute bottom-4 right-4 bg-background/90 backdrop-blur-sm rounded-lg p-3 shadow-lg text-xs space-y-1">
           <div className="flex items-center gap-2">
-            <span className="w-3 h-3 rounded-full bg-emerald-500"></span>
+            <span className="w-3 h-3 rounded-full bg-success"></span>
             <span className="text-muted-foreground">Condição Segura</span>
           </div>
           <div className="flex items-center gap-2">
-            <span className="w-3 h-3 rounded-full bg-amber-500"></span>
+            <span className="w-3 h-3 rounded-full bg-warning"></span>
             <span className="text-muted-foreground">Atenção</span>
           </div>
           <div className="flex items-center gap-2">
-            <span className="w-3 h-3 rounded-full bg-orange-500"></span>
+            <span className="w-3 h-3 rounded-full bg-warning"></span>
             <span className="text-muted-foreground">Alerta</span>
           </div>
           <div className="flex items-center gap-2">
-            <span className="w-3 h-3 rounded-full bg-red-500"></span>
+            <span className="w-3 h-3 rounded-full bg-destructive"></span>
             <span className="text-muted-foreground">Perigo</span>
           </div>
         </div>
