@@ -21,6 +21,7 @@ export const BillingPortal = lazy(() => import("@/pages/Settings"));
 export const OnboardingDashboard = lazy(() => import("@/pages/OnboardingDashboard"));
 export const TenantOnboardingWizard = lazy(() => import("@/pages/TenantOnboardingWizardPage"));
 export const InteractiveOnboarding = lazy(() => import("@/pages/InteractiveOnboarding"));
+export const WorldClassOnboarding = lazy(() => import("@/components/onboarding/WorldClassOnboarding"));
 export const AnalyticsFeedback = lazy(() => import("@/pages/AnalyticsFeedback"));
 
 // Central de Comando extras
