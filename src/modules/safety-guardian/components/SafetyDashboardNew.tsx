@@ -1,6 +1,6 @@
 /**
- * Safety Guardian Dashboard - Refactored
- * Dashboard principal com todas as funcionalidades integradas
+ * Safety Guardian Dashboard - Refactored v3
+ * Dashboard principal com analytics avançados
  */
 
 import React, { useState, useEffect } from 'react';
@@ -26,25 +26,14 @@ export const SafetyDashboard: React.FC = () => {
   const [detailsDialogOpen, setDetailsDialogOpen] = useState(false);
 
   const {
-    loading,
-    metrics,
-    incidents,
-    alerts,
-    filters,
-    setFilters,
-    createIncident,
-    markAlertAsRead,
-    markAllAlertsAsRead,
-    getFilteredIncidents,
-    unreadAlertsCount,
-    refresh,
+    loading, metrics, incidents, alerts, filters, setFilters,
+    createIncident, markAlertAsRead, markAllAlertsAsRead,
+    getFilteredIncidents, unreadAlertsCount, refresh,
   } = useSafetyData();
 
   const { analyzeIncident, analysisState, generatePredictiveInsights } = useSafetyAI();
 
-  useEffect(() => {
-    generatePredictiveInsights();
-  }, []);
+  useEffect(() => { generatePredictiveInsights(); }, []);
 
   const handleSubmitReport = async (incident: Partial<SafetyIncident>) => {
     await createIncident(incident);
@@ -68,16 +57,13 @@ export const SafetyDashboard: React.FC = () => {
       {/* Header Actions */}
       <div className="flex flex-col sm:flex-row items-start sm:items-center justify-between gap-4">
         <Select value={selectedPeriod} onValueChange={setSelectedPeriod}>
-          <SelectTrigger className="w-40">
-            <SelectValue />
-          </SelectTrigger>
+          <SelectTrigger className="w-40"><SelectValue /></SelectTrigger>
           <SelectContent>
             <SelectItem value="mtd">Este Mês</SelectItem>
             <SelectItem value="qtd">Este Trimestre</SelectItem>
             <SelectItem value="ytd">Este Ano</SelectItem>
           </SelectContent>
         </Select>
-
         <div className="flex items-center gap-2">
           <Button variant="outline" size="icon" onClick={refresh} disabled={loading} aria-label="Atualizar" title="Atualizar">
             <RefreshCw className={`h-4 w-4 ${loading ? 'animate-spin' : ''}`} />
@@ -85,12 +71,8 @@ export const SafetyDashboard: React.FC = () => {
           <Button variant="outline" size="icon" aria-label="Configurações de segurança" title="Configurações">
             <Settings className="h-4 w-4" />
           </Button>
-          <Button 
-            className="bg-destructive hover:bg-destructive/90"
-            onClick={() => setReportDialogOpen(true)}
-          >
-            <Plus className="h-4 w-4 mr-2" />
-            Reportar Ocorrência
+          <Button className="bg-destructive hover:bg-destructive/90" onClick={() => setReportDialogOpen(true)}>
+            <Plus className="h-4 w-4 mr-2" />Reportar Ocorrência
           </Button>
         </div>
       </div>
@@ -98,8 +80,8 @@ export const SafetyDashboard: React.FC = () => {
       {/* LTI Banner */}
       <LTICounterBanner daysWithoutLTI={metrics.daysWithoutLTI} goal={365} />
 
-      {/* KPI Cards */}
-      <SafetyKPICards metrics={metrics} loading={loading} />
+      {/* KPI Cards v3 - Now with TRIR Trend, Radar, Severity Charts */}
+      <SafetyKPICards metrics={metrics} loading={loading} incidents={incidents} />
 
       {/* AI Alerts */}
       <AIAlertsPanel
@@ -125,7 +107,6 @@ export const SafetyDashboard: React.FC = () => {
         onOpenChange={setReportDialogOpen}
         onSubmit={handleSubmitReport}
       />
-
       <IncidentDetailsDialog
         incident={selectedIncident}
         open={detailsDialogOpen}
