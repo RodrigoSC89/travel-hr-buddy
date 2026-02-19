@@ -99,6 +99,7 @@ export function QuickAIPromptPanel() {
             onClick={() => handleSubmit(prompt)}
             disabled={isLoading || !prompt.trim()}
             className="shrink-0 h-[60px] w-10"
+            aria-label="Enviar prompt"
           >
             {isLoading ? <Loader2 className="h-4 w-4 animate-spin" /> : <Send className="h-4 w-4" />}
           </Button>
