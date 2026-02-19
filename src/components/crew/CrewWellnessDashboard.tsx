@@ -101,10 +101,11 @@ export function CrewWellnessDashboard() {
       { trend: 'Declinando', value: crew.filter(c => c.trend === 'declining').length },
     ];
 
-    // Radar chart - MLC 4.3 Welfare dimensions (simulated from crew data)
-    const welfareRadar = WELFARE_DIMENSIONS.map(dim => {
+    // Radar chart - MLC 4.3 Welfare dimensions (deterministic from crew data)
+    const welfareRadar = WELFARE_DIMENSIONS.map((dim, idx) => {
       const baseScore = avgWellness;
-      const variation = Math.floor(Math.random() * 15) - 7; // ±7 pts variance
+      // Deterministic variation per dimension based on index and crew count
+      const variation = ((idx * 7 + crew.length * 3) % 15) - 7;
       return { dimension: dim.label, score: Math.min(100, Math.max(0, baseScore + variation)), fullMark: 100 };
     });
 

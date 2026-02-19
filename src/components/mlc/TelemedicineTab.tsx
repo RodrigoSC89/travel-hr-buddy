@@ -1,9 +1,11 @@
 /**
- * Telemedicine Tab — MLC Medical Care Enhancement
+ * Telemedicine Tab — Connected to Supabase medical_records
  * Remote medical consultation logging and TMAS integration
  */
 import { useState, useMemo } from "react";
-import { Card, CardContent, CardHeader, CardTitle } from "@/components/ui/card";
+import { useQuery } from "@tanstack/react-query";
+import { supabase } from "@/integrations/supabase/client";
+import { Card, CardContent } from "@/components/ui/card";
 import { Badge } from "@/components/ui/badge";
 import { Button } from "@/components/ui/button";
 import { Input } from "@/components/ui/input";
@@ -12,7 +14,7 @@ import { toast } from "sonner";
 import {
   Phone, Video, Stethoscope, AlertTriangle,
   CheckCircle2, Clock, Users, Search,
-  FileText, Plus, Heart, Activity, Pill, Calendar
+  FileText, Plus, Heart, Pill, Calendar, Loader2
 } from "lucide-react";
 
 interface TelemedicineConsultation {
@@ -34,54 +36,64 @@ interface TelemedicineConsultation {
   notes?: string;
 }
 
-const MOCK_CONSULTATIONS: TelemedicineConsultation[] = [
-  {
-    id: "tm-1", date: "2026-02-18T14:30:00", crewName: "José Ferreira", rank: "AB Seaman",
-    vesselName: "MV Atlântico Sul", consultationType: "tmas", method: "satellite_phone",
-    provider: "TMAS Brazil - Rio de Janeiro", chiefComplaint: "Dor abdominal intensa, náusea e vômito há 12h",
-    diagnosis: "Suspeita de apendicite aguda", treatment: "Antibióticos IV iniciados. Medevac recomendado.",
-    status: "medevac_recommended", urgency: "emergency",
-    medications: ["Ceftriaxona 1g IV 12/12h", "Metronidazol 500mg IV 8/8h", "Tramadol 50mg IV SOS"],
-    notes: "Paciente estável. ETA porto mais próximo: 18h. Helicóptero SAR em standby.",
-  },
-  {
-    id: "tm-2", date: "2026-02-17T09:00:00", crewName: "Carlos Mendes", rank: "Oiler",
-    vesselName: "MV Santos Express", consultationType: "specialist", method: "video",
-    provider: "Dr. Maria Costa - Dermatologista", chiefComplaint: "Erupção cutânea generalizada com prurido",
-    diagnosis: "Dermatite de contato ocupacional", treatment: "Creme de hidrocortisona + anti-histamínico oral",
-    status: "pending_followup", urgency: "routine", followUpDate: "2026-02-24",
-    medications: ["Hidrocortisona 1% creme 2x/dia", "Loratadina 10mg 1x/dia"],
-  },
-  {
-    id: "tm-3", date: "2026-02-16T16:45:00", crewName: "Marcos Lima", rank: "Cook",
-    vesselName: "MV Rio Grande", consultationType: "tmas", method: "radio",
-    provider: "TMAS Italy - CIRM Roma", chiefComplaint: "Corte profundo na mão durante preparo de alimentos",
-    diagnosis: "Laceração 4cm no dorso da mão esquerda", treatment: "Sutura com 5 pontos. Curativo estéril. Antibiótico oral.",
-    status: "completed", urgency: "urgent",
-    medications: ["Amoxicilina 500mg 8/8h por 7 dias", "Paracetamol 1g SOS"],
-  },
-  {
-    id: "tm-4", date: "2026-02-15T11:00:00", crewName: "Paulo Santos", rank: "Chief Officer",
-    vesselName: "MV Atlântico Sul", consultationType: "follow_up", method: "video",
-    provider: "Dr. André Ribeiro - Cardiologista", chiefComplaint: "Follow-up hipertensão arterial",
-    diagnosis: "HAS controlada", treatment: "Manter medicação atual. Próximo follow-up em 30 dias.",
-    status: "completed", urgency: "routine", followUpDate: "2026-03-15",
-    medications: ["Losartana 50mg 1x/dia", "HCTZ 25mg 1x/dia"],
-  },
-  {
-    id: "tm-5", date: "2026-02-14T08:30:00", crewName: "Roberto Alves", rank: "3rd Engineer",
-    vesselName: "MV Santos Express", consultationType: "tmas", method: "email",
-    provider: "TMAS Norway - Radio Medico", chiefComplaint: "Dor dental severa, inchaço na gengiva",
-    diagnosis: "Abscesso periapical", treatment: "Antibióticos + analgésicos. Encaminhamento dentista no próximo porto.",
-    status: "pending_followup", urgency: "urgent",
-    medications: ["Amoxicilina+Clavulanato 875mg 12/12h", "Ibuprofeno 600mg 8/8h"],
-  },
-];
+function mapStatusToConsultation(status: string | null): TelemedicineConsultation["status"] {
+  if (status === "completed" || status === "active") return "completed";
+  if (status === "critical") return "medevac_recommended";
+  if (status === "follow_up" || status === "pending") return "pending_followup";
+  return "ongoing";
+}
+
+function deriveUrgency(conditions: string[] | null, status: string | null): TelemedicineConsultation["urgency"] {
+  if (status === "critical") return "emergency";
+  if (conditions && conditions.length > 2) return "urgent";
+  return "routine";
+}
 
 export function TelemedicineTab() {
-  const [consultations] = useState(MOCK_CONSULTATIONS);
   const [searchQuery, setSearchQuery] = useState("");
   const [filterUrgency, setFilterUrgency] = useState("all");
+
+  const { data: consultations = [], isLoading } = useQuery({
+    queryKey: ["telemedicine-consultations"],
+    queryFn: async () => {
+      const [{ data: records }, { data: crewMembers }, { data: vessels }] = await Promise.all([
+        supabase.from("medical_records").select("*").order("created_at", { ascending: false }).limit(50),
+        supabase.from("crew_members").select("id, full_name, rank, vessel_id"),
+        supabase.from("vessels").select("id, name"),
+      ]);
+
+      const crewMap = new Map((crewMembers || []).map(c => [c.id, c]));
+      const vesselMap = new Map((vessels || []).map(v => [v.id, v]));
+
+      return (records || []).map((r): TelemedicineConsultation => {
+        const crew = r.crew_member_id ? crewMap.get(r.crew_member_id) : null;
+        const vessel = r.vessel_id ? vesselMap.get(r.vessel_id) : null;
+        const conditions = r.conditions as string[] | null;
+        const allergies = r.allergies as string[] | null;
+        const history = r.medical_history as Record<string, unknown> | null;
+
+        return {
+          id: r.id,
+          date: r.created_at || new Date().toISOString(),
+          crewName: r.crew_member_name || crew?.full_name || "Tripulante",
+          rank: crew?.rank || "N/A",
+          vesselName: vessel?.name || "N/A",
+          consultationType: history?.type as any || "tmas",
+          method: history?.method as any || "satellite_phone",
+          provider: (history?.provider as string) || "TMAS Brazil",
+          chiefComplaint: conditions?.join(", ") || r.notes || "Consulta médica",
+          diagnosis: (history?.diagnosis as string) || undefined,
+          treatment: (history?.treatment as string) || r.notes || "Tratamento prescrito",
+          status: mapStatusToConsultation(r.status),
+          urgency: deriveUrgency(conditions, r.status),
+          followUpDate: r.next_checkup || undefined,
+          medications: allergies || undefined,
+          notes: r.notes || undefined,
+        };
+      });
+    },
+    staleTime: 30000,
+  });
 
   const filtered = useMemo(() => {
     let result = consultations;
@@ -126,6 +138,15 @@ export function TelemedicineTab() {
     if (m === "satellite_phone" || m === "radio") return Phone;
     return FileText;
   };
+
+  if (isLoading) {
+    return (
+      <Card><CardContent className="py-12 text-center">
+        <Loader2 className="h-8 w-8 mx-auto mb-3 animate-spin text-primary" />
+        <p className="text-muted-foreground">Carregando registros médicos...</p>
+      </CardContent></Card>
+    );
+  }
 
   return (
     <div className="space-y-6">
@@ -244,7 +265,7 @@ export function TelemedicineTab() {
         })}
       </div>
 
-      {filtered.length === 0 && (
+      {filtered.length === 0 && !isLoading && (
         <Card><CardContent className="py-12 text-center text-muted-foreground">
           <Stethoscope className="h-12 w-12 mx-auto mb-3 opacity-30" />
           <p>Nenhuma consulta encontrada</p>

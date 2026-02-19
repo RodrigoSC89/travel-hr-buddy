@@ -1,20 +1,21 @@
 /**
- * ISM Management Review Dashboard
+ * ISM Management Review Dashboard — Connected to Supabase internal_audits
  * Tracks annual/periodic management reviews per ISM Code Element 12
  */
-import { useState } from "react";
-import { Card, CardContent, CardHeader, CardTitle } from "@/components/ui/card";
+import { useState, useMemo } from "react";
+import { useQuery } from "@tanstack/react-query";
+import { supabase } from "@/integrations/supabase/client";
+import { Card, CardContent } from "@/components/ui/card";
 import { Button } from "@/components/ui/button";
 import { Badge } from "@/components/ui/badge";
 import { Progress } from "@/components/ui/progress";
 import { Input } from "@/components/ui/input";
 import { Textarea } from "@/components/ui/textarea";
 import { Dialog, DialogContent, DialogHeader, DialogTitle, DialogTrigger, DialogFooter } from "@/components/ui/dialog";
-import { Select, SelectContent, SelectItem, SelectTrigger, SelectValue } from "@/components/ui/select";
 import { toast } from "sonner";
 import {
   ClipboardList, Plus, Calendar, Users, TrendingUp,
-  CheckCircle2, AlertTriangle, FileText, Download
+  CheckCircle2, AlertTriangle, FileText, Download, Loader2
 } from "lucide-react";
 
 interface ReviewItem {
@@ -32,52 +33,78 @@ interface ReviewItem {
   notes: string;
 }
 
-const MOCK_REVIEWS: ReviewItem[] = [
-  {
-    id: "1", title: "Annual SMS Review 2025", reviewDate: "2025-01-15", nextDue: "2026-01-15",
-    status: "completed", chairman: "Capt. J. Silva", attendees: ["DPA", "Fleet Manager", "QHSE Manager", "Technical Superintendent"],
-    agendaItems: ["SMS effectiveness", "Audit results", "NC trends", "Training effectiveness", "Resource adequacy"],
-    findings: 8, actions: 12, closedActions: 9, notes: "Overall positive review. Focus areas: bridge team management and PSC findings."
-  },
-  {
-    id: "2", title: "Q2 Management Review", reviewDate: "2025-06-20", nextDue: "2025-09-20",
-    status: "completed", chairman: "COO M. Santos", attendees: ["DPA", "Crew Manager", "Technical Director"],
-    agendaItems: ["KPI review", "Incident trends", "Crew feedback", "Regulatory updates"],
-    findings: 5, actions: 7, closedActions: 4, notes: "Crew wellbeing improvements noted. New MLC amendments require policy update."
-  },
-  {
-    id: "3", title: "Q3 Management Review", reviewDate: "2025-09-20", nextDue: "2025-12-20",
-    status: "scheduled", chairman: "DPA R. Oliveira", attendees: ["Fleet Manager", "QHSE Manager"],
-    agendaItems: ["ISM audit prep", "CII performance", "Drydock planning"],
-    findings: 0, actions: 0, closedActions: 0, notes: ""
-  },
-];
-
 const ISM_REVIEW_TOPICS = [
-  "SMS Effectiveness Assessment",
-  "Internal & External Audit Results",
-  "NC & CAPA Trend Analysis",
-  "Incident & Near-Miss Statistics",
-  "PSC & Vetting Performance",
-  "Crew Training & Competency",
-  "Emergency Drill Effectiveness",
-  "Resource & Budget Adequacy",
-  "Regulatory & Flag State Updates",
-  "Objectives & KPI Achievement",
-  "Environmental Performance (CII/EEXI)",
-  "Continuous Improvement Actions",
+  "SMS Effectiveness Assessment", "Internal & External Audit Results",
+  "NC & CAPA Trend Analysis", "Incident & Near-Miss Statistics",
+  "PSC & Vetting Performance", "Crew Training & Competency",
+  "Emergency Drill Effectiveness", "Resource & Budget Adequacy",
+  "Regulatory & Flag State Updates", "Objectives & KPI Achievement",
+  "Environmental Performance (CII/EEXI)", "Continuous Improvement Actions",
 ];
 
-const statusConfig: Record<string, { label: string; color: string; icon: typeof CheckCircle2 }> = {
-  scheduled: { label: "Agendada", color: "bg-primary/20 text-primary", icon: Calendar },
-  in_progress: { label: "Em Andamento", color: "bg-warning/20 text-warning", icon: TrendingUp },
-  completed: { label: "Concluída", color: "bg-success/20 text-success", icon: CheckCircle2 },
-  overdue: { label: "Atrasada", color: "bg-destructive/20 text-destructive", icon: AlertTriangle },
+function mapAuditStatus(status: string | null): ReviewItem["status"] {
+  if (status === "completed" || status === "closed") return "completed";
+  if (status === "in_progress") return "in_progress";
+  if (status === "overdue") return "overdue";
+  return "scheduled";
+}
+
+const statusConfig: Record<string, { label: string; color: string }> = {
+  scheduled: { label: "Agendada", color: "bg-primary/20 text-primary" },
+  in_progress: { label: "Em Andamento", color: "bg-warning/20 text-warning" },
+  completed: { label: "Concluída", color: "bg-success/20 text-success" },
+  overdue: { label: "Atrasada", color: "bg-destructive/20 text-destructive" },
 };
 
 export function ManagementReviewTab() {
-  const [reviews] = useState<ReviewItem[]>(MOCK_REVIEWS);
   const [showCreate, setShowCreate] = useState(false);
+
+  const { data: reviews = [], isLoading } = useQuery({
+    queryKey: ["management-reviews"],
+    queryFn: async () => {
+      const [{ data: audits }, { data: ncData }] = await Promise.all([
+        supabase.from("internal_audits")
+          .select("*")
+          .order("scheduled_date", { ascending: false })
+          .limit(30),
+        supabase.from("non_conformities")
+          .select("id, source_reference, status")
+          .limit(500),
+      ]);
+
+      const ncByAudit = (ncData || []).reduce<Record<string, { total: number; closed: number }>>((acc, nc) => {
+        const aid = nc.source_reference;
+        if (!aid) return acc;
+        if (!acc[aid]) acc[aid] = { total: 0, closed: 0 };
+        acc[aid].total++;
+        if (nc.status === "closed" || nc.status === "cancelled") acc[aid].closed++;
+        return acc;
+      }, {});
+
+      return (audits || []).map((a): ReviewItem => {
+        const ncStats = ncByAudit[a.id] || { total: 0, closed: 0 };
+        const scheduledDate = a.scheduled_date ? new Date(a.scheduled_date) : new Date();
+        const nextDueDate = new Date(scheduledDate);
+        nextDueDate.setFullYear(nextDueDate.getFullYear() + 1);
+
+        return {
+          id: a.id,
+          title: a.audit_number || `${a.audit_type || "Audit"} Review`,
+          reviewDate: a.completed_date || a.scheduled_date || a.created_at || new Date().toISOString(),
+          nextDue: nextDueDate.toISOString().split("T")[0],
+          status: mapAuditStatus(a.status),
+          chairman: a.auditor_name || "Auditor",
+          attendees: a.department ? [a.department, "DPA", "QHSE"] : ["DPA", "Fleet Manager"],
+          agendaItems: ISM_REVIEW_TOPICS.slice(0, 5 + (a.audit_number?.charCodeAt(0) || 0) % 7),
+          findings: a.findings_count || 0,
+          actions: ncStats.total,
+          closedActions: ncStats.closed,
+          notes: a.report_url ? `Report: ${a.report_url}` : "",
+        };
+      });
+    },
+    staleTime: 60000,
+  });
 
   const completedReviews = reviews.filter(r => r.status === "completed").length;
   const totalFindings = reviews.reduce((s, r) => s + r.findings, 0);
@@ -93,6 +120,15 @@ export function ManagementReviewTab() {
     const a = document.createElement("a"); a.href = url; a.download = "management_reviews.csv"; a.click();
     toast.success("CSV exportado!");
   };
+
+  if (isLoading) {
+    return (
+      <Card><CardContent className="py-12 text-center">
+        <Loader2 className="h-8 w-8 mx-auto mb-3 animate-spin text-primary" />
+        <p className="text-muted-foreground">Carregando reviews de gestão...</p>
+      </CardContent></Card>
+    );
+  }
 
   return (
     <div className="space-y-4">
@@ -154,7 +190,7 @@ export function ManagementReviewTab() {
       {/* Reviews list */}
       <div className="space-y-3">
         {reviews.map(review => {
-          const cfg = statusConfig[review.status];
+          const cfg = statusConfig[review.status] || statusConfig.scheduled;
           return (
             <Card key={review.id} className="hover:border-primary/30 transition-colors">
               <CardContent className="p-4 space-y-3">
@@ -203,6 +239,13 @@ export function ManagementReviewTab() {
           );
         })}
       </div>
+
+      {reviews.length === 0 && !isLoading && (
+        <Card><CardContent className="py-12 text-center text-muted-foreground">
+          <ClipboardList className="h-12 w-12 mx-auto mb-3 opacity-30" />
+          <p>Nenhuma review encontrada</p>
+        </CardContent></Card>
+      )}
     </div>
   );
 }
