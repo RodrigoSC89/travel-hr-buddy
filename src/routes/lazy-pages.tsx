@@ -108,6 +108,7 @@ export const ExportCenterPage = lazy(() => import("@/pages/ExportCenterPage"));
 // AUDITORIAS & COMPLIANCE
 // ============================================
 export const PEODP = lazy(() => import("@/pages/PEODP"));
+export const LVSAceitacaoPetrobras = lazy(() => import("@/pages/LVSAceitacaoPetrobras"));
 export const SGSO = lazy(() => import("@/pages/SGSO"));
 export const SGSOReportPage = lazy(() => import("@/pages/SGSOReportPage"));
 export const PreOVIDInspection = lazy(() => import("@/pages/PreOVIDInspection"));

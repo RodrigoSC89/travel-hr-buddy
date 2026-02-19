@@ -173,6 +173,7 @@ export const AppRoutes = () => (
       {/* ======== AUDITORIAS & COMPLIANCE ======== */}
       <Route path="/audit-ai-chat" element={<Pages.AuditAIChatPage />} />
       <Route path="/peo-dp" element={<Pages.PEODP />} />
+      <Route path="/lvs-aceitacao-petrobras" element={<Pages.LVSAceitacaoPetrobras />} />
       <Route path="/sgso" element={<Pages.SGSO />} />
       <Route path="/sgso/report" element={<Pages.SGSOReportPage />} />
       <Route path="/pre-ovid" element={<Pages.PreOVIDInspection />} />
