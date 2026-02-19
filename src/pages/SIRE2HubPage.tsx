@@ -11,7 +11,8 @@ import { Card, CardContent, CardHeader, CardTitle } from '@/components/ui/card';
 import { Badge } from '@/components/ui/badge';
 import { Button } from '@/components/ui/button';
 import { Progress } from '@/components/ui/progress';
-import { Shield, ClipboardCheck, AlertTriangle, Calendar, Eye, Plus, FileText, TrendingUp } from 'lucide-react';
+import { Shield, ClipboardCheck, AlertTriangle, Calendar, Eye, Plus, FileText, TrendingUp, Target } from 'lucide-react';
+import { SIREMockSimulator } from '@/components/compliance/SIREMockSimulator';
 import { supabase } from '@/integrations/supabase/client';
 import { useQuery } from '@tanstack/react-query';
 
@@ -103,6 +104,7 @@ export default function SIRE2HubPage() {
             <TabsTrigger value="inspections">Inspections</TabsTrigger>
             <TabsTrigger value="chapters">13 Chapters</TabsTrigger>
             <TabsTrigger value="findings">Findings & CAPA</TabsTrigger>
+            <TabsTrigger value="mock-simulator"><Target className="h-4 w-4 mr-1" />Mock Simulator</TabsTrigger>
           </TabsList>
 
           <TabsContent value="inspections" className="space-y-4">
@@ -225,6 +227,10 @@ export default function SIRE2HubPage() {
                 </table>
               </div>
             )}
+          </TabsContent>
+
+          <TabsContent value="mock-simulator">
+            <SIREMockSimulator />
           </TabsContent>
         </Tabs>
       </motion.div>
