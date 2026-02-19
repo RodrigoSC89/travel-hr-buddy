@@ -32,7 +32,8 @@ interface ReviewItem {
   notes: string;
 }
 
-const MOCK_REVIEWS: ReviewItem[] = [
+/** Seed data — used as fallback until ISM management review records are populated */
+const SEED_REVIEWS: ReviewItem[] = [
   {
     id: "1", title: "Annual SMS Review 2025", reviewDate: "2025-01-15", nextDue: "2026-01-15",
     status: "completed", chairman: "Capt. J. Silva", attendees: ["DPA", "Fleet Manager", "QHSE Manager", "Technical Superintendent"],
@@ -76,7 +77,7 @@ const statusConfig: Record<string, { label: string; color: string; icon: typeof 
 };
 
 export function ManagementReviewTab() {
-  const [reviews] = useState<ReviewItem[]>(MOCK_REVIEWS);
+  const [reviews] = useState<ReviewItem[]>(SEED_REVIEWS);
   const [showCreate, setShowCreate] = useState(false);
 
   const completedReviews = reviews.filter(r => r.status === "completed").length;

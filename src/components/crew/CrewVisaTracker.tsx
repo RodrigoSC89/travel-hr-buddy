@@ -32,7 +32,8 @@ interface CrewVisa {
   notes?: string;
 }
 
-const MOCK_VISAS: CrewVisa[] = [
+/** Seed data — used as fallback until Supabase visa tracking table is populated */
+const SEED_VISAS: CrewVisa[] = [
   { id: "v1", crewName: "João Silva", rank: "Master", nationality: "Brazilian", documentType: "passport", documentNumber: "FX****321", issuingCountry: "Brazil", issueDate: "2024-03-15", expiryDate: "2034-03-14", status: "valid", daysRemaining: 2945 },
   { id: "v2", crewName: "João Silva", rank: "Master", nationality: "Brazilian", documentType: "c1d_visa", documentNumber: "US****789", issuingCountry: "USA", issueDate: "2024-06-01", expiryDate: "2026-06-01", status: "expiring", daysRemaining: 102, nextPort: "Houston" },
   { id: "v3", crewName: "Raj Patel", rank: "Chief Engineer", nationality: "Indian", documentType: "seaman_book", documentNumber: "IN****456", issuingCountry: "India", issueDate: "2023-01-10", expiryDate: "2026-01-09", status: "expired", daysRemaining: -41 },
@@ -55,7 +56,7 @@ const DOC_TYPE_LABELS: Record<string, string> = {
 };
 
 export function CrewVisaTracker() {
-  const [visas] = useState<CrewVisa[]>(MOCK_VISAS);
+  const [visas] = useState<CrewVisa[]>(SEED_VISAS);
   const [searchQuery, setSearchQuery] = useState("");
   const [filterStatus, setFilterStatus] = useState("all");
   const [filterDocType, setFilterDocType] = useState("all");
