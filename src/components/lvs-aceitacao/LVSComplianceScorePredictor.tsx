@@ -53,13 +53,18 @@ const flattenItems = (section: Section): LVItem[] =>
 
 const generateHistoricalTrend = (currentScore: number) => {
   const points = [];
-  let score = Math.max(15, currentScore - 35);
+  const startScore = Math.max(15, currentScore - 35);
+  const range = currentScore - startScore;
   for (let i = 6; i >= 0; i--) {
-    score = Math.min(100, score + Math.random() * 8 - 1);
+    const progress = (6 - i) / 6;
+    // Deterministic easing curve with sine variation
+    const eased = progress * progress; // quadratic ease-in
+    const wave = Math.sin(progress * Math.PI) * 3;
+    const score = Math.min(100, Math.round(startScore + range * eased + wave));
     points.push({
       label: i === 0 ? "Hoje" : `${i * 5}d atrás`,
-      score: Math.round(score),
-      benchmark: 75 + Math.random() * 5
+      score,
+      benchmark: 75 + (i % 3) // deterministic slight variation
     });
   }
   points[points.length - 1].score = currentScore;

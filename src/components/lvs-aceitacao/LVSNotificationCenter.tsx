@@ -49,7 +49,7 @@ function generateNotifications(): LVSNotification[] {
       title: `Item Rejeitado: ${item.ref}`,
       description: `"${item.question.substring(0, 80)}..." na seção ${item.sectionCode} — ${item.sectionTitle}`,
       section: item.sectionCode,
-      timestamp: new Date(now.getTime() - Math.random() * 86400000 * 3),
+      timestamp: new Date(now.getTime() - (idx + 1) * 3600000 * 8), // deterministic: 8h apart
       isRead: false,
       actionLabel: "Ver Item",
     });
@@ -65,14 +65,14 @@ function generateNotifications(): LVSNotification[] {
       title: `Pendência: ${item.ref}`,
       description: `${item.pendency} — Seção ${item.sectionCode}`,
       section: item.sectionCode,
-      timestamp: new Date(now.getTime() - Math.random() * 86400000 * 5),
-      isRead: Math.random() > 0.5,
+      timestamp: new Date(now.getTime() - (idx + 1) * 3600000 * 12), // deterministic: 12h apart
+      isRead: idx % 2 === 0, // deterministic alternating
       actionLabel: "Resolver",
     });
   });
 
   // Low score sections → warning
-  ALL_LVS_SECTIONS.forEach(section => {
+  ALL_LVS_SECTIONS.forEach((section, sIdx) => {
     const items = section.subsections.flatMap(ss => ss.items);
     const approved = items.filter(i => i.status === "approved").length;
     const score = items.length > 0 ? Math.round((approved / items.length) * 100) : 0;
@@ -84,7 +84,7 @@ function generateNotifications(): LVSNotification[] {
         title: `Score Baixo: ${section.code} ${section.title}`,
         description: `Apenas ${score}% de conformidade (${approved}/${items.length} itens aprovados)`,
         section: section.code,
-        timestamp: new Date(now.getTime() - Math.random() * 86400000),
+        timestamp: new Date(now.getTime() - (sIdx + 1) * 3600000 * 4), // deterministic: 4h apart
         isRead: false,
         actionLabel: "Analisar",
       });

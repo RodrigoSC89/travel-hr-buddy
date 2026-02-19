@@ -74,7 +74,9 @@ const useVesselKPIs = () => {
         const activeCrew = vCrew.filter(c => c.status === "active").length;
         const pmsEfficiency = totalMaint > 0 ? Math.round((completedMaint / totalMaint) * 100) : 100;
         const completedVoyages = vVoyages.filter(vg => vg.status === "completed").length;
-        const ciiValue = v.eexi_attained ? parseFloat(String(v.eexi_attained)) : Math.random() * 12 + 4;
+        // Deterministic CII fallback based on vessel GT
+        const gtBased = v.gross_tonnage ? (Number(v.gross_tonnage) % 100) / 10 + 4 : 8;
+        const ciiValue = v.eexi_attained ? parseFloat(String(v.eexi_attained)) : gtBased;
         const ciiRating = getCIIRating(ciiValue);
 
         return {

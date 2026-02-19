@@ -1981,6 +1981,54 @@ const SIDE_EFFECTS: Record<string, SideEffectFn[]> = {
     async () => { /* High-frequency event — no side-effect, handled by cache invalidation only */ },
   ],
 
+  // ═══════════════════════════════════════════════════════════
+  // NEW CROSS-MODULE FLOWS (PATCH: Complete Integration)
+  // ═══════════════════════════════════════════════════════════
+
+  // POOL SETTLEMENTS → VOYAGE P&L + FINANCE
+  'finance.pool.settlement_created': [
+    async (event) => {
+      const p = event.payload as Record<string, unknown>;
+      const amount = Number(p.amount ?? p.settlement_amount ?? 0);
+      if (amount > 0) {
+        await safeInsert('expenses', {
+          description: `Pool Settlement: ${p.pool_name ?? 'Pool'} - Período ${p.period ?? 'N/A'}`,
+          amount, category: 'pool_settlement', status: 'approved',
+          vessel_id: p.vessel_id || null,
+          reference_id: String(p.id ?? ''), reference_type: 'pool_settlement',
+        });
+      }
+      await safeInsert('soc_alerts', {
+        vessel_id: p.vessel_id || null, alert_type: 'pool_settlement',
+        severity: 'medium', title: `Pool Settlement: ${p.pool_name ?? 'Pool'}`,
+        description: `Liquidação de pool processada. Valor: $${amount.toLocaleString()}. Verificar lançamento contábil.`,
+        status: 'active',
+      });
+    },
+  ],
+
+  // NOON REPORTS → FLEET PERFORMANCE + BUNKER + EMISSIONS
+  'operations.noon.report_created': [
+    async (event) => {
+      const p = event.payload as Record<string, unknown>;
+      if (p.vessel_id && (p.latitude || p.longitude)) {
+        await safeUpdate('vessels', {
+          current_latitude: p.latitude ?? null,
+          current_longitude: p.longitude ?? null,
+        }, { id: String(p.vessel_id) });
+      }
+      const consumption = Number(p.fuel_consumption ?? p.hfo_consumption ?? 0);
+      if (consumption > 50) {
+        await safeInsert('soc_alerts', {
+          vessel_id: p.vessel_id || null, alert_type: 'high_fuel_consumption',
+          severity: 'medium', title: `Consumo elevado: ${consumption}mt/dia`,
+          description: `Noon report registrou consumo acima do esperado. Verificar performance do casco.`,
+          status: 'active',
+        });
+      }
+    },
+  ],
+
 };
 
 // ═══════════════════════════════════════════════════════════

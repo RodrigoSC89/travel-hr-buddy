@@ -181,6 +181,9 @@ export const EVENT_TYPES = {
   'operations.cargo.updated': 'operations.cargo.updated',
   'operations.bunker.created': 'operations.bunker.created',
   'operations.ballast.created': 'operations.ballast.created',
+  'operations.noon.report_created': 'operations.noon.report_created',
+  // Finance expanded
+  'finance.pool.settlement_created': 'finance.pool.settlement_created',
   // Communication
   'comms.message.sent': 'comms.message.sent',
   'comms.notification.created': 'comms.notification.created',

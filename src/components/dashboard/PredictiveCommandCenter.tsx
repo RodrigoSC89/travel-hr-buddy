@@ -131,13 +131,15 @@ export default function PredictiveCommandCenter() {
 
   // Generate sparkline data based on predictions
   const sparklineData = useMemo(() => {
-    return predictions.map(p => {
+    return predictions.map((p, pIdx) => {
       const base = p.current;
       const target = p.predicted;
-      const noise = () => (Math.random() - 0.5) * (base * 0.1);
+      // Deterministic pseudo-variation based on index
       return Array.from({ length: 10 }, (_, i) => {
-        if (i < 7) return Math.max(0, base + noise() + (i * (target - base)) / 15);
-        return Math.max(0, base + (target - base) * ((i - 4) / 6) + noise());
+        const seed = ((pIdx + 1) * (i + 1) * 7) % 11 - 5; // -5 to 5 deterministic
+        const variation = seed * (base * 0.02);
+        if (i < 7) return Math.max(0, base + variation + (i * (target - base)) / 15);
+        return Math.max(0, base + (target - base) * ((i - 4) / 6) + variation);
       });
     });
   }, [predictions]);
