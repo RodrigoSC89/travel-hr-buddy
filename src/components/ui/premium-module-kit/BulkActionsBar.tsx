@@ -76,7 +76,6 @@ export const BulkActionsBar = memo(({
           variant="ghost"
           className="h-7 w-7 text-background/60 hover:text-background hover:bg-background/10"
           onClick={onClearSelection}
-          aria-label="Limpar seleção"
         >
           <X className="h-3.5 w-3.5" />
         </Button>

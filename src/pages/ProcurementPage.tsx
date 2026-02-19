@@ -1,6 +1,6 @@
 /**
  * Procurement Hub - vs ShipServ
- * Complete procurement suite: RFQ workflow, supplier analytics, comparison matrix, smart catalog
+ * Complete procurement suite: RFQ workflow, supplier analytics, comparison matrix
  */
 import { useState } from "react";
 import { motion } from "framer-motion";
@@ -9,8 +9,7 @@ import { staggerContainer, fadeUp } from "@/lib/animations/motion-variants";
 import { ProcurementWorkflow } from "@/components/operations/ProcurementWorkflow";
 import { RFQComparisonMatrix } from "@/components/procurement/RFQComparisonMatrix";
 import { SupplierPerformanceDashboard } from "@/components/procurement/SupplierPerformanceDashboard";
-import { SmartSupplierCatalog } from "@/components/procurement/SmartSupplierCatalog";
-import { ShoppingCart, Scale, TrendingUp, Package } from "lucide-react";
+import { ShoppingCart, Scale, TrendingUp } from "lucide-react";
 
 export default function ProcurementPage() {
   const [activeTab, setActiveTab] = useState("workflow");
@@ -22,12 +21,12 @@ export default function ProcurementPage() {
           <ShoppingCart className="h-6 w-6 text-primary" />
           Procurement Center
         </h1>
-        <p className="text-muted-foreground">RFQ Workflow, Supplier Analytics, Smart Catalog & Quotation Comparison — surpassing ShipServ</p>
+        <p className="text-muted-foreground">RFQ Workflow, Supplier Analytics & Quotation Comparison — surpassing ShipServ</p>
       </motion.div>
 
       <motion.div variants={fadeUp}>
         <Tabs value={activeTab} onValueChange={setActiveTab}>
-          <TabsList className="grid w-full max-w-2xl grid-cols-4">
+          <TabsList className="grid w-full max-w-lg grid-cols-3">
             <TabsTrigger value="workflow" className="gap-1.5">
               <ShoppingCart className="h-4 w-4" /> Workflow
             </TabsTrigger>
@@ -36,9 +35,6 @@ export default function ProcurementPage() {
             </TabsTrigger>
             <TabsTrigger value="suppliers" className="gap-1.5">
               <TrendingUp className="h-4 w-4" /> Suppliers
-            </TabsTrigger>
-            <TabsTrigger value="catalog" className="gap-1.5">
-              <Package className="h-4 w-4" /> Catalog
             </TabsTrigger>
           </TabsList>
 
@@ -52,10 +48,6 @@ export default function ProcurementPage() {
 
           <TabsContent value="suppliers" className="mt-4">
             <SupplierPerformanceDashboard />
-          </TabsContent>
-
-          <TabsContent value="catalog" className="mt-4">
-            <SmartSupplierCatalog />
           </TabsContent>
         </Tabs>
       </motion.div>

@@ -42,7 +42,7 @@ describe("Sensitive Data Storage Policy", () => {
       }
     }
     
-    expect(violations.length).toBeLessThanOrEqual(1);
+    expect(violations).toHaveLength(0);
   });
 });
 

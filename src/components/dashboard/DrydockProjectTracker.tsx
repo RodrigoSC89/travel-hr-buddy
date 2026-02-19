@@ -194,7 +194,7 @@ export function DrydockProjectTracker() {
                       <Badge variant="outline" className="text-xs bg-destructive/10 text-destructive"><AlertTriangle className="h-3 w-3 mr-1" />{Math.abs(proj.daysRemaining)}d atraso</Badge>
                     ) : null}
                     {proj.status === "completed" && <Badge variant="outline" className="text-xs bg-success/10 text-success"><CheckCircle className="h-3 w-3 mr-1" />Concluído</Badge>}
-                    <Button variant="ghost" size="icon" className="h-7 w-7" aria-label="Ver detalhes do projeto"><Eye className="h-4 w-4" /></Button>
+                    <Button variant="ghost" size="icon" className="h-7 w-7"><Eye className="h-4 w-4" /></Button>
                   </div>
                 </div>
                 <div className="space-y-1">

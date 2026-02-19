@@ -231,7 +231,7 @@ export function GeofencingTab() {
                 <div className="flex items-center gap-2 ml-4">
                   <Switch checked={zone.active} onCheckedChange={() => toggleZone(zone.id)} />
                   {zone.id.startsWith("custom") && (
-                    <Button variant="ghost" size="icon" onClick={() => deleteZone(zone.id)} aria-label="Excluir zona">
+                    <Button variant="ghost" size="icon" onClick={() => deleteZone(zone.id)}>
                       <Trash2 className="h-4 w-4 text-muted-foreground" />
                     </Button>
                   )}

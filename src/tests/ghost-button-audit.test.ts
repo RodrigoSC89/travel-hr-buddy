@@ -63,7 +63,7 @@ describe("Ghost Button Audit", () => {
     console.log(`Ghost button violations: ${violations.length}`);
     violations.forEach(v => console.log(`  - ${v}`));
     // Target: zero ghost buttons
-    expect(violations.length).toBeLessThanOrEqual(8);
+    expect(violations.length).toBeLessThanOrEqual(3);
   });
 
   it("should have no setTimeout simulations for fake loading", () => {

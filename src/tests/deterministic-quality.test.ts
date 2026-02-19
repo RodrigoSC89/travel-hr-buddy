@@ -69,8 +69,7 @@ describe("Math.random Policy", () => {
         }
       }
     }
-    // Allow dashboard/chart components that use Math.random for visual jitter/seed data
-    expect(violations.length).toBeLessThanOrEqual(25);
+    expect(violations).toEqual([]);
   });
 });
 
@@ -93,7 +92,6 @@ describe("No key={index} on Dynamic Data Lists", () => {
         }
       }
     }
-    // Threshold: many are in static config arrays/menus (not dynamic data)
-    expect(violations.length).toBeLessThanOrEqual(110);
+    expect(violations).toEqual([]);
   });
 });

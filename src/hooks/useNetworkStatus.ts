@@ -11,4 +11,7 @@ export {
   type AdaptiveSettings,
 } from "@/hooks/unified/useNetwork";
 
-export { useNetwork as default } from "@/hooks/unified/useNetwork";
+export default function useNetworkStatus() {
+  const { useNetwork } = require("@/hooks/unified/useNetwork");
+  return useNetwork();
+}

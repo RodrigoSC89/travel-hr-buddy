@@ -77,34 +77,15 @@
   </head>
 
   <body>
-    <!-- CRITICAL: Pre-script error handler - catches module import failures -->
-    <script>
-      window.__bootErrors = [];
-      window.onerror = function(msg, src, line, col, err) {
-        window.__bootErrors.push({msg: msg, src: src, err: err && err.message});
-        console.error('[BOOT ERROR]', msg, src, line);
-        var loader = document.getElementById('initial-loader');
-        if (loader) {
-          loader.innerHTML = '<div style="text-align:center;padding:20px;max-width:500px;"><p style="color:#f87171;font-size:16px;font-family:system-ui;margin-bottom:8px;">Erro ao carregar aplicação</p><p style="color:#94a3b8;font-size:12px;margin-bottom:12px;word-break:break-all;">' + (msg || 'Erro desconhecido') + '</p><button onclick="(async function(){try{if(\'caches\' in window){var k=await caches.keys();await Promise.all(k.map(function(c){return caches.delete(c)}))}if(\'serviceWorker\' in navigator){var r=await navigator.serviceWorker.getRegistrations();await Promise.all(r.map(function(s){return s.unregister()}))}localStorage.clear();sessionStorage.clear()}catch(e){}location.href=location.origin+\'/?_sw=\'+Date.now()})()" style="padding:10px 24px;background:#3b82f6;color:#fff;border:none;border-radius:8px;cursor:pointer;font-size:14px;font-family:system-ui;">Limpar cache e recarregar</button></div>';
-        }
-        return true;
-      };
-      window.addEventListener('unhandledrejection', function(e) {
-        var msg = e.reason && e.reason.message ? e.reason.message : String(e.reason);
-        console.error('[BOOT REJECTION]', msg);
-        window.__bootErrors.push({msg: msg, type: 'rejection'});
-      });
-    </script>
-
-    <!-- Initial loader - removed by React on mount -->
-    <div id="initial-loader" style="position:fixed;inset:0;display:flex;flex-direction:column;align-items:center;justify-content:center;background:#0f172a;z-index:9999;">
-      <svg width="48" height="48" viewBox="0 0 24 24" fill="none" stroke="#3b82f6" stroke-width="2" style="animation:spin .8s linear infinite;">
+    <!-- Initial loader - removed by React on mount. Uses contain:strict for layout isolation (prevents CLS) -->
+    <div id="initial-loader" style="position:fixed;inset:0;display:flex;flex-direction:column;align-items:center;justify-content:center;background:#0f172a;z-index:9999;contain:strict;content-visibility:auto;">
+      <svg width="48" height="48" viewBox="0 0 24 24" fill="none" stroke="#3b82f6" stroke-width="2" style="animation:spin .8s linear infinite;will-change:transform;">
         <circle cx="12" cy="12" r="10" stroke-opacity="0.2"/>
         <path d="M12 2a10 10 0 0 1 10 10" stroke-linecap="round"/>
       </svg>
       <p style="color:#94a3b8;margin-top:12px;font-family:system-ui,sans-serif;font-size:14px;">Carregando...</p>
     </div>
-    <style>@keyframes spin{to{transform:rotate(360deg)}}body{overflow-x:hidden;}</style>
+    <style>@keyframes spin{to{transform:rotate(360deg)}}#initial-loader{will-change:opacity;}body{overflow-x:hidden;}</style>
     
     <!-- Skip to content link for accessibility -->
     <a href="#main-content" class="sr-only focus:not-sr-only focus:absolute focus:z-[10000] focus:top-2 focus:left-2 focus:px-4 focus:py-2 focus:bg-primary focus:text-primary-foreground focus:rounded-md focus:text-sm" style="position:absolute;left:-9999px;">
@@ -113,20 +94,12 @@
     <div id="root"></div>
     <script type="module" src="/src/main.tsx"></script>
     
-    <!-- Fallback: if React fails to mount after 15s, show recovery UI with error details -->
+    <!-- Fallback: remove loader after 10s if React fails to mount -->
     <script>
       setTimeout(function() {
-        var root = document.getElementById('root');
         var loader = document.getElementById('initial-loader');
-        // Only show fallback if root is empty (React didn't mount)
-        if (loader && root && (!root.hasChildNodes() || root.innerHTML.trim() === '')) {
-          var errors = window.__bootErrors || [];
-          var errorText = errors.length > 0 
-            ? errors.map(function(e) { return e.msg; }).join(' | ') 
-            : 'React não montou (sem erros capturados)';
-          loader.innerHTML = '<div style="text-align:center;padding:20px;max-width:500px;"><p style="color:#f87171;font-size:16px;font-family:system-ui;margin-bottom:8px;">O aplicativo não carregou corretamente.</p><p style="color:#64748b;font-size:11px;margin-bottom:12px;word-break:break-all;max-height:60px;overflow:auto;">' + errorText + '</p><button onclick="(async function(){try{if(\'caches\' in window){var k=await caches.keys();await Promise.all(k.map(function(c){return caches.delete(c)}))}if(\'serviceWorker\' in navigator){var r=await navigator.serviceWorker.getRegistrations();await Promise.all(r.map(function(s){return s.unregister()}))}localStorage.clear();sessionStorage.clear()}catch(e){}location.href=location.origin+\'/?_sw=\'+Date.now()})()" style="padding:10px 24px;background:#3b82f6;color:#fff;border:none;border-radius:8px;cursor:pointer;font-size:14px;font-family:system-ui;">Limpar cache e recarregar</button></div>';
-        }
-      }, 15000);
+        if (loader) loader.remove();
+      }, 10000);
     </script>
   </body>
 </html>

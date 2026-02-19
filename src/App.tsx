@@ -2,6 +2,10 @@
  * App.tsx - Clean entry point with providers only
  * All routes extracted to src/routes/
  */
+/**
+ * App.tsx - Clean entry point with providers only
+ * All routes extracted to src/routes/
+ */
 import * as React from "react";
 import { Suspense, useEffect } from "react";
 import { BrowserRouter as Router } from "react-router-dom";
@@ -62,16 +66,6 @@ const queryClient = new QueryClient({
 });
 
 function App() {
-  // Remove the initial HTML loader now that React has mounted
-  useEffect(() => {
-    const loader = document.getElementById('initial-loader');
-    if (loader) {
-      loader.style.opacity = '0';
-      loader.style.transition = 'opacity 0.3s ease-out';
-      setTimeout(() => loader.remove(), 300);
-    }
-  }, []);
-
   // Prefetch critical routes and init offline DB after initial render
   useEffect(() => {
     // Install auto-integration interceptor (makes ALL mutations publish events)

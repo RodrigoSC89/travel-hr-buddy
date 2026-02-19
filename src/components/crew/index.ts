@@ -7,4 +7,3 @@ export { CrewDossierManager } from "./crew-dossier-manager";
 export { CrewManagementHub } from "./CrewManagementHub";
 export { CrewAppraisalSystem } from "./CrewAppraisalSystem";
 export { CrewTravelManager } from "./CrewTravelManager";
-export { FlagStateCertValidator } from "./FlagStateCertValidator";

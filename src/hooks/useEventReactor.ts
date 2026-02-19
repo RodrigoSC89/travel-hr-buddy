@@ -16,7 +16,6 @@ import { supabase } from "@/integrations/supabase/client";
 import { localEventBus, type EventType, type DomainEvent } from "@/lib/events/event-bus";
 import { executeSideEffects } from "@/lib/integration/cross-module-side-effects";
 import { toast } from "sonner";
-import { spaNavigate } from "@/lib/navigation/spa-navigate";
 
 interface EventReaction {
   eventType: string;
@@ -61,7 +60,7 @@ const REACTIONS: EventReaction[] = [
     handler: (event, qc) => {
       toast.info("Viagem Criada", {
         description: "Tracking e Finance notificados",
-        action: { label: "Ver Viagens", onClick: () => spaNavigate('/operations') },
+        action: { label: "Ver Viagens", onClick: () => window.location.href = '/operations' },
       });
       qc.invalidateQueries({ queryKey: ['voyages'] });
       qc.invalidateQueries({ queryKey: ['fleet'] });
@@ -74,7 +73,7 @@ const REACTIONS: EventReaction[] = [
     handler: (_e, qc) => {
       toast.success("Viagem Concluída", {
         description: "P&L calculado → Finance e Fleet atualizados",
-        action: { label: "Ver P&L", onClick: () => spaNavigate('/operations?tab=voyage-pnl') },
+        action: { label: "Ver P&L", onClick: () => window.location.href = '/operations?tab=voyage-pnl' },
       });
       qc.invalidateQueries({ queryKey: ['voyages'] });
       qc.invalidateQueries({ queryKey: ['voyage-pnl'] });
@@ -93,7 +92,7 @@ const REACTIONS: EventReaction[] = [
       const p = event.payload as Record<string, unknown>;
       toast.info("Nova OS Criada", {
         description: `Prioridade: ${p.priority ?? 'normal'} — Procurement e Compliance notificados`,
-        action: { label: "Ver Manutenção", onClick: () => spaNavigate('/maintenance') },
+        action: { label: "Ver Manutenção", onClick: () => window.location.href = '/maintenance' },
       });
       qc.invalidateQueries({ queryKey: ['maintenance'] });
       qc.invalidateQueries({ queryKey: ['work-orders'] });
@@ -108,7 +107,7 @@ const REACTIONS: EventReaction[] = [
     handler: (_e, qc) => {
       toast.info("OS Concluída", {
         description: "Compliance, Procurement e Finance atualizados automaticamente",
-        action: { label: "Ver Compliance", onClick: () => spaNavigate('/compliance') },
+        action: { label: "Ver Compliance", onClick: () => window.location.href = '/compliance' },
       });
       qc.invalidateQueries({ queryKey: ['maintenance'] });
       qc.invalidateQueries({ queryKey: ['work-orders'] });
@@ -163,7 +162,7 @@ const REACTIONS: EventReaction[] = [
     handler: (_e, qc) => {
       toast.warning("Nova Não-Conformidade", {
         description: "Risk Matrix e Action Items atualizados automaticamente",
-        action: { label: "Ver Riscos", onClick: () => spaNavigate('/compliance?tab=risk') },
+        action: { label: "Ver Riscos", onClick: () => window.location.href = '/compliance?tab=risk' },
       });
       qc.invalidateQueries({ queryKey: ['risk'] });
       qc.invalidateQueries({ queryKey: ['findings'] });
@@ -190,7 +189,7 @@ const REACTIONS: EventReaction[] = [
       toast.error("Certificado Expirando", {
         description: `${p.certificate_type ?? 'Certificado'} (${p.days_remaining ?? '?'} dias) — Crew e Rotações bloqueados`,
         duration: 10000,
-        action: { label: "Ver Tripulação", onClick: () => spaNavigate('/workbench?tab=people') },
+        action: { label: "Ver Tripulação", onClick: () => window.location.href = '/workbench?tab=people' },
       });
       qc.invalidateQueries({ queryKey: ['crew'] });
       qc.invalidateQueries({ queryKey: ['certificates'] });
@@ -252,7 +251,7 @@ const REACTIONS: EventReaction[] = [
     handler: (_e, qc) => {
       toast.success("PO Aprovada → Financeiro", {
         description: "Expense criado, Suppliers e Contracts atualizados",
-        action: { label: "Ver Finanças", onClick: () => spaNavigate('/workbench?tab=finance') },
+        action: { label: "Ver Finanças", onClick: () => window.location.href = '/workbench?tab=finance' },
       });
       qc.invalidateQueries({ queryKey: ['finance'] });
       qc.invalidateQueries({ queryKey: ['expenses'] });
@@ -271,7 +270,7 @@ const REACTIONS: EventReaction[] = [
     handler: (_e, qc) => {
       toast.info("Escala Publicada", {
         description: "Validação MLC/STCW em andamento. Vessels e Compliance notificados.",
-        action: { label: "Ver Tripulação", onClick: () => spaNavigate('/workbench?tab=people') },
+        action: { label: "Ver Tripulação", onClick: () => window.location.href = '/workbench?tab=people' },
       });
       qc.invalidateQueries({ queryKey: ['rotations'] });
       qc.invalidateQueries({ queryKey: ['crew'] });
@@ -321,7 +320,7 @@ const REACTIONS: EventReaction[] = [
       const p = event.payload as Record<string, unknown>;
       toast.warning("Alerta de Rastreamento", {
         description: String(p.message ?? `${p.alert_type ?? 'Alerta'} — severity: ${p.severity ?? 'medium'}`),
-        action: { label: "Ver Tracking", onClick: () => spaNavigate('/tracking') },
+        action: { label: "Ver Tracking", onClick: () => window.location.href = '/tracking' },
       });
       qc.invalidateQueries({ queryKey: ['alerts'] });
       qc.invalidateQueries({ queryKey: ['tracking'] });
@@ -379,7 +378,7 @@ const REACTIONS: EventReaction[] = [
     handler: (_e, qc) => {
       toast.info("Nova Sugestão IA", {
         description: "Ação pendente de aprovação humana (HITL)",
-        action: { label: "Ver IA", onClick: () => spaNavigate('/ai-hub') },
+        action: { label: "Ver IA", onClick: () => window.location.href = '/ai-hub' },
       });
       qc.invalidateQueries({ queryKey: ['ai-suggestions'] });
     },
