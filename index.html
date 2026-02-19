@@ -87,60 +87,19 @@
     </div>
     <style>@keyframes spin{to{transform:rotate(360deg)}}#initial-loader{will-change:opacity;}body{overflow-x:hidden;}</style>
     
-    <!-- AGGRESSIVE: Force SW cleanup BEFORE React loads to prevent white screen -->
+    <!-- Cleanup stale SW on first load -->
     <script>
       (function() {
-        var BOOT_KEY = 'nauti_boot_v21';
-        var booted = sessionStorage.getItem(BOOT_KEY);
-        
-        // If we already booted successfully this session, skip cleanup
-        if (booted === 'ok') return;
-        
-        // Mark that we're attempting boot
-        sessionStorage.setItem(BOOT_KEY, 'booting');
-        
-        // Unregister ALL service workers immediately
         if ('serviceWorker' in navigator) {
           navigator.serviceWorker.getRegistrations().then(function(regs) {
             regs.forEach(function(r) { r.unregister(); });
           }).catch(function() {});
         }
-        
-        // Clear ALL caches
         if ('caches' in window) {
           caches.keys().then(function(keys) {
             keys.forEach(function(k) { caches.delete(k); });
           }).catch(function() {});
         }
-        
-        // Detect white screen crash: if React hasn't mounted after 8s, hard reload
-        setTimeout(function() {
-          var root = document.getElementById('root');
-          if (root && root.childNodes.length === 0) {
-            // React failed to mount - white screen detected
-            var reloadCount = parseInt(sessionStorage.getItem('nauti_rescue') || '0', 10);
-            if (reloadCount < 2) {
-              sessionStorage.setItem('nauti_rescue', String(reloadCount + 1));
-              // Clear localStorage auth tokens that might be corrupted
-              try {
-                Object.keys(localStorage).filter(function(k) {
-                  return k.indexOf('supabase') !== -1 || k.indexOf('sb-') !== -1;
-                }).forEach(function(k) { localStorage.removeItem(k); });
-              } catch(e) {}
-              window.location.reload();
-            } else {
-              // After 2 failed attempts, show recovery UI
-              sessionStorage.removeItem('nauti_rescue');
-              root.innerHTML = '<div style="display:flex;align-items:center;justify-content:center;min-height:100vh;background:#0f172a;color:#fff;font-family:system-ui;flex-direction:column;"><h2 style="margin-bottom:8px;">Nauti One</h2><p style="color:#94a3b8;margin-bottom:16px;">Erro ao carregar. Limpando cache...</p><button onclick="localStorage.clear();sessionStorage.clear();location.reload();" style="padding:10px 24px;background:#3b82f6;color:#fff;border:none;border-radius:8px;cursor:pointer;font-size:16px;">Recarregar Aplicação</button></div>';
-              var loader = document.getElementById('initial-loader');
-              if (loader) loader.remove();
-            }
-          } else {
-            // React mounted successfully
-            sessionStorage.setItem(BOOT_KEY, 'ok');
-            sessionStorage.removeItem('nauti_rescue');
-          }
-        }, 8000);
       })();
     </script>
     
