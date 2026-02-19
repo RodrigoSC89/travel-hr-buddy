@@ -17,6 +17,10 @@ import {
 import { useNautilusAI } from "@/hooks/useNautilusAI";
 import ReactMarkdown from "react-markdown";
 
+interface LVSDocumentAnalyzerProps {
+  onSaveAnalysis?: (documentName: string, aiResponse: string, mappedItems: number, gaps: number, confidence: number) => Promise<any>;
+}
+
 interface AnalysisResult {
   id: string;
   documentName: string;
@@ -27,7 +31,7 @@ interface AnalysisResult {
   timestamp: string;
 }
 
-export function LVSDocumentAnalyzer() {
+export function LVSDocumentAnalyzer({ onSaveAnalysis }: LVSDocumentAnalyzerProps = {}) {
   const { analyze, isLoading } = useNautilusAI();
   const [documentText, setDocumentText] = useState("");
   const [documentName, setDocumentName] = useState("");
