@@ -222,6 +222,7 @@ export const SIDEBAR_ROUTES: SidebarGroup[] = [
       { label: "10. SGSO ANP", path: "/sgso", icon: Shield, emoji: "⚙️", badge: "17P" },
       { label: "11. Pre-SIRE 2.0", path: "/pre-sire", icon: Ship, emoji: "🔍", badge: "SIRE" },
       { label: "12. TMSA", path: "/tmsa-assessment", icon: BarChart3, emoji: "📈", badge: "OCIMF" },
+      { label: "13. LVS Aceitação RSV", path: "/lvs-aceitacao-petrobras", icon: Ship, emoji: "🚢", badge: "PBR", status: "new" as const },
     ],
   },
 
