@@ -1,6 +1,6 @@
 /**
  * Finance & Procurement AI Dashboard Page
- * Complete financial management with AI-powered features
+ * Complete financial management with AI-powered features + Maritime Accounting
  */
 import React, { useState } from 'react';
 import { Helmet } from 'react-helmet-async';
@@ -8,12 +8,13 @@ import { Tabs, TabsContent, TabsList, TabsTrigger } from '@/components/ui/tabs';
 import { Badge } from '@/components/ui/badge';
 import { 
   DollarSign, Brain, ShoppingCart, FileText, BarChart3,
-  TrendingUp, Sparkles
+  TrendingUp, Sparkles, BookOpen
 } from 'lucide-react';
 import { PredictiveCostDashboard } from '@/modules/finance/components/PredictiveCostDashboard';
 import { IntelligentProcurement } from '@/modules/finance/components/IntelligentProcurement';
 import { InvoiceAutomation } from '@/modules/finance/components/InvoiceAutomation';
 import { BudgetForecastingAI } from '@/modules/finance/components/BudgetForecastingAI';
+import { MaritimeAccountingModule } from '@/components/finance/MaritimeAccountingModule';
 
 export default function FinanceProcurementAIPage() {
   const [activeTab, setActiveTab] = useState('costs');
@@ -41,7 +42,7 @@ export default function FinanceProcurementAIPage() {
                 </Badge>
               </h1>
               <p className="text-muted-foreground">
-                Predição de custos, procurement inteligente e automação de faturas
+                Predição de custos, procurement inteligente, automação de faturas e contabilidade marítima
               </p>
             </div>
           </div>
@@ -59,7 +60,7 @@ export default function FinanceProcurementAIPage() {
 
         {/* Main Tabs */}
         <Tabs value={activeTab} onValueChange={setActiveTab}>
-          <TabsList className="grid w-full grid-cols-4">
+          <TabsList className="grid w-full grid-cols-5">
             <TabsTrigger value="costs" className="flex items-center gap-2">
               <BarChart3 className="h-4 w-4" />
               Predição de Custos
@@ -75,6 +76,10 @@ export default function FinanceProcurementAIPage() {
             <TabsTrigger value="budget" className="flex items-center gap-2">
               <DollarSign className="h-4 w-4" />
               Budget & Forecast
+            </TabsTrigger>
+            <TabsTrigger value="accounting" className="flex items-center gap-2">
+              <BookOpen className="h-4 w-4" />
+              📒 GL/AP/AR
             </TabsTrigger>
           </TabsList>
 
@@ -92,6 +97,10 @@ export default function FinanceProcurementAIPage() {
 
           <TabsContent value="budget" className="mt-6">
             <BudgetForecastingAI />
+          </TabsContent>
+
+          <TabsContent value="accounting" className="mt-6">
+            <MaritimeAccountingModule />
           </TabsContent>
         </Tabs>
       </div>

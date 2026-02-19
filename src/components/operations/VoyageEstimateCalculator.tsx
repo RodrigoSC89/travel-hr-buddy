@@ -4,7 +4,7 @@
  * bunker cost breakdown, CSV export, CO2 estimation
  * v3: Waterfall P&L chart, scenario radar, OPEX sensitivity, multi-port routing
  */
-import React, { useState, useMemo } from "react";
+import React, { useState, useMemo, lazy, Suspense } from "react";
 import { Card, CardContent, CardHeader, CardTitle } from "@/components/ui/card";
 import { Button } from "@/components/ui/button";
 import { Input } from "@/components/ui/input";
@@ -24,6 +24,7 @@ import {
   Cell,
 } from "recharts";
 
+const MarketIntelligencePanel = lazy(() => import("@/components/voyage/MarketIntelligencePanel"));
 interface VoyageScenario {
   id: string;
   name: string;
@@ -193,12 +194,13 @@ export function VoyageEstimateCalculator() {
       </div>
 
       <Tabs value={activeTab} onValueChange={setActiveTab}>
-        <TabsList>
+        <TabsList className="flex-wrap">
           <TabsTrigger value="comparison">Comparison</TabsTrigger>
           <TabsTrigger value="breakdown">Cost Breakdown</TabsTrigger>
           <TabsTrigger value="sensitivity">Sensitivity</TabsTrigger>
           <TabsTrigger value="waterfall">P&L Waterfall</TabsTrigger>
           <TabsTrigger value="radar">Scenario Radar</TabsTrigger>
+          <TabsTrigger value="market">📊 Market Intel</TabsTrigger>
         </TabsList>
 
         <TabsContent value="comparison" className="mt-4 space-y-4">
@@ -521,6 +523,11 @@ export function VoyageEstimateCalculator() {
               })()}
             </CardContent>
           </Card>
+        {/* Market Intelligence Tab */}
+        <TabsContent value="market" className="mt-4">
+          <Suspense fallback={<div className="p-8 text-center text-muted-foreground">Loading Market Intelligence...</div>}>
+            <MarketIntelligencePanel />
+          </Suspense>
         </TabsContent>
       </Tabs>
 
