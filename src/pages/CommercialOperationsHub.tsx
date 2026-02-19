@@ -15,8 +15,9 @@ import { useQuery } from '@tanstack/react-query';
 import { supabase } from '@/integrations/supabase/client';
 import {
   DollarSign, Ship, Anchor, Leaf, BarChart3, Calculator,
-  TrendingUp, Clock, RefreshCw
+  TrendingUp, Clock, RefreshCw, Timer
 } from 'lucide-react';
+import { DemurrageCalculatorTab } from '@/components/operations/DemurrageCalculatorTab';
 import { toast } from 'sonner';
 
 // Existing components
@@ -217,7 +218,7 @@ export default function CommercialOperationsHub() {
       {/* Tabs */}
       <motion.div variants={fadeUp}>
         <Tabs value={activeTab} onValueChange={setActiveTab}>
-          <TabsList className="grid grid-cols-2 md:grid-cols-5 w-full">
+          <TabsList className="grid grid-cols-2 md:grid-cols-6 w-full">
             <TabsTrigger value="voyage-pnl" className="gap-1.5">
               <DollarSign className="h-3.5 w-3.5" /> Voyage P&L
             </TabsTrigger>
@@ -232,6 +233,9 @@ export default function CommercialOperationsHub() {
             </TabsTrigger>
             <TabsTrigger value="tce" className="gap-1.5">
               <BarChart3 className="h-3.5 w-3.5" /> TCE Benchmark
+            </TabsTrigger>
+            <TabsTrigger value="demurrage-calc" className="gap-1.5">
+              <Timer className="h-3.5 w-3.5" /> Demurrage Calc
             </TabsTrigger>
           </TabsList>
 
@@ -322,6 +326,11 @@ export default function CommercialOperationsHub() {
                 )}
               </div>
             )}
+          </TabsContent>
+
+          {/* Demurrage Calculator */}
+          <TabsContent value="demurrage-calc" className="mt-4">
+            <DemurrageCalculatorTab />
           </TabsContent>
         </Tabs>
       </motion.div>
