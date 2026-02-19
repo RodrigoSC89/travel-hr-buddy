@@ -41,7 +41,15 @@ export function CIIRatingDashboard({ vesselId, vesselName }: CIIRatingDashboardP
       const { data, error } = await supabase.functions.invoke("calculate-cii", {
         body: { vesselId },
       });
-      if (error) throw error;
+      if (error) {
+        // Edge function 404 = vessel not found, return null gracefully
+        console.warn("[CII] Edge function error:", error.message);
+        return null;
+      }
+      if (data?.error) {
+        console.warn("[CII] Vessel not found or no data:", data.error);
+        return null;
+      }
       return data as CIIData;
     },
     staleTime: 1000 * 60 * 60,
