@@ -72,85 +72,65 @@ const initializeOptionalFeatures = async () => {
 // ============================================
 const forceUpdateIfNeeded = async () => {
   const SW_VERSION_KEY = 'nautilus_sw_version';
-  const CURRENT_VERSION = 'v16-ios-pwa-ultimate'; // SYNC com public/sw.js
-  const RELOAD_KEY = 'nautilus_reload_count';
-  
+  const CURRENT_VERSION = 'v21-no-stale-js'; // SYNC with public/sw.js
+
   try {
-    // Detectar loop de reload (> 2 reloads em 30 segundos)
-    const reloadCount = parseInt(localStorage.getItem(RELOAD_KEY) || '0', 10);
-    const reloadTime = parseInt(localStorage.getItem(RELOAD_KEY + '_time') || '0', 10);
-    const now = Date.now();
-    
-    if (now - reloadTime < 30000 && reloadCount > 2) {
-      logger.warn('[Boot v16] Reload loop detected! Unregistering ALL service workers...');
-      
-      // Limpar TUDO - SW causando problemas
+    // Always purge ALL caches on version mismatch (prevents stale JS white screen)
+    const storedVersion = localStorage.getItem(SW_VERSION_KEY);
+
+    if (storedVersion !== CURRENT_VERSION) {
+      logger.info('[Boot v21] Version mismatch — purging all caches', { stored: storedVersion, current: CURRENT_VERSION });
+
+      // 1. Delete all Cache API entries
+      if ('caches' in window) {
+        const keys = await caches.keys();
+        await Promise.all(keys.map(k => caches.delete(k)));
+        logger.info('[Boot v21] Caches purged', { count: keys.length });
+      }
+
+      // 2. Force-update any existing SW
       if ('serviceWorker' in navigator) {
         const registrations = await navigator.serviceWorker.getRegistrations();
         for (const reg of registrations) {
-          await reg.unregister();
+          if (reg.waiting) reg.waiting.postMessage({ type: 'SKIP_WAITING' });
+          await reg.update().catch(() => {});
         }
       }
-      
+
+      localStorage.setItem(SW_VERSION_KEY, CURRENT_VERSION);
+    }
+
+    // Reload-loop detection (> 3 reloads in 15s)
+    const RELOAD_KEY = 'nautilus_reload_count';
+    const reloadCount = parseInt(localStorage.getItem(RELOAD_KEY) || '0', 10);
+    const reloadTime = parseInt(localStorage.getItem(RELOAD_KEY + '_t') || '0', 10);
+    const now = Date.now();
+
+    if (now - reloadTime < 15000 && reloadCount > 3) {
+      logger.warn('[Boot v21] Reload loop! Unregistering all SWs');
+      if ('serviceWorker' in navigator) {
+        const regs = await navigator.serviceWorker.getRegistrations();
+        for (const r of regs) await r.unregister();
+      }
       if ('caches' in window) {
         const keys = await caches.keys();
         await Promise.all(keys.map(k => caches.delete(k)));
       }
-      
-      // Limpar tokens de auth corrompidos
-      Object.keys(localStorage)
-        .filter(k => k.includes('supabase') || k.includes('sb-'))
-        .forEach(k => localStorage.removeItem(k));
-      
       localStorage.removeItem(RELOAD_KEY);
-      localStorage.removeItem(RELOAD_KEY + '_time');
-      localStorage.setItem(SW_VERSION_KEY, CURRENT_VERSION);
-      
-      logger.info('[Boot v16] Emergency cleanup complete');
+      localStorage.removeItem(RELOAD_KEY + '_t');
       return true;
     }
-    
-    // Incrementar contador de reload
+
     localStorage.setItem(RELOAD_KEY, String(reloadCount + 1));
-    localStorage.setItem(RELOAD_KEY + '_time', String(now));
-    
-    // Limpar contador após 30 segundos de estabilidade
+    localStorage.setItem(RELOAD_KEY + '_t', String(now));
     setTimeout(() => {
       localStorage.removeItem(RELOAD_KEY);
-      localStorage.removeItem(RELOAD_KEY + '_time');
-    }, 30000);
-    
-    const storedVersion = localStorage.getItem(SW_VERSION_KEY);
-    
-    // Sempre limpar caches se versão diferente
-    if (storedVersion !== CURRENT_VERSION) {
-      logger.info('[Boot v16] Version mismatch, cleaning up...', { stored: storedVersion, current: CURRENT_VERSION });
-      
-      // Limpar TODOS os caches
-      if ('caches' in window) {
-        const keys = await caches.keys();
-        await Promise.all(keys.map(k => caches.delete(k)));
-        logger.info('[Boot v16] Caches cleared', { count: keys.length });
-      }
-      
-      // Atualizar SW se existir
-      if ('serviceWorker' in navigator) {
-        const registrations = await navigator.serviceWorker.getRegistrations();
-        for (const reg of registrations) {
-          if (reg.waiting) {
-            reg.waiting.postMessage({ type: 'SKIP_WAITING' });
-          }
-          await reg.update();
-        }
-      }
-      
-      localStorage.setItem(SW_VERSION_KEY, CURRENT_VERSION);
-      localStorage.removeItem('nautilus_sw_disabled');
-    }
-    
+      localStorage.removeItem(RELOAD_KEY + '_t');
+    }, 15000);
+
     return true;
   } catch (error) {
-    logger.error('[Boot v16] Error during update check', error);
+    logger.error('[Boot v21] Cleanup error', error);
     return true;
   }
 };

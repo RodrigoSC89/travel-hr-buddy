@@ -1,14 +1,14 @@
-// Service Worker Nauti One v20 - Offline-First Maritime PWA
-// ESTRATÉGIA: Push notifications + App Shell caching para offline
-// Cache de navegação com fallback offline para uso marítimo
+// Service Worker Nauti One v21 - WHITE SCREEN FIX
+// STRATEGY: Network-first for ALL navigable content (HTML, JS, CSS)
+// Cache-first ONLY for static assets (images, fonts)
+// This prevents stale JS/CSS after deployments
 
-const SW_VERSION = 'v20-offline-maritime';
-const APP_SHELL_CACHE = 'nauti-app-shell-v20';
-const RUNTIME_CACHE = 'nauti-runtime-v20';
+const SW_VERSION = 'v21-no-stale-js';
+const STATIC_CACHE = 'nauti-static-v21';
+const NAVIGATION_CACHE = 'nauti-nav-v21';
 
-// App shell resources to precache for offline
-const APP_SHELL_RESOURCES = [
-  '/',
+// Only precache truly static, non-code resources
+const PRECACHE_RESOURCES = [
   '/offline.html',
   '/favicon.ico',
   '/favicon.png',
@@ -16,70 +16,57 @@ const APP_SHELL_RESOURCES = [
   '/manifest.json',
 ];
 
-// Instalação - precache app shell
+// Install - precache minimal resources
 self.addEventListener('install', (event) => {
-  console.log(`[SW ${SW_VERSION}] Installing - Caching app shell`);
+  console.log(`[SW ${SW_VERSION}] Installing`);
   event.waitUntil(
-    caches.open(APP_SHELL_CACHE)
-      .then(cache => cache.addAll(APP_SHELL_RESOURCES))
+    caches.open(STATIC_CACHE)
+      .then(cache => cache.addAll(PRECACHE_RESOURCES))
       .then(() => self.skipWaiting())
-      .catch(err => {
-        console.warn(`[SW ${SW_VERSION}] App shell cache failed (non-critical):`, err);
-        self.skipWaiting();
-      })
+      .catch(() => self.skipWaiting())
   );
 });
 
-// Ativação - limpar caches antigos
+// Activate - delete ALL old caches aggressively
 self.addEventListener('activate', (event) => {
-  console.log(`[SW ${SW_VERSION}] Activating`);
+  console.log(`[SW ${SW_VERSION}] Activating - purging old caches`);
   event.waitUntil(
     (async () => {
       const keys = await caches.keys();
       await Promise.all(
         keys
-          .filter(k => k !== APP_SHELL_CACHE && k !== RUNTIME_CACHE)
+          .filter(k => k !== STATIC_CACHE && k !== NAVIGATION_CACHE)
           .map(k => {
-            console.log(`[SW ${SW_VERSION}] Deleting old cache: ${k}`);
+            console.log(`[SW ${SW_VERSION}] Deleting: ${k}`);
             return caches.delete(k);
           })
       );
       await self.clients.claim();
-      
-      const clients = await self.clients.matchAll({ type: 'window' });
-      clients.forEach(client => {
-        client.postMessage({ type: 'SW_UPDATED', version: SW_VERSION, timestamp: Date.now() });
-      });
     })()
   );
 });
 
-// Fetch strategy: Network-first with offline fallback
+// Fetch handler
 self.addEventListener('fetch', (event) => {
   const { request } = event;
-  
-  // Skip non-GET, chrome-extension, and Supabase API calls
+
+  // Skip non-GET, extensions, and API calls
   if (
     request.method !== 'GET' ||
     request.url.includes('chrome-extension') ||
     request.url.includes('supabase.co') ||
     request.url.includes('/rest/') ||
-    request.url.includes('/auth/')
+    request.url.includes('/auth/') ||
+    request.url.includes('/functions/')
   ) return;
 
-  // Navigation requests: network-first with offline.html fallback
+  // ============================================================
+  // NAVIGATION: Network-first, offline.html fallback
+  // ============================================================
   if (request.mode === 'navigate') {
     event.respondWith(
       fetch(request)
-        .then(response => {
-          // Cache successful navigations for offline
-          if (response.ok) {
-            const clone = response.clone();
-            caches.open(RUNTIME_CACHE).then(cache => cache.put(request, clone));
-          }
-          return response;
-        })
-        .catch(() => 
+        .catch(() =>
           caches.match(request)
             .then(cached => cached || caches.match('/offline.html'))
         )
@@ -87,11 +74,31 @@ self.addEventListener('fetch', (event) => {
     return;
   }
 
-  // Static assets: cache-first (fonts, images, css, js)
+  // ============================================================
+  // JS & CSS: ALWAYS network-first (CRITICAL - prevents white screen)
+  // Stale JS/CSS after deploy = broken app = white screen
+  // ============================================================
+  if (request.url.match(/\.(js|css|mjs)(\?.*)?$/)) {
+    event.respondWith(
+      fetch(request)
+        .then(response => {
+          if (response.ok) {
+            const clone = response.clone();
+            caches.open(NAVIGATION_CACHE).then(cache => cache.put(request, clone));
+          }
+          return response;
+        })
+        .catch(() => caches.match(request).then(c => c || new Response('', { status: 503 })))
+    );
+    return;
+  }
+
+  // ============================================================
+  // STATIC ASSETS (images, fonts): Cache-first (safe - content-hashed)
+  // ============================================================
   if (
-    request.url.includes('/assets/') ||
-    request.url.includes('/icons/') ||
-    request.url.match(/\.(woff2?|ttf|otf|png|jpg|svg|ico|css|js)$/)
+    request.url.match(/\.(woff2?|ttf|otf|png|jpg|jpeg|webp|gif|svg|ico|avif)(\?.*)?$/) ||
+    request.url.includes('/icons/')
   ) {
     event.respondWith(
       caches.match(request).then(cached => {
@@ -99,7 +106,7 @@ self.addEventListener('fetch', (event) => {
         return fetch(request).then(response => {
           if (response.ok) {
             const clone = response.clone();
-            caches.open(RUNTIME_CACHE).then(cache => cache.put(request, clone));
+            caches.open(STATIC_CACHE).then(cache => cache.put(request, clone));
           }
           return response;
         }).catch(() => new Response('', { status: 503 }));
@@ -112,47 +119,32 @@ self.addEventListener('fetch', (event) => {
 // ====== MESSAGE HANDLERS ======
 self.addEventListener('message', (event) => {
   const { type } = event.data || {};
-  
+
   if (type === 'SKIP_WAITING') {
     self.skipWaiting();
   }
-  
+
   if (type === 'CLEAR_CACHE' || type === 'CLEAR_ALL_CACHES') {
     caches.keys()
       .then(keys => Promise.all(keys.map(k => caches.delete(k))))
-      .then(() => event.ports[0]?.postMessage({ success: true, version: SW_VERSION }))
+      .then(() => event.ports[0]?.postMessage({ success: true }))
       .catch(err => event.ports[0]?.postMessage({ success: false, error: err.message }));
   }
-  
+
   if (type === 'GET_VERSION') {
     event.ports[0]?.postMessage({ version: SW_VERSION });
   }
-  
+
   if (type === 'UNREGISTER') {
     self.registration.unregister()
-      .then(() => event.ports[0]?.postMessage({ success: true }))
-      .catch(err => event.ports[0]?.postMessage({ success: false, error: err.message }));
-  }
-  
-  if (type === 'FORCE_UPDATE') {
-    self.registration.update()
-      .then(() => event.ports[0]?.postMessage({ success: true }))
-      .catch(() => event.ports[0]?.postMessage({ success: false }));
+      .then(() => event.ports[0]?.postMessage({ success: true }));
   }
 
-  if (type === 'CHECK_UPDATE') {
-    self.registration.update()
-      .then(() => event.ports[0]?.postMessage({ success: true, currentVersion: SW_VERSION }))
-      .catch(err => event.ports[0]?.postMessage({ success: false, error: err.message }));
-  }
-  
   if (type === 'HEALTH_CHECK') {
-    event.ports[0]?.postMessage({ 
-      healthy: true, 
+    event.ports[0]?.postMessage({
+      healthy: true,
       version: SW_VERSION,
       timestamp: Date.now(),
-      cacheEnabled: true,
-      fetchInterceptionEnabled: true,
     });
   }
 });
@@ -188,4 +180,4 @@ self.addEventListener('notificationclick', (event) => {
   );
 });
 
-console.log(`[SW ${SW_VERSION}] Maritime PWA SW loaded - Offline-first + Push notifications`);
+console.log(`[SW ${SW_VERSION}] Loaded - Network-first JS/CSS, push notifications`);
