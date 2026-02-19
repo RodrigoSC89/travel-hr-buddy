@@ -11,7 +11,7 @@ import React, { Suspense, lazy, useState, useMemo, useCallback } from 'react';
 import { useSearchParams } from 'react-router-dom';
 import { Tabs, TabsContent, TabsList, TabsTrigger } from '@/components/ui/tabs';
 import { Badge } from '@/components/ui/badge';
-import { Compass, Anchor, Ship, Map, Target, Package, FileText, Plus, CheckCircle, Wifi, Download, Brain, Building2 } from 'lucide-react';
+import { Compass, Anchor, Ship, Map, Target, Package, FileText, Plus, CheckCircle, Wifi, Download, Brain, Building2, ClipboardCheck } from 'lucide-react';
 import { Skeleton } from '@/components/ui/skeleton';
 import { EnhancedActionBar } from '@/components/ui/world-class/EnhancedActionBar';
 import { WorkflowStatusBar } from '@/components/ui/world-class/WorkflowStatusBar';
@@ -46,6 +46,7 @@ const CrewFatigueCommand = lazy(() => import('@/components/dashboard/CrewFatigue
 const BunkerIntelligence = lazy(() => import('@/components/dashboard/BunkerIntelligence'));
 const CargoUtilizationOptimizer = lazy(() => import('@/components/dashboard/CargoUtilizationOptimizer'));
 const NoonReportAnalytics = lazy(() => import('@/components/dashboard/NoonReportAnalytics'));
+const NoonReportAIValidation = lazy(() => import('@/components/operations/NoonReportAIValidation').then(m => ({ default: m.NoonReportAIValidation })));
 const WeatherRoutingQuickPanel = lazy(() => import('@/components/operations/WeatherRoutingQuickPanel'));
 const LaytimeQuickPanel = lazy(() => import('@/components/operations/LaytimeQuickPanel'));
 const CertificationExpiryTracker = lazy(() => import('@/components/dashboard/CertificationExpiryTracker').then(m => ({ default: m.CertificationExpiryTracker })));
@@ -81,6 +82,7 @@ const tabConfig = [
   { id: 'logistics', label: 'Logistics', icon: Package },
   { id: 'contracts', label: 'Contracts', icon: FileText },
   { id: 'manning', label: 'Manning Agents', icon: Building2 },
+  { id: 'noon-validation', label: 'Noon Report IA', icon: ClipboardCheck },
   { id: 'ai-copilot', label: '🧠 IA Copiloto', icon: Brain },
 ];
 
@@ -439,6 +441,10 @@ export default function OpsMegaHub() {
 
             <TabsContent value="manning" className="mt-0">
               <ManningAgentPortal />
+            </TabsContent>
+
+            <TabsContent value="noon-validation" className="mt-0">
+              <NoonReportAIValidation />
             </TabsContent>
 
             <TabsContent value="ai-copilot" className="mt-0">
