@@ -1,7 +1,7 @@
 /**
- * Procurement Workflow Manager - vs AMOS/TM Master
+ * Procurement Workflow Manager v3 - vs AMOS/TM Master
  * Complete RFQ → PO → Invoice → Delivery pipeline
- * Zero Mock Policy: data from purchase_requisitions & procurement_orders
+ * NEW: Spend Analytics Charts, Dept Distribution, Monthly Trend, Supplier Performance
  */
 import { useState, useMemo } from "react";
 import { motion } from "framer-motion";
@@ -20,12 +20,18 @@ import { Progress } from "@/components/ui/progress";
 import { 
   Package, FileText, DollarSign, Truck, Clock, CheckCircle2, 
   AlertTriangle, Plus, Search, Filter, ArrowRight, BarChart3,
-  Send, Eye, ShoppingCart
+  Send, Eye, ShoppingCart, Download, TrendingUp
 } from "lucide-react";
+import {
+  BarChart, Bar, XAxis, YAxis, CartesianGrid, Tooltip, ResponsiveContainer,
+  PieChart, Pie, Cell, Legend, LineChart, Line
+} from 'recharts';
 import { toast } from "sonner";
 import { useQuery, useMutation, useQueryClient } from "@tanstack/react-query";
 import { supabase } from "@/integrations/supabase/client";
 import { useAuth } from "@/contexts/AuthContext";
+
+const CHART_COLORS = ['hsl(var(--primary))', 'hsl(210,70%,55%)', 'hsl(160,60%,45%)', 'hsl(35,80%,55%)', 'hsl(280,60%,55%)', 'hsl(0,70%,55%)'];
 
 const priorityColors: Record<string, string> = {
   critical: "bg-destructive text-destructive-foreground",
@@ -289,43 +295,162 @@ export function ProcurementWorkflow() {
         </TabsContent>
 
         <TabsContent value="analytics" className="space-y-4">
-          <div className="grid grid-cols-1 md:grid-cols-2 gap-4">
-            <Card>
-              <CardHeader><CardTitle className="text-sm">Spend Summary</CardTitle></CardHeader>
-              <CardContent className="space-y-3">
-                <div className="flex justify-between text-sm p-3 rounded-lg bg-muted/50">
-                  <span>Total Requisitions</span>
-                  <span className="font-bold">{requisitions.length}</span>
+          {(() => {
+            // Department distribution
+            const deptMap: Record<string, number> = {};
+            requisitions.forEach((r: any) => { const d = r.department || 'other'; deptMap[d] = (deptMap[d] || 0) + 1; });
+            const deptData = Object.entries(deptMap).map(([name, value]) => ({ name, value })).sort((a, b) => b.value - a.value);
+
+            // Priority distribution
+            const prioMap: Record<string, number> = {};
+            requisitions.forEach((r: any) => { const p = r.priority || 'routine'; prioMap[p] = (prioMap[p] || 0) + 1; });
+            const prioData = Object.entries(prioMap).map(([name, value]) => ({ name, value }));
+
+            // Supplier spend (from POs)
+            const supplierMap: Record<string, number> = {};
+            orders.forEach((o: any) => { const s = o.supplier_name || 'Unknown'; supplierMap[s] = (supplierMap[s] || 0) + (Number(o.total_amount) || 0); });
+            const supplierData = Object.entries(supplierMap).map(([name, spend]) => ({ name: name.slice(0, 15), spend })).sort((a, b) => b.spend - a.spend).slice(0, 8);
+
+            // Monthly trend
+            const monthMap: Record<string, { reqs: number; pos: number; spend: number }> = {};
+            requisitions.forEach((r: any) => {
+              const m = (r.created_at || '').slice(0, 7);
+              if (!m) return;
+              if (!monthMap[m]) monthMap[m] = { reqs: 0, pos: 0, spend: 0 };
+              monthMap[m].reqs++;
+            });
+            orders.forEach((o: any) => {
+              const m = (o.created_at || '').slice(0, 7);
+              if (!m) return;
+              if (!monthMap[m]) monthMap[m] = { reqs: 0, pos: 0, spend: 0 };
+              monthMap[m].pos++;
+              monthMap[m].spend += Number(o.total_amount) || 0;
+            });
+            const monthlyTrend = Object.entries(monthMap).sort(([a], [b]) => a.localeCompare(b)).slice(-6)
+              .map(([month, d]) => ({ month: month.slice(5), reqs: d.reqs, pos: d.pos, spend: Math.round(d.spend / 1000) }));
+
+            return (
+              <div className="space-y-4">
+                {/* Summary Cards */}
+                <div className="grid grid-cols-2 md:grid-cols-4 gap-3">
+                  <Card className="bg-primary/5 border-primary/20"><CardContent className="p-3 text-center">
+                    <p className="text-xs text-muted-foreground">Total Spend</p>
+                    <p className="text-xl font-bold text-primary">${(stats.totalSpend / 1000).toFixed(1)}K</p>
+                  </CardContent></Card>
+                  <Card><CardContent className="p-3 text-center">
+                    <p className="text-xs text-muted-foreground">Avg PO Value</p>
+                    <p className="text-xl font-bold">${orders.length > 0 ? Math.round(stats.totalSpend / orders.length).toLocaleString() : 0}</p>
+                  </CardContent></Card>
+                  <Card><CardContent className="p-3 text-center">
+                    <p className="text-xs text-muted-foreground">Suppliers</p>
+                    <p className="text-xl font-bold">{Object.keys(supplierMap).length}</p>
+                  </CardContent></Card>
+                  <Card><CardContent className="p-3 text-center">
+                    <p className="text-xs text-muted-foreground">Approval Rate</p>
+                    <p className="text-xl font-bold">{requisitions.length > 0 ? Math.round(requisitions.filter((r: any) => ['approved', 'rfq_sent', 'po_issued', 'delivered', 'closed'].includes(r.status)).length / requisitions.length * 100) : 0}%</p>
+                  </CardContent></Card>
                 </div>
-                <div className="flex justify-between text-sm p-3 rounded-lg bg-muted/50">
-                  <span>Active POs</span>
-                  <span className="font-bold">{stats.activePOs}</span>
+
+                <div className="grid md:grid-cols-2 gap-4">
+                  {/* Department Distribution */}
+                  <Card>
+                    <CardHeader className="pb-2"><CardTitle className="text-sm">Requisitions by Department</CardTitle></CardHeader>
+                    <CardContent className="h-64">
+                      {deptData.length > 0 ? (
+                        <ResponsiveContainer width="100%" height="100%">
+                          <PieChart>
+                            <Pie data={deptData} dataKey="value" nameKey="name" cx="50%" cy="50%" outerRadius={80} label>
+                              {deptData.map((_, i) => <Cell key={i} fill={CHART_COLORS[i % CHART_COLORS.length]} />)}
+                            </Pie>
+                            <Tooltip /><Legend />
+                          </PieChart>
+                        </ResponsiveContainer>
+                      ) : <p className="text-center py-16 text-muted-foreground text-sm">No data</p>}
+                    </CardContent>
+                  </Card>
+
+                  {/* Priority Distribution */}
+                  <Card>
+                    <CardHeader className="pb-2"><CardTitle className="text-sm">Priority Distribution</CardTitle></CardHeader>
+                    <CardContent className="h-64">
+                      {prioData.length > 0 ? (
+                        <ResponsiveContainer width="100%" height="100%">
+                          <BarChart data={prioData}>
+                            <CartesianGrid strokeDasharray="3 3" className="stroke-border" />
+                            <XAxis dataKey="name" className="text-xs" />
+                            <YAxis className="text-xs" />
+                            <Tooltip />
+                            <Bar dataKey="value" name="Requisitions" radius={[4,4,0,0]}>
+                              {prioData.map((entry, i) => (
+                                <Cell key={i} fill={entry.name === 'critical' ? 'hsl(var(--destructive))' : entry.name === 'urgent' ? 'hsl(var(--warning))' : 'hsl(var(--primary))'} />
+                              ))}
+                            </Bar>
+                          </BarChart>
+                        </ResponsiveContainer>
+                      ) : <p className="text-center py-16 text-muted-foreground text-sm">No data</p>}
+                    </CardContent>
+                  </Card>
+
+                  {/* Supplier Spend */}
+                  <Card>
+                    <CardHeader className="pb-2"><CardTitle className="text-sm">Top Supplier Spend</CardTitle></CardHeader>
+                    <CardContent className="h-64">
+                      {supplierData.length > 0 ? (
+                        <ResponsiveContainer width="100%" height="100%">
+                          <BarChart data={supplierData} layout="vertical">
+                            <CartesianGrid strokeDasharray="3 3" className="stroke-border" />
+                            <XAxis type="number" className="text-xs" />
+                            <YAxis dataKey="name" type="category" className="text-[10px]" width={100} />
+                            <Tooltip formatter={(v: number) => `$${v.toLocaleString()}`} />
+                            <Bar dataKey="spend" fill="hsl(160,60%,45%)" name="Spend ($)" radius={[0,4,4,0]} />
+                          </BarChart>
+                        </ResponsiveContainer>
+                      ) : <p className="text-center py-16 text-muted-foreground text-sm">No PO data</p>}
+                    </CardContent>
+                  </Card>
+
+                  {/* Monthly Trend */}
+                  <Card>
+                    <CardHeader className="pb-2"><CardTitle className="text-sm flex items-center gap-2"><TrendingUp className="h-4 w-4" />Monthly Activity</CardTitle></CardHeader>
+                    <CardContent className="h-64">
+                      {monthlyTrend.length > 0 ? (
+                        <ResponsiveContainer width="100%" height="100%">
+                          <BarChart data={monthlyTrend}>
+                            <CartesianGrid strokeDasharray="3 3" className="stroke-border" />
+                            <XAxis dataKey="month" className="text-xs" />
+                            <YAxis className="text-xs" />
+                            <Tooltip />
+                            <Bar dataKey="reqs" fill="hsl(var(--primary))" name="Requisitions" radius={[4,4,0,0]} />
+                            <Bar dataKey="pos" fill="hsl(210,70%,55%)" name="POs" radius={[4,4,0,0]} />
+                          </BarChart>
+                        </ResponsiveContainer>
+                      ) : <p className="text-center py-16 text-muted-foreground text-sm">No data</p>}
+                    </CardContent>
+                  </Card>
                 </div>
-                <div className="flex justify-between text-sm p-3 rounded-lg bg-primary/5 border border-primary/20">
-                  <span className="font-medium">Total Spend</span>
-                  <span className="font-bold text-primary">${stats.totalSpend.toLocaleString()}</span>
-                </div>
-              </CardContent>
-            </Card>
-            <Card>
-              <CardHeader><CardTitle className="text-sm">Status Distribution</CardTitle></CardHeader>
-              <CardContent className="space-y-3">
-                {statusFlow.map(status => {
-                  const count = requisitions.filter((r: any) => r.status === status).length;
-                  const pct = requisitions.length > 0 ? (count / requisitions.length) * 100 : 0;
-                  return (
-                    <div key={status} className="space-y-1">
-                      <div className="flex justify-between text-sm">
-                        <span className="capitalize">{status.replace(/_/g, " ")}</span>
-                        <span className="font-medium">{count}</span>
-                      </div>
-                      <Progress value={pct} className="h-1.5" />
-                    </div>
-                  );
-                })}
-              </CardContent>
-            </Card>
-          </div>
+
+                {/* Status Distribution */}
+                <Card>
+                  <CardHeader><CardTitle className="text-sm">Pipeline Status Distribution</CardTitle></CardHeader>
+                  <CardContent className="space-y-3">
+                    {statusFlow.map(status => {
+                      const count = requisitions.filter((r: any) => r.status === status).length;
+                      const pct = requisitions.length > 0 ? (count / requisitions.length) * 100 : 0;
+                      return (
+                        <div key={status} className="space-y-1">
+                          <div className="flex justify-between text-sm">
+                            <span className="capitalize">{status.replace(/_/g, " ")}</span>
+                            <span className="font-medium">{count} ({pct.toFixed(0)}%)</span>
+                          </div>
+                          <Progress value={pct} className="h-1.5" />
+                        </div>
+                      );
+                    })}
+                  </CardContent>
+                </Card>
+              </div>
+            );
+          })()}
         </TabsContent>
       </Tabs>
     </motion.div>
