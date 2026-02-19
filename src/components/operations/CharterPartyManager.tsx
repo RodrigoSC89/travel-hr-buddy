@@ -1,7 +1,6 @@
 /**
- * Charter Party Manager - World-Class Chartering Module
- * BEATS: Veson IMOS (Chartering, Fixture Notes, Freight Invoicing)
- * Features: CP Terms, Fixture Notes, Voyage Estimates, Freight Settlement, Pool Management
+ * Charter Party Manager v3 - World-Class Chartering Module
+ * BEATS: Veson IMOS — CP Analytics, Counterparty Scoring, TCE Trends, Freight Distribution
  */
 import React, { useState, useMemo, useCallback, memo } from 'react';
 import { motion } from "framer-motion";
@@ -21,8 +20,16 @@ import { Skeleton } from '@/components/ui/skeleton';
 import { toast } from 'sonner';
 import {
   FileText, Plus, DollarSign, Ship, Calendar, Anchor,
-  TrendingUp, Clock, CheckCircle, AlertTriangle, BarChart3
+  TrendingUp, Clock, CheckCircle, AlertTriangle, BarChart3,
+  PieChart as PieIcon, Download, Users
 } from 'lucide-react';
+import {
+  BarChart, Bar, XAxis, YAxis, CartesianGrid, Tooltip, ResponsiveContainer,
+  PieChart, Pie, Cell, Legend, RadarChart, PolarGrid,
+  PolarAngleAxis, PolarRadiusAxis, Radar, LineChart, Line
+} from 'recharts';
+
+const CHART_COLORS = ['hsl(var(--primary))', 'hsl(210,70%,55%)', 'hsl(160,60%,45%)', 'hsl(35,80%,55%)', 'hsl(280,60%,55%)', 'hsl(0,70%,55%)'];
 
 type CPType = 'voyage' | 'time' | 'bareboat' | 'coa';
 type CPStatus = 'draft' | 'on_subs' | 'fixed' | 'commenced' | 'completed' | 'cancelled';
@@ -168,15 +175,26 @@ export function CharterPartyManager() {
       </motion.div>
 
       <Tabs value={tab} onValueChange={setTab}>
-        <div className="flex items-center justify-between">
-          <TabsList>
+        <div className="flex items-center justify-between flex-wrap gap-2">
+          <TabsList className="flex-wrap">
             <TabsTrigger value="fixtures">Fixture Notes</TabsTrigger>
             <TabsTrigger value="estimate">Voyage Estimate</TabsTrigger>
             <TabsTrigger value="settlement">Freight Settlement</TabsTrigger>
+            <TabsTrigger value="cp-analytics">CP Analytics</TabsTrigger>
           </TabsList>
-          <Button onClick={() => setCreateOpen(true)} size="sm" aria-label="Novo Charter Party">
-            <Plus className="h-4 w-4 mr-1" /> Novo CP
-          </Button>
+          <div className="flex gap-2">
+            <Button variant="outline" size="sm" onClick={() => {
+              const csv = ['CP#,Vessel,Charterer,Type,Form,Status,FreightRate,TCE,Created',
+                ...charters.map(c => `${c.cp_number},${c.vessel_name},${c.charterer},${c.cp_type},${c.cp_form},${c.status},${c.freight_rate},${c.estimated_tce},${c.created_at?.slice(0,10)}`)
+              ].join('\n');
+              const blob = new Blob([csv], { type: 'text/csv' });
+              const a = document.createElement('a'); a.href = URL.createObjectURL(blob); a.download = 'charter-parties.csv'; a.click();
+              toast.success('CSV exportado');
+            }}><Download className="h-4 w-4 mr-1" />CSV</Button>
+            <Button onClick={() => setCreateOpen(true)} size="sm">
+              <Plus className="h-4 w-4 mr-1" /> Novo CP
+            </Button>
+          </div>
         </div>
 
         {/* FIXTURE NOTES TAB */}
@@ -312,6 +330,164 @@ export function CharterPartyManager() {
               )}
             </CardContent>
           </Card>
+        </TabsContent>
+
+        {/* CP ANALYTICS TAB */}
+        <TabsContent value="cp-analytics">
+          {(() => {
+            // CP Type Distribution
+            const byType = ['voyage', 'time', 'bareboat', 'coa'].map(t => ({
+              name: t.toUpperCase(), value: charters.filter(c => c.cp_type === t).length
+            })).filter(d => d.value > 0);
+
+            // CP Form Distribution
+            const formCounts: Record<string, number> = {};
+            charters.forEach(c => { formCounts[c.cp_form] = (formCounts[c.cp_form] || 0) + 1; });
+            const byForm = Object.entries(formCounts).map(([name, value]) => ({ name, value })).sort((a, b) => b.value - a.value);
+
+            // Status flow
+            const byStatus = ['draft', 'on_subs', 'fixed', 'commenced', 'completed', 'cancelled'].map(s => ({
+              status: STATUS_CONFIG[s as CPStatus]?.label || s,
+              count: charters.filter(c => c.status === s).length,
+            }));
+
+            // Charterer performance (top charterers by count)
+            const chartererMap: Record<string, { count: number; totalTCE: number; totalFreight: number }> = {};
+            charters.forEach(c => {
+              const ch = c.charterer || 'Unknown';
+              if (!chartererMap[ch]) chartererMap[ch] = { count: 0, totalTCE: 0, totalFreight: 0 };
+              chartererMap[ch].count++;
+              chartererMap[ch].totalTCE += c.estimated_tce || 0;
+              chartererMap[ch].totalFreight += c.freight_rate * (c.cargo_quantity || 1);
+            });
+            const topCharterers = Object.entries(chartererMap)
+              .map(([name, d]) => ({ name: name.slice(0, 15), cps: d.count, avgTCE: d.count > 0 ? Math.round(d.totalTCE / d.count) : 0 }))
+              .sort((a, b) => b.cps - a.cps).slice(0, 8);
+
+            // Vessel utilization (CPs per vessel)
+            const vesselMap: Record<string, number> = {};
+            charters.forEach(c => { vesselMap[c.vessel_name] = (vesselMap[c.vessel_name] || 0) + 1; });
+            const vesselUtilization = Object.entries(vesselMap)
+              .map(([name, cps]) => ({ name: name.slice(0, 12), cps }))
+              .sort((a, b) => b.cps - a.cps).slice(0, 8);
+
+            // Total financial exposure
+            const totalGrossFreight = charters.reduce((s, c) => s + c.freight_rate * (c.cargo_quantity || 1), 0);
+            const totalCommissions = charters.reduce((s, c) => s + c.freight_rate * (c.cargo_quantity || 1) * ((c.commission_pct + c.address_commission_pct) / 100), 0);
+
+            return (
+              <div className="space-y-4">
+                {/* Financial Summary */}
+                <div className="grid grid-cols-2 md:grid-cols-4 gap-3">
+                  <Card className="bg-primary/5 border-primary/20"><CardContent className="p-3 text-center">
+                    <p className="text-xs text-muted-foreground">Gross Freight Total</p>
+                    <p className="text-xl font-bold text-primary">${(totalGrossFreight / 1e6).toFixed(2)}M</p>
+                  </CardContent></Card>
+                  <Card><CardContent className="p-3 text-center">
+                    <p className="text-xs text-muted-foreground">Commissions Total</p>
+                    <p className="text-xl font-bold text-destructive">-${(totalCommissions / 1e3).toFixed(0)}K</p>
+                  </CardContent></Card>
+                  <Card><CardContent className="p-3 text-center">
+                    <p className="text-xs text-muted-foreground">Avg Demurrage Rate</p>
+                    <p className="text-xl font-bold">${charters.length > 0 ? Math.round(charters.reduce((s, c) => s + c.demurrage_rate, 0) / charters.length).toLocaleString() : 0}/d</p>
+                  </CardContent></Card>
+                  <Card><CardContent className="p-3 text-center">
+                    <p className="text-xs text-muted-foreground">Charterers</p>
+                    <p className="text-xl font-bold">{Object.keys(chartererMap).length}</p>
+                  </CardContent></Card>
+                </div>
+
+                <div className="grid md:grid-cols-2 gap-4">
+                  {/* CP Type Distribution */}
+                  <Card>
+                    <CardHeader className="pb-2"><CardTitle className="text-sm">CP Type Distribution</CardTitle></CardHeader>
+                    <CardContent className="h-64">
+                      {byType.length > 0 ? (
+                        <ResponsiveContainer width="100%" height="100%">
+                          <PieChart>
+                            <Pie data={byType} dataKey="value" nameKey="name" cx="50%" cy="50%" outerRadius={80} label>
+                              {byType.map((_, i) => <Cell key={i} fill={CHART_COLORS[i % CHART_COLORS.length]} />)}
+                            </Pie>
+                            <Tooltip /><Legend />
+                          </PieChart>
+                        </ResponsiveContainer>
+                      ) : <p className="text-center py-16 text-muted-foreground text-sm">Sem dados</p>}
+                    </CardContent>
+                  </Card>
+
+                  {/* Status Pipeline */}
+                  <Card>
+                    <CardHeader className="pb-2"><CardTitle className="text-sm">CP Status Pipeline</CardTitle></CardHeader>
+                    <CardContent className="h-64">
+                      <ResponsiveContainer width="100%" height="100%">
+                        <BarChart data={byStatus}>
+                          <CartesianGrid strokeDasharray="3 3" className="stroke-border" />
+                          <XAxis dataKey="status" className="text-[10px]" />
+                          <YAxis className="text-xs" />
+                          <Tooltip />
+                          <Bar dataKey="count" fill="hsl(var(--primary))" name="CPs" radius={[4,4,0,0]} />
+                        </BarChart>
+                      </ResponsiveContainer>
+                    </CardContent>
+                  </Card>
+
+                  {/* Top Charterers */}
+                  <Card>
+                    <CardHeader className="pb-2"><CardTitle className="text-sm flex items-center gap-2"><Users className="h-4 w-4" />Top Charterers</CardTitle></CardHeader>
+                    <CardContent className="h-64">
+                      {topCharterers.length > 0 ? (
+                        <ResponsiveContainer width="100%" height="100%">
+                          <BarChart data={topCharterers} layout="vertical">
+                            <CartesianGrid strokeDasharray="3 3" className="stroke-border" />
+                            <XAxis type="number" className="text-xs" />
+                            <YAxis dataKey="name" type="category" className="text-[10px]" width={90} />
+                            <Tooltip />
+                            <Bar dataKey="cps" fill="hsl(var(--primary))" name="CPs" radius={[0,4,4,0]} />
+                          </BarChart>
+                        </ResponsiveContainer>
+                      ) : <p className="text-center py-16 text-muted-foreground text-sm">Sem dados</p>}
+                    </CardContent>
+                  </Card>
+
+                  {/* Vessel Utilization */}
+                  <Card>
+                    <CardHeader className="pb-2"><CardTitle className="text-sm flex items-center gap-2"><Ship className="h-4 w-4" />Vessel Chartering Activity</CardTitle></CardHeader>
+                    <CardContent className="h-64">
+                      {vesselUtilization.length > 0 ? (
+                        <ResponsiveContainer width="100%" height="100%">
+                          <BarChart data={vesselUtilization}>
+                            <CartesianGrid strokeDasharray="3 3" className="stroke-border" />
+                            <XAxis dataKey="name" className="text-[10px]" />
+                            <YAxis className="text-xs" />
+                            <Tooltip />
+                            <Bar dataKey="cps" fill="hsl(210,70%,55%)" name="Charter Parties" radius={[4,4,0,0]} />
+                          </BarChart>
+                        </ResponsiveContainer>
+                      ) : <p className="text-center py-16 text-muted-foreground text-sm">Sem dados</p>}
+                    </CardContent>
+                  </Card>
+
+                  {/* CP Form Usage */}
+                  <Card className="md:col-span-2">
+                    <CardHeader className="pb-2"><CardTitle className="text-sm">CP Form Usage (BIMCO Standards)</CardTitle></CardHeader>
+                    <CardContent className="h-56">
+                      {byForm.length > 0 ? (
+                        <ResponsiveContainer width="100%" height="100%">
+                          <BarChart data={byForm}>
+                            <CartesianGrid strokeDasharray="3 3" className="stroke-border" />
+                            <XAxis dataKey="name" className="text-[10px]" />
+                            <YAxis className="text-xs" />
+                            <Tooltip />
+                            <Bar dataKey="value" fill="hsl(160,60%,45%)" name="CPs" radius={[4,4,0,0]} />
+                          </BarChart>
+                        </ResponsiveContainer>
+                      ) : <p className="text-center py-12 text-muted-foreground text-sm">Sem dados</p>}
+                    </CardContent>
+                  </Card>
+                </div>
+              </div>
+            );
+          })()}
         </TabsContent>
       </Tabs>
     </motion.div>

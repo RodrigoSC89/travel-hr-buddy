@@ -1,6 +1,6 @@
 /**
- * QHSE Incident & Investigation Manager v2
- * BEATS: DNV ShipManager — Severity trends, LTIR/TRIR, root cause, investigation timeline, CSV export
+ * QHSE Incident & Investigation Manager v3
+ * BEATS: DNV ShipManager — Safety Radar, Safety Flash, LTIR/TRIR, root cause waterfall, investigation timeline
  */
 import React, { useState, useMemo } from 'react';
 import { motion } from "framer-motion";
@@ -20,9 +20,14 @@ import { Tabs, TabsContent, TabsList, TabsTrigger } from '@/components/ui/tabs';
 import { toast } from 'sonner';
 import {
   ShieldAlert, Plus, Search, AlertTriangle, CheckCircle,
-  Activity, TrendingDown, Download, BarChart3, Clock, PieChart as PieIcon, Eye
+  Activity, TrendingDown, Download, BarChart3, Clock, PieChart as PieIcon, Eye,
+  Zap, FileWarning, Shield
 } from 'lucide-react';
-import { BarChart, Bar, XAxis, YAxis, CartesianGrid, Tooltip, ResponsiveContainer, PieChart, Pie, Cell, LineChart, Line } from 'recharts';
+import {
+  BarChart, Bar, XAxis, YAxis, CartesianGrid, Tooltip, ResponsiveContainer,
+  PieChart, Pie, Cell, LineChart, Line, RadarChart, PolarGrid,
+  PolarAngleAxis, PolarRadiusAxis, Radar, Legend
+} from 'recharts';
 import { cn } from '@/lib/utils';
 
 type IncidentSeverity = 'near_miss' | 'minor' | 'moderate' | 'serious' | 'fatal';
@@ -225,10 +230,12 @@ export function QHSEIncidentManager() {
       </motion.div>
 
       <Tabs value={mainTab} onValueChange={setMainTab}>
-        <TabsList>
+        <TabsList className="flex-wrap">
           <TabsTrigger value="incidents">Incidentes</TabsTrigger>
           <TabsTrigger value="analytics">Analytics</TabsTrigger>
           <TabsTrigger value="rootcause">Causa Raiz</TabsTrigger>
+          <TabsTrigger value="radar">Safety Radar</TabsTrigger>
+          <TabsTrigger value="flash">Safety Flash</TabsTrigger>
         </TabsList>
 
         {/* Incidents */}
@@ -379,6 +386,154 @@ export function QHSEIncidentManager() {
                       <span className={`text-xl font-bold ${ind.color}`}>{ind.value}</span>
                     </div>
                   ))}
+                </div>
+              </CardContent>
+            </Card>
+          </div>
+        </TabsContent>
+
+        {/* Safety Performance Radar */}
+        <TabsContent value="radar">
+          <div className="grid md:grid-cols-2 gap-4">
+            <Card>
+              <CardHeader className="pb-2"><CardTitle className="text-sm flex items-center gap-2"><Shield className="h-4 w-4" />Safety Performance Radar</CardTitle></CardHeader>
+              <CardContent className="h-80">
+                {(() => {
+                  const total = Math.max(analytics.total, 1);
+                  const radarData = [
+                    { dimension: 'Near Miss\nReporting', value: Math.min(100, (analytics.nearMisses / total) * 150), benchmark: 60 },
+                    { dimension: 'Resolution\nSpeed', value: Math.min(100, analytics.avgResolutionDays > 0 ? Math.max(0, 100 - analytics.avgResolutionDays * 2) : 80), benchmark: 70 },
+                    { dimension: 'Investigation\nDepth', value: Math.min(100, (analytics.byRootCause.length / 10) * 100), benchmark: 50 },
+                    { dimension: 'LTIR\nPerformance', value: Math.min(100, Number(analytics.ltir) < 1 ? 90 : Math.max(0, 100 - Number(analytics.ltir) * 20)), benchmark: 75 },
+                    { dimension: 'Closure\nRate', value: analytics.total > 0 ? Math.round((analytics.resolved / analytics.total) * 100) : 0, benchmark: 80 },
+                  ];
+                  return (
+                    <ResponsiveContainer width="100%" height="100%">
+                      <RadarChart data={radarData}>
+                        <PolarGrid className="stroke-border" />
+                        <PolarAngleAxis dataKey="dimension" className="text-[10px]" />
+                        <PolarRadiusAxis angle={90} domain={[0, 100]} className="text-xs" />
+                        <Radar name="Performance" dataKey="value" stroke="hsl(var(--primary))" fill="hsl(var(--primary))" fillOpacity={0.3} />
+                        <Radar name="Benchmark" dataKey="benchmark" stroke="hsl(var(--warning))" fill="hsl(var(--warning))" fillOpacity={0.1} strokeDasharray="5 5" />
+                        <Legend />
+                        <Tooltip />
+                      </RadarChart>
+                    </ResponsiveContainer>
+                  );
+                })()}
+              </CardContent>
+            </Card>
+            <Card>
+              <CardHeader className="pb-2"><CardTitle className="text-sm">Safety Culture Scorecard</CardTitle></CardHeader>
+              <CardContent>
+                <div className="space-y-3 py-2">
+                  {(() => {
+                    const total = Math.max(analytics.total, 1);
+                    const nearMissRatio = analytics.nearMisses / total;
+                    const closureRate = analytics.resolved / total;
+                    const avgRes = analytics.avgResolutionDays;
+                    const overallScore = Math.round(
+                      (nearMissRatio > 0.6 ? 25 : nearMissRatio * 40) +
+                      (closureRate * 25) +
+                      (avgRes < 15 ? 25 : avgRes < 30 ? 15 : 5) +
+                      (Number(analytics.ltir) < 1 ? 25 : Number(analytics.ltir) < 3 ? 15 : 5)
+                    );
+                    const grade = overallScore >= 80 ? 'A' : overallScore >= 60 ? 'B' : overallScore >= 40 ? 'C' : 'D';
+                    const gradeColor = grade === 'A' ? 'text-success' : grade === 'B' ? 'text-primary' : grade === 'C' ? 'text-warning' : 'text-destructive';
+                    return (
+                      <>
+                        <div className="text-center py-4">
+                          <div className={`text-6xl font-black ${gradeColor}`}>{grade}</div>
+                          <div className="text-2xl font-bold mt-1">{overallScore}/100</div>
+                          <p className="text-xs text-muted-foreground mt-1">Safety Culture Score</p>
+                        </div>
+                        {[
+                          { label: 'Near Miss Reporting Culture', score: Math.round(nearMissRatio * 100), target: 60 },
+                          { label: 'Incident Closure Rate', score: Math.round(closureRate * 100), target: 80 },
+                          { label: 'Investigation Quality', score: Math.min(100, Math.round((analytics.byRootCause.length / 10) * 100)), target: 50 },
+                          { label: 'Response Time', score: avgRes < 15 ? 95 : avgRes < 30 ? 60 : 30, target: 70 },
+                        ].map(item => (
+                          <div key={item.label} className="flex items-center justify-between p-2 rounded bg-muted/30">
+                            <span className="text-sm">{item.label}</span>
+                            <div className="flex items-center gap-2">
+                              <Badge variant={item.score >= item.target ? 'default' : 'destructive'} className="text-xs">
+                                {item.score}%
+                              </Badge>
+                              <span className="text-[10px] text-muted-foreground">meta: {item.target}%</span>
+                            </div>
+                          </div>
+                        ))}
+                      </>
+                    );
+                  })()}
+                </div>
+              </CardContent>
+            </Card>
+          </div>
+        </TabsContent>
+
+        {/* Safety Flash Generator */}
+        <TabsContent value="flash">
+          <div className="grid md:grid-cols-2 gap-4">
+            <Card>
+              <CardHeader className="pb-2">
+                <CardTitle className="text-sm flex items-center gap-2">
+                  <Zap className="h-4 w-4 text-warning" />Safety Flash - Incidentes Recentes
+                </CardTitle>
+              </CardHeader>
+              <CardContent>
+                {incidents.filter(i => {
+                  const m = i.metadata as Record<string, unknown> | null;
+                  return m?.incident_severity === 'serious' || m?.incident_severity === 'fatal' || m?.incident_severity === 'moderate';
+                }).slice(0, 5).map((inc, idx) => {
+                  const meta = (inc.metadata as Record<string, unknown>) || {};
+                  const severity = (meta.incident_severity as IncidentSeverity) || 'minor';
+                  return (
+                    <div key={inc.id} className="p-3 border-l-4 border-destructive/60 bg-muted/30 rounded-r mb-3">
+                      <div className="flex items-center gap-2 mb-1">
+                        <FileWarning className="h-4 w-4 text-destructive" />
+                        <Badge className={SEVERITY_CONFIG[severity]?.color}>{SEVERITY_CONFIG[severity]?.label}</Badge>
+                        <span className="text-xs text-muted-foreground">{new Date(inc.created_at).toLocaleDateString('pt-BR')}</span>
+                      </div>
+                      <p className="font-semibold text-sm">{inc.title}</p>
+                      {meta.root_cause ? <p className="text-xs mt-1"><span className="text-muted-foreground">Causa:</span> {ROOT_CAUSE_LABELS[meta.root_cause as string] || String(meta.root_cause)}</p> : null}
+                      {meta.corrective_action ? <p className="text-xs mt-1"><span className="text-muted-foreground">Ação:</span> {String(meta.corrective_action).slice(0, 100)}</p> : null}
+                    </div>
+                  );
+                })}
+                {incidents.filter(i => {
+                  const m = i.metadata as Record<string, unknown> | null;
+                  return m?.incident_severity === 'serious' || m?.incident_severity === 'fatal' || m?.incident_severity === 'moderate';
+                }).length === 0 && (
+                  <div className="text-center py-8 text-muted-foreground">
+                    <Shield className="h-10 w-10 mx-auto mb-2 opacity-50" />
+                    <p>Nenhum incidente grave para Safety Flash</p>
+                  </div>
+                )}
+              </CardContent>
+            </Card>
+            <Card>
+              <CardHeader className="pb-2"><CardTitle className="text-sm">Lessons Learned Summary</CardTitle></CardHeader>
+              <CardContent>
+                <div className="space-y-3">
+                  {analytics.byRootCause.slice(0, 5).map((rc, i) => (
+                    <div key={rc.name} className="p-3 bg-muted/30 rounded">
+                      <div className="flex justify-between items-center mb-1">
+                        <span className="text-sm font-medium">{rc.name}</span>
+                        <Badge variant="outline">{rc.count} ocorrências</Badge>
+                      </div>
+                      <p className="text-xs text-muted-foreground">
+                        {rc.name.includes('Humano') ? 'Reforçar treinamento e procedimentos operacionais. Implementar dupla verificação.'
+                          : rc.name.includes('Equipamento') ? 'Revisar plano de manutenção preventiva. Verificar running hours e calibração.'
+                          : rc.name.includes('Procedimento') ? 'Atualizar SMS/ISM manual. Realizar drill de conformidade.'
+                          : rc.name.includes('Fadiga') ? 'Revisar escala MLC 2.3. Implementar monitoramento de work/rest hours.'
+                          : 'Analisar tendências e implementar medidas preventivas específicas.'}
+                      </p>
+                    </div>
+                  ))}
+                  {analytics.byRootCause.length === 0 && (
+                    <p className="text-center py-6 text-muted-foreground text-sm">Preencha causa raiz nos incidentes para gerar lições aprendidas</p>
+                  )}
                 </div>
               </CardContent>
             </Card>
