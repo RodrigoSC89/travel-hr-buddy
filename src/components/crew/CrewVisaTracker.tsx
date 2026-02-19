@@ -1,19 +1,17 @@
 /**
  * Crew Visa & Immigration Tracker
- * Digital visa/immigration tracking for crew changes
+ * Connected to crew_certifications + crew_members for real data
  */
 import { useState, useMemo } from "react";
-import { Card, CardContent, CardHeader, CardTitle } from "@/components/ui/card";
+import { useQuery } from "@tanstack/react-query";
+import { supabase } from "@/integrations/supabase/client";
+import { Card, CardContent } from "@/components/ui/card";
 import { Badge } from "@/components/ui/badge";
-import { Button } from "@/components/ui/button";
 import { Input } from "@/components/ui/input";
 import { Select, SelectContent, SelectItem, SelectTrigger, SelectValue } from "@/components/ui/select";
-import { Progress } from "@/components/ui/progress";
-import { toast } from "sonner";
 import {
   Stamp, AlertTriangle, CheckCircle2, Clock,
-  Search, Globe, Users, Plane, FileText,
-  Calendar, MapPin, Download, Plus
+  Search, Globe, Users, FileText, MapPin, Loader2
 } from "lucide-react";
 
 interface CrewVisa {
@@ -21,29 +19,15 @@ interface CrewVisa {
   crewName: string;
   rank: string;
   nationality: string;
-  documentType: "passport" | "seaman_book" | "visa" | "work_permit" | "yellow_fever" | "c1d_visa";
+  documentType: string;
   documentNumber: string;
   issuingCountry: string;
   issueDate: string;
   expiryDate: string;
   status: "valid" | "expiring" | "expired" | "pending";
   daysRemaining: number;
-  nextPort?: string;
   notes?: string;
 }
-
-const MOCK_VISAS: CrewVisa[] = [
-  { id: "v1", crewName: "João Silva", rank: "Master", nationality: "Brazilian", documentType: "passport", documentNumber: "FX****321", issuingCountry: "Brazil", issueDate: "2024-03-15", expiryDate: "2034-03-14", status: "valid", daysRemaining: 2945 },
-  { id: "v2", crewName: "João Silva", rank: "Master", nationality: "Brazilian", documentType: "c1d_visa", documentNumber: "US****789", issuingCountry: "USA", issueDate: "2024-06-01", expiryDate: "2026-06-01", status: "expiring", daysRemaining: 102, nextPort: "Houston" },
-  { id: "v3", crewName: "Raj Patel", rank: "Chief Engineer", nationality: "Indian", documentType: "seaman_book", documentNumber: "IN****456", issuingCountry: "India", issueDate: "2023-01-10", expiryDate: "2026-01-09", status: "expired", daysRemaining: -41 },
-  { id: "v4", crewName: "Raj Patel", rank: "Chief Engineer", nationality: "Indian", documentType: "visa", documentNumber: "SG****111", issuingCountry: "Singapore", issueDate: "2025-12-01", expiryDate: "2026-12-01", status: "valid", daysRemaining: 285, nextPort: "Singapore" },
-  { id: "v5", crewName: "Miguel Santos", rank: "2nd Officer", nationality: "Filipino", documentType: "passport", documentNumber: "PH****222", issuingCountry: "Philippines", issueDate: "2022-05-20", expiryDate: "2027-05-19", status: "valid", daysRemaining: 454 },
-  { id: "v6", crewName: "Miguel Santos", rank: "2nd Officer", nationality: "Filipino", documentType: "yellow_fever", documentNumber: "YF****333", issuingCountry: "WHO", issueDate: "2024-08-01", expiryDate: "2026-08-01", status: "expiring", daysRemaining: 163, nextPort: "Lagos" },
-  { id: "v7", crewName: "Andrei Volkov", rank: "AB Seaman", nationality: "Ukrainian", documentType: "seaman_book", documentNumber: "UA****444", issuingCountry: "Ukraine", issueDate: "2023-11-01", expiryDate: "2028-10-31", status: "valid", daysRemaining: 985 },
-  { id: "v8", crewName: "Andrei Volkov", rank: "AB Seaman", nationality: "Ukrainian", documentType: "work_permit", documentNumber: "NL****555", issuingCountry: "Netherlands", issueDate: "2025-06-01", expiryDate: "2026-03-01", status: "expiring", daysRemaining: 10, nextPort: "Rotterdam", notes: "Renovação urgente - contatar agente em Rotterdam" },
-  { id: "v9", crewName: "Chen Wei", rank: "Bosun", nationality: "Chinese", documentType: "passport", documentNumber: "CN****666", issuingCountry: "China", issueDate: "2021-04-15", expiryDate: "2031-04-14", status: "valid", daysRemaining: 1880 },
-  { id: "v10", crewName: "Pedro Lima", rank: "3rd Engineer", nationality: "Brazilian", documentType: "visa", documentNumber: "AE****777", issuingCountry: "UAE", issueDate: "2025-10-01", expiryDate: "2026-04-01", status: "expiring", daysRemaining: 41, nextPort: "Dubai" },
-];
 
 const DOC_TYPE_LABELS: Record<string, string> = {
   passport: "Passaporte",
@@ -52,13 +36,110 @@ const DOC_TYPE_LABELS: Record<string, string> = {
   work_permit: "Work Permit",
   yellow_fever: "Febre Amarela",
   c1d_visa: "Visto C1/D (EUA)",
+  coc: "CoC",
+  cop: "CoP",
+  stcw: "STCW",
+  medical: "Médico",
+  goc: "GOC",
 };
 
+function computeDocStatus(expiryDate: string): { status: CrewVisa["status"]; daysRemaining: number } {
+  if (!expiryDate) return { status: "pending", daysRemaining: 0 };
+  const now = new Date();
+  const expiry = new Date(expiryDate);
+  const diffMs = expiry.getTime() - now.getTime();
+  const daysRemaining = Math.floor(diffMs / 86400000);
+  if (daysRemaining < 0) return { status: "expired", daysRemaining };
+  if (daysRemaining <= 90) return { status: "expiring", daysRemaining };
+  return { status: "valid", daysRemaining };
+}
+
 export function CrewVisaTracker() {
-  const [visas] = useState<CrewVisa[]>(MOCK_VISAS);
   const [searchQuery, setSearchQuery] = useState("");
   const [filterStatus, setFilterStatus] = useState("all");
   const [filterDocType, setFilterDocType] = useState("all");
+
+  // Fetch crew certifications (passports, visas, etc.)
+  const { data: certifications = [], isLoading } = useQuery({
+    queryKey: ["crew-visa-certifications"],
+    queryFn: async () => {
+      const { data, error } = await supabase
+        .from("crew_certifications")
+        .select("id, crew_member_id, certification_name, certification_type, certification_number, issuing_authority, issue_date, expiry_date, status")
+        .order("expiry_date", { ascending: true })
+        .limit(200);
+      if (error) throw error;
+      return data || [];
+    },
+    staleTime: 60000,
+  });
+
+  // Fetch crew members for names/ranks/nationality
+  const { data: crewMembers = [] } = useQuery({
+    queryKey: ["crew-members-visa"],
+    queryFn: async () => {
+      const { data, error } = await supabase
+        .from("crew_members")
+        .select("id, full_name, rank, nationality, passport_number, passport_expiry")
+        .limit(200);
+      if (error) return [];
+      return data || [];
+    },
+    staleTime: 120000,
+  });
+
+  const crewMap = useMemo(() => {
+    const map = new Map<string, any>();
+    crewMembers.forEach((c: any) => map.set(c.id, c));
+    return map;
+  }, [crewMembers]);
+
+  // Map certifications to visa tracker format
+  const visas: CrewVisa[] = useMemo(() => {
+    const results: CrewVisa[] = [];
+
+    // Add from crew_certifications
+    certifications.forEach((cert: any) => {
+      const crew = crewMap.get(cert.crew_member_id);
+      const { status, daysRemaining } = computeDocStatus(cert.expiry_date);
+
+      results.push({
+        id: cert.id,
+        crewName: crew?.full_name || "N/A",
+        rank: crew?.rank || "N/A",
+        nationality: crew?.nationality || "N/A",
+        documentType: cert.certification_type || cert.certification_name || "certificate",
+        documentNumber: cert.certification_number || "N/A",
+        issuingCountry: cert.issuing_authority || "N/A",
+        issueDate: cert.issue_date || "",
+        expiryDate: cert.expiry_date || "",
+        status,
+        daysRemaining,
+      });
+    });
+
+    // Add passport data from crew_members (if they have passport info)
+    crewMembers.forEach((crew: any) => {
+      if (crew.passport_number && crew.passport_expiry) {
+        const { status, daysRemaining } = computeDocStatus(crew.passport_expiry);
+        results.push({
+          id: `passport-${crew.id}`,
+          crewName: crew.full_name || "N/A",
+          rank: crew.rank || "N/A",
+          nationality: crew.nationality || "N/A",
+          documentType: "passport",
+          documentNumber: crew.passport_number,
+          issuingCountry: crew.nationality || "N/A",
+          issueDate: "",
+          expiryDate: crew.passport_expiry,
+          status,
+          daysRemaining,
+        });
+      }
+    });
+
+    return results;
+  }, [certifications, crewMembers, crewMap]);
 
   const filtered = useMemo(() => {
     let result = visas;
@@ -67,7 +148,7 @@ export function CrewVisaTracker() {
       result = result.filter(v => v.crewName.toLowerCase().includes(q) || v.nationality.toLowerCase().includes(q));
     }
     if (filterStatus !== "all") result = result.filter(v => v.status === filterStatus);
-    if (filterDocType !== "all") result = result.filter(v => v.documentType === filterDocType);
+    if (filterDocType !== "all") result = result.filter(v => v.documentType.toLowerCase().includes(filterDocType.toLowerCase()));
     return result.sort((a, b) => a.daysRemaining - b.daysRemaining);
   }, [visas, searchQuery, filterStatus, filterDocType]);
 
@@ -85,6 +166,15 @@ export function CrewVisaTracker() {
     if (s === "expired") return "bg-destructive/20 text-destructive";
     return "bg-muted text-muted-foreground";
   };
+
+  if (isLoading) {
+    return (
+      <div className="flex items-center justify-center py-12">
+        <Loader2 className="h-8 w-8 animate-spin text-muted-foreground" />
+        <span className="ml-2 text-muted-foreground">Carregando documentos...</span>
+      </div>
+    );
+  }
 
   return (
     <div className="space-y-6">
@@ -133,6 +223,17 @@ export function CrewVisaTracker() {
         </Select>
       </div>
 
+      {/* Empty State */}
+      {visas.length === 0 && (
+        <Card>
+          <CardContent className="py-12 text-center text-muted-foreground">
+            <Stamp className="h-12 w-12 mx-auto mb-3 opacity-30" />
+            <p className="font-medium">Nenhum documento encontrado</p>
+            <p className="text-sm mt-1">Cadastre tripulantes com passaportes e certificações em <code>crew_members</code> e <code>crew_certifications</code></p>
+          </CardContent>
+        </Card>
+      )}
+
       {/* List */}
       <div className="space-y-2">
         {filtered.map(visa => (
@@ -150,11 +251,10 @@ export function CrewVisaTracker() {
                       <Badge variant="outline" className="text-[10px]"><Globe className="h-3 w-3 mr-1" />{visa.nationality}</Badge>
                     </div>
                     <div className="flex items-center gap-3 text-xs text-muted-foreground mt-1 flex-wrap">
-                      <span className="font-medium">{DOC_TYPE_LABELS[visa.documentType]}</span>
+                      <span className="font-medium">{DOC_TYPE_LABELS[visa.documentType] || visa.documentType}</span>
                       <span>{visa.documentNumber}</span>
                       <span>Emissão: {visa.issuingCountry}</span>
-                      <span>Validade: {visa.expiryDate}</span>
-                      {visa.nextPort && <span className="flex items-center gap-1"><MapPin className="h-3 w-3" />{visa.nextPort}</span>}
+                      {visa.expiryDate && <span>Validade: {visa.expiryDate}</span>}
                     </div>
                     {visa.notes && <p className="text-xs text-warning mt-1 italic">{visa.notes}</p>}
                   </div>
@@ -173,10 +273,10 @@ export function CrewVisaTracker() {
         ))}
       </div>
 
-      {filtered.length === 0 && (
+      {visas.length > 0 && filtered.length === 0 && (
         <Card><CardContent className="py-12 text-center text-muted-foreground">
           <Stamp className="h-12 w-12 mx-auto mb-3 opacity-30" />
-          <p>Nenhum documento encontrado</p>
+          <p>Nenhum documento encontrado para este filtro</p>
         </CardContent></Card>
       )}
     </div>
