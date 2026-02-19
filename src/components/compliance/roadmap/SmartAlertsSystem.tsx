@@ -1,4 +1,6 @@
 import React, { useState, useEffect, useMemo, useCallback } from 'react';
+import { useQuery } from '@tanstack/react-query';
+import { supabase } from '@/integrations/supabase/client';
 import { Card, CardContent, CardHeader, CardTitle, CardDescription } from "@/components/ui/card";
 import { Badge } from "@/components/ui/badge";
 import { Button } from "@/components/ui/button";
@@ -154,38 +156,88 @@ const defaultRules: AlertRule[] = [
   }
 ];
 
-// Generate mock alert logs
-const generateAlertLogs = (): AlertLog[] => {
-  const tipos = ['certificado_vencendo', 'nc_critica', 'nc_sem_acao', 'auditoria_atrasada', 'evidencia_pendente', 'score_baixo'];
-  const status = ['pendente', 'enviado', 'lido', 'acao_tomada', 'erro'] as const;
-  const canais = ['email', 'sms', 'push', 'sistema'];
-  const modulos = ['PEOTRAM', 'PEO-DP', 'MLC', 'SGSO'];
-  const prioridades = ['critica', 'alta', 'media', 'baixa'] as const;
+// Generate alert logs from real data (notifications + non_conformities + crew_certifications)
+function useRealAlertLogs() {
+  return useQuery({
+    queryKey: ['smart-alerts-logs'],
+    queryFn: async () => {
+      const [{ data: notifications }, { data: ncs }, { data: certs }] = await Promise.all([
+        supabase.from('notifications').select('id, title, message, type, priority, created_at, read')
+          .order('created_at', { ascending: false }).limit(50),
+        supabase.from('non_conformities').select('id, title, severity, status, created_at, vessel_id')
+          .eq('status', 'open').limit(20),
+        supabase.from('crew_certifications').select('id, certification_name, expiry_date, status, crew_member_id')
+          .limit(30),
+      ]);
 
-  return Array.from({ length: 25 }, (_, i) => {
-    const tipo = tipos[i % tipos.length];
-    const prioridade = prioridades[(i * 7 + 3) % prioridades.length];
-    const currentStatus = status[(i * 11 + 2) % status.length];
-    const hoursAgo = ((i * 37 + 5) % 168);
+      const logs: AlertLog[] = [];
+      const now = new Date();
 
-    return {
-      id: `log-${i + 1}`,
-      ruleId: `rule-${(i % 6) + 1}`,
-      ruleName: defaultRules[(i % 6)].nome,
-      tipo,
-      titulo: `Alerta: ${tipo.replace(/_/g, ' ')} #${i + 1}`,
-      mensagem: `Mensagem detalhada do alerta ${i + 1} - ${tipo.replace(/_/g, ' ')}`,
-      destinatario: `usuario${(i % 5) + 1}@empresa.com`,
-      canal: canais[i % canais.length],
-      dataCriacao: new Date(Date.now() - hoursAgo * 60 * 60 * 1000).toISOString(),
-      dataEnvio: currentStatus !== 'pendente' ? new Date(Date.now() - (hoursAgo - 1) * 60 * 60 * 1000).toISOString() : undefined,
-      status: currentStatus,
-      prioridade,
-      itemRelacionado: `ITEM-${String(i + 1).padStart(3, '0')}`,
-      modulo: modulos[i % modulos.length]
-    };
+      // Map notifications to alert logs
+      (notifications || []).forEach((n, i) => {
+        logs.push({
+          id: n.id,
+          ruleId: 'rule-1',
+          ruleName: 'Notificação do Sistema',
+          tipo: n.type || 'sistema',
+          titulo: n.title || `Alerta #${i + 1}`,
+          mensagem: n.message || '',
+          destinatario: 'sistema',
+          canal: 'sistema',
+          dataCriacao: n.created_at,
+          dataEnvio: n.read ? n.created_at : undefined,
+          status: n.read ? 'lido' : 'pendente',
+          prioridade: (n.priority === 'critical' ? 'critica' : n.priority === 'high' ? 'alta' : n.priority === 'low' ? 'baixa' : 'media') as AlertLog['prioridade'],
+          modulo: 'Sistema',
+        });
+      });
+
+      // Map open NCs to critical alerts
+      (ncs || []).forEach(nc => {
+        const isCritical = nc.severity === 'critical' || nc.severity === 'major';
+        logs.push({
+          id: `nc-${nc.id}`,
+          ruleId: isCritical ? 'rule-2' : 'rule-3',
+          ruleName: isCritical ? 'NC Crítica Aberta' : 'NC Sem Ação',
+          tipo: isCritical ? 'nc_critica' : 'nc_sem_acao',
+          titulo: `NC: ${nc.title || 'Sem título'}`,
+          mensagem: `Não conformidade ${nc.severity || 'N/A'} aberta desde ${nc.created_at ? new Date(nc.created_at).toLocaleDateString('pt-BR') : 'N/A'}`,
+          destinatario: 'responsavel_nc',
+          canal: isCritical ? 'email' : 'sistema',
+          dataCriacao: nc.created_at || new Date().toISOString(),
+          status: 'pendente',
+          prioridade: isCritical ? 'critica' : 'alta',
+          modulo: 'Compliance',
+        });
+      });
+
+      // Map expiring certifications to alerts
+      (certs || []).forEach(cert => {
+        if (!cert.expiry_date) return;
+        const daysUntilExpiry = Math.floor((new Date(cert.expiry_date).getTime() - now.getTime()) / (1000 * 60 * 60 * 24));
+        if (daysUntilExpiry <= 30 && daysUntilExpiry > -90) {
+          logs.push({
+            id: `cert-${cert.id}`,
+            ruleId: 'rule-1',
+            ruleName: 'Certificados Vencendo',
+            tipo: 'certificado_vencendo',
+            titulo: `Certificado: ${cert.certification_name || 'N/A'}`,
+            mensagem: daysUntilExpiry > 0 ? `Vence em ${daysUntilExpiry} dias` : `Vencido há ${Math.abs(daysUntilExpiry)} dias`,
+            destinatario: 'gestor_seguranca',
+            canal: 'email',
+            dataCriacao: new Date(new Date(cert.expiry_date).getTime() - 30 * 24 * 60 * 60 * 1000).toISOString(),
+            status: daysUntilExpiry <= 0 ? 'pendente' : 'enviado',
+            prioridade: daysUntilExpiry <= 7 ? 'critica' : daysUntilExpiry <= 14 ? 'alta' : 'media',
+            modulo: 'PEOTRAM',
+          });
+        }
+      });
+
+      return logs.sort((a, b) => new Date(b.dataCriacao).getTime() - new Date(a.dataCriacao).getTime());
+    },
+    staleTime: 30000,
   });
-};
+}
 
 // Helper functions
 const getPrioridadeColor = (prioridade: string) => {
@@ -234,7 +286,8 @@ const getCanalIcon = (canal: string) => {
 
 export function SmartAlertsSystem() {
   const [rules, setRules] = useState<AlertRule[]>(defaultRules);
-  const [logs, setLogs] = useState<AlertLog[]>(() => generateAlertLogs());
+  const { data: realLogs = [] } = useRealAlertLogs();
+  const [logs, setLogs] = useState<AlertLog[]>([]);
   const [activeTab, setActiveTab] = useState('dashboard');
   const [selectedRule, setSelectedRule] = useState<AlertRule | null>(null);
   const [isRuleDialogOpen, setIsRuleDialogOpen] = useState(false);
@@ -243,6 +296,11 @@ export function SmartAlertsSystem() {
   const [filterModulo, setFilterModulo] = useState<string>('all');
   const [searchTerm, setSearchTerm] = useState('');
   const [soundEnabled, setSoundEnabled] = useState(true);
+
+  // Sync real logs from Supabase into local state
+  useEffect(() => {
+    if (realLogs.length > 0) setLogs(realLogs);
+  }, [realLogs]);
 
   // Calculate stats
   const stats = useMemo<AlertStats>(() => {

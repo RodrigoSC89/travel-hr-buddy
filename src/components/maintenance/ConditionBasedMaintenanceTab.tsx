@@ -337,7 +337,8 @@ function generateHistoryFromCurrent(current: number, points: number): { date: st
   const now = new Date();
   return Array.from({ length: points }, (_, i) => {
     const monthIdx = (now.getMonth() - (points - 1 - i) + 12) % 12;
-    const variation = (Math.random() - 0.3) * current * 0.15;
+    // Deterministic variation based on index position (simulates gradual degradation)
+    const variation = ((i % 3) - 1) * current * 0.05;
     return {
       date: months[monthIdx],
       value: Math.max(0, Math.round((current - (points - 1 - i) * current * 0.08 + variation) * 10) / 10),

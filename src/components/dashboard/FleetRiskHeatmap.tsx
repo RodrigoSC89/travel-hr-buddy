@@ -74,6 +74,19 @@ export default function FleetRiskHeatmap() {
     staleTime: 120000,
   });
 
+  const { data: crewMembers = [] } = useQuery({
+    queryKey: ['risk-heatmap-crew'],
+    queryFn: async () => {
+      const { data, error } = await supabase
+        .from('crew_members')
+        .select('id, vessel_id, status')
+        .eq('status', 'active');
+      if (error) throw error;
+      return data || [];
+    },
+    staleTime: 120000,
+  });
+
   const heatmapData = useMemo(() => {
     return vessels.map(v => {
       const vesselWOs = workOrders.filter(w => w.vessel_id === v.id);
@@ -81,9 +94,15 @@ export default function FleetRiskHeatmap() {
       const overdueWOs = vesselWOs.filter(w => w.status === 'overdue').length;
       const criticalNCs = vesselNCs.filter(n => n.severity === 'critical' || n.severity === 'major').length;
 
+      // Crew score from real crew & certification data
+      const vesselCrew = crewMembers.filter(c => c.vessel_id === v.id);
+      const vesselCrewCerts = certs.filter(c => vesselCrew.some(cm => cm.id === c.crew_member_id));
+      const expiredCerts = vesselCrewCerts.filter(c => c.expiry_date && new Date(c.expiry_date) < new Date()).length;
+      const totalCrewCerts = vesselCrewCerts.length || 1;
+
       const compliance = Math.max(20, 100 - (vesselNCs.length * 15) - (criticalNCs * 20));
       const maintenance = Math.max(20, 100 - (overdueWOs * 20) - (vesselWOs.length * 5));
-      const crew = Math.max(30, 100 - Math.floor(Math.random() * 25)); // Would use real crew data
+      const crew = Math.max(30, 100 - Math.round((expiredCerts / totalCrewCerts) * 60) - (vesselCrew.length === 0 ? 30 : 0));
       const safety = Math.max(25, 100 - (criticalNCs * 25) - (vesselNCs.length * 8));
       const financial = Math.max(30, 100 - (overdueWOs * 10));
 
@@ -92,7 +111,7 @@ export default function FleetRiskHeatmap() {
 
       return { vessel: v, scores, avgRisk };
     });
-  }, [vessels, workOrders, ncs, certs]);
+  }, [vessels, workOrders, ncs, certs, crewMembers]);
 
   const overallRisk = useMemo(() => {
     if (heatmapData.length === 0) return 0;
