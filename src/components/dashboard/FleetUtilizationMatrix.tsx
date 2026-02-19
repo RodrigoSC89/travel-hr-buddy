@@ -36,7 +36,9 @@ export default function FleetUtilizationMatrix() {
         idle: 5, drydock: 10, layup: 0, decommissioned: 0,
       };
       const utilization = statusMap[v.status || "idle"] ?? 50;
-      const efficiency = Math.min(100, utilization + Math.random() * 10 - 5);
+      // Deterministic efficiency based on vessel name hash instead of random
+      const nameHash = (v.name || "").split("").reduce((a: number, c: string) => a + c.charCodeAt(0), 0);
+      const efficiency = Math.min(100, utilization + (nameHash % 11) - 5);
 
       return { ...v, utilization, efficiency: Math.round(efficiency) };
     });

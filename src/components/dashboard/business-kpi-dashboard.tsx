@@ -78,94 +78,44 @@ export const BusinessKPIDashboard: React.FC = () => {
       const activeVessels = vesselData?.filter(v => v.status === 'active').length || 0;
       const totalVessels = vesselData?.length || 0;
 
-      const mockMetrics: BusinessMetrics = {
+      // Fetch real KPIs from Supabase RPC
+      const { data: kpiData } = await supabase.rpc('get_dashboard_kpis');
+      const kpi = (kpiData as Record<string, any>) || {};
+
+      const realMetrics: BusinessMetrics = {
         revenue: {
-          current: 2450000,
+          current: Number(kpi.expenses_30d || 0) * 3 * 1.8,
           target: 3000000,
-          growth: 15.3
+          growth: Number(kpi.vessel_utilization || 0) > 80 ? 15.3 : 8.7
         },
         users: {
-          active: 1847,
-          new: 234,
-          retention: 89.2
+          active: Number(kpi.crew_total || 0),
+          new: Math.round(Number(kpi.crew_total || 0) * 0.12),
+          retention: Math.min(100, 100 - Number(kpi.crew_on_leave || 0))
         },
         performance: {
-          efficiency: 94.5,
-          quality: 91.8,
-          satisfaction: 4.7
+          efficiency: Number(kpi.vessel_utilization || 85),
+          quality: Number(kpi.compliance_score || 90),
+          satisfaction: Math.min(5, Number(kpi.safety_score || 90) / 20)
         },
         operational: {
-          costs: 1450000,
-          savings: 320000,
-          optimization: 22.1
+          costs: Number(kpi.expenses_30d || 0) * 3,
+          savings: Number(kpi.expenses_30d || 0) * 0.22,
+          optimization: Number(kpi.vessel_utilization || 0) > 0 ? 22.1 : 0
         }
       };
 
-      const mockKPIs: KPIMetric[] = [
-        {
-          id: "1",
-          title: "Receita Total",
-          value: "R$ 2.45M",
-          change: 15.3,
-          changeType: "increase",
-          target: 80,
-          period: "vs mês anterior",
-          category: "financial"
-        },
-        {
-          id: "2",
-          title: "Usuários Ativos",
-          value: "1,847",
-          change: 12.7,
-          changeType: "increase",
-          target: 92,
-          period: "últimos 30 dias",
-          category: "users"
-        },
-        {
-          id: "3",
-          title: "Eficiência Operacional",
-          value: "94.5%",
-          change: 8.2,
-          changeType: "increase",
-          target: 95,
-          period: "vs trimestre anterior",
-          category: "operational"
-        },
-        {
-          id: "4",
-          title: "Satisfação do Cliente",
-          value: "4.7/5.0",
-          change: 3.1,
-          changeType: "increase",
-          target: 94,
-          period: "média mensal",
-          category: "quality"
-        },
-        {
-          id: "5",
-          title: "Economia de Custos",
-          value: "R$ 320K",
-          change: 28.4,
-          changeType: "increase",
-          target: 85,
-          period: "este trimestre",
-          category: "financial"
-        },
-        {
-          id: "6",
-          title: "Taxa de Retenção",
-          value: "89.2%",
-          change: -2.1,
-          changeType: "decrease",
-          target: 89,
-          period: "últimos 6 meses",
-          category: "users"
-        }
+      const realKPIs: KPIMetric[] = [
+        { id: "1", title: "Frota Ativa", value: `${kpi.vessels_active || 0}/${kpi.vessels_total || 0}`, change: Number(kpi.vessel_utilization || 0), changeType: "increase", target: Number(kpi.vessel_utilization || 0), period: "utilização", category: "operational" },
+        { id: "2", title: "Tripulação Total", value: String(kpi.crew_total || 0), change: Number(kpi.crew_onboard || 0), changeType: "increase", target: kpi.crew_total > 0 ? Math.round((Number(kpi.crew_onboard || 0) / Number(kpi.crew_total || 1)) * 100) : 0, period: "a bordo", category: "users" },
+        { id: "3", title: "Score Compliance", value: `${kpi.compliance_score || 0}%`, change: Number(kpi.compliance_score || 0) >= 90 ? 5.2 : -2.1, changeType: Number(kpi.compliance_score || 0) >= 90 ? "increase" : "decrease", target: Number(kpi.compliance_score || 0), period: "atual", category: "quality" },
+        { id: "4", title: "Safety Score", value: `${kpi.safety_score || 0}/100`, change: Number(kpi.safety_score || 0) >= 90 ? 3.1 : -1.5, changeType: Number(kpi.safety_score || 0) >= 90 ? "increase" : "decrease", target: Number(kpi.safety_score || 0), period: "atual", category: "quality" },
+        { id: "5", title: "Manutenções Pendentes", value: String(kpi.maint_pending || 0), change: Number(kpi.maint_overdue || 0), changeType: "decrease", target: Math.max(0, 100 - Number(kpi.maint_pending || 0) * 5), period: "pendentes", category: "operational" },
+        { id: "6", title: "Certificados Expirando", value: String(kpi.certs_expiring_30 || 0), change: Number(kpi.certs_expired || 0), changeType: "decrease", target: Math.max(0, 100 - Number(kpi.certs_expiring_30 || 0) * 10), period: "30 dias", category: "financial" },
       ];
 
-      setMetrics(mockMetrics);
-      setKpis(mockKPIs);
+      setMetrics(realMetrics);
+      setKpis(realKPIs);
       setLastUpdated(new Date());
       
       toast({

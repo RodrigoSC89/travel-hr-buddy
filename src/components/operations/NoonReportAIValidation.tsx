@@ -1,8 +1,10 @@
 /**
- * Noon Report AI Validation Tab
+ * Noon Report AI Validation Tab — Connected to Supabase noon_reports + vessels
  * AI-driven validation of noon report data: consumption anomalies, speed/slip checks, weather cross-ref
  */
 import { useState, useMemo } from "react";
+import { useQuery } from "@tanstack/react-query";
+import { supabase } from "@/integrations/supabase/client";
 import { Card, CardContent, CardHeader, CardTitle } from "@/components/ui/card";
 import { Badge } from "@/components/ui/badge";
 import { Button } from "@/components/ui/button";
@@ -10,18 +12,9 @@ import { Progress } from "@/components/ui/progress";
 import { toast } from "sonner";
 import {
   Brain, AlertTriangle, CheckCircle2, TrendingUp,
-  Fuel, Wind, Gauge, Anchor, BarChart3, Zap,
-  RefreshCw, Download, Clock, Ship
+  Fuel, Wind, Gauge, Ship, BarChart3,
+  RefreshCw, Clock, Loader2
 } from "lucide-react";
-
-interface ValidationResult {
-  id: string;
-  reportDate: string;
-  vesselName: string;
-  status: "valid" | "warning" | "critical";
-  overallScore: number;
-  checks: ValidationCheck[];
-}
 
 interface ValidationCheck {
   name: string;
@@ -33,78 +26,136 @@ interface ValidationCheck {
   aiComment: string;
 }
 
-// Mock validation results based on realistic noon report data
-const MOCK_VALIDATIONS: ValidationResult[] = [
-  {
-    id: "nr-001",
-    reportDate: new Date().toISOString().split("T")[0],
-    vesselName: "MV Atlântico Sul",
-    status: "warning",
-    overallScore: 78,
-    checks: [
-      { name: "Consumo FO Main Engine", category: "consumption", status: "warning", value: "32.5 MT", expected: "28-30 MT", deviation: 8.3, aiComment: "Consumo 8.3% acima do esperado para speed/draft reportados. Verificar condições de hull fouling." },
-      { name: "Consumo DO Aux Engines", category: "consumption", status: "pass", value: "4.2 MT", expected: "3.8-4.5 MT", deviation: 0, aiComment: "Dentro da faixa normal." },
-      { name: "Velocidade vs RPM", category: "speed", status: "pass", value: "12.5 kn @ 85 RPM", expected: "12.2-12.8 kn", deviation: 0, aiComment: "Relação speed/RPM consistente com curva de performance." },
-      { name: "Slip %", category: "speed", status: "warning", value: "8.2%", expected: "3-6%", deviation: 36.6, aiComment: "Slip elevado indica possível fouling ou corrente adversa. Cross-ref com dados de corrente marítima." },
-      { name: "Distância vs Speed x Tempo", category: "distance", status: "pass", value: "298 NM", expected: "300 NM", deviation: 0.6, aiComment: "Distância consistente com velocidade e tempo reportados." },
-      { name: "Beaufort vs Speed Loss", category: "weather", status: "pass", value: "BF 5, -0.8 kn", expected: "-0.5 a -1.2 kn", deviation: 0, aiComment: "Perda de velocidade compatível com estado do mar reportado." },
-      { name: "ROB vs Consumo", category: "compliance", status: "pass", value: "ROB 850 MT", expected: "845-855 MT", deviation: 0, aiComment: "ROB consistente com consumo reportado e ROB anterior." },
-    ],
-  },
-  {
-    id: "nr-002",
-    reportDate: new Date(Date.now() - 86400000).toISOString().split("T")[0],
-    vesselName: "MV Santos Express",
-    status: "critical",
-    overallScore: 52,
-    checks: [
-      { name: "Consumo FO Main Engine", category: "consumption", status: "fail", value: "45.2 MT", expected: "35-38 MT", deviation: 18.9, aiComment: "Consumo 18.9% acima do limite. Provável erro de medição ou vazamento não reportado." },
-      { name: "Consumo DO Aux Engines", category: "consumption", status: "warning", value: "6.8 MT", expected: "4.5-5.5 MT", deviation: 23.6, aiComment: "Consumo DO elevado. Verificar se todos os geradores estavam necessários." },
-      { name: "Velocidade vs RPM", category: "speed", status: "fail", value: "14.2 kn @ 75 RPM", expected: "11.5-12.5 kn", deviation: 13.6, aiComment: "Velocidade incompatível com RPM reportado. Verificar dados de GPS vs log." },
-      { name: "Slip %", category: "speed", status: "pass", value: "4.5%", expected: "3-6%", deviation: 0, aiComment: "Dentro da faixa normal." },
-      { name: "Distância vs Speed x Tempo", category: "distance", status: "warning", value: "340 NM", expected: "288 NM", deviation: 18.0, aiComment: "Distância 18% acima do esperado pela velocidade/tempo. Possível erro de posição." },
-      { name: "Beaufort vs Speed Loss", category: "weather", status: "pass", value: "BF 3, -0.2 kn", expected: "0 a -0.3 kn", deviation: 0, aiComment: "Condições meteorológicas favoráveis, perda mínima." },
-      { name: "ROB vs Consumo", category: "compliance", status: "fail", value: "ROB 620 MT", expected: "680-700 MT", deviation: 11.4, aiComment: "Diferença significativa no ROB. 60-80 MT não contabilizados. Investigar." },
-    ],
-  },
-  {
-    id: "nr-003",
-    reportDate: new Date(Date.now() - 2 * 86400000).toISOString().split("T")[0],
-    vesselName: "MV Rio Grande",
-    status: "valid",
-    overallScore: 95,
-    checks: [
-      { name: "Consumo FO Main Engine", category: "consumption", status: "pass", value: "26.8 MT", expected: "25-28 MT", deviation: 0, aiComment: "Consumo dentro da faixa ideal." },
-      { name: "Consumo DO Aux Engines", category: "consumption", status: "pass", value: "3.9 MT", expected: "3.5-4.2 MT", deviation: 0, aiComment: "Nominal." },
-      { name: "Velocidade vs RPM", category: "speed", status: "pass", value: "11.8 kn @ 80 RPM", expected: "11.5-12.2 kn", deviation: 0, aiComment: "Consistente com curva de performance." },
-      { name: "Slip %", category: "speed", status: "pass", value: "4.1%", expected: "3-6%", deviation: 0, aiComment: "Normal." },
-      { name: "Distância vs Speed x Tempo", category: "distance", status: "pass", value: "283 NM", expected: "280-285 NM", deviation: 0, aiComment: "Exato." },
-      { name: "Beaufort vs Speed Loss", category: "weather", status: "pass", value: "BF 4, -0.5 kn", expected: "-0.3 a -0.7 kn", deviation: 0, aiComment: "Compatível." },
-      { name: "ROB vs Consumo", category: "compliance", status: "pass", value: "ROB 1,120 MT", expected: "1,115-1,125 MT", deviation: 0, aiComment: "ROB consistente." },
-    ],
-  },
-];
+interface ValidationResult {
+  id: string;
+  reportDate: string;
+  vesselName: string;
+  status: "valid" | "warning" | "critical";
+  overallScore: number;
+  checks: ValidationCheck[];
+}
+
+function validateReport(report: any, vesselName: string): ValidationResult {
+  const checks: ValidationCheck[] = [];
+  let score = 100;
+
+  // Consumption FO validation
+  const consumptionHfo = Number(report.consumption_hfo) || 0;
+  const expectedHfoMin = 25;
+  const expectedHfoMax = 38;
+  const hfoDeviation = consumptionHfo > expectedHfoMax ? ((consumptionHfo - expectedHfoMax) / expectedHfoMax) * 100 :
+                        consumptionHfo < expectedHfoMin && consumptionHfo > 0 ? ((expectedHfoMin - consumptionHfo) / expectedHfoMin) * 100 : 0;
+  const hfoStatus = hfoDeviation > 15 ? "fail" : hfoDeviation > 5 ? "warning" : "pass";
+  if (hfoStatus !== "pass") score -= hfoDeviation > 15 ? 20 : 8;
+  checks.push({
+    name: "Consumo FO Main Engine", category: "consumption", status: hfoStatus,
+    value: consumptionHfo > 0 ? `${consumptionHfo.toFixed(1)} MT` : "N/R",
+    expected: `${expectedHfoMin}-${expectedHfoMax} MT`,
+    deviation: Math.round(hfoDeviation * 10) / 10,
+    aiComment: hfoStatus === "fail" ? "Consumo fora da faixa esperada. Verificar condições de hull fouling ou vazamento." :
+               hfoStatus === "warning" ? "Consumo ligeiramente fora da faixa. Monitorar." : "Dentro da faixa normal."
+  });
+
+  // Speed vs RPM
+  const speedAvg = Number(report.speed_avg) || 0;
+  const rpm = Number(report.me_rpm) || 0;
+  const expectedSpeed = rpm > 0 ? rpm * 0.15 : 12;
+  const speedDev = speedAvg > 0 && rpm > 0 ? Math.abs(((speedAvg - expectedSpeed) / expectedSpeed) * 100) : 0;
+  const speedStatus = speedDev > 15 ? "fail" : speedDev > 8 ? "warning" : "pass";
+  if (speedStatus !== "pass") score -= speedDev > 15 ? 15 : 6;
+  checks.push({
+    name: "Velocidade vs RPM", category: "speed", status: speedStatus,
+    value: speedAvg > 0 ? `${speedAvg.toFixed(1)} kn @ ${rpm} RPM` : "N/R",
+    expected: `${(expectedSpeed * 0.9).toFixed(1)}-${(expectedSpeed * 1.1).toFixed(1)} kn`,
+    deviation: Math.round(speedDev * 10) / 10,
+    aiComment: speedStatus === "fail" ? "Velocidade incompatível com RPM. Verificar dados GPS vs log." :
+               speedStatus === "warning" ? "Variação moderada na relação speed/RPM." : "Consistente com curva de performance."
+  });
+
+  // Distance validation
+  const distance = Number(report.distance_run) || 0;
+  const expectedDist = speedAvg * 24;
+  const distDev = distance > 0 && expectedDist > 0 ? Math.abs(((distance - expectedDist) / expectedDist) * 100) : 0;
+  const distStatus = distDev > 15 ? "fail" : distDev > 8 ? "warning" : "pass";
+  if (distStatus !== "pass") score -= distDev > 15 ? 12 : 5;
+  checks.push({
+    name: "Distância vs Speed x Tempo", category: "distance", status: distStatus,
+    value: distance > 0 ? `${distance.toFixed(0)} NM` : "N/R",
+    expected: expectedDist > 0 ? `${(expectedDist * 0.9).toFixed(0)}-${(expectedDist * 1.1).toFixed(0)} NM` : "N/A",
+    deviation: Math.round(distDev * 10) / 10,
+    aiComment: distStatus === "pass" ? "Distância consistente." : "Discrepância na distância reportada."
+  });
+
+  // Weather cross-ref
+  const windForce = report.wind_force || 0;
+  const seaState = report.sea_state || 0;
+  const weatherConsistent = Math.abs(windForce - seaState) <= 2;
+  checks.push({
+    name: "Beaufort vs Sea State", category: "weather", status: weatherConsistent ? "pass" : "warning",
+    value: `BF ${windForce}, Sea ${seaState}`,
+    expected: "Correlação ≤2 escalas",
+    deviation: weatherConsistent ? 0 : Math.abs(windForce - seaState) * 10,
+    aiComment: weatherConsistent ? "Condições meteorológicas consistentes." : "Discrepância entre vento e estado do mar."
+  });
+  if (!weatherConsistent) score -= 5;
+
+  // ROB compliance
+  const robHfo = Number(report.rob_hfo) || 0;
+  const robMdo = Number(report.rob_mdo) || 0;
+  checks.push({
+    name: "ROB Report", category: "compliance", status: robHfo > 0 || robMdo > 0 ? "pass" : "warning",
+    value: robHfo > 0 ? `HFO: ${robHfo.toFixed(0)} MT, MDO: ${robMdo.toFixed(0)} MT` : "Não reportado",
+    expected: "ROB reportado",
+    deviation: 0,
+    aiComment: robHfo > 0 ? "ROB reportado." : "ROB não informado no relatório."
+  });
+  if (robHfo === 0 && robMdo === 0) score -= 5;
+
+  score = Math.max(0, Math.min(100, Math.round(score)));
+  const failCount = checks.filter(c => c.status === "fail").length;
+  const warnCount = checks.filter(c => c.status === "warning").length;
+
+  return {
+    id: report.id,
+    reportDate: report.report_date || new Date(report.created_at).toISOString().split("T")[0],
+    vesselName,
+    status: failCount > 0 ? "critical" : warnCount > 1 ? "warning" : "valid",
+    overallScore: score,
+    checks,
+  };
+}
 
 export function NoonReportAIValidation() {
-  const [validations] = useState<ValidationResult[]>(MOCK_VALIDATIONS);
   const [selectedReport, setSelectedReport] = useState<string | null>(null);
-  const [isValidating, setIsValidating] = useState(false);
+
+  const { data: validations = [], isLoading, refetch } = useQuery({
+    queryKey: ["noon-report-validations"],
+    queryFn: async () => {
+      const [{ data: reports }, { data: vessels }] = await Promise.all([
+        supabase.from("noon_reports").select("*").order("report_date", { ascending: false }).limit(20),
+        supabase.from("vessels").select("id, name"),
+      ]);
+      const vesselMap = new Map((vessels || []).map(v => [v.id, v.name]));
+      return (reports || []).map(r => validateReport(r, vesselMap.get(r.vessel_id!) || "Vessel"));
+    },
+    staleTime: 30000,
+  });
 
   const stats = useMemo(() => {
     const total = validations.length;
     const valid = validations.filter(v => v.status === "valid").length;
     const warnings = validations.filter(v => v.status === "warning").length;
     const critical = validations.filter(v => v.status === "critical").length;
-    const avgScore = Math.round(validations.reduce((s, v) => s + v.overallScore, 0) / Math.max(total, 1));
+    const avgScore = total > 0 ? Math.round(validations.reduce((s, v) => s + v.overallScore, 0) / total) : 0;
     return { total, valid, warnings, critical, avgScore };
   }, [validations]);
 
-  const handleRevalidate = () => {
+  const [isValidating, setIsValidating] = useState(false);
+  const handleRevalidate = async () => {
     setIsValidating(true);
-    setTimeout(() => {
-      setIsValidating(false);
-      toast.success("Validação IA concluída", { description: `${stats.total} reports analisados` });
-    }, 2000);
+    await refetch();
+    setIsValidating(false);
+    toast.success("Validação IA concluída", { description: `${stats.total} reports analisados` });
   };
 
   const getStatusColor = (status: string) => {
@@ -131,6 +182,15 @@ export function NoonReportAIValidation() {
   };
 
   const selectedValidation = validations.find(v => v.id === selectedReport);
+
+  if (isLoading) {
+    return (
+      <Card><CardContent className="py-12 text-center">
+        <Loader2 className="h-8 w-8 mx-auto mb-3 animate-spin text-primary" />
+        <p className="text-muted-foreground">Carregando noon reports...</p>
+      </CardContent></Card>
+    );
+  }
 
   return (
     <div className="space-y-6">
@@ -159,7 +219,7 @@ export function NoonReportAIValidation() {
       <div className="flex justify-between items-center">
         <p className="text-sm text-muted-foreground">
           <Brain className="h-4 w-4 inline mr-1" />
-          Validação automática: consumo, velocidade/RPM/slip, distância, weather cross-ref, ROB
+          Validação automática: consumo, velocidade/RPM, distância, weather cross-ref, ROB
         </p>
         <Button onClick={handleRevalidate} disabled={isValidating}>
           <RefreshCw className={`h-4 w-4 mr-2 ${isValidating ? "animate-spin" : ""}`} />
@@ -168,43 +228,50 @@ export function NoonReportAIValidation() {
       </div>
 
       {/* Reports List */}
-      <div className="grid grid-cols-1 lg:grid-cols-3 gap-4">
-        {validations.map(v => (
-          <Card
-            key={v.id}
-            className={`cursor-pointer transition-all hover:border-primary/40 ${selectedReport === v.id ? "border-primary ring-1 ring-primary/30" : ""}`}
-            onClick={() => setSelectedReport(v.id === selectedReport ? null : v.id)}
-          >
-            <CardContent className="p-4">
-              <div className="flex items-center justify-between mb-3">
-                <div>
-                  <h4 className="font-medium">{v.vesselName}</h4>
-                  <p className="text-xs text-muted-foreground flex items-center gap-1">
-                    <Clock className="h-3 w-3" />{v.reportDate}
-                  </p>
-                </div>
-                <Badge className={getStatusBg(v.status)}>
-                  {v.status === "valid" ? "OK" : v.status === "warning" ? "Alerta" : "Crítico"}
-                </Badge>
-              </div>
-              <div className="flex items-center gap-2">
-                <Progress value={v.overallScore} className="h-2 flex-1" />
-                <span className={`text-sm font-bold ${getStatusColor(v.status)}`}>{v.overallScore}%</span>
-              </div>
-              <div className="flex gap-1 mt-2 flex-wrap">
-                {v.checks.filter(c => c.status !== "pass").map(c => (
-                  <Badge key={c.name} variant="outline" className={`text-[9px] ${getStatusBg(c.status)}`}>
-                    {c.category}
+      {validations.length > 0 ? (
+        <div className="grid grid-cols-1 lg:grid-cols-3 gap-4">
+          {validations.map(v => (
+            <Card
+              key={v.id}
+              className={`cursor-pointer transition-all hover:border-primary/40 ${selectedReport === v.id ? "border-primary ring-1 ring-primary/30" : ""}`}
+              onClick={() => setSelectedReport(v.id === selectedReport ? null : v.id)}
+            >
+              <CardContent className="p-4">
+                <div className="flex items-center justify-between mb-3">
+                  <div>
+                    <h4 className="font-medium">{v.vesselName}</h4>
+                    <p className="text-xs text-muted-foreground flex items-center gap-1">
+                      <Clock className="h-3 w-3" />{v.reportDate}
+                    </p>
+                  </div>
+                  <Badge className={getStatusBg(v.status)}>
+                    {v.status === "valid" ? "OK" : v.status === "warning" ? "Alerta" : "Crítico"}
                   </Badge>
-                ))}
-                {v.checks.every(c => c.status === "pass") && (
-                  <Badge variant="outline" className="text-[9px] bg-success/10 text-success">Todos OK</Badge>
-                )}
-              </div>
-            </CardContent>
-          </Card>
-        ))}
-      </div>
+                </div>
+                <div className="flex items-center gap-2">
+                  <Progress value={v.overallScore} className="h-2 flex-1" />
+                  <span className={`text-sm font-bold ${getStatusColor(v.status)}`}>{v.overallScore}%</span>
+                </div>
+                <div className="flex gap-1 mt-2 flex-wrap">
+                  {v.checks.filter(c => c.status !== "pass").map(c => (
+                    <Badge key={c.name} variant="outline" className={`text-[9px] ${getStatusBg(c.status)}`}>
+                      {c.category}
+                    </Badge>
+                  ))}
+                  {v.checks.every(c => c.status === "pass") && (
+                    <Badge variant="outline" className="text-[9px] bg-success/10 text-success">Todos OK</Badge>
+                  )}
+                </div>
+              </CardContent>
+            </Card>
+          ))}
+        </div>
+      ) : (
+        <Card><CardContent className="py-12 text-center text-muted-foreground">
+          <Ship className="h-12 w-12 mx-auto mb-3 opacity-30" />
+          <p>Nenhum noon report encontrado</p>
+        </CardContent></Card>
+      )}
 
       {/* Detail Panel */}
       {selectedValidation && (
