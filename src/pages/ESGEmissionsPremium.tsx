@@ -10,7 +10,7 @@ import { Skeleton } from "@/components/ui/skeleton";
 import { Button } from "@/components/ui/button";
 import { 
   LayoutDashboard, Leaf, Factory, Droplets, Fuel,
-  Globe, BarChart3, FileText, Settings, Shield, RefreshCw
+  Globe, BarChart3, FileText, Settings, Shield, RefreshCw, Coins
 } from "lucide-react";
 import { useCIICalculator } from "@/hooks/useCIICalculator";
 
@@ -24,6 +24,7 @@ const GovernanceESGPanel = lazy(() => import("@/modules/esg-emissions/components
 const ESGAnalyticsBenchmark = lazy(() => import("@/modules/esg-emissions/components/ESGAnalyticsBenchmark"));
 const ESGReports = lazy(() => import("@/modules/esg-emissions/components/ESGReports").then(m => ({ default: m.ESGReports })));
 const ESGSettings = lazy(() => import("@/modules/esg-emissions/components/ESGSettings").then(m => ({ default: m.ESGSettings })));
+const CarbonCreditTradingTab = lazy(() => import("@/components/esg/CarbonCreditTradingTab").then(m => ({ default: m.CarbonCreditTradingTab })));
 
 function LoadingSkeleton() {
   return (
@@ -70,7 +71,7 @@ export default function ESGEmissionsPremium() {
 
       {/* Tabs */}
       <Tabs defaultValue="command" className="space-y-6">
-        <TabsList className="grid w-full grid-cols-9 h-auto p-1">
+        <TabsList className="grid w-full grid-cols-10 h-auto p-1">
           <TabsTrigger value="command" className="flex flex-col items-center gap-1 py-2">
             <LayoutDashboard className="h-4 w-4" />
             <span className="text-xs">Comando</span>
@@ -78,6 +79,10 @@ export default function ESGEmissionsPremium() {
           <TabsTrigger value="carbon" className="flex flex-col items-center gap-1 py-2">
             <Factory className="h-4 w-4" />
             <span className="text-xs">Carbono</span>
+          </TabsTrigger>
+          <TabsTrigger value="carbon-trading" className="flex flex-col items-center gap-1 py-2">
+            <Coins className="h-4 w-4" />
+            <span className="text-xs">Credits</span>
           </TabsTrigger>
           <TabsTrigger value="marpol" className="flex flex-col items-center gap-1 py-2">
             <Globe className="h-4 w-4" />
@@ -118,6 +123,12 @@ export default function ESGEmissionsPremium() {
         <TabsContent value="carbon">
           <Suspense fallback={<LoadingSkeleton />}>
             <CarbonTrackingPanel />
+          </Suspense>
+        </TabsContent>
+
+        <TabsContent value="carbon-trading">
+          <Suspense fallback={<LoadingSkeleton />}>
+            <CarbonCreditTradingTab />
           </Suspense>
         </TabsContent>
 
