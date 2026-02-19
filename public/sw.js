@@ -87,24 +87,41 @@ self.addEventListener('fetch', (event) => {
     return;
   }
 
-  // Static assets: cache-first (fonts, images, css, js)
+  // Static assets: JS uses network-first (prevents stale chunk errors after deploy)
+  // Other assets (fonts, images, css) use cache-first
   if (
     request.url.includes('/assets/') ||
     request.url.includes('/icons/') ||
     request.url.match(/\.(woff2?|ttf|otf|png|jpg|svg|ico|css|js)$/)
   ) {
-    event.respondWith(
-      caches.match(request).then(cached => {
-        if (cached) return cached;
-        return fetch(request).then(response => {
+    const isJS = request.url.endsWith('.js');
+    
+    if (isJS) {
+      // JS chunks: network-first to avoid stale module errors
+      event.respondWith(
+        fetch(request).then(response => {
           if (response.ok) {
             const clone = response.clone();
             caches.open(RUNTIME_CACHE).then(cache => cache.put(request, clone));
           }
           return response;
-        }).catch(() => new Response('', { status: 503 }));
-      })
-    );
+        }).catch(() => caches.match(request).then(cached => cached || new Response('', { status: 503 })))
+      );
+    } else {
+      // Non-JS assets: cache-first (fonts, images, css)
+      event.respondWith(
+        caches.match(request).then(cached => {
+          if (cached) return cached;
+          return fetch(request).then(response => {
+            if (response.ok) {
+              const clone = response.clone();
+              caches.open(RUNTIME_CACHE).then(cache => cache.put(request, clone));
+            }
+            return response;
+          }).catch(() => new Response('', { status: 503 }));
+        })
+      );
+    }
     return;
   }
 });
