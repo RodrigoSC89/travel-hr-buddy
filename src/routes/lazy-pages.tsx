@@ -338,6 +338,7 @@ export const ClientPortalPage = lazy(() => import("@/pages/client-portal"));
 export const VoiceCopilotPage = lazy(() => import("@/pages/VoiceCopilotPage"));
 export const CrewFatiguePredictorPage = lazy(() => import("@/pages/CrewFatiguePredictorPage"));
 export const FleetBenchmarkingPage = lazy(() => import("@/pages/FleetBenchmarkingPage"));
+export const WorldLeadershipDashboard = lazy(() => import("@/pages/WorldLeadershipDashboard"));
 export const GamificationHub = lazy(() => import("@/pages/GamificationHub"));
 export const SecurityDashboardPage = lazy(() => import("@/pages/SecurityDashboardPage"));
 export const PerformanceMonitorPage = lazy(() => import("@/pages/PerformanceMonitorPage"));
