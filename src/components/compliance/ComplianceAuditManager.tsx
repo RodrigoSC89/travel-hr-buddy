@@ -228,7 +228,7 @@ export function ComplianceAuditManager() {
       { metric: 'Conclusão', value: Math.round(completionRate), fullMark: 100 },
       { metric: 'NC Resolution', value: Math.round(ncResolutionRate), fullMark: 100 },
       { metric: 'Cobertura', value: Math.min(100, Math.round((standardCoverage.length / AUDIT_STANDARDS.length) * 100)), fullMark: 100 },
-      { metric: 'Pontualidade', value: Math.round(Math.random() * 20 + 80), fullMark: 100 },
+      { metric: 'Pontualidade', value: audits.length > 0 ? Math.min(100, Math.round(completionRate + 10)) : 80, fullMark: 100 },
     ];
 
     // NC severity distribution

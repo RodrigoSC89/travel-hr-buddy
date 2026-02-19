@@ -122,8 +122,12 @@ StatCard.displayName = "StatCard";
 function generateSparkline(current: number, points = 8): number[] {
   const result: number[] = [];
   const base = Math.max(current * 0.7, 0);
+  const range = current - base;
   for (let i = 0; i < points - 1; i++) {
-    result.push(Math.round(base + Math.random() * (current - base)));
+    // Deterministic interpolation with sine wave variation
+    const progress = i / (points - 1);
+    const wave = Math.sin(progress * Math.PI * 2) * 0.15;
+    result.push(Math.round(base + range * (progress + wave)));
   }
   result.push(current);
   return result;

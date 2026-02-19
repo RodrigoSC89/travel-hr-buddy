@@ -814,6 +814,23 @@ const TABLE_EVENT_MAP: Record<string, TableEventMapping> = {
     entityType: 'charter_party',
     getEntityId: (r) => String(r.id ?? ''),
   },
+
+  // ═══════ NOON REPORTS ═══════
+  noon_reports: {
+    insert: 'operations.noon.report_created',
+    update: 'operations.noon.report_created',
+    entityType: 'voyage',
+    getEntityId: (r) => String(r.id ?? ''),
+    buildPayload: (op, r) => ({ report_id: r.id, vessel_id: r.vessel_id, latitude: r.latitude, longitude: r.longitude, fuel_consumption: r.fuel_consumption, hfo_consumption: r.hfo_consumption }),
+  },
+
+  // ═══════ POOL SETTLEMENTS ═══════
+  pool_settlements: {
+    insert: 'finance.pool.settlement_created',
+    entityType: 'invoice',
+    getEntityId: (r) => String(r.id ?? ''),
+    buildPayload: (op, r) => ({ id: r.id, vessel_id: r.vessel_id, pool_name: r.pool_name, amount: r.amount, settlement_amount: r.settlement_amount, period: r.period }),
+  },
 };
 
 // ============================================

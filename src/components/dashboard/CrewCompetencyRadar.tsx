@@ -65,7 +65,9 @@ export function CrewCompetencyRadar() {
         c.certification_type?.toLowerCase().includes(area.toLowerCase()) && c.status === 'valid'
       );
       const coverage = (relevantCerts.length / totalCrew) * 100;
-      return Math.min(100, coverage + 40 + Math.random() * 20); // Baseline + coverage
+      // Deterministic baseline offset per area index
+      const areaOffset = ((COMPETENCY_AREAS.indexOf(area) + 1) * 7) % 20;
+      return Math.min(100, coverage + 40 + areaOffset);
     });
 
     return areaScores;
