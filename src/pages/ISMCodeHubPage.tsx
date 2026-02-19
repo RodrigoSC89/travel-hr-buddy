@@ -11,6 +11,7 @@ import { CrossModulePanel } from "@/components/integration";
 import { PremiumModuleShell, type ModuleTab } from "@/components/ui/premium-module-kit/PremiumModuleShell";
 import { SmartKPIGrid } from "@/components/ui/premium-module-kit/SmartKPIGrid";
 import { ISMKPIDashboard } from "@/components/compliance/ISMKPIDashboard";
+import { ManagementReviewTab } from "@/components/compliance/ManagementReviewTab";
 import { Card, CardContent, CardHeader, CardTitle, CardDescription } from "@/components/ui/card";
 import { Button } from "@/components/ui/button";
 import { Badge } from "@/components/ui/badge";
@@ -508,6 +509,7 @@ export default function ISMCodeHubPage() {
     { id: "kpi-dashboard", label: "KPI Dashboard", icon: TrendingUp, content: <ISMKPIDashboard /> },
     { id: "gap-analysis", label: "Gap Analysis", icon: Target, content: <GapAnalysisTab />, badge: stats.assessed },
     { id: "capa", label: "CAPA", icon: ClipboardList, content: <CAPAWorkflow />, badge: stats.openCAPAs },
+    { id: "management-review", label: "Management Review", icon: FileCheck, content: <ManagementReviewTab /> },
   ];
 
   return (
