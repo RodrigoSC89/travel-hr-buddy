@@ -167,8 +167,8 @@ if (typeof requestIdleCallback !== "undefined") {
   setTimeout(initializeOptionalFeatures, 3000);
 }
 
-// Remove initial HTML loader before React mounts
-const removeInitialLoader = () => {
+// Remove initial HTML loader - called AFTER React successfully mounts
+export const removeInitialLoader = () => {
   const loader = document.getElementById('initial-loader');
   if (loader) {
     loader.style.opacity = '0';
@@ -177,21 +177,38 @@ const removeInitialLoader = () => {
   }
 };
 
-// Render the app
+// Show crash fallback if React fails to mount
+const showCrashFallback = (error?: unknown) => {
+  const loader = document.getElementById('initial-loader');
+  if (loader) loader.remove();
+  
+  const msg = error instanceof Error ? error.message : 'Erro desconhecido';
+  console.error('[Boot] React failed to mount:', msg);
+  
+  document.body.innerHTML = `<div style="display:flex;align-items:center;justify-content:center;min-height:100vh;background:#0f172a;color:#fff;font-family:system-ui;">
+    <div style="text-align:center;max-width:400px;padding:20px;">
+      <h1 style="font-size:1.5rem;margin-bottom:8px;">Erro de inicialização</h1>
+      <p style="color:#94a3b8;margin-bottom:16px;">Não foi possível carregar a aplicação.</p>
+      <p style="color:#64748b;font-size:12px;margin-bottom:16px;word-break:break-all;">${msg}</p>
+      <button onclick="(async function(){try{if('caches' in window){var k=await caches.keys();await Promise.all(k.map(function(c){return caches.delete(c)}))}if('serviceWorker' in navigator){var r=await navigator.serviceWorker.getRegistrations();await Promise.all(r.map(function(s){return s.unregister()}))}localStorage.clear();sessionStorage.clear()}catch(e){}location.href=location.origin+'/?_sw='+Date.now()})()" style="padding:10px 24px;background:#3b82f6;color:#fff;border:none;border-radius:6px;cursor:pointer;font-size:14px;">Limpar cache e recarregar</button>
+    </div>
+  </div>`;
+};
+
+// Render the app - DO NOT remove loader here, let React do it after mount
 const container = document.getElementById("root");
 if (container) {
-  // Remove loader immediately before render
-  removeInitialLoader();
-  
-  createRoot(container).render(
-    <React.StrictMode>
-      <HelmetProvider>
-        <App />
-      </HelmetProvider>
-    </React.StrictMode>
-  );
+  try {
+    createRoot(container).render(
+      <React.StrictMode>
+        <HelmetProvider>
+          <App />
+        </HelmetProvider>
+      </React.StrictMode>
+    );
+  } catch (error) {
+    showCrashFallback(error);
+  }
 } else {
-  // Fallback error display if root is missing
-  removeInitialLoader();
-  document.body.innerHTML = '<div style="display:flex;align-items:center;justify-content:center;min-height:100vh;background:#0f172a;color:#fff;font-family:system-ui;"><div style="text-align:center"><h1>Erro de inicialização</h1><p>Não foi possível carregar a aplicação.</p><button onclick="location.reload()" style="margin-top:16px;padding:8px 16px;background:#3b82f6;color:#fff;border:none;border-radius:6px;cursor:pointer;">Recarregar</button></div></div>';
+  showCrashFallback(new Error('Root element not found'));
 }
