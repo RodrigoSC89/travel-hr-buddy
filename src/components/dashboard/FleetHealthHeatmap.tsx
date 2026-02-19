@@ -59,7 +59,7 @@ export function FleetHealthHeatmap({ vessels, maintenance, certificates }: Fleet
         machinery: Math.max(35, 90 - critical * 12 - overdue * 4),
         safety: Math.max(50, 88 - overdue * 6),
         compliance: Math.round((activeCerts / totalCerts) * 100),
-        crew: v.status === "active" ? Math.max(60, 92 - Math.floor(Math.random() * 10)) : 50,
+        crew: v.status === "active" ? Math.max(60, 92 - overdue * 3 - critical * 4) : 50,
       };
     });
   }, [vessels, maintenance, certificates]);

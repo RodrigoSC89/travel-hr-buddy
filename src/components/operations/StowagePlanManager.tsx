@@ -93,13 +93,18 @@ export function StowagePlanManager() {
     ];
 
     // SF/BM along vessel length
-    const stressProfile = holds.map((h, i) => ({
-      frame: `FR ${20 + i * 15}`,
-      sf: Math.round(stabilityData.sf_max * (0.6 + Math.random() * 0.4)),
-      bm: Math.round(stabilityData.bm_max * (0.5 + Math.random() * 0.5)),
-      sfLimit: stabilityData.sf_limit,
-      bmLimit: stabilityData.bm_limit,
-    }));
+    const stressProfile = holds.map((h, i) => {
+      // Deterministic stress distribution based on hold position and load
+      const loadRatio = h.capacity > 0 ? h.loaded / h.capacity : 0.5;
+      const positionFactor = 0.6 + (loadRatio * 0.4);
+      return {
+        frame: `FR ${20 + i * 15}`,
+        sf: Math.round(stabilityData.sf_max * positionFactor),
+        bm: Math.round(stabilityData.bm_max * (0.5 + loadRatio * 0.5)),
+        sfLimit: stabilityData.sf_limit,
+        bmLimit: stabilityData.bm_limit,
+      };
+    });
 
     // Plans from DB
     const planCount = plans.length;

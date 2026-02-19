@@ -98,9 +98,9 @@ export default function SpendAnalyticsDashboard() {
       }));
 
     // Top suppliers with scoring
-    const topSuppliers = suppliers.slice(0, 8).map(s => {
+    const topSuppliers = suppliers.slice(0, 8).map((s, idx) => {
       const rating = Number(s.rating) || 0;
-      const onTime = Number((s as any).on_time_delivery_rate) || (70 + Math.random() * 25);
+      const onTime = Number((s as any).on_time_delivery_rate) || Math.max(60, 95 - idx * 3);
       const quality = Number((s as any).quality_score) || (rating * 20);
       const leadTime = Number(s.lead_time_days) || 14;
       // Composite score: 40% quality + 30% delivery + 20% rating + 10% lead time

@@ -68,7 +68,7 @@ export function ComplianceReadinessTimeline() {
   const frameworkScores = FRAMEWORKS.map(fw => {
     const fwAudits = audits.filter(a => a.audit_type?.toLowerCase().includes(fw.key));
     const fwCompleted = fwAudits.filter(a => a.status === "completed" || a.status === "closed").length;
-    const score = fwAudits.length > 0 ? Math.round((fwCompleted / fwAudits.length) * 100) : Math.floor(60 + Math.random() * 30);
+    const score = fwAudits.length > 0 ? Math.round((fwCompleted / fwAudits.length) * 100) : 0;
     return { ...fw, score };
   });
 

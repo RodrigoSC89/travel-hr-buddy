@@ -67,12 +67,12 @@ export function EquipmentHealthMatrix() {
 
   const cells: EquipmentCell[] = useMemo(() => {
     if (predictions.length === 0) {
-      // Fallback demo data for visual richness
+      // Deterministic fallback when no AI predictions exist
       const systems = ["Main Engine", "Aux Gen #1", "Aux Gen #2", "Boiler", "Steering Gear", "Ballast Pump", "Fire Pump", "Crane #1", "Compressor", "Purifier"];
       return systems.map((name, i) => ({
         name,
         vessel: "Fleet Average",
-        health: Math.max(20, 100 - (i * 8) - Math.floor(Math.random() * 10)),
+        health: Math.max(20, 100 - (i * 9)),
         status: i < 3 ? "healthy" : i < 6 ? "attention" : "critical",
         failureProbability: Math.min(0.95, 0.05 + i * 0.09),
       }));
