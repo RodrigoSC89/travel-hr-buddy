@@ -2,9 +2,9 @@
 // ESTRATÉGIA: Push notifications + App Shell caching para offline
 // Cache de navegação com fallback offline para uso marítimo
 
-const SW_VERSION = 'v20-offline-maritime';
-const APP_SHELL_CACHE = 'nauti-app-shell-v20';
-const RUNTIME_CACHE = 'nauti-runtime-v20';
+const SW_VERSION = 'v21-aggressive-fix';
+const APP_SHELL_CACHE = 'nauti-app-shell-v21';
+const RUNTIME_CACHE = 'nauti-runtime-v21';
 
 // App shell resources to precache for offline
 const APP_SHELL_RESOURCES = [
