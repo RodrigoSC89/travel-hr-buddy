@@ -26,6 +26,10 @@ export const AppRoutes = () => (
     <Route path="/demo" element={<Pages.DemoLauncher />} />
     <Route path="/home" element={<Pages.LandingPage />} />
     
+    {/* Fullscreen onboarding (authenticated but no sidebar/header) */}
+    <Route path="/welcome" element={<ProtectedRoute><Pages.WorldClassOnboarding /></ProtectedRoute>} />
+    <Route path="/onboarding/setup" element={<ProtectedRoute><Pages.WorldClassOnboarding /></ProtectedRoute>} />
+
     {/* ============================================ */}
     {/* AUTHENTICATED ROUTES */}
     {/* ============================================ */}
@@ -54,9 +58,7 @@ export const AppRoutes = () => (
       <Route path="/billing-portal" element={<Pages.BillingPortal />} />
       <Route path="/planos" element={<Pages.Billing />} />
       <Route path="/onboarding" element={<Pages.OnboardingDashboard />} />
-      <Route path="/onboarding/setup" element={<Pages.TenantOnboardingWizard />} />
       <Route path="/onboarding-tour" element={<Pages.InteractiveOnboarding />} />
-      <Route path="/welcome" element={<Pages.InteractiveOnboarding />} />
       <Route path="/analytics-feedback" element={<Pages.AnalyticsFeedback />} />
       <Route path="/feedback" element={<Pages.AnalyticsFeedback />} />
       
