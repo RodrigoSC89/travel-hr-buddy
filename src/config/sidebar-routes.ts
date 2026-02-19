@@ -35,7 +35,7 @@ import {
   Calendar, Server, Radio, Globe, Plane,
   Lock, GraduationCap, Trash2, Fuel, Stethoscope, Terminal,
   Briefcase, Gamepad2, Waves, Search, Trophy, Lightbulb, Handshake, Calculator, ShoppingCart,
-  ArrowRightLeft, ShieldAlert, Layers
+  ArrowRightLeft, ShieldAlert, Layers, Crown
 } from "lucide-react";
 import type { LucideIcon } from "lucide-react";
 
@@ -270,6 +270,7 @@ export const SIDEBAR_ROUTES: SidebarGroup[] = [
     defaultOpen: false,
     items: [
       { label: "World-Class Dashboard", path: "/world-class", icon: Trophy, emoji: "🏆", badge: "NEW", status: "new" as const },
+      { label: "World Leadership", path: "/world-leadership", icon: Crown, emoji: "👑", badge: "#1", status: "new" as const },
       { label: "Voice Copilot", path: "/voice-copilot", icon: Mic, emoji: "🎙️", badge: "AI", status: "new" as const },
       { label: "Computer Vision", path: "/computer-vision-inspector", icon: Eye, emoji: "👁️", badge: "CV", status: "new" as const },
       { label: "Crew Marketplace", path: "/crew-marketplace", icon: Users, emoji: "🌍", badge: "GLOBAL", status: "new" as const },
