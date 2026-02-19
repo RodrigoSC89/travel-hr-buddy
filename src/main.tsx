@@ -1,188 +1,95 @@
-// main.tsx - PATCH 852 - React initialization + Sentry
+// main.tsx - PATCH 900 - Ultra-resilient boot sequence
+// Every step wrapped in try-catch to prevent white screen
+
+// Step 1: Minimal imports only
 import * as React from "react";
 import { createRoot } from "react-dom/client";
-import { HelmetProvider } from "react-helmet-async";
-import App from "./App.tsx";
-import "./index.css";
-import { logger } from "@/lib/logger";
-import { initializeSentry } from "@/lib/monitoring/sentry-init";
 
-// Initialize Sentry before anything else
-initializeSentry();
-
-// Initialize i18n
-import "@/i18n";
-
-// Initialize theme before rendering
-const initializeTheme = () => {
+// Boot diagnostics helper - writes to DOM if console fails
+function bootLog(step: string, status: 'ok' | 'fail' | 'start' = 'ok') {
   try {
-    const stored = localStorage.getItem("theme");
-    const prefersDark = window.matchMedia("(prefers-color-scheme: dark)").matches;
-    const theme = stored || (prefersDark ? "dark" : "light");
-    document.documentElement.classList.toggle("dark", theme === "dark");
-  } catch {
-    // Ignore theme errors
-  }
-};
-
-initializeTheme();
-
-// Accessibility checker disabled - causes preload timeout crashes
-// Initialize only when explicitly requested via console: window.__initAxe()
-if (import.meta.env.DEV && typeof window !== 'undefined') {
-  (window as any).__initAxe = async () => {
-    try {
-      const axe = await import("@axe-core/react");
-      const React = await import("react");
-      const ReactDOM = await import("react-dom");
-      axe.default(React, ReactDOM, 1000);
-      console.log("[A11y] axe-core initialized manually");
-    } catch { /* optional */ }
-  };
-}
-
-// Defer non-critical initializations - only after app is loaded
-const initializeOptionalFeatures = async () => {
-  // Wait for app to be interactive first (use requestIdleCallback when available)
-  await new Promise<void>(resolve => {
-    if ('requestIdleCallback' in window) {
-      window.requestIdleCallback(() => resolve());
+    const msg = `[Boot] ${step}: ${status}`;
+    if (status === 'fail') {
+      console.error(msg);
     } else {
-      requestAnimationFrame(() => resolve());
+      console.log(msg);
     }
-  });
-  
-  try {
-    // Route prefetching removed during dead code cleanup
-    // Accessibility checker now manual: window.__initAxe()
-    // Web vitals monitoring removed during dead code cleanup
-  } catch (error) {
-    logger.warn("Optional features init failed:", error instanceof Error ? { message: error.message } : undefined);
-  }
-};
-
-// ============================================
-// CRITICAL: Force SW cleanup on boot v16 - iOS PWA ULTIMATE FIX
-// Estratégia: Limpar caches e sincronizar versões
-// ============================================
-const forceUpdateIfNeeded = async () => {
-  const SW_VERSION_KEY = 'nautilus_sw_version';
-  const CURRENT_VERSION = 'v21-aggressive-fix'; // SYNC com public/sw.js
-  const RELOAD_KEY = 'nautilus_reload_count';
-  
-  try {
-    // Detectar loop de reload (> 2 reloads em 30 segundos)
-    const reloadCount = parseInt(localStorage.getItem(RELOAD_KEY) || '0', 10);
-    const reloadTime = parseInt(localStorage.getItem(RELOAD_KEY + '_time') || '0', 10);
-    const now = Date.now();
-    
-    if (now - reloadTime < 30000 && reloadCount > 2) {
-      logger.warn('[Boot v16] Reload loop detected! Unregistering ALL service workers...');
-      
-      // Limpar TUDO - SW causando problemas
-      if ('serviceWorker' in navigator) {
-        const registrations = await navigator.serviceWorker.getRegistrations();
-        for (const reg of registrations) {
-          await reg.unregister();
-        }
-      }
-      
-      if ('caches' in window) {
-        const keys = await caches.keys();
-        await Promise.all(keys.map(k => caches.delete(k)));
-      }
-      
-      // Limpar tokens de auth corrompidos
-      Object.keys(localStorage)
-        .filter(k => k.includes('supabase') || k.includes('sb-'))
-        .forEach(k => localStorage.removeItem(k));
-      
-      localStorage.removeItem(RELOAD_KEY);
-      localStorage.removeItem(RELOAD_KEY + '_time');
-      localStorage.setItem(SW_VERSION_KEY, CURRENT_VERSION);
-      
-      logger.info('[Boot v16] Emergency cleanup complete');
-      return true;
-    }
-    
-    // Incrementar contador de reload
-    localStorage.setItem(RELOAD_KEY, String(reloadCount + 1));
-    localStorage.setItem(RELOAD_KEY + '_time', String(now));
-    
-    // Limpar contador após 30 segundos de estabilidade
-    setTimeout(() => {
-      localStorage.removeItem(RELOAD_KEY);
-      localStorage.removeItem(RELOAD_KEY + '_time');
-    }, 30000);
-    
-    const storedVersion = localStorage.getItem(SW_VERSION_KEY);
-    
-    // Sempre limpar caches se versão diferente
-    if (storedVersion !== CURRENT_VERSION) {
-      logger.info('[Boot v16] Version mismatch, cleaning up...', { stored: storedVersion, current: CURRENT_VERSION });
-      
-      // Limpar TODOS os caches
-      if ('caches' in window) {
-        const keys = await caches.keys();
-        await Promise.all(keys.map(k => caches.delete(k)));
-        logger.info('[Boot v16] Caches cleared', { count: keys.length });
-      }
-      
-      // Atualizar SW se existir
-      if ('serviceWorker' in navigator) {
-        const registrations = await navigator.serviceWorker.getRegistrations();
-        for (const reg of registrations) {
-          if (reg.waiting) {
-            reg.waiting.postMessage({ type: 'SKIP_WAITING' });
-          }
-          await reg.update();
-        }
-      }
-      
-      localStorage.setItem(SW_VERSION_KEY, CURRENT_VERSION);
-      localStorage.removeItem('nautilus_sw_disabled');
-    }
-    
-    return true;
-  } catch (error) {
-    logger.error('[Boot v16] Error during update check', error);
-    return true;
-  }
-};
-
-// Register minimal service worker (only for push notifications)
-const initServiceWorker = async () => {
-  if (!('serviceWorker' in navigator)) return;
-  
-  // Em desenvolvimento, não registrar SW
-  if (!import.meta.env.PROD) {
-    logger.info('[Boot v16] Dev mode - skipping SW registration');
-    return;
-  }
-
-  try {
-    const registration = await navigator.serviceWorker.register('/sw.js', {
-      updateViaCache: 'none',
-    });
-    logger.info('[Boot v16] Minimal SW registered', { scope: registration.scope });
-  } catch (error) {
-    logger.warn('[Boot v16] SW registration failed (not critical)', error instanceof Error ? { message: error.message } : undefined);
-  }
-};
-
-// Execute cleanup on load
-forceUpdateIfNeeded().then(() => {
-  window.addEventListener("load", initServiceWorker);
-});
-
-// Initialize optional features after render
-if (typeof requestIdleCallback !== "undefined") {
-  requestIdleCallback(() => initializeOptionalFeatures());
-} else {
-  setTimeout(initializeOptionalFeatures, 3000);
+  } catch { /* ignore */ }
 }
 
-// Remove initial HTML loader before React mounts
+// Step 2: Theme initialization (before any React)
+try {
+  const stored = localStorage.getItem("theme");
+  const prefersDark = window.matchMedia("(prefers-color-scheme: dark)").matches;
+  const theme = stored || (prefersDark ? "dark" : "light");
+  document.documentElement.classList.toggle("dark", theme === "dark");
+  bootLog('theme', 'ok');
+} catch {
+  bootLog('theme', 'fail');
+}
+
+// Step 3: Sentry (optional, non-blocking)
+try {
+  const { initializeSentry } = await import("@/lib/monitoring/sentry-init");
+  initializeSentry();
+  bootLog('sentry', 'ok');
+} catch {
+  bootLog('sentry', 'fail');
+}
+
+// Step 4: i18n (optional, non-blocking)
+try {
+  await import("@/i18n");
+  bootLog('i18n', 'ok');
+} catch {
+  bootLog('i18n', 'fail');
+}
+
+// Step 5: CSS (critical but should not crash)
+try {
+  await import("./index.css");
+  bootLog('css', 'ok');
+} catch {
+  bootLog('css', 'fail');
+}
+
+// Step 6: Import App component
+let App: React.ComponentType;
+try {
+  const module = await import("./App.tsx");
+  App = module.default;
+  bootLog('App import', 'ok');
+} catch (err) {
+  bootLog('App import', 'fail');
+  console.error('[Boot] FATAL: Failed to import App:', err);
+  // Show error UI
+  const root = document.getElementById("root");
+  if (root) {
+    root.innerHTML = `<div style="display:flex;align-items:center;justify-content:center;min-height:100vh;background:#0f172a;color:#fff;font-family:system-ui;flex-direction:column;">
+      <h2 style="margin-bottom:8px;">Nauti One - Erro de Carregamento</h2>
+      <p style="color:#94a3b8;margin-bottom:8px;">Falha ao importar módulos da aplicação.</p>
+      <pre style="color:#f87171;font-size:12px;max-width:80vw;overflow:auto;margin-bottom:16px;padding:8px;background:#1e293b;border-radius:4px;">${err instanceof Error ? err.message : String(err)}</pre>
+      <button onclick="sessionStorage.clear();localStorage.clear();location.reload();" style="padding:10px 24px;background:#3b82f6;color:#fff;border:none;border-radius:8px;cursor:pointer;font-size:16px;">Limpar Cache e Recarregar</button>
+    </div>`;
+  }
+  const loader = document.getElementById('initial-loader');
+  if (loader) loader.remove();
+  throw err; // Stop execution
+}
+
+// Step 7: Optional HelmetProvider
+let HelmetProvider: React.ComponentType<{ children?: React.ReactNode }>;
+try {
+  const helmet = await import("react-helmet-async");
+  HelmetProvider = helmet.HelmetProvider as unknown as React.ComponentType<{ children?: React.ReactNode }>;
+  bootLog('helmet', 'ok');
+} catch {
+  bootLog('helmet', 'fail');
+  // Fallback: just render children
+  HelmetProvider = ({ children }: { children?: React.ReactNode }) => <>{children}</>;
+}
+
+// Step 8: Remove loader and render
 const removeInitialLoader = () => {
   const loader = document.getElementById('initial-loader');
   if (loader) {
@@ -192,21 +99,49 @@ const removeInitialLoader = () => {
   }
 };
 
-// Render the app
 const container = document.getElementById("root");
 if (container) {
-  // Remove loader immediately before render
   removeInitialLoader();
   
-  createRoot(container).render(
-    <React.StrictMode>
-      <HelmetProvider>
-        <App />
-      </HelmetProvider>
-    </React.StrictMode>
-  );
+  try {
+    createRoot(container).render(
+      <React.StrictMode>
+        <HelmetProvider>
+          <App />
+        </HelmetProvider>
+      </React.StrictMode>
+    );
+    bootLog('render', 'ok');
+  } catch (err) {
+    bootLog('render', 'fail');
+    console.error('[Boot] FATAL: React render failed:', err);
+    container.innerHTML = `<div style="display:flex;align-items:center;justify-content:center;min-height:100vh;background:#0f172a;color:#fff;font-family:system-ui;flex-direction:column;">
+      <h2 style="margin-bottom:8px;">Nauti One - Erro de Renderização</h2>
+      <p style="color:#94a3b8;margin-bottom:8px;">Falha ao renderizar a aplicação.</p>
+      <pre style="color:#f87171;font-size:12px;max-width:80vw;overflow:auto;margin-bottom:16px;padding:8px;background:#1e293b;border-radius:4px;">${err instanceof Error ? err.message : String(err)}</pre>
+      <button onclick="sessionStorage.clear();localStorage.clear();location.reload();" style="padding:10px 24px;background:#3b82f6;color:#fff;border:none;border-radius:8px;cursor:pointer;font-size:16px;">Limpar Cache e Recarregar</button>
+    </div>`;
+  }
 } else {
-  // Fallback error display if root is missing
   removeInitialLoader();
-  document.body.innerHTML = '<div style="display:flex;align-items:center;justify-content:center;min-height:100vh;background:#0f172a;color:#fff;font-family:system-ui;"><div style="text-align:center"><h1>Erro de inicialização</h1><p>Não foi possível carregar a aplicação.</p><button onclick="location.reload()" style="margin-top:16px;padding:8px 16px;background:#3b82f6;color:#fff;border:none;border-radius:6px;cursor:pointer;">Recarregar</button></div></div>';
+  document.body.innerHTML = '<div style="display:flex;align-items:center;justify-content:center;min-height:100vh;background:#0f172a;color:#fff;font-family:system-ui;"><div style="text-align:center"><h1>Erro de inicialização</h1><p>Elemento root não encontrado.</p><button onclick="location.reload()" style="margin-top:16px;padding:8px 16px;background:#3b82f6;color:#fff;border:none;border-radius:6px;cursor:pointer;">Recarregar</button></div></div>';
+}
+
+// Step 9: Deferred initializations (fully optional, non-blocking)
+setTimeout(async () => {
+  try {
+    const { prefetchCriticalRoutes } = await import("@/lib/performance/route-prefetch");
+    prefetchCriticalRoutes();
+  } catch { /* silent */ }
+}, 5000);
+
+// Step 10: Service Worker (production only, deferred)
+if (import.meta.env.PROD) {
+  window.addEventListener("load", async () => {
+    try {
+      if ('serviceWorker' in navigator) {
+        await navigator.serviceWorker.register('/sw.js', { updateViaCache: 'none' });
+      }
+    } catch { /* not critical */ }
+  });
 }
