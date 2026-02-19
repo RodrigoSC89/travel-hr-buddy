@@ -1,8 +1,8 @@
 /**
  * Subscription & Pricing Page — SaaS Monetization
- * Per-vessel pricing with Stripe integration ready
+ * Per-vessel pricing with live Stripe integration
  */
-import React, { useState } from "react";
+import React, { useState, useEffect } from "react";
 import { Card, CardContent, CardHeader, CardTitle, CardDescription } from "@/components/ui/card";
 import { Button } from "@/components/ui/button";
 import { Badge } from "@/components/ui/badge";
@@ -11,13 +11,16 @@ import { Label } from "@/components/ui/label";
 import { motion } from "framer-motion";
 import { staggerContainer, fadeUp } from "@/lib/animations/motion-variants";
 import { toast } from "sonner";
+import { supabase } from "@/integrations/supabase/client";
+import { useSearchParams } from "react-router-dom";
 import {
   Check, Star, Zap, Shield, Crown, Ship, Users,
-  BarChart3, Headphones, Globe, Rocket, ArrowRight
+  BarChart3, Headphones, Globe, Rocket, ArrowRight, Loader2, CreditCard
 } from "lucide-react";
 
 interface PricingTier {
   name: string;
+  tierKey: string;
   price: number;
   yearlyPrice: number;
   vesselLimit: string;
@@ -31,6 +34,7 @@ interface PricingTier {
 const TIERS: PricingTier[] = [
   {
     name: "Starter",
+    tierKey: "starter",
     price: 500,
     yearlyPrice: 5000,
     vesselLimit: "Até 10 navios",
@@ -48,6 +52,7 @@ const TIERS: PricingTier[] = [
   },
   {
     name: "Professional",
+    tierKey: "professional",
     price: 1200,
     yearlyPrice: 12000,
     vesselLimit: "Até 50 navios",
@@ -70,6 +75,7 @@ const TIERS: PricingTier[] = [
   },
   {
     name: "Enterprise",
+    tierKey: "enterprise",
     price: 0,
     yearlyPrice: 0,
     vesselLimit: "Ilimitado",
@@ -95,13 +101,73 @@ const TIERS: PricingTier[] = [
 
 export default function SubscriptionPage() {
   const [yearly, setYearly] = useState(false);
+  const [loading, setLoading] = useState<string | null>(null);
+  const [currentPlan, setCurrentPlan] = useState<string | null>(null);
+  const [subscriptionEnd, setSubscriptionEnd] = useState<string | null>(null);
+  const [searchParams] = useSearchParams();
 
-  const handleSubscribe = (tier: PricingTier) => {
+  // Check subscription status on mount and after checkout
+  useEffect(() => {
+    checkSubscription();
+    if (searchParams.get("success") === "true") {
+      toast.success("Assinatura ativada com sucesso! 🎉");
+      checkSubscription();
+    }
+    if (searchParams.get("canceled") === "true") {
+      toast.info("Checkout cancelado.");
+    }
+  }, []);
+
+  const checkSubscription = async () => {
+    try {
+      const { data, error } = await supabase.functions.invoke("check-subscription");
+      if (error) throw error;
+      if (data?.subscribed) {
+        setCurrentPlan(data.plan_name);
+        setSubscriptionEnd(data.subscription_end);
+      } else {
+        setCurrentPlan(null);
+        setSubscriptionEnd(null);
+      }
+    } catch (err) {
+      console.error("Error checking subscription:", err);
+    }
+  };
+
+  const handleSubscribe = async (tier: PricingTier) => {
     if (tier.name === "Enterprise") {
       toast.info("Entre em contato: enterprise@nautione.ai");
-    } else {
-      toast.success(`Redirecionando para checkout — Plano ${tier.name}...`);
-      // TODO: supabase.functions.invoke("create-checkout", { body: { tier: tier.name } })
+      return;
+    }
+    
+    setLoading(tier.tierKey);
+    try {
+      const { data, error } = await supabase.functions.invoke("create-checkout", {
+        body: { tier: tier.tierKey },
+      });
+      if (error) throw error;
+      if (data?.url) {
+        window.open(data.url, "_blank");
+      }
+    } catch (err: any) {
+      toast.error(err.message || "Erro ao iniciar checkout");
+    } finally {
+      setLoading(null);
+    }
+  };
+
+  const handleManageSubscription = async () => {
+    setLoading("manage");
+    try {
+      const { data, error } = await supabase.functions.invoke("customer-portal");
+      if (error) throw error;
+      if (data?.url) {
+        window.open(data.url, "_blank");
+      }
+    } catch (err: any) {
+      toast.error(err.message || "Erro ao abrir portal");
+    } finally {
+      setLoading(null);
     }
   };
 
@@ -127,8 +193,15 @@ export default function SubscriptionPage() {
       {/* Pricing Cards */}
       <motion.div variants={fadeUp} className="grid grid-cols-1 md:grid-cols-3 gap-6">
         {TIERS.map((tier) => (
-          <Card key={tier.name} className={`relative ${tier.color} transition-shadow hover:shadow-lg`}>
-            {tier.popular && (
+          <Card key={tier.name} className={`relative ${tier.color} ${currentPlan === tier.tierKey ? 'ring-2 ring-success' : ''} transition-shadow hover:shadow-lg`}>
+            {currentPlan === tier.tierKey && (
+              <div className="absolute -top-3 left-1/2 -translate-x-1/2">
+                <Badge className="bg-success text-success-foreground">
+                  <Check className="h-3 w-3 mr-1" /> Seu Plano
+                </Badge>
+              </div>
+            )}
+            {tier.popular && currentPlan !== tier.tierKey && (
               <div className="absolute -top-3 left-1/2 -translate-x-1/2">
                 <Badge className="bg-primary text-primary-foreground">
                   <Star className="h-3 w-3 mr-1" /> Mais Popular
@@ -168,14 +241,30 @@ export default function SubscriptionPage() {
                 ))}
               </ul>
 
-              <Button
-                className="w-full"
-                variant={tier.popular ? "default" : "outline"}
-                onClick={() => handleSubscribe(tier)}
-              >
-                {tier.name === "Enterprise" ? "Falar com Vendas" : "Começar Agora"}
-                <ArrowRight className="h-4 w-4 ml-2" />
-              </Button>
+              {currentPlan === tier.tierKey ? (
+                <Button
+                  className="w-full"
+                  variant="outline"
+                  onClick={handleManageSubscription}
+                  disabled={loading === "manage"}
+                >
+                  {loading === "manage" ? <Loader2 className="h-4 w-4 animate-spin mr-2" /> : <CreditCard className="h-4 w-4 mr-2" />}
+                  Gerenciar Assinatura
+                </Button>
+              ) : (
+                <Button
+                  className="w-full"
+                  variant={tier.popular ? "default" : "outline"}
+                  onClick={() => handleSubscribe(tier)}
+                  disabled={loading === tier.tierKey}
+                >
+                  {loading === tier.tierKey ? (
+                    <Loader2 className="h-4 w-4 animate-spin mr-2" />
+                  ) : null}
+                  {tier.name === "Enterprise" ? "Falar com Vendas" : "Começar Agora"}
+                  <ArrowRight className="h-4 w-4 ml-2" />
+                </Button>
+              )}
             </CardContent>
           </Card>
         ))}

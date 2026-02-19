@@ -4,7 +4,7 @@ import { createClient } from "https://esm.sh/@supabase/supabase-js@2";
 
 const corsHeaders = {
   "Access-Control-Allow-Origin": "*",
-  "Access-Control-Allow-Headers": "authorization, x-client-info, apikey, content-type",
+  "Access-Control-Allow-Headers": "authorization, x-client-info, apikey, content-type, x-supabase-client-platform, x-supabase-client-platform-version, x-supabase-client-runtime, x-supabase-client-runtime-version",
 };
 
 const logStep = (step: string, details?: unknown) => {
@@ -25,9 +25,17 @@ serve(async (req) => {
   try {
     logStep("Function started");
 
-    const { priceId } = await req.json();
-    if (!priceId) throw new Error("Price ID is required");
-    logStep("Price ID received", { priceId });
+    const { priceId, tier } = await req.json();
+    
+    // Support both priceId and tier-based lookup
+    const TIER_PRICES: Record<string, string> = {
+      starter: "price_1SngA4AOyLwx0ssAHfYecvhF",
+      professional: "price_1SngAmAOyLwx0ssAFTSUkEJV",
+    };
+    
+    const resolvedPriceId = priceId || (tier ? TIER_PRICES[tier.toLowerCase()] : null);
+    if (!resolvedPriceId) throw new Error("Price ID or valid tier is required");
+    logStep("Price ID resolved", { resolvedPriceId, tier });
 
     const authHeader = req.headers.get("Authorization")!;
     const token = authHeader.replace("Bearer ", "");
@@ -52,13 +60,13 @@ serve(async (req) => {
       customer_email: customerId ? undefined : user.email,
       line_items: [
         {
-          price: priceId,
+          price: resolvedPriceId,
           quantity: 1,
         },
       ],
       mode: "subscription",
-      success_url: `${req.headers.get("origin")}/billing?success=true`,
-      cancel_url: `${req.headers.get("origin")}/billing?canceled=true`,
+      success_url: `${req.headers.get("origin")}/subscription?success=true`,
+      cancel_url: `${req.headers.get("origin")}/subscription?canceled=true`,
     });
     logStep("Checkout session created", { sessionId: session.id });
 
