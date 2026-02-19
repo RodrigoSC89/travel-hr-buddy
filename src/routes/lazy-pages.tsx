@@ -360,6 +360,7 @@ export const ShipVettingPage = lazy(() => import("@/pages/ShipVettingPage"));
 export const NoonReportAnalyticsPage = lazy(() => import("@/pages/NoonReportAnalyticsPage"));
 export const PSCHistoryPage = lazy(() => import("@/pages/PSCHistoryPage"));
 export const StowagePlanPage = lazy(() => import("@/pages/StowagePlanPage"));
+export const BunkerOperationsPage = lazy(() => import("@/pages/BunkerOperationsPage"));
 
 // Role Management (Admin only)
 export const RoleManagementPage = lazy(() => import("@/pages/admin/RoleManagementPage"));
