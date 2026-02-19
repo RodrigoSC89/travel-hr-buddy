@@ -17,6 +17,10 @@ import { ALL_LVS_SECTIONS, type Section, type ItemStatus } from "./lvs-data";
 import { useNautilusAI } from "@/hooks/useNautilusAI";
 import ReactMarkdown from "react-markdown";
 
+interface LVSActionPlanGeneratorProps {
+  onSavePlan?: (title: string, content: string, scope: string, priority: string, gapCount: number, estimatedDays: number) => Promise<any>;
+}
+
 const STATUS_CONFIG: Record<ItemStatus, { label: string }> = {
   approved: { label: "Aprovado" },
   pending: { label: "Pendente" },
@@ -35,7 +39,7 @@ interface ActionPlan {
   estimatedDays: number;
 }
 
-export function LVSActionPlanGenerator() {
+export function LVSActionPlanGenerator({ onSavePlan }: LVSActionPlanGeneratorProps = {}) {
   const { generate, isLoading } = useNautilusAI();
   const [plans, setPlans] = useState<ActionPlan[]>([]);
   const [activePlan, setActivePlan] = useState<ActionPlan | null>(null);

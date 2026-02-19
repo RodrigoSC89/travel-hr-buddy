@@ -2,6 +2,7 @@
  * LVS Aceitação RSV Petrobras - Vessel Acceptance Checklist
  * Baseado na ET-3000.00-1500-91C-PLL-017 e especificações técnicas Petrobras
  * Padrão PEO-DP/PEOTRAM: Folders → Subfolders → LV Items → Evidências → IA
+ * Com persistência Supabase e sessões de aceitação
  */
 import React from "react";
 import { Tabs, TabsContent, TabsList, TabsTrigger } from "@/components/ui/tabs";
@@ -11,15 +12,19 @@ import { ModulePageWrapper } from "@/components/ui/module-page-wrapper";
 import { ModuleHeader } from "@/components/ui/module-header";
 import {
   Ship, Shield, Brain, ClipboardCheck, FolderTree,
-  Target, TrendingUp, Sparkles, FileSearch, ClipboardList,
+  Target, TrendingUp, FileSearch, ClipboardList,
   MessageSquare, Calendar
 } from "lucide-react";
 import { LVSAcceptanceDashboard } from "@/components/lvs-aceitacao/LVSAcceptanceDashboard";
 import { LVSDocumentAnalyzer } from "@/components/lvs-aceitacao/LVSDocumentAnalyzer";
 import { LVSActionPlanGenerator } from "@/components/lvs-aceitacao/LVSActionPlanGenerator";
 import { LVSReadinessTimeline } from "@/components/lvs-aceitacao/LVSReadinessTimeline";
+import { LVSSessionManager } from "@/components/lvs-aceitacao/LVSSessionManager";
+import { useLVSPersistence } from "@/components/lvs-aceitacao/useLVSPersistence";
 
 const LVSAceitacaoPetrobras = () => {
+  const persistence = useLVSPersistence();
+
   return (
     <ModulePageWrapper gradient="blue">
       <ModuleHeader
@@ -35,7 +40,16 @@ const LVSAceitacaoPetrobras = () => {
         ]}
       />
 
-      <Tabs defaultValue="checklist" className="w-full">
+      {/* Session Manager */}
+      <LVSSessionManager
+        sessions={persistence.sessions}
+        activeSession={persistence.activeSession}
+        onCreateSession={persistence.createSession}
+        onLoadSession={persistence.loadSession}
+        isLoading={persistence.isLoading}
+      />
+
+      <Tabs defaultValue="checklist" className="w-full mt-4">
         <TabsList className="mb-4 flex-wrap h-auto gap-1">
           <TabsTrigger value="checklist" className="gap-1.5"><FolderTree className="h-3.5 w-3.5" /> Checklist LVS</TabsTrigger>
           <TabsTrigger value="readiness" className="gap-1.5"><Calendar className="h-3.5 w-3.5" /> Readiness Timeline</TabsTrigger>
@@ -46,7 +60,11 @@ const LVSAceitacaoPetrobras = () => {
         </TabsList>
 
         <TabsContent value="checklist">
-          <LVSAcceptanceDashboard />
+          <LVSAcceptanceDashboard
+            sections={persistence.sections}
+            setSections={persistence.setSections}
+            onSaveItemStatus={persistence.activeSession ? persistence.saveItemStatus : undefined}
+          />
         </TabsContent>
 
         <TabsContent value="readiness">
@@ -54,11 +72,11 @@ const LVSAceitacaoPetrobras = () => {
         </TabsContent>
 
         <TabsContent value="document-analyzer">
-          <LVSDocumentAnalyzer />
+          <LVSDocumentAnalyzer onSaveAnalysis={persistence.activeSession ? persistence.saveDocumentAnalysis : undefined} />
         </TabsContent>
 
         <TabsContent value="action-plan">
-          <LVSActionPlanGenerator />
+          <LVSActionPlanGenerator onSavePlan={persistence.activeSession ? persistence.saveActionPlan : undefined} />
         </TabsContent>
 
         <TabsContent value="interview">

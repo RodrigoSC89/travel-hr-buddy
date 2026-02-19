@@ -45,8 +45,16 @@ const STATUS_CONFIG: Record<ItemStatus, { label: string; color: string; icon: Re
 const CHART_COLORS = ["hsl(var(--success))", "hsl(var(--warning))", "hsl(var(--destructive))", "hsl(var(--muted))", "hsl(var(--primary))"];
 
 // ─── Component ────────────────────────────────────────────────
-export function LVSAcceptanceDashboard() {
-  const [sections, setSections] = useState<Section[]>(ALL_LVS_SECTIONS);
+interface DashboardProps {
+  sections?: Section[];
+  setSections?: React.Dispatch<React.SetStateAction<Section[]>>;
+  onSaveItemStatus?: (itemRef: string, status: ItemStatus, fields?: { observations?: string; pendency?: string; deadline?: string }) => Promise<void>;
+}
+
+export function LVSAcceptanceDashboard({ sections: externalSections, setSections: externalSetSections, onSaveItemStatus }: DashboardProps = {}) {
+  const [localSections, setLocalSections] = useState<Section[]>(ALL_LVS_SECTIONS);
+  const sections = externalSections || localSections;
+  const setSections = externalSetSections || setLocalSections;
   const [expandedSections, setExpandedSections] = useState<Set<string>>(new Set());
   const [expandedSubSections, setExpandedSubSections] = useState<Set<string>>(new Set());
   const [searchTerm, setSearchTerm] = useState("");
@@ -74,6 +82,9 @@ export function LVSAcceptanceDashboard() {
 
   // Update item status
   const updateItemStatus = useCallback((itemId: string, status: ItemStatus) => {
+    // Find the item ref for persistence
+    const itemRef = sections.flatMap(s => s.subsections.flatMap(ss => ss.items)).find(i => i.id === itemId)?.ref;
+    
     setSections(prev => prev.map(sec => ({
       ...sec,
       subsections: sec.subsections.map(sub => ({
@@ -81,8 +92,12 @@ export function LVSAcceptanceDashboard() {
         items: sub.items.map(item => item.id === itemId ? { ...item, status } : item)
       }))
     })));
+    
+    if (onSaveItemStatus && itemRef) {
+      onSaveItemStatus(itemRef, status);
+    }
     toast.success(`Status atualizado para ${STATUS_CONFIG[status].label}`);
-  }, []);
+  }, [sections, onSaveItemStatus]);
 
   const updateItemFields = useCallback((itemId: string, fields: Partial<LVItem>) => {
     setSections(prev => prev.map(sec => ({

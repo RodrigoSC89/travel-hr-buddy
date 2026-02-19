@@ -29409,6 +29409,255 @@ export type Database = {
           },
         ]
       }
+      lvs_acceptance_sessions: {
+        Row: {
+          approved_items: number | null
+          created_at: string
+          created_by: string | null
+          et_reference: string
+          id: string
+          metadata: Json | null
+          notes: string | null
+          organization_id: string | null
+          overall_score: number | null
+          pending_items: number | null
+          rejected_items: number | null
+          status: string
+          target_date: string | null
+          title: string
+          total_items: number | null
+          updated_at: string
+          vessel_id: string | null
+        }
+        Insert: {
+          approved_items?: number | null
+          created_at?: string
+          created_by?: string | null
+          et_reference?: string
+          id?: string
+          metadata?: Json | null
+          notes?: string | null
+          organization_id?: string | null
+          overall_score?: number | null
+          pending_items?: number | null
+          rejected_items?: number | null
+          status?: string
+          target_date?: string | null
+          title?: string
+          total_items?: number | null
+          updated_at?: string
+          vessel_id?: string | null
+        }
+        Update: {
+          approved_items?: number | null
+          created_at?: string
+          created_by?: string | null
+          et_reference?: string
+          id?: string
+          metadata?: Json | null
+          notes?: string | null
+          organization_id?: string | null
+          overall_score?: number | null
+          pending_items?: number | null
+          rejected_items?: number | null
+          status?: string
+          target_date?: string | null
+          title?: string
+          total_items?: number | null
+          updated_at?: string
+          vessel_id?: string | null
+        }
+        Relationships: [
+          {
+            foreignKeyName: "lvs_acceptance_sessions_organization_id_fkey"
+            columns: ["organization_id"]
+            isOneToOne: false
+            referencedRelation: "organizations"
+            referencedColumns: ["id"]
+          },
+          {
+            foreignKeyName: "lvs_acceptance_sessions_vessel_id_fkey"
+            columns: ["vessel_id"]
+            isOneToOne: false
+            referencedRelation: "vessels"
+            referencedColumns: ["id"]
+          },
+        ]
+      }
+      lvs_action_plans: {
+        Row: {
+          content: string
+          created_at: string
+          created_by: string | null
+          estimated_days: number | null
+          gap_count: number | null
+          id: string
+          metadata: Json | null
+          priority: string | null
+          scope: string | null
+          session_id: string | null
+          status: string
+          title: string
+          updated_at: string
+        }
+        Insert: {
+          content: string
+          created_at?: string
+          created_by?: string | null
+          estimated_days?: number | null
+          gap_count?: number | null
+          id?: string
+          metadata?: Json | null
+          priority?: string | null
+          scope?: string | null
+          session_id?: string | null
+          status?: string
+          title: string
+          updated_at?: string
+        }
+        Update: {
+          content?: string
+          created_at?: string
+          created_by?: string | null
+          estimated_days?: number | null
+          gap_count?: number | null
+          id?: string
+          metadata?: Json | null
+          priority?: string | null
+          scope?: string | null
+          session_id?: string | null
+          status?: string
+          title?: string
+          updated_at?: string
+        }
+        Relationships: [
+          {
+            foreignKeyName: "lvs_action_plans_session_id_fkey"
+            columns: ["session_id"]
+            isOneToOne: false
+            referencedRelation: "lvs_acceptance_sessions"
+            referencedColumns: ["id"]
+          },
+        ]
+      }
+      lvs_document_analyses: {
+        Row: {
+          ai_response: string | null
+          confidence: number | null
+          created_at: string
+          created_by: string | null
+          document_name: string
+          document_type: string | null
+          gaps_found: number | null
+          id: string
+          mapped_items: number | null
+          matched_refs: Json | null
+          metadata: Json | null
+          session_id: string | null
+        }
+        Insert: {
+          ai_response?: string | null
+          confidence?: number | null
+          created_at?: string
+          created_by?: string | null
+          document_name: string
+          document_type?: string | null
+          gaps_found?: number | null
+          id?: string
+          mapped_items?: number | null
+          matched_refs?: Json | null
+          metadata?: Json | null
+          session_id?: string | null
+        }
+        Update: {
+          ai_response?: string | null
+          confidence?: number | null
+          created_at?: string
+          created_by?: string | null
+          document_name?: string
+          document_type?: string | null
+          gaps_found?: number | null
+          id?: string
+          mapped_items?: number | null
+          matched_refs?: Json | null
+          metadata?: Json | null
+          session_id?: string | null
+        }
+        Relationships: [
+          {
+            foreignKeyName: "lvs_document_analyses_session_id_fkey"
+            columns: ["session_id"]
+            isOneToOne: false
+            referencedRelation: "lvs_acceptance_sessions"
+            referencedColumns: ["id"]
+          },
+        ]
+      }
+      lvs_item_status: {
+        Row: {
+          created_at: string
+          deadline: string | null
+          et_ref: string | null
+          evidence_documents: Json | null
+          has_photo: boolean | null
+          id: string
+          item_question: string | null
+          item_ref: string
+          observations: string | null
+          pendency: string | null
+          photo_urls: Json | null
+          section_code: string | null
+          session_id: string
+          status: string
+          updated_at: string
+          updated_by: string | null
+        }
+        Insert: {
+          created_at?: string
+          deadline?: string | null
+          et_ref?: string | null
+          evidence_documents?: Json | null
+          has_photo?: boolean | null
+          id?: string
+          item_question?: string | null
+          item_ref: string
+          observations?: string | null
+          pendency?: string | null
+          photo_urls?: Json | null
+          section_code?: string | null
+          session_id: string
+          status?: string
+          updated_at?: string
+          updated_by?: string | null
+        }
+        Update: {
+          created_at?: string
+          deadline?: string | null
+          et_ref?: string | null
+          evidence_documents?: Json | null
+          has_photo?: boolean | null
+          id?: string
+          item_question?: string | null
+          item_ref?: string
+          observations?: string | null
+          pendency?: string | null
+          photo_urls?: Json | null
+          section_code?: string | null
+          session_id?: string
+          status?: string
+          updated_at?: string
+          updated_by?: string | null
+        }
+        Relationships: [
+          {
+            foreignKeyName: "lvs_item_status_session_id_fkey"
+            columns: ["session_id"]
+            isOneToOne: false
+            referencedRelation: "lvs_acceptance_sessions"
+            referencedColumns: ["id"]
+          },
+        ]
+      }
       maintenance_alerts: {
         Row: {
           acknowledged_at: string | null
