@@ -35,17 +35,19 @@ interface CIIRatingDashboardProps {
 }
 
 export function CIIRatingDashboard({ vesselId, vesselName }: CIIRatingDashboardProps) {
-  const { data: cii, isLoading } = useQuery({
+  const { data: cii, isLoading, isError } = useQuery({
     queryKey: ["cii-rating", vesselId],
     queryFn: async () => {
       const { data, error } = await supabase.functions.invoke("calculate-cii", {
         body: { vesselId },
       });
       if (error) throw error;
+      if (data?.error) throw new Error(data.error);
       return data as CIIData;
     },
     staleTime: 1000 * 60 * 60,
-    enabled: !!vesselId,
+    enabled: !!vesselId && vesselId !== "all",
+    retry: false,
   });
 
   if (isLoading) {
@@ -53,6 +55,17 @@ export function CIIRatingDashboard({ vesselId, vesselName }: CIIRatingDashboardP
       <Card>
         <CardContent className="p-6">
           <Skeleton className="h-32 w-full" />
+        </CardContent>
+      </Card>
+    );
+  }
+
+  if (isError) {
+    return (
+      <Card className="border-destructive/20">
+        <CardContent className="p-6 text-center text-sm text-muted-foreground">
+          <AlertTriangle className="h-5 w-5 mx-auto mb-2 text-warning" />
+          Dados CII indisponíveis para este navio
         </CardContent>
       </Card>
     );
