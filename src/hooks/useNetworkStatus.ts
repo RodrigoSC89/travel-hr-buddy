@@ -10,8 +10,3 @@ export {
   type NetworkStatus,
   type AdaptiveSettings,
 } from "@/hooks/unified/useNetwork";
-
-export default function useNetworkStatus() {
-  const { useNetwork } = require("@/hooks/unified/useNetwork");
-  return useNetwork();
-}
