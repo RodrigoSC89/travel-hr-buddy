@@ -17,7 +17,7 @@ import { Select, SelectContent, SelectItem, SelectTrigger, SelectValue } from '@
 import { Button } from '@/components/ui/button';
 import { Label } from '@/components/ui/label';
 import { Badge } from '@/components/ui/badge';
-import { Wrench, Shield, Brain, Anchor, Fuel, Cpu, Trash2, Leaf, Calendar, Plus, Download, Wifi, Sparkles, BarChart3, Radio } from 'lucide-react';
+import { Wrench, Shield, Brain, Anchor, Fuel, Cpu, Trash2, Leaf, Calendar, Plus, Download, Wifi, Sparkles, BarChart3, Radio, Vibrate } from 'lucide-react';
 import { Skeleton } from '@/components/ui/skeleton';
 import { EnhancedActionBar } from '@/components/ui/world-class/EnhancedActionBar';
 import { WorkflowStatusBar } from '@/components/ui/world-class/WorkflowStatusBar';
@@ -62,6 +62,7 @@ const InventoryCriticalityDashboard = lazy(() => import('@/components/dashboard/
 const EquipmentFailurePredictionMap = lazy(() => import('@/components/dashboard/EquipmentFailurePredictionMap').then(m => ({ default: m.EquipmentFailurePredictionMap })));
 const WarrantyClaimsTracker = lazy(() => import('@/components/dashboard/WarrantyClaimsTracker').then(m => ({ default: m.WarrantyClaimsTracker })));
 const SparePartsIntelligence = lazy(() => import('@/components/dashboard/SparePartsIntelligence').then(m => ({ default: m.SparePartsIntelligence })));
+const ConditionBasedMaintenanceTab = lazy(() => import('@/components/maintenance/ConditionBasedMaintenanceTab').then(m => ({ default: m.ConditionBasedMaintenanceTab })));
 const LoadingSkeleton = () => (
   <div className="space-y-4 p-6">
     <Skeleton className="h-8 w-64" />
@@ -87,6 +88,7 @@ const tabConfig = [
   { id: 'esg', label: 'ESG Emissions', icon: Leaf },
   { id: 'gantt', label: 'Gantt Chart', icon: BarChart3 },
   { id: 'sensor-logbook', label: 'Sensor Logbook', icon: Radio },
+  { id: 'cbm', label: 'CBM', icon: Vibrate },
   { id: 'ai-hub', label: '🧠 IA Hub', icon: Sparkles },
 ];
 
@@ -466,6 +468,10 @@ export default function MaintenanceMegaHub() {
 
             <TabsContent value="sensor-logbook" className="mt-0">
               <SensorLogbookManager />
+            </TabsContent>
+
+            <TabsContent value="cbm" className="mt-0">
+              <ConditionBasedMaintenanceTab />
             </TabsContent>
 
             <TabsContent value="ai-hub" className="mt-0">
