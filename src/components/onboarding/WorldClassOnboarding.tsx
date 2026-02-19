@@ -23,6 +23,7 @@ import { supabase } from "@/integrations/supabase/client";
 import { useAuth } from "@/contexts/AuthContext";
 import { toast } from "sonner";
 import { cn } from "@/lib/utils";
+import { seedDemoData, type SeedProgress } from "@/lib/seed/demo-data-seeder";
 
 // ─── Constants ──────────────────────────────────────────────
 const STORAGE_KEY = "nauti-world-onboarding-v2";
@@ -153,6 +154,10 @@ export default function WorldClassOnboarding() {
   const { user } = useAuth();
   const [phase, setPhase] = useState<Phase>("welcome");
   const [isSubmitting, setIsSubmitting] = useState(false);
+  const [seedProgress, setSeedProgress] = useState<SeedProgress | null>(null);
+  const [isSeeding, setIsSeeding] = useState(false);
+  const [seedComplete, setSeedComplete] = useState(false);
+
 
   // Org
   const [orgName, setOrgName] = useState("");
@@ -258,12 +263,37 @@ export default function WorldClassOnboarding() {
 
   const handleFinish = () => {
     localStorage.setItem(STORAGE_KEY, "true");
-    // Also mark legacy keys
     localStorage.setItem("nauti-tenant-onboarding-complete", "true");
     localStorage.setItem("nauti-onboarding-complete", "true");
     localStorage.setItem("nautilus_onboarding_completed", "true");
     setPhase("complete");
   };
+
+  const handleSeedDemoData = useCallback(async () => {
+    if (!createdOrgId) {
+      toast.error("Crie uma organização primeiro para carregar dados demo");
+      return;
+    }
+    setIsSeeding(true);
+    setSeedComplete(false);
+    try {
+      const result = await seedDemoData(createdOrgId, (progress) => {
+        setSeedProgress(progress);
+      });
+      if (result.success) {
+        const totalCreated = Object.values(result.created).reduce((a, b) => a + b, 0);
+        toast.success(`${totalCreated} registros demo criados em ${(result.durationMs / 1000).toFixed(1)}s!`);
+        setSeedComplete(true);
+      } else {
+        toast.warning(`Dados parcialmente carregados. ${result.errors.length} erro(s).`);
+        setSeedComplete(true);
+      }
+    } catch (err) {
+      toast.error(`Erro ao carregar dados demo: ${err instanceof Error ? err.message : "Erro desconhecido"}`);
+    } finally {
+      setIsSeeding(false);
+    }
+  }, [createdOrgId]);
 
   const addCrewRow = () => {
     setCrewMembers(prev => [...prev, { full_name: "", rank: "", nationality: "Brazilian" }]);
@@ -665,6 +695,48 @@ export default function WorldClassOnboarding() {
                         )}
                       </motion.div>
                     ))}
+                  </div>
+
+                  {/* Demo Data Loader */}
+                  <div className="p-4 rounded-xl border border-dashed border-primary/30 bg-primary/5 space-y-3">
+                    <div className="flex items-center gap-2">
+                      <Zap className="h-4 w-4 text-primary" />
+                      <p className="text-sm font-semibold">Dados de Demonstração</p>
+                    </div>
+                    <p className="text-xs text-muted-foreground">
+                      Popule o sistema com dados realistas de operação marítima: embarcações, tripulação, viagens, manutenção e certificações.
+                    </p>
+                    {seedProgress && isSeeding && (
+                      <div className="space-y-1">
+                        <div className="flex justify-between text-xs text-muted-foreground">
+                          <span>{seedProgress.step.replace("_", " ")}</span>
+                          <span>{seedProgress.current}/{seedProgress.total}</span>
+                        </div>
+                        <Progress value={(seedProgress.current / seedProgress.total) * 100} className="h-1.5" />
+                      </div>
+                    )}
+                    {seedComplete ? (
+                      <Badge variant="secondary" className="bg-primary/10 text-primary border-primary/20">
+                        <CheckCircle2 className="h-3 w-3 mr-1" /> Dados demo carregados!
+                      </Badge>
+                    ) : (
+                      <Button
+                        variant="outline"
+                        size="sm"
+                        onClick={handleSeedDemoData}
+                        disabled={isSeeding || !createdOrgId}
+                        className="w-full gap-2"
+                      >
+                        {isSeeding ? (
+                          <motion.div animate={{ rotate: 360 }} transition={{ duration: 1, repeat: Infinity, ease: "linear" }}>
+                            <Compass className="h-4 w-4" />
+                          </motion.div>
+                        ) : (
+                          <Sparkles className="h-4 w-4" />
+                        )}
+                        {isSeeding ? "Carregando dados..." : "Carregar Dados Demo"}
+                      </Button>
+                    )}
                   </div>
 
                   {/* Quick links */}
