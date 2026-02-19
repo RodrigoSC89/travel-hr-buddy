@@ -72,7 +72,7 @@ const initializeOptionalFeatures = async () => {
 // ============================================
 const forceUpdateIfNeeded = async () => {
   const SW_VERSION_KEY = 'nautilus_sw_version';
-  const CURRENT_VERSION = 'v16-ios-pwa-ultimate'; // SYNC com public/sw.js
+  const CURRENT_VERSION = 'v21-aggressive-fix'; // SYNC com public/sw.js
   const RELOAD_KEY = 'nautilus_reload_count';
   
   try {
