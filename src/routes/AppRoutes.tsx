@@ -298,6 +298,7 @@ export const AppRoutes = () => (
       <Route path="/noon-report-analytics" element={<Pages.NoonReportAnalyticsPage />} />
       <Route path="/psc-history" element={<Pages.PSCHistoryPage />} />
       <Route path="/stowage-plan" element={<Pages.StowagePlanPage />} />
+      <Route path="/bunker-operations" element={<Pages.BunkerOperationsPage />} />
       
       {/* ======== ESG & SUSTENTABILIDADE ======== */}
       <Route path="/esg-emissions" element={<Pages.ESGEmissionsPage />} />
