@@ -2,8 +2,9 @@ import type { FC } from 'react';
 import { useState, Suspense, lazy } from 'react';
 import { ModulePageWrapper } from '@/components/ui/module-page-wrapper';
 import { ModuleHeader } from '@/components/ui/module-header';
-import { Shield, Brain, Scale, Globe, Sparkles, Search, MessageSquare, Zap, ClipboardCheck, FileSearch, Clock, Heart, Users, Calculator, FileText, AlertTriangle, Home, Plane, UtensilsCrossed, DollarSign, ShieldCheck, Building2, BarChart3, Crosshair, FileDown } from 'lucide-react';
+import { Shield, Brain, Scale, Globe, Sparkles, Search, MessageSquare, Zap, ClipboardCheck, FileSearch, Clock, Heart, Users, Calculator, FileText, AlertTriangle, Home, Plane, UtensilsCrossed, DollarSign, ShieldCheck, Building2, BarChart3, Crosshair, FileDown, Stethoscope } from 'lucide-react';
 import { SmartEvidenceOrganizer } from '@/components/compliance/smart-evidence-organizer';
+import { TelemedicineTab } from '@/components/mlc/TelemedicineTab';
 import { MLCInspectionDashboardV2 } from '@/components/mlc/MLCInspectionDashboardV2';
 import { MLCWelfareScoring } from '@/components/mlc/MLCWelfareScoring';
 import { MLCDMLCChecklist } from '@/components/mlc/MLCDMLCChecklist';
@@ -82,6 +83,7 @@ const MLCInspection: FC = () => {
           <TabsTrigger value="complaints" className="gap-1"><AlertTriangle className="h-3 w-3" />Reclamações</TabsTrigger>
           <TabsTrigger value="manning" className="gap-1"><Users className="h-3 w-3" />Manning</TabsTrigger>
           <TabsTrigger value="medical" className="gap-1"><Heart className="h-3 w-3" />Medical Care</TabsTrigger>
+          <TabsTrigger value="telemedicine" className="gap-1"><Stethoscope className="h-3 w-3" />Telemedicina</TabsTrigger>
           <TabsTrigger value="accommodation" className="gap-1"><Home className="h-3 w-3" />Alojamento</TabsTrigger>
           <TabsTrigger value="repatriation" className="gap-1"><Plane className="h-3 w-3" />Repatriação</TabsTrigger>
           <TabsTrigger value="food-catering" className="gap-1"><UtensilsCrossed className="h-3 w-3" />Alimentação</TabsTrigger>
@@ -113,6 +115,7 @@ const MLCInspection: FC = () => {
         <TabsContent value="complaints"><MLCComplaintProcedures /></TabsContent>
         <TabsContent value="manning"><MLCManningCalculator /></TabsContent>
         <TabsContent value="medical"><MLCMedicalCareTracker /></TabsContent>
+        <TabsContent value="telemedicine"><TelemedicineTab /></TabsContent>
         <TabsContent value="accommodation"><MLCAccommodationInspector /></TabsContent>
         <TabsContent value="repatriation"><MLCRepatriationTracker /></TabsContent>
         <TabsContent value="food-catering"><MLCFoodCateringInspector /></TabsContent>

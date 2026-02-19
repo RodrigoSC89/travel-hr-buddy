@@ -26,6 +26,7 @@ import {
   FileCheck, ArrowRight, Calendar, type LucideIcon
 } from "lucide-react";
 import { PMSCalendarView } from "@/components/maintenance/PMSCalendarView";
+import { ConditionBasedMaintenanceTab } from "@/components/maintenance/ConditionBasedMaintenanceTab";
 
 // ============================================
 // TYPES
@@ -665,6 +666,12 @@ export default function PMSHubPage() {
       label: "Running Hours",
       icon: Timer,
       content: <RunningHoursTab />,
+    },
+    {
+      id: "cbm",
+      label: "CBM",
+      icon: Gauge,
+      content: <ConditionBasedMaintenanceTab />,
     },
   ];
 
