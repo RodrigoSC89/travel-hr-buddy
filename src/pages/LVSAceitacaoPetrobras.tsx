@@ -13,7 +13,7 @@ import { ModuleHeader } from "@/components/ui/module-header";
 import {
   Ship, Shield, Brain, ClipboardCheck, FolderTree,
   Target, TrendingUp, FileSearch, ClipboardList,
-  MessageSquare, Calendar, Zap, Archive, Gauge, Flame
+  MessageSquare, Calendar, Zap, Archive, Gauge, Flame, FileText, BellRing
 } from "lucide-react";
 import { LVSAcceptanceDashboard } from "@/components/lvs-aceitacao/LVSAcceptanceDashboard";
 import { LVSDocumentAnalyzer } from "@/components/lvs-aceitacao/LVSDocumentAnalyzer";
@@ -26,6 +26,8 @@ import { LVSPetrobrasInspectionSimulator } from "@/components/lvs-aceitacao/LVSP
 import { LVSBulkActionsProgress } from "@/components/lvs-aceitacao/LVSBulkActionsProgress";
 import { LVSComplianceScorePredictor } from "@/components/lvs-aceitacao/LVSComplianceScorePredictor";
 import { LVSRiskHeatmap } from "@/components/lvs-aceitacao/LVSRiskHeatmap";
+import { LVSAuditPackGenerator } from "@/components/lvs-aceitacao/LVSAuditPackGenerator";
+import { LVSNotificationCenter } from "@/components/lvs-aceitacao/LVSNotificationCenter";
 import { useLVSPersistence } from "@/components/lvs-aceitacao/useLVSPersistence";
 
 const LVSAceitacaoPetrobras = () => {
@@ -67,6 +69,8 @@ const LVSAceitacaoPetrobras = () => {
           <TabsTrigger value="bulk-actions" className="gap-1.5"><ClipboardCheck className="h-3.5 w-3.5" /> Bulk Actions</TabsTrigger>
           <TabsTrigger value="score-predictor" className="gap-1.5"><Gauge className="h-3.5 w-3.5" /> Score Preditivo</TabsTrigger>
           <TabsTrigger value="risk-heatmap" className="gap-1.5"><Flame className="h-3.5 w-3.5" /> Risk Heatmap</TabsTrigger>
+          <TabsTrigger value="audit-pack" className="gap-1.5"><FileText className="h-3.5 w-3.5" /> Audit Pack</TabsTrigger>
+          <TabsTrigger value="notifications" className="gap-1.5"><BellRing className="h-3.5 w-3.5" /> Notificações</TabsTrigger>
           <TabsTrigger value="interview" className="gap-1.5"><MessageSquare className="h-3.5 w-3.5" /> Entrevista IA</TabsTrigger>
           <TabsTrigger value="evidence-organizer" className="gap-1.5"><ClipboardList className="h-3.5 w-3.5" /> Evidências</TabsTrigger>
         </TabsList>
@@ -113,6 +117,14 @@ const LVSAceitacaoPetrobras = () => {
 
         <TabsContent value="risk-heatmap">
           <LVSRiskHeatmap />
+        </TabsContent>
+
+        <TabsContent value="audit-pack">
+          <LVSAuditPackGenerator />
+        </TabsContent>
+
+        <TabsContent value="notifications">
+          <LVSNotificationCenter />
         </TabsContent>
 
         <TabsContent value="interview">
