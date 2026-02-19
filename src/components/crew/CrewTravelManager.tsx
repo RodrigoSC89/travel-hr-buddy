@@ -1,6 +1,6 @@
 /**
- * Crew Travel & Logistics Manager v2
- * BEATS: Compas/Stena — Full travel lifecycle, cost analytics, timeline view
+ * Crew Travel & Logistics Manager v3
+ * BEATS: Compas/Stena — Full travel lifecycle, internal quotation engine, zero external APIs
  */
 import React, { useState, useMemo } from 'react';
 import { useQuery, useMutation, useQueryClient } from '@tanstack/react-query';
@@ -15,8 +15,12 @@ import { Select, SelectContent, SelectItem, SelectTrigger, SelectValue } from '@
 import { Skeleton } from '@/components/ui/skeleton';
 import { Tabs, TabsContent, TabsList, TabsTrigger } from '@/components/ui/tabs';
 import { toast } from 'sonner';
-import { Plane, CreditCard, Calendar, MapPin, Plus, Globe, DollarSign, TrendingUp, Download, Search, Clock, Users, BarChart3, AlertTriangle } from 'lucide-react';
+import { Plane, CreditCard, Calendar, MapPin, Plus, Globe, DollarSign, TrendingUp, Download, Search, Clock, Users, BarChart3, AlertTriangle, Hotel, Bus, FileText } from 'lucide-react';
 import { BarChart, Bar, XAxis, YAxis, CartesianGrid, Tooltip, ResponsiveContainer, PieChart, Pie, Cell } from 'recharts';
+import { FlightRouteCatalog } from './travel/FlightRouteCatalog';
+import { ApprovedHotelsCatalog } from './travel/ApprovedHotelsCatalog';
+import { TransferProvidersCatalog } from './travel/TransferProvidersCatalog';
+import { QuotationEngine } from './travel/QuotationEngine';
 
 type TravelType = 'embarkation' | 'disembarkation' | 'crew_change' | 'training' | 'medical' | 'repatriation';
 
@@ -191,8 +195,12 @@ export function CrewTravelManager() {
       </div>
 
       <Tabs value={mainTab} onValueChange={setMainTab}>
-        <TabsList>
+        <TabsList className="flex-wrap h-auto gap-1">
           <TabsTrigger value="travels">Viagens</TabsTrigger>
+          <TabsTrigger value="flights"><Plane className="h-3 w-3 mr-1" />Rotas Aéreas</TabsTrigger>
+          <TabsTrigger value="hotels"><Hotel className="h-3 w-3 mr-1" />Hotéis</TabsTrigger>
+          <TabsTrigger value="transfers"><Bus className="h-3 w-3 mr-1" />Transfers</TabsTrigger>
+          <TabsTrigger value="quotations"><FileText className="h-3 w-3 mr-1" />Cotações</TabsTrigger>
           <TabsTrigger value="analytics">Analytics</TabsTrigger>
           <TabsTrigger value="urgent">Urgentes ({analytics.urgent.length})</TabsTrigger>
         </TabsList>
@@ -253,6 +261,12 @@ export function CrewTravelManager() {
             </div>
           )}
         </TabsContent>
+
+        {/* Internal Catalogs */}
+        <TabsContent value="flights"><FlightRouteCatalog /></TabsContent>
+        <TabsContent value="hotels"><ApprovedHotelsCatalog /></TabsContent>
+        <TabsContent value="transfers"><TransferProvidersCatalog /></TabsContent>
+        <TabsContent value="quotations"><QuotationEngine /></TabsContent>
 
         {/* Analytics */}
         <TabsContent value="analytics">

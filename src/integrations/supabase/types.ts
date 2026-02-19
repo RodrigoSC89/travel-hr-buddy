@@ -52315,6 +52315,271 @@ export type Database = {
         }
         Relationships: []
       }
+      travel_approved_hotels: {
+        Row: {
+          address: string | null
+          airport_distance_km: number | null
+          airport_shuttle: boolean | null
+          breakfast_included: boolean | null
+          city: string
+          contract_valid_until: string | null
+          country: string
+          created_at: string | null
+          daily_rate_usd: number | null
+          email: string | null
+          hotel_name: string
+          id: string
+          internal_rating: number | null
+          is_active: boolean | null
+          max_daily_rate_usd: number | null
+          organization_id: string | null
+          phone: string | null
+          port_distance_km: number | null
+          port_name: string | null
+          rank_policy: Json | null
+          star_rating: number | null
+          total_reviews: number | null
+          updated_at: string | null
+          website: string | null
+        }
+        Insert: {
+          address?: string | null
+          airport_distance_km?: number | null
+          airport_shuttle?: boolean | null
+          breakfast_included?: boolean | null
+          city: string
+          contract_valid_until?: string | null
+          country: string
+          created_at?: string | null
+          daily_rate_usd?: number | null
+          email?: string | null
+          hotel_name: string
+          id?: string
+          internal_rating?: number | null
+          is_active?: boolean | null
+          max_daily_rate_usd?: number | null
+          organization_id?: string | null
+          phone?: string | null
+          port_distance_km?: number | null
+          port_name?: string | null
+          rank_policy?: Json | null
+          star_rating?: number | null
+          total_reviews?: number | null
+          updated_at?: string | null
+          website?: string | null
+        }
+        Update: {
+          address?: string | null
+          airport_distance_km?: number | null
+          airport_shuttle?: boolean | null
+          breakfast_included?: boolean | null
+          city?: string
+          contract_valid_until?: string | null
+          country?: string
+          created_at?: string | null
+          daily_rate_usd?: number | null
+          email?: string | null
+          hotel_name?: string
+          id?: string
+          internal_rating?: number | null
+          is_active?: boolean | null
+          max_daily_rate_usd?: number | null
+          organization_id?: string | null
+          phone?: string | null
+          port_distance_km?: number | null
+          port_name?: string | null
+          rank_policy?: Json | null
+          star_rating?: number | null
+          total_reviews?: number | null
+          updated_at?: string | null
+          website?: string | null
+        }
+        Relationships: [
+          {
+            foreignKeyName: "travel_approved_hotels_organization_id_fkey"
+            columns: ["organization_id"]
+            isOneToOne: false
+            referencedRelation: "organizations"
+            referencedColumns: ["id"]
+          },
+        ]
+      }
+      travel_bookings: {
+        Row: {
+          booking_number: string
+          booking_type: string
+          cancellation_reason: string | null
+          confirmation_number: string | null
+          created_at: string | null
+          created_by: string | null
+          crew_member_id: string | null
+          currency: string | null
+          description: string | null
+          end_date: string | null
+          id: string
+          organization_id: string | null
+          post_feedback: string | null
+          post_rating: number | null
+          quotation_request_id: string | null
+          quotation_response_id: string | null
+          start_date: string | null
+          status: string | null
+          supplier_name: string
+          total_price_usd: number
+          updated_at: string | null
+          vessel_id: string | null
+        }
+        Insert: {
+          booking_number: string
+          booking_type: string
+          cancellation_reason?: string | null
+          confirmation_number?: string | null
+          created_at?: string | null
+          created_by?: string | null
+          crew_member_id?: string | null
+          currency?: string | null
+          description?: string | null
+          end_date?: string | null
+          id?: string
+          organization_id?: string | null
+          post_feedback?: string | null
+          post_rating?: number | null
+          quotation_request_id?: string | null
+          quotation_response_id?: string | null
+          start_date?: string | null
+          status?: string | null
+          supplier_name: string
+          total_price_usd: number
+          updated_at?: string | null
+          vessel_id?: string | null
+        }
+        Update: {
+          booking_number?: string
+          booking_type?: string
+          cancellation_reason?: string | null
+          confirmation_number?: string | null
+          created_at?: string | null
+          created_by?: string | null
+          crew_member_id?: string | null
+          currency?: string | null
+          description?: string | null
+          end_date?: string | null
+          id?: string
+          organization_id?: string | null
+          post_feedback?: string | null
+          post_rating?: number | null
+          quotation_request_id?: string | null
+          quotation_response_id?: string | null
+          start_date?: string | null
+          status?: string | null
+          supplier_name?: string
+          total_price_usd?: number
+          updated_at?: string | null
+          vessel_id?: string | null
+        }
+        Relationships: [
+          {
+            foreignKeyName: "travel_bookings_crew_member_id_fkey"
+            columns: ["crew_member_id"]
+            isOneToOne: false
+            referencedRelation: "crew_members"
+            referencedColumns: ["id"]
+          },
+          {
+            foreignKeyName: "travel_bookings_organization_id_fkey"
+            columns: ["organization_id"]
+            isOneToOne: false
+            referencedRelation: "organizations"
+            referencedColumns: ["id"]
+          },
+          {
+            foreignKeyName: "travel_bookings_quotation_request_id_fkey"
+            columns: ["quotation_request_id"]
+            isOneToOne: false
+            referencedRelation: "travel_quotation_requests"
+            referencedColumns: ["id"]
+          },
+          {
+            foreignKeyName: "travel_bookings_quotation_response_id_fkey"
+            columns: ["quotation_response_id"]
+            isOneToOne: false
+            referencedRelation: "travel_quotation_responses"
+            referencedColumns: ["id"]
+          },
+          {
+            foreignKeyName: "travel_bookings_vessel_id_fkey"
+            columns: ["vessel_id"]
+            isOneToOne: false
+            referencedRelation: "vessels"
+            referencedColumns: ["id"]
+          },
+        ]
+      }
+      travel_flight_routes: {
+        Row: {
+          avg_duration_hours: number | null
+          avg_price_usd: number | null
+          created_at: string | null
+          destination_city: string
+          destination_iata: string | null
+          frequency: string | null
+          id: string
+          is_active: boolean | null
+          max_price_usd: number | null
+          min_price_usd: number | null
+          notes: string | null
+          organization_id: string | null
+          origin_city: string
+          origin_iata: string | null
+          preferred_airlines: string[] | null
+          updated_at: string | null
+        }
+        Insert: {
+          avg_duration_hours?: number | null
+          avg_price_usd?: number | null
+          created_at?: string | null
+          destination_city: string
+          destination_iata?: string | null
+          frequency?: string | null
+          id?: string
+          is_active?: boolean | null
+          max_price_usd?: number | null
+          min_price_usd?: number | null
+          notes?: string | null
+          organization_id?: string | null
+          origin_city: string
+          origin_iata?: string | null
+          preferred_airlines?: string[] | null
+          updated_at?: string | null
+        }
+        Update: {
+          avg_duration_hours?: number | null
+          avg_price_usd?: number | null
+          created_at?: string | null
+          destination_city?: string
+          destination_iata?: string | null
+          frequency?: string | null
+          id?: string
+          is_active?: boolean | null
+          max_price_usd?: number | null
+          min_price_usd?: number | null
+          notes?: string | null
+          organization_id?: string | null
+          origin_city?: string
+          origin_iata?: string | null
+          preferred_airlines?: string[] | null
+          updated_at?: string | null
+        }
+        Relationships: [
+          {
+            foreignKeyName: "travel_flight_routes_organization_id_fkey"
+            columns: ["organization_id"]
+            isOneToOne: false
+            referencedRelation: "organizations"
+            referencedColumns: ["id"]
+          },
+        ]
+      }
       travel_itineraries: {
         Row: {
           booking_reference: string | null
@@ -52547,6 +52812,231 @@ export type Database = {
           },
         ]
       }
+      travel_quotation_requests: {
+        Row: {
+          approved_at: string | null
+          approved_by: string | null
+          cabin_class: string | null
+          check_in_date: string | null
+          check_out_date: string | null
+          created_at: string | null
+          crew_member_id: string | null
+          crew_member_name: string | null
+          departure_date: string | null
+          destination_city: string | null
+          hotel_city: string | null
+          id: string
+          is_one_way: boolean | null
+          max_budget_usd: number | null
+          notes: string | null
+          organization_id: string | null
+          origin_city: string | null
+          passengers: number | null
+          request_number: string
+          request_type: string
+          return_date: string | null
+          rooms_needed: number | null
+          status: string | null
+          transfer_city: string | null
+          transfer_date: string | null
+          transfer_destination: string | null
+          transfer_origin: string | null
+          updated_at: string | null
+          urgency: string | null
+          vessel_id: string | null
+        }
+        Insert: {
+          approved_at?: string | null
+          approved_by?: string | null
+          cabin_class?: string | null
+          check_in_date?: string | null
+          check_out_date?: string | null
+          created_at?: string | null
+          crew_member_id?: string | null
+          crew_member_name?: string | null
+          departure_date?: string | null
+          destination_city?: string | null
+          hotel_city?: string | null
+          id?: string
+          is_one_way?: boolean | null
+          max_budget_usd?: number | null
+          notes?: string | null
+          organization_id?: string | null
+          origin_city?: string | null
+          passengers?: number | null
+          request_number: string
+          request_type: string
+          return_date?: string | null
+          rooms_needed?: number | null
+          status?: string | null
+          transfer_city?: string | null
+          transfer_date?: string | null
+          transfer_destination?: string | null
+          transfer_origin?: string | null
+          updated_at?: string | null
+          urgency?: string | null
+          vessel_id?: string | null
+        }
+        Update: {
+          approved_at?: string | null
+          approved_by?: string | null
+          cabin_class?: string | null
+          check_in_date?: string | null
+          check_out_date?: string | null
+          created_at?: string | null
+          crew_member_id?: string | null
+          crew_member_name?: string | null
+          departure_date?: string | null
+          destination_city?: string | null
+          hotel_city?: string | null
+          id?: string
+          is_one_way?: boolean | null
+          max_budget_usd?: number | null
+          notes?: string | null
+          organization_id?: string | null
+          origin_city?: string | null
+          passengers?: number | null
+          request_number?: string
+          request_type?: string
+          return_date?: string | null
+          rooms_needed?: number | null
+          status?: string | null
+          transfer_city?: string | null
+          transfer_date?: string | null
+          transfer_destination?: string | null
+          transfer_origin?: string | null
+          updated_at?: string | null
+          urgency?: string | null
+          vessel_id?: string | null
+        }
+        Relationships: [
+          {
+            foreignKeyName: "travel_quotation_requests_crew_member_id_fkey"
+            columns: ["crew_member_id"]
+            isOneToOne: false
+            referencedRelation: "crew_members"
+            referencedColumns: ["id"]
+          },
+          {
+            foreignKeyName: "travel_quotation_requests_organization_id_fkey"
+            columns: ["organization_id"]
+            isOneToOne: false
+            referencedRelation: "organizations"
+            referencedColumns: ["id"]
+          },
+          {
+            foreignKeyName: "travel_quotation_requests_vessel_id_fkey"
+            columns: ["vessel_id"]
+            isOneToOne: false
+            referencedRelation: "vessels"
+            referencedColumns: ["id"]
+          },
+        ]
+      }
+      travel_quotation_responses: {
+        Row: {
+          ai_score: number | null
+          airline: string | null
+          arrival_time: string | null
+          cancellation_policy: string | null
+          convenience_score: number | null
+          created_at: string | null
+          currency: string | null
+          departure_time: string | null
+          description: string | null
+          duration_hours: number | null
+          flight_number: string | null
+          hotel_name: string | null
+          id: string
+          includes_baggage: boolean | null
+          includes_meals: boolean | null
+          is_recommended: boolean | null
+          is_selected: boolean | null
+          notes: string | null
+          price_score: number | null
+          price_usd: number
+          reliability_score: number | null
+          request_id: string | null
+          selected_at: string | null
+          selected_by: string | null
+          supplier_email: string | null
+          supplier_name: string
+          supplier_phone: string | null
+          transfer_company: string | null
+          valid_until: string | null
+        }
+        Insert: {
+          ai_score?: number | null
+          airline?: string | null
+          arrival_time?: string | null
+          cancellation_policy?: string | null
+          convenience_score?: number | null
+          created_at?: string | null
+          currency?: string | null
+          departure_time?: string | null
+          description?: string | null
+          duration_hours?: number | null
+          flight_number?: string | null
+          hotel_name?: string | null
+          id?: string
+          includes_baggage?: boolean | null
+          includes_meals?: boolean | null
+          is_recommended?: boolean | null
+          is_selected?: boolean | null
+          notes?: string | null
+          price_score?: number | null
+          price_usd: number
+          reliability_score?: number | null
+          request_id?: string | null
+          selected_at?: string | null
+          selected_by?: string | null
+          supplier_email?: string | null
+          supplier_name: string
+          supplier_phone?: string | null
+          transfer_company?: string | null
+          valid_until?: string | null
+        }
+        Update: {
+          ai_score?: number | null
+          airline?: string | null
+          arrival_time?: string | null
+          cancellation_policy?: string | null
+          convenience_score?: number | null
+          created_at?: string | null
+          currency?: string | null
+          departure_time?: string | null
+          description?: string | null
+          duration_hours?: number | null
+          flight_number?: string | null
+          hotel_name?: string | null
+          id?: string
+          includes_baggage?: boolean | null
+          includes_meals?: boolean | null
+          is_recommended?: boolean | null
+          is_selected?: boolean | null
+          notes?: string | null
+          price_score?: number | null
+          price_usd?: number
+          reliability_score?: number | null
+          request_id?: string | null
+          selected_at?: string | null
+          selected_by?: string | null
+          supplier_email?: string | null
+          supplier_name?: string
+          supplier_phone?: string | null
+          transfer_company?: string | null
+          valid_until?: string | null
+        }
+        Relationships: [
+          {
+            foreignKeyName: "travel_quotation_responses_request_id_fkey"
+            columns: ["request_id"]
+            isOneToOne: false
+            referencedRelation: "travel_quotation_requests"
+            referencedColumns: ["id"]
+          },
+        ]
+      }
       travel_recommendations: {
         Row: {
           action_deadline: string | null
@@ -52600,6 +53090,136 @@ export type Database = {
           user_id?: string
         }
         Relationships: []
+      }
+      travel_transfer_providers: {
+        Row: {
+          airport_to_port_rate_usd: number | null
+          availability: string | null
+          base_rate_usd: number | null
+          city: string
+          company_name: string
+          contact_name: string | null
+          country: string
+          created_at: string | null
+          email: string | null
+          hotel_to_port_rate_usd: number | null
+          id: string
+          internal_rating: number | null
+          is_active: boolean | null
+          organization_id: string | null
+          phone: string | null
+          port_name: string | null
+          rate_per_km_usd: number | null
+          total_trips: number | null
+          updated_at: string | null
+          vehicle_types: string[] | null
+        }
+        Insert: {
+          airport_to_port_rate_usd?: number | null
+          availability?: string | null
+          base_rate_usd?: number | null
+          city: string
+          company_name: string
+          contact_name?: string | null
+          country: string
+          created_at?: string | null
+          email?: string | null
+          hotel_to_port_rate_usd?: number | null
+          id?: string
+          internal_rating?: number | null
+          is_active?: boolean | null
+          organization_id?: string | null
+          phone?: string | null
+          port_name?: string | null
+          rate_per_km_usd?: number | null
+          total_trips?: number | null
+          updated_at?: string | null
+          vehicle_types?: string[] | null
+        }
+        Update: {
+          airport_to_port_rate_usd?: number | null
+          availability?: string | null
+          base_rate_usd?: number | null
+          city?: string
+          company_name?: string
+          contact_name?: string | null
+          country?: string
+          created_at?: string | null
+          email?: string | null
+          hotel_to_port_rate_usd?: number | null
+          id?: string
+          internal_rating?: number | null
+          is_active?: boolean | null
+          organization_id?: string | null
+          phone?: string | null
+          port_name?: string | null
+          rate_per_km_usd?: number | null
+          total_trips?: number | null
+          updated_at?: string | null
+          vehicle_types?: string[] | null
+        }
+        Relationships: [
+          {
+            foreignKeyName: "travel_transfer_providers_organization_id_fkey"
+            columns: ["organization_id"]
+            isOneToOne: false
+            referencedRelation: "organizations"
+            referencedColumns: ["id"]
+          },
+        ]
+      }
+      travel_transfer_routes: {
+        Row: {
+          created_at: string | null
+          destination_name: string
+          destination_type: string
+          distance_km: number | null
+          estimated_duration_min: number | null
+          fixed_price_usd: number | null
+          id: string
+          is_active: boolean | null
+          origin_name: string
+          origin_type: string
+          provider_id: string | null
+          route_name: string
+        }
+        Insert: {
+          created_at?: string | null
+          destination_name: string
+          destination_type: string
+          distance_km?: number | null
+          estimated_duration_min?: number | null
+          fixed_price_usd?: number | null
+          id?: string
+          is_active?: boolean | null
+          origin_name: string
+          origin_type: string
+          provider_id?: string | null
+          route_name: string
+        }
+        Update: {
+          created_at?: string | null
+          destination_name?: string
+          destination_type?: string
+          distance_km?: number | null
+          estimated_duration_min?: number | null
+          fixed_price_usd?: number | null
+          id?: string
+          is_active?: boolean | null
+          origin_name?: string
+          origin_type?: string
+          provider_id?: string | null
+          route_name?: string
+        }
+        Relationships: [
+          {
+            foreignKeyName: "travel_transfer_routes_provider_id_fkey"
+            columns: ["provider_id"]
+            isOneToOne: false
+            referencedRelation: "travel_transfer_providers"
+            referencedColumns: ["id"]
+          },
+        ]
       }
       trust_compliance_logs: {
         Row: {
