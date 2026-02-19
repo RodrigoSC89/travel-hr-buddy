@@ -22,6 +22,8 @@ import { LVSReadinessTimeline } from "@/components/lvs-aceitacao/LVSReadinessTim
 import { LVSSessionManager } from "@/components/lvs-aceitacao/LVSSessionManager";
 import { LVSSmartGapCloser } from "@/components/lvs-aceitacao/LVSSmartGapCloser";
 import { LVSAutoEvidenceBuilder } from "@/components/lvs-aceitacao/LVSAutoEvidenceBuilder";
+import { LVSPetrobrasInspectionSimulator } from "@/components/lvs-aceitacao/LVSPetrobrasInspectionSimulator";
+import { LVSBulkActionsProgress } from "@/components/lvs-aceitacao/LVSBulkActionsProgress";
 import { useLVSPersistence } from "@/components/lvs-aceitacao/useLVSPersistence";
 
 const LVSAceitacaoPetrobras = () => {
@@ -59,8 +61,10 @@ const LVSAceitacaoPetrobras = () => {
           <TabsTrigger value="readiness" className="gap-1.5"><Calendar className="h-3.5 w-3.5" /> Readiness Timeline</TabsTrigger>
           <TabsTrigger value="document-analyzer" className="gap-1.5"><FileSearch className="h-3.5 w-3.5" /> Analisador de Documentos</TabsTrigger>
           <TabsTrigger value="action-plan" className="gap-1.5"><ClipboardList className="h-3.5 w-3.5" /> Plano de Ação IA</TabsTrigger>
-          <TabsTrigger value="interview" className="gap-1.5"><MessageSquare className="h-3.5 w-3.5" /> Simulador de Entrevista</TabsTrigger>
-          <TabsTrigger value="evidence-organizer" className="gap-1.5"><ClipboardCheck className="h-3.5 w-3.5" /> Organizador de Evidências</TabsTrigger>
+          <TabsTrigger value="inspection-sim" className="gap-1.5"><Shield className="h-3.5 w-3.5" /> Simulador Inspeção</TabsTrigger>
+          <TabsTrigger value="bulk-actions" className="gap-1.5"><ClipboardCheck className="h-3.5 w-3.5" /> Bulk Actions</TabsTrigger>
+          <TabsTrigger value="interview" className="gap-1.5"><MessageSquare className="h-3.5 w-3.5" /> Entrevista IA</TabsTrigger>
+          <TabsTrigger value="evidence-organizer" className="gap-1.5"><ClipboardList className="h-3.5 w-3.5" /> Evidências</TabsTrigger>
         </TabsList>
 
         <TabsContent value="checklist">
@@ -89,6 +93,14 @@ const LVSAceitacaoPetrobras = () => {
 
         <TabsContent value="action-plan">
           <LVSActionPlanGenerator onSavePlan={persistence.activeSession ? persistence.saveActionPlan : undefined} />
+        </TabsContent>
+
+        <TabsContent value="inspection-sim">
+          <LVSPetrobrasInspectionSimulator />
+        </TabsContent>
+
+        <TabsContent value="bulk-actions">
+          <LVSBulkActionsProgress />
         </TabsContent>
 
         <TabsContent value="interview">
