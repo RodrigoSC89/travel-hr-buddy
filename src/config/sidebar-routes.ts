@@ -284,6 +284,21 @@ export const SIDEBAR_ROUTES: SidebarGroup[] = [
       { label: "Voyage Optimizer", path: "/voyage-optimizer", icon: Map, emoji: "🗺️", badge: "AI", status: "new" as const },
     ],
   },
+
+  // ═══════════════════════════════════════════════════════════
+  // I. 🚀 GO-TO-MARKET - Roadmap Tools
+  // ═══════════════════════════════════════════════════════════
+  {
+    title: "🚀 Go-to-Market",
+    defaultOpen: false,
+    items: [
+      { label: "Landing Page", path: "/landing", icon: Globe, emoji: "🌐", badge: "PUBLIC", status: "new" as const },
+      { label: "Pricing", path: "/landing#pricing", icon: DollarSign, emoji: "💰", badge: "NEW", status: "new" as const },
+      { label: "API & Webhooks", path: "/api-docs", icon: Link, emoji: "🔗", badge: "v1", status: "new" as const },
+      { label: "Usage Analytics", path: "/usage-analytics", icon: BarChart3, emoji: "📊", badge: "LIVE", status: "new" as const },
+      { label: "ISO 27001 / SOC 2", path: "/iso-soc", icon: Shield, emoji: "🏆", badge: "CERT", status: "new" as const },
+    ],
+  },
 ];
 
 /**
