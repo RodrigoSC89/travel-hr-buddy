@@ -43,8 +43,18 @@ import {
   Eye,
   RefreshCw,
   FileText,
-  Calendar
+  Calendar,
+  BarChart3,
+  TrendingUp,
+  Target
 } from "lucide-react";
+import {
+  ResponsiveContainer, BarChart, Bar, XAxis, YAxis, CartesianGrid, Tooltip,
+  PieChart, Pie, Cell, Legend, RadarChart, Radar, PolarGrid, PolarAngleAxis,
+  PolarRadiusAxis
+} from "recharts";
+
+const CHART_COLORS = ["hsl(var(--primary))", "hsl(210,70%,55%)", "hsl(160,60%,45%)", "hsl(35,80%,55%)", "hsl(280,60%,55%)", "hsl(0,70%,55%)"];
 
 interface FleetVessel {
   id: string;
@@ -432,6 +442,7 @@ export function FleetCommandDashboard() {
             )}
           </TabsTrigger>
           <TabsTrigger value="actions">Ações</TabsTrigger>
+          <TabsTrigger value="analytics">Analytics</TabsTrigger>
           <TabsTrigger value="map">Mapa</TabsTrigger>
         </TabsList>
 
@@ -700,6 +711,105 @@ export function FleetCommandDashboard() {
               )}
             </CardContent>
           </Card>
+        </TabsContent>
+
+        {/* V3: Analytics Tab */}
+        <TabsContent value="analytics" className="space-y-4">
+          {(() => {
+            const statusDist = [
+              { name: "Operacional", value: vessels.filter(v => v.status === "operational").length },
+              { name: "Em Trânsito", value: vessels.filter(v => v.status === "transit").length },
+              { name: "Atracada", value: vessels.filter(v => v.status === "docked").length },
+              { name: "Manutenção", value: vessels.filter(v => v.status === "maintenance").length },
+              { name: "Alerta", value: vessels.filter(v => v.status === "alert").length },
+            ].filter(d => d.value > 0);
+
+            const typeDist: Record<string, number> = {};
+            vessels.forEach(v => { typeDist[v.type] = (typeDist[v.type] || 0) + 1; });
+            const typeData = Object.entries(typeDist).map(([name, value]) => ({ name, value })).sort((a, b) => b.value - a.value);
+
+            const fuelDist = [
+              { range: "0-25%", count: vessels.filter(v => v.fuel <= 25).length },
+              { range: "26-50%", count: vessels.filter(v => v.fuel > 25 && v.fuel <= 50).length },
+              { range: "51-75%", count: vessels.filter(v => v.fuel > 50 && v.fuel <= 75).length },
+              { range: "76-100%", count: vessels.filter(v => v.fuel > 75).length },
+            ];
+
+            const radarData = [
+              { subject: "Operacional", value: vessels.length > 0 ? Math.round((vessels.filter(v => v.status === "operational" || v.status === "transit").length / vessels.length) * 100) : 0, fullMark: 100 },
+              { subject: "Combustível", value: vessels.length > 0 ? Math.round(vessels.reduce((s, v) => s + v.fuel, 0) / vessels.length) : 0, fullMark: 100 },
+              { subject: "Alertas Baixos", value: Math.max(0, 100 - alerts.filter(a => !a.acknowledged).length * 10), fullMark: 100 },
+              { subject: "Ações Concluídas", value: actions.length > 0 ? Math.round((actions.filter(a => a.status === "completed").length / actions.length) * 100) : 100, fullMark: 100 },
+              { subject: "Cobertura", value: Math.min(100, vessels.length * 15), fullMark: 100 },
+            ];
+
+            return (
+              <div className="grid md:grid-cols-2 gap-4">
+                <Card>
+                  <CardHeader><CardTitle className="text-sm flex items-center gap-2"><BarChart3 className="h-4 w-4" />Status da Frota</CardTitle></CardHeader>
+                  <CardContent>
+                    {statusDist.length === 0 ? <p className="text-center py-8 text-muted-foreground">Sem dados</p> : (
+                      <ResponsiveContainer width="100%" height={220}>
+                        <PieChart>
+                          <Pie data={statusDist} dataKey="value" nameKey="name" cx="50%" cy="50%" outerRadius={75} label>
+                            {statusDist.map((_, i) => <Cell key={i} fill={CHART_COLORS[i % CHART_COLORS.length]} />)}
+                          </Pie>
+                          <Tooltip /><Legend />
+                        </PieChart>
+                      </ResponsiveContainer>
+                    )}
+                  </CardContent>
+                </Card>
+
+                <Card>
+                  <CardHeader><CardTitle className="text-sm flex items-center gap-2"><Ship className="h-4 w-4" />Tipos de Embarcação</CardTitle></CardHeader>
+                  <CardContent>
+                    {typeData.length === 0 ? <p className="text-center py-8 text-muted-foreground">Sem dados</p> : (
+                      <ResponsiveContainer width="100%" height={220}>
+                        <BarChart data={typeData}>
+                          <CartesianGrid strokeDasharray="3 3" stroke="hsl(var(--border))" />
+                          <XAxis dataKey="name" tick={{ fontSize: 10 }} />
+                          <YAxis tick={{ fontSize: 11 }} />
+                          <Tooltip />
+                          <Bar dataKey="value" name="Embarcações" fill="hsl(var(--primary))" radius={[4,4,0,0]} />
+                        </BarChart>
+                      </ResponsiveContainer>
+                    )}
+                  </CardContent>
+                </Card>
+
+                <Card>
+                  <CardHeader><CardTitle className="text-sm flex items-center gap-2"><Fuel className="h-4 w-4" />Distribuição de Combustível</CardTitle></CardHeader>
+                  <CardContent>
+                    <ResponsiveContainer width="100%" height={220}>
+                      <BarChart data={fuelDist}>
+                        <CartesianGrid strokeDasharray="3 3" stroke="hsl(var(--border))" />
+                        <XAxis dataKey="range" tick={{ fontSize: 11 }} />
+                        <YAxis tick={{ fontSize: 11 }} />
+                        <Tooltip />
+                        <Bar dataKey="count" name="Embarcações" fill="hsl(var(--warning))" radius={[4,4,0,0]} />
+                      </BarChart>
+                    </ResponsiveContainer>
+                  </CardContent>
+                </Card>
+
+                <Card>
+                  <CardHeader><CardTitle className="text-sm flex items-center gap-2"><Target className="h-4 w-4" />Fleet Performance Radar</CardTitle></CardHeader>
+                  <CardContent>
+                    <ResponsiveContainer width="100%" height={220}>
+                      <RadarChart data={radarData} cx="50%" cy="50%" outerRadius="65%">
+                        <PolarGrid stroke="hsl(var(--border))" />
+                        <PolarAngleAxis dataKey="subject" tick={{ fontSize: 9 }} />
+                        <PolarRadiusAxis angle={30} domain={[0, 100]} tick={{ fontSize: 9 }} />
+                        <Radar name="Score" dataKey="value" stroke="hsl(var(--primary))" fill="hsl(var(--primary))" fillOpacity={0.3} />
+                        <Tooltip />
+                      </RadarChart>
+                    </ResponsiveContainer>
+                  </CardContent>
+                </Card>
+              </div>
+            );
+          })()}
         </TabsContent>
 
         {/* Map Tab */}
