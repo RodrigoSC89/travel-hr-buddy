@@ -1,7 +1,8 @@
 /**
- * Noon Report Manager v2 - World-class voyage reporting
+ * Noon Report Manager v3 - World-class voyage reporting
  * Benchmarks: BASSnet, DNV ShipManager, Veson IMOS
  * Full CRUD + Performance Analytics + Weather Impact + Fuel Efficiency
+ * V3: Vessel Performance Ranking, Good/Bad Weather Analysis, Voyage Comparison, EEOI Calculator
  */
 import React, { useState, useMemo } from 'react';
 import { useQuery, useMutation, useQueryClient } from '@tanstack/react-query';
@@ -16,13 +17,18 @@ import { Textarea } from '@/components/ui/textarea';
 import { Dialog, DialogContent, DialogHeader, DialogTitle } from '@/components/ui/dialog';
 import { Tabs, TabsContent, TabsList, TabsTrigger } from '@/components/ui/tabs';
 import { Skeleton } from '@/components/ui/skeleton';
+import { Progress } from '@/components/ui/progress';
 import { toast } from 'sonner';
 import {
   Navigation, Fuel, Wind, Thermometer, Anchor, Send, Plus, Eye,
   CheckCircle, Clock, Ship, Compass, Waves, TrendingUp, AlertTriangle,
-  BarChart3, Download, Filter
+  BarChart3, Download, Filter, Zap, Award, Globe
 } from 'lucide-react';
-import { LineChart, Line, BarChart, Bar, XAxis, YAxis, CartesianGrid, Tooltip, ResponsiveContainer, AreaChart, Area, ScatterChart, Scatter } from 'recharts';
+import {
+  LineChart, Line, BarChart, Bar, XAxis, YAxis, CartesianGrid, Tooltip,
+  ResponsiveContainer, AreaChart, Area, ScatterChart, Scatter, RadarChart,
+  PolarGrid, PolarAngleAxis, PolarRadiusAxis, Radar, ComposedChart, Legend
+} from 'recharts';
 
 const VESSEL_STATUSES = ['at-sea', 'anchored', 'in-port', 'maneuvering', 'drifting'];
 const WIND_DIRS = ['N', 'NE', 'E', 'SE', 'S', 'SW', 'W', 'NW'];
@@ -173,6 +179,68 @@ export default function NoonReportManager() {
     // CO2 estimate (IMO factor: HFO=3.114, MDO=3.206, MGO=3.206 tCO2/tFuel)
     const co2 = totalFuelHFO * 3.114 + totalFuelMDO * 3.206 + totalFuelMGO * 3.206;
 
+    // V3: EEOI = (CO2 emissions) / (cargo × distance) — simplified
+    const eeoi = totalDistance > 0 ? (co2 * 1e6) / (totalDistance * 50000) : 0; // assume 50k DWT
+
+    // V3: Good vs Bad Weather analysis (BF <= 4 = good, BF >= 5 = bad)
+    const goodWeather = reps.filter(r => r.wind_force != null && r.wind_force <= 4);
+    const badWeather = reps.filter(r => r.wind_force != null && r.wind_force >= 5);
+    const goodWeatherStats = {
+      count: goodWeather.length,
+      avgSpeed: goodWeather.length > 0 ? +(goodWeather.reduce((s, r) => s + (r.speed_avg || 0), 0) / goodWeather.length).toFixed(1) : 0,
+      avgFuel: goodWeather.length > 0 ? +(goodWeather.reduce((s, r) => s + (r.consumption_hfo || 0) + (r.consumption_mdo || 0), 0) / goodWeather.length).toFixed(1) : 0,
+    };
+    const badWeatherStats = {
+      count: badWeather.length,
+      avgSpeed: badWeather.length > 0 ? +(badWeather.reduce((s, r) => s + (r.speed_avg || 0), 0) / badWeather.length).toFixed(1) : 0,
+      avgFuel: badWeather.length > 0 ? +(badWeather.reduce((s, r) => s + (r.consumption_hfo || 0) + (r.consumption_mdo || 0), 0) / badWeather.length).toFixed(1) : 0,
+    };
+    const speedLossPct = goodWeatherStats.avgSpeed > 0 && badWeatherStats.avgSpeed > 0
+      ? +((1 - badWeatherStats.avgSpeed / goodWeatherStats.avgSpeed) * 100).toFixed(1) : 0;
+
+    // V3: Vessel Performance Ranking
+    const vesselPerf = Object.values(
+      reps.reduce<Record<string, { name: string; distance: number; fuel: number; reports: number; co2: number; avgSpeed: number[] }>>((acc, r) => {
+        const vname = r.vessels?.name || 'N/A';
+        if (!acc[vname]) acc[vname] = { name: vname, distance: 0, fuel: 0, reports: 0, co2: 0, avgSpeed: [] };
+        acc[vname].distance += r.distance_run || 0;
+        const fuel = (r.consumption_hfo || 0) + (r.consumption_mdo || 0) + (r.consumption_mgo || 0);
+        acc[vname].fuel += fuel;
+        acc[vname].co2 += (r.consumption_hfo || 0) * 3.114 + (r.consumption_mdo || 0) * 3.206 + (r.consumption_mgo || 0) * 3.206;
+        acc[vname].reports++;
+        if (r.speed_avg) acc[vname].avgSpeed.push(r.speed_avg);
+        return acc;
+      }, {})
+    ).map(v => ({
+      name: v.name,
+      distance: Math.round(v.distance),
+      fuel: +v.fuel.toFixed(1),
+      efficiency: v.distance > 0 ? +(v.fuel / v.distance).toFixed(3) : 0,
+      avgSpeed: v.avgSpeed.length > 0 ? +(v.avgSpeed.reduce((a, b) => a + b, 0) / v.avgSpeed.length).toFixed(1) : 0,
+      co2: +v.co2.toFixed(1),
+      reports: v.reports,
+    })).sort((a, b) => a.efficiency - b.efficiency);
+
+    // V3: Speed profile over time (ordered vs actual)
+    const speedProfile = [...reps].reverse().slice(-30)
+      .filter(r => r.speed_avg)
+      .map(r => ({
+        date: r.report_date?.substring(5) || '',
+        actual: r.speed_avg || 0,
+        ordered: r.speed_ordered || r.speed_avg || 0,
+        delta: +((r.speed_avg || 0) - (r.speed_ordered || r.speed_avg || 0)).toFixed(1),
+      }));
+
+    // V3: Radar chart for vessel performance dimensions
+    const radarData = [
+      { metric: 'Velocidade', value: Math.min(100, (avgSpeed / 15) * 100) },
+      { metric: 'Eficiência', value: Math.min(100, fuelEfficiency > 0 ? (1 / fuelEfficiency) * 10 : 0) },
+      { metric: 'Distância', value: Math.min(100, (totalDistance / 5000) * 100) },
+      { metric: 'CO₂', value: Math.min(100, co2 > 0 ? Math.max(0, 100 - (co2 / 50)) : 100) },
+      { metric: 'Reports', value: Math.min(100, (reps.length / 100) * 100) },
+      { metric: 'Clima', value: Math.min(100, goodWeather.length > 0 ? (goodWeather.length / (goodWeather.length + badWeather.length)) * 100 : 50) },
+    ];
+
     return {
       totalReports: reps.length,
       totalDistance: Math.round(totalDistance),
@@ -180,12 +248,19 @@ export default function NoonReportManager() {
       avgSpeed: +avgSpeed.toFixed(1),
       fuelEfficiency: +fuelEfficiency.toFixed(3),
       co2: +co2.toFixed(1),
+      eeoi: +eeoi.toFixed(2),
       speedConsumption,
       fuelTrend,
       weatherData,
       robTrend,
       submitted: reps.filter(r => r.status === 'submitted').length,
       approved: reps.filter(r => r.status === 'approved').length,
+      goodWeatherStats,
+      badWeatherStats,
+      speedLossPct,
+      vesselPerf,
+      speedProfile,
+      radarData,
     };
   }, [filteredReports]);
 
@@ -214,9 +289,9 @@ export default function NoonReportManager() {
         <div>
           <h2 className="text-2xl font-bold flex items-center gap-2">
             <Navigation className="h-6 w-6 text-primary" />
-            Noon Report System
+            Noon Report System <Badge variant="outline" className="text-[10px]">v3</Badge>
           </h2>
-          <p className="text-muted-foreground">Relatórios diários — Padrão BASSnet/DNV ShipManager</p>
+          <p className="text-muted-foreground">Relatórios diários — Padrão BASSnet/DNV ShipManager · EEOI · Weather Analysis</p>
         </div>
         <div className="flex gap-2">
           <Button variant="outline" size="sm" onClick={exportCSV}><Download className="w-4 h-4 mr-1" />CSV</Button>
@@ -225,14 +300,15 @@ export default function NoonReportManager() {
       </div>
 
       {/* KPIs */}
-      <div className="grid grid-cols-2 md:grid-cols-6 gap-3">
+      <div className="grid grid-cols-2 md:grid-cols-7 gap-3">
         {[
           { icon: Ship, label: 'Reports', value: analytics?.totalReports || 0, color: 'text-primary' },
-          { icon: Navigation, label: 'Distância (nm)', value: analytics?.totalDistance || 0, color: 'text-info' },
+          { icon: Navigation, label: 'Distância (nm)', value: analytics?.totalDistance || 0, color: 'text-primary' },
           { icon: TrendingUp, label: 'Vel. Média (kn)', value: analytics?.avgSpeed || 0, color: 'text-success' },
           { icon: Fuel, label: 'Consumo (t)', value: analytics?.totalFuel || 0, color: 'text-warning' },
           { icon: BarChart3, label: 'Eficiência (t/nm)', value: analytics?.fuelEfficiency || 0, color: 'text-accent-foreground' },
           { icon: Waves, label: 'CO₂ Est. (t)', value: analytics?.co2 || 0, color: 'text-destructive' },
+          { icon: Globe, label: 'EEOI', value: analytics?.eeoi || 0, color: 'text-primary' },
         ].map(kpi => (
           <Card key={kpi.label}><CardContent className="p-3 text-center">
             <kpi.icon className={`h-5 w-5 mx-auto mb-1 ${kpi.color}`} />
@@ -250,6 +326,7 @@ export default function NoonReportManager() {
             <TabsTrigger value="performance">Performance</TabsTrigger>
             <TabsTrigger value="fuel">Combustível & ROB</TabsTrigger>
             <TabsTrigger value="weather">Impacto Meteorológico</TabsTrigger>
+            <TabsTrigger value="ranking">Ranking</TabsTrigger>
           </TabsList>
           <Select value={vesselFilter} onValueChange={setVesselFilter}>
             <SelectTrigger className="w-[180px] h-8"><Filter className="h-3 w-3 mr-1" /><SelectValue placeholder="Embarcação" /></SelectTrigger>
@@ -319,20 +396,35 @@ export default function NoonReportManager() {
               </CardContent>
             </Card>
             <Card>
-              <CardHeader className="pb-2"><CardTitle className="text-sm">Eficiência por Report (t/nm)</CardTitle></CardHeader>
+              <CardHeader className="pb-2"><CardTitle className="text-sm">Velocidade Ordenada vs Real</CardTitle></CardHeader>
               <CardContent className="h-72">
-                {analytics?.fuelTrend?.length ? (
+                {analytics?.speedProfile?.length ? (
                   <ResponsiveContainer width="100%" height="100%">
-                    <AreaChart data={analytics.fuelTrend.map(d => ({
-                      ...d,
-                      efficiency: d.total > 0 ? +(d.total / Math.max(1, d.total * 10)).toFixed(3) : 0,
-                    }))}>
+                    <ComposedChart data={analytics.speedProfile}>
                       <CartesianGrid strokeDasharray="3 3" className="stroke-border" />
                       <XAxis dataKey="date" className="text-xs" />
                       <YAxis className="text-xs" />
                       <Tooltip />
-                      <Area type="monotone" dataKey="total" stroke="hsl(var(--primary))" fill="hsl(var(--primary)/0.2)" name="Consumo Total (t)" />
-                    </AreaChart>
+                      <Legend />
+                      <Line type="monotone" dataKey="ordered" stroke="hsl(var(--muted-foreground))" strokeDasharray="5 5" name="Ordenada" dot={false} />
+                      <Line type="monotone" dataKey="actual" stroke="hsl(var(--primary))" name="Real" strokeWidth={2} dot={false} />
+                      <Bar dataKey="delta" fill="hsl(var(--warning)/0.5)" name="Delta" />
+                    </ComposedChart>
+                  </ResponsiveContainer>
+                ) : <p className="text-muted-foreground text-center py-16 text-sm">Dados insuficientes</p>}
+              </CardContent>
+            </Card>
+            <Card className="md:col-span-2">
+              <CardHeader className="pb-2"><CardTitle className="text-sm flex items-center gap-2"><Zap className="h-4 w-4 text-primary" />Radar de Performance</CardTitle></CardHeader>
+              <CardContent className="h-72">
+                {analytics?.radarData ? (
+                  <ResponsiveContainer width="100%" height="100%">
+                    <RadarChart data={analytics.radarData}>
+                      <PolarGrid />
+                      <PolarAngleAxis dataKey="metric" className="text-xs" />
+                      <PolarRadiusAxis angle={30} domain={[0, 100]} className="text-xs" />
+                      <Radar name="Performance" dataKey="value" stroke="hsl(var(--primary))" fill="hsl(var(--primary)/0.3)" fillOpacity={0.6} />
+                    </RadarChart>
                   </ResponsiveContainer>
                 ) : <p className="text-muted-foreground text-center py-16 text-sm">Dados insuficientes</p>}
               </CardContent>
@@ -385,6 +477,47 @@ export default function NoonReportManager() {
         {/* Weather Impact */}
         <TabsContent value="weather">
           <div className="grid md:grid-cols-2 gap-4">
+            {/* Good vs Bad Weather comparison */}
+            {analytics && (
+              <Card className="md:col-span-2">
+                <CardHeader className="pb-2"><CardTitle className="text-sm flex items-center gap-2">
+                  <Wind className="h-4 w-4 text-primary" />Good Weather vs Bad Weather Analysis
+                </CardTitle></CardHeader>
+                <CardContent>
+                  <div className="grid grid-cols-2 md:grid-cols-4 gap-4">
+                    <div className="p-4 rounded-lg border border-success/30 bg-success/5 text-center">
+                      <CheckCircle className="h-5 w-5 mx-auto mb-1 text-success" />
+                      <div className="text-lg font-bold">{analytics.goodWeatherStats.count}</div>
+                      <div className="text-[10px] text-muted-foreground">Reports BF ≤ 4</div>
+                      <div className="text-sm mt-1">{analytics.goodWeatherStats.avgSpeed} kn · {analytics.goodWeatherStats.avgFuel} t/dia</div>
+                    </div>
+                    <div className="p-4 rounded-lg border border-destructive/30 bg-destructive/5 text-center">
+                      <AlertTriangle className="h-5 w-5 mx-auto mb-1 text-destructive" />
+                      <div className="text-lg font-bold">{analytics.badWeatherStats.count}</div>
+                      <div className="text-[10px] text-muted-foreground">Reports BF ≥ 5</div>
+                      <div className="text-sm mt-1">{analytics.badWeatherStats.avgSpeed} kn · {analytics.badWeatherStats.avgFuel} t/dia</div>
+                    </div>
+                    <div className="p-4 rounded-lg border text-center">
+                      <TrendingUp className="h-5 w-5 mx-auto mb-1 text-warning" />
+                      <div className="text-lg font-bold text-warning">{analytics.speedLossPct}%</div>
+                      <div className="text-[10px] text-muted-foreground">Perda de Velocidade</div>
+                      <div className="text-[10px] text-muted-foreground">em mau tempo</div>
+                    </div>
+                    <div className="p-4 rounded-lg border text-center">
+                      <Fuel className="h-5 w-5 mx-auto mb-1 text-primary" />
+                      <div className="text-lg font-bold">
+                        {analytics.goodWeatherStats.avgFuel > 0 && analytics.badWeatherStats.avgFuel > 0
+                          ? `+${(((analytics.badWeatherStats.avgFuel / analytics.goodWeatherStats.avgFuel) - 1) * 100).toFixed(0)}%`
+                          : 'N/A'
+                        }
+                      </div>
+                      <div className="text-[10px] text-muted-foreground">Aumento Consumo</div>
+                      <div className="text-[10px] text-muted-foreground">em mau tempo</div>
+                    </div>
+                  </div>
+                </CardContent>
+              </Card>
+            )}
             <Card>
               <CardHeader className="pb-2"><CardTitle className="text-sm">Velocidade por Escala Beaufort</CardTitle></CardHeader>
               <CardContent className="h-72">
@@ -417,29 +550,51 @@ export default function NoonReportManager() {
                 ) : <p className="text-muted-foreground text-center py-16 text-sm">Sem dados</p>}
               </CardContent>
             </Card>
-            {analytics?.weatherData && analytics.weatherData.length > 2 && (
-              <Card className="md:col-span-2">
-                <CardHeader className="pb-2"><CardTitle className="text-sm flex items-center gap-2">
-                  <AlertTriangle className="h-4 w-4 text-warning" />Análise de Impacto Meteorológico
-                </CardTitle></CardHeader>
-                <CardContent>
-                  <div className="grid grid-cols-2 md:grid-cols-4 gap-3">
-                    {analytics.weatherData.map(w => {
-                      const bf = parseInt(w.beaufort.slice(3));
-                      const severity = bf >= 7 ? 'destructive' : bf >= 5 ? 'secondary' : 'default';
+          </div>
+        </TabsContent>
+
+        {/* V3: Vessel Ranking */}
+        <TabsContent value="ranking">
+          <div className="grid md:grid-cols-2 gap-4">
+            <Card className="md:col-span-2">
+              <CardHeader className="pb-2"><CardTitle className="text-sm flex items-center gap-2">
+                <Award className="h-4 w-4 text-primary" />Ranking de Eficiência por Embarcação
+              </CardTitle></CardHeader>
+              <CardContent>
+                {analytics?.vesselPerf?.length ? (
+                  <div className="space-y-3">
+                    {analytics.vesselPerf.map((v, i) => {
+                      const maxFuel = Math.max(...analytics.vesselPerf.map(x => x.fuel));
                       return (
-                        <div key={w.beaufort} className="p-3 border rounded-lg text-center">
-                          <Badge variant={severity as any} className="mb-2">{w.beaufort}</Badge>
-                          <div className="text-sm"><span className="text-muted-foreground">Vel:</span> {w.avgSpeed} kn</div>
-                          <div className="text-sm"><span className="text-muted-foreground">Fuel:</span> {w.avgFuel} t/dia</div>
-                          {bf >= 6 && <div className="text-[10px] text-warning mt-1">⚠ Heavy Weather</div>}
+                        <div key={v.name} className="flex items-center gap-3 p-3 border rounded-lg">
+                          <div className={`w-8 h-8 rounded-full flex items-center justify-center text-sm font-bold ${
+                            i === 0 ? 'bg-success/20 text-success' : i === 1 ? 'bg-primary/20 text-primary' : 'bg-muted text-muted-foreground'
+                          }`}>
+                            {i + 1}
+                          </div>
+                          <div className="flex-1 min-w-0">
+                            <div className="flex items-center justify-between mb-1">
+                              <span className="font-medium text-sm">{v.name}</span>
+                              <div className="flex items-center gap-3 text-xs text-muted-foreground">
+                                <span>{v.avgSpeed} kn</span>
+                                <span>{v.distance} nm</span>
+                                <span>{v.fuel} t</span>
+                                <span className="font-bold text-foreground">{v.efficiency} t/nm</span>
+                              </div>
+                            </div>
+                            <Progress value={maxFuel > 0 ? (v.fuel / maxFuel) * 100 : 0} className="h-1.5" />
+                          </div>
+                          <div className="text-right">
+                            <div className="text-xs text-muted-foreground">{v.co2} tCO₂</div>
+                            <div className="text-[10px] text-muted-foreground">{v.reports} reports</div>
+                          </div>
                         </div>
                       );
                     })}
                   </div>
-                </CardContent>
-              </Card>
-            )}
+                ) : <p className="text-muted-foreground text-center py-8">Sem dados para ranking</p>}
+              </CardContent>
+            </Card>
           </div>
         </TabsContent>
       </Tabs>
@@ -472,6 +627,7 @@ export default function NoonReportManager() {
                 <div><Label>Longitude</Label><Input type="number" step="0.001" placeholder="-46.633" value={form.longitude} onChange={e => set('longitude', e.target.value)} /></div>
                 <div><Label>Rumo (°)</Label><Input type="number" placeholder="180" value={form.course} onChange={e => set('course', e.target.value)} /></div>
                 <div><Label>Velocidade Média (kn)</Label><Input type="number" step="0.1" value={form.speed_avg} onChange={e => set('speed_avg', e.target.value)} /></div>
+                <div><Label>Velocidade Ordenada (kn)</Label><Input type="number" step="0.1" value={form.speed_ordered} onChange={e => set('speed_ordered', e.target.value)} /></div>
                 <div><Label>Distância Percorrida (nm)</Label><Input type="number" step="0.1" value={form.distance_run} onChange={e => set('distance_run', e.target.value)} /></div>
                 <div><Label>Distância Restante (nm)</Label><Input type="number" step="0.1" value={form.distance_to_go} onChange={e => set('distance_to_go', e.target.value)} /></div>
               </div>
