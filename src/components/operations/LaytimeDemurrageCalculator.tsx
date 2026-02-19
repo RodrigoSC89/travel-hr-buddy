@@ -1,6 +1,7 @@
 /**
- * Laytime & Demurrage Calculator - World-Class (supera IMOS/Veson)
+ * Laytime & Demurrage Calculator - World-Class v3 (supera IMOS/Veson)
  * BIMCO-compliant, suporta SHINC/SHEX, múltiplas cargas, reversible/non-reversible
+ * v3: Demurrage exposure analytics, time utilization chart, what-if simulator
  */
 import React, { useState, useMemo } from 'react';
 import { Card, CardContent, CardHeader, CardTitle, CardDescription } from '@/components/ui/card';
@@ -12,6 +13,10 @@ import { Select, SelectContent, SelectItem, SelectTrigger, SelectValue } from '@
 import { Tabs, TabsContent, TabsList, TabsTrigger } from '@/components/ui/tabs';
 import { Switch } from '@/components/ui/switch';
 import { Progress } from '@/components/ui/progress';
+import {
+  ResponsiveContainer, BarChart, Bar, XAxis, YAxis, CartesianGrid, Tooltip as RTooltip,
+  PieChart, Pie, Cell, Legend,
+} from 'recharts';
 import { toast } from 'sonner';
 import {
   Clock, DollarSign, AlertTriangle, CheckCircle, Ship,
@@ -232,6 +237,8 @@ export default function LaytimeDemurrageCalculator() {
           <TabsTrigger value="params">Charter Party Terms</TabsTrigger>
           <TabsTrigger value="sof">Statement of Facts</TabsTrigger>
           <TabsTrigger value="summary">Calculation Summary</TabsTrigger>
+          <TabsTrigger value="analytics">Analytics</TabsTrigger>
+          <TabsTrigger value="whatif">What-If Simulator</TabsTrigger>
         </TabsList>
 
         {/* Charter Party Terms */}
@@ -482,6 +489,202 @@ export default function LaytimeDemurrageCalculator() {
               </CardContent>
             </Card>
           </div>
+        </TabsContent>
+
+        {/* v3: Analytics */}
+        <TabsContent value="analytics">
+          <div className="grid md:grid-cols-2 gap-4">
+            <Card>
+              <CardHeader><CardTitle className="text-base">Time Utilization Breakdown</CardTitle></CardHeader>
+              <CardContent>
+                {(() => {
+                  const countable = events.filter(e => e.countable);
+                  const deductions = events.filter(e => !e.countable && e.deductionReason);
+                  const waiting = events.filter(e => e.eventType === 'waiting' || e.eventType === 'weather_delay');
+
+                  const countableHours = countable.reduce((s, e) => {
+                    if (e.startTime && e.endTime) return s + differenceInMinutes(new Date(e.endTime), new Date(e.startTime)) / 60;
+                    return s;
+                  }, 0);
+                  const deductionHours = deductions.reduce((s, e) => {
+                    if (e.startTime && e.endTime) return s + differenceInMinutes(new Date(e.endTime), new Date(e.startTime)) / 60;
+                    return s;
+                  }, 0);
+                  const waitingHours = waiting.reduce((s, e) => {
+                    if (e.startTime && e.endTime) return s + differenceInMinutes(new Date(e.endTime), new Date(e.startTime)) / 60;
+                    return s;
+                  }, 0);
+
+                  const pieData = [
+                    { name: 'Countable', value: Math.round(countableHours) },
+                    { name: 'Deductions', value: Math.round(deductionHours) },
+                    { name: 'Waiting/Weather', value: Math.round(waitingHours) },
+                  ].filter(d => d.value > 0);
+
+                  const COLORS = ['hsl(var(--primary))', 'hsl(var(--destructive))', 'hsl(var(--warning))'];
+
+                  return pieData.length > 0 ? (
+                    <ResponsiveContainer width="100%" height={220}>
+                      <PieChart>
+                        <Pie data={pieData} dataKey="value" nameKey="name" cx="50%" cy="50%" outerRadius={80} label>
+                          {pieData.map((_, i) => <Cell key={i} fill={COLORS[i % COLORS.length]} />)}
+                        </Pie>
+                        <RTooltip formatter={(v: number) => `${v}h`} />
+                        <Legend />
+                      </PieChart>
+                    </ResponsiveContainer>
+                  ) : <p className="text-center text-muted-foreground py-8 text-sm">Add SOF events to see breakdown</p>;
+                })()}
+              </CardContent>
+            </Card>
+
+            <Card>
+              <CardHeader><CardTitle className="text-base">Demurrage Exposure per Rate</CardTitle></CardHeader>
+              <CardContent>
+                {(() => {
+                  const rates = [15000, 20000, 25000, 30000, 35000, 40000, 50000];
+                  const exposureData = rates.map(rate => {
+                    const demAmt = calculation.demurrageHours > 0 ? (calculation.demurrageHours / 24) * rate : 0;
+                    const despAmt = calculation.despatchHours > 0 ? (calculation.despatchHours / 24) * (rate / 2) : 0;
+                    return {
+                      rate: `$${(rate/1000).toFixed(0)}k/d`,
+                      demurrage: Math.round(demAmt / 1000),
+                      despatch: -Math.round(despAmt / 1000),
+                    };
+                  });
+                  return (
+                    <ResponsiveContainer width="100%" height={220}>
+                      <BarChart data={exposureData}>
+                        <CartesianGrid strokeDasharray="3 3" opacity={0.3} />
+                        <XAxis dataKey="rate" fontSize={10} />
+                        <YAxis fontSize={10} tickFormatter={v => `$${v}k`} />
+                        <RTooltip formatter={(v: number) => `$${Math.abs(v).toLocaleString()}k`} />
+                        <Bar dataKey="demurrage" fill="hsl(var(--destructive))" name="Demurrage $k" radius={[4,4,0,0]} />
+                        <Bar dataKey="despatch" fill="hsl(var(--success))" name="Despatch $k" radius={[4,4,0,0]} />
+                        <Legend />
+                      </BarChart>
+                    </ResponsiveContainer>
+                  );
+                })()}
+              </CardContent>
+            </Card>
+
+            <Card className="md:col-span-2">
+              <CardHeader><CardTitle className="text-base">Key Metrics</CardTitle></CardHeader>
+              <CardContent>
+                <div className="grid grid-cols-2 md:grid-cols-5 gap-3">
+                  <div className="text-center p-3 rounded-lg bg-muted/30">
+                    <div className="text-xs text-muted-foreground">Laytime Efficiency</div>
+                    <div className="text-xl font-bold">{calculation.allowedLaytime > 0 ? Math.round((calculation.usedLaytime / calculation.allowedLaytime) * 100) : 0}%</div>
+                  </div>
+                  <div className="text-center p-3 rounded-lg bg-muted/30">
+                    <div className="text-xs text-muted-foreground">SOF Events</div>
+                    <div className="text-xl font-bold">{events.length}</div>
+                  </div>
+                  <div className="text-center p-3 rounded-lg bg-muted/30">
+                    <div className="text-xs text-muted-foreground">Deduction Hours</div>
+                    <div className="text-xl font-bold">{events.filter(e => !e.countable && e.deductionReason).reduce((s, e) => {
+                      if (e.startTime && e.endTime) return s + differenceInMinutes(new Date(e.endTime), new Date(e.startTime)) / 60;
+                      return s;
+                    }, 0).toFixed(1)}h</div>
+                  </div>
+                  <div className="text-center p-3 rounded-lg bg-muted/30">
+                    <div className="text-xs text-muted-foreground">Load Port Events</div>
+                    <div className="text-xl font-bold">{events.filter(e => e.port === 'load').length}</div>
+                  </div>
+                  <div className="text-center p-3 rounded-lg bg-muted/30">
+                    <div className="text-xs text-muted-foreground">Disch Port Events</div>
+                    <div className="text-xl font-bold">{events.filter(e => e.port === 'discharge').length}</div>
+                  </div>
+                </div>
+              </CardContent>
+            </Card>
+          </div>
+        </TabsContent>
+
+        {/* v3: What-If Simulator */}
+        <TabsContent value="whatif">
+          <Card>
+            <CardHeader>
+              <CardTitle className="text-base flex items-center gap-2">
+                <Calculator className="h-4 w-4" /> What-If Simulator — Rate Sensitivity
+              </CardTitle>
+            </CardHeader>
+            <CardContent>
+              {(() => {
+                const qty = parseFloat(cargoQty) || 50000;
+                const scenarios = [
+                  { label: "Faster Load (2x rate)", loadRate: parseFloat(loadRate) * 2, dischRate: parseFloat(dischRate) },
+                  { label: "Current", loadRate: parseFloat(loadRate), dischRate: parseFloat(dischRate) },
+                  { label: "Slower Load (0.5x)", loadRate: parseFloat(loadRate) * 0.5, dischRate: parseFloat(dischRate) },
+                  { label: "Faster Disch (2x)", loadRate: parseFloat(loadRate), dischRate: parseFloat(dischRate) * 2 },
+                  { label: "Slower Disch (0.5x)", loadRate: parseFloat(loadRate), dischRate: parseFloat(dischRate) * 0.5 },
+                ];
+                const demRate = parseFloat(demurrageRate) || 25000;
+                const despRate = parseFloat(despatchRate) || 12500;
+
+                const simData = scenarios.map(s => {
+                  const loadLT = qty / s.loadRate * 24;
+                  const dischLT = qty / s.dischRate * 24;
+                  const allowed = reversible ? loadLT + dischLT : Math.max(loadLT, dischLT);
+                  const remaining = allowed - calculation.usedLaytime;
+                  const demHrs = Math.max(0, -remaining);
+                  const despHrs = Math.max(0, remaining);
+                  const net = demHrs > 0 ? (demHrs / 24) * demRate : -(despHrs / 24) * despRate;
+                  return {
+                    scenario: s.label,
+                    allowed: Math.round(allowed),
+                    net: Math.round(net / 1000),
+                    status: demHrs > 0 ? 'Demurrage' : 'Despatch',
+                  };
+                });
+
+                return (
+                  <div className="space-y-4">
+                    <ResponsiveContainer width="100%" height={250}>
+                      <BarChart data={simData}>
+                        <CartesianGrid strokeDasharray="3 3" opacity={0.3} />
+                        <XAxis dataKey="scenario" fontSize={10} angle={-10} />
+                        <YAxis fontSize={10} tickFormatter={v => `$${v}k`} />
+                        <RTooltip formatter={(v: number) => `$${v.toLocaleString()}k`} />
+                        <Bar dataKey="net" name="Net Amount $k" radius={[4,4,0,0]}>
+                          {simData.map((entry, i) => (
+                            <Cell key={i} fill={entry.net > 0 ? 'hsl(var(--destructive))' : 'hsl(var(--success))'} />
+                          ))}
+                        </Bar>
+                      </BarChart>
+                    </ResponsiveContainer>
+                    <div className="overflow-x-auto">
+                      <table className="w-full text-sm">
+                        <thead className="border-b"><tr className="text-muted-foreground">
+                          <th className="text-left p-2">Scenario</th>
+                          <th className="text-right p-2">Allowed (h)</th>
+                          <th className="text-center p-2">Status</th>
+                          <th className="text-right p-2">Net Amount</th>
+                        </tr></thead>
+                        <tbody>
+                          {simData.map((s) => (
+                            <tr key={s.scenario} className="border-b hover:bg-muted/30">
+                              <td className="p-2 font-medium">{s.scenario}</td>
+                              <td className="p-2 text-right font-mono">{s.allowed}h</td>
+                              <td className="p-2 text-center">
+                                <Badge className={s.status === 'Demurrage' ? 'bg-destructive/20 text-destructive' : 'bg-success/20 text-success'}>
+                                  {s.status}
+                                </Badge>
+                              </td>
+                              <td className={`p-2 text-right font-mono font-bold ${s.net > 0 ? 'text-destructive' : 'text-success'}`}>
+                                ${Math.abs(s.net).toLocaleString()}k
+                              </td>
+                            </tr>
+                          ))}
+                        </tbody>
+                      </table>
+                    </div>
+                  </div>
+                );
+              })()}
+            </CardContent>
+          </Card>
         </TabsContent>
       </Tabs>
     </div>

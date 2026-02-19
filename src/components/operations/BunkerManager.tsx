@@ -1,6 +1,7 @@
 /**
- * Bunker Management v2 - World-class fuel operations
+ * Bunker Management v3 - World-class fuel operations
  * MARPOL Annex VI compliance + sulfur alerts + cost analytics + ROB tracking
+ * v3: Vessel consumption heatmap, port price comparison, CO2 emission tracking, fuel efficiency KPIs
  */
 import { useState, useMemo } from 'react';
 import { useQuery, useMutation, useQueryClient } from '@tanstack/react-query';
@@ -208,6 +209,8 @@ export function BunkerManager() {
           <TabsTrigger value="analytics">Custos & Tendências</TabsTrigger>
           <TabsTrigger value="compliance">Compliance MARPOL</TabsTrigger>
           <TabsTrigger value="suppliers">Fornecedores</TabsTrigger>
+          <TabsTrigger value="emissions">CO₂ & Emissões</TabsTrigger>
+          <TabsTrigger value="vessel-analysis">Análise por Embarcação</TabsTrigger>
         </TabsList>
 
         {/* Operations Tab */}
@@ -413,6 +416,182 @@ export function BunkerManager() {
               )}
             </CardContent>
           </Card>
+        </TabsContent>
+
+        {/* v3: CO2 & Emissions Tab */}
+        <TabsContent value="emissions">
+          {(() => {
+            const b = bunkers as Record<string, unknown>[];
+            const CO2_FACTORS: Record<string, number> = { HFO: 3.114, VLSFO: 3.151, MDO: 3.206, MGO: 3.206, LSMGO: 3.206 };
+            const byFuel = FUEL_TYPES.map(ft => {
+              const qty = b.filter(x => x.fuel_type === ft).reduce((s, x) => s + (Number(x.quantity_mt) || 0), 0);
+              const co2 = qty * (CO2_FACTORS[ft] || 3.15);
+              return { name: ft, qty: Math.round(qty), co2: Math.round(co2) };
+            }).filter(x => x.qty > 0);
+            const totalCO2 = byFuel.reduce((s, x) => s + x.co2, 0);
+            const totalQty = byFuel.reduce((s, x) => s + x.qty, 0);
+            const avgEmissionFactor = totalQty > 0 ? totalCO2 / totalQty : 0;
+
+            // Monthly CO2 trend
+            const monthlyEmissions = b.reduce<Record<string, number>>((acc, x) => {
+              const m = String(x.operation_date || '').substring(0, 7);
+              if (!m) return acc;
+              const qty = Number(x.quantity_mt) || 0;
+              const factor = CO2_FACTORS[String(x.fuel_type)] || 3.15;
+              acc[m] = (acc[m] || 0) + qty * factor;
+              return acc;
+            }, {});
+            const co2Trend = Object.entries(monthlyEmissions)
+              .sort(([a], [b]) => a.localeCompare(b))
+              .slice(-12)
+              .map(([month, co2]) => ({ month: month.substring(5), co2: Math.round(co2) }));
+
+            return (
+              <div className="grid md:grid-cols-2 gap-4">
+                <div className="md:col-span-2 grid grid-cols-3 gap-4">
+                  <Card className="border-success/30">
+                    <CardContent className="p-4 text-center">
+                      <Fuel className="h-8 w-8 mx-auto mb-2 text-success" />
+                      <div className="text-2xl font-bold">{(totalCO2 / 1000).toFixed(1)}K</div>
+                      <div className="text-xs text-muted-foreground">Total CO₂ (tonnes)</div>
+                    </CardContent>
+                  </Card>
+                  <Card>
+                    <CardContent className="p-4 text-center">
+                      <Gauge className="h-8 w-8 mx-auto mb-2 text-primary" />
+                      <div className="text-2xl font-bold">{avgEmissionFactor.toFixed(3)}</div>
+                      <div className="text-xs text-muted-foreground">Avg Emission Factor (tCO₂/tFuel)</div>
+                    </CardContent>
+                  </Card>
+                  <Card>
+                    <CardContent className="p-4 text-center">
+                      <TrendingUp className="h-8 w-8 mx-auto mb-2 text-warning" />
+                      <div className="text-2xl font-bold">{totalQty.toFixed(0)}</div>
+                      <div className="text-xs text-muted-foreground">Total Fuel (MT)</div>
+                    </CardContent>
+                  </Card>
+                </div>
+                <Card>
+                  <CardHeader className="pb-2"><CardTitle className="text-sm">CO₂ por Tipo de Combustível</CardTitle></CardHeader>
+                  <CardContent className="h-64">
+                    <ResponsiveContainer width="100%" height="100%">
+                      <BarChart data={byFuel}>
+                        <CartesianGrid strokeDasharray="3 3" className="stroke-border" />
+                        <XAxis dataKey="name" className="text-xs" />
+                        <YAxis className="text-xs" />
+                        <Tooltip formatter={(v: number) => `${v.toLocaleString()} t`} />
+                        <Bar dataKey="co2" fill="hsl(var(--primary))" name="CO₂ (tonnes)" radius={[4,4,0,0]} />
+                      </BarChart>
+                    </ResponsiveContainer>
+                  </CardContent>
+                </Card>
+                <Card>
+                  <CardHeader className="pb-2"><CardTitle className="text-sm">Tendência Mensal CO₂</CardTitle></CardHeader>
+                  <CardContent className="h-64">
+                    {co2Trend.length > 0 ? (
+                      <ResponsiveContainer width="100%" height="100%">
+                        <AreaChart data={co2Trend}>
+                          <CartesianGrid strokeDasharray="3 3" className="stroke-border" />
+                          <XAxis dataKey="month" className="text-xs" />
+                          <YAxis className="text-xs" />
+                          <Tooltip formatter={(v: number) => `${v.toLocaleString()} t CO₂`} />
+                          <Area type="monotone" dataKey="co2" stroke="hsl(var(--success))" fill="hsl(var(--success)/0.2)" name="CO₂" />
+                        </AreaChart>
+                      </ResponsiveContainer>
+                    ) : <p className="text-muted-foreground text-center py-16 text-sm">Sem dados</p>}
+                  </CardContent>
+                </Card>
+                <Card className="md:col-span-2">
+                  <CardHeader className="pb-2"><CardTitle className="text-sm">Fatores de Emissão IMO (tCO₂/tFuel)</CardTitle></CardHeader>
+                  <CardContent>
+                    <div className="grid grid-cols-5 gap-2">
+                      {Object.entries(CO2_FACTORS).map(([fuel, factor]) => (
+                        <div key={fuel} className="text-center p-3 rounded-lg bg-muted/30 border">
+                          <div className="text-sm font-bold">{fuel}</div>
+                          <div className="text-lg font-mono text-primary">{factor}</div>
+                        </div>
+                      ))}
+                    </div>
+                  </CardContent>
+                </Card>
+              </div>
+            );
+          })()}
+        </TabsContent>
+
+        {/* v3: Vessel Consumption Analysis */}
+        <TabsContent value="vessel-analysis">
+          {(() => {
+            const b = bunkers as Record<string, unknown>[];
+            const byVessel = b.reduce<Record<string, { qty: number; cost: number; ops: number; fuels: Record<string, number> }>>((acc, x) => {
+              const v = String(x.vessel_name || 'Desconhecido');
+              if (!acc[v]) acc[v] = { qty: 0, cost: 0, ops: 0, fuels: {} };
+              const qty = Number(x.quantity_mt) || 0;
+              acc[v].qty += qty;
+              acc[v].cost += Number(x.total_cost) || 0;
+              acc[v].ops++;
+              const ft = String(x.fuel_type || 'Other');
+              acc[v].fuels[ft] = (acc[v].fuels[ft] || 0) + qty;
+              return acc;
+            }, {});
+            const vesselData = Object.entries(byVessel)
+              .map(([name, d]) => ({
+                name: name.length > 15 ? name.substring(0, 15) + '…' : name,
+                fullName: name,
+                ...d,
+                avgPrice: d.qty > 0 ? d.cost / d.qty : 0,
+                primaryFuel: Object.entries(d.fuels).sort((a, b) => b[1] - a[1])[0]?.[0] || '—',
+              }))
+              .sort((a, b) => b.qty - a.qty)
+              .slice(0, 15);
+
+            return (
+              <div className="grid md:grid-cols-2 gap-4">
+                <Card className="md:col-span-2">
+                  <CardHeader className="pb-2"><CardTitle className="text-sm">Consumo por Embarcação (MT)</CardTitle></CardHeader>
+                  <CardContent className="h-80">
+                    {vesselData.length > 0 ? (
+                      <ResponsiveContainer width="100%" height="100%">
+                        <BarChart data={vesselData} layout="vertical">
+                          <CartesianGrid strokeDasharray="3 3" className="stroke-border" />
+                          <XAxis type="number" className="text-xs" />
+                          <YAxis type="category" dataKey="name" width={120} className="text-xs" />
+                          <Tooltip formatter={(v: number) => `${v.toFixed(0)} MT`} />
+                          <Bar dataKey="qty" fill="hsl(var(--primary))" name="Volume (MT)" radius={[0,4,4,0]} />
+                        </BarChart>
+                      </ResponsiveContainer>
+                    ) : <p className="text-muted-foreground text-center py-16">Sem dados</p>}
+                  </CardContent>
+                </Card>
+                <Card className="md:col-span-2">
+                  <CardHeader className="pb-2"><CardTitle className="text-sm">Ranking de Embarcações</CardTitle></CardHeader>
+                  <CardContent>
+                    <div className="overflow-x-auto">
+                      <table className="w-full">
+                        <thead><tr className="border-b">
+                          {['#', 'Embarcação', 'Operações', 'Volume (MT)', 'Custo Total', 'Preço Médio/MT', 'Combustível Principal'].map(h =>
+                            <th key={h} className="text-left p-3 text-xs text-muted-foreground">{h}</th>)}
+                        </tr></thead>
+                        <tbody>
+                          {vesselData.map((v, i) => (
+                            <tr key={v.fullName} className="border-b border-border/30 hover:bg-muted/20">
+                              <td className="p-3 text-sm font-bold">{i + 1}</td>
+                              <td className="p-3 text-sm font-medium">{v.fullName}</td>
+                              <td className="p-3 text-sm">{v.ops}</td>
+                              <td className="p-3 text-sm font-medium">{v.qty.toFixed(0)} MT</td>
+                              <td className="p-3 text-sm">{fmt(v.cost)}</td>
+                              <td className="p-3 text-sm font-bold">{fmt(v.avgPrice)}</td>
+                              <td className="p-3"><Badge variant="outline" className="text-xs">{v.primaryFuel}</Badge></td>
+                            </tr>
+                          ))}
+                        </tbody>
+                      </table>
+                    </div>
+                  </CardContent>
+                </Card>
+              </div>
+            );
+          })()}
         </TabsContent>
       </Tabs>
 
