@@ -18,6 +18,7 @@ import { useCrossModuleAutomation } from "@/hooks/useCrossModuleAutomation";
 import { useRealtimeAlerts } from "@/hooks/useRealtimeAlerts";
 import { useGlobalShortcuts } from "@/hooks/useGlobalShortcuts";
 import { SmartBreadcrumbs } from "@/components/layout/SmartBreadcrumbs";
+import { useAutoTour } from "@/hooks/useGuidedTour";
 
 // Lazy load offline components
 const OfflineStatusBar = lazy(() => 
@@ -39,6 +40,7 @@ export const AppLayout: FC = () => {
   const { criticalCount } = useCrossModuleAutomation();
   useRealtimeAlerts();
   useGlobalShortcuts();
+  useAutoTour();
 
   return (
     <ThemeProvider defaultTheme="dark" storageKey="nautilus-ui-theme">
