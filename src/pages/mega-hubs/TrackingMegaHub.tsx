@@ -14,7 +14,7 @@ import React, { Suspense, lazy, useMemo, useCallback } from 'react';
 import { useSearchParams, useNavigate } from 'react-router-dom';
 import { Tabs, TabsContent, TabsList, TabsTrigger } from '@/components/ui/tabs';
 import { Badge } from '@/components/ui/badge';
-import { Satellite, Activity, Ship, Radio, Cloud, AlertTriangle, Map, RefreshCw, Download, Filter, Wifi, Bell, Brain } from 'lucide-react';
+import { Satellite, Activity, Ship, Radio, Cloud, AlertTriangle, Map, RefreshCw, Download, Filter, Wifi, Bell, Brain, MapPin } from 'lucide-react';
 import { Skeleton } from '@/components/ui/skeleton';
 import { EnhancedActionBar } from '@/components/ui/world-class/EnhancedActionBar';
 // RealTimeTrackingMap removed - world-class deleted
@@ -44,6 +44,7 @@ const SATCOMPerformanceMonitor = lazy(() => import('@/components/dashboard/SATCO
 const VesselETAPredictor = lazy(() => import('@/components/dashboard/VesselETAPredictor'));
 const TrackingKPISummary = lazy(() => import('@/components/dashboard/TrackingKPISummary').then(m => ({ default: m.TrackingKPISummary })));
 const VesselPerformanceSparklines = lazy(() => import('@/components/dashboard/VesselPerformanceSparklines').then(m => ({ default: m.VesselPerformanceSparklines })));
+const GeofenceEditor = lazy(() => import('@/components/compliance/GeofenceEditor').then(m => ({ default: m.GeofenceEditor })));
 
 const LoadingSkeleton = () => (
   <div className="space-y-4 p-6">
@@ -65,6 +66,7 @@ const tabConfig = [
   { id: 'satcom', label: 'SATCOM', icon: Radio },
   { id: 'weather', label: 'Weather AI', icon: Cloud },
   { id: 'predictive', label: 'Predictive', icon: Map },
+  { id: 'geofencing', label: 'Geofencing', icon: MapPin },
   { id: 'alerts', label: 'Alerts', icon: AlertTriangle },
   { id: 'ai-copilot', label: '🧠 IA Hub', icon: Brain },
 ];
@@ -391,6 +393,10 @@ export default function TrackingMegaHub() {
               <PredictiveTelemetry />
             </TabsContent>
             
+            <TabsContent value="geofencing" className="mt-0">
+              <GeofenceEditor geofences={[]} onGeofencesChange={() => {}} />
+            </TabsContent>
+
             <TabsContent value="alerts" className="mt-0">
               <AlertsCommandCenter />
             </TabsContent>

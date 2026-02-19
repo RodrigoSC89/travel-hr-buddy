@@ -13,7 +13,7 @@ import React, { Suspense, lazy, useMemo, useCallback } from 'react';
 import { useSearchParams, useLocation, useNavigate } from 'react-router-dom';
 import { Tabs, TabsContent, TabsList, TabsTrigger } from '@/components/ui/tabs';
 import { Badge } from '@/components/ui/badge';
-import { Briefcase, FileText, Users, DollarSign, Settings, Plane, Plus, Download, Upload, Calendar, Wifi, Brain, Heart } from 'lucide-react';
+import { Briefcase, FileText, Users, DollarSign, Settings, Plane, Plus, Download, Upload, Calendar, Wifi, Brain, Heart, Stamp, Banknote, ShieldCheck, TreePine } from 'lucide-react';
 import { Skeleton } from '@/components/ui/skeleton';
 import { EnhancedActionBar } from '@/components/ui/world-class/EnhancedActionBar';
 import { WorkflowStatusBar } from '@/components/ui/world-class/WorkflowStatusBar';
@@ -50,6 +50,10 @@ const CrewOvertimeTracker = lazy(() => import('@/components/dashboard/CrewOverti
 const ProcurementPipelineTracker = lazy(() => import('@/components/dashboard/ProcurementPipelineTracker').then(m => ({ default: m.ProcurementPipelineTracker })));
 const PayrollSummaryDashboard = lazy(() => import('@/components/dashboard/PayrollSummaryDashboard').then(m => ({ default: m.PayrollSummaryDashboard })));
 const DocumentProcessingAnalytics = lazy(() => import('@/components/dashboard/DocumentProcessingAnalytics').then(m => ({ default: m.DocumentProcessingAnalytics })));
+const CrewVisaTracker = lazy(() => import('@/components/crew/CrewVisaTracker').then(m => ({ default: m.CrewVisaTracker })));
+const AllotmentManagementTab = lazy(() => import('@/components/crew/AllotmentManagementTab').then(m => ({ default: m.AllotmentManagementTab })));
+const SupplierScorecard = lazy(() => import('@/components/procurement/SupplierScorecard').then(m => ({ default: m.SupplierScorecard })));
+const CarbonCreditTradingTab = lazy(() => import('@/components/esg/CarbonCreditTradingTab').then(m => ({ default: m.CarbonCreditTradingTab })));
 
 const LoadingSkeleton = () => (
   <div className="space-y-4 p-6">
@@ -73,6 +77,10 @@ const sectionConfig = [
   { id: 'travel', label: 'Travel', icon: Plane, color: 'purple' },
   { id: 'itinerary', label: 'Itinerário', icon: Calendar, color: 'purple' },
   { id: 'crew-pool', label: 'Crew Pool', icon: Users, color: 'green' },
+  { id: 'visa-tracker', label: 'Visa Tracker', icon: Stamp, color: 'orange' },
+  { id: 'allotment', label: 'Allotment', icon: Banknote, color: 'green' },
+  { id: 'supplier-score', label: 'Supplier Score', icon: ShieldCheck, color: 'yellow' },
+  { id: 'carbon-trading', label: 'Carbon Trading', icon: TreePine, color: 'green' },
   { id: 'ai-crew', label: '🧠 Crew AI', icon: Heart, color: 'pink' },
   { id: 'ai-finance', label: '🧠 Finance AI', icon: Brain, color: 'indigo' },
   { id: 'ai-docs', label: '🧠 Docs AI', icon: Brain, color: 'cyan' },
@@ -608,6 +616,22 @@ export default function WorkbenchMegaHub() {
                 searchPlaceholder="Search settings, integrations..."
               />
               <SystemHub />
+            </TabsContent>
+
+            <TabsContent value="visa-tracker" className="mt-0">
+              <CrewVisaTracker />
+            </TabsContent>
+
+            <TabsContent value="allotment" className="mt-0">
+              <AllotmentManagementTab />
+            </TabsContent>
+
+            <TabsContent value="supplier-score" className="mt-0">
+              <SupplierScorecard />
+            </TabsContent>
+
+            <TabsContent value="carbon-trading" className="mt-0">
+              <CarbonCreditTradingTab />
             </TabsContent>
 
             <TabsContent value="ai-crew" className="mt-0">
