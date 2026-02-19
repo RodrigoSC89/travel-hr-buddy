@@ -27,20 +27,19 @@ const initializeTheme = () => {
 
 initializeTheme();
 
-// Initialize axe-core accessibility checker in development
-const initializeAccessibilityChecker = async () => {
-  if (import.meta.env.DEV) {
+// Accessibility checker disabled - causes preload timeout crashes
+// Initialize only when explicitly requested via console: window.__initAxe()
+if (import.meta.env.DEV && typeof window !== 'undefined') {
+  (window as any).__initAxe = async () => {
     try {
       const axe = await import("@axe-core/react");
       const React = await import("react");
       const ReactDOM = await import("react-dom");
       axe.default(React, ReactDOM, 1000);
-      logger.info("[A11y] axe-core accessibility checker initialized");
-    } catch {
-      // axe-core is optional, fail silently
-    }
-  }
-};
+      console.log("[A11y] axe-core initialized manually");
+    } catch { /* optional */ }
+  };
+}
 
 // Defer non-critical initializations - only after app is loaded
 const initializeOptionalFeatures = async () => {
@@ -54,12 +53,8 @@ const initializeOptionalFeatures = async () => {
   });
   
   try {
-    // Initialize accessibility checker in dev
-    await initializeAccessibilityChecker();
-    
     // Route prefetching removed during dead code cleanup
-    
-    // Only initialize monitoring in production
+    // Accessibility checker now manual: window.__initAxe()
     // Web vitals monitoring removed during dead code cleanup
   } catch (error) {
     logger.warn("Optional features init failed:", error instanceof Error ? { message: error.message } : undefined);
