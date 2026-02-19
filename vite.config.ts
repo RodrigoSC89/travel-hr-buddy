@@ -160,8 +160,8 @@ export default defineConfig(({ mode }) => ({
     esbuildOptions: {
       target: "esnext",
     },
-    // Force re-optimization when dependencies change
-    force: mode === "development",
+    // Don't force re-optimization on every restart (causes server crashes on large projects)
+    // force: mode === "development",
   },
   esbuild: {
     target: "esnext",
