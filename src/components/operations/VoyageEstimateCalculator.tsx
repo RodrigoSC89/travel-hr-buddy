@@ -523,6 +523,7 @@ export function VoyageEstimateCalculator() {
               })()}
             </CardContent>
           </Card>
+        </TabsContent>
         {/* Market Intelligence Tab */}
         <TabsContent value="market" className="mt-4">
           <Suspense fallback={<div className="p-8 text-center text-muted-foreground">Loading Market Intelligence...</div>}>
