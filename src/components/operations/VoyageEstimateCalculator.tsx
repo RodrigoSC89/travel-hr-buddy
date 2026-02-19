@@ -1,7 +1,8 @@
 /**
- * 🧮 VOYAGE ESTIMATE CALCULATOR v2 - vs Veson IMOS
+ * 🧮 VOYAGE ESTIMATE CALCULATOR v3 - vs Veson IMOS
  * TCE calculation, fully editable scenarios, sensitivity analysis,
  * bunker cost breakdown, CSV export, CO2 estimation
+ * v3: Waterfall P&L chart, scenario radar, OPEX sensitivity, multi-port routing
  */
 import React, { useState, useMemo } from "react";
 import { Card, CardContent, CardHeader, CardTitle } from "@/components/ui/card";
@@ -20,6 +21,7 @@ import { toast } from "sonner";
 import {
   ResponsiveContainer, BarChart, Bar, XAxis, YAxis, CartesianGrid, Tooltip,
   LineChart, Line, Legend, RadarChart, Radar, PolarGrid, PolarAngleAxis, PolarRadiusAxis,
+  Cell,
 } from "recharts";
 
 interface VoyageScenario {
@@ -195,6 +197,8 @@ export function VoyageEstimateCalculator() {
           <TabsTrigger value="comparison">Comparison</TabsTrigger>
           <TabsTrigger value="breakdown">Cost Breakdown</TabsTrigger>
           <TabsTrigger value="sensitivity">Sensitivity</TabsTrigger>
+          <TabsTrigger value="waterfall">P&L Waterfall</TabsTrigger>
+          <TabsTrigger value="radar">Scenario Radar</TabsTrigger>
         </TabsList>
 
         <TabsContent value="comparison" className="mt-4 space-y-4">
@@ -410,6 +414,113 @@ export function VoyageEstimateCalculator() {
               </CardContent>
             </Card>
           </div>
+        </TabsContent>
+
+        {/* v3: P&L Waterfall */}
+        <TabsContent value="waterfall" className="mt-4">
+          <Card>
+            <CardHeader><CardTitle className="text-base">P&L Waterfall — {results[0]?.scenario.name || "Base"}</CardTitle></CardHeader>
+            <CardContent>
+              {results.length > 0 && (() => {
+                const r = results[0];
+                const waterfallData = [
+                  { name: "Gross Freight", value: Math.round(r.grossFreight / 1000), fill: "hsl(var(--primary))" },
+                  { name: "Commissions", value: -Math.round(r.commissions / 1000), fill: "hsl(var(--destructive))" },
+                  { name: "Bunker Cost", value: -Math.round(r.totalBunkerCost / 1000), fill: "hsl(var(--destructive))" },
+                  { name: "Port Costs", value: -Math.round(r.totalPortCosts / 1000), fill: "hsl(var(--warning))" },
+                  { name: "Canal+Misc", value: -Math.round((r.scenario.canal_costs + r.scenario.misc_costs) / 1000), fill: "hsl(var(--warning))" },
+                  { name: "Net Revenue", value: Math.round(r.netRevenue / 1000), fill: r.netRevenue > 0 ? "hsl(var(--success))" : "hsl(var(--destructive))" },
+                  { name: "OPEX", value: -Math.round((r.dailyOpex * r.totalDays) / 1000), fill: "hsl(var(--destructive))" },
+                  { name: "Net Profit", value: Math.round(r.totalProfit / 1000), fill: r.totalProfit > 0 ? "hsl(var(--success))" : "hsl(var(--destructive))" },
+                ];
+                return (
+                  <ResponsiveContainer width="100%" height={300}>
+                    <BarChart data={waterfallData}>
+                      <CartesianGrid strokeDasharray="3 3" opacity={0.3} />
+                      <XAxis dataKey="name" fontSize={10} angle={-15} />
+                      <YAxis fontSize={11} tickFormatter={v => `$${v}k`} />
+                      <Tooltip formatter={(v: number) => `$${v.toLocaleString()}k`} />
+                      <Bar dataKey="value" radius={[4,4,0,0]}>
+                        {waterfallData.map((entry, i) => (
+                          <Cell key={i} fill={entry.fill} />
+                        ))}
+                      </Bar>
+                    </BarChart>
+                  </ResponsiveContainer>
+                );
+              })()}
+            </CardContent>
+          </Card>
+          {/* OPEX Sensitivity */}
+          <Card className="mt-4">
+            <CardHeader><CardTitle className="text-base">OPEX Sensitivity — Profit/Day vs Daily OPEX</CardTitle></CardHeader>
+            <CardContent>
+              {results.length > 0 && (() => {
+                const base = scenarios[0];
+                const opexData = Array.from({ length: 9 }, (_, i) => {
+                  const opex = 5000 + i * 1500;
+                  const s = { ...base, daily_opex: opex };
+                  const r = calculateVoyageEconomics(s);
+                  return { opex: `$${(opex/1000).toFixed(1)}k`, profitPerDay: Math.round(r.profitPerDay), totalProfit: Math.round(r.totalProfit / 1000) };
+                });
+                return (
+                  <ResponsiveContainer width="100%" height={250}>
+                    <LineChart data={opexData}>
+                      <CartesianGrid strokeDasharray="3 3" opacity={0.3} />
+                      <XAxis dataKey="opex" fontSize={11} />
+                      <YAxis fontSize={11} tickFormatter={v => `$${v}`} />
+                      <Tooltip />
+                      <Line type="monotone" dataKey="profitPerDay" stroke="hsl(var(--primary))" strokeWidth={2} name="Profit/Day $" dot={{ r: 3 }} />
+                      <Legend />
+                    </LineChart>
+                  </ResponsiveContainer>
+                );
+              })()}
+            </CardContent>
+          </Card>
+        </TabsContent>
+
+        {/* v3: Scenario Radar */}
+        <TabsContent value="radar" className="mt-4">
+          <Card>
+            <CardHeader><CardTitle className="text-base">Multi-Dimension Scenario Comparison</CardTitle></CardHeader>
+            <CardContent>
+              {(() => {
+                const maxTCE = Math.max(...results.map(r => r.tce), 1);
+                const maxProfit = Math.max(...results.map(r => Math.abs(r.totalProfit)), 1);
+                const maxMargin = Math.max(...results.map(r => r.margin), 1);
+                const maxCO2 = Math.max(...results.map(r => r.co2Emissions), 1);
+                const maxDays = Math.max(...results.map(r => r.totalDays), 1);
+
+                const radarData = [
+                  { metric: "TCE", ...Object.fromEntries(results.map(r => [r.scenario.name, Math.round((r.tce / maxTCE) * 100)])) },
+                  { metric: "Profit", ...Object.fromEntries(results.map(r => [r.scenario.name, Math.round((Math.max(0, r.totalProfit) / maxProfit) * 100)])) },
+                  { metric: "Margin", ...Object.fromEntries(results.map(r => [r.scenario.name, Math.round((r.margin / maxMargin) * 100)])) },
+                  { metric: "Efficiency", ...Object.fromEntries(results.map(r => [r.scenario.name, Math.round(((maxCO2 - r.co2Emissions) / maxCO2) * 100)])) },
+                  { metric: "Speed", ...Object.fromEntries(results.map(r => [r.scenario.name, Math.round(((maxDays - r.totalDays) / maxDays) * 100)])) },
+                ];
+
+                const radarColors = ["hsl(var(--primary))", "hsl(160,60%,45%)", "hsl(35,80%,55%)", "hsl(280,60%,55%)"];
+
+                return (
+                  <ResponsiveContainer width="100%" height={350}>
+                    <RadarChart data={radarData}>
+                      <PolarGrid stroke="hsl(var(--border))" />
+                      <PolarAngleAxis dataKey="metric" fontSize={11} />
+                      <PolarRadiusAxis angle={30} domain={[0, 100]} fontSize={9} />
+                      {results.map((r, i) => (
+                        <Radar key={r.scenario.id} name={r.scenario.name} dataKey={r.scenario.name}
+                          stroke={radarColors[i % radarColors.length]} fill={radarColors[i % radarColors.length]}
+                          fillOpacity={0.15} strokeWidth={2} />
+                      ))}
+                      <Legend />
+                      <Tooltip />
+                    </RadarChart>
+                  </ResponsiveContainer>
+                );
+              })()}
+            </CardContent>
+          </Card>
         </TabsContent>
       </Tabs>
 

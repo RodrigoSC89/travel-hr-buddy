@@ -1,6 +1,7 @@
 /**
- * Insurance & P&I Manager - World-Class v2 (vs Cloud Fleet Manager / DNV)
+ * Insurance & P&I Manager - World-Class v3 (vs Cloud Fleet Manager / DNV)
  * Full CRUD, coverage gap analysis, renewal alerts, claims analytics, premium benchmarking
+ * v3: Insurer performance scoring, claims aging, loss ratio trends, risk heatmap
  */
 import { useState, useMemo } from "react";
 import { Card, CardContent, CardHeader, CardTitle } from "@/components/ui/card";
@@ -595,10 +596,112 @@ export function InsurancePIManager() {
                       <XAxis dataKey="month" fontSize={11} />
                       <YAxis fontSize={11} />
                       <Tooltip formatter={(v: number) => `$${v.toLocaleString()}`} />
-                      <Area type="monotone" dataKey="amount" fill="hsl(var(--warning))" fillOpacity={0.2} stroke="hsl(var(--warning))" strokeWidth={2} />
+                      <Area type="monotone" dataKey="amount" fill="hsl(var(--warning))" fillOpacity={0.2} stroke="hsl(var(--warning))" strokeWidth={2} name="Claims $" />
+                      <Area type="monotone" dataKey="count" fill="hsl(var(--primary))" fillOpacity={0.1} stroke="hsl(var(--primary))" strokeWidth={1} name="Count" />
                     </AreaChart>
                   </ResponsiveContainer>
                 )}
+              </CardContent>
+            </Card>
+
+            {/* v3: Insurer Performance Scoring */}
+            <Card className="md:col-span-2">
+              <CardHeader><CardTitle className="text-base flex items-center gap-2"><Target className="h-4 w-4" /> Insurer Performance Scorecard</CardTitle></CardHeader>
+              <CardContent>
+                {(() => {
+                  const insurerMap: Record<string, { policies: number; totalPremium: number; totalClaimed: number; totalRecovered: number; avgDaysToSettle: number; claimCount: number }> = {};
+                  policies.forEach((p: any) => {
+                    const key = p.insurer || "Unknown";
+                    if (!insurerMap[key]) insurerMap[key] = { policies: 0, totalPremium: 0, totalClaimed: 0, totalRecovered: 0, avgDaysToSettle: 0, claimCount: 0 };
+                    insurerMap[key].policies++;
+                    insurerMap[key].totalPremium += Number(p.premium || 0);
+                  });
+                  claims.forEach((c: any) => {
+                    const insurer = (c.insurance_policies as any)?.insurer || "Unknown";
+                    if (!insurerMap[insurer]) insurerMap[insurer] = { policies: 0, totalPremium: 0, totalClaimed: 0, totalRecovered: 0, avgDaysToSettle: 0, claimCount: 0 };
+                    insurerMap[insurer].totalClaimed += Number(c.amount_claimed || 0);
+                    insurerMap[insurer].totalRecovered += Number(c.amount_recovered || 0);
+                    insurerMap[insurer].claimCount++;
+                  });
+                  const insurers = Object.entries(insurerMap)
+                    .map(([name, d]) => {
+                      const recoveryRate = d.totalClaimed > 0 ? (d.totalRecovered / d.totalClaimed) * 100 : 100;
+                      const lossRatio = d.totalPremium > 0 ? (d.totalClaimed / d.totalPremium) * 100 : 0;
+                      const score = Math.round(
+                        (recoveryRate * 0.4) +
+                        (Math.max(0, 100 - lossRatio) * 0.3) +
+                        (d.policies > 0 ? Math.min(100, d.policies * 20) * 0.15 : 0) +
+                        (d.claimCount === 0 ? 100 * 0.15 : Math.max(0, 100 - d.claimCount * 10) * 0.15)
+                      );
+                      return { name, ...d, recoveryRate, lossRatio, score };
+                    })
+                    .sort((a, b) => b.score - a.score);
+
+                  if (insurers.length === 0) return <p className="text-center text-muted-foreground py-8">No insurer data</p>;
+
+                  return (
+                    <div className="space-y-2">
+                      {insurers.map((ins, i) => (
+                        <div key={ins.name} className="flex items-center justify-between p-3 rounded-lg border hover:bg-muted/30">
+                          <div className="flex items-center gap-3">
+                            <span className="text-lg font-bold text-muted-foreground w-6">#{i + 1}</span>
+                            <div>
+                              <div className="font-medium">{ins.name}</div>
+                              <div className="text-xs text-muted-foreground">{ins.policies} policies • {ins.claimCount} claims</div>
+                            </div>
+                          </div>
+                          <div className="flex items-center gap-4 text-xs">
+                            <div className="text-right">
+                              <div className="text-muted-foreground">Recovery</div>
+                              <div className="font-mono font-bold">{ins.recoveryRate.toFixed(0)}%</div>
+                            </div>
+                            <div className="text-right">
+                              <div className="text-muted-foreground">Loss Ratio</div>
+                              <div className={`font-mono font-bold ${ins.lossRatio > 70 ? "text-destructive" : ins.lossRatio > 40 ? "text-warning" : "text-success"}`}>{ins.lossRatio.toFixed(0)}%</div>
+                            </div>
+                            <Badge className={ins.score >= 70 ? "bg-success/20 text-success" : ins.score >= 40 ? "bg-warning/20 text-warning" : "bg-destructive/20 text-destructive"}>
+                              Score: {ins.score}
+                            </Badge>
+                          </div>
+                        </div>
+                      ))}
+                      <p className="text-[10px] text-muted-foreground pt-1">Score = 40% Recovery + 30% Loss Ratio + 15% Portfolio Size + 15% Claims Frequency</p>
+                    </div>
+                  );
+                })()}
+              </CardContent>
+            </Card>
+
+            {/* v3: Claims Aging Analysis */}
+            <Card className="md:col-span-2">
+              <CardHeader><CardTitle className="text-base flex items-center gap-2"><Clock className="h-4 w-4" /> Claims Aging Analysis</CardTitle></CardHeader>
+              <CardContent>
+                {(() => {
+                  const openClaims = claims.filter((c: any) => c.status === "open" || c.status === "under_review");
+                  const buckets = [
+                    { label: "0-30 days", min: 0, max: 30, count: 0, amount: 0 },
+                    { label: "31-60 days", min: 31, max: 60, count: 0, amount: 0 },
+                    { label: "61-90 days", min: 61, max: 90, count: 0, amount: 0 },
+                    { label: "90+ days", min: 91, max: 9999, count: 0, amount: 0 },
+                  ];
+                  openClaims.forEach((c: any) => {
+                    const age = differenceInDays(new Date(), new Date(c.incident_date || c.created_at));
+                    const bucket = buckets.find(b => age >= b.min && age <= b.max);
+                    if (bucket) { bucket.count++; bucket.amount += Number(c.amount_claimed || 0); }
+                  });
+
+                  return (
+                    <div className="grid grid-cols-4 gap-3">
+                      {buckets.map((b) => (
+                        <div key={b.label} className={`text-center p-4 rounded-lg border ${b.label === "90+ days" && b.count > 0 ? "border-destructive/40 bg-destructive/5" : "bg-muted/20"}`}>
+                          <div className="text-sm font-medium">{b.label}</div>
+                          <div className="text-2xl font-bold mt-1">{b.count}</div>
+                          <div className="text-xs text-muted-foreground">${(b.amount / 1000).toFixed(0)}K exposure</div>
+                        </div>
+                      ))}
+                    </div>
+                  );
+                })()}
               </CardContent>
             </Card>
           </div>
