@@ -35,7 +35,7 @@ import {
   Calendar, Server, Radio, Globe, Plane,
   Lock, GraduationCap, Trash2, Fuel, Stethoscope, Terminal,
   Briefcase, Gamepad2, Waves, Search, Trophy, Lightbulb, Handshake, Calculator, ShoppingCart,
-  ArrowRightLeft, ShieldAlert, Layers, Crown
+  ArrowRightLeft, ShieldAlert, Layers
 } from "lucide-react";
 import type { LucideIcon } from "lucide-react";
 
@@ -270,7 +270,6 @@ export const SIDEBAR_ROUTES: SidebarGroup[] = [
     defaultOpen: false,
     items: [
       { label: "World-Class Dashboard", path: "/world-class", icon: Trophy, emoji: "🏆", badge: "NEW", status: "new" as const },
-      { label: "World Leadership", path: "/world-leadership", icon: Crown, emoji: "👑", badge: "#1", status: "new" as const },
       { label: "Voice Copilot", path: "/voice-copilot", icon: Mic, emoji: "🎙️", badge: "AI", status: "new" as const },
       { label: "Computer Vision", path: "/computer-vision-inspector", icon: Eye, emoji: "👁️", badge: "CV", status: "new" as const },
       { label: "Crew Marketplace", path: "/crew-marketplace", icon: Users, emoji: "🌍", badge: "GLOBAL", status: "new" as const },
@@ -282,21 +281,6 @@ export const SIDEBAR_ROUTES: SidebarGroup[] = [
       { label: "Monte Carlo Risk", path: "/compliance?standard=hub", icon: Target, emoji: "🎲", badge: "SIM" },
       { label: "Evidence Pack", path: "/evidence-pack", icon: Package, emoji: "📦", badge: "PSC", status: "new" as const },
       { label: "Voyage Optimizer", path: "/voyage-optimizer", icon: Map, emoji: "🗺️", badge: "AI", status: "new" as const },
-    ],
-  },
-
-  // ═══════════════════════════════════════════════════════════
-  // I. 🚀 GO-TO-MARKET - Roadmap Tools
-  // ═══════════════════════════════════════════════════════════
-  {
-    title: "🚀 Go-to-Market",
-    defaultOpen: false,
-    items: [
-      { label: "Landing Page", path: "/landing", icon: Globe, emoji: "🌐", badge: "PUBLIC", status: "new" as const },
-      { label: "Pricing", path: "/landing#pricing", icon: DollarSign, emoji: "💰", badge: "NEW", status: "new" as const },
-      { label: "API & Webhooks", path: "/api-docs", icon: Link, emoji: "🔗", badge: "v1", status: "new" as const },
-      { label: "Usage Analytics", path: "/usage-analytics", icon: BarChart3, emoji: "📊", badge: "LIVE", status: "new" as const },
-      { label: "ISO 27001 / SOC 2", path: "/iso-soc", icon: Shield, emoji: "🏆", badge: "CERT", status: "new" as const },
     ],
   },
 ];

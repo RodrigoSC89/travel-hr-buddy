@@ -365,13 +365,6 @@ export const PSCHistoryPage = lazy(() => import("@/pages/PSCHistoryPage"));
 export const StowagePlanPage = lazy(() => import("@/pages/StowagePlanPage"));
 export const BunkerOperationsPage = lazy(() => import("@/pages/BunkerOperationsPage"));
 
-// ============================================
-// ROADMAP PAGES (Go-to-Market, Analytics, API, Certifications)
-// ============================================
-export const APIDocsPage = lazy(() => import("@/pages/APIDocsPage"));
-export const ISOSOCCompliancePage = lazy(() => import("@/pages/ISOSOCCompliancePage"));
-export const UsageAnalyticsDashboard = lazy(() => import("@/pages/UsageAnalyticsDashboard"));
-
 // Role Management (Admin only)
 export const RoleManagementPage = lazy(() => import("@/pages/admin/RoleManagementPage"));
 
