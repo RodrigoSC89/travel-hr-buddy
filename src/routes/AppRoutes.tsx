@@ -365,6 +365,11 @@ export const AppRoutes = () => (
       <Route path="/advanced/crew-wellness-ai" element={<Pages.CrewWellnessAIAdvancedPage />} />
       <Route path="/advanced/executive-dashboard" element={<Pages.ExecutiveDashboardAdvancedPage />} />
       
+      {/* ======== ROADMAP: GO-TO-MARKET & ANALYTICS ======== */}
+      <Route path="/api-docs" element={<Pages.APIDocsPage />} />
+      <Route path="/iso-soc" element={<Pages.ISOSOCCompliancePage />} />
+      <Route path="/usage-analytics" element={<Pages.UsageAnalyticsDashboard />} />
+      
       {/* ======== SYSTEM REDIRECTS ======== */}
       <Route path="/system/interactivity" element={<Navigate to="/command" replace />} />
       <Route path="/system/qa-scoreboard" element={<Navigate to="/command" replace />} />
