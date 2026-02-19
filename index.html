@@ -94,12 +94,14 @@
     <div id="root"></div>
     <script type="module" src="/src/main.tsx"></script>
     
-    <!-- Fallback: remove loader after 10s if React fails to mount -->
+    <!-- Fallback: if React fails to mount after 12s, show recovery UI -->
     <script>
       setTimeout(function() {
         var loader = document.getElementById('initial-loader');
-        if (loader) loader.remove();
-      }, 10000);
+        if (loader) {
+          loader.innerHTML = '<div style="text-align:center;padding:20px;"><p style="color:#f87171;font-size:16px;font-family:system-ui;margin-bottom:12px;">O aplicativo não carregou corretamente.</p><button onclick="(async function(){try{if(\'caches\' in window){var k=await caches.keys();await Promise.all(k.map(function(c){return caches.delete(c)}))}if(\'serviceWorker\' in navigator){var r=await navigator.serviceWorker.getRegistrations();await Promise.all(r.map(function(s){return s.unregister()}))}localStorage.clear();sessionStorage.clear()}catch(e){}location.href=location.origin+\'/?_sw=\'+Date.now()})()" style="padding:10px 24px;background:#3b82f6;color:#fff;border:none;border-radius:8px;cursor:pointer;font-size:14px;font-family:system-ui;">Limpar cache e recarregar</button></div>';
+        }
+      }, 12000);
     </script>
   </body>
 </html>
