@@ -15,7 +15,7 @@ import { ScrollArea } from "@/components/ui/scroll-area";
 import { 
   Award, Users, BookOpen, Calendar, GraduationCap, 
   FileCheck, Shield, CheckCircle2, AlertTriangle, Clock,
-  Ship, TrendingUp, Target, Brain, RefreshCw, Loader2, Sparkles
+  Ship, TrendingUp, Target, Brain, RefreshCw, Loader2, Sparkles, Flag
 } from "lucide-react";
 import { useComplianceStats, useCrewCertifications, useSTCWCompetencies } from "@/hooks/useSTCWMLCData";
 import { useAuditAgentChat } from "@/hooks/useAuditAgentChat";
@@ -25,6 +25,7 @@ import { toast } from "sonner";
 const STCWCompetencyMatrix = lazy(() => import("@/components/crew/STCWCompetencyMatrix").then(m => ({ default: m.STCWCompetencyMatrix })));
 const SeaTimeCalculator = lazy(() => import("@/components/crew/STCWCompetencyMatrix").then(m => ({ default: m.STCWCompetencyMatrix }))); // Reuse STCW matrix for sea time
 const MLCComplianceModule = lazy(() => import("@/components/crew/MLCComplianceDashboard").then(m => ({ default: m.MLCComplianceDashboard })));
+const FlagStateCertValidator = lazy(() => import("@/components/crew/FlagStateCertValidator").then(m => ({ default: m.FlagStateCertValidator })));
 
 function LoadingSkeleton() {
   return (
@@ -155,7 +156,7 @@ Competências STCW cadastradas: ${stats.competencyCount}
 
         {/* Main Tabs */}
         <Tabs value={currentTab} onValueChange={handleTabChange} className="space-y-6">
-          <TabsList className="grid w-full grid-cols-5 h-auto p-1">
+          <TabsList className="grid w-full grid-cols-6 h-auto p-1">
             <TabsTrigger value="overview" className="flex flex-col items-center gap-1 py-2">
               <Target className="h-4 w-4" />
               <span className="text-xs">Overview</span>
@@ -175,6 +176,10 @@ Competências STCW cadastradas: ${stats.competencyCount}
             <TabsTrigger value="certificates" className="flex flex-col items-center gap-1 py-2">
               <FileCheck className="h-4 w-4" />
               <span className="text-xs">Certificates</span>
+            </TabsTrigger>
+            <TabsTrigger value="flag-state" className="flex flex-col items-center gap-1 py-2">
+              <Flag className="h-4 w-4" />
+              <span className="text-xs">Flag State</span>
             </TabsTrigger>
           </TabsList>
 
@@ -371,6 +376,13 @@ Competências STCW cadastradas: ${stats.competencyCount}
                 )}
               </CardContent>
             </Card>
+          </TabsContent>
+
+          {/* Flag State Validation Tab */}
+          <TabsContent value="flag-state">
+            <Suspense fallback={<LoadingSkeleton />}>
+              <FlagStateCertValidator />
+            </Suspense>
           </TabsContent>
         </Tabs>
       </div>
