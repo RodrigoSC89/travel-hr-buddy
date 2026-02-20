@@ -251,7 +251,7 @@ export default function AIModulesHubPage() {
               <Button variant="outline" onClick={() => navigate('/ai/voyage-logistics')}>
                 🗺️ Otimizar Rota
               </Button>
-              <Button variant="outline" onClick={() => navigate('/compliance-hub')}>
+              <Button variant="outline" onClick={() => navigate('/compliance')}>
                 📋 Verificar Compliance
               </Button>
               <Button variant="outline" onClick={() => navigate('/ai/safety-incident')}>

@@ -137,7 +137,7 @@ export const ModernExecutiveDashboard: React.FC<ExecutiveDashboardProps> = ({ cl
       trend: "+2.3% vs mês anterior",
       icon: <Shield className="w-6 h-6 text-primary-foreground" />,
       color: "green" as const,
-      onClick: () => navigate("/peotram"),
+      onClick: () => navigate("/compliance?standard=peotram"),
       actionLabel: "Ver PEOTRAM"
     },
     {

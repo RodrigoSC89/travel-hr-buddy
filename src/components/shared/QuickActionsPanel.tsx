@@ -72,7 +72,7 @@ export function QuickActionsPanel() {
       id: "send-message",
       label: "Enviar Mensagem",
       icon: MessageSquare,
-      action: () => navigate("/communication-command"),
+      action: () => navigate("/command"),
       color: "text-info"
     },
     {

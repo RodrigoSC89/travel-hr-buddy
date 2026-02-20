@@ -67,7 +67,7 @@ const FloatingMenu = () => {
       delay: 100,
       ariaLabel: "Abrir Chat Premium",
       action: () => {
-        navigate("/communication-command");
+        navigate("/command");
         toast({
           title: "💬 Chat Premium",
           description: "Abrindo sistema de comunicação"
