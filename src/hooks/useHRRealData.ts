@@ -6,6 +6,7 @@
 
 import { useQuery, useMutation, useQueryClient } from '@tanstack/react-query';
 import { supabase } from '@/integrations/supabase/client';
+import { fromUntyped } from '@/integrations/supabase/untyped-client';
 import { useToast } from '@/hooks/use-toast';
 
 // ============= TYPES =============
@@ -610,7 +611,7 @@ export function useHRPerformanceReviews() {
   return useQuery({
     queryKey: ['hr-performance-reviews-real'],
     queryFn: async () => {
-      const { data, error } = await (supabase.from as Function)('crew_performance_reviews')
+      const { data, error } = await fromUntyped('crew_performance_reviews')
         .select(`
           id,
           crew_member_id,

@@ -113,6 +113,16 @@ const KNOWN_UNTYPED_TABLES = new Set([
   // Alerts & Tracking
   "telemetry_alerts", "soc_alerts", "vessel_positions",
   
+  // OVID
+  "ovid_inspections", "ovid_answers", "ovid_evidence_photos",
+  
+  // HR Performance
+  "crew_performance_reviews", "crew_rotations",
+  
+  // Integrations
+  "integration_credentials", "integration_logs", "integration_plugins",
+  "webhook_integrations", "oauth_connections", "voice_settings",
+  
   // Documents
   "entity_documents",
   

@@ -4,6 +4,7 @@
  */
 
 import { supabase } from '@/integrations/supabase/client';
+import { fromUntyped } from '@/integrations/supabase/untyped-client';
 
 export type CrossModuleAnalysisType = 'correlation' | 'predictive_alerts' | 'fleet_optimization' | 'unified_analytics';
 
@@ -68,7 +69,7 @@ export class CrossModuleIntelligenceService {
     operations: number;
   }> {
     const [maintenance, crew, inspections, incidents] = await Promise.all([
-      (supabase.from as Function)('maintenance_tasks').select('status, priority').eq('vessel_id', vesselId).then((r: { data: Record<string, unknown>[] | null }) => r.data || []),
+      fromUntyped('maintenance_tasks').select('status, priority').eq('vessel_id', vesselId).then((r: { data: Record<string, unknown>[] | null }) => r.data || []),
       supabase.from('crew_members').select('status').eq('vessel_id', vesselId).then(r => r.data || []),
       supabase.from('psc_inspections').select('id, created_at').eq('vessel_id', vesselId).order('created_at', { ascending: false }).limit(5).then(r => r.data || []),
       supabase.from('safety_incidents').select('severity, status').eq('vessel_id', vesselId).order('created_at', { ascending: false }).limit(10).then(r => r.data || []),
@@ -112,7 +113,7 @@ export class CrossModuleIntelligenceService {
     const [vessels, crew, maintenance, incidents] = await Promise.all([
       supabase.from('vessels').select('id, status').then(r => r.data || []),
       supabase.from('crew_members').select('id, status').then(r => r.data || []),
-      (supabase.from as Function)('maintenance_tasks').select('id, status, priority').then((r: { data: Record<string, unknown>[] | null }) => r.data || []),
+      fromUntyped('maintenance_tasks').select('id, status, priority').then((r: { data: Record<string, unknown>[] | null }) => r.data || []),
       supabase.from('safety_incidents').select('id, severity, status').then(r => r.data || []),
     ]);
 

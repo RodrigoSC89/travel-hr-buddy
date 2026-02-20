@@ -3,6 +3,7 @@
  */
 
 import { supabase } from "@/integrations/supabase/client";
+import { fromUntyped } from "@/integrations/supabase/untyped-client";
 import { publishEvent } from "@/lib/events/event-bus";
 
 export const VoyagesService = {
@@ -67,7 +68,7 @@ export const VoyagesService = {
 
   async getRelatedCosts(voyageId: string) {
     const [expenses, bunkers] = await Promise.all([
-      (supabase.from as Function)('expenses').select('id, description, amount, currency, category').eq('voyage_id', voyageId),
+      fromUntyped('expenses').select('id, description, amount, currency, category').eq('voyage_id', voyageId),
       supabase.from('bunker_operations').select('id, fuel_type, quantity_mt, total_cost').eq('voyage_id', voyageId),
     ]);
 
