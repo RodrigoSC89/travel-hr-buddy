@@ -160,7 +160,7 @@ export const AppRoutes = () => (
       <Route path="/noaa-weather" element={<Pages.WeatherMaritime />} />
       <Route path="/opensky-flights" element={<Pages.WeatherMaritime />} />
       <Route path="/earthquake-monitor" element={<Pages.WeatherMaritime />} />
-      <Route path="/voice-transcriber" element={<Navigate to="/ai-hub" replace />} />
+      <Route path="/voice-transcriber" element={<Navigate to="/ai?tab=chat-voice" replace />} />
       
       {/* ======== RELATÓRIOS & DOCUMENTOS ======== */}
       <Route path="/reports-command" element={<Pages.ReportsCommandCenter />} />
