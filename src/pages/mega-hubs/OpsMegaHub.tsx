@@ -27,6 +27,7 @@ import { CrossModulePanel } from '@/components/integration';
 import { HubModulesBrowser } from '@/components/ui/HubModulesBrowser';
 import { OPS_ABSORBED, OPS_TAB_MODULES } from '@/lib/hub-absorbed-modules';
 import { TabTriggerWithModules } from '@/components/ui/TabTriggerWithModules';
+import { ModuleLauncherModal } from '@/components/ui/ModuleLauncherModal';
 // Lazy load sub-components
 const OperationsCommandHub = lazy(() => import('@/pages/OperationsCommandCenter'));
 const MaritimeCommandCenter = lazy(() => import('@/pages/MaritimeCommandCenter'));
@@ -97,6 +98,7 @@ export default function OpsMegaHub() {
   const [searchParams, setSearchParams] = useSearchParams();
   const activeTab = searchParams.get('tab') || 'overview';
   const activeModuleId = searchParams.get('module');
+  const [launcherOpen, setLauncherOpen] = useState(false);
   const [showActionPanel, setShowActionPanel] = useState(true);
   const [voyageDialogOpen, setVoyageDialogOpen] = useState(false);
   const queryClient = useQueryClient();
@@ -192,6 +194,7 @@ export default function OpsMegaHub() {
                   icon={tab.icon}
                   modules={OPS_TAB_MODULES[tab.id] || []}
                   onModuleSelect={(moduleId) => setSearchParams({ tab: 'modules', module: moduleId })}
+                  onOpenLauncher={() => setLauncherOpen(true)}
                 />
               ))}
             </TabsList>
@@ -486,6 +489,16 @@ export default function OpsMegaHub() {
 
       {/* New Voyage Dialog */}
       <NewVoyageDialog open={voyageDialogOpen} onOpenChange={setVoyageDialogOpen} />
+
+      {/* Module Launcher Modal */}
+      <ModuleLauncherModal
+        open={launcherOpen}
+        onOpenChange={setLauncherOpen}
+        hubName="Ferramentas Operacionais"
+        hubIcon={<Compass className="h-5 w-5" />}
+        modules={OPS_ABSORBED}
+        onModuleSelect={(moduleId) => setSearchParams({ tab: 'modules', module: moduleId })}
+      />
     </div>
   );
 }

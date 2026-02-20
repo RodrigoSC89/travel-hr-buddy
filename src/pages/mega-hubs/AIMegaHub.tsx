@@ -33,6 +33,7 @@ import { publishEvent } from '@/lib/events/event-bus';
 import { HubModulesBrowser } from '@/components/ui/HubModulesBrowser';
 import { AI_ABSORBED, AI_TAB_MODULES } from '@/lib/hub-absorbed-modules';
 import { TabTriggerWithModules } from '@/components/ui/TabTriggerWithModules';
+import { ModuleLauncherModal } from '@/components/ui/ModuleLauncherModal';
 
 // Lazy load sub-components
 const AIControlTowerHub = lazy(() => import('@/pages/AIHubPage'));
@@ -123,6 +124,7 @@ export default function AIMegaHub() {
   // Migrate old tab IDs to new ones
   const activeTab = TAB_MIGRATION[rawTab] || rawTab;
   const activeModuleId = searchParams.get('module');
+  const [launcherOpen, setLauncherOpen] = useState(false);
   const queryClient = useQueryClient();
   const navigate = useNavigate();
   const { exportToJSON } = useRealActionHandlers();
@@ -284,6 +286,7 @@ export default function AIMegaHub() {
                   icon={tab.icon}
                   modules={AI_TAB_MODULES[tab.id] || []}
                   onModuleSelect={(moduleId) => setSearchParams({ tab: 'all-modules', module: moduleId })}
+                  onOpenLauncher={() => setLauncherOpen(true)}
                 />
               ))}
             </TabsList>
@@ -543,6 +546,16 @@ export default function AIMegaHub() {
           </div>
         </DialogContent>
       </Dialog>
+
+      {/* Module Launcher Modal */}
+      <ModuleLauncherModal
+        open={launcherOpen}
+        onOpenChange={setLauncherOpen}
+        hubName="🧪 Laboratório IA"
+        hubIcon={<Brain className="h-5 w-5" />}
+        modules={AI_ABSORBED}
+        onModuleSelect={(moduleId) => setSearchParams({ tab: 'all-modules', module: moduleId })}
+      />
     </div>
   );
 }

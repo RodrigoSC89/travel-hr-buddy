@@ -9,7 +9,7 @@
  * ✅ FUNCTIONAL ACTIONS (UPLOAD, EXPORT, CREATE)
  */
 
-import React, { Suspense, lazy, useMemo, useCallback } from 'react';
+import React, { Suspense, lazy, useMemo, useCallback, useState } from 'react';
 import { useSearchParams, useLocation, useNavigate } from 'react-router-dom';
 import { Tabs, TabsContent, TabsList, TabsTrigger } from '@/components/ui/tabs';
 import { Badge } from '@/components/ui/badge';
@@ -28,6 +28,7 @@ import { publishEvent } from '@/lib/events/event-bus';
 import { HubModulesBrowser } from '@/components/ui/HubModulesBrowser';
 import { WORKBENCH_ABSORBED, WORKBENCH_TAB_MODULES } from '@/lib/hub-absorbed-modules';
 import { TabTriggerWithModules } from '@/components/ui/TabTriggerWithModules';
+import { ModuleLauncherModal } from '@/components/ui/ModuleLauncherModal';
 
 // Lazy load sub-components
 const DocumentCenterHub = lazy(() => import('@/pages/Documents'));
@@ -101,6 +102,7 @@ export default function WorkbenchMegaHub() {
   const pathSection = location.pathname.split('/')[2] || '';
   const activeSection = pathSection || searchParams.get('section') || 'docs';
   const activeModuleId = searchParams.get('module');
+  const [launcherOpen, setLauncherOpen] = useState(false);
 
   // Real data: crew members
   const { data: crewMembers = [], isLoading: crewLoading } = useQuery({
@@ -282,6 +284,7 @@ export default function WorkbenchMegaHub() {
                   icon={section.icon}
                   modules={WORKBENCH_TAB_MODULES[section.id] || []}
                   onModuleSelect={(moduleId) => setSearchParams({ section: 'modules', module: moduleId })}
+                  onOpenLauncher={() => setLauncherOpen(true)}
                 />
               ))}
             </TabsList>
@@ -666,6 +669,16 @@ export default function WorkbenchMegaHub() {
           </Suspense>
         </div>
       </Tabs>
+
+      {/* Module Launcher Modal */}
+      <ModuleLauncherModal
+        open={launcherOpen}
+        onOpenChange={setLauncherOpen}
+        hubName="Centro de Recursos"
+        hubIcon={<Briefcase className="h-5 w-5" />}
+        modules={WORKBENCH_ABSORBED}
+        onModuleSelect={(moduleId) => setSearchParams({ section: 'modules', module: moduleId })}
+      />
     </div>
   );
 }
