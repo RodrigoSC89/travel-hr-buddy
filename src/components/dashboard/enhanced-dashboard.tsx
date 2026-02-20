@@ -340,7 +340,7 @@ export const EnhancedDashboard = () => {
       icon: Rocket, 
       label: "Inovação", 
       action: () => {
-        navigate("/revolutionary-features");
+        navigate("/ai");
         toast({ title: "🚀 Inovação", description: "Abrindo centro de inteligência e inovação" });
       }
     }

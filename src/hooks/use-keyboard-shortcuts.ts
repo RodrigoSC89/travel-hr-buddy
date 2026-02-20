@@ -47,13 +47,13 @@ export const useKeyboardShortcuts = (onGlobalSearch?: () => void) => {
     {
       key: "5",
       ctrlKey: true,
-      action: () => navigate("/alerts-command"),
+      action: () => navigate("/command"),
       description: "Ir para Alertas"
     },
     {
       key: "6",
       ctrlKey: true,
-      action: () => navigate("/communication-command"),
+      action: () => navigate("/command"),
       description: "Ir para Comunicação"
     },
     {
