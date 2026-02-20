@@ -3,7 +3,7 @@
  * Offline-first sync with background capabilities
  */
 
-import { supabase } from '@/integrations/supabase/client';
+import { fromUntyped } from '@/integrations/supabase/untyped-client';
 
 export interface QueuedItem {
   id: string;
@@ -225,20 +225,20 @@ class MobileSyncManager {
 
     switch (type) {
       case 'create': {
-        const { error } = await (supabase.from as Function)(table).insert(data);
+        const { error } = await fromUntyped(table).insert(data);
         if (error) throw error;
         break;
       }
       case 'update': {
         const { id, ...updateData } = data;
-        const { error } = await (supabase.from as Function)(table)
+        const { error } = await fromUntyped(table)
           .update(updateData)
           .eq('id', id as string);
         if (error) throw error;
         break;
       }
       case 'delete': {
-        const { error } = await (supabase.from as Function)(table)
+        const { error } = await fromUntyped(table)
           .delete()
           .eq('id', data.id as string);
         if (error) throw error;

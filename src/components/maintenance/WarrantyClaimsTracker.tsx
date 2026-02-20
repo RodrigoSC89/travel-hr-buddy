@@ -12,6 +12,7 @@ import { Label } from "@/components/ui/label";
 import { Textarea } from "@/components/ui/textarea";
 import { Skeleton } from "@/components/ui/skeleton";
 import { Select, SelectContent, SelectItem, SelectTrigger, SelectValue } from "@/components/ui/select";
+import { fromUntyped } from "@/integrations/supabase/untyped-client";
 import { Dialog, DialogContent, DialogHeader, DialogTitle } from "@/components/ui/dialog";
 import { Tabs, TabsContent, TabsList, TabsTrigger } from "@/components/ui/tabs";
 import {
@@ -66,7 +67,7 @@ export function WarrantyClaimsTracker() {
   const { data: claims = [], isLoading, refetch } = useQuery({
     queryKey: ["warranty-claims"],
     queryFn: async () => {
-      const { data, error } = await (supabase.from as Function)("warranty_claims")
+      const { data, error } = await fromUntyped("warranty_claims")
         .select("*, vessels:vessel_id(name)")
         .order("created_at", { ascending: false });
       if (error) throw error;
@@ -77,7 +78,7 @@ export function WarrantyClaimsTracker() {
   const createMutation = useMutation({
     mutationFn: async (f: typeof emptyForm) => {
       const num = `WC-${new Date().getFullYear()}-${String(claims.length + 1).padStart(3, "0")}`;
-      const { error } = await (supabase.from as Function)("warranty_claims").insert({
+      const { error } = await fromUntyped("warranty_claims").insert({
         claim_number: num,
         equipment: f.equipment,
         manufacturer: f.manufacturer,
@@ -103,7 +104,7 @@ export function WarrantyClaimsTracker() {
 
   const updateMutation = useMutation({
     mutationFn: async ({ id, updates }: { id: string; updates: Record<string, unknown> }) => {
-      const { error } = await (supabase.from as Function)("warranty_claims").update(updates).eq("id", id);
+      const { error } = await fromUntyped("warranty_claims").update(updates).eq("id", id);
       if (error) throw error;
     },
     onSuccess: () => {
@@ -116,7 +117,7 @@ export function WarrantyClaimsTracker() {
 
   const deleteMutation = useMutation({
     mutationFn: async (id: string) => {
-      const { error } = await (supabase.from as Function)("warranty_claims").delete().eq("id", id);
+      const { error } = await fromUntyped("warranty_claims").delete().eq("id", id);
       if (error) throw error;
     },
     onSuccess: () => {

@@ -20,6 +20,7 @@
 import { useQuery, useMutation, useQueryClient } from '@tanstack/react-query';
 import { logger } from '@/lib/logger';
 import { supabase } from '@/integrations/supabase/client';
+import { fromUntyped } from '@/integrations/supabase/untyped-client';
 import { toast } from 'sonner';
 import { useUniversalExport, type ExportColumn, type ExportFormat } from './useUniversalExport';
 
@@ -124,8 +125,7 @@ export function useMaritimeAudits(auditType: AuditType) {
     queryFn: async () => {
       // For specialized tables
       if (['peotram', 'pre-ovid', 'psc', 'sgso'].includes(auditType)) {
-        const { data, error } = await (supabase.from as Function)(tableName)
-          .select('*')
+        const { data, error } = await fromUntyped(tableName)
           .select('*')
           .order('created_at', { ascending: false });
         
@@ -176,9 +176,8 @@ export function useMaritimeAudit(auditType: AuditType, auditId: string) {
     queryFn: async () => {
       if (!auditId) return null;
       
-      const { data, error } = await (supabase.from as Function)(tableName)
+      const { data, error } = await fromUntyped(tableName)
         .select('*')
-        .eq('id', auditId)
         .eq('id', auditId)
         .single();
       
@@ -246,9 +245,8 @@ export function useCreateMaritimeAudit() {
         insertData.audit_number = `${input.audit_type.toUpperCase()}-${Date.now()}`;
       }
       
-      const { data, error } = await (supabase.from as Function)(tableName)
+      const { data, error } = await fromUntyped(tableName)
         .insert(insertData)
-        .select()
         .select()
         .single();
       
@@ -296,9 +294,8 @@ export function useUpdateMaritimeAudit() {
       if (input.notes) updateData.notes = input.notes;
       if (input.next_audit_date) updateData.next_audit_date = input.next_audit_date;
       
-      const { data, error } = await (supabase.from as Function)(tableName)
+      const { data, error } = await fromUntyped(tableName)
         .update(updateData)
-        .eq('id', input.id)
         .eq('id', input.id)
         .select()
         .single();
@@ -333,7 +330,7 @@ export function useDeleteMaritimeAudit() {
       const tableName = AUDIT_TABLE_MAP[auditType];
       const label = AUDIT_LABELS[auditType];
       
-      const { error } = await (supabase.from as Function)(tableName)
+      const { error } = await fromUntyped(tableName)
         .delete()
         .eq('id', auditId);
       

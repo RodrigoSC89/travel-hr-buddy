@@ -5,7 +5,7 @@
  */
 import React, { useState } from 'react';
 import { useQuery, useQueryClient } from '@tanstack/react-query';
-import { supabase } from '@/integrations/supabase/client';
+import { fromUntyped } from '@/integrations/supabase/untyped-client';
 import { useCreateJSATemplate } from '@/hooks/useModuleHooks';
 import { Card, CardContent, CardHeader, CardTitle } from '@/components/ui/card';
 import { Button } from '@/components/ui/button';
@@ -46,7 +46,7 @@ export function JSATemplatesManager() {
   const { data: templates = [], isLoading } = useQuery({
     queryKey: ['jsa-templates'],
     queryFn: async () => {
-      const { data, error } = await (supabase.from as Function)('jsa_templates')
+      const { data, error } = await fromUntyped('jsa_templates')
         .select('*')
         .order('job_type');
       if (error) throw error;

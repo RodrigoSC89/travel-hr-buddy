@@ -11,7 +11,7 @@ import { Select, SelectContent, SelectItem, SelectTrigger, SelectValue } from "@
 import { AlertTriangle, CheckCircle, Clock, Users, Download, Shield } from "lucide-react";
 import { toast } from "sonner";
 import { useQuery } from "@tanstack/react-query";
-import { supabase } from "@/integrations/supabase/client";
+import { fromUntyped } from "@/integrations/supabase/untyped-client";
 
 const MLC_RULES = [
   { rule: "Max 14 hours work in any 24h period", limit: 14, unit: "daily" },
@@ -44,7 +44,7 @@ export function MLCWorkRestCalculator() {
         startDate = d.toISOString().split("T")[0];
       }
 
-      const { data, error } = await (supabase.from as Function)("mlc_work_rest_records")
+      const { data, error } = await fromUntyped("mlc_work_rest_records")
         .select("*, crew_members(full_name, rank)")
         .gte("record_date", startDate)
         .order("record_date", { ascending: false });

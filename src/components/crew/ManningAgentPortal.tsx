@@ -5,7 +5,7 @@
  */
 import React, { useState } from 'react';
 import { useQuery, useMutation, useQueryClient } from '@tanstack/react-query';
-import { supabase } from '@/integrations/supabase/client';
+import { fromUntyped } from '@/integrations/supabase/untyped-client';
 import { Card, CardContent, CardHeader, CardTitle } from '@/components/ui/card';
 import { Button } from '@/components/ui/button';
 import { Badge } from '@/components/ui/badge';
@@ -27,7 +27,7 @@ export function ManningAgentPortal() {
   const { data: agents = [] } = useQuery({
     queryKey: ['manning-agents'],
     queryFn: async () => {
-      const { data, error } = await (supabase.from as Function)('manning_agents')
+      const { data, error } = await fromUntyped('manning_agents')
         .select('*')
         .order('agent_name');
       if (error) throw error;
@@ -39,7 +39,7 @@ export function ManningAgentPortal() {
     queryKey: ['manning-candidates', selectedAgent],
     queryFn: async () => {
       if (!selectedAgent) return [];
-      const { data, error } = await (supabase.from as Function)('manning_agent_candidates')
+      const { data, error } = await fromUntyped('manning_agent_candidates')
         .select('*')
         .eq('agent_id', selectedAgent)
         .order('created_at', { ascending: false });
@@ -51,7 +51,7 @@ export function ManningAgentPortal() {
 
   const createAgentMutation = useMutation({
     mutationFn: async (form: Record<string, unknown>) => {
-      const { error } = await (supabase.from as Function)('manning_agents').insert(form);
+      const { error } = await fromUntyped('manning_agents').insert(form);
       if (error) throw error;
     },
     onSuccess: () => {
@@ -63,7 +63,7 @@ export function ManningAgentPortal() {
 
   const createCandidateMutation = useMutation({
     mutationFn: async (form: Record<string, unknown>) => {
-      const { error } = await (supabase.from as Function)('manning_agent_candidates').insert(form);
+      const { error } = await fromUntyped('manning_agent_candidates').insert(form);
       if (error) throw error;
     },
     onSuccess: () => {

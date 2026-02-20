@@ -4,6 +4,7 @@
  */
 
 import { supabase } from '@/integrations/supabase/client';
+import { fromUntyped } from '@/integrations/supabase/untyped-client';
 import { logger } from '@/lib/utils/production-logger';
 
 export interface KPIDefinition {
@@ -355,7 +356,7 @@ export class KPITracker {
     const { data: session } = await supabase.auth.getSession();
     const userId = session?.session?.user?.id ?? 'anonymous';
 
-    await (supabase.from as Function)('analytics_events').insert({
+    await fromUntyped('analytics_events').insert({
       event_name: event,
       event_category: 'engagement',
       user_id: userId,
@@ -373,7 +374,7 @@ export class KPITracker {
     const monthStart = new Date(now.getFullYear(), now.getMonth(), 1);
 
     // Get unique users today
-    const { data: dailyUsers } = await (supabase.from as Function)('analytics_events')
+    const { data: dailyUsers } = await fromUntyped('analytics_events')
       .select('user_id')
       .gte('timestamp', dayStart.toISOString())
       .not('user_id', 'is', null);
@@ -382,7 +383,7 @@ export class KPITracker {
     await this.trackKPI('DAU', dau);
 
     // Get unique users this month
-    const { data: monthlyUsers } = await (supabase.from as Function)('analytics_events')
+    const { data: monthlyUsers } = await fromUntyped('analytics_events')
       .select('user_id')
       .gte('timestamp', monthStart.toISOString())
       .not('user_id', 'is', null);

@@ -4,7 +4,7 @@
  */
 import { useState, useMemo } from "react";
 import { useQuery } from "@tanstack/react-query";
-import { supabase } from "@/integrations/supabase/client";
+import { fromUntyped } from "@/integrations/supabase/untyped-client";
 import { Card, CardContent, CardHeader, CardTitle } from "@/components/ui/card";
 import { Button } from "@/components/ui/button";
 import { Badge } from "@/components/ui/badge";
@@ -59,7 +59,7 @@ export function CrewPayrollManager() {
   const { data: payrolls = [], isLoading: payrollsLoading } = useQuery({
     queryKey: ["crew-payrolls"],
     queryFn: async () => {
-      const { data, error } = await (supabase.from as Function)("crew_payroll")
+      const { data, error } = await fromUntyped("crew_payroll")
         .select("*").order("period_start", { ascending: false });
       if (error) throw error;
       return (data || []).map((p: Record<string, unknown>): CrewPayroll => ({
@@ -84,7 +84,7 @@ export function CrewPayrollManager() {
   const { data: crewMembers = [] } = useQuery({
     queryKey: ["crew-payroll-members"],
     queryFn: async () => {
-      const { data, error } = await supabase.from("crew_members").select("id, full_name, rank").eq("status", "active");
+      const { data, error } = await (await import("@/integrations/supabase/client")).supabase.from("crew_members").select("id, full_name, rank").eq("status", "active");
       if (error) throw error;
       return data as CrewMember[];
     },

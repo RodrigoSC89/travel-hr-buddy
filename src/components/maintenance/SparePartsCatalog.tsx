@@ -12,7 +12,7 @@ import { Progress } from "@/components/ui/progress";
 import { Select, SelectContent, SelectItem, SelectTrigger, SelectValue } from "@/components/ui/select";
 import { Package, Search, AlertTriangle, TrendingUp, BarChart3, Plus, Download, DollarSign, Layers, Clock, Zap } from "lucide-react";
 import { useQuery } from "@tanstack/react-query";
-import { supabase } from "@/integrations/supabase/client";
+import { fromUntyped } from "@/integrations/supabase/untyped-client";
 import { BarChart, Bar, XAxis, YAxis, CartesianGrid, Tooltip, ResponsiveContainer, PieChart, Pie, Cell } from 'recharts';
 import { toast } from 'sonner';
 import { cn } from '@/lib/utils';
@@ -36,7 +36,7 @@ export function SparePartsCatalog() {
   const { data: parts = [], isLoading } = useQuery({
     queryKey: ["spare-parts-catalog"],
     queryFn: async () => {
-      const { data, error } = await (supabase.from as Function)("inventory_items")
+      const { data, error } = await fromUntyped("inventory_items")
         .select("*").order("created_at", { ascending: false }).limit(500);
       if (error) return [] as SparePart[];
       return (data || []).map((item: Record<string, unknown>): SparePart => ({

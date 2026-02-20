@@ -3,7 +3,7 @@ import { Card, CardContent, CardDescription, CardHeader, CardTitle } from "@/com
 import { Button } from "@/components/ui/button";
 import { Badge } from "@/components/ui/badge";
 import { Textarea } from "@/components/ui/textarea";
-import { supabase } from "@/integrations/supabase/client";
+import { fromUntyped } from "@/integrations/supabase/untyped-client";
 import { logger } from "@/lib/logger";
 import {
   Brain, 
@@ -36,7 +36,7 @@ export const AIAnalysisComponent: React.FC<AIAnalysisProps> = ({
       setAnalyzing(true);
       setLoading(true);
 
-      const response = await supabase.functions.invoke("checklist-ai-analysis", {
+      const response = await (await import("@/integrations/supabase/client")).supabase.functions.invoke("checklist-ai-analysis", {
         body: {
           checklistId: checklist.id,
           checklistData: {
@@ -59,7 +59,7 @@ export const AIAnalysisComponent: React.FC<AIAnalysisProps> = ({
       onAnalysisComplete?.(aiAnalysis);
 
       // Save analysis to database
-      const { error: dbError } = await (supabase.from as Function)("checklist_ai_analysis")
+      const { error: dbError } = await fromUntyped("checklist_ai_analysis")
         .insert({
           checklist_id: checklist.id,
           overall_score: aiAnalysis.overallScore,

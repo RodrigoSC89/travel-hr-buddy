@@ -6,6 +6,7 @@
 import { useState } from 'react';
 import { useQuery, useMutation, useQueryClient } from '@tanstack/react-query';
 import { supabase } from '@/integrations/supabase/client';
+import { fromUntyped } from '@/integrations/supabase/untyped-client';
 import { Card, CardContent, CardHeader, CardTitle, CardDescription } from "@/components/ui/card";
 import { Button } from "@/components/ui/button";
 import { Input } from "@/components/ui/input";
@@ -67,7 +68,7 @@ export const AutomatedReportsManager = () => {
   const { data: reports = [], isLoading } = useQuery({
     queryKey: ['scheduled-reports'],
     queryFn: async () => {
-      const { data, error } = await (supabase.from as Function)('scheduled_reports')
+      const { data, error } = await fromUntyped('scheduled_reports')
         .select('*')
         .order('created_at', { ascending: false });
       if (error) throw error;
@@ -90,7 +91,7 @@ export const AutomatedReportsManager = () => {
     mutationFn: async (data: typeof newReport) => {
       const { data: userData } = await supabase.auth.getUser();
       const nextRun = new Date(Date.now() + 86400000).toISOString();
-      const { error } = await (supabase.from as Function)('scheduled_reports').insert({
+      const { error } = await fromUntyped('scheduled_reports').insert({
         name: data.name,
         report_type: data.type,
         schedule: data.schedule,
@@ -113,7 +114,7 @@ export const AutomatedReportsManager = () => {
 
   const toggleMutation = useMutation({
     mutationFn: async ({ id, isActive }: { id: string; isActive: boolean }) => {
-      const { error } = await (supabase.from as Function)('scheduled_reports')
+      const { error } = await fromUntyped('scheduled_reports')
         .update({ is_active: !isActive })
         .eq('id', id);
       if (error) throw error;
@@ -126,7 +127,7 @@ export const AutomatedReportsManager = () => {
 
   const deleteMutation = useMutation({
     mutationFn: async (id: string) => {
-      const { error } = await (supabase.from as Function)('scheduled_reports')
+      const { error } = await fromUntyped('scheduled_reports')
         .delete()
         .eq('id', id);
       if (error) throw error;
@@ -158,7 +159,7 @@ export const AutomatedReportsManager = () => {
         });
       }
       // Update last_run
-      await (supabase.from as Function)('scheduled_reports')
+      await fromUntyped('scheduled_reports')
         .update({ last_run: new Date().toISOString() })
         .eq('id', report.id);
       queryClient.invalidateQueries({ queryKey: ['scheduled-reports'] });

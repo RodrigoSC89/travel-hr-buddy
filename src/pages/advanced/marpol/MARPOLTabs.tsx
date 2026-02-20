@@ -17,6 +17,7 @@ import { Textarea } from "@/components/ui/textarea";
 import { motion } from "framer-motion";
 import { toast } from "sonner";
 import { supabase } from "@/integrations/supabase/client";
+import { fromUntyped } from "@/integrations/supabase/untyped-client";
 import { exportToCSV, exportTableToPDF } from "@/lib/export-utils";
 import {
   Leaf, Waves, Trash2, AlertTriangle, CheckCircle2,
@@ -172,7 +173,7 @@ export function MARPOLTabs({
     setSavingTank(true);
     try {
       if (tankEditMode === "edit" && editingTank) {
-        const { error } = await (supabase.from as Function)("equipment_sensors")
+        const { error } = await fromUntyped("equipment_sensors")
           .update({
             value: parseFloat(tankForm.currentLevel) || 0,
             max_threshold: parseFloat(tankForm.capacity),
@@ -183,7 +184,7 @@ export function MARPOLTabs({
         if (error) throw error;
         toast.success("Volume do tanque atualizado");
       } else {
-        const { error } = await (supabase.from as Function)("equipment_sensors")
+        const { error } = await fromUntyped("equipment_sensors")
           .insert({
             sensor_type: tankForm.name,
             equipment_id: `tank-${Date.now()}`,
