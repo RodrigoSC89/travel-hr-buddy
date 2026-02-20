@@ -10,6 +10,7 @@
  */
 
 import { supabase } from "@/integrations/supabase/client";
+import { fromUntyped } from "@/integrations/supabase/untyped-client";
 import { RealtimeChannel } from "@supabase/supabase-js";
 import { syncQueue } from "./syncQueue";
 import { networkDetector } from "./networkDetector";
@@ -205,7 +206,7 @@ export class EnhancedSyncEngine {
   private async pollTable(table: string): Promise<void> {
     const lastSync = this.status.lastSync || new Date(0);
     
-    const { data, error } = await (supabase.from as Function)(table)
+    const { data, error } = await fromUntyped(table)
       .select("*")
       .gte("updated_at", lastSync.toISOString())
       .order("updated_at", { ascending: false })

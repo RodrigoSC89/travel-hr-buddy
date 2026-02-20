@@ -7,6 +7,7 @@ import { motion } from "framer-motion";
 import { staggerContainer, fadeUp, kpiCard } from "@/lib/animations/motion-variants";
 import { useQuery, useMutation, useQueryClient } from '@tanstack/react-query';
 import { supabase } from '@/integrations/supabase/client';
+import { fromUntyped } from '@/integrations/supabase/untyped-client';
 import { Card, CardContent, CardHeader, CardTitle } from '@/components/ui/card';
 import { Button } from '@/components/ui/button';
 import { Badge } from '@/components/ui/badge';
@@ -65,7 +66,7 @@ export default function ClassSurveyTracker() {
   const { data: surveys = [], isLoading, refetch } = useQuery({
     queryKey: ['class-surveys'],
     queryFn: async () => {
-      const { data, error } = await (supabase.from as Function)('class_surveys')
+      const { data, error } = await fromUntyped('class_surveys')
         .select('*, vessels:vessel_id(name)')
         .order('due_date', { ascending: true });
       if (error) throw error;
@@ -81,7 +82,7 @@ export default function ClassSurveyTracker() {
   const { data: conditions = [] } = useQuery({
     queryKey: ['class-conditions'],
     queryFn: async () => {
-      const { data, error } = await (supabase.from as Function)('class_conditions')
+      const { data, error } = await fromUntyped('class_conditions')
         .select('*, vessels:vessel_id(name)')
         .order('due_date', { ascending: true });
       if (error) throw error;
@@ -104,7 +105,7 @@ export default function ClassSurveyTracker() {
 
   const createSurvey = useMutation({
     mutationFn: async (f: typeof emptyForm) => {
-      const { error } = await (supabase.from as Function)('class_surveys').insert({
+      const { error } = await fromUntyped('class_surveys').insert({
         vessel_id: f.vessel_id || null, survey_type: f.survey_type,
         class_society: f.class_society, due_date: f.due_date || null,
         last_completed: f.last_completed || null, surveyor: f.surveyor || null,
@@ -124,7 +125,7 @@ export default function ClassSurveyTracker() {
 
   const updateSurvey = useMutation({
     mutationFn: async ({ id, updates }: { id: string; updates: Record<string, unknown> }) => {
-      const { error } = await (supabase.from as Function)('class_surveys').update(updates).eq('id', id);
+      const { error } = await fromUntyped('class_surveys').update(updates).eq('id', id);
       if (error) throw error;
     },
     onSuccess: () => {
@@ -136,7 +137,7 @@ export default function ClassSurveyTracker() {
 
   const deleteSurvey = useMutation({
     mutationFn: async (id: string) => {
-      const { error } = await (supabase.from as Function)('class_surveys').delete().eq('id', id);
+      const { error } = await fromUntyped('class_surveys').delete().eq('id', id);
       if (error) throw error;
     },
     onSuccess: () => {

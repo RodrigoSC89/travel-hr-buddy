@@ -96,6 +96,7 @@ const KNOWN_UNTYPED_TABLES = new Set([
   
   // PEODP & Petrobras
   "peodp_equipment", "peotram_sat_chambers",
+  "peodp_operational_window", "peodp_equipment_status", "peodp_simops",
   "lvs_acceptance_sessions", "lvs_item_status", "lvs_action_plans", "lvs_document_analyses",
   
   // MLC & STCW
@@ -109,6 +110,7 @@ const KNOWN_UNTYPED_TABLES = new Set([
   
   // System & Events
   "system_events", "event_outbox", "automation_workflows",
+  "audit_events", "event_subscriptions",
   
   // Alerts & Tracking
   "telemetry_alerts", "soc_alerts", "vessel_positions",
@@ -122,12 +124,21 @@ const KNOWN_UNTYPED_TABLES = new Set([
   // Integrations
   "integration_credentials", "integration_logs", "integration_plugins",
   "webhook_integrations", "oauth_connections", "voice_settings",
+  "integration_health",
   
   // Documents
   "entity_documents",
   
   // Crew Certifications (untyped)
   "crew_certifications",
+  
+  // Compliance
+  "compliance_items", "non_conformities", "corrective_actions",
+  "internal_audits", "maintenance_records",
+  "scheduled_compliance_reports",
+  
+  // Health & Wellbeing
+  "crew_health_metrics", "health_anomalies",
   
   // Miscellaneous
   "vessel_restrictions", "ia_performance_log",

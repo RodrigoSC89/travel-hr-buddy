@@ -5,6 +5,7 @@
  */
 
 import { supabase } from "@/integrations/supabase/client";
+import { fromUntyped } from "@/integrations/supabase/untyped-client";
 import { logger } from "@/lib/logger";
 
 export type ForecastEvent = "incident" | "downtime" | "overload" | "normal";
@@ -131,7 +132,7 @@ class PredictiveEngine {
   private async updateModelParameters(patterns: Record<string, unknown>): Promise<void> {
     try {
       // Store model config using ai_configurations table
-      await (supabase.from as Function)("ai_configurations")
+      await fromUntyped("ai_configurations")
         .upsert({
           config_key: "predictive_engine_params",
           config_value: {

@@ -13,7 +13,7 @@ import { Select, SelectContent, SelectItem, SelectTrigger, SelectValue } from "@
 import { toast } from "sonner";
 import { Download, Search, Plus, BookOpen, Copy, Star, Filter, FileText } from "lucide-react";
 import { useQuery } from "@tanstack/react-query";
-import { supabase } from "@/integrations/supabase/client";
+import { fromUntyped } from "@/integrations/supabase/untyped-client";
 
 interface Clause {
   id: string;
@@ -52,8 +52,7 @@ export function ClauseLibraryTab() {
   const { data: dbClauses = [] } = useQuery({
     queryKey: ["charter-party-clauses"],
     queryFn: async () => {
-      const { data, error } = await supabase
-        .from("charter_party_clauses" as any)
+      const { data, error } = await fromUntyped("charter_party_clauses")
         .select("*")
         .order("created_at", { ascending: false })
         .limit(100);

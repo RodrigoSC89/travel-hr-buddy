@@ -3,6 +3,7 @@ import { Card, CardContent, CardHeader, CardTitle } from "@/components/ui/card";
 import { Badge } from "@/components/ui/badge";
 import { AlertCircle, TrendingUp, TrendingDown, Activity } from "lucide-react";
 import { supabase } from "@/integrations/supabase/client";
+import { fromUntyped } from "@/integrations/supabase/untyped-client";
 import { useToast } from "@/hooks/use-toast";
 import { LineChart, Line, XAxis, YAxis, CartesianGrid, Tooltip, ResponsiveContainer, Legend } from "recharts";
 
@@ -54,11 +55,11 @@ export const HealthMetricsDashboard: React.FC = () => {
       const thirtyDaysAgo = new Date();
       thirtyDaysAgo.setDate(thirtyDaysAgo.getDate() - 30);
 
-      const { data: metricsData, error: metricsError } = await (supabase.from as Function)("crew_health_metrics")
+      const { data: metricsData, error: metricsError } = await fromUntyped("crew_health_metrics")
         .select("*")
         .eq("user_id", user.id)
         .gte("recorded_at", thirtyDaysAgo.toISOString())
-        .order("recorded_at", { ascending: true }) as { data: HealthMetric[] | null; error: Error | null };
+        .order("recorded_at", { ascending: true });
 
       if (metricsError) throw metricsError;
 
@@ -66,12 +67,13 @@ export const HealthMetricsDashboard: React.FC = () => {
 
       // Calculate averages
       if (metricsData && metricsData.length > 0) {
-        const avgMood = metricsData.reduce((sum, m) => sum + (m.mood_score || 0), 0) / metricsData.length;
-        const avgSleep = metricsData.reduce((sum, m) => sum + (m.sleep_hours || 0), 0) / metricsData.length;
-        const avgStress = metricsData.reduce((sum, m) => sum + (m.stress_level || 0), 0) / metricsData.length;
-        const heartRates = metricsData.filter(m => m.heart_rate).map(m => m.heart_rate as number);
+        const typedMetrics = metricsData as HealthMetric[];
+        const avgMood = typedMetrics.reduce((sum: number, m: HealthMetric) => sum + (m.mood_score || 0), 0) / typedMetrics.length;
+        const avgSleep = typedMetrics.reduce((sum: number, m: HealthMetric) => sum + (m.sleep_hours || 0), 0) / typedMetrics.length;
+        const avgStress = typedMetrics.reduce((sum: number, m: HealthMetric) => sum + (m.stress_level || 0), 0) / typedMetrics.length;
+        const heartRates = typedMetrics.filter((m: HealthMetric) => m.heart_rate).map((m: HealthMetric) => m.heart_rate as number);
         const avgHeartRate = heartRates.length > 0
-          ? heartRates.reduce((sum, hr) => sum + hr, 0) / heartRates.length
+          ? heartRates.reduce((sum: number, hr: number) => sum + hr, 0) / heartRates.length
           : 0;
 
         setStats({
@@ -83,12 +85,12 @@ export const HealthMetricsDashboard: React.FC = () => {
       }
 
       // Load recent anomalies
-      const { data: anomaliesData, error: anomaliesError } = await (supabase.from as Function)("health_anomalies")
+      const { data: anomaliesData, error: anomaliesError } = await fromUntyped("health_anomalies")
         .select("*")
         .eq("user_id", user.id)
         .eq("is_resolved", false)
         .order("created_at", { ascending: false })
-        .limit(5) as { data: HealthAnomaly[] | null; error: Error | null };
+        .limit(5);
 
       if (anomaliesError) throw anomaliesError;
       setAnomalies(anomaliesData || []);

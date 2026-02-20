@@ -4,7 +4,7 @@
  */
 import React, { useState, useEffect } from "react";
 import { useQuery, useMutation, useQueryClient } from "@tanstack/react-query";
-import { supabase } from "@/integrations/supabase/client";
+import { fromUntyped } from "@/integrations/supabase/untyped-client";
 import { Card, CardContent, CardHeader, CardTitle, CardDescription } from "@/components/ui/card";
 import { Badge } from "@/components/ui/badge";
 import { Progress } from "@/components/ui/progress";
@@ -77,7 +77,7 @@ export const PeoDPOperationalWindow: React.FC = () => {
   const { data: envRecords = [] } = useQuery({
     queryKey: ['peodp-operational-window'],
     queryFn: async () => {
-      const { data, error } = await (supabase.from as Function)('peodp_operational_window')
+      const { data, error } = await fromUntyped('peodp_operational_window')
         .select('*').order('recorded_at', { ascending: false }).limit(4);
       if (error) throw error;
       return (data || []) as EnvironmentalRecord[];
@@ -87,7 +87,7 @@ export const PeoDPOperationalWindow: React.FC = () => {
   const { data: equipment = [] } = useQuery({
     queryKey: ['peodp-equipment-status'],
     queryFn: async () => {
-      const { data, error } = await (supabase.from as Function)('peodp_equipment_status')
+      const { data, error } = await fromUntyped('peodp_equipment_status')
         .select('*').order('equipment_type').order('name');
       if (error) throw error;
       return (data || []) as DPEquipment[];
@@ -96,7 +96,7 @@ export const PeoDPOperationalWindow: React.FC = () => {
 
   const seedEnv = useMutation({
     mutationFn: async () => {
-      const { error } = await (supabase.from as Function)('peodp_operational_window').insert(DEFAULT_ENV);
+      const { error } = await fromUntyped('peodp_operational_window').insert(DEFAULT_ENV);
       if (error) throw error;
     },
     onSuccess: () => queryClient.invalidateQueries({ queryKey: ['peodp-operational-window'] }),
@@ -104,7 +104,7 @@ export const PeoDPOperationalWindow: React.FC = () => {
 
   const seedEquipment = useMutation({
     mutationFn: async () => {
-      const { error } = await (supabase.from as Function)('peodp_equipment_status').insert(DEFAULT_EQUIPMENT);
+      const { error } = await fromUntyped('peodp_equipment_status').insert(DEFAULT_EQUIPMENT);
       if (error) throw error;
     },
     onSuccess: () => queryClient.invalidateQueries({ queryKey: ['peodp-equipment-status'] }),
@@ -112,8 +112,8 @@ export const PeoDPOperationalWindow: React.FC = () => {
 
   const updateEquipmentStatus = useMutation({
     mutationFn: async ({ id, status }: { id: string; status: string }) => {
-      const { error } = await (supabase.from as Function)('peodp_equipment_status')
-        .update({ status, updated_at: new Date().toISOString() } as never).eq('id', id);
+      const { error } = await fromUntyped('peodp_equipment_status')
+        .update({ status, updated_at: new Date().toISOString() }).eq('id', id);
       if (error) throw error;
     },
     onSuccess: () => {

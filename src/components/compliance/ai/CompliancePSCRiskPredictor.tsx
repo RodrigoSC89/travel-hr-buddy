@@ -13,6 +13,7 @@ import { Input } from "@/components/ui/input";
 import { Label } from "@/components/ui/label";
 import { Select, SelectContent, SelectItem, SelectTrigger, SelectValue } from "@/components/ui/select";
 import { supabase } from "@/integrations/supabase/client";
+import { fromUntyped } from "@/integrations/supabase/untyped-client";
 import { useQuery } from "@tanstack/react-query";
 import { toast } from "sonner";
 import { logger } from "@/lib/logger";
@@ -79,7 +80,7 @@ export function CompliancePSCRiskPredictor({
   const { data: vesselData = [] } = useQuery({
     queryKey: ["psc-predictor-vessels"],
     queryFn: async () => {
-      const { data } = await (supabase.from as Function)("vessels")
+      const { data } = await supabase.from("vessels")
         .select("id, name, vessel_type, flag_state, imo_number, status, built_year")
         .limit(20);
       return data || [];
@@ -90,7 +91,7 @@ export function CompliancePSCRiskPredictor({
   const { data: pscHistory = [] } = useQuery({
     queryKey: ["psc-predictor-history"],
     queryFn: async () => {
-      const { data } = await (supabase.from as Function)("psc_inspections")
+      const { data } = await fromUntyped("psc_inspections")
         .select("id, inspection_date, port, result, deficiencies_count, detained, inspection_type")
         .order("inspection_date", { ascending: false })
         .limit(20);
@@ -102,7 +103,7 @@ export function CompliancePSCRiskPredictor({
   const { data: complianceData = [] } = useQuery({
     queryKey: ["psc-predictor-compliance"],
     queryFn: async () => {
-      const { data } = await (supabase.from as Function)("compliance_items")
+      const { data } = await fromUntyped("compliance_items")
         .select("id, status, regulation_reference")
         .limit(100);
       return data || [];
@@ -113,7 +114,7 @@ export function CompliancePSCRiskPredictor({
   const { data: openNCs = [] } = useQuery({
     queryKey: ["psc-predictor-ncs"],
     queryFn: async () => {
-      const { data } = await (supabase.from as Function)("non_conformities")
+      const { data } = await fromUntyped("non_conformities")
         .select("id, severity, status, source")
         .eq("status", "open")
         .limit(50);
