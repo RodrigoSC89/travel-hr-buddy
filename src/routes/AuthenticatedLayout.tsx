@@ -65,7 +65,7 @@ export const AuthenticatedLayout = () => {
             <HealthStatusBar />
             <PresenceAvatars />
           </div>
-          <main className="flex-1 overflow-auto px-3 pb-20 md:px-6 md:pb-6">
+          <main className="flex-1 overflow-auto px-3 pb-24 md:px-6 md:pb-6 lg:px-8 xl:px-10 2xl:px-12">
             {alerts.length > 0 && (
               <div className="mt-3 mb-1">
                 <ProactiveAlertsBanner alerts={alerts} onDismiss={dismissAlert} maxVisible={3} />

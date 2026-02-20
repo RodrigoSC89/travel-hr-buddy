@@ -60,7 +60,7 @@ export const AppLayout: FC = () => {
             {/* Main content area */}
             <div className="flex-1 flex flex-col min-w-0 w-full">
               <Header />
-              <main className="flex-1 overflow-auto px-3 pb-20 md:px-6 md:pb-6" data-tour="main-content">
+              <main className="flex-1 overflow-auto px-3 pb-24 md:px-6 md:pb-6 lg:px-8 xl:px-10 2xl:px-12" data-tour="main-content">
                 <SmartBreadcrumbs />
                 <Outlet />
               </main>
