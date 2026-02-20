@@ -7,7 +7,7 @@
  * ✅ WORLD-CLASS COMPONENTS INTEGRATED
  */
 
-import React, { Suspense, lazy, useMemo, useCallback } from 'react';
+import React, { Suspense, lazy, useMemo, useCallback, useState } from 'react';
 import { useNavigate } from 'react-router-dom';
 import { useSearchParams } from 'react-router-dom';
 import { Tabs, TabsContent, TabsList, TabsTrigger } from '@/components/ui/tabs';
@@ -29,6 +29,7 @@ import { CrossModulePanel } from '@/components/integration';
 import { HubModulesBrowser } from '@/components/ui/HubModulesBrowser';
 import { COMMAND_ABSORBED, COMMAND_TAB_MODULES } from '@/lib/hub-absorbed-modules';
 import { TabTriggerWithModules } from '@/components/ui/TabTriggerWithModules';
+import { ModuleLauncherModal } from '@/components/ui/ModuleLauncherModal';
 
 // Lazy load sub-components
 const EnhancedUnifiedDashboard = lazy(() => import('@/components/dashboard/enhanced-unified-dashboard'));
@@ -103,6 +104,7 @@ export default function CommandMegaHub() {
   const activeModuleId = searchParams.get('module');
   const navigate = useNavigate();
   const activeTab = searchParams.get('tab') || 'overview';
+  const [launcherOpen, setLauncherOpen] = useState(false);
   const queryClient = useQueryClient();
   const { quickActions, exportToCSV } = useRealActionHandlers();
   const { vessels, voyages, metrics, isLoading } = useOperationsCommandData();
@@ -219,6 +221,7 @@ export default function CommandMegaHub() {
                   icon={tab.icon}
                   modules={COMMAND_TAB_MODULES[tab.id] || []}
                   onModuleSelect={(moduleId) => setSearchParams({ tab: 'modules', module: moduleId })}
+                  onOpenLauncher={() => setLauncherOpen(true)}
                 />
               ))}
             </TabsList>
@@ -527,6 +530,16 @@ export default function CommandMegaHub() {
           </Suspense>
         </div>
       </Tabs>
+
+      {/* Module Launcher Modal */}
+      <ModuleLauncherModal
+        open={launcherOpen}
+        onOpenChange={setLauncherOpen}
+        hubName="Centro Estratégico"
+        hubIcon={<Compass className="h-5 w-5" />}
+        modules={COMMAND_ABSORBED}
+        onModuleSelect={(moduleId) => setSearchParams({ tab: 'modules', module: moduleId })}
+      />
     </div>
   );
 }

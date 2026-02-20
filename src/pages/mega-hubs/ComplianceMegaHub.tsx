@@ -36,6 +36,7 @@ import { publishEvent } from '@/lib/events/event-bus';
 import { HubModulesBrowser } from '@/components/ui/HubModulesBrowser';
 import { COMPLIANCE_ABSORBED, COMPLIANCE_TAB_MODULES } from '@/lib/hub-absorbed-modules';
 import { TabTriggerWithModules } from '@/components/ui/TabTriggerWithModules';
+import { ModuleLauncherModal } from '@/components/ui/ModuleLauncherModal';
 
 // ═══════════════════════════════════════════════════════════
 // LAZY LOAD - SUB-COMPONENTS
@@ -151,6 +152,7 @@ export default function ComplianceMegaHub() {
   const activeTab = searchParams.get('tab') || 'hub';
   const standard = searchParams.get('standard');
   const activeModuleId = searchParams.get('module');
+  const [launcherOpen, setLauncherOpen] = useState(false);
   const queryClient = useQueryClient();
   const { exportToCSV } = useRealActionHandlers();
 
@@ -306,6 +308,7 @@ export default function ComplianceMegaHub() {
                   icon={tab.icon}
                   modules={COMPLIANCE_TAB_MODULES[tab.id] || []}
                   onModuleSelect={(moduleId) => setSearchParams({ tab: 'modules', module: moduleId })}
+                  onOpenLauncher={() => setLauncherOpen(true)}
                 />
               ))}
             </TabsList>
@@ -576,6 +579,16 @@ export default function ComplianceMegaHub() {
           </div>
         </DialogContent>
       </Dialog>
+
+      {/* Module Launcher Modal */}
+      <ModuleLauncherModal
+        open={launcherOpen}
+        onOpenChange={setLauncherOpen}
+        hubName="Arsenal Regulatório"
+        hubIcon={<Shield className="h-5 w-5" />}
+        modules={COMPLIANCE_ABSORBED}
+        onModuleSelect={(moduleId) => setSearchParams({ tab: 'modules', module: moduleId })}
+      />
     </div>
   );
 }

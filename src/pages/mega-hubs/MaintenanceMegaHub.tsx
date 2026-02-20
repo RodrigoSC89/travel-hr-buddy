@@ -32,6 +32,7 @@ import { publishEvent } from '@/lib/events/event-bus';
 import { HubModulesBrowser } from '@/components/ui/HubModulesBrowser';
 import { MAINTENANCE_ABSORBED, MAINTENANCE_TAB_MODULES } from '@/lib/hub-absorbed-modules';
 import { TabTriggerWithModules } from '@/components/ui/TabTriggerWithModules';
+import { ModuleLauncherModal } from '@/components/ui/ModuleLauncherModal';
 
 // Lazy load sub-components
 const MaintenanceHub = lazy(() => import('@/pages/MaintenanceCommandCenter'));
@@ -100,6 +101,7 @@ export default function MaintenanceMegaHub() {
   const activeTab = searchParams.get('tab') || 'overview';
   const mode = searchParams.get('mode');
   const activeModuleId = searchParams.get('module');
+  const [launcherOpen, setLauncherOpen] = useState(false);
   const queryClient = useQueryClient();
   const { createMaintenanceOrder, exportToCSV } = useRealActionHandlers();
 
@@ -234,6 +236,7 @@ export default function MaintenanceMegaHub() {
                   icon={tab.icon}
                   modules={MAINTENANCE_TAB_MODULES[tab.id] || []}
                   onModuleSelect={(moduleId) => setSearchParams({ tab: 'modules', module: moduleId })}
+                  onOpenLauncher={() => setLauncherOpen(true)}
                 />
               ))}
             </TabsList>
@@ -523,6 +526,16 @@ export default function MaintenanceMegaHub() {
           </div>
         </DialogContent>
       </Dialog>
+
+      {/* Module Launcher Modal */}
+      <ModuleLauncherModal
+        open={launcherOpen}
+        onOpenChange={setLauncherOpen}
+        hubName="Toolkit de Engenharia"
+        hubIcon={<Wrench className="h-5 w-5" />}
+        modules={MAINTENANCE_ABSORBED}
+        onModuleSelect={(moduleId) => setSearchParams({ tab: 'modules', module: moduleId })}
+      />
     </div>
   );
 }

@@ -10,7 +10,7 @@
  * ✅ FUNCTIONAL EXPORT & REFRESH
  */
 
-import React, { Suspense, lazy, useMemo, useCallback } from 'react';
+import React, { Suspense, lazy, useMemo, useCallback, useState } from 'react';
 import { useSearchParams, useNavigate } from 'react-router-dom';
 import { Tabs, TabsContent, TabsList, TabsTrigger } from '@/components/ui/tabs';
 import { Badge } from '@/components/ui/badge';
@@ -28,6 +28,7 @@ import { useCreateTrackingAlert } from '@/hooks/useModuleHooks';
 import { HubModulesBrowser } from '@/components/ui/HubModulesBrowser';
 import { TRACKING_ABSORBED, TRACKING_TAB_MODULES } from '@/lib/hub-absorbed-modules';
 import { TabTriggerWithModules } from '@/components/ui/TabTriggerWithModules';
+import { ModuleLauncherModal } from '@/components/ui/ModuleLauncherModal';
 
 // Lazy load sub-components
 const TrackingTelemetryHub = lazy(() => import('@/pages/TelemetriaCommand'));
@@ -79,6 +80,7 @@ export default function TrackingMegaHub() {
   const [searchParams, setSearchParams] = useSearchParams();
   const activeTab = searchParams.get('tab') || 'overview';
   const activeModuleId = searchParams.get('module');
+  const [launcherOpen, setLauncherOpen] = useState(false);
   const queryClient = useQueryClient();
   const { exportToCSV } = useRealActionHandlers();
   const createAlertMutation = useCreateTrackingAlert();
@@ -203,6 +205,7 @@ export default function TrackingMegaHub() {
                   icon={tab.icon}
                   modules={TRACKING_TAB_MODULES[tab.id] || []}
                   onModuleSelect={(moduleId) => setSearchParams({ tab: 'modules', module: moduleId })}
+                  onOpenLauncher={() => setLauncherOpen(true)}
                 />
               ))}
             </TabsList>
@@ -419,6 +422,16 @@ export default function TrackingMegaHub() {
           </Suspense>
         </div>
       </Tabs>
+
+      {/* Module Launcher Modal */}
+      <ModuleLauncherModal
+        open={launcherOpen}
+        onOpenChange={setLauncherOpen}
+        hubName="Sensores & IoT"
+        hubIcon={<Satellite className="h-5 w-5" />}
+        modules={TRACKING_ABSORBED}
+        onModuleSelect={(moduleId) => setSearchParams({ tab: 'modules', module: moduleId })}
+      />
     </div>
   );
 }
