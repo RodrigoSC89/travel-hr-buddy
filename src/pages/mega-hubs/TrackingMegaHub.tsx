@@ -196,19 +196,14 @@ export default function TrackingMegaHub() {
           <div className="container">
             <TabsList className="h-12 bg-transparent gap-2 justify-start overflow-x-auto">
               {tabConfig.map((tab) => (
-                <TabsTrigger
+                <TabTriggerWithModules
                   key={tab.id}
-                  value={tab.id}
-                  className="data-[state=active]:bg-hub-tracking data-[state=active]:text-white gap-2"
-                >
-                  <tab.icon className="h-4 w-4" />
-                  {tab.label}
-                  {tab.id === 'alerts' && trackingMetrics.openAlerts > 0 && (
-                    <Badge variant="destructive" className="h-5 min-w-5 px-1 text-[10px]">
-                      {trackingMetrics.openAlerts}
-                    </Badge>
-                  )}
-                </TabsTrigger>
+                  tabId={tab.id}
+                  label={tab.label}
+                  icon={tab.icon}
+                  modules={TRACKING_TAB_MODULES[tab.id] || []}
+                  onModuleSelect={(moduleId) => setSearchParams({ tab: 'modules', module: moduleId })}
+                />
               ))}
             </TabsList>
           </div>

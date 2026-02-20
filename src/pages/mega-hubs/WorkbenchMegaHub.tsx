@@ -87,7 +87,7 @@ const sectionConfig = [
   { id: 'ai-crew', label: '🧠 Crew AI', icon: Heart, color: 'pink' },
   { id: 'ai-finance', label: '🧠 Finance AI', icon: Brain, color: 'indigo' },
   { id: 'ai-docs', label: '🧠 Docs AI', icon: Brain, color: 'cyan' },
-  { id: 'modules', label: '📦 Módulos', icon: Briefcase, color: 'gray' },
+  
 ];
 
 export default function WorkbenchMegaHub() {
@@ -275,14 +275,14 @@ export default function WorkbenchMegaHub() {
           <div className="container">
             <TabsList className="h-14 bg-transparent gap-2 justify-start overflow-x-auto">
               {sectionConfig.map((section) => (
-                <TabsTrigger
+                <TabTriggerWithModules
                   key={section.id}
-                  value={section.id}
-                  className={`gap-2 px-4 py-2 ${getColorClass(section.id, activeSection === section.id)}`}
-                >
-                  <section.icon className="h-4 w-4" />
-                  {section.label}
-                </TabsTrigger>
+                  tabId={section.id}
+                  label={section.label}
+                  icon={section.icon}
+                  modules={WORKBENCH_TAB_MODULES[section.id] || []}
+                  onModuleSelect={(moduleId) => setSearchParams({ section: 'modules', module: moduleId })}
+                />
               ))}
             </TabsList>
           </div>

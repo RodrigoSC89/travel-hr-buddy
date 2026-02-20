@@ -277,15 +277,14 @@ export default function AIMegaHub() {
           <div className="container">
             <TabsList className="h-12 bg-transparent gap-2 justify-start overflow-x-auto" data-testid="ai-hub-tabs">
               {tabConfig.map((tab) => (
-                <TabsTrigger
+                <TabTriggerWithModules
                   key={tab.id}
-                  value={tab.id}
-                  className="data-[state=active]:bg-hub-ai data-[state=active]:text-white gap-2"
-                  data-testid={`ai-tab-${tab.id}`}
-                >
-                  <tab.icon className="h-4 w-4" />
-                  {tab.label}
-                </TabsTrigger>
+                  tabId={tab.id}
+                  label={tab.label}
+                  icon={tab.icon}
+                  modules={AI_TAB_MODULES[tab.id] || []}
+                  onModuleSelect={(moduleId) => setSearchParams({ tab: 'all-modules', module: moduleId })}
+                />
               ))}
             </TabsList>
           </div>
