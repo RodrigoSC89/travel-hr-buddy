@@ -26,7 +26,12 @@ import {
   Plus,
   Trash2,
   TestTube,
-  RefreshCw
+  RefreshCw,
+  Building2,
+  Globe,
+  Database,
+  ExternalLink,
+  Code
 } from "lucide-react";
 
 interface WebhookConfig {
@@ -120,6 +125,21 @@ export default function IntegrationsCenter() {
     }
   };
 
+  const erpConnectors = [
+    { name: "SAP S/4HANA", protocol: "OData v4 / RFC", modules: "HR (PA), PM, FI, MM", status: "ready" as const, docs: "https://api.sap.com" },
+    { name: "Oracle Cloud", protocol: "REST API + OAuth 2.0", modules: "HCM, EAM, Financials", status: "ready" as const, docs: "https://docs.oracle.com/en/cloud" },
+    { name: "Microsoft Dynamics 365", protocol: "OData v4 + Azure AD", modules: "Finance, HR, Supply Chain", status: "ready" as const, docs: "https://learn.microsoft.com/en-us/dynamics365" },
+    { name: "MarineTraffic AIS", protocol: "REST API", modules: "Position Tracking, ETA, Port Calls", status: "connected" as const, docs: "https://www.marinetraffic.com/en/ais-api-services" },
+    { name: "Open-Meteo Weather", protocol: "REST (Free, No Key)", modules: "Marine Forecast, Wind, Waves", status: "connected" as const, docs: "https://open-meteo.com/en/docs/marine-weather-api" },
+    { name: "StormGlass", protocol: "REST API", modules: "Detailed Marine Weather", status: "configured" as const, docs: "https://stormglass.io/docs" },
+    { name: "Mapbox", protocol: "REST + SDK", modules: "Maps, Geocoding, Navigation", status: "connected" as const, docs: "https://docs.mapbox.com" },
+    { name: "OpenAI / GPT-4o", protocol: "REST API", modules: "AI Assistant, OCR, NLP", status: "connected" as const, docs: "https://platform.openai.com/docs" },
+    { name: "Firebase", protocol: "SDK + REST", modules: "Push Notifications (FCM)", status: "connected" as const, docs: "https://firebase.google.com/docs" },
+    { name: "Sentry", protocol: "SDK", modules: "Error Tracking, Performance", status: "connected" as const, docs: "https://docs.sentry.io" },
+    { name: "Resend", protocol: "REST API", modules: "Transactional Email", status: "configured" as const, docs: "https://resend.com/docs" },
+    { name: "ElevenLabs", protocol: "REST API", modules: "Voice AI, TTS", status: "configured" as const, docs: "https://elevenlabs.io/docs" },
+  ];
+
   const integrationCards = [
     {
       icon: MessageSquare,
@@ -170,7 +190,7 @@ export default function IntegrationsCenter() {
           </div>
           <Badge variant="outline" className="text-primary border-primary">
             <Settings className="h-3 w-3 mr-1" />
-            4 Integrações Ativas
+            {erpConnectors.filter(c => c.status === "connected").length + integrationCards.filter(c => c.enabled).length} Integrações Ativas
           </Badge>
         </div>
 
@@ -208,8 +228,12 @@ export default function IntegrationsCenter() {
         </div>
 
         {/* Configuration Tabs */}
-        <Tabs defaultValue="slack" className="space-y-4">
-          <TabsList className="grid w-full grid-cols-4">
+        <Tabs defaultValue="marketplace" className="space-y-4">
+          <TabsList className="grid w-full grid-cols-5">
+            <TabsTrigger value="marketplace">
+              <Globe className="h-4 w-4 mr-2" />
+              Marketplace
+            </TabsTrigger>
             <TabsTrigger value="slack">
               <MessageSquare className="h-4 w-4 mr-2" />
               Slack
@@ -227,6 +251,44 @@ export default function IntegrationsCenter() {
               Push
             </TabsTrigger>
           </TabsList>
+
+          {/* API Marketplace Tab */}
+          <TabsContent value="marketplace">
+            <Card>
+              <CardHeader>
+                <CardTitle className="flex items-center gap-2">
+                  <Globe className="h-5 w-5 text-primary" />
+                  API Marketplace — {erpConnectors.length} Integrações
+                </CardTitle>
+                <CardDescription>
+                  Conectores enterprise para SAP, Oracle, MS Dynamics e serviços marítimos
+                </CardDescription>
+              </CardHeader>
+              <CardContent>
+                <div className="grid gap-3">
+                  {erpConnectors.map((connector) => (
+                    <div key={connector.name} className="flex items-center justify-between p-3 bg-muted/30 rounded-lg border border-border/50">
+                      <div className="flex items-center gap-3">
+                        <Building2 className="h-5 w-5 text-primary" />
+                        <div>
+                          <p className="font-medium text-foreground">{connector.name}</p>
+                          <p className="text-xs text-muted-foreground">{connector.protocol} — {connector.modules}</p>
+                        </div>
+                      </div>
+                      <div className="flex items-center gap-2">
+                        <Badge variant={connector.status === "connected" ? "default" : connector.status === "configured" ? "secondary" : "outline"}>
+                          {connector.status === "connected" ? "✅ Conectado" : connector.status === "configured" ? "⚙️ Configurado" : "🔧 Pronto"}
+                        </Badge>
+                        <Button variant="ghost" size="sm" onClick={() => window.open(connector.docs, "_blank")}>
+                          <ExternalLink className="h-4 w-4" />
+                        </Button>
+                      </div>
+                    </div>
+                  ))}
+                </div>
+              </CardContent>
+            </Card>
+          </TabsContent>
 
           {/* Slack Tab */}
           <TabsContent value="slack">
