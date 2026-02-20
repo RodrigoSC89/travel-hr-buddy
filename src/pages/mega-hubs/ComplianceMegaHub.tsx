@@ -24,7 +24,7 @@ import { Skeleton } from '@/components/ui/skeleton';
 import type { LucideIcon } from 'lucide-react';
 import { EnhancedActionBar } from '@/components/ui/world-class/EnhancedActionBar';
 import { WorkflowStatusBar } from '@/components/ui/world-class/WorkflowStatusBar';
-// AuditWorkflowManager removed - world-class deleted
+const AuditWorkflowManager = lazy(() => import('@/components/compliance/AuditWorkflowManager'));
 import { HubEmptyState } from '@/components/ui/HubEmptyState';
 import { ConfirmDialog } from '@/components/ui/ConfirmDialog';
 import { useQueryClient, useQuery } from '@tanstack/react-query';
@@ -448,9 +448,6 @@ export default function ComplianceMegaHub() {
                 <Suspense fallback={<Skeleton className="h-64" />}>
                   <AuditGapHeatmap />
                 </Suspense>
-                <Suspense fallback={<Skeleton className="h-64" />}>
-                  <AuditGapHeatmap />
-                </Suspense>
               </div>
 
               {/* Wave 39: Regulatory Radar Live */}
@@ -508,7 +505,7 @@ export default function ComplianceMegaHub() {
                 ]}
                 onRefresh={handleRefresh}
               />
-              {/* AuditWorkflowManager removed */}
+              <AuditWorkflowManager />
             </TabsContent>
             
             <TabsContent value="audits" className="mt-0 space-y-6">

@@ -83,6 +83,7 @@ const tabConfig = [
   { id: 'overview', label: 'Overview', icon: Wrench },
   { id: 'planning', label: 'PMS Calendar', icon: Calendar },
   { id: 'equipment', label: 'Equipment Tree', icon: Cpu },
+  { id: 'spare-parts', label: 'Spare Parts', icon: Wrench },
   { id: 'surveys', label: 'Class Surveys', icon: Shield },
   { id: 'predictive', label: 'Predictive', icon: Brain },
   { id: 'drydock', label: 'Drydock', icon: Anchor },
