@@ -32,6 +32,8 @@ import { ModuleLauncherModal } from '@/components/ui/ModuleLauncherModal';
 
 // Lazy load sub-components
 const DocumentCenterHub = lazy(() => import('@/pages/Documents'));
+const DocumentVersionControl = lazy(() => import('@/components/documents/DocumentVersionControl'));
+const CrewSchedulerGantt = lazy(() => import('@/components/crew/CrewSchedulerGantt'));
 const PeopleHub = lazy(() => import('@/components/crew/CrewManagementPremium'));
 const FinanceHub = lazy(() => import('@/pages/VoyageAccountingPage'));
 const SystemHub = lazy(() => import('@/pages/Settings'));
@@ -88,7 +90,6 @@ const sectionConfig = [
   { id: 'ai-crew', label: '🧠 Crew AI', icon: Heart, color: 'pink' },
   { id: 'ai-finance', label: '🧠 Finance AI', icon: Brain, color: 'indigo' },
   { id: 'ai-docs', label: '🧠 Docs AI', icon: Brain, color: 'cyan' },
-  
 ];
 
 export default function WorkbenchMegaHub() {
@@ -373,7 +374,7 @@ export default function WorkbenchMegaHub() {
                 ]}
                 onRefresh={handleRefresh}
               />
-              {/* DocumentVersionControl removed */}
+              <DocumentVersionControl />
             </TabsContent>
 
             {/* PEOPLE SECTION */}
@@ -481,7 +482,7 @@ export default function WorkbenchMegaHub() {
                   }
                 ]}
               />
-              {/* CrewSchedulerGantt removed */}
+              <CrewSchedulerGantt />
             </TabsContent>
 
             {/* FINANCE SECTION */}
