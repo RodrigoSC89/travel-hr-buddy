@@ -5,7 +5,7 @@
 
 import { useState, useMemo } from "react";
 import { useQuery, useQueryClient } from "@tanstack/react-query";
-import { supabase } from "@/integrations/supabase/client";
+import { fromUntyped } from "@/integrations/supabase/untyped-client";
 import { useCreatePMSSystem, useCreatePMSWorkOrder, useUpdatePMSWorkOrderStatus } from "@/hooks/useModuleHooks";
 import { CrossModulePanel } from "@/components/integration";
 import { PremiumModuleShell, type ModuleTab } from "@/components/ui/premium-module-kit/PremiumModuleShell";
@@ -97,8 +97,7 @@ function usePMSSystems() {
   return useQuery({
     queryKey: ["pms_systems"],
     queryFn: async () => {
-      const { data, error } = await supabase
-        .from("pms_systems" as any)
+      const { data, error } = await fromUntyped("pms_systems")
         .select("*")
         .order("sort_order");
       if (error) throw error;
@@ -111,7 +110,7 @@ function usePMSSubsystems(systemId?: string) {
   return useQuery({
     queryKey: ["pms_subsystems", systemId],
     queryFn: async () => {
-      let q = supabase.from("pms_subsystems" as any).select("*").order("sort_order");
+      let q = fromUntyped("pms_subsystems").select("*").order("sort_order");
       if (systemId) q = q.eq("system_id", systemId);
       const { data, error } = await q;
       if (error) throw error;
@@ -124,7 +123,7 @@ function usePMSComponents(subsystemId?: string) {
   return useQuery({
     queryKey: ["pms_components", subsystemId],
     queryFn: async () => {
-      let q = supabase.from("pms_components" as any).select("*").order("sort_order");
+      let q = fromUntyped("pms_components").select("*").order("sort_order");
       if (subsystemId) q = q.eq("subsystem_id", subsystemId);
       const { data, error } = await q;
       if (error) throw error;
@@ -137,7 +136,7 @@ function usePMSJobs(componentId?: string) {
   return useQuery({
     queryKey: ["pms_jobs", componentId],
     queryFn: async () => {
-      let q = supabase.from("pms_jobs" as any).select("*").order("job_code");
+      let q = fromUntyped("pms_jobs").select("*").order("job_code");
       if (componentId) q = q.eq("component_id", componentId);
       const { data, error } = await q;
       if (error) throw error;
@@ -150,7 +149,7 @@ function usePMSWorkOrders(statusFilter?: string) {
   return useQuery({
     queryKey: ["pms_work_orders", statusFilter],
     queryFn: async () => {
-      let q = supabase.from("pms_work_orders" as any).select("*").order("created_at", { ascending: false });
+      let q = fromUntyped("pms_work_orders").select("*").order("created_at", { ascending: false });
       if (statusFilter && statusFilter !== "all") q = q.eq("status", statusFilter);
       const { data, error } = await q;
       if (error) throw error;
@@ -528,8 +527,7 @@ function RunningHoursTab() {
   const { data: components = [], isLoading } = useQuery({
     queryKey: ["pms_components_all"],
     queryFn: async () => {
-      const { data, error } = await supabase
-        .from("pms_components" as any)
+      const { data, error } = await fromUntyped("pms_components")
         .select("*")
         .order("code");
       if (error) throw error;
@@ -540,8 +538,7 @@ function RunningHoursTab() {
   const { data: triggers = [] } = useQuery({
     queryKey: ["pms_rh_triggers"],
     queryFn: async () => {
-      const { data, error } = await supabase
-        .from("pms_running_hours_triggers" as any)
+      const { data, error } = await fromUntyped("pms_running_hours_triggers")
         .select("*");
       if (error) throw error;
       return (data || []) as unknown as any[];

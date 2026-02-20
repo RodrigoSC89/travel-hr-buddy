@@ -5,7 +5,7 @@
 
 import { useState, useMemo } from "react";
 import { useQuery, useQueryClient } from "@tanstack/react-query";
-import { supabase } from "@/integrations/supabase/client";
+import { fromUntyped } from "@/integrations/supabase/untyped-client";
 import { useRunISMGapAnalysis, useCreateISMCAPA, useUpdateISMCAPAStatus } from "@/hooks/useModuleHooks";
 import { CrossModulePanel } from "@/components/integration";
 import { PremiumModuleShell, type ModuleTab } from "@/components/ui/premium-module-kit/PremiumModuleShell";
@@ -74,8 +74,7 @@ function useISMElements() {
   return useQuery({
     queryKey: ["ism_elements"],
     queryFn: async () => {
-      const { data, error } = await supabase
-        .from("ism_elements" as any).select("*").order("element_number");
+      const { data, error } = await fromUntyped("ism_elements").select("*").order("element_number");
       if (error) throw error;
       return (data || []) as unknown as ISMElement[];
     },
@@ -86,8 +85,7 @@ function useISMGapAnalysis() {
   return useQuery({
     queryKey: ["ism_gap_analysis"],
     queryFn: async () => {
-      const { data, error } = await supabase
-        .from("ism_gap_analysis" as any).select("*");
+      const { data, error } = await fromUntyped("ism_gap_analysis").select("*");
       if (error) throw error;
       return (data || []) as unknown as ISMGapAnalysis[];
     },
@@ -98,7 +96,7 @@ function useISMCAPAs(statusFilter?: string) {
   return useQuery({
     queryKey: ["ism_capa", statusFilter],
     queryFn: async () => {
-      let q = supabase.from("ism_capa" as any).select("*").order("created_at", { ascending: false });
+      let q = fromUntyped("ism_capa").select("*").order("created_at", { ascending: false });
       if (statusFilter && statusFilter !== "all") q = q.eq("status", statusFilter);
       const { data, error } = await q;
       if (error) throw error;

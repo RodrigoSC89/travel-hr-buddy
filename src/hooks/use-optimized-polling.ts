@@ -4,6 +4,7 @@
  */
 
 import { useEffect, useRef, useCallback } from "react";
+import { logger } from "@/lib/utils/production-logger";
 
 export interface UsePollingOptions {
   id: string;
@@ -34,12 +35,16 @@ export function useOptimizedPolling(options: UsePollingOptions): void {
     if (!enabled) return;
 
     if (immediate) {
-      try { callbackRef.current(); } catch {}
+      try { callbackRef.current(); } catch (e) {
+        logger.warn(`[Polling:${id}] Immediate callback failed`, { error: e });
+      }
     }
 
     const timer = setInterval(() => {
       if (document.visibilityState === 'visible' && navigator.onLine) {
-        try { callbackRef.current(); } catch {}
+        try { callbackRef.current(); } catch (e) {
+          logger.warn(`[Polling:${id}] Interval callback failed`, { error: e });
+        }
       }
     }, interval);
 

@@ -6,7 +6,7 @@
 
 import { useState, useMemo } from "react";
 import { useQuery, useQueryClient } from "@tanstack/react-query";
-import { supabase } from "@/integrations/supabase/client";
+import { fromUntyped } from "@/integrations/supabase/untyped-client";
 import { useCreateETSRecord } from "@/hooks/useModuleHooks";
 import { PremiumModuleShell, type ModuleTab } from "@/components/ui/premium-module-kit/PremiumModuleShell";
 import { SmartKPIGrid } from "@/components/ui/premium-module-kit/SmartKPIGrid";
@@ -54,7 +54,7 @@ function useEUETSRecords(year?: number) {
   return useQuery({
     queryKey: ["eu_ets_tracking", year],
     queryFn: async () => {
-      let q = supabase.from("eu_ets_tracking" as any).select("*").order("created_at", { ascending: false });
+      let q = fromUntyped("eu_ets_tracking").select("*").order("created_at", { ascending: false });
       if (year) q = q.eq("reporting_year", year);
       const { data, error } = await q;
       if (error) throw error;
@@ -68,7 +68,7 @@ function AllowancePortfolioTab() {
   const { data: allowances = [] } = useQuery({
     queryKey: ["eu_ets_allowances"],
     queryFn: async () => {
-      const { data, error } = await supabase.from("eu_ets_allowances" as any)
+      const { data, error } = await fromUntyped("eu_ets_allowances")
         .select("*")
         .order("purchase_date", { ascending: false });
       if (error) throw error;

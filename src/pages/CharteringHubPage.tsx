@@ -5,7 +5,7 @@
 
 import { useState, useMemo } from "react";
 import { useQuery, useQueryClient } from "@tanstack/react-query";
-import { supabase } from "@/integrations/supabase/client";
+import { fromUntyped } from "@/integrations/supabase/untyped-client";
 import { useCreateCharterParty, useUpdateCharterStatus } from "@/hooks/useModuleHooks";
 import { CrossModulePanel } from "@/components/integration";
 import { PremiumModuleShell, type ModuleTab } from "@/components/ui/premium-module-kit/PremiumModuleShell";
@@ -60,7 +60,7 @@ function useCharterParties(typeFilter?: string) {
   return useQuery({
     queryKey: ["charter_parties", typeFilter],
     queryFn: async () => {
-      let q = supabase.from("charter_parties" as any).select("*").order("created_at", { ascending: false });
+      let q = fromUntyped("charter_parties").select("*").order("created_at", { ascending: false });
       if (typeFilter && typeFilter !== "all") q = q.eq("charter_type", typeFilter);
       const { data, error } = await q;
       if (error) throw error;

@@ -16,6 +16,7 @@ export const DemoLauncher = lazy(() => import("@/pages/DemoLauncher"));
 // CentralComando removed — consolidated into CommandMegaHub at /command
 export const NotFound = lazy(() => import("@/pages/NotFound"));
 export const DevRoutesDashboard = lazy(() => import("@/pages/DevRoutesDashboard"));
+// Billing routes intentionally map to Settings page (billing tab is within Settings)
 export const Billing = lazy(() => import("@/pages/Settings"));
 export const BillingPortal = lazy(() => import("@/pages/Settings"));
 export const OnboardingDashboard = lazy(() => import("@/pages/OnboardingDashboard"));
@@ -34,7 +35,9 @@ export const HealthMonitor = lazy(() => import("@/pages/HealthMonitor"));
 export const MaritimeCommandCenter = lazy(() => import("@/pages/MaritimeCommandCenter"));
 export const FleetCommandCenter = lazy(() => import("@/pages/FleetCommandCenter"));
 export const VoyageCommandCenter = lazy(() => import("@/pages/VoyageCommandCenter"));
+// MissionCommandCenter maps to OperationsCommandCenter (missions are a subset of operations)
 export const MissionCommandCenter = lazy(() => import("@/pages/OperationsCommandCenter"));
+// BridgeLink maps to FleetCommandCenter (bridge link is fleet-level monitoring)
 export const BridgeLink = lazy(() => import("@/pages/FleetCommandCenter"));
 
 // Digital Twin & Advanced

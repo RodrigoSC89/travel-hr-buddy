@@ -170,7 +170,9 @@ export const PreOVIDAIChat: React.FC<PreOVIDAIChatProps> = ({
                   return updated;
                 });
               }
-            } catch {}
+            } catch {
+              // Stream chunk parse error - skip malformed chunk
+            }
           }
         }
       }
