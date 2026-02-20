@@ -368,6 +368,14 @@ export const PSCHistoryPage = lazy(() => import("@/pages/PSCHistoryPage"));
 export const StowagePlanPage = lazy(() => import("@/pages/StowagePlanPage"));
 export const BunkerOperationsPage = lazy(() => import("@/pages/BunkerOperationsPage"));
 
+// ============================================
+// GAP CLOSURE MODULES
+// ============================================
+export const SupportPortalPage = lazy(() => import("@/pages/SupportPortalPage"));
+export const APIDeveloperPortalPage = lazy(() => import("@/pages/APIDeveloperPortalPage"));
+export const FlagStateCompliancePage = lazy(() => import("@/pages/FlagStateCompliancePage"));
+export const InfrastructureDashboardPage = lazy(() => import("@/pages/InfrastructureDashboardPage"));
+
 // Role Management (Admin only)
 export const RoleManagementPage = lazy(() => import("@/pages/admin/RoleManagementPage"));
 
