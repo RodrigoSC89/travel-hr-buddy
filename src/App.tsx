@@ -85,7 +85,7 @@ function App() {
       <ThemeProvider defaultTheme="dark" storageKey="nautilus-ui-theme">
         <PerformanceProvider>
           <AuthProvider>
-            <Router>
+            <Router future={{ v7_startTransition: true, v7_relativeSplatPath: true }}>
               <TooltipProvider>
                 <LazyLoadErrorBoundary>
                   <SkipToContent />

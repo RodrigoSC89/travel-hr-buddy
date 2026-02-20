@@ -152,7 +152,7 @@ export const AppRoutes = () => (
       {/* ======== APIs & INTEGRAÇÕES ======== */}
       <Route path="/integracoes/api-center" element={<Pages.APICenter />} />
       <Route path="/integracoes/api-monitor" element={<Pages.APIMonitor />} />
-      <Route path="/integracoes" element={<Pages.Integrations />} />
+      <Route path="/integracoes" element={<Navigate to="/integrations" replace />} />
       <Route path="/weather-maritime" element={<Pages.WeatherMaritime />} />
       <Route path="/ais-tracker-page" element={<Pages.AISTrackerPage />} />
       <Route path="/port-api" element={<Pages.PortAPI />} />
@@ -501,9 +501,9 @@ export const AppRoutes = () => (
       <Route path="/training" element={<Navigate to="/nautilus-academy" replace />} />
       <Route path="/voyage-planner" element={<Navigate to="/voyage-command" replace />} />
       <Route path="/maintenance-planner" element={<Navigate to="/maintenance" replace />} />
-      <Route path="/subsea-operations" element={<Navigate to="/ocean-sonar" replace />} />
+      <Route path="/subsea-operations" element={<Navigate to="/maritime-command" replace />} />
       <Route path="/finance-command-center" element={<Navigate to="/workbench" replace />} />
-      <Route path="/about" element={<Navigate to="/landing" replace />} />
+      {/* /about already defined as public route - this redirect is for authenticated users */}
       <Route path="/blog" element={<Navigate to="/landing" replace />} />
       <Route path="/contact" element={<Navigate to="/landing" replace />} />
       <Route path="/terms" element={<Navigate to="/landing" replace />} />
