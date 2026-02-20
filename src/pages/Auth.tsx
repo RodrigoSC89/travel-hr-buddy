@@ -378,7 +378,7 @@ const Auth: React.FC = () => {
   );
 
   return (
-    <div className="min-h-screen flex items-center justify-center p-4 overflow-hidden relative" style={{ background: '#040a18' }}>
+    <div className="min-h-screen min-h-dvh flex items-center justify-center p-4 sm:p-6 overflow-hidden relative" style={{ background: '#040a18' }}>
       {/* === CINEMATIC DEEP OCEAN BACKGROUND === */}
       <div className="absolute inset-0 pointer-events-none overflow-hidden">
         
@@ -469,7 +469,7 @@ const Auth: React.FC = () => {
         initial={{ opacity: 0, y: 30, filter: "blur(10px)" }}
         animate={{ opacity: 1, y: 0, filter: "blur(0px)" }}
         transition={{ duration: 0.8, ease: [0.25, 0.46, 0.45, 0.94] }}
-        className="w-full max-w-5xl grid lg:grid-cols-2 gap-12 items-center relative z-10"
+        className="w-full max-w-5xl grid lg:grid-cols-2 gap-6 lg:gap-12 items-center relative z-10"
       >
         {/* Left Side - System Showcase */}
         <motion.div
@@ -608,7 +608,7 @@ const Auth: React.FC = () => {
           initial={{ opacity: 0, x: 50, filter: "blur(8px)" }}
           animate={{ opacity: 1, x: 0, filter: "blur(0px)" }}
           transition={{ duration: 0.9, delay: 0.25, ease: [0.25, 0.46, 0.45, 0.94] }}
-          className="w-full max-w-md mx-auto"
+          className="w-full max-w-md mx-auto px-1 sm:px-0"
         >
           <Card 
             className="border-white/[0.08] relative overflow-hidden"
@@ -912,7 +912,7 @@ const Auth: React.FC = () => {
           </motion.div>
 
           {/* Footer */}
-          <p className="text-center text-xs mt-4" style={{ color: 'hsla(210,30%,50%,0.4)' }}>
+          <p className="text-center text-xs mt-4 pb-safe" style={{ color: 'hsla(210,30%,50%,0.4)' }}>
             © {new Date().getFullYear()} Nauti One • Maritime Operations Platform
           </p>
         </motion.div>

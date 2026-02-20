@@ -87,12 +87,12 @@ export const Header: FC = () => {
 
   return (
     <header 
-      className="sticky top-0 z-50 w-full border-b border-border/40 bg-background/80 backdrop-blur-xl supports-[backdrop-filter]:bg-background/60"
+      className="sticky top-0 z-50 w-full border-b border-border/40 bg-background/85 backdrop-blur-xl supports-[backdrop-filter]:bg-background/60"
       style={{
         paddingTop: 'env(safe-area-inset-top, 0px)',
       }}
     >
-      <div className="flex h-14 items-center px-3 md:px-4 gap-2">
+      <div className="flex h-12 sm:h-14 items-center px-2 sm:px-3 md:px-4 gap-1.5 sm:gap-2">
         {/* Menu Trigger */}
         <button
           type="button"
