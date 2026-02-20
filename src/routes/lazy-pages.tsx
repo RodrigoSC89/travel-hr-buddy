@@ -179,6 +179,7 @@ export const STCWMLCCompliance = lazy(() => import("@/pages/STCWMLCCompliance"))
 // ============================================
 export const Settings = lazy(() => import("@/pages/Settings"));
 export const IntegrationsCenter = lazy(() => import("@/pages/IntegrationsCenter"));
+export const BusinessRoadmapPage = lazy(() => import("@/pages/BusinessRoadmapPage"));
 export const Collaboration = lazy(() => import("@/pages/Collaboration"));
 export const SecuritySettings = lazy(() => import("@/pages/settings/Security"));
 
