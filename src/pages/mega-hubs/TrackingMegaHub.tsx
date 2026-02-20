@@ -26,7 +26,8 @@ import { toast } from 'sonner';
 import { CrossModulePanel } from '@/components/integration';
 import { useCreateTrackingAlert } from '@/hooks/useModuleHooks';
 import { HubModulesBrowser } from '@/components/ui/HubModulesBrowser';
-import { TRACKING_ABSORBED } from '@/lib/hub-absorbed-modules';
+import { TRACKING_ABSORBED, TRACKING_TAB_MODULES } from '@/lib/hub-absorbed-modules';
+import { TabTriggerWithModules } from '@/components/ui/TabTriggerWithModules';
 
 // Lazy load sub-components
 const TrackingTelemetryHub = lazy(() => import('@/pages/TelemetriaCommand'));
@@ -71,7 +72,6 @@ const tabConfig = [
   { id: 'geofencing', label: 'Geofencing', icon: MapPin },
   { id: 'alerts', label: 'Alerts', icon: AlertTriangle },
   { id: 'ai-copilot', label: '🧠 IA Hub', icon: Brain },
-  { id: 'modules', label: '📦 Módulos', icon: Satellite },
 ];
 
 export default function TrackingMegaHub() {

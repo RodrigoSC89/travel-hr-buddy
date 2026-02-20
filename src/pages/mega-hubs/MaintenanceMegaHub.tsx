@@ -30,7 +30,8 @@ import { toast } from 'sonner';
 import { CrossModulePanel } from '@/components/integration';
 import { publishEvent } from '@/lib/events/event-bus';
 import { HubModulesBrowser } from '@/components/ui/HubModulesBrowser';
-import { MAINTENANCE_ABSORBED } from '@/lib/hub-absorbed-modules';
+import { MAINTENANCE_ABSORBED, MAINTENANCE_TAB_MODULES } from '@/lib/hub-absorbed-modules';
+import { TabTriggerWithModules } from '@/components/ui/TabTriggerWithModules';
 
 // Lazy load sub-components
 const MaintenanceHub = lazy(() => import('@/pages/MaintenanceCommandCenter'));
@@ -92,7 +93,6 @@ const tabConfig = [
   { id: 'sensor-logbook', label: 'Sensor Logbook', icon: Radio },
   { id: 'cbm', label: 'CBM', icon: Vibrate },
   { id: 'ai-hub', label: '🧠 IA Hub', icon: Sparkles },
-  { id: 'modules', label: '📦 Módulos', icon: Wrench },
 ];
 
 export default function MaintenanceMegaHub() {

@@ -34,7 +34,8 @@ import { toast } from 'sonner';
 import { CrossModulePanel } from '@/components/integration';
 import { publishEvent } from '@/lib/events/event-bus';
 import { HubModulesBrowser } from '@/components/ui/HubModulesBrowser';
-import { COMPLIANCE_ABSORBED } from '@/lib/hub-absorbed-modules';
+import { COMPLIANCE_ABSORBED, COMPLIANCE_TAB_MODULES } from '@/lib/hub-absorbed-modules';
+import { TabTriggerWithModules } from '@/components/ui/TabTriggerWithModules';
 
 // ═══════════════════════════════════════════════════════════
 // LAZY LOAD - SUB-COMPONENTS
@@ -122,7 +123,6 @@ const tabConfig: TabConfig[] = [
   { id: 'ism-kpi', label: 'ISM KPIs', icon: Activity },
   { id: 'sire2', label: 'SIRE 2.0', icon: Radar },
   { id: 'ai-hub', label: '🧠 IA Compliance', icon: Brain },
-  { id: 'modules', label: '📦 Módulos', icon: Shield },
 ];
 
 // ═══════════════════════════════════════════════════════════

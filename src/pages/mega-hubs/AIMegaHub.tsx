@@ -31,7 +31,8 @@ import { toast } from 'sonner';
 import { CrossModulePanel } from '@/components/integration';
 import { publishEvent } from '@/lib/events/event-bus';
 import { HubModulesBrowser } from '@/components/ui/HubModulesBrowser';
-import { AI_ABSORBED } from '@/lib/hub-absorbed-modules';
+import { AI_ABSORBED, AI_TAB_MODULES } from '@/lib/hub-absorbed-modules';
+import { TabTriggerWithModules } from '@/components/ui/TabTriggerWithModules';
 
 // Lazy load sub-components
 const AIControlTowerHub = lazy(() => import('@/pages/AIHubPage'));
@@ -99,7 +100,7 @@ const tabConfig = [
   { id: 'intelligence', label: 'Intelligence', icon: FileText },
   { id: 'analytics', label: 'Analytics', icon: BarChart3 },
   { id: 'predictive', label: '🔮 Predictive', icon: Activity },
-  { id: 'all-modules', label: '📦 Módulos', icon: Cpu },
+  { id: 'all-modules', label: '🧪 Laboratório', icon: Cpu },
 ];
 
 // Map old tab IDs to new grouped IDs for backward compatibility

@@ -25,7 +25,8 @@ import { toast } from 'sonner';
 import { NewVoyageDialog } from '@/components/operations/QuickActionDialogs';
 import { CrossModulePanel } from '@/components/integration';
 import { HubModulesBrowser } from '@/components/ui/HubModulesBrowser';
-import { OPS_ABSORBED } from '@/lib/hub-absorbed-modules';
+import { OPS_ABSORBED, OPS_TAB_MODULES } from '@/lib/hub-absorbed-modules';
+import { TabTriggerWithModules } from '@/components/ui/TabTriggerWithModules';
 // Lazy load sub-components
 const OperationsCommandHub = lazy(() => import('@/pages/OperationsCommandCenter'));
 const MaritimeCommandCenter = lazy(() => import('@/pages/MaritimeCommandCenter'));
@@ -90,7 +91,6 @@ const tabConfig = [
   { id: 'fuel-quality', label: 'Fuel Quality', icon: Droplets },
   { id: 'clause-library', label: 'Clause Library', icon: BookOpen },
   { id: 'ai-copilot', label: '🧠 IA Copiloto', icon: Brain },
-  { id: 'modules', label: '📦 Módulos', icon: Compass },
 ];
 
 export default function OpsMegaHub() {
@@ -185,14 +185,14 @@ export default function OpsMegaHub() {
           <div className="container">
             <TabsList className="h-12 bg-transparent gap-2 justify-start overflow-x-auto">
               {tabConfig.map((tab) => (
-                <TabsTrigger
+                <TabTriggerWithModules
                   key={tab.id}
-                  value={tab.id}
-                  className="data-[state=active]:bg-hub-ops data-[state=active]:text-white gap-2"
-                >
-                  <tab.icon className="h-4 w-4" />
-                  {tab.label}
-                </TabsTrigger>
+                  tabId={tab.id}
+                  label={tab.label}
+                  icon={tab.icon}
+                  modules={OPS_TAB_MODULES[tab.id] || []}
+                  onModuleSelect={(moduleId) => setSearchParams({ tab: 'modules', module: moduleId })}
+                />
               ))}
             </TabsList>
           </div>
@@ -467,10 +467,11 @@ export default function OpsMegaHub() {
               <OperationsAIHub />
             </TabsContent>
 
+            {/* Ferramentas Operacionais - Módulos absorvidos */}
             <TabsContent value="modules" className="mt-0">
               <HubModulesBrowser
                 modules={OPS_ABSORBED}
-                hubName="Hub de Operações"
+                hubName="Ferramentas Operacionais"
                 hubColor="text-hub-ops"
                 activeModuleId={activeModuleId}
                 onModuleSelect={(id) => {

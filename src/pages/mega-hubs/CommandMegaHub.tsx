@@ -27,7 +27,8 @@ import { useOperationsCommandData } from '@/hooks/useOperationsCommandData';
 import { toast } from 'sonner';
 import { CrossModulePanel } from '@/components/integration';
 import { HubModulesBrowser } from '@/components/ui/HubModulesBrowser';
-import { COMMAND_ABSORBED } from '@/lib/hub-absorbed-modules';
+import { COMMAND_ABSORBED, COMMAND_TAB_MODULES } from '@/lib/hub-absorbed-modules';
+import { TabTriggerWithModules } from '@/components/ui/TabTriggerWithModules';
 
 // Lazy load sub-components
 const EnhancedUnifiedDashboard = lazy(() => import('@/components/dashboard/enhanced-unified-dashboard'));
@@ -95,7 +96,6 @@ const tabConfig = [
   { id: 'ceo', label: '👔 CEO Dashboard', icon: BarChart3 },
   { id: 'my-dashboard', label: '🎯 Meu Dashboard', icon: Activity },
   { id: 'performance', label: '📊 Performance', icon: Gauge },
-  { id: 'modules', label: '📦 Módulos', icon: Compass },
 ];
 
 export default function CommandMegaHub() {
@@ -212,14 +212,14 @@ export default function CommandMegaHub() {
           <div className="container">
             <TabsList className="h-12 bg-transparent gap-2 justify-start overflow-x-auto">
               {tabConfig.map((tab) => (
-                <TabsTrigger
+                <TabTriggerWithModules
                   key={tab.id}
-                  value={tab.id}
-                  className="data-[state=active]:bg-primary data-[state=active]:text-primary-foreground gap-2"
-                >
-                  <tab.icon className="h-4 w-4" />
-                  {tab.label}
-                </TabsTrigger>
+                  tabId={tab.id}
+                  label={tab.label}
+                  icon={tab.icon}
+                  modules={COMMAND_TAB_MODULES[tab.id] || []}
+                  onModuleSelect={(moduleId) => setSearchParams({ tab: 'modules', module: moduleId })}
+                />
               ))}
             </TabsList>
           </div>
@@ -511,10 +511,11 @@ export default function CommandMegaHub() {
               <PerformanceMetrics />
             </TabsContent>
 
+            {/* Centro Estratégico - Módulos absorvidos renderizados inline */}
             <TabsContent value="modules" className="mt-0">
               <HubModulesBrowser
                 modules={COMMAND_ABSORBED}
-                hubName="Central de Comando"
+                hubName="Centro Estratégico"
                 hubColor="text-hub-command"
                 activeModuleId={activeModuleId}
                 onModuleSelect={(id) => {
