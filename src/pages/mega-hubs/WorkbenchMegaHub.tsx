@@ -275,7 +275,7 @@ export default function WorkbenchMegaHub() {
       <Tabs value={activeSection} onValueChange={handleSectionChange} className="w-full">
         <div className="border-b bg-background/95 backdrop-blur supports-[backdrop-filter]:bg-background/60 sticky top-[73px] z-10">
           <div className="container">
-            <TabsList className="h-14 bg-transparent gap-2 justify-start overflow-x-auto">
+            <TabsList className="h-auto flex-wrap bg-transparent gap-1.5 justify-start py-2">
               {sectionConfig.map((section) => (
                 <TabTriggerWithModules
                   key={section.id}
