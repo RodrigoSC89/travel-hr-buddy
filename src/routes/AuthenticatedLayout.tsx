@@ -9,15 +9,25 @@ import { SidebarProvider } from "@/components/ui/sidebar";
 import { AppSidebar } from "@/components/layout/app-sidebar";
 import { Header } from "@/components/layout/header";
 import { MobileBottomNav } from "@/components/layout/mobile-bottom-nav";
-import { ProductOnboardingTour } from "@/components/onboarding/ProductOnboardingTour";
 import { ModuleErrorBoundary } from "@/components/layout/module-error-boundary";
-import { PresenceAvatars } from "@/components/ui/PresenceAvatars";
-import { HealthStatusBar } from "@/components/ui/HealthStatusBar";
 import { useRealtimeToasts } from "@/hooks/useRealtimeToasts";
 import { useAutonomousMonitor } from "@/hooks/useAutonomousMonitor";
-import { ProactiveAlertsBanner } from "@/components/dashboard/ProactiveAlertsBanner";
 import { useSmartPrefetch } from "@/lib/performance/smart-prefetch";
 import { useEventReactor } from "@/hooks/useEventReactor";
+
+// Lazy load non-critical layout components
+const PresenceAvatars = lazy(() => 
+  import("@/components/ui/PresenceAvatars").then(mod => ({ default: mod.PresenceAvatars }))
+);
+const HealthStatusBar = lazy(() => 
+  import("@/components/ui/HealthStatusBar").then(mod => ({ default: mod.HealthStatusBar }))
+);
+const ProactiveAlertsBanner = lazy(() => 
+  import("@/components/dashboard/ProactiveAlertsBanner").then(mod => ({ default: mod.ProactiveAlertsBanner }))
+);
+const ProductOnboardingTour = lazy(() => 
+  import("@/components/onboarding/ProductOnboardingTour").then(mod => ({ default: mod.ProductOnboardingTour }))
+);
 
 const OfflineStatusBar = lazy(() => 
   import("@/components/offline/OfflineStatusBar").then(mod => ({ default: mod.OfflineStatusBar }))
@@ -62,13 +72,15 @@ export const AuthenticatedLayout = () => {
           <Header />
           {/* System status strip */}
           <div className="flex items-center justify-between px-4 py-1 border-b border-border/30 bg-card/30 backdrop-blur-sm">
-            <HealthStatusBar />
-            <PresenceAvatars />
+            <Suspense fallback={<div className="h-5" />}><HealthStatusBar /></Suspense>
+            <Suspense fallback={null}><PresenceAvatars /></Suspense>
           </div>
           <main className="flex-1 overflow-auto px-3 pb-24 md:px-6 md:pb-6 lg:px-8 xl:px-10 2xl:px-12">
             {alerts.length > 0 && (
               <div className="mt-3 mb-1">
-                <ProactiveAlertsBanner alerts={alerts} onDismiss={dismissAlert} maxVisible={3} />
+                <Suspense fallback={null}>
+                  <ProactiveAlertsBanner alerts={alerts} onDismiss={dismissAlert} maxVisible={3} />
+                </Suspense>
               </div>
             )}
             <ModuleErrorBoundary moduleName="Page">
@@ -79,7 +91,7 @@ export const AuthenticatedLayout = () => {
           </main>
         </div>
         <MobileBottomNav />
-        <ProductOnboardingTour />
+        <Suspense fallback={null}><ProductOnboardingTour /></Suspense>
         <Suspense fallback={null}><OfflineStatusBar position="bottom" showDetails={true} /></Suspense>
         <Suspense fallback={null}><CommandPalette /></Suspense>
         <Suspense fallback={null}><GlobalAIAssistant /></Suspense>
