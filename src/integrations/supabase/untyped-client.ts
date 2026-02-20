@@ -110,6 +110,15 @@ const KNOWN_UNTYPED_TABLES = new Set([
   // System & Events
   "system_events", "event_outbox", "automation_workflows",
   
+  // Alerts & Tracking
+  "telemetry_alerts", "soc_alerts", "vessel_positions",
+  
+  // Documents
+  "entity_documents",
+  
+  // Crew Certifications (untyped)
+  "crew_certifications",
+  
   // Miscellaneous
   "vessel_restrictions", "ia_performance_log",
 ]);
@@ -121,13 +130,14 @@ const KNOWN_UNTYPED_TABLES = new Set([
  * @param tableName - The name of the untyped table
  * @returns PostgrestQueryBuilder for the table
  */
-export function fromUntyped(tableName: string) {
+// eslint-disable-next-line @typescript-eslint/no-explicit-any
+export function fromUntyped(tableName: string): any {
   if (import.meta.env.DEV && !KNOWN_UNTYPED_TABLES.has(tableName)) {
     logger.warn(`[UntypedClient] Table "${tableName}" is not in the known untyped registry. ` +
       `Add it to KNOWN_UNTYPED_TABLES or check if it's now in the generated types.`);
   }
   
-  return (supabase.from as (table: string) => ReturnType<typeof supabase.from>)(tableName);
+  return (supabase as any).from(tableName);
 }
 
 /**

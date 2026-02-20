@@ -2,14 +2,14 @@
  * NAUTI ONE — Tracking Domain Service
  */
 
-import { supabase } from "@/integrations/supabase/client";
+import { fromUntyped } from "@/integrations/supabase/untyped-client";
 import { publishEvent } from "@/lib/events/event-bus";
 
 export const TrackingService = {
   async createAlert(alert: Record<string, unknown>) {
     // Try telemetry_alerts first (for sensor/geofence alerts), fallback to soc_alerts
     const table = alert.sensor_id ? 'telemetry_alerts' : 'soc_alerts';
-    const { data, error } = await (supabase.from as Function)(table).insert(alert).select().single();
+    const { data, error } = await fromUntyped(table).insert(alert).select().single();
     if (error) throw error;
 
     await publishEvent({
@@ -38,7 +38,7 @@ export const TrackingService = {
   },
 
   async getVesselPositions(vesselId: string, limit = 100) {
-    const { data, error } = await (supabase.from as Function)('vessel_positions')
+    const { data, error } = await fromUntyped('vessel_positions')
       .select('*')
       .eq('vessel_id', vesselId)
       .order('timestamp', { ascending: false })

@@ -2,12 +2,12 @@
  * NAUTI ONE — ETS/Emissions Domain Service
  */
 
-import { supabase } from "@/integrations/supabase/client";
+import { fromUntyped } from "@/integrations/supabase/untyped-client";
 import { publishEvent } from "@/lib/events/event-bus";
 
 export const ETSService = {
   async createRecord(rec: Record<string, unknown>) {
-    const { data, error } = await (supabase.from as Function)('eu_ets_tracking').insert({
+    const { data, error } = await fromUntyped('eu_ets_tracking').insert({
       ...rec,
       status: 'calculated',
     }).select().single();
