@@ -1,4 +1,4 @@
-import { useState, Suspense, lazy, useEffect } from "react";
+import { useState, Suspense, lazy } from "react";
 import type { FC } from "react";
 import { Outlet } from "react-router-dom";
 import { SidebarProvider } from "@/components/ui/sidebar";
@@ -10,15 +10,18 @@ import { useSystemActions } from "@/hooks/use-system-actions";
 // Toaster removed — single instance in App.tsx
 import { ThemeProvider } from "@/components/layout/theme-provider";
 import { SEOWrapper } from "@/components/layout/seo-wrapper";
-import GlobalSearch from "@/components/ui/global-search";
-
-import EnhancedNotifications from "@/components/ui/enhanced-notifications";
 import { useSessionSecurity } from "@/hooks/useSessionSecurity";
 import { useCrossModuleAutomation } from "@/hooks/useCrossModuleAutomation";
 import { useRealtimeAlerts } from "@/hooks/useRealtimeAlerts";
 import { useGlobalShortcuts } from "@/hooks/useGlobalShortcuts";
-import { SmartBreadcrumbs } from "@/components/layout/SmartBreadcrumbs";
 import { useAutoTour } from "@/hooks/useGuidedTour";
+
+// Lazy load heavy layout components
+const GlobalSearch = lazy(() => import("@/components/ui/global-search"));
+const EnhancedNotifications = lazy(() => import("@/components/ui/enhanced-notifications"));
+const SmartBreadcrumbs = lazy(() => 
+  import("@/components/layout/SmartBreadcrumbs").then(m => ({ default: m.SmartBreadcrumbs }))
+);
 
 // Lazy load offline components
 const OfflineStatusBar = lazy(() => 
@@ -61,7 +64,7 @@ export const AppLayout: FC = () => {
             <div className="flex-1 flex flex-col min-w-0 w-full">
               <Header />
               <main className="flex-1 overflow-auto px-3 pb-24 md:px-6 md:pb-6 lg:px-8 xl:px-10 2xl:px-12" data-tour="main-content">
-                <SmartBreadcrumbs />
+                <Suspense fallback={null}><SmartBreadcrumbs /></Suspense>
                 <Outlet />
               </main>
             </div>
@@ -70,14 +73,18 @@ export const AppLayout: FC = () => {
             <MobileBottomNav criticalAlerts={criticalCount} />
             
             {/* Global Features */}
-            <GlobalSearch 
-              isOpen={isSearchOpen} 
-              onOpenChange={setIsSearchOpen} 
-            />
-            <EnhancedNotifications 
-              isOpen={isNotificationsOpen}
-              onClose={() => setIsNotificationsOpen(false)}
-            />
+            <Suspense fallback={null}>
+              <GlobalSearch 
+                isOpen={isSearchOpen} 
+                onOpenChange={setIsSearchOpen} 
+              />
+            </Suspense>
+            <Suspense fallback={null}>
+              <EnhancedNotifications 
+                isOpen={isNotificationsOpen}
+                onClose={() => setIsNotificationsOpen(false)}
+              />
+            </Suspense>
             {/* Quick Action FAB */}
             <Suspense fallback={null}>
               <QuickActionFAB />
