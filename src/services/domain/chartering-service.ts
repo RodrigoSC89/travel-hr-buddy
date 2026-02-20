@@ -2,13 +2,13 @@
  * NAUTI ONE — Chartering Domain Service
  */
 
-import { supabase } from "@/integrations/supabase/client";
+import { fromUntyped } from "@/integrations/supabase/untyped-client";
 import { publishEvent, logAuditEvent } from "@/lib/events/event-bus";
 
 export const CharteringService = {
   async createCharterParty(cp: Record<string, unknown>) {
     const charterNumber = `CP-${Date.now().toString(36).toUpperCase()}`;
-    const { data, error } = await (supabase.from as Function)('charter_parties').insert({
+    const { data, error } = await fromUntyped('charter_parties').insert({
       ...cp,
       charter_number: charterNumber,
       status: 'negotiating',
@@ -32,7 +32,7 @@ export const CharteringService = {
   },
 
   async updateStatus(id: string, status: string) {
-    const { data, error } = await (supabase.from as Function)('charter_parties')
+    const { data, error } = await fromUntyped('charter_parties')
       .update({ status }).eq('id', id).select().single();
     if (error) throw error;
 

@@ -2,12 +2,12 @@
  * NAUTI ONE — Compliance Domain Service
  */
 
-import { supabase } from "@/integrations/supabase/client";
+import { fromUntyped } from "@/integrations/supabase/untyped-client";
 import { publishEvent } from "@/lib/events/event-bus";
 
 export const ComplianceService = {
   async createFinding(finding: Record<string, unknown>) {
-    const { data, error } = await (supabase.from as Function)('sire2_findings').insert(finding).select().single();
+    const { data, error } = await fromUntyped('sire2_findings').insert(finding).select().single();
     if (error) throw error;
 
     await publishEvent({
@@ -27,7 +27,7 @@ export const ComplianceService = {
   },
 
   async closeFinding(id: string, resolution: Record<string, unknown>) {
-    const { data, error } = await (supabase.from as Function)('sire2_findings')
+    const { data, error } = await fromUntyped('sire2_findings')
       .update({ ...resolution, status: 'closed' })
       .eq('id', id)
       .select()
@@ -48,7 +48,7 @@ export const ComplianceService = {
     const futureDate = new Date();
     futureDate.setDate(futureDate.getDate() + daysAhead);
 
-    const { data, error } = await (supabase.from as Function)('crew_certifications')
+    const { data, error } = await fromUntyped('crew_certifications')
       .select('*, crew_members(full_name, vessel_id)')
       .lte('expiry_date', futureDate.toISOString())
       .gte('expiry_date', new Date().toISOString())

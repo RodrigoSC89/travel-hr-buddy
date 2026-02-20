@@ -9,7 +9,7 @@ import { Card, CardContent, CardHeader, CardTitle } from '@/components/ui/card';
 import { Badge } from '@/components/ui/badge';
 import { Progress } from '@/components/ui/progress';
 import { useQuery } from '@tanstack/react-query';
-import { supabase } from '@/integrations/supabase/client';
+import { fromUntyped } from '@/integrations/supabase/untyped-client';
 import { Shield, AlertTriangle, CheckCircle2, XCircle } from 'lucide-react';
 import { Skeleton } from '@/components/ui/skeleton';
 
@@ -30,11 +30,10 @@ const ISM_ELEMENTS = [
 ];
 
 export default function ISMGapAnalyzer() {
-  const { data: ismElements = [], isLoading } = useQuery({
+  const { data: ismElements = [], isLoading } = useQuery<any[]>({
     queryKey: ['ism-gap-analysis'],
     queryFn: async () => {
-      const { data, error } = await supabase
-        .from('ism_elements')
+      const { data, error } = await fromUntyped('ism_elements')
         .select('id, element_number, title')
         .order('element_number');
       if (error) throw error;
@@ -43,11 +42,10 @@ export default function ISMGapAnalyzer() {
     staleTime: 60000,
   });
 
-  const { data: evidence = [] } = useQuery({
+  const { data: evidence = [] } = useQuery<any[]>({
     queryKey: ['ism-evidence-count'],
     queryFn: async () => {
-      const { data, error } = await supabase
-        .from('ism_evidence')
+      const { data, error } = await fromUntyped('ism_evidence')
         .select('requirement_id, status')
         .limit(500);
       if (error) throw error;
@@ -56,11 +54,10 @@ export default function ISMGapAnalyzer() {
     staleTime: 60000,
   });
 
-  const { data: requirements = [] } = useQuery({
+  const { data: requirements = [] } = useQuery<any[]>({
     queryKey: ['ism-requirements-map'],
     queryFn: async () => {
-      const { data, error } = await supabase
-        .from('ism_requirements')
+      const { data, error } = await fromUntyped('ism_requirements')
         .select('id, element_id')
         .limit(500);
       if (error) throw error;
@@ -70,14 +67,14 @@ export default function ISMGapAnalyzer() {
   });
 
   const analysis = useMemo(() => {
-    const elementMap = new Map(ismElements.map(e => [String(e.element_number), e]));
+    const elementMap = new Map(ismElements.map((e: any) => [String(e.element_number), e]));
     
     // Build requirement -> element mapping
-    const reqToElement = new Map(requirements.map(r => [r.id, r.element_id]));
+    const reqToElement = new Map(requirements.map((r: any) => [r.id, r.element_id]));
     
     // Count evidence per element
     const evidenceByElement: Record<string, { total: number; approved: number }> = {};
-    evidence.forEach(ev => {
+    evidence.forEach((ev: any) => {
       const elementId = reqToElement.get(ev.requirement_id);
       if (!elementId) return;
       if (!evidenceByElement[elementId]) evidenceByElement[elementId] = { total: 0, approved: 0 };

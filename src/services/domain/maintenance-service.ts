@@ -2,12 +2,12 @@
  * NAUTI ONE — Maintenance Domain Service
  */
 
-import { supabase } from "@/integrations/supabase/client";
+import { fromUntyped } from "@/integrations/supabase/untyped-client";
 import { publishEvent, logAuditEvent } from "@/lib/events/event-bus";
 
 export const MaintenanceService = {
   async createWorkOrder(wo: Record<string, unknown>) {
-    const { data, error } = await (supabase.from as Function)('pms_work_orders').insert(wo).select().single();
+    const { data, error } = await fromUntyped('pms_work_orders').insert(wo).select().single();
     if (error) throw error;
 
     await publishEvent({
@@ -26,7 +26,7 @@ export const MaintenanceService = {
   },
 
   async completeWorkOrder(id: string, completionData: Record<string, unknown>) {
-    const { data, error } = await (supabase.from as Function)('pms_work_orders')
+    const { data, error } = await fromUntyped('pms_work_orders')
       .update({ ...completionData, status: 'completed', completed_date: new Date().toISOString() })
       .eq('id', id)
       .select()
@@ -49,7 +49,7 @@ export const MaintenanceService = {
   },
 
   async listByVessel(vesselId: string) {
-    const { data, error } = await (supabase.from as Function)('pms_work_orders')
+    const { data, error } = await fromUntyped('pms_work_orders')
       .select('*')
       .eq('vessel_id', vesselId)
       .order('created_at', { ascending: false })

@@ -2,12 +2,12 @@
  * NAUTI ONE — Finance Domain Service
  */
 
-import { supabase } from "@/integrations/supabase/client";
+import { fromUntyped } from "@/integrations/supabase/untyped-client";
 import { publishEvent } from "@/lib/events/event-bus";
 
 export const FinanceService = {
   async approveInvoice(invoiceId: string) {
-    const { data, error } = await (supabase.from as Function)('invoices')
+    const { data, error } = await fromUntyped('invoices')
       .update({ status: 'approved', approved_at: new Date().toISOString() })
       .eq('id', invoiceId)
       .select()
@@ -31,7 +31,7 @@ export const FinanceService = {
   },
 
   async approvePO(poId: string) {
-    const { data, error } = await (supabase.from as Function)('procurement_orders')
+    const { data, error } = await fromUntyped('procurement_orders')
       .update({ status: 'approved' })
       .eq('id', poId)
       .select()
@@ -54,7 +54,7 @@ export const FinanceService = {
   },
 
   async getVoyagePnL(voyageId: string) {
-    const { data, error } = await (supabase.from as Function)('voyage_pnl')
+    const { data, error } = await fromUntyped('voyage_pnl')
       .select('*')
       .eq('voyage_id', voyageId)
       .single();
