@@ -4,7 +4,8 @@
  * Substitui os dropdowns com uma experiência imersiva
  */
 import React, { useState, useMemo } from 'react';
-import { Dialog, DialogContent } from '@/components/ui/dialog';
+import { Dialog, DialogContent, DialogTitle, DialogDescription } from '@/components/ui/dialog';
+import { VisuallyHidden } from '@radix-ui/react-visually-hidden';
 import { Input } from '@/components/ui/input';
 import { Badge } from '@/components/ui/badge';
 import { Search, X, Sparkles } from 'lucide-react';
@@ -77,6 +78,10 @@ export function ModuleLauncherModal({
   return (
     <Dialog open={open} onOpenChange={onOpenChange}>
       <DialogContent className="max-w-4xl max-h-[85vh] p-0 gap-0 overflow-hidden bg-background/98 backdrop-blur-xl border-border/50">
+        <VisuallyHidden>
+          <DialogTitle>{hubName}</DialogTitle>
+          <DialogDescription>Navegação de módulos especializados</DialogDescription>
+        </VisuallyHidden>
         {/* Header */}
         <div className="border-b border-border/50 bg-card/50 px-6 py-4">
           <div className="flex items-center justify-between mb-4">
