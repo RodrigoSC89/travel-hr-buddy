@@ -5,6 +5,7 @@
  */
 
 import { supabase } from "@/integrations/supabase/client";
+import { fromUntyped } from "@/integrations/supabase/untyped-client";
 import { logger } from "@/lib/logger";
 import type {
   VoiceSession,
@@ -223,7 +224,7 @@ export class VoiceService {
   }
 
   static async saveSettings(settings: Partial<VoiceSettings>): Promise<VoiceSettings> {
-    const { data, error } = await (supabase.from as Function)("voice_settings")
+    const { data, error } = await fromUntyped("voice_settings")
       .upsert(settings)
       .select()
       .single();

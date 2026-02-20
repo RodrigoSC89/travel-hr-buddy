@@ -4,6 +4,7 @@
  */
 
 import { supabase } from "@/integrations/supabase/client";
+import { fromUntyped } from "@/integrations/supabase/untyped-client";
 import { logger } from "@/lib/logger";
 import type {
   WebhookIntegration,
@@ -41,7 +42,7 @@ export class IntegrationsService {
   static async createIntegration(
     integration: Partial<WebhookIntegration>
   ): Promise<WebhookIntegration> {
-    const { data, error } = await (supabase.from as Function)("webhook_integrations")
+    const { data, error } = await fromUntyped("webhook_integrations")
       .insert(integration)
       .select()
       .single();
@@ -141,7 +142,7 @@ export class IntegrationsService {
   static async saveOAuthConnection(
     connection: Partial<OAuthConnection>
   ): Promise<OAuthConnection> {
-    const { data, error } = await (supabase.from as Function)("oauth_connections")
+    const { data, error } = await fromUntyped("oauth_connections")
       .upsert(connection)
       .select()
       .single();
@@ -216,7 +217,7 @@ export class IntegrationsService {
   }
 
   static async createLog(log: Partial<IntegrationLog>): Promise<void> {
-    const { error } = await (supabase.from as Function)("integration_logs").insert(log);
+    const { error } = await fromUntyped("integration_logs").insert(log);
     if (error) throw error;
   }
 
@@ -390,7 +391,7 @@ export class IntegrationsService {
 
   // PATCH 385: Modular Plugin System
   static async installPlugin(plugin: Partial<IntegrationPlugin>): Promise<IntegrationPlugin> {
-    const { data, error } = await (supabase.from as Function)("integration_plugins")
+    const { data, error } = await fromUntyped("integration_plugins")
       .insert({
         ...plugin,
         is_enabled: true,

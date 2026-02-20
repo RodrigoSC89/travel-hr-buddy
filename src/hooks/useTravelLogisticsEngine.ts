@@ -4,7 +4,7 @@
  * 100% independente de APIs externas
  */
 import { useQuery, useMutation, useQueryClient } from "@tanstack/react-query";
-import { supabase } from "@/integrations/supabase/client";
+import { fromUntyped } from "@/integrations/supabase/untyped-client";
 import { toast } from "sonner";
 
 // ═══ TYPES ═══
@@ -173,7 +173,7 @@ export function useFlightRoutes() {
   return useQuery({
     queryKey: ["travel-flight-routes"],
     queryFn: async () => {
-      const { data, error } = await (supabase.from as Function)("travel_flight_routes")
+      const { data, error } = await fromUntyped("travel_flight_routes")
         .select("*").eq("is_active", true).order("origin_city");
       if (error) throw error;
       return (data || []) as FlightRoute[];
@@ -185,7 +185,7 @@ export function useApprovedHotels(city?: string) {
   return useQuery({
     queryKey: ["travel-approved-hotels", city],
     queryFn: async () => {
-      let q = (supabase.from as Function)("travel_approved_hotels")
+      let q = fromUntyped("travel_approved_hotels")
         .select("*").eq("is_active", true).order("internal_rating", { ascending: false });
       if (city) q = q.ilike("city", `%${city}%`);
       const { data, error } = await q;
@@ -199,7 +199,7 @@ export function useTransferProviders(city?: string) {
   return useQuery({
     queryKey: ["travel-transfer-providers", city],
     queryFn: async () => {
-      let q = (supabase.from as Function)("travel_transfer_providers")
+      let q = fromUntyped("travel_transfer_providers")
         .select("*").eq("is_active", true).order("internal_rating", { ascending: false });
       if (city) q = q.ilike("city", `%${city}%`);
       const { data, error } = await q;
@@ -213,7 +213,7 @@ export function useTransferRoutes(providerId?: string) {
   return useQuery({
     queryKey: ["travel-transfer-routes", providerId],
     queryFn: async () => {
-      let q = (supabase.from as Function)("travel_transfer_routes")
+      let q = fromUntyped("travel_transfer_routes")
         .select("*").eq("is_active", true);
       if (providerId) q = q.eq("provider_id", providerId);
       const { data, error } = await q;
@@ -228,7 +228,7 @@ export function useQuotationRequests() {
   return useQuery({
     queryKey: ["travel-quotation-requests"],
     queryFn: async () => {
-      const { data, error } = await (supabase.from as Function)("travel_quotation_requests")
+      const { data, error } = await fromUntyped("travel_quotation_requests")
         .select("*").order("created_at", { ascending: false }).limit(200);
       if (error) throw error;
       return (data || []) as QuotationRequest[];
@@ -240,7 +240,7 @@ export function useQuotationResponses(requestId?: string) {
   return useQuery({
     queryKey: ["travel-quotation-responses", requestId],
     queryFn: async () => {
-      let q = (supabase.from as Function)("travel_quotation_responses")
+      let q = fromUntyped("travel_quotation_responses")
         .select("*").order("ai_score", { ascending: false });
       if (requestId) q = q.eq("request_id", requestId);
       const { data, error } = await q;
@@ -255,7 +255,7 @@ export function useTravelBookings() {
   return useQuery({
     queryKey: ["travel-bookings"],
     queryFn: async () => {
-      const { data, error } = await (supabase.from as Function)("travel_bookings")
+      const { data, error } = await fromUntyped("travel_bookings")
         .select("*").order("created_at", { ascending: false }).limit(200);
       if (error) throw error;
       return (data || []) as any[];
@@ -269,7 +269,7 @@ export function useCreateFlightRoute() {
   const qc = useQueryClient();
   return useMutation({
     mutationFn: async (route: Partial<FlightRoute>) => {
-      const { error } = await (supabase.from as Function)("travel_flight_routes").insert(route);
+      const { error } = await fromUntyped("travel_flight_routes").insert(route);
       if (error) throw error;
     },
     onSuccess: () => { toast.success("Rota aérea cadastrada"); qc.invalidateQueries({ queryKey: ["travel-flight-routes"] }); },
@@ -281,7 +281,7 @@ export function useCreateApprovedHotel() {
   const qc = useQueryClient();
   return useMutation({
     mutationFn: async (hotel: Partial<ApprovedHotel>) => {
-      const { error } = await (supabase.from as Function)("travel_approved_hotels").insert(hotel);
+      const { error } = await fromUntyped("travel_approved_hotels").insert(hotel);
       if (error) throw error;
     },
     onSuccess: () => { toast.success("Hotel homologado cadastrado"); qc.invalidateQueries({ queryKey: ["travel-approved-hotels"] }); },
@@ -293,7 +293,7 @@ export function useCreateTransferProvider() {
   const qc = useQueryClient();
   return useMutation({
     mutationFn: async (provider: Partial<TransferProvider>) => {
-      const { error } = await (supabase.from as Function)("travel_transfer_providers").insert(provider);
+      const { error } = await fromUntyped("travel_transfer_providers").insert(provider);
       if (error) throw error;
     },
     onSuccess: () => { toast.success("Empresa de transfer cadastrada"); qc.invalidateQueries({ queryKey: ["travel-transfer-providers"] }); },
@@ -305,7 +305,7 @@ export function useCreateQuotationRequest() {
   const qc = useQueryClient();
   return useMutation({
     mutationFn: async (req: Partial<QuotationRequest>) => {
-      const { data, error } = await (supabase.from as Function)("travel_quotation_requests")
+      const { data, error } = await fromUntyped("travel_quotation_requests")
         .insert({ ...req, request_number: 'TRQ-AUTO' }).select().single();
       if (error) throw error;
       return data;
@@ -322,7 +322,7 @@ export function useSubmitQuotationResponse() {
       const { request, ...responseData } = resp;
       // Auto-calculate score
       const scores = calculateQuotationScore(responseData, request || {});
-      const { error } = await (supabase.from as Function)("travel_quotation_responses").insert({
+      const { error } = await fromUntyped("travel_quotation_responses").insert({
         ...responseData,
         ai_score: scores.total,
         price_score: scores.price,
@@ -342,11 +342,11 @@ export function useSelectQuotation() {
   return useMutation({
     mutationFn: async ({ responseId, requestId }: { responseId: string; requestId: string }) => {
       // Mark response as selected
-      const { error: e1 } = await (supabase.from as Function)("travel_quotation_responses")
+      const { error: e1 } = await fromUntyped("travel_quotation_responses")
         .update({ is_selected: true, selected_at: new Date().toISOString() }).eq("id", responseId);
       if (e1) throw e1;
       // Update request status
-      const { error: e2 } = await (supabase.from as Function)("travel_quotation_requests")
+      const { error: e2 } = await fromUntyped("travel_quotation_requests")
         .update({ status: "approved" }).eq("id", requestId);
       if (e2) throw e2;
     },

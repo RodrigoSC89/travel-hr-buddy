@@ -2,12 +2,12 @@
  * NAUTI ONE — People Domain Service
  */
 
-import { supabase } from "@/integrations/supabase/client";
+import { fromUntyped } from "@/integrations/supabase/untyped-client";
 import { publishEvent } from "@/lib/events/event-bus";
 
 export const PeopleService = {
   async publishRotation(rotationId: string) {
-    const { data, error } = await (supabase.from as Function)('crew_rotations')
+    const { data, error } = await fromUntyped('crew_rotations')
       .update({ status: 'published' })
       .eq('id', rotationId)
       .select()
@@ -33,7 +33,7 @@ export const PeopleService = {
     const futureDate = new Date();
     futureDate.setDate(futureDate.getDate() + daysAhead);
 
-    const { data, error } = await (supabase.from as Function)('crew_certifications')
+    const { data, error } = await fromUntyped('crew_certifications')
       .select('*, crew_members(full_name, vessel_id)')
       .lte('expiry_date', futureDate.toISOString())
       .gte('expiry_date', new Date().toISOString());

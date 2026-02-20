@@ -2,12 +2,12 @@
  * NAUTI ONE — ISM Compliance Domain Service
  */
 
-import { supabase } from "@/integrations/supabase/client";
+import { fromUntyped } from "@/integrations/supabase/untyped-client";
 import { publishEvent, logAuditEvent } from "@/lib/events/event-bus";
 
 export const ISMService = {
   async runGapAnalysis(elementId: string, assessmentData: Record<string, unknown>) {
-    const { data, error } = await (supabase.from as Function)('ism_gap_analysis').insert({
+    const { data, error } = await fromUntyped('ism_gap_analysis').insert({
       element_id: elementId,
       ...assessmentData,
       last_assessed_at: new Date().toISOString(),
@@ -30,7 +30,7 @@ export const ISMService = {
   },
 
   async createCAPA(capa: Record<string, unknown>) {
-    const { data, error } = await (supabase.from as Function)('ism_capa').insert(capa).select().single();
+    const { data, error } = await fromUntyped('ism_capa').insert(capa).select().single();
     if (error) throw error;
 
     await publishEvent({
@@ -47,7 +47,7 @@ export const ISMService = {
     const updates: Record<string, unknown> = { status };
     if (status === 'closed') updates.completion_date = new Date().toISOString().split('T')[0];
 
-    const { data, error } = await (supabase.from as Function)('ism_capa')
+    const { data, error } = await fromUntyped('ism_capa')
       .update(updates).eq('id', id).select().single();
     if (error) throw error;
 

@@ -6,6 +6,7 @@
  */
 
 import { supabase } from "@/integrations/supabase/client";
+import { fromUntyped } from "@/integrations/supabase/untyped-client";
 import { logger } from "@/lib/logger";
 
 interface OAuthConfig {
@@ -231,7 +232,7 @@ export class OAuthService {
       scope: tokens.scope
     };
 
-    const { error } = await (supabase.from as Function)("integration_credentials")
+    const { error } = await fromUntyped("integration_credentials")
       .upsert({
         user_id: userData.user.id,
         provider,
@@ -257,7 +258,7 @@ export class OAuthService {
     }
 
     // Get stored credentials
-    const { data: credentials, error: fetchError } = await (supabase.from as Function)("integration_credentials")
+    const { data: credentials, error: fetchError } = await fromUntyped("integration_credentials")
       .select("*")
       .eq("user_id", userData.user.id)
       .eq("provider", provider)
@@ -315,7 +316,7 @@ export class OAuthService {
       throw new Error("User not authenticated");
     }
 
-    const { data: credentials, error } = await (supabase.from as Function)("integration_credentials")
+    const { data: credentials, error } = await fromUntyped("integration_credentials")
       .select("*")
       .eq("user_id", userData.user.id)
       .eq("provider", provider)
@@ -347,7 +348,7 @@ export class OAuthService {
       throw new Error("User not authenticated");
     }
 
-    const { error } = await (supabase.from as Function)("integration_credentials")
+    const { error } = await fromUntyped("integration_credentials")
       .delete()
       .eq("user_id", userData.user.id)
       .eq("provider", provider);
@@ -368,7 +369,7 @@ export class OAuthService {
       return false;
     }
 
-    const { data, error } = await (supabase.from as Function)("integration_credentials")
+    const { data, error } = await fromUntyped("integration_credentials")
       .select("id")
       .eq("user_id", userData.user.id)
       .eq("provider", provider)
@@ -388,7 +389,7 @@ export class OAuthService {
     try {
       const { data: userData } = await supabase.auth.getUser();
       
-      await (supabase.from as Function)("integration_logs")
+      await fromUntyped("integration_logs")
         .insert({
           user_id: userData.user?.id,
           provider,
@@ -413,7 +414,7 @@ export class OAuthService {
       return [];
     }
 
-    let query = (supabase.from as Function)("integration_logs")
+    let query = fromUntyped("integration_logs")
       .select("*")
       .eq("user_id", userData.user.id)
       .order("created_at", { ascending: false })

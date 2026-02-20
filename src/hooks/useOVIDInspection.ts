@@ -1,5 +1,6 @@
 import { useState, useCallback, useEffect } from 'react';
 import { supabase } from '@/integrations/supabase/client';
+import { fromUntyped } from '@/integrations/supabase/untyped-client';
 import { toast } from 'sonner';
 import { useDebouncedValue } from './use-debounced-value';
 import { logger } from '@/lib/logger';
@@ -53,7 +54,7 @@ export function useOVIDInspection(inspectionId?: string) {
     setIsLoading(true);
     try {
       // Use dynamic table access for tables not yet in generated types
-      const { data: inspData, error: inspError } = await (supabase.from as Function)('ovid_inspections')
+      const { data: inspData, error: inspError } = await fromUntyped('ovid_inspections')
         .select('*')
         .eq('id', id)
         .single();
@@ -61,7 +62,7 @@ export function useOVIDInspection(inspectionId?: string) {
       if (inspError) throw inspError;
       setInspection(inspData as OVIDInspection);
 
-      const { data: ansData, error: ansError } = await (supabase.from as Function)('ovid_answers')
+      const { data: ansData, error: ansError } = await fromUntyped('ovid_answers')
         .select('*')
         .eq('inspection_id', id);
 
@@ -80,7 +81,7 @@ export function useOVIDInspection(inspectionId?: string) {
       setAnswers(answersMap);
 
       // Load photos
-      const { data: photoData } = await (supabase.from as Function)('ovid_evidence_photos')
+      const { data: photoData } = await fromUntyped('ovid_evidence_photos')
         .select('*')
         .eq('inspection_id', id);
       
@@ -109,7 +110,7 @@ export function useOVIDInspection(inspectionId?: string) {
       const { data: user } = await supabase.auth.getUser();
       if (!user.user) throw new Error('User not authenticated');
 
-      const { data: newInsp, error } = await (supabase.from as Function)('ovid_inspections')
+      const { data: newInsp, error } = await fromUntyped('ovid_inspections')
         .insert({
           ...data,
           user_id: user.user.id,
@@ -152,7 +153,7 @@ export function useOVIDInspection(inspectionId?: string) {
           observation: (ans as OVIDAnswer).observation,
         }));
 
-        const { error } = await (supabase.from as Function)('ovid_answers')
+        const { error } = await fromUntyped('ovid_answers')
           .upsert(updates, { onConflict: 'inspection_id,question_id' });
 
         if (error) throw error;
@@ -164,7 +165,7 @@ export function useOVIDInspection(inspectionId?: string) {
         const answered = compliant + nonCompliant + notApplicable;
         const score = answered > 0 ? Math.round(((compliant + notApplicable) / answered) * 100) : 0;
 
-        await (supabase.from as Function)('ovid_inspections')
+        await fromUntyped('ovid_inspections')
           .update({
             compliant_count: compliant,
             non_compliant_count: nonCompliant,
@@ -189,7 +190,7 @@ export function useOVIDInspection(inspectionId?: string) {
     if (!inspection?.id) return false;
     
     try {
-      const { error } = await (supabase.from as Function)('ovid_inspections')
+      const { error } = await fromUntyped('ovid_inspections')
         .update({
           status: 'completed',
           completed_at: new Date().toISOString(),
@@ -210,7 +211,7 @@ export function useOVIDInspection(inspectionId?: string) {
   // Load inspection history
   const loadHistory = useCallback(async (): Promise<OVIDInspection[]> => {
     try {
-      const { data, error } = await (supabase.from as Function)('ovid_inspections')
+      const { data, error } = await fromUntyped('ovid_inspections')
         .select('*')
         .order('created_at', { ascending: false })
         .limit(50);
@@ -239,7 +240,7 @@ export function useOVIDInspection(inspectionId?: string) {
 
       if (uploadError) throw uploadError;
 
-      const { error: dbError } = await (supabase.from as Function)('ovid_evidence_photos')
+      const { error: dbError } = await fromUntyped('ovid_evidence_photos')
         .insert({
           inspection_id: inspection.id,
           question_id: questionId,
