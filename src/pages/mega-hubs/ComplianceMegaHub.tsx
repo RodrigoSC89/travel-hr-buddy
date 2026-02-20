@@ -37,6 +37,7 @@ import { HubModulesBrowser } from '@/components/ui/HubModulesBrowser';
 import { COMPLIANCE_ABSORBED, COMPLIANCE_TAB_MODULES } from '@/lib/hub-absorbed-modules';
 import { TabTriggerWithModules } from '@/components/ui/TabTriggerWithModules';
 import { ModuleLauncherModal } from '@/components/ui/ModuleLauncherModal';
+import { cn } from '@/lib/utils';
 
 // ═══════════════════════════════════════════════════════════
 // LAZY LOAD - SUB-COMPONENTS
@@ -111,7 +112,8 @@ interface TabConfig {
 
 const tabConfig: TabConfig[] = [
   { id: 'hub', label: 'Compliance Hub', icon: Shield },
-  { id: 'audit-workflow', label: 'Audit Workflow', icon: ClipboardCheck },
+  { id: 'audits', label: '12 Auditorias', icon: ClipboardCheck },
+  { id: 'audit-workflow', label: 'Audit Workflow', icon: ClipboardList },
   { id: 'scorecard', label: 'Scorecard', icon: BarChart3 },
   { id: 'audit-agents', label: '10 AI Agents', icon: Bot },
   { id: 'certificates', label: 'Certificates', icon: Award },
@@ -124,6 +126,24 @@ const tabConfig: TabConfig[] = [
   { id: 'ism-kpi', label: 'ISM KPIs', icon: Activity },
   { id: 'sire2', label: 'SIRE 2.0', icon: Radar },
   { id: 'ai-hub', label: '🧠 IA Compliance', icon: Brain },
+];
+
+// ═══════════════════════════════════════════════════════════
+// CARDS DAS 12 AUDITORIAS MARÍTIMAS
+// ═══════════════════════════════════════════════════════════
+const AUDIT_STANDARDS_CARDS: { key: string; label: string; description: string; icon: LucideIcon; color: string }[] = [
+  { key: 'peo-dp', label: 'PEO-DP', description: 'Petrobras DP Operations', icon: Target, color: 'from-blue-500/20 to-blue-600/10 border-blue-500/30' },
+  { key: 'peotram', label: 'PEOTRAM', description: 'Petrobras Transport', icon: Activity, color: 'from-indigo-500/20 to-indigo-600/10 border-indigo-500/30' },
+  { key: 'ism', label: 'ISM Code', description: 'International Safety Management', icon: Shield, color: 'from-emerald-500/20 to-emerald-600/10 border-emerald-500/30' },
+  { key: 'isps', label: 'ISPS Code', description: 'Port Facility Security', icon: Lock, color: 'from-red-500/20 to-red-600/10 border-red-500/30' },
+  { key: 'solas', label: 'SOLAS', description: 'Safety of Life at Sea', icon: AlertTriangle, color: 'from-orange-500/20 to-orange-600/10 border-orange-500/30' },
+  { key: 'marpol', label: 'MARPOL', description: 'Marine Pollution Prevention', icon: FileText, color: 'from-teal-500/20 to-teal-600/10 border-teal-500/30' },
+  { key: 'pre-ovid', label: 'Pre-OVID', description: 'OCIMF Vessel Inspection', icon: ClipboardCheck, color: 'from-purple-500/20 to-purple-600/10 border-purple-500/30' },
+  { key: 'pre-mlc', label: 'MLC 2006', description: 'Maritime Labour Convention', icon: Award, color: 'from-amber-500/20 to-amber-600/10 border-amber-500/30' },
+  { key: 'psc', label: 'PSC', description: 'Port State Control', icon: Radar, color: 'from-cyan-500/20 to-cyan-600/10 border-cyan-500/30' },
+  { key: 'sgso', label: 'SGSO (ANP)', description: 'Sistema de Gestão de Segurança Operacional', icon: HardHat, color: 'from-rose-500/20 to-rose-600/10 border-rose-500/30' },
+  { key: 'pre-sire', label: 'Pre-SIRE', description: 'Ship Inspection Report Exchange', icon: BarChart3, color: 'from-violet-500/20 to-violet-600/10 border-violet-500/30' },
+  { key: 'tmsa', label: 'TMSA', description: 'Tanker Management Self Assessment', icon: Bot, color: 'from-fuchsia-500/20 to-fuchsia-600/10 border-fuchsia-500/30' },
 ];
 
 // ═══════════════════════════════════════════════════════════
@@ -491,6 +511,35 @@ export default function ComplianceMegaHub() {
               {/* AuditWorkflowManager removed */}
             </TabsContent>
             
+            <TabsContent value="audits" className="mt-0 space-y-6">
+              <div className="text-center mb-6">
+                <h2 className="text-xl font-bold text-foreground">12 Auditorias Marítimas</h2>
+                <p className="text-sm text-muted-foreground mt-1">IMO, OCIMF, ILO, ANP — Selecione um padrão para iniciar</p>
+              </div>
+              <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 xl:grid-cols-4 gap-4">
+                {AUDIT_STANDARDS_CARDS.map((std) => (
+                  <button
+                    key={std.key}
+                    onClick={() => setSearchParams({ tab: 'audits', standard: std.key })}
+                    className={cn(
+                      "group relative flex flex-col items-start gap-3 p-5 rounded-2xl border",
+                      "bg-gradient-to-br transition-all duration-300 text-left",
+                      "hover:shadow-lg hover:scale-[1.02] active:scale-[0.98]",
+                      std.color
+                    )}
+                  >
+                    <div className="p-2.5 rounded-xl bg-background/60 backdrop-blur-sm group-hover:bg-background/80 transition-colors">
+                      <std.icon className="h-5 w-5 text-foreground" />
+                    </div>
+                    <div>
+                      <div className="text-base font-bold text-foreground">{std.label}</div>
+                      <div className="text-xs text-muted-foreground mt-0.5 leading-relaxed">{std.description}</div>
+                    </div>
+                  </button>
+                ))}
+              </div>
+            </TabsContent>
+
             <TabsContent value="scorecard" className="mt-0">
               <ComplianceScorecardPage />
             </TabsContent>
