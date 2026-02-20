@@ -324,6 +324,8 @@ export const AppRoutes = () => (
       <Route path="/collaboration" element={<Pages.Collaboration />} />
       <Route path="/roadmap" element={<Pages.BusinessRoadmapPage />} />
       <Route path="/business-roadmap" element={<Pages.BusinessRoadmapPage />} />
+      <Route path="/consolidation-plan" element={<Pages.ModuleConsolidationPlan />} />
+      <Route path="/module-consolidation" element={<Pages.ModuleConsolidationPlan />} />
       <Route path="/client-portal" element={<Pages.ClientPortalPage />} />
       <Route path="/whatsapp-bot" element={<Pages.WhatsAppBotPage />} />
       
