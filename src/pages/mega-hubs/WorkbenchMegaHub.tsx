@@ -25,6 +25,8 @@ import { useRealActionHandlers } from '@/hooks/useRealActionHandlers';
 import { toast } from 'sonner';
 import { CrossModulePanel } from '@/components/integration';
 import { publishEvent } from '@/lib/events/event-bus';
+import { HubModulesBrowser } from '@/components/ui/HubModulesBrowser';
+import { WORKBENCH_ABSORBED } from '@/lib/hub-absorbed-modules';
 
 // Lazy load sub-components
 const DocumentCenterHub = lazy(() => import('@/pages/Documents'));
@@ -84,6 +86,7 @@ const sectionConfig = [
   { id: 'ai-crew', label: '🧠 Crew AI', icon: Heart, color: 'pink' },
   { id: 'ai-finance', label: '🧠 Finance AI', icon: Brain, color: 'indigo' },
   { id: 'ai-docs', label: '🧠 Docs AI', icon: Brain, color: 'cyan' },
+  { id: 'modules', label: '📦 Módulos', icon: Briefcase, color: 'gray' },
 ];
 
 export default function WorkbenchMegaHub() {
@@ -96,6 +99,7 @@ export default function WorkbenchMegaHub() {
   // Determine section from path or query params
   const pathSection = location.pathname.split('/')[2] || '';
   const activeSection = pathSection || searchParams.get('section') || 'docs';
+  const activeModuleId = searchParams.get('module');
 
   // Real data: crew members
   const { data: crewMembers = [], isLoading: crewLoading } = useQuery({
@@ -644,6 +648,19 @@ export default function WorkbenchMegaHub() {
 
             <TabsContent value="ai-docs" className="mt-0">
               <DocumentsAIHub />
+            </TabsContent>
+
+            <TabsContent value="modules" className="mt-0">
+              <HubModulesBrowser
+                modules={WORKBENCH_ABSORBED}
+                hubName="Área de Trabalho"
+                hubColor="text-hub-workbench"
+                activeModuleId={activeModuleId}
+                onModuleSelect={(id) => {
+                  if (id) setSearchParams({ section: 'modules', module: id });
+                  else setSearchParams({ section: 'modules' });
+                }}
+              />
             </TabsContent>
           </Suspense>
         </div>

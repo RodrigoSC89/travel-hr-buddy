@@ -26,6 +26,8 @@ import { useRealActionHandlers } from '@/hooks/useRealActionHandlers';
 import { useOperationsCommandData } from '@/hooks/useOperationsCommandData';
 import { toast } from 'sonner';
 import { CrossModulePanel } from '@/components/integration';
+import { HubModulesBrowser } from '@/components/ui/HubModulesBrowser';
+import { COMMAND_ABSORBED } from '@/lib/hub-absorbed-modules';
 
 // Lazy load sub-components
 const EnhancedUnifiedDashboard = lazy(() => import('@/components/dashboard/enhanced-unified-dashboard'));
@@ -93,10 +95,12 @@ const tabConfig = [
   { id: 'ceo', label: '👔 CEO Dashboard', icon: BarChart3 },
   { id: 'my-dashboard', label: '🎯 Meu Dashboard', icon: Activity },
   { id: 'performance', label: '📊 Performance', icon: Gauge },
+  { id: 'modules', label: '📦 Módulos', icon: Compass },
 ];
 
 export default function CommandMegaHub() {
   const [searchParams, setSearchParams] = useSearchParams();
+  const activeModuleId = searchParams.get('module');
   const navigate = useNavigate();
   const activeTab = searchParams.get('tab') || 'overview';
   const queryClient = useQueryClient();
@@ -505,6 +509,19 @@ export default function CommandMegaHub() {
 
             <TabsContent value="performance" className="mt-0 space-y-6">
               <PerformanceMetrics />
+            </TabsContent>
+
+            <TabsContent value="modules" className="mt-0">
+              <HubModulesBrowser
+                modules={COMMAND_ABSORBED}
+                hubName="Central de Comando"
+                hubColor="text-hub-command"
+                activeModuleId={activeModuleId}
+                onModuleSelect={(id) => {
+                  if (id) setSearchParams({ tab: 'modules', module: id });
+                  else setSearchParams({ tab: 'modules' });
+                }}
+              />
             </TabsContent>
           </Suspense>
         </div>

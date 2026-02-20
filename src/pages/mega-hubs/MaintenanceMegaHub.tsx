@@ -29,6 +29,8 @@ import { useRealActionHandlers } from '@/hooks/useRealActionHandlers';
 import { toast } from 'sonner';
 import { CrossModulePanel } from '@/components/integration';
 import { publishEvent } from '@/lib/events/event-bus';
+import { HubModulesBrowser } from '@/components/ui/HubModulesBrowser';
+import { MAINTENANCE_ABSORBED } from '@/lib/hub-absorbed-modules';
 
 // Lazy load sub-components
 const MaintenanceHub = lazy(() => import('@/pages/MaintenanceCommandCenter'));
@@ -90,12 +92,14 @@ const tabConfig = [
   { id: 'sensor-logbook', label: 'Sensor Logbook', icon: Radio },
   { id: 'cbm', label: 'CBM', icon: Vibrate },
   { id: 'ai-hub', label: '🧠 IA Hub', icon: Sparkles },
+  { id: 'modules', label: '📦 Módulos', icon: Wrench },
 ];
 
 export default function MaintenanceMegaHub() {
   const [searchParams, setSearchParams] = useSearchParams();
   const activeTab = searchParams.get('tab') || 'overview';
   const mode = searchParams.get('mode');
+  const activeModuleId = searchParams.get('module');
   const queryClient = useQueryClient();
   const { createMaintenanceOrder, exportToCSV } = useRealActionHandlers();
 
@@ -476,6 +480,19 @@ export default function MaintenanceMegaHub() {
 
             <TabsContent value="ai-hub" className="mt-0">
               <MaintenanceAIHub />
+            </TabsContent>
+
+            <TabsContent value="modules" className="mt-0">
+              <HubModulesBrowser
+                modules={MAINTENANCE_ABSORBED}
+                hubName="Hub de Manutenção"
+                hubColor="text-hub-maintenance"
+                activeModuleId={activeModuleId}
+                onModuleSelect={(id) => {
+                  if (id) setSearchParams({ tab: 'modules', module: id });
+                  else setSearchParams({ tab: 'modules' });
+                }}
+              />
             </TabsContent>
           </Suspense>
         </div>
