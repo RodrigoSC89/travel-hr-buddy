@@ -140,6 +140,33 @@ const KNOWN_UNTYPED_TABLES = new Set([
   // Health & Wellbeing
   "crew_health_metrics", "health_anomalies",
   
+  // MARPOL & Environment
+  "equipment_sensors",
+  
+  // Checklists & Analysis
+  "checklist_ai_analysis",
+  
+  // Maritime Audits
+  "peotram_audits", "preovid_audits", "peotram_moc_requests",
+  
+  // MLC Extended
+  "mlc_dmlc",
+  
+  // Analytics
+  "analytics_events",
+  
+  // Routing
+  "voyage_routes",
+  
+  // Payroll
+  "crew_payroll",
+  
+  // Document Registry
+  "document_registry",
+  
+  // Scheduled Reports
+  "scheduled_reports",
+  
   // Miscellaneous
   "vessel_restrictions", "ia_performance_log",
 ]);

@@ -3,7 +3,7 @@
  * AI-powered route optimization based on weather forecasts and risk avoidance
  */
 
-import { supabase } from "@/integrations/supabase/client";
+import { fromUntyped } from "@/integrations/supabase/untyped-client";
 import { getWeatherData, NormalizedWeatherData } from "@/services/weather";
 import * as Sentry from "@sentry/react";
 import { logger } from "@/lib/logger";
@@ -574,7 +574,7 @@ export async function storeRouteCalculation(
   vesselId?: string
 ): Promise<void> {
   try {
-    await (supabase.from as Function)("voyage_routes").insert({
+    await fromUntyped("voyage_routes").insert({
       vessel_id: vesselId,
       origin: result.recommendedRoute.waypoints[0],
       destination: result.recommendedRoute.waypoints[result.recommendedRoute.waypoints.length - 1],

@@ -11,6 +11,7 @@
  */
 
 import { supabase } from "@/integrations/supabase/client";
+import { fromUntyped } from "@/integrations/supabase/untyped-client";
 import { logger } from "@/lib/logger";
 import type { DomainEvent } from "@/lib/events/event-bus";
 
@@ -2037,7 +2038,7 @@ const SIDE_EFFECTS: Record<string, SideEffectFn[]> = {
 
 async function safeInsert(table: string, data: Record<string, unknown>): Promise<boolean> {
   try {
-    const { error } = await (supabase.from as Function)(table).insert({
+    const { error } = await fromUntyped(table).insert({
       ...data,
       created_at: data.created_at ?? new Date().toISOString(),
     });
@@ -2054,7 +2055,7 @@ async function safeInsert(table: string, data: Record<string, unknown>): Promise
 
 async function safeUpdate(table: string, data: Record<string, unknown>, match: Record<string, string>): Promise<boolean> {
   try {
-    let query = (supabase.from as Function)(table).update({
+    let query = fromUntyped(table).update({
       ...data,
       updated_at: new Date().toISOString(),
     });

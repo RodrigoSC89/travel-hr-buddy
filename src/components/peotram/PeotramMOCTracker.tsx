@@ -14,7 +14,7 @@ import { Progress } from "@/components/ui/progress";
 import { AlertTriangle, ArrowRight, CheckCircle, Clock, FileText, GitBranch, Plus, Shield, Target, Users } from "lucide-react";
 import { toast } from "sonner";
 import { useQuery, useMutation, useQueryClient } from "@tanstack/react-query";
-import { supabase } from "@/integrations/supabase/client";
+import { fromUntyped } from "@/integrations/supabase/untyped-client";
 
 const FLOW_STEPS = [
   { key: "draft", label: "Solicitação", icon: FileText },
@@ -46,7 +46,7 @@ export const PeotramMOCTracker: React.FC = () => {
   const { data: mocs = [], isLoading } = useQuery({
     queryKey: ["peotram-moc-requests"],
     queryFn: async () => {
-      const { data, error } = await (supabase.from as Function)("peotram_moc_requests")
+      const { data, error } = await fromUntyped("peotram_moc_requests")
         .select("*")
         .order("created_at", { ascending: false });
       if (error) throw error;
@@ -57,7 +57,7 @@ export const PeotramMOCTracker: React.FC = () => {
   const createMutation = useMutation({
     mutationFn: async (moc: Record<string, unknown>) => {
       const count = mocs.length + 1;
-      const { error } = await (supabase.from as Function)("peotram_moc_requests").insert({
+      const { error } = await fromUntyped("peotram_moc_requests").insert({
         ...moc,
         moc_number: `MOC-2026-${String(count).padStart(3, "0")}`,
         request_date: new Date().toISOString().split("T")[0],
@@ -77,7 +77,7 @@ export const PeotramMOCTracker: React.FC = () => {
 
   const updateMutation = useMutation({
     mutationFn: async ({ id, updates }: { id: string; updates: Record<string, unknown> }) => {
-      const { error } = await (supabase.from as Function)("peotram_moc_requests").update(updates).eq("id", id);
+      const { error } = await fromUntyped("peotram_moc_requests").update(updates).eq("id", id);
       if (error) throw error;
     },
     onSuccess: () => {

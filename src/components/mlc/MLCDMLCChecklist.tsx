@@ -11,7 +11,7 @@ import { Select, SelectContent, SelectItem, SelectTrigger, SelectValue } from "@
 import { Download, Loader2, Save } from "lucide-react";
 import { toast } from "sonner";
 import { useQuery, useMutation, useQueryClient } from "@tanstack/react-query";
-import { supabase } from "@/integrations/supabase/client";
+import { fromUntyped } from "@/integrations/supabase/untyped-client";
 
 interface DMLCItem {
   id: string;
@@ -48,7 +48,7 @@ export function MLCDMLCChecklist() {
   const { data: items = DEFAULT_DMLC_ITEMS, isLoading } = useQuery({
     queryKey: ["mlc-dmlc"],
     queryFn: async () => {
-      const { data, error } = await (supabase.from as Function)("mlc_dmlc")
+      const { data, error } = await fromUntyped("mlc_dmlc")
         .select("*")
         .order("item_number");
       if (error) throw error;
@@ -71,7 +71,7 @@ export function MLCDMLCChecklist() {
   const saveMutation = useMutation({
     mutationFn: async (itemsToSave: DMLCItem[]) => {
       for (const item of itemsToSave) {
-        const { error } = await (supabase.from as Function)("mlc_dmlc").upsert({
+        const { error } = await fromUntyped("mlc_dmlc").upsert({
           id: item.id,
           title: item.title,
           regulation: item.regulation,

@@ -4,6 +4,7 @@
  */
 
 import { supabase } from '@/integrations/supabase/client';
+import { fromUntyped } from '@/integrations/supabase/untyped-client';
 import { logger } from '@/lib/logger';
 
 export type DocumentCategory = 
@@ -109,7 +110,7 @@ export async function createDocument(
     status: 'draft',
   } as Record<string, unknown>;
 
-  const { data: doc, error } = await (supabase.from as Function)('document_registry')
+  const { data: doc, error } = await fromUntyped('document_registry')
     .insert(insertData)
     .select()
     .single();
