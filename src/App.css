@@ -1,26 +1,104 @@
-/* Nautilus One - Global App Styles */
+/* Nautilus One - Global App Styles v2 — Premium UX */
 
+/* ─── Root ─── */
 #root {
   width: 100%;
   min-height: 100vh;
-  min-height: 100dvh; /* Dynamic viewport height for mobile browsers */
+  min-height: 100dvh;
 }
 
-/* Smooth scrolling for the entire app */
+/* ─── Base HTML ─── */
 html {
   scroll-behavior: smooth;
   -webkit-text-size-adjust: 100%;
   text-size-adjust: 100%;
+  /* Custom selection color */
+  --selection-bg: hsl(var(--primary) / 0.25);
+  --selection-fg: hsl(var(--foreground));
 }
 
-/* Prevent horizontal overflow globally */
+::selection {
+  background: var(--selection-bg);
+  color: var(--selection-fg);
+}
+
 body {
   overflow-x: hidden;
   -webkit-font-smoothing: antialiased;
   -moz-osx-font-smoothing: grayscale;
 }
 
-/* Desktop: full-width layout with no constraints */
+/* ─── Focus ring — accessible & beautiful ─── */
+*:focus-visible {
+  outline: 2px solid hsl(var(--primary) / 0.6);
+  outline-offset: 2px;
+  border-radius: 4px;
+  transition: outline-offset 0.15s ease;
+}
+
+/* ─── Scrollbar — subtle & modern ─── */
+::-webkit-scrollbar {
+  width: 6px;
+  height: 6px;
+}
+
+::-webkit-scrollbar-track {
+  background: transparent;
+}
+
+::-webkit-scrollbar-thumb {
+  background: hsl(var(--muted-foreground) / 0.2);
+  border-radius: 999px;
+  transition: background 0.2s;
+}
+
+::-webkit-scrollbar-thumb:hover {
+  background: hsl(var(--muted-foreground) / 0.35);
+}
+
+/* Firefox scrollbar */
+* {
+  scrollbar-width: thin;
+  scrollbar-color: hsl(var(--muted-foreground) / 0.2) transparent;
+}
+
+/* ─── Shimmer skeleton animation ─── */
+@keyframes shimmer {
+  0% { background-position: -200% 0; }
+  100% { background-position: 200% 0; }
+}
+
+.skeleton-shimmer {
+  background: linear-gradient(
+    90deg,
+    hsl(var(--muted)) 0%,
+    hsl(var(--muted-foreground) / 0.08) 40%,
+    hsl(var(--muted)) 80%
+  );
+  background-size: 200% 100%;
+  animation: shimmer 1.8s ease-in-out infinite;
+}
+
+/* ─── Smooth image loading ─── */
+img {
+  transition: opacity 0.3s ease;
+}
+
+img[loading="lazy"] {
+  opacity: 0;
+}
+
+img[loading="lazy"].loaded,
+img:not([loading="lazy"]) {
+  opacity: 1;
+}
+
+/* ─── Touch improvements ─── */
+button, a, [role="button"], input, select, textarea {
+  -webkit-tap-highlight-color: transparent;
+}
+
+/* ─── Layout: Desktop ─── */
 @media (min-width: 1024px) {
   #root {
     display: flex;
@@ -28,7 +106,7 @@ body {
   }
 }
 
-/* Tablet: optimize for touch and medium screens */
+/* ─── Layout: Tablet ─── */
 @media (min-width: 768px) and (max-width: 1023px) {
   #root {
     display: flex;
@@ -36,32 +114,78 @@ body {
   }
 }
 
-/* Mobile: optimize for small screens and PWA */
+/* ─── Layout: Mobile ─── */
 @media (max-width: 767px) {
   #root {
     display: flex;
     flex-direction: column;
   }
-  
-  /* Prevent content from being hidden behind bottom nav */
+
   main {
     padding-bottom: calc(4rem + env(safe-area-inset-bottom, 0px)) !important;
   }
-}
 
-/* PWA standalone mode adjustments */
-@media (display-mode: standalone) {
-  body {
-    /* Prevent pull-to-refresh in PWA */
-    overscroll-behavior-y: contain;
+  /* Larger touch targets on mobile */
+  button:not(.compact-btn),
+  [role="button"]:not(.compact-btn) {
+    min-height: 44px;
+    min-width: 44px;
   }
 }
 
-/* iOS PWA status bar area */
+/* ─── PWA standalone mode ─── */
+@media (display-mode: standalone) {
+  body {
+    overscroll-behavior-y: contain;
+    /* Prevent long-press context menu in PWA */
+    -webkit-touch-callout: none;
+  }
+}
+
+/* iOS PWA safe area */
 @supports (padding-top: env(safe-area-inset-top)) {
   @media (display-mode: standalone) {
     #root {
       padding-top: env(safe-area-inset-top);
     }
+  }
+}
+
+/* ─── Toast enhancements ─── */
+[data-sonner-toaster] {
+  --normal-bg: hsl(var(--background));
+  --normal-border: hsl(var(--border));
+  --normal-text: hsl(var(--foreground));
+}
+
+[data-sonner-toast] {
+  border-radius: 12px !important;
+  box-shadow: 0 8px 32px hsl(0 0% 0% / 0.12), 0 0 0 1px hsl(var(--border) / 0.5) !important;
+}
+
+/* ─── Card hover lift ─── */
+.card-lift {
+  transition: transform 0.2s ease, box-shadow 0.2s ease;
+}
+
+.card-lift:hover {
+  transform: translateY(-2px);
+  box-shadow: 0 8px 24px hsl(0 0% 0% / 0.08);
+}
+
+/* ─── Gradient text utility ─── */
+@keyframes gradient-shift {
+  0%, 100% { background-position: 0% 50%; }
+  50% { background-position: 100% 50%; }
+}
+
+/* ─── Print styles ─── */
+@media print {
+  nav, header, footer, [data-sonner-toaster], .mobile-bottom-nav {
+    display: none !important;
+  }
+  
+  main {
+    padding: 0 !important;
   }
 }

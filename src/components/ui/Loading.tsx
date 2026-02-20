@@ -141,7 +141,7 @@ export const LoadingSkeleton: React.FC<LoadingSkeletonProps> = ({ className }) =
   return (
     <div
       className={cn(
-        "animate-pulse rounded-md bg-muted",
+        "rounded-md skeleton-shimmer",
         className
       )}
       aria-hidden="true"
