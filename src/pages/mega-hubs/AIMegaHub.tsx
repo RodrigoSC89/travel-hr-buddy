@@ -30,6 +30,8 @@ import { useRealActionHandlers } from '@/hooks/useRealActionHandlers';
 import { toast } from 'sonner';
 import { CrossModulePanel } from '@/components/integration';
 import { publishEvent } from '@/lib/events/event-bus';
+import { HubModulesBrowser } from '@/components/ui/HubModulesBrowser';
+import { AI_ABSORBED } from '@/lib/hub-absorbed-modules';
 
 // Lazy load sub-components
 const AIControlTowerHub = lazy(() => import('@/pages/AIHubPage'));
@@ -97,6 +99,7 @@ const tabConfig = [
   { id: 'intelligence', label: 'Intelligence', icon: FileText },
   { id: 'analytics', label: 'Analytics', icon: BarChart3 },
   { id: 'predictive', label: '🔮 Predictive', icon: Activity },
+  { id: 'all-modules', label: '📦 Módulos', icon: Cpu },
 ];
 
 // Map old tab IDs to new grouped IDs for backward compatibility
@@ -118,6 +121,7 @@ export default function AIMegaHub() {
   const rawTab = searchParams.get('tab') || 'hub';
   // Migrate old tab IDs to new ones
   const activeTab = TAB_MIGRATION[rawTab] || rawTab;
+  const activeModuleId = searchParams.get('module');
   const queryClient = useQueryClient();
   const navigate = useNavigate();
   const { exportToJSON } = useRealActionHandlers();
@@ -507,6 +511,19 @@ export default function AIMegaHub() {
             {/* 9. Predictive Insights */}
             <TabsContent value="predictive" className="mt-0">
               <AIPredictiveInsights />
+            </TabsContent>
+
+            <TabsContent value="all-modules" className="mt-0">
+              <HubModulesBrowser
+                modules={AI_ABSORBED}
+                hubName="Hub de IA"
+                hubColor="text-hub-ai"
+                activeModuleId={activeModuleId}
+                onModuleSelect={(id) => {
+                  if (id) setSearchParams({ tab: 'all-modules', module: id });
+                  else setSearchParams({ tab: 'all-modules' });
+                }}
+              />
             </TabsContent>
           </Suspense>
         </div>

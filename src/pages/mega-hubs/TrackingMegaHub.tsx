@@ -25,6 +25,8 @@ import { useRealActionHandlers } from '@/hooks/useRealActionHandlers';
 import { toast } from 'sonner';
 import { CrossModulePanel } from '@/components/integration';
 import { useCreateTrackingAlert } from '@/hooks/useModuleHooks';
+import { HubModulesBrowser } from '@/components/ui/HubModulesBrowser';
+import { TRACKING_ABSORBED } from '@/lib/hub-absorbed-modules';
 
 // Lazy load sub-components
 const TrackingTelemetryHub = lazy(() => import('@/pages/TelemetriaCommand'));
@@ -69,12 +71,14 @@ const tabConfig = [
   { id: 'geofencing', label: 'Geofencing', icon: MapPin },
   { id: 'alerts', label: 'Alerts', icon: AlertTriangle },
   { id: 'ai-copilot', label: '🧠 IA Hub', icon: Brain },
+  { id: 'modules', label: '📦 Módulos', icon: Satellite },
 ];
 
 export default function TrackingMegaHub() {
   const navigate = useNavigate();
   const [searchParams, setSearchParams] = useSearchParams();
   const activeTab = searchParams.get('tab') || 'overview';
+  const activeModuleId = searchParams.get('module');
   const queryClient = useQueryClient();
   const { exportToCSV } = useRealActionHandlers();
   const createAlertMutation = useCreateTrackingAlert();
@@ -403,6 +407,19 @@ export default function TrackingMegaHub() {
 
             <TabsContent value="ai-copilot" className="mt-0">
               <TrackingAIHub />
+            </TabsContent>
+
+            <TabsContent value="modules" className="mt-0">
+              <HubModulesBrowser
+                modules={TRACKING_ABSORBED}
+                hubName="Hub de Rastreamento"
+                hubColor="text-hub-tracking"
+                activeModuleId={activeModuleId}
+                onModuleSelect={(id) => {
+                  if (id) setSearchParams({ tab: 'modules', module: id });
+                  else setSearchParams({ tab: 'modules' });
+                }}
+              />
             </TabsContent>
           </Suspense>
         </div>

@@ -24,6 +24,8 @@ import { useRealActionHandlers } from '@/hooks/useRealActionHandlers';
 import { toast } from 'sonner';
 import { NewVoyageDialog } from '@/components/operations/QuickActionDialogs';
 import { CrossModulePanel } from '@/components/integration';
+import { HubModulesBrowser } from '@/components/ui/HubModulesBrowser';
+import { OPS_ABSORBED } from '@/lib/hub-absorbed-modules';
 // Lazy load sub-components
 const OperationsCommandHub = lazy(() => import('@/pages/OperationsCommandCenter'));
 const MaritimeCommandCenter = lazy(() => import('@/pages/MaritimeCommandCenter'));
@@ -88,11 +90,13 @@ const tabConfig = [
   { id: 'fuel-quality', label: 'Fuel Quality', icon: Droplets },
   { id: 'clause-library', label: 'Clause Library', icon: BookOpen },
   { id: 'ai-copilot', label: '🧠 IA Copiloto', icon: Brain },
+  { id: 'modules', label: '📦 Módulos', icon: Compass },
 ];
 
 export default function OpsMegaHub() {
   const [searchParams, setSearchParams] = useSearchParams();
   const activeTab = searchParams.get('tab') || 'overview';
+  const activeModuleId = searchParams.get('module');
   const [showActionPanel, setShowActionPanel] = useState(true);
   const [voyageDialogOpen, setVoyageDialogOpen] = useState(false);
   const queryClient = useQueryClient();
@@ -461,6 +465,19 @@ export default function OpsMegaHub() {
 
             <TabsContent value="ai-copilot" className="mt-0">
               <OperationsAIHub />
+            </TabsContent>
+
+            <TabsContent value="modules" className="mt-0">
+              <HubModulesBrowser
+                modules={OPS_ABSORBED}
+                hubName="Hub de Operações"
+                hubColor="text-hub-ops"
+                activeModuleId={activeModuleId}
+                onModuleSelect={(id) => {
+                  if (id) setSearchParams({ tab: 'modules', module: id });
+                  else setSearchParams({ tab: 'modules' });
+                }}
+              />
             </TabsContent>
           </Suspense>
         </div>
