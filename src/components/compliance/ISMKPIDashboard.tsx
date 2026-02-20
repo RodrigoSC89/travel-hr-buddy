@@ -4,7 +4,7 @@
  */
 import { useMemo } from "react";
 import { useQuery } from "@tanstack/react-query";
-import { supabase } from "@/integrations/supabase/client";
+import { fromUntyped } from "@/integrations/supabase/untyped-client";
 import { Card, CardContent, CardHeader, CardTitle } from "@/components/ui/card";
 import { Badge } from "@/components/ui/badge";
 import { Progress } from "@/components/ui/progress";
@@ -24,7 +24,7 @@ export function ISMKPIDashboard() {
   const { data: elements = [] } = useQuery({
     queryKey: ["ism_elements"],
     queryFn: async () => {
-      const { data, error } = await supabase.from("ism_elements" as any).select("*").order("element_number");
+      const { data, error } = await fromUntyped("ism_elements").select("*").order("element_number");
       if (error) throw error;
       return (data || []) as any[];
     },
@@ -33,7 +33,7 @@ export function ISMKPIDashboard() {
   const { data: gaps = [] } = useQuery({
     queryKey: ["ism_gap_analysis"],
     queryFn: async () => {
-      const { data, error } = await supabase.from("ism_gap_analysis" as any).select("*");
+      const { data, error } = await fromUntyped("ism_gap_analysis").select("*");
       if (error) throw error;
       return (data || []) as any[];
     },
@@ -42,7 +42,7 @@ export function ISMKPIDashboard() {
   const { data: capas = [] } = useQuery({
     queryKey: ["ism_capa"],
     queryFn: async () => {
-      const { data, error } = await supabase.from("ism_capa" as any).select("*");
+      const { data, error } = await fromUntyped("ism_capa").select("*");
       if (error) throw error;
       return (data || []) as any[];
     },

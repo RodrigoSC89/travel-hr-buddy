@@ -474,7 +474,7 @@ export const SmartOnboardingWizard: React.FC = () => {
       for (const automation of automations) {
         await supabase.from("automation_workflows").insert({
           ...automation,
-          organization_id: (await supabase.auth.getUser()).data.user?.id // Temporário para demo
+          organization_id: (await supabase.auth.getUser()).data.user?.user_metadata?.organization_id || (await supabase.auth.getUser()).data.user?.id
         });
       }
 

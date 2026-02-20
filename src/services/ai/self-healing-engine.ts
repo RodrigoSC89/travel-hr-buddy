@@ -276,7 +276,10 @@ class SelfHealingEngine {
         // Enable fallback mode (ephemeral runtime flag)
         try {
           sessionStorage.setItem("api-fallback-mode", "true");
-        } catch {}
+        } catch (e) {
+          // sessionStorage unavailable (private browsing, storage quota exceeded)
+          logger.warn("[SelfHealing] Cannot set fallback mode in sessionStorage", { error: e });
+        }
         break;
 
       case "authentication":

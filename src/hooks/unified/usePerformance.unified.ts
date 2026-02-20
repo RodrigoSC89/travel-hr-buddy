@@ -277,7 +277,9 @@ export function useWebVitals(): WebVitals {
       });
       lcpObserver.observe({ entryTypes: ['largest-contentful-paint'], buffered: true });
       observers.push(lcpObserver);
-    } catch {}
+    } catch {
+      // PerformanceObserver for LCP not supported in this browser
+    }
 
     try {
       // FID
@@ -289,7 +291,9 @@ export function useWebVitals(): WebVitals {
       });
       fidObserver.observe({ entryTypes: ['first-input'], buffered: true });
       observers.push(fidObserver);
-    } catch {}
+    } catch {
+      // PerformanceObserver for FID not supported in this browser
+    }
 
     try {
       // CLS
@@ -305,7 +309,9 @@ export function useWebVitals(): WebVitals {
       });
       clsObserver.observe({ entryTypes: ['layout-shift'], buffered: true });
       observers.push(clsObserver);
-    } catch {}
+    } catch {
+      // PerformanceObserver for CLS not supported in this browser
+    }
 
     return () => {
       observers.forEach(o => o.disconnect());
