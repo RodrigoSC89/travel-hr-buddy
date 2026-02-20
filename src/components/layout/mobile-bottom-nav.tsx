@@ -55,12 +55,14 @@ export const MobileBottomNav: React.FC<MobileBottomNavProps> = ({ criticalAlerts
 
   return (
     <nav 
-      className="fixed bottom-0 left-0 right-0 z-50 bg-background/95 backdrop-blur-xl border-t border-border/50 shadow-lg"
+      className="fixed bottom-0 left-0 right-0 z-50 bg-background/95 backdrop-blur-2xl border-t border-border/30 shadow-[0_-4px_24px_hsl(0_0%_0%/0.1)]"
       style={{
         paddingBottom: 'env(safe-area-inset-bottom, 0px)',
       }}
+      role="navigation"
+      aria-label="Navegação principal"
     >
-      <div className="flex items-center justify-around h-16 px-2 max-w-lg mx-auto">
+      <div className="flex items-center justify-around h-16 px-1 max-w-lg mx-auto">
         {navItems.map((item) => {
           const active = isActive(item.path);
           const Icon = item.icon;
@@ -71,47 +73,42 @@ export const MobileBottomNav: React.FC<MobileBottomNavProps> = ({ criticalAlerts
               key={item.path}
               onClick={() => handleNavClick(item.path)}
               className={cn(
-                "relative flex flex-col items-center justify-center flex-1 h-full min-h-[44px] gap-0.5 transition-all",
-                "active:scale-95 touch-manipulation",
+                "compact-btn relative flex flex-col items-center justify-center flex-1 h-full gap-0.5 transition-all duration-200",
+                "active:scale-90 touch-manipulation",
                 active 
                   ? "text-primary" 
-                  : "text-muted-foreground hover:text-foreground"
+                  : "text-muted-foreground"
               )}
               aria-label={item.label}
               aria-current={active ? "page" : undefined}
             >
               <div className="relative">
-                <Icon className={cn(
-                  "h-5 w-5 transition-all duration-200",
-                  active && "scale-110"
-                )} />
+                <motion.div
+                  animate={active ? { scale: 1.15, y: -2 } : { scale: 1, y: 0 }}
+                  transition={{ type: "spring", stiffness: 400, damping: 25 }}
+                >
+                  <Icon className="h-5 w-5" />
+                </motion.div>
                 {showBadge && (
                   <Badge 
                     variant="destructive" 
-                    className="absolute -top-2 -right-3 h-4 min-w-4 px-1 text-[9px] font-bold flex items-center justify-center"
+                    className="absolute -top-2 -right-3 h-4 min-w-4 px-1 text-[9px] font-bold flex items-center justify-center animate-pulse"
                   >
                     {criticalAlerts > 9 ? "9+" : criticalAlerts}
                   </Badge>
                 )}
-                {active && (
-                  <motion.div
-                    layoutId="mobile-nav-glow"
-                    className="absolute -inset-2 bg-primary/10 rounded-full -z-10"
-                    transition={{ type: "spring", stiffness: 300, damping: 30 }}
-                  />
-                )}
               </div>
               <span className={cn(
-                "text-[10px] font-medium transition-all",
-                active && "font-bold text-primary"
+                "text-[10px] transition-all duration-200",
+                active ? "font-bold text-primary" : "font-medium"
               )}>
                 {item.label}
               </span>
               {active && (
                 <motion.div
-                  layoutId="mobile-nav-indicator"
-                  className="absolute top-0 w-8 h-0.5 rounded-full bg-primary"
-                  transition={{ type: "spring", stiffness: 300, damping: 30 }}
+                  layoutId="mobile-nav-pill"
+                  className="absolute -top-px left-1/2 -translate-x-1/2 w-10 h-[3px] rounded-full bg-primary shadow-[0_0_8px_hsl(var(--primary)/0.4)]"
+                  transition={{ type: "spring", stiffness: 350, damping: 30 }}
                 />
               )}
             </button>
