@@ -124,13 +124,14 @@ export function AuthProvider({ children }: AuthProviderProps): JSX.Element {
     let mounted = true;
     let subscription: { unsubscribe: () => void } | null = null;
     
-    // Safety timeout - show error state but NEVER grant access
+    // Safety timeout - resolve loading faster to prevent UI flash
+    // 2s is enough for getSession() even on slow maritime networks
     const safetyTimeout = setTimeout(() => {
       if (mounted && isLoading) {
-        logger.warn("[AuthContext] Safety timeout (5s) - resolving loading state");
+        logger.warn("[AuthContext] Safety timeout (2s) - resolving loading state");
         setIsLoading(false);
       }
-    }, 5000);
+    }, 2000);
 
     // Clear any corrupted tokens on mount
     clearCorruptedTokens();
