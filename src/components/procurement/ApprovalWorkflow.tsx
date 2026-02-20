@@ -4,7 +4,7 @@
  */
 import React, { useState } from 'react';
 import { useQuery, useMutation, useQueryClient } from '@tanstack/react-query';
-import { supabase } from '@/integrations/supabase/client';
+import { fromUntyped } from '@/integrations/supabase/untyped-client';
 import { Card, CardContent, CardHeader, CardTitle, CardDescription } from '@/components/ui/card';
 import { Button } from '@/components/ui/button';
 import { Badge } from '@/components/ui/badge';
@@ -54,7 +54,7 @@ export function ApprovalWorkflow() {
   const { data: pendingItems = [], isLoading } = useQuery({
     queryKey: ['procurement-pending-approvals'],
     queryFn: async () => {
-      const { data, error } = await (supabase.from as Function)('procurement_orders')
+      const { data, error } = await fromUntyped('procurement_orders')
         .select('*')
         .eq('status', 'pending')
         .order('total_amount', { ascending: false });
@@ -67,7 +67,7 @@ export function ApprovalWorkflow() {
   const { data: recentDecisions = [] } = useQuery({
     queryKey: ['procurement-recent-decisions'],
     queryFn: async () => {
-      const { data, error } = await (supabase.from as Function)('procurement_orders')
+      const { data, error } = await fromUntyped('procurement_orders')
         .select('*')
         .in('status', ['approved', 'cancelled'])
         .order('approved_at', { ascending: false })
@@ -79,7 +79,7 @@ export function ApprovalWorkflow() {
 
   const decideMutation = useMutation({
     mutationFn: async ({ id, approved, comments }: { id: string; approved: boolean; comments: string }) => {
-      const { error } = await (supabase.from as Function)('procurement_orders')
+      const { error } = await fromUntyped('procurement_orders')
         .update({
           status: approved ? 'approved' : 'cancelled',
           approved_at: new Date().toISOString(),

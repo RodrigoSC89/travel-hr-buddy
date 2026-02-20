@@ -6,6 +6,7 @@
 import React from 'react';
 import { useQuery } from '@tanstack/react-query';
 import { supabase } from '@/integrations/supabase/client';
+import { fromUntyped } from '@/integrations/supabase/untyped-client';
 import { Card, CardContent, CardHeader, CardTitle } from '@/components/ui/card';
 import { Badge } from '@/components/ui/badge';
 import { Progress } from '@/components/ui/progress';
@@ -33,7 +34,7 @@ export default function IntegrationHealthDashboard() {
   const { data: healthRecords = [], refetch: refetchHealth } = useQuery({
     queryKey: ['integration-health'],
     queryFn: async () => {
-      const { data, error } = await (supabase.from as Function)('integration_health')
+      const { data, error } = await fromUntyped('integration_health')
         .select('*')
         .order('last_check_at', { ascending: false });
       if (error) throw error;
@@ -47,9 +48,9 @@ export default function IntegrationHealthDashboard() {
     queryKey: ['outbox-stats'],
     queryFn: async () => {
       const [pending, processed, failed] = await Promise.all([
-        (supabase.from as Function)('event_outbox').select('id', { count: 'exact', head: true }).eq('status', 'pending'),
-        (supabase.from as Function)('event_outbox').select('id', { count: 'exact', head: true }).eq('status', 'processed'),
-        (supabase.from as Function)('event_outbox').select('id', { count: 'exact', head: true }).eq('status', 'failed'),
+        fromUntyped('event_outbox').select('id', { count: 'exact', head: true }).eq('status', 'pending'),
+        fromUntyped('event_outbox').select('id', { count: 'exact', head: true }).eq('status', 'processed'),
+        fromUntyped('event_outbox').select('id', { count: 'exact', head: true }).eq('status', 'failed'),
       ]);
       return {
         pending: pending.count ?? 0,
@@ -65,7 +66,7 @@ export default function IntegrationHealthDashboard() {
   const { data: recentAudits = [] } = useQuery({
     queryKey: ['recent-audit-events-dashboard'],
     queryFn: async () => {
-      const { data, error } = await (supabase.from as Function)('audit_events')
+      const { data, error } = await fromUntyped('audit_events')
         .select('*')
         .order('created_at', { ascending: false })
         .limit(10);
@@ -79,7 +80,7 @@ export default function IntegrationHealthDashboard() {
   const { data: subscriptions = [] } = useQuery({
     queryKey: ['event-subscriptions'],
     queryFn: async () => {
-      const { data, error } = await (supabase.from as Function)('event_subscriptions')
+      const { data, error } = await fromUntyped('event_subscriptions')
         .select('*')
         .eq('enabled', true);
       if (error) throw error;

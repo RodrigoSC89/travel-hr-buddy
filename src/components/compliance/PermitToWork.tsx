@@ -15,7 +15,7 @@ import {
   ShieldAlert, Flame, Wind, Zap, Clock, CheckCircle2,
   AlertTriangle, Plus, Download, Users, Eye, Loader2
 } from "lucide-react";
-import { supabase } from "@/integrations/supabase/client";
+import { fromUntyped } from "@/integrations/supabase/untyped-client";
 import { useQuery, useMutation, useQueryClient } from "@tanstack/react-query";
 import { toast } from "sonner";
 import { quickExport } from "@/lib/export-utils";
@@ -56,7 +56,7 @@ export function PermitToWork() {
   const { data: permits = [], isLoading } = useQuery({
     queryKey: ["permits-to-work"],
     queryFn: async () => {
-      const { data, error } = await (supabase.from as Function)("permits_to_work")
+      const { data, error } = await fromUntyped("permits_to_work")
         .select("*")
         .order("created_at", { ascending: false });
       if (error) throw error;
@@ -77,7 +77,7 @@ export function PermitToWork() {
         radiation: ["Source secured", "Dosimeters issued", "Exclusion zone established", "Radiation survey complete", "Emergency procedures briefed"],
       };
       const checklist = (defaultChecklist[form.permit_type] || []).map(item => ({ item, checked: false }));
-      const { error } = await (supabase.from as Function)("permits_to_work").insert({
+      const { error } = await fromUntyped("permits_to_work").insert({
         permit_number: num, permit_type: form.permit_type, title: form.title,
         location: form.location, risk_level: form.risk_level, requested_by_name: form.requested_by_name,
         status: "pending", checklist,
@@ -97,7 +97,7 @@ export function PermitToWork() {
     mutationFn: async ({ id, status }: { id: string; status: string }) => {
       const updates: any = { status };
       if (status === "closed") updates.closed_at = new Date().toISOString();
-      const { error } = await (supabase.from as Function)("permits_to_work").update(updates).eq("id", id);
+      const { error } = await fromUntyped("permits_to_work").update(updates).eq("id", id);
       if (error) throw error;
     },
     onSuccess: () => {

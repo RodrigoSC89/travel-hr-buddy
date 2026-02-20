@@ -8,7 +8,7 @@ import { Card, CardContent, CardDescription, CardHeader, CardTitle } from "@/com
 import { Button } from "@/components/ui/button";
 import { Badge } from "@/components/ui/badge";
 import { Calendar, Clock, Download, Trash2, Play } from "lucide-react";
-import { supabase } from "@/integrations/supabase/client";
+import { fromUntyped } from "@/integrations/supabase/untyped-client";
 import { useToast } from "@/hooks/use-toast";
 import { Select, SelectContent, SelectItem, SelectTrigger, SelectValue } from "@/components/ui/select";
 import { Input } from "@/components/ui/input";
@@ -49,7 +49,7 @@ export const ScheduledReports: React.FC = () => {
 
   const fetchScheduledReports = async () => {
     try {
-      const { data, error } = await (supabase.from as Function)("scheduled_compliance_reports")
+      const { data, error } = await fromUntyped("scheduled_compliance_reports")
         .select("*")
         .order("next_run", { ascending: true });
 
@@ -77,7 +77,7 @@ export const ScheduledReports: React.FC = () => {
     try {
       const nextRun = calculateNextRun(formData.frequency);
 
-      const { error } = await (supabase.from as Function)("scheduled_compliance_reports").insert({
+      const { error } = await fromUntyped("scheduled_compliance_reports").insert({
         title: formData.title,
         template: formData.template,
         format: formData.format,
@@ -145,12 +145,12 @@ export const ScheduledReports: React.FC = () => {
       const fileName = `${report.title.replace(/\s+/g, "-")}-${Date.now()}.${report.format}`;
       const storagePath = `compliance-reports/${fileName}`;
 
-      const { error } = await (supabase.from as Function)("scheduled_compliance_reports")
+      const { error } = await fromUntyped("scheduled_compliance_reports")
         .update({
           last_run: new Date().toISOString(),
           next_run: calculateNextRun(report.frequency),
           storage_path: storagePath,
-        } as never)
+        })
         .eq("id", reportId);
 
       if (error) {
@@ -177,7 +177,7 @@ export const ScheduledReports: React.FC = () => {
 
   const deleteSchedule = async (reportId: string) => {
     try {
-      const { error } = await (supabase.from as Function)("scheduled_compliance_reports")
+      const { error } = await fromUntyped("scheduled_compliance_reports")
         .delete()
         .eq("id", reportId);
 

@@ -23,6 +23,7 @@ import {
   FileText, Calendar, ArrowRight, ChevronRight, Eye
 } from "lucide-react";
 import { supabase } from "@/integrations/supabase/client";
+import { fromUntyped } from "@/integrations/supabase/untyped-client";
 import { toast } from "sonner";
 import ReactMarkdown from "react-markdown";
 import { logger } from "@/lib/logger";
@@ -102,7 +103,7 @@ export function ComplianceSGIAutoEvidence({
       setScanProgress(Math.round(((i + 1) / SGI_DATA_SOURCES.length) * 100));
 
       try {
-        let query = (supabase.from as Function)(src.table).select("*").limit(20);
+        let query = fromUntyped(src.table).select("*").limit(20);
         if (searchVessel) {
           // Try to filter by vessel name if the table has vessel-related columns
           query = query.or(`vessel_name.ilike.%${searchVessel}%`).limit(20);

@@ -7,7 +7,7 @@ import { Card, CardContent, CardHeader, CardTitle, CardDescription } from "@/com
 import { Badge } from "@/components/ui/badge";
 import { Button } from "@/components/ui/button";
 import { useQuery, useMutation, useQueryClient } from "@tanstack/react-query";
-import { supabase } from "@/integrations/supabase/client";
+import { fromUntyped } from "@/integrations/supabase/untyped-client";
 import { toast } from "sonner";
 import { AlertTriangle, Anchor, CheckCircle, Clock, Layers, Shield, Target, Users, Activity, Zap, Loader2 } from "lucide-react";
 
@@ -55,7 +55,7 @@ export const PeoDPSIMOPSDashboard: React.FC = () => {
   const { data: simops = [], isLoading } = useQuery({
     queryKey: ["peodp-simops"],
     queryFn: async () => {
-      const { data, error } = await (supabase.from as Function)("peodp_simops")
+      const { data, error } = await fromUntyped("peodp_simops")
         .select("*")
         .order("created_at", { ascending: false });
       if (error) throw error;
@@ -78,8 +78,8 @@ export const PeoDPSIMOPSDashboard: React.FC = () => {
 
   const updateStatusMutation = useMutation({
     mutationFn: async ({ id, status }: { id: string; status: string }) => {
-      const { error } = await (supabase.from as Function)("peodp_simops")
-        .update({ status } as never).eq("id", id);
+      const { error } = await fromUntyped("peodp_simops")
+        .update({ status }).eq("id", id);
       if (error) throw error;
     },
     onSuccess: () => {

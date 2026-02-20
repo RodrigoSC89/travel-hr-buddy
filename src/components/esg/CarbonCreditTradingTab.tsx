@@ -13,7 +13,7 @@ import { toast } from "sonner";
 import { Download, TrendingUp, TrendingDown, Leaf, DollarSign, BarChart3, ShoppingCart, AlertTriangle } from "lucide-react";
 import { ResponsiveContainer, AreaChart, Area, XAxis, YAxis, CartesianGrid, Tooltip, BarChart, Bar } from "recharts";
 import { useQuery } from "@tanstack/react-query";
-import { supabase } from "@/integrations/supabase/client";
+import { fromUntyped } from "@/integrations/supabase/untyped-client";
 
 const EU_ETS_PRICE_HISTORY = [
   { month: "Jul 24", price: 65.2, volume: 1200 },
@@ -40,8 +40,7 @@ export function CarbonCreditTradingTab() {
   const { data: etsData = [] } = useQuery({
     queryKey: ["eu-ets-tracking"],
     queryFn: async () => {
-      const { data, error } = await supabase
-        .from("eu_ets_tracking" as any)
+      const { data, error } = await fromUntyped("eu_ets_tracking")
         .select("*")
         .order("created_at", { ascending: false })
         .limit(50);
