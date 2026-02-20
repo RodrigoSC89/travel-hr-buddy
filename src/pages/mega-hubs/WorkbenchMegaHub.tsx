@@ -26,7 +26,8 @@ import { toast } from 'sonner';
 import { CrossModulePanel } from '@/components/integration';
 import { publishEvent } from '@/lib/events/event-bus';
 import { HubModulesBrowser } from '@/components/ui/HubModulesBrowser';
-import { WORKBENCH_ABSORBED } from '@/lib/hub-absorbed-modules';
+import { WORKBENCH_ABSORBED, WORKBENCH_TAB_MODULES } from '@/lib/hub-absorbed-modules';
+import { TabTriggerWithModules } from '@/components/ui/TabTriggerWithModules';
 
 // Lazy load sub-components
 const DocumentCenterHub = lazy(() => import('@/pages/Documents'));

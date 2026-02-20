@@ -79,7 +79,6 @@ export const SIDEBAR_ROUTES: SidebarGroup[] = [
       { label: "SOC Security", path: "/command?tab=soc", icon: Shield, emoji: "🛡️" },
       { label: "Digital Twin", path: "/command?tab=digital-twin", icon: Ship, emoji: "🚢" },
       { label: "AI Copiloto", path: "/command?tab=ai-copilot", icon: Brain, emoji: "🧠" },
-      { label: "📦 Módulos (11)", path: "/command?tab=modules", icon: Layers, emoji: "📦" },
     ],
   },
 
@@ -97,7 +96,6 @@ export const SIDEBAR_ROUTES: SidebarGroup[] = [
       { label: "Missions", path: "/ops?tab=missions", icon: Target, emoji: "🎯" },
       { label: "Logistics", path: "/ops?tab=logistics", icon: Package, emoji: "📦" },
       { label: "Contracts", path: "/ops?tab=contracts", icon: FileText, emoji: "📝" },
-      { label: "📦 Módulos (30)", path: "/ops?tab=modules", icon: Layers, emoji: "📦" },
     ],
   },
 
@@ -115,7 +113,6 @@ export const SIDEBAR_ROUTES: SidebarGroup[] = [
       { label: "Digital Twin", path: "/maintenance?tab=digital-twin", icon: Cpu, emoji: "🎮", badge: "3D" },
       { label: "ESG Emissions", path: "/maintenance?tab=esg", icon: Leaf, emoji: "🌱" },
       { label: "MARPOL & Waste", path: "/maintenance?tab=waste-marpol", icon: Leaf, emoji: "♻️" },
-      { label: "📦 Módulos (7)", path: "/maintenance?tab=modules", icon: Layers, emoji: "📦" },
     ],
   },
 
@@ -133,7 +130,6 @@ export const SIDEBAR_ROUTES: SidebarGroup[] = [
       { label: "Workflows", path: "/ai?tab=workflows", icon: Zap, emoji: "🔄" },
       { label: "11 AI Modules", path: "/ai?tab=modules", icon: Brain, emoji: "🌟", badge: "11" },
       { label: "Analytics", path: "/ai?tab=analytics", icon: BarChart3, emoji: "📊" },
-      { label: "📦 Módulos (20)", path: "/ai?tab=all-modules", icon: Layers, emoji: "📦" },
     ],
   },
 
@@ -150,7 +146,6 @@ export const SIDEBAR_ROUTES: SidebarGroup[] = [
       { label: "SATCOM", path: "/tracking?tab=satcom", icon: Radio, emoji: "📻" },
       { label: "Weather AI", path: "/tracking?tab=weather", icon: Cloud, emoji: "🌤️", badge: "AI" },
       { label: "Alerts", path: "/tracking?tab=alerts", icon: AlertTriangle, emoji: "🚨" },
-      { label: "📦 Módulos (2)", path: "/tracking?tab=modules", icon: Layers, emoji: "📦" },
     ],
   },
 
@@ -169,7 +164,6 @@ export const SIDEBAR_ROUTES: SidebarGroup[] = [
       { label: "NCs & CAPAs", path: "/compliance?tab=ncs-capas", icon: AlertTriangle, emoji: "⚠️" },
       { label: "Regulations", path: "/compliance?tab=regulations", icon: BookOpen, emoji: "📖" },
       { label: "12 Auditorias", path: "/compliance?tab=audits", icon: ClipboardList, emoji: "📋", badge: "12" },
-      { label: "📦 Módulos (24)", path: "/compliance?tab=modules", icon: Layers, emoji: "📦" },
     ],
   },
 
@@ -185,7 +179,6 @@ export const SIDEBAR_ROUTES: SidebarGroup[] = [
       { label: "Finance", path: "/workbench?section=finance", icon: DollarSign, emoji: "💰" },
       { label: "Travel", path: "/workbench?section=travel", icon: Globe, emoji: "✈️" },
       { label: "System", path: "/workbench?section=system", icon: Settings, emoji: "⚙️" },
-      { label: "📦 Módulos (35)", path: "/workbench?section=modules", icon: Layers, emoji: "📦" },
     ],
   },
 ];
