@@ -376,6 +376,9 @@ export const APIDeveloperPortalPage = lazy(() => import("@/pages/APIDeveloperPor
 export const FlagStateCompliancePage = lazy(() => import("@/pages/FlagStateCompliancePage"));
 export const InfrastructureDashboardPage = lazy(() => import("@/pages/InfrastructureDashboardPage"));
 
+// Module Consolidation Plan
+export const ModuleConsolidationPlan = lazy(() => import("@/pages/ModuleConsolidationPlan"));
+
 // Role Management (Admin only)
 export const RoleManagementPage = lazy(() => import("@/pages/admin/RoleManagementPage"));
 
