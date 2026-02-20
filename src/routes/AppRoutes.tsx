@@ -327,6 +327,18 @@ export const AppRoutes = () => (
       <Route path="/client-portal" element={<Pages.ClientPortalPage />} />
       <Route path="/whatsapp-bot" element={<Pages.WhatsAppBotPage />} />
       
+      {/* ======== GAP CLOSURE MODULES ======== */}
+      <Route path="/support-portal" element={<Pages.SupportPortalPage />} />
+      <Route path="/support" element={<Pages.SupportPortalPage />} />
+      <Route path="/sla" element={<Pages.SupportPortalPage />} />
+      <Route path="/api-portal" element={<Pages.APIDeveloperPortalPage />} />
+      <Route path="/developer" element={<Pages.APIDeveloperPortalPage />} />
+      <Route path="/api-docs" element={<Pages.APIDeveloperPortalPage />} />
+      <Route path="/flag-state" element={<Pages.FlagStateCompliancePage />} />
+      <Route path="/imo-fal" element={<Pages.FlagStateCompliancePage />} />
+      <Route path="/infrastructure" element={<Pages.InfrastructureDashboardPage />} />
+      <Route path="/scalability" element={<Pages.InfrastructureDashboardPage />} />
+      
       {/* ======== WORLD-CLASS DISRUPTIVE FEATURES ======== */}
       <Route path="/computer-vision-inspector" element={<Pages.ComputerVisionInspectorPage />} />
       <Route path="/crew-marketplace" element={<Pages.CrewMarketplacePage />} />

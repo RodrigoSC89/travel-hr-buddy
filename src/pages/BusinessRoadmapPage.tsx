@@ -68,7 +68,7 @@ const GAP_CATEGORIES = [
     title: "Infraestrutura & Escalabilidade",
     subtitle: "Multi-cloud, HA, 10K+ navios",
     color: "text-warning",
-    score: 15,
+    score: 30,
     items: [
       { id: "i1", title: "Migrar para Supabase Pro/Enterprise com replicação", description: "Upgrade do plano Supabase para suportar Read Replicas e backup point-in-time", priority: "critical" as const, status: "not_started" as const, effort: "1-2 meses", timeline: "Q2 2026" },
       { id: "i2", title: "Implementar CDN global (Cloudflare/AWS CloudFront)", description: "Distribuir assets estáticos globalmente para latência <200ms em qualquer porto", priority: "high" as const, status: "not_started" as const, effort: "2-4 semanas", timeline: "Q2 2026" },
@@ -84,7 +84,7 @@ const GAP_CATEGORIES = [
     title: "Suporte & SLA",
     subtitle: "24/7, SLA enterprise, onboarding",
     color: "text-destructive",
-    score: 0,
+    score: 20,
     items: [
       { id: "s1", title: "Definir tiers de SLA (Standard/Premium/Enterprise)", description: "Standard: 8x5, Premium: 12x7, Enterprise: 24/7 com TAM dedicado", priority: "critical" as const, status: "not_started" as const, effort: "2-4 semanas", timeline: "Q2 2026" },
       { id: "s2", title: "Implementar sistema de tickets e knowledge base", description: "Zendesk/Freshdesk com KB em 3 idiomas (PT/EN/ES)", priority: "high" as const, status: "not_started" as const, effort: "1-2 meses", timeline: "Q2 2026" },
@@ -99,7 +99,7 @@ const GAP_CATEGORIES = [
     title: "Flag State & Regulatório",
     subtitle: "Aprovação oficial como logbook digital",
     color: "text-destructive",
-    score: 0,
+    score: 15,
     items: [
       { id: "f1", title: "Mapeamento de Flag States que aceitam logbooks digitais", description: "Priorizar Bahamas, Marshall Islands, Liberia, Panama - mais progressivos", priority: "critical" as const, status: "not_started" as const, effort: "1-2 meses", timeline: "Q2 2026" },
       { id: "f2", title: "Submissão para aprovação em 2+ Flag States", description: "Iniciar processo formal com Marshall Islands e Bahamas", priority: "critical" as const, status: "not_started" as const, effort: "6-12 meses", timeline: "Q4 2026" },
@@ -114,7 +114,7 @@ const GAP_CATEGORIES = [
     title: "Integrações Enterprise",
     subtitle: "SAP, Oracle, MS Dynamics, AIS real",
     color: "text-warning",
-    score: 25,
+    score: 40,
     items: [
       { id: "e1", title: "Conector SAP S/4HANA via OData/RFC", description: "Integração com SAP HR (PA), PM (manutenção) e FI (financeiro)", priority: "critical" as const, status: "in_progress" as const, effort: "3-6 meses", timeline: "Q3 2026" },
       { id: "e2", title: "Conector Oracle Cloud HCM/EAM", description: "Integração REST com Oracle Human Capital Management e Enterprise Asset Management", priority: "high" as const, status: "in_progress" as const, effort: "3-6 meses", timeline: "Q3 2026" },
