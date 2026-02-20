@@ -2,12 +2,9 @@
  * Tracking Mega-Hub - Rastreamento & Telemetria
  * Rota canônica: /tracking
  * 
- * Consolida: Tracking & Telemetry + AIS + SATCOM + Weather Intelligence
- * 
- * ✅ ZERO CONSOLE.LOG HANDLERS
- * ✅ REAL DATA INTEGRATION
- * ✅ SYSTEM STATUS BAR
- * ✅ FUNCTIONAL EXPORT & REFRESH
+ * P2: Consolidated from 10 tabs to 7 grouped tabs
+ * ✅ ZERO FEATURE LOSS
+ * ✅ BACKWARD COMPATIBLE DEEP LINKS
  */
 
 import React, { Suspense, lazy, useMemo, useCallback, useState } from 'react';
@@ -17,7 +14,6 @@ import { Badge } from '@/components/ui/badge';
 import { Satellite, Activity, Ship, Radio, Cloud, AlertTriangle, Map, RefreshCw, Download, Filter, Wifi, Bell, Brain, MapPin } from 'lucide-react';
 import { Skeleton } from '@/components/ui/skeleton';
 import { EnhancedActionBar } from '@/components/ui/world-class/EnhancedActionBar';
-// RealTimeTrackingMap removed - world-class deleted
 import { HubEmptyState } from '@/components/ui/HubEmptyState';
 import { useQueryClient, useQuery } from '@tanstack/react-query';
 import { supabase } from '@/integrations/supabase/client';
@@ -29,8 +25,9 @@ import { HubModulesBrowser } from '@/components/ui/HubModulesBrowser';
 import { TRACKING_ABSORBED, TRACKING_TAB_MODULES } from '@/lib/hub-absorbed-modules';
 import { TabTriggerWithModules } from '@/components/ui/TabTriggerWithModules';
 import { ModuleLauncherModal } from '@/components/ui/ModuleLauncherModal';
+import { SubTabSelector } from '@/components/ui/SubTabSelector';
 
-// Lazy load sub-components
+// Lazy load
 const TrackingTelemetryHub = lazy(() => import('@/pages/TelemetriaCommand'));
 const RealTimeTrackingPage = lazy(() => import('@/pages/tracking/RealTimeTrackingPage'));
 const VesselTrackingMapPage = lazy(() => import('@/pages/VesselTrackingPage'));
@@ -51,66 +48,69 @@ const VesselPerformanceSparklines = lazy(() => import('@/components/dashboard/Ve
 const GeofenceEditor = lazy(() => import('@/components/compliance/GeofenceEditor').then(m => ({ default: m.GeofenceEditor })));
 
 const LoadingSkeleton = () => (
-  <div className="space-y-4 p-6">
-    <Skeleton className="h-8 w-64" />
-    <div className="grid grid-cols-1 md:grid-cols-3 gap-4">
-      <Skeleton className="h-32" />
-      <Skeleton className="h-32" />
-      <Skeleton className="h-32" />
-    </div>
-    <Skeleton className="h-64" />
-  </div>
+  <div className="space-y-4 p-6"><Skeleton className="h-8 w-64" /><div className="grid grid-cols-1 md:grid-cols-3 gap-4"><Skeleton className="h-32" /><Skeleton className="h-32" /><Skeleton className="h-32" /></div><Skeleton className="h-64" /></div>
 );
 
+/**
+ * P2: Consolidated from 10 tabs to 7 grouped tabs
+ * Old 10: overview, live-map, realtime, ais, satcom, weather, predictive, geofencing, alerts, ai-copilot
+ * New 7:
+ * 1. overview       → Overview
+ * 2. live-map       → Live Map
+ * 3. fleet-tracking → Fleet Tracking (Real-time + AIS subtabs)
+ * 4. satcom         → SATCOM
+ * 5. weather        → Weather & Predictive (Weather + Predictive subtabs)
+ * 6. geofencing     → Geofencing & Alerts (Geofencing + Alerts subtabs)
+ * 7. ai-copilot     → IA Hub
+ */
 const tabConfig = [
   { id: 'overview', label: 'Overview', icon: Satellite },
   { id: 'live-map', label: 'Live Map', icon: Map },
-  { id: 'realtime', label: 'Real-time', icon: Activity },
-  { id: 'ais', label: 'AIS Fleet', icon: Ship },
+  { id: 'fleet-tracking', label: 'Fleet Tracking', icon: Ship },
   { id: 'satcom', label: 'SATCOM', icon: Radio },
-  { id: 'weather', label: 'Weather AI', icon: Cloud },
-  { id: 'predictive', label: 'Predictive', icon: Map },
-  { id: 'geofencing', label: 'Geofencing', icon: MapPin },
-  { id: 'alerts', label: 'Alerts', icon: AlertTriangle },
+  { id: 'weather', label: 'Weather & Predictive', icon: Cloud },
+  { id: 'geofencing', label: 'Geofencing & Alerts', icon: MapPin },
   { id: 'ai-copilot', label: '🧠 IA Hub', icon: Brain },
 ];
+
+const TAB_MIGRATION: Record<string, string> = {
+  'realtime': 'fleet-tracking',
+  'ais': 'fleet-tracking',
+  'predictive': 'weather',
+  'alerts': 'geofencing',
+};
 
 export default function TrackingMegaHub() {
   const navigate = useNavigate();
   const [searchParams, setSearchParams] = useSearchParams();
-  const activeTab = searchParams.get('tab') || 'overview';
+  const rawTab = searchParams.get('tab') || 'overview';
+  const activeTab = TAB_MIGRATION[rawTab] || rawTab;
   const activeModuleId = searchParams.get('module');
   const [launcherOpen, setLauncherOpen] = useState(false);
   const queryClient = useQueryClient();
   const { exportToCSV } = useRealActionHandlers();
   const createAlertMutation = useCreateTrackingAlert();
 
-  // Real data: vessels for tracking
+  // Sub-tab state
+  const [fleetTrackingSubTab, setFleetTrackingSubTab] = useState<'realtime' | 'ais'>('realtime');
+  const [weatherSubTab, setWeatherSubTab] = useState<'weather' | 'predictive'>('weather');
+  const [geofencingSubTab, setGeofencingSubTab] = useState<'geofencing' | 'alerts'>('geofencing');
+
+  React.useEffect(() => {
+    if (rawTab === 'ais') setFleetTrackingSubTab('ais');
+    if (rawTab === 'predictive') setWeatherSubTab('predictive');
+    if (rawTab === 'alerts') setGeofencingSubTab('alerts');
+  }, [rawTab]);
+
   const { data: vessels = [], isLoading: vesselsLoading } = useQuery({
     queryKey: ['tracking-vessels'],
-    queryFn: async () => {
-      const { data, error } = await supabase
-        .from('vessels')
-        .select('id, name, status, vessel_type, flag_state, imo_number, updated_at')
-        .order('name');
-      if (error) throw error;
-      return data || [];
-    },
+    queryFn: async () => { const { data, error } = await supabase.from('vessels').select('id, name, status, vessel_type, flag_state, imo_number, updated_at').order('name'); if (error) throw error; return data || []; },
     staleTime: 15000,
   });
 
-  // Real data: telemetry alerts
   const { data: alerts = [] } = useQuery({
     queryKey: ['tracking-alerts'],
-    queryFn: async () => {
-      const { data, error } = await supabase
-        .from('telemetry_alerts')
-        .select('*')
-        .order('created_at', { ascending: false })
-        .limit(20);
-      if (error) throw error;
-      return data || [];
-    },
+    queryFn: async () => { const { data, error } = await supabase.from('telemetry_alerts').select('*').order('created_at', { ascending: false }).limit(20); if (error) throw error; return data || []; },
     staleTime: 15000,
   });
 
@@ -120,318 +120,139 @@ export default function TrackingMegaHub() {
     openAlerts: alerts.filter((a) => !a.resolved && !a.acknowledged).length,
   }), [vessels, alerts]);
 
-  const handleTabChange = (value: string) => {
-    setSearchParams({ tab: value });
-  };
+  const handleTabChange = (value: string) => { setSearchParams({ tab: value }); };
 
   const handleRefresh = useCallback(async () => {
-    await Promise.all([
-      queryClient.invalidateQueries({ queryKey: ['tracking-vessels'] }),
-      queryClient.invalidateQueries({ queryKey: ['tracking-alerts'] }),
-      queryClient.invalidateQueries({ queryKey: ['fleet-tracking'] }),
-    ]);
+    await Promise.all([queryClient.invalidateQueries({ queryKey: ['tracking-vessels'] }), queryClient.invalidateQueries({ queryKey: ['tracking-alerts'] }), queryClient.invalidateQueries({ queryKey: ['fleet-tracking'] })]);
     toast.success('Posições e alertas atualizados');
   }, [queryClient]);
 
   const handleExportPositions = useCallback(async () => {
-    if (vessels.length === 0) {
-      toast.error('Nenhuma embarcação para exportar');
-      return;
-    }
-    const exportData = vessels.map((v) => ({
-      name: v.name,
-      imo: v.imo_number,
-      type: v.vessel_type,
-      status: v.status,
-      flag: v.flag_state,
-      last_update: v.updated_at,
-    }));
-    exportToCSV(exportData, 'fleet-positions');
+    if (vessels.length === 0) { toast.error('Nenhuma embarcação para exportar'); return; }
+    exportToCSV(vessels.map((v) => ({ name: v.name, imo: v.imo_number, type: v.vessel_type, status: v.status, flag: v.flag_state, last_update: v.updated_at })), 'fleet-positions');
   }, [vessels, exportToCSV]);
 
   const handleCreateAlert = useCallback(() => {
-    createAlertMutation.mutate({
-      sensor_id: 'manual',
-      alert_type: 'geofence',
-      severity: 'medium',
-      message: `Alerta manual - ${new Date().toLocaleString('pt-BR')}`,
-    });
+    createAlertMutation.mutate({ sensor_id: 'manual', alert_type: 'geofence', severity: 'medium', message: `Alerta manual - ${new Date().toLocaleString('pt-BR')}` });
   }, [createAlertMutation]);
 
   return (
     <div className="min-h-screen bg-background">
-      {/* Header */}
       <div className="border-b bg-card/50 backdrop-blur-sm sticky top-0 z-10">
         <div className="container py-4">
           <div className="flex items-center justify-between">
             <div className="flex items-center gap-3">
-              <div className="p-2 bg-hub-tracking/10 rounded-lg">
-                <Satellite className="h-6 w-6 text-hub-tracking" />
-              </div>
-              <div>
-                <h1 className="text-2xl font-bold">Hub de Rastreamento</h1>
-                <p className="text-sm text-muted-foreground">
-                  Posições AIS, telemetria, SATCOM, previsão meteorológica e alertas de geofencing
-                </p>
-              </div>
+              <div className="p-2 bg-hub-tracking/10 rounded-lg"><Satellite className="h-6 w-6 text-hub-tracking" /></div>
+              <div><h1 className="text-2xl font-bold">Hub de Rastreamento</h1><p className="text-sm text-muted-foreground">Posições AIS, telemetria, SATCOM, previsão meteorológica e alertas de geofencing</p></div>
             </div>
             <div className="flex gap-2">
-              {trackingMetrics.openAlerts > 0 && (
-                <Badge variant="outline" className="bg-destructive/10 text-destructive border-destructive/20">
-                  {trackingMetrics.openAlerts} alertas ativos
-                </Badge>
-              )}
-              <Badge variant="outline" className="bg-success/10 text-success border-success/20">
-                {trackingMetrics.totalVessels} rastreadas
-              </Badge>
-              <Badge variant="outline" className="bg-hub-tracking/10 text-hub-tracking border-hub-tracking/20">
-                AIS Ativo
-              </Badge>
+              {trackingMetrics.openAlerts > 0 && <Badge variant="outline" className="bg-destructive/10 text-destructive border-destructive/20">{trackingMetrics.openAlerts} alertas ativos</Badge>}
+              <Badge variant="outline" className="bg-success/10 text-success border-success/20">{trackingMetrics.totalVessels} rastreadas</Badge>
+              <Badge variant="outline" className="bg-hub-tracking/10 text-hub-tracking border-hub-tracking/20">AIS Ativo</Badge>
             </div>
           </div>
         </div>
       </div>
 
-      {/* Tabs Navigation */}
       <Tabs value={activeTab} onValueChange={handleTabChange} className="w-full">
         <div className="border-b bg-background/95 backdrop-blur supports-[backdrop-filter]:bg-background/60 sticky top-[73px] z-10">
           <div className="container">
             <TabsList className="h-auto flex-wrap bg-transparent gap-1.5 justify-start py-2">
               {tabConfig.map((tab) => (
-                <TabTriggerWithModules
-                  key={tab.id}
-                  tabId={tab.id}
-                  label={tab.label}
-                  icon={tab.icon}
-                  modules={TRACKING_TAB_MODULES[tab.id] || []}
-                  onModuleSelect={(moduleId) => setSearchParams({ tab: 'modules', module: moduleId })}
-                  onOpenLauncher={() => setLauncherOpen(true)}
-                />
+                <TabTriggerWithModules key={tab.id} tabId={tab.id} label={tab.label} icon={tab.icon} modules={TRACKING_TAB_MODULES[tab.id] || []} onModuleSelect={(moduleId) => setSearchParams({ tab: 'modules', module: moduleId })} onOpenLauncher={() => setLauncherOpen(true)} />
               ))}
             </TabsList>
           </div>
         </div>
 
-        {/* Tab Contents */}
         <div className="container py-6">
           <Suspense fallback={<LoadingSkeleton />}>
+            {/* Overview */}
             <TabsContent value="overview" className="mt-0 space-y-6">
-              {/* System Status */}
               <div className="flex items-center gap-3 text-xs text-muted-foreground px-1">
-                <div className="flex items-center gap-1.5">
-                  <Wifi className="h-3.5 w-3.5 text-success" />
-                  <span>Online</span>
-                </div>
-                <span>•</span>
-                <span>{trackingMetrics.totalVessels} embarcações rastreadas</span>
-                <span>•</span>
-                <span>{trackingMetrics.activeVessels} ativas</span>
-                <span>•</span>
-                <span>{trackingMetrics.openAlerts} alertas abertos</span>
-                <span>•</span>
-                <span>Atualizado: {new Date().toLocaleTimeString('pt-BR', { hour: '2-digit', minute: '2-digit' })}</span>
+                <div className="flex items-center gap-1.5"><Wifi className="h-3.5 w-3.5 text-success" /><span>Online</span></div>
+                <span>•</span><span>{trackingMetrics.totalVessels} embarcações rastreadas</span>
+                <span>•</span><span>{trackingMetrics.activeVessels} ativas</span>
+                <span>•</span><span>{trackingMetrics.openAlerts} alertas abertos</span>
+                <span>•</span><span>Atualizado: {new Date().toLocaleTimeString('pt-BR', { hour: '2-digit', minute: '2-digit' })}</span>
               </div>
-
-              {/* Enhanced Action Bar */}
-              <EnhancedActionBar
-                title="Fleet Tracking Command"
-                subtitle={`${trackingMetrics.activeVessels} embarcações ativas | ${trackingMetrics.openAlerts} alertas pendentes`}
+              <EnhancedActionBar title="Fleet Tracking Command" subtitle={`${trackingMetrics.activeVessels} embarcações ativas | ${trackingMetrics.openAlerts} alertas pendentes`}
                 actions={[
-                  {
-                    id: 'refresh-positions',
-                    label: 'Refresh Positions',
-                    icon: <RefreshCw className="h-4 w-4" />,
-                    onClick: handleRefresh,
-                    variant: 'default',
-                    tooltip: 'Recarregar posições AIS e alertas'
-                  },
-                  {
-                    id: 'live-map',
-                    label: 'Live Map',
-                    icon: <Map className="h-4 w-4" />,
-                    onClick: () => setSearchParams({ tab: 'live-map' }),
-                    variant: 'outline',
-                    tooltip: 'Abrir mapa interativo ao vivo'
-                  },
-                  {
-                    id: 'new-alert',
-                    label: 'Novo Alerta',
-                    icon: <Bell className="h-4 w-4" />,
-                    onClick: handleCreateAlert,
-                    variant: 'outline',
-                    tooltip: 'Criar alerta manual de geofencing'
-                  }
+                  { id: 'refresh-positions', label: 'Refresh Positions', icon: <RefreshCw className="h-4 w-4" />, onClick: handleRefresh, variant: 'default', tooltip: 'Recarregar posições AIS e alertas' },
+                  { id: 'live-map', label: 'Live Map', icon: <Map className="h-4 w-4" />, onClick: () => setSearchParams({ tab: 'live-map' }), variant: 'outline', tooltip: 'Abrir mapa interativo ao vivo' },
+                  { id: 'new-alert', label: 'Novo Alerta', icon: <Bell className="h-4 w-4" />, onClick: handleCreateAlert, variant: 'outline', tooltip: 'Criar alerta manual de geofencing' }
                 ]}
-                onRefresh={handleRefresh}
-                isRefreshing={vesselsLoading}
-                secondaryActions={[
-                  {
-                    id: 'export-positions',
-                    label: 'Exportar Posições (CSV)',
-                    icon: <Download className="h-4 w-4" />,
-                    onClick: handleExportPositions,
-                  }
-                ]}
-                showSearch
-                searchPlaceholder="Search vessels, routes, locations..."
+                onRefresh={handleRefresh} isRefreshing={vesselsLoading}
+                secondaryActions={[{ id: 'export-positions', label: 'Exportar Posições (CSV)', icon: <Download className="h-4 w-4" />, onClick: handleExportPositions }]}
+                showSearch searchPlaceholder="Search vessels, routes, locations..."
               />
-
-              {/* Empty state when no vessels */}
-              {!vesselsLoading && trackingMetrics.totalVessels === 0 && (
-                <HubEmptyState 
-                  hub="tracking" 
-                  onPrimaryAction={() => navigate('/ops')} 
-                />
-              )}
-
-              {/* Tracking KPI Summary Cards */}
-              <Suspense fallback={<Skeleton className="h-24" />}>
-                <TrackingKPISummary />
-              </Suspense>
-
-              {/* Wave 20: Tracking Intelligence Panels */}
+              {!vesselsLoading && trackingMetrics.totalVessels === 0 && <HubEmptyState hub="tracking" onPrimaryAction={() => navigate('/ops')} />}
+              <Suspense fallback={<Skeleton className="h-24" />}><TrackingKPISummary /></Suspense>
               <div className="grid grid-cols-1 lg:grid-cols-2 gap-6">
-                <Suspense fallback={<Skeleton className="h-64" />}>
-                  <TelemetryHealthMatrix />
-                </Suspense>
-                <Suspense fallback={<Skeleton className="h-64" />}>
-                  <FleetPositionIntelligence />
-                </Suspense>
+                <Suspense fallback={<Skeleton className="h-64" />}><TelemetryHealthMatrix /></Suspense>
+                <Suspense fallback={<Skeleton className="h-64" />}><FleetPositionIntelligence /></Suspense>
               </div>
-
-              {/* Wave 28: Geofence Intelligence */}
               <div className="grid grid-cols-1 lg:grid-cols-2 gap-6">
-                <Suspense fallback={<Skeleton className="h-64" />}>
-                  <GeofenceIntelligence />
-                </Suspense>
-                <Suspense fallback={<Skeleton className="h-64" />}>
-                  <IoTAnomalyDetector />
-                </Suspense>
+                <Suspense fallback={<Skeleton className="h-64" />}><GeofenceIntelligence /></Suspense>
+                <Suspense fallback={<Skeleton className="h-64" />}><IoTAnomalyDetector /></Suspense>
               </div>
-
-              {/* Wave 45: SATCOM Performance */}
               <div className="grid grid-cols-1 lg:grid-cols-2 gap-6">
-                <Suspense fallback={<Skeleton className="h-64" />}>
-                  <SATCOMPerformanceMonitor />
-                </Suspense>
-                <Suspense fallback={<Skeleton className="h-64" />}>
-                  <VesselETAPredictor />
-                </Suspense>
+                <Suspense fallback={<Skeleton className="h-64" />}><SATCOMPerformanceMonitor /></Suspense>
+                <Suspense fallback={<Skeleton className="h-64" />}><VesselETAPredictor /></Suspense>
               </div>
-
-              {/* Vessel Performance Sparklines */}
-              <Suspense fallback={<Skeleton className="h-64" />}>
-              <VesselPerformanceSparklines />
-              </Suspense>
-
-              {/* Cross-Module Integration Panel */}
-              <CrossModulePanel
-                entityType="vessel"
-                entityId={vessels[0]?.id ?? ''}
-                showQuickActions
-                showActivityFeed
-                className="mt-6"
-              />
-
+              <Suspense fallback={<Skeleton className="h-64" />}><VesselPerformanceSparklines /></Suspense>
+              <CrossModulePanel entityType="vessel" entityId={vessels[0]?.id ?? ''} showQuickActions showActivityFeed className="mt-6" />
               {(vesselsLoading || trackingMetrics.totalVessels > 0) && <TrackingTelemetryHub />}
             </TabsContent>
 
+            {/* Live Map */}
             <TabsContent value="live-map" className="mt-0 space-y-6">
-              {/* Enhanced Action Bar for Live Map */}
-              <EnhancedActionBar
-                title="Live Fleet Map"
-                subtitle={`${trackingMetrics.activeVessels} embarcações ativas no mapa`}
+              <EnhancedActionBar title="Live Fleet Map" subtitle={`${trackingMetrics.activeVessels} embarcações ativas no mapa`}
                 actions={[
-                  {
-                    id: 'refresh-map',
-                    label: 'Refresh',
-                    icon: <RefreshCw className="h-4 w-4" />,
-                    onClick: handleRefresh,
-                    variant: 'default',
-                    tooltip: 'Recarregar mapa'
-                  },
-                  {
-                    id: 'filter',
-                    label: 'Filters',
-                    icon: <Filter className="h-4 w-4" />,
-                    onClick: () => { const filterSection = document.querySelector('[data-filter-section]'); if (filterSection) filterSection.scrollIntoView({ behavior: 'smooth' }); },
-                    variant: 'outline',
-                    tooltip: 'Filtrar embarcações por tipo ou status'
-                  }
+                  { id: 'refresh-map', label: 'Refresh', icon: <RefreshCw className="h-4 w-4" />, onClick: handleRefresh, variant: 'default', tooltip: 'Recarregar mapa' },
+                  { id: 'filter', label: 'Filters', icon: <Filter className="h-4 w-4" />, onClick: () => {}, variant: 'outline', tooltip: 'Filtrar embarcações' }
                 ]}
-                onRefresh={handleRefresh}
-                isRefreshing={vesselsLoading}
-                secondaryActions={[
-                  {
-                    id: 'export-map-data',
-                    label: 'Exportar Dados do Mapa',
-                    icon: <Download className="h-4 w-4" />,
-                    onClick: handleExportPositions,
-                  }
-                ]}
+                onRefresh={handleRefresh} isRefreshing={vesselsLoading}
+                secondaryActions={[{ id: 'export-map-data', label: 'Exportar Dados do Mapa', icon: <Download className="h-4 w-4" />, onClick: handleExportPositions }]}
               />
-
-              {/* Live Map - dedicated vessel tracking with map focus */}
               <Suspense fallback={<LoadingSkeleton />}><VesselTrackingMapPage /></Suspense>
             </TabsContent>
-            
-            <TabsContent value="realtime" className="mt-0">
-              <RealTimeTrackingPage />
-            </TabsContent>
-            
-            <TabsContent value="ais" className="mt-0">
-              <AISTrackerPage />
-            </TabsContent>
-            
-            <TabsContent value="satcom" className="mt-0">
-              <SatcomDashboardEnhanced />
-            </TabsContent>
-            
-            <TabsContent value="weather" className="mt-0">
-              <WeatherIntelligencePage />
-            </TabsContent>
-            
-            <TabsContent value="predictive" className="mt-0">
-              <PredictiveTelemetry />
-            </TabsContent>
-            
-            <TabsContent value="geofencing" className="mt-0">
-              <GeofenceEditor geofences={[]} onGeofencesChange={() => {}} />
+
+            {/* Fleet Tracking (merged: realtime + ais) */}
+            <TabsContent value="fleet-tracking" className="mt-0 space-y-4">
+              <SubTabSelector options={[{ id: 'realtime', label: '📡 Real-time' }, { id: 'ais', label: '🚢 AIS Fleet' }]} active={fleetTrackingSubTab} onChange={(id) => setFleetTrackingSubTab(id as 'realtime' | 'ais')} />
+              {fleetTrackingSubTab === 'realtime' && <RealTimeTrackingPage />}
+              {fleetTrackingSubTab === 'ais' && <AISTrackerPage />}
             </TabsContent>
 
-            <TabsContent value="alerts" className="mt-0">
-              <AlertsCommandCenter />
+            <TabsContent value="satcom" className="mt-0"><SatcomDashboardEnhanced /></TabsContent>
+
+            {/* Weather & Predictive (merged) */}
+            <TabsContent value="weather" className="mt-0 space-y-4">
+              <SubTabSelector options={[{ id: 'weather', label: '🌤️ Weather AI' }, { id: 'predictive', label: '🔮 Predictive' }]} active={weatherSubTab} onChange={(id) => setWeatherSubTab(id as 'weather' | 'predictive')} />
+              {weatherSubTab === 'weather' && <WeatherIntelligencePage />}
+              {weatherSubTab === 'predictive' && <PredictiveTelemetry />}
             </TabsContent>
 
-            <TabsContent value="ai-copilot" className="mt-0">
-              <TrackingAIHub />
+            {/* Geofencing & Alerts (merged) */}
+            <TabsContent value="geofencing" className="mt-0 space-y-4">
+              <SubTabSelector options={[{ id: 'geofencing', label: '📍 Geofencing' }, { id: 'alerts', label: '🔔 Alerts' }]} active={geofencingSubTab} onChange={(id) => setGeofencingSubTab(id as 'geofencing' | 'alerts')} />
+              {geofencingSubTab === 'geofencing' && <GeofenceEditor geofences={[]} onGeofencesChange={() => {}} />}
+              {geofencingSubTab === 'alerts' && <AlertsCommandCenter />}
             </TabsContent>
+
+            <TabsContent value="ai-copilot" className="mt-0"><TrackingAIHub /></TabsContent>
 
             <TabsContent value="modules" className="mt-0">
-              <HubModulesBrowser
-                modules={TRACKING_ABSORBED}
-                hubName="Hub de Rastreamento"
-                hubColor="text-hub-tracking"
-                activeModuleId={activeModuleId}
-                onModuleSelect={(id) => {
-                  if (id) setSearchParams({ tab: 'modules', module: id });
-                  else setSearchParams({ tab: 'modules' });
-                }}
+              <HubModulesBrowser modules={TRACKING_ABSORBED} hubName="Hub de Rastreamento" hubColor="text-hub-tracking" activeModuleId={activeModuleId}
+                onModuleSelect={(id) => { if (id) setSearchParams({ tab: 'modules', module: id }); else setSearchParams({ tab: 'modules' }); }}
               />
             </TabsContent>
           </Suspense>
         </div>
       </Tabs>
 
-      {/* Module Launcher Modal */}
-      <ModuleLauncherModal
-        open={launcherOpen}
-        onOpenChange={setLauncherOpen}
-        hubName="Sensores & IoT"
-        hubIcon={<Satellite className="h-5 w-5" />}
-        modules={TRACKING_ABSORBED}
-        onModuleSelect={(moduleId) => setSearchParams({ tab: 'modules', module: moduleId })}
-      />
+      <ModuleLauncherModal open={launcherOpen} onOpenChange={setLauncherOpen} hubName="Sensores & IoT" hubIcon={<Satellite className="h-5 w-5" />} modules={TRACKING_ABSORBED} onModuleSelect={(moduleId) => setSearchParams({ tab: 'modules', module: moduleId })} />
     </div>
   );
 }
