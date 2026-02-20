@@ -2,12 +2,11 @@
  * Compliance Mega-Hub - Auditorias & Conformidade
  * Rota canônica: /compliance
  * 
- * Consolida: Compliance Hub + 12 Maritime Audits + 10 AI Agents + Security
- * 
+ * P2: Consolidated from 15 tabs to 9 grouped tabs
  * ✅ 12 AUDITORIAS MARÍTIMAS COMPLETAS
  * ✅ 10 AGENTES DE AUDITORIA IA
- * ✅ ZERO SUPRESSÃO DE FUNCIONALIDADES
- * ✅ WORLD-CLASS COMPONENTS INTEGRATED
+ * ✅ ZERO FEATURE LOSS
+ * ✅ BACKWARD COMPATIBLE DEEP LINKS
  */
 
 import React, { Suspense, lazy, useMemo, useCallback, useState } from 'react';
@@ -37,11 +36,10 @@ import { HubModulesBrowser } from '@/components/ui/HubModulesBrowser';
 import { COMPLIANCE_ABSORBED, COMPLIANCE_TAB_MODULES } from '@/lib/hub-absorbed-modules';
 import { TabTriggerWithModules } from '@/components/ui/TabTriggerWithModules';
 import { ModuleLauncherModal } from '@/components/ui/ModuleLauncherModal';
+import { SubTabSelector } from '@/components/ui/SubTabSelector';
 import { cn } from '@/lib/utils';
 
-// ═══════════════════════════════════════════════════════════
-// LAZY LOAD - SUB-COMPONENTS
-// ═══════════════════════════════════════════════════════════
+// Lazy components
 const ComplianceHubPage = lazy(() => import('@/pages/ComplianceRoadmapPage'));
 const ComplianceScorecardPage = lazy(() => import('@/pages/ExecutiveCompliancePage'));
 const AgentsDashboard = lazy(() => import('@/pages/audit-agents/AgentsDashboard'));
@@ -70,9 +68,7 @@ const ComplianceReadinessTimeline = lazy(() => import('@/components/dashboard/Co
 const ISMKPIDashboard = lazy(() => import('@/components/compliance/ISMKPIDashboard').then(m => ({ default: m.ISMKPIDashboard })));
 const SIRE2HubPage = lazy(() => import('@/pages/SIRE2HubPage'));
 
-// ═══════════════════════════════════════════════════════════
-// 12 AUDITORIAS MARÍTIMAS COMPLETAS - ZERO SUPRESSÃO
-// ═══════════════════════════════════════════════════════════
+// 12 Maritime Audits
 const PEODP = lazy(() => import('@/pages/PEODP'));
 const PEOTRAM = lazy(() => import('@/pages/PEOTRAMPage'));
 const SafetyIMCAV2 = lazy(() => import('@/pages/ISMCodePage'));
@@ -86,51 +82,48 @@ const SGSO = lazy(() => import('@/pages/SGSO'));
 const PreSIREInspection = lazy(() => import('@/pages/PreSIREInspection'));
 const TMSAAssessment = lazy(() => import('@/pages/TMSAAssessment'));
 
-// ═══════════════════════════════════════════════════════════
-// LOADING SKELETON
-// ═══════════════════════════════════════════════════════════
 const LoadingSkeleton = () => (
   <div className="space-y-4 p-6">
-    <Skeleton className="h-8 w-64" />
-    <div className="grid grid-cols-1 md:grid-cols-3 gap-4">
-      <Skeleton className="h-32" />
-      <Skeleton className="h-32" />
-      <Skeleton className="h-32" />
-    </div>
-    <Skeleton className="h-64" />
+    <Skeleton className="h-8 w-64" /><div className="grid grid-cols-1 md:grid-cols-3 gap-4"><Skeleton className="h-32" /><Skeleton className="h-32" /><Skeleton className="h-32" /></div><Skeleton className="h-64" />
   </div>
 );
 
-// ═══════════════════════════════════════════════════════════
-// TAB CONFIGURATION
-// ═══════════════════════════════════════════════════════════
-interface TabConfig {
-  id: string;
-  label: string;
-  icon: LucideIcon;
-}
-
-const tabConfig: TabConfig[] = [
+/**
+ * P2: Consolidated from 15 tabs to 9 grouped tabs
+ * Old 15: hub, audits, audit-workflow, scorecard, audit-agents, certificates, risk-matrix, ncs-capas, regulations, security, loto, jsa, ism-kpi, sire2, ai-hub
+ * New 9:
+ * 1. hub           → Compliance Hub
+ * 2. audits        → 12 Auditorias
+ * 3. audit-workflow → Audit Workflow
+ * 4. scorecard     → Scorecard & KPIs (scorecard + ISM KPIs subtabs)
+ * 5. audit-agents  → AI Agents
+ * 6. certificates  → Certificates
+ * 7. risk-safety   → Risk & Safety (Risk Matrix + NCs/CAPAs + LOTO + JSA subtabs)
+ * 8. regulations   → Regulations & Security (Regulations + Security + SIRE 2.0 subtabs)
+ * 9. ai-hub        → IA Compliance
+ */
+const tabConfig: { id: string; label: string; icon: LucideIcon }[] = [
   { id: 'hub', label: 'Compliance Hub', icon: Shield },
   { id: 'audits', label: '12 Auditorias', icon: ClipboardCheck },
   { id: 'audit-workflow', label: 'Audit Workflow', icon: ClipboardList },
-  { id: 'scorecard', label: 'Scorecard', icon: BarChart3 },
+  { id: 'scorecard', label: 'Scorecard & KPIs', icon: BarChart3 },
   { id: 'audit-agents', label: '10 AI Agents', icon: Bot },
   { id: 'certificates', label: 'Certificates', icon: Award },
-  { id: 'risk-matrix', label: 'Risk Matrix', icon: Target },
-  { id: 'ncs-capas', label: 'NCs & CAPAs', icon: AlertTriangle },
-  { id: 'regulations', label: 'Regulations', icon: FileText },
-  { id: 'security', label: 'Security', icon: Lock },
-  { id: 'loto', label: 'LOTO', icon: HardHat },
-  { id: 'jsa', label: 'JSA', icon: ClipboardList },
-  { id: 'ism-kpi', label: 'ISM KPIs', icon: Activity },
-  { id: 'sire2', label: 'SIRE 2.0', icon: Radar },
+  { id: 'risk-safety', label: 'Risk & Safety', icon: AlertTriangle },
+  { id: 'regulations', label: 'Regulations & Security', icon: FileText },
   { id: 'ai-hub', label: '🧠 IA Compliance', icon: Brain },
 ];
 
-// ═══════════════════════════════════════════════════════════
-// CARDS DAS 12 AUDITORIAS MARÍTIMAS
-// ═══════════════════════════════════════════════════════════
+const TAB_MIGRATION: Record<string, string> = {
+  'risk-matrix': 'risk-safety',
+  'ncs-capas': 'risk-safety',
+  'loto': 'risk-safety',
+  'jsa': 'risk-safety',
+  'ism-kpi': 'scorecard',
+  'security': 'regulations',
+  'sire2': 'regulations',
+};
+
 const AUDIT_STANDARDS_CARDS: { key: string; label: string; description: string; icon: LucideIcon; color: string }[] = [
   { key: 'peo-dp', label: 'PEO-DP', description: 'Petrobras DP Operations', icon: Target, color: 'from-blue-500/20 to-blue-600/10 border-blue-500/30' },
   { key: 'peotram', label: 'PEOTRAM', description: 'Petrobras Transport', icon: Activity, color: 'from-indigo-500/20 to-indigo-600/10 border-indigo-500/30' },
@@ -146,66 +139,49 @@ const AUDIT_STANDARDS_CARDS: { key: string; label: string; description: string; 
   { key: 'tmsa', label: 'TMSA', description: 'Tanker Management Self Assessment', icon: Bot, color: 'from-fuchsia-500/20 to-fuchsia-600/10 border-fuchsia-500/30' },
 ];
 
-// ═══════════════════════════════════════════════════════════
-// MAPEAMENTO COMPLETO DAS 12 AUDITORIAS MARÍTIMAS
-// ═══════════════════════════════════════════════════════════
 const auditStandards: Record<string, React.LazyExoticComponent<React.ComponentType<Record<string, never>>>> = {
-  'peo-dp': PEODP,
-  'peotram': PEOTRAM,
-  'ism': SafetyIMCAV2,
-  'isps': ISPSSecurityV2,
-  'solas': SOLASInspection,
-  'marpol': WasteManagementPremium,
-  'pre-ovid': PreOVIDInspection,
-  'pre-mlc': MLCInspection,
-  'psc': PSCPackage,
-  'sgso': SGSO,
-  'pre-sire': PreSIREInspection,
-  'tmsa': TMSAAssessment,
+  'peo-dp': PEODP, 'peotram': PEOTRAM, 'ism': SafetyIMCAV2, 'isps': ISPSSecurityV2,
+  'solas': SOLASInspection, 'marpol': WasteManagementPremium, 'pre-ovid': PreOVIDInspection,
+  'pre-mlc': MLCInspection, 'psc': PSCPackage, 'sgso': SGSO, 'pre-sire': PreSIREInspection, 'tmsa': TMSAAssessment,
 };
 
-// ═══════════════════════════════════════════════════════════
-// COMPLIANCE MEGA-HUB COMPONENT
-// ═══════════════════════════════════════════════════════════
 export default function ComplianceMegaHub() {
   const [searchParams, setSearchParams] = useSearchParams();
-  const activeTab = searchParams.get('tab') || 'hub';
+  const rawTab = searchParams.get('tab') || 'hub';
+  const activeTab = TAB_MIGRATION[rawTab] || rawTab;
   const standard = searchParams.get('standard');
   const activeModuleId = searchParams.get('module');
   const [launcherOpen, setLauncherOpen] = useState(false);
   const queryClient = useQueryClient();
   const { exportToCSV } = useRealActionHandlers();
 
-  // Real compliance data
+  // Sub-tab state
+  const [scorecardSubTab, setScorecardSubTab] = useState<'scorecard' | 'ism-kpi'>('scorecard');
+  const [riskSafetySubTab, setRiskSafetySubTab] = useState<'risk-matrix' | 'ncs-capas' | 'loto' | 'jsa'>('risk-matrix');
+  const [regulationsSubTab, setRegulationsSubTab] = useState<'regulations' | 'security' | 'sire2'>('regulations');
+
+  // Initialize sub-tab from old deep-link
+  React.useEffect(() => {
+    if (rawTab === 'ism-kpi') setScorecardSubTab('ism-kpi');
+    if (rawTab === 'ncs-capas') setRiskSafetySubTab('ncs-capas');
+    if (rawTab === 'loto') setRiskSafetySubTab('loto');
+    if (rawTab === 'jsa') setRiskSafetySubTab('jsa');
+    if (rawTab === 'security') setRegulationsSubTab('security');
+    if (rawTab === 'sire2') setRegulationsSubTab('sire2');
+  }, [rawTab]);
+
+  // Real data
   const { data: audits = [], isLoading: auditsLoading } = useQuery({
     queryKey: ['compliance-audits-hub'],
-    queryFn: async () => {
-      const { data, error } = await supabase
-        .from('internal_audits')
-        .select('*')
-        .order('created_at', { ascending: false })
-        .limit(50);
-      if (error) throw error;
-      return data || [];
-    },
+    queryFn: async () => { const { data, error } = await supabase.from('internal_audits').select('*').order('created_at', { ascending: false }).limit(50); if (error) throw error; return data || []; },
     staleTime: 30000,
   });
-
   const { data: nonConformities = [] } = useQuery({
     queryKey: ['compliance-ncs-hub'],
-    queryFn: async () => {
-      const { data, error } = await supabase
-        .from('non_conformities')
-        .select('*')
-        .order('created_at', { ascending: false })
-        .limit(50);
-      if (error) throw error;
-      return data || [];
-    },
+    queryFn: async () => { const { data, error } = await supabase.from('non_conformities').select('*').order('created_at', { ascending: false }).limit(50); if (error) throw error; return data || []; },
     staleTime: 30000,
   });
 
-  // Compliance metrics
   const complianceMetrics = useMemo(() => ({
     totalAudits: audits.length,
     openAudits: audits.filter((a) => a.status === 'open' || a.status === 'in_progress').length,
@@ -214,7 +190,6 @@ export default function ComplianceMegaHub() {
     openNCs: nonConformities.filter((nc) => nc.status === 'open').length,
   }), [audits, nonConformities]);
 
-  // Dynamic workflow
   const workflowSteps = useMemo(() => [
     { id: 'planning', label: 'Planejamento', status: complianceMetrics.totalAudits > 0 ? 'completed' as const : 'current' as const },
     { id: 'execution', label: 'Execução', status: complianceMetrics.openAudits > 0 ? 'current' as const : complianceMetrics.totalAudits > 0 ? 'completed' as const : 'pending' as const },
@@ -223,10 +198,7 @@ export default function ComplianceMegaHub() {
     { id: 'closure', label: 'Encerramento', status: complianceMetrics.completedAudits > 2 ? 'completed' as const : 'pending' as const }
   ], [complianceMetrics]);
 
-  const handleTabChange = (value: string) => {
-    setSearchParams({ tab: value });
-  };
-
+  const handleTabChange = (value: string) => { setSearchParams({ tab: value }); };
   const handleRefresh = useCallback(async () => {
     await queryClient.invalidateQueries({ queryKey: ['compliance-audits-hub'] });
     await queryClient.invalidateQueries({ queryKey: ['compliance-ncs-hub'] });
@@ -235,30 +207,15 @@ export default function ComplianceMegaHub() {
 
   const [auditDialogOpen, setAuditDialogOpen] = useState(false);
   const [auditForm, setAuditForm] = useState({ audit_type: 'internal', scope: '', vessel_id: '' });
-
-  const handleNewAudit = useCallback(() => {
-    setAuditDialogOpen(true);
-  }, []);
+  const handleNewAudit = useCallback(() => { setAuditDialogOpen(true); }, []);
 
   const handleSubmitAudit = useCallback(async () => {
     if (!auditForm.audit_type) { toast.error('Tipo de auditoria obrigatório'); return; }
     const auditNumber = `AUD-${new Date().getFullYear()}-${String(Date.now() % 9999).padStart(4, '0')}`;
-    const { data, error } = await supabase.from('internal_audits').insert({
-      audit_number: auditNumber,
-      audit_type: auditForm.audit_type,
-      scope: auditForm.scope || null,
-      vessel_id: auditForm.vessel_id || null,
-      status: 'planned',
-    }).select().single();
+    const { data, error } = await supabase.from('internal_audits').insert({ audit_number: auditNumber, audit_type: auditForm.audit_type, scope: auditForm.scope || null, vessel_id: auditForm.vessel_id || null, status: 'planned' }).select().single();
     if (error) { toast.error('Erro ao criar auditoria: ' + error.message); return; }
     toast.success('Auditoria criada: ' + auditNumber);
-    // Publish cross-module event
-    publishEvent({
-      type: 'compliance.audit.created',
-      payload: { audit_id: data?.id, audit_number: auditNumber, audit_type: auditForm.audit_type, vessel_id: auditForm.vessel_id },
-      sourceEntityType: 'audit',
-      sourceEntityId: data?.id,
-    });
+    publishEvent({ type: 'compliance.audit.created', payload: { audit_id: data?.id, audit_number: auditNumber, audit_type: auditForm.audit_type, vessel_id: auditForm.vessel_id }, sourceEntityType: 'audit', sourceEntityId: data?.id });
     queryClient.invalidateQueries({ queryKey: ['compliance-audits-hub'] });
     queryClient.invalidateQueries({ queryKey: ['compliance'] });
     queryClient.invalidateQueries({ queryKey: ['dashboard-kpis'] });
@@ -274,11 +231,7 @@ export default function ComplianceMegaHub() {
   // If accessing a specific standard, render that audit page
   if (standard && auditStandards[standard]) {
     const AuditComponent = auditStandards[standard];
-    return (
-      <Suspense fallback={<LoadingSkeleton />}>
-        <AuditComponent />
-      </Suspense>
-    );
+    return <Suspense fallback={<LoadingSkeleton />}><AuditComponent /></Suspense>;
   }
 
   return (
@@ -288,226 +241,89 @@ export default function ComplianceMegaHub() {
         <div className="container py-4">
           <div className="flex items-center justify-between">
             <div className="flex items-center gap-3">
-              <div className="p-2 bg-destructive/10 rounded-lg">
-                <Shield className="h-6 w-6 text-destructive" />
-              </div>
+              <div className="p-2 bg-destructive/10 rounded-lg"><Shield className="h-6 w-6 text-destructive" /></div>
               <div>
                 <h1 className="text-2xl font-bold">Hub de Compliance</h1>
-                <p className="text-sm text-muted-foreground">
-                  12 auditorias marítimas (IMO, OCIMF, ILO, ANP) + 10 agentes IA de auditoria
-                </p>
+                <p className="text-sm text-muted-foreground">12 auditorias marítimas (IMO, OCIMF, ILO, ANP) + 10 agentes IA de auditoria</p>
               </div>
             </div>
             <div className="flex gap-2">
-              <Badge variant="outline" className="bg-primary/10 text-primary border-primary/20">
-                {complianceMetrics.totalAudits} auditorias
-              </Badge>
-              {complianceMetrics.openNCs > 0 && (
-                <Badge variant="outline" className="bg-destructive/10 text-destructive border-destructive/20">
-                  {complianceMetrics.openNCs} NCs abertas
-                </Badge>
-              )}
-              <Badge variant="outline" className="bg-success/10 text-success border-success/20">
-                12/12 standards
-              </Badge>
+              <Badge variant="outline" className="bg-primary/10 text-primary border-primary/20">{complianceMetrics.totalAudits} auditorias</Badge>
+              {complianceMetrics.openNCs > 0 && <Badge variant="outline" className="bg-destructive/10 text-destructive border-destructive/20">{complianceMetrics.openNCs} NCs abertas</Badge>}
+              <Badge variant="outline" className="bg-success/10 text-success border-success/20">12/12 standards</Badge>
             </div>
           </div>
         </div>
       </div>
 
-      {/* Tabs Navigation */}
       <Tabs value={activeTab} onValueChange={handleTabChange} className="w-full">
         <div className="border-b bg-background/95 backdrop-blur supports-[backdrop-filter]:bg-background/60 sticky top-[73px] z-10">
           <div className="container">
             <TabsList className="h-auto flex-wrap bg-transparent gap-1.5 justify-start py-2">
               {tabConfig.map((tab) => (
-                <TabTriggerWithModules
-                  key={tab.id}
-                  tabId={tab.id}
-                  label={tab.label}
-                  icon={tab.icon}
-                  modules={COMPLIANCE_TAB_MODULES[tab.id] || []}
-                  onModuleSelect={(moduleId) => setSearchParams({ tab: 'modules', module: moduleId })}
-                  onOpenLauncher={() => setLauncherOpen(true)}
-                />
+                <TabTriggerWithModules key={tab.id} tabId={tab.id} label={tab.label} icon={tab.icon} modules={COMPLIANCE_TAB_MODULES[tab.id] || []} onModuleSelect={(moduleId) => setSearchParams({ tab: 'modules', module: moduleId })} onOpenLauncher={() => setLauncherOpen(true)} />
               ))}
             </TabsList>
           </div>
         </div>
 
-        {/* Tab Contents */}
         <div className="container py-6">
           <Suspense fallback={<LoadingSkeleton />}>
+            {/* Hub Overview */}
             <TabsContent value="hub" className="mt-0 space-y-6">
-              {/* System Status */}
               <div className="flex items-center gap-3 text-xs text-muted-foreground px-1">
-                <div className="flex items-center gap-1.5">
-                  <Wifi className="h-3.5 w-3.5 text-success" />
-                  <span>Conectado</span>
-                </div>
-                <span>•</span>
-                <span>{complianceMetrics.totalAudits} auditorias</span>
-                <span>•</span>
-                <span>{complianceMetrics.openNCs} NCs abertas</span>
-                <span>•</span>
-                <span>12 padrões marítimos</span>
+                <div className="flex items-center gap-1.5"><Wifi className="h-3.5 w-3.5 text-success" /><span>Conectado</span></div>
+                <span>•</span><span>{complianceMetrics.totalAudits} auditorias</span>
+                <span>•</span><span>{complianceMetrics.openNCs} NCs abertas</span>
+                <span>•</span><span>12 padrões marítimos</span>
               </div>
-
-              {/* Enhanced Action Bar */}
-              <EnhancedActionBar
-                title="Centro de Compliance"
-                subtitle={`${complianceMetrics.openAudits} auditorias em andamento | ${complianceMetrics.openNCs} não-conformidades abertas`}
+              <EnhancedActionBar title="Centro de Compliance" subtitle={`${complianceMetrics.openAudits} auditorias em andamento | ${complianceMetrics.openNCs} não-conformidades abertas`}
                 actions={[
-                  {
-                    id: 'new-audit',
-                    label: 'Nova Auditoria',
-                    icon: <Plus className="h-4 w-4" />,
-                    onClick: handleNewAudit,
-                    variant: 'default',
-                    tooltip: 'Iniciar nova auditoria interna'
-                  },
-                  {
-                    id: 'workflow',
-                    label: 'Workflow',
-                    icon: <ClipboardCheck className="h-4 w-4" />,
-                    onClick: () => setSearchParams({ tab: 'audit-workflow' }),
-                    variant: 'outline'
-                  },
+                  { id: 'new-audit', label: 'Nova Auditoria', icon: <Plus className="h-4 w-4" />, onClick: handleNewAudit, variant: 'default', tooltip: 'Iniciar nova auditoria interna' },
+                  { id: 'workflow', label: 'Workflow', icon: <ClipboardCheck className="h-4 w-4" />, onClick: () => setSearchParams({ tab: 'audit-workflow' }), variant: 'outline' },
                 ]}
-                onRefresh={handleRefresh}
-                isRefreshing={auditsLoading}
-                secondaryActions={[
-                  {
-                    id: 'export',
-                    label: 'Exportar Relatório',
-                    icon: <Download className="h-4 w-4" />,
-                    onClick: handleExportCompliance,
-                  }
-                ]}
-                showSearch
-                searchPlaceholder="Buscar auditorias, certificados, NCs..."
+                onRefresh={handleRefresh} isRefreshing={auditsLoading}
+                secondaryActions={[{ id: 'export', label: 'Exportar Relatório', icon: <Download className="h-4 w-4" />, onClick: handleExportCompliance }]}
+                showSearch searchPlaceholder="Buscar auditorias, certificados, NCs..."
               />
-
-              {/* Workflow Status - Dynamic */}
-              <WorkflowStatusBar
-                title="Ciclo de Compliance"
-                steps={workflowSteps}
-                variant="horizontal"
-              />
-
-              {/* Empty state when no audits */}
-              {!auditsLoading && complianceMetrics.totalAudits === 0 && (
-                <HubEmptyState 
-                  hub="compliance" 
-                  onPrimaryAction={handleNewAudit} 
-                />
-              )}
-
-              {/* Audit Countdown + Compliance Score */}
+              <WorkflowStatusBar title="Ciclo de Compliance" steps={workflowSteps} variant="horizontal" />
+              {!auditsLoading && complianceMetrics.totalAudits === 0 && <HubEmptyState hub="compliance" onPrimaryAction={handleNewAudit} />}
               <div className="grid grid-cols-1 lg:grid-cols-2 gap-6">
-                <Suspense fallback={<Skeleton className="h-64" />}>
-                  <AuditCountdownCards />
-                </Suspense>
-                <Suspense fallback={<Skeleton className="h-64" />}>
-                  <ComplianceScoreDashboard />
-                </Suspense>
+                <Suspense fallback={<Skeleton className="h-64" />}><AuditCountdownCards /></Suspense>
+                <Suspense fallback={<Skeleton className="h-64" />}><ComplianceScoreDashboard /></Suspense>
               </div>
-
-              {/* Document & Certificate Expiry Matrix */}
-              <Suspense fallback={<Skeleton className="h-64" />}>
-                <DocumentExpiryMatrix />
-              </Suspense>
-
-              {/* Real-time Compliance Events Monitor */}
-              <Suspense fallback={<Skeleton className="h-64" />}>
-                <ComplianceEventsMonitor />
-              </Suspense>
-
-              {/* Wave 18: Compliance Intelligence Panels */}
+              <Suspense fallback={<Skeleton className="h-64" />}><DocumentExpiryMatrix /></Suspense>
+              <Suspense fallback={<Skeleton className="h-64" />}><ComplianceEventsMonitor /></Suspense>
               <div className="grid grid-cols-1 lg:grid-cols-2 gap-6">
-                <Suspense fallback={<Skeleton className="h-64" />}>
-                  <ComplianceRiskPredictor />
-                </Suspense>
-                <Suspense fallback={<Skeleton className="h-64" />}>
-                  <AuditReadinessTimeline />
-                </Suspense>
+                <Suspense fallback={<Skeleton className="h-64" />}><ComplianceRiskPredictor /></Suspense>
+                <Suspense fallback={<Skeleton className="h-64" />}><AuditReadinessTimeline /></Suspense>
               </div>
-
-              {/* Wave 25: Compliance Deep Analytics */}
+              <div className="grid grid-cols-1 lg:grid-cols-2 gap-6"><Suspense fallback={<Skeleton className="h-64" />}><RegulatoryChangeTracker /></Suspense></div>
               <div className="grid grid-cols-1 lg:grid-cols-2 gap-6">
-                <Suspense fallback={<Skeleton className="h-64" />}>
-                  <RegulatoryChangeTracker />
-                </Suspense>
+                <Suspense fallback={<Skeleton className="h-64" />}><VettingReadinessCenter /></Suspense>
+                <Suspense fallback={<Skeleton className="h-64" />}><AuditGapHeatmap /></Suspense>
               </div>
-
-              {/* Wave 29: Vetting Readiness */}
+              <div className="grid grid-cols-1 lg:grid-cols-2 gap-6"><Suspense fallback={<Skeleton className="h-64" />}><RegulatoryRadarLive /></Suspense></div>
               <div className="grid grid-cols-1 lg:grid-cols-2 gap-6">
-                <Suspense fallback={<Skeleton className="h-64" />}>
-                  <VettingReadinessCenter />
-                </Suspense>
-                <Suspense fallback={<Skeleton className="h-64" />}>
-                  <AuditGapHeatmap />
-                </Suspense>
+                <Suspense fallback={<Skeleton className="h-64" />}><ISMGapAnalyzer /></Suspense>
+                <Suspense fallback={<Skeleton className="h-64" />}><PSCDetentionPredictor /></Suspense>
               </div>
-
-              {/* Wave 39: Regulatory Radar Live */}
-              <div className="grid grid-cols-1 lg:grid-cols-2 gap-6">
-                <Suspense fallback={<Skeleton className="h-64" />}>
-                  <RegulatoryRadarLive />
-                </Suspense>
-              </div>
-
-              {/* Wave 44: ISM Gap Analyzer + Wave 50: PSC Detention Predictor */}
-              <div className="grid grid-cols-1 lg:grid-cols-2 gap-6">
-                <Suspense fallback={<Skeleton className="h-64" />}>
-                  <ISMGapAnalyzer />
-                </Suspense>
-                <Suspense fallback={<Skeleton className="h-64" />}>
-                  <PSCDetentionPredictor />
-                </Suspense>
-              </div>
-
-              {/* Safety Incident Analytics */}
-              <Suspense fallback={<Skeleton className="h-64" />}>
-                <SafetyIncidentAnalytics />
-              </Suspense>
-
-              {/* Wave 51: Compliance Readiness Timeline */}
-              <Suspense fallback={<Skeleton className="h-64" />}>
-                <ComplianceReadinessTimeline />
-              </Suspense>
-
+              <Suspense fallback={<Skeleton className="h-64" />}><SafetyIncidentAnalytics /></Suspense>
+              <Suspense fallback={<Skeleton className="h-64" />}><ComplianceReadinessTimeline /></Suspense>
               {(auditsLoading || complianceMetrics.totalAudits > 0) && <ComplianceHubPage />}
-
-              {/* Cross-Module Integration — Compliance ↔ Maintenance ↔ Risk ↔ Training */}
-              <CrossModulePanel
-                entityType="audit"
-                entityId={audits[0]?.id ?? ''}
-                vesselId={audits[0]?.vessel_id ?? undefined}
-                showQuickActions
-                showActivityFeed
-              />
+              <CrossModulePanel entityType="audit" entityId={audits[0]?.id ?? ''} vesselId={audits[0]?.vessel_id ?? undefined} showQuickActions showActivityFeed />
             </TabsContent>
 
+            {/* Audit Workflow */}
             <TabsContent value="audit-workflow" className="mt-0 space-y-6">
-              {/* Enhanced Action Bar for Audit Workflow */}
-              <EnhancedActionBar
-                title="Gerenciador de Auditorias"
-                subtitle="Scorecards dinâmicos para ISM, ISPS, MLC e todas 12 auditorias marítimas"
-                actions={[
-                  {
-                    id: 'new-audit',
-                    label: 'Nova Auditoria',
-                    icon: <Plus className="h-4 w-4" />,
-                    onClick: handleNewAudit,
-                    variant: 'default'
-                  }
-                ]}
+              <EnhancedActionBar title="Gerenciador de Auditorias" subtitle="Scorecards dinâmicos para ISM, ISPS, MLC e todas 12 auditorias marítimas"
+                actions={[{ id: 'new-audit', label: 'Nova Auditoria', icon: <Plus className="h-4 w-4" />, onClick: handleNewAudit, variant: 'default' }]}
                 onRefresh={handleRefresh}
               />
               <AuditWorkflowManager />
             </TabsContent>
-            
+
+            {/* 12 Auditorias */}
             <TabsContent value="audits" className="mt-0 space-y-6">
               <div className="text-center mb-6">
                 <h2 className="text-xl font-bold text-foreground">12 Auditorias Marítimas</h2>
@@ -515,86 +331,47 @@ export default function ComplianceMegaHub() {
               </div>
               <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 xl:grid-cols-4 gap-4">
                 {AUDIT_STANDARDS_CARDS.map((std) => (
-                  <button
-                    key={std.key}
-                    onClick={() => setSearchParams({ tab: 'audits', standard: std.key })}
-                    className={cn(
-                      "group relative flex flex-col items-start gap-3 p-5 rounded-2xl border",
-                      "bg-gradient-to-br transition-all duration-300 text-left",
-                      "hover:shadow-lg hover:scale-[1.02] active:scale-[0.98]",
-                      std.color
-                    )}
-                  >
-                    <div className="p-2.5 rounded-xl bg-background/60 backdrop-blur-sm group-hover:bg-background/80 transition-colors">
-                      <std.icon className="h-5 w-5 text-foreground" />
-                    </div>
-                    <div>
-                      <div className="text-base font-bold text-foreground">{std.label}</div>
-                      <div className="text-xs text-muted-foreground mt-0.5 leading-relaxed">{std.description}</div>
-                    </div>
+                  <button key={std.key} onClick={() => setSearchParams({ tab: 'audits', standard: std.key })}
+                    className={cn("group relative flex flex-col items-start gap-3 p-5 rounded-2xl border bg-gradient-to-br transition-all duration-300 text-left hover:shadow-lg hover:scale-[1.02] active:scale-[0.98]", std.color)}>
+                    <div className="p-2.5 rounded-xl bg-background/60 backdrop-blur-sm group-hover:bg-background/80 transition-colors"><std.icon className="h-5 w-5 text-foreground" /></div>
+                    <div><div className="text-base font-bold text-foreground">{std.label}</div><div className="text-xs text-muted-foreground mt-0.5 leading-relaxed">{std.description}</div></div>
                   </button>
                 ))}
               </div>
             </TabsContent>
 
-            <TabsContent value="scorecard" className="mt-0">
-              <ComplianceScorecardPage />
-            </TabsContent>
-            
-            <TabsContent value="audit-agents" className="mt-0">
-              <AgentsDashboard />
-            </TabsContent>
-            
-            <TabsContent value="certificates" className="mt-0">
-              <DiagnosticCertificatesPage />
-            </TabsContent>
-            
-            <TabsContent value="risk-matrix" className="mt-0">
-              <RiskMatrixV2 />
-            </TabsContent>
-            
-            <TabsContent value="ncs-capas" className="mt-0">
-              <DiagnosticNCsPage />
-            </TabsContent>
-            
-            <TabsContent value="regulations" className="mt-0">
-              <RegulationsV2 />
-            </TabsContent>
-            
-            <TabsContent value="security" className="mt-0">
-              <SecurityCenter />
+            {/* Scorecard & KPIs (merged: scorecard + ISM KPIs) */}
+            <TabsContent value="scorecard" className="mt-0 space-y-4">
+              <SubTabSelector options={[{ id: 'scorecard', label: '📊 Scorecard' }, { id: 'ism-kpi', label: '📈 ISM KPIs' }]} active={scorecardSubTab} onChange={(id) => setScorecardSubTab(id as 'scorecard' | 'ism-kpi')} />
+              {scorecardSubTab === 'scorecard' && <ComplianceScorecardPage />}
+              {scorecardSubTab === 'ism-kpi' && <ISMKPIDashboard />}
             </TabsContent>
 
-            <TabsContent value="loto" className="mt-0">
-              <LOTOProceduresManager />
+            <TabsContent value="audit-agents" className="mt-0"><AgentsDashboard /></TabsContent>
+            <TabsContent value="certificates" className="mt-0"><DiagnosticCertificatesPage /></TabsContent>
+
+            {/* Risk & Safety (merged: risk-matrix + ncs-capas + loto + jsa) */}
+            <TabsContent value="risk-safety" className="mt-0 space-y-4">
+              <SubTabSelector options={[{ id: 'risk-matrix', label: '🎯 Risk Matrix' }, { id: 'ncs-capas', label: '⚠️ NCs & CAPAs' }, { id: 'loto', label: '🔒 LOTO' }, { id: 'jsa', label: '📋 JSA' }]} active={riskSafetySubTab} onChange={(id) => setRiskSafetySubTab(id as any)} />
+              {riskSafetySubTab === 'risk-matrix' && <RiskMatrixV2 />}
+              {riskSafetySubTab === 'ncs-capas' && <DiagnosticNCsPage />}
+              {riskSafetySubTab === 'loto' && <LOTOProceduresManager />}
+              {riskSafetySubTab === 'jsa' && <JSATemplatesManager />}
             </TabsContent>
 
-            <TabsContent value="jsa" className="mt-0">
-              <JSATemplatesManager />
+            {/* Regulations & Security (merged: regulations + security + sire2) */}
+            <TabsContent value="regulations" className="mt-0 space-y-4">
+              <SubTabSelector options={[{ id: 'regulations', label: '📜 Regulations' }, { id: 'security', label: '🔐 Security' }, { id: 'sire2', label: '📡 SIRE 2.0' }]} active={regulationsSubTab} onChange={(id) => setRegulationsSubTab(id as 'regulations' | 'security' | 'sire2')} />
+              {regulationsSubTab === 'regulations' && <RegulationsV2 />}
+              {regulationsSubTab === 'security' && <SecurityCenter />}
+              {regulationsSubTab === 'sire2' && <SIRE2HubPage />}
             </TabsContent>
 
-            <TabsContent value="ism-kpi" className="mt-0">
-              <ISMKPIDashboard />
-            </TabsContent>
-
-            <TabsContent value="sire2" className="mt-0">
-              <SIRE2HubPage />
-            </TabsContent>
-
-            <TabsContent value="ai-hub" className="mt-0">
-              <ComplianceAIHub />
-            </TabsContent>
+            <TabsContent value="ai-hub" className="mt-0"><ComplianceAIHub /></TabsContent>
 
             <TabsContent value="modules" className="mt-0">
-              <HubModulesBrowser
-                modules={COMPLIANCE_ABSORBED}
-                hubName="Hub de Compliance"
-                hubColor="text-destructive"
-                activeModuleId={activeModuleId}
-                onModuleSelect={(id) => {
-                  if (id) setSearchParams({ tab: 'modules', module: id });
-                  else setSearchParams({ tab: 'modules' });
-                }}
+              <HubModulesBrowser modules={COMPLIANCE_ABSORBED} hubName="Hub de Compliance" hubColor="text-destructive" activeModuleId={activeModuleId}
+                onModuleSelect={(id) => { if (id) setSearchParams({ tab: 'modules', module: id }); else setSearchParams({ tab: 'modules' }); }}
               />
             </TabsContent>
           </Suspense>
@@ -604,19 +381,13 @@ export default function ComplianceMegaHub() {
       {/* New Audit Dialog */}
       <Dialog open={auditDialogOpen} onOpenChange={setAuditDialogOpen}>
         <DialogContent className="sm:max-w-md">
-          <DialogHeader>
-            <DialogTitle>Nova Auditoria</DialogTitle>
-          </DialogHeader>
+          <DialogHeader><DialogTitle>Nova Auditoria</DialogTitle></DialogHeader>
           <div className="space-y-4">
             <div><Label>Tipo de Auditoria *</Label>
               <Select value={auditForm.audit_type} onValueChange={v => setAuditForm(p => ({ ...p, audit_type: v }))}>
                 <SelectTrigger><SelectValue /></SelectTrigger>
                 <SelectContent>
-                  <SelectItem value="internal">Interna</SelectItem>
-                  <SelectItem value="external">Externa</SelectItem>
-                  <SelectItem value="flag_state">Flag State</SelectItem>
-                  <SelectItem value="psc">PSC</SelectItem>
-                  <SelectItem value="class">Sociedade Classificadora</SelectItem>
+                  <SelectItem value="internal">Interna</SelectItem><SelectItem value="external">Externa</SelectItem><SelectItem value="flag_state">Flag State</SelectItem><SelectItem value="psc">PSC</SelectItem><SelectItem value="class">Sociedade Classificadora</SelectItem>
                 </SelectContent>
               </Select>
             </div>
@@ -626,15 +397,7 @@ export default function ComplianceMegaHub() {
         </DialogContent>
       </Dialog>
 
-      {/* Module Launcher Modal */}
-      <ModuleLauncherModal
-        open={launcherOpen}
-        onOpenChange={setLauncherOpen}
-        hubName="Arsenal Regulatório"
-        hubIcon={<Shield className="h-5 w-5" />}
-        modules={COMPLIANCE_ABSORBED}
-        onModuleSelect={(moduleId) => setSearchParams({ tab: 'modules', module: moduleId })}
-      />
+      <ModuleLauncherModal open={launcherOpen} onOpenChange={setLauncherOpen} hubName="Arsenal Regulatório" hubIcon={<Shield className="h-5 w-5" />} modules={COMPLIANCE_ABSORBED} onModuleSelect={(moduleId) => setSearchParams({ tab: 'modules', module: moduleId })} />
     </div>
   );
 }

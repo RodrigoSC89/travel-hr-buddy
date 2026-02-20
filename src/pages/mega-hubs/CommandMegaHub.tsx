@@ -4,7 +4,9 @@
  * 
  * Consolida: Central de Comando + NOC + SOC + Comms + Alerts
  * 
- * ✅ WORLD-CLASS COMPONENTS INTEGRATED
+ * P2: Consolidated from 12 tabs to 8 grouped tabs
+ * ✅ ZERO FEATURE LOSS
+ * ✅ BACKWARD COMPATIBLE DEEP LINKS
  */
 
 import React, { Suspense, lazy, useMemo, useCallback, useState } from 'react';
@@ -30,6 +32,7 @@ import { HubModulesBrowser } from '@/components/ui/HubModulesBrowser';
 import { COMMAND_ABSORBED, COMMAND_TAB_MODULES } from '@/lib/hub-absorbed-modules';
 import { TabTriggerWithModules } from '@/components/ui/TabTriggerWithModules';
 import { ModuleLauncherModal } from '@/components/ui/ModuleLauncherModal';
+import { SubTabSelector } from '@/components/ui/SubTabSelector';
 
 // Lazy load sub-components
 const EnhancedUnifiedDashboard = lazy(() => import('@/components/dashboard/enhanced-unified-dashboard'));
@@ -84,30 +87,65 @@ const LoadingSkeleton = () => (
   </div>
 );
 
+/**
+ * P2: Consolidated from 12 tabs to 8 grouped tabs
+ * 
+ * Old 12: overview, operations, executive, digital-twin, noc, soc, comms, alerts, ai-copilot, ceo, my-dashboard, performance
+ * 
+ * New 8:
+ * 1. overview      → Overview (unchanged)
+ * 2. operations    → Operations (unchanged)
+ * 3. executive     → Executive (executive + CEO + performance as subtabs)
+ * 4. digital-twin  → Digital Twin (unchanged)
+ * 5. noc-soc       → NOC & SOC (NOC + SOC as subtabs)
+ * 6. comms-alerts  → Comms & Alerts (Comms + Alerts as subtabs)
+ * 7. ai-copilot    → IA Copiloto (unchanged)
+ * 8. my-dashboard  → Meu Dashboard (unchanged)
+ */
 const tabConfig = [
   { id: 'overview', label: 'Overview', icon: Compass },
   { id: 'operations', label: 'Operations', icon: Activity },
   { id: 'executive', label: 'Executive', icon: BarChart3 },
   { id: 'digital-twin', label: '🚢 Digital Twin', icon: Ship },
-  { id: 'noc', label: 'NOC 24/7', icon: Eye },
-  { id: 'soc', label: 'SOC Security', icon: Shield },
-  { id: 'comms', label: 'Comms', icon: Radio },
-  { id: 'alerts', label: 'Alerts', icon: Bell },
+  { id: 'noc-soc', label: 'NOC & SOC', icon: Eye },
+  { id: 'comms-alerts', label: 'Comms & Alerts', icon: Radio },
   { id: 'ai-copilot', label: '🧠 IA Copiloto', icon: Brain },
-  { id: 'ceo', label: '👔 CEO Dashboard', icon: BarChart3 },
   { id: 'my-dashboard', label: '🎯 Meu Dashboard', icon: Activity },
-  { id: 'performance', label: '📊 Performance', icon: Gauge },
 ];
+
+// Backward compatibility: map old tab IDs to new grouped IDs
+const TAB_MIGRATION: Record<string, string> = {
+  'noc': 'noc-soc',
+  'soc': 'noc-soc',
+  'comms': 'comms-alerts',
+  'alerts': 'comms-alerts',
+  'ceo': 'executive',
+  'performance': 'executive',
+};
 
 export default function CommandMegaHub() {
   const [searchParams, setSearchParams] = useSearchParams();
   const activeModuleId = searchParams.get('module');
   const navigate = useNavigate();
-  const activeTab = searchParams.get('tab') || 'overview';
+  const rawTab = searchParams.get('tab') || 'overview';
+  const activeTab = TAB_MIGRATION[rawTab] || rawTab;
   const [launcherOpen, setLauncherOpen] = useState(false);
   const queryClient = useQueryClient();
   const { quickActions, exportToCSV } = useRealActionHandlers();
   const { vessels, voyages, metrics, isLoading } = useOperationsCommandData();
+
+  // Sub-tab state for grouped tabs
+  const [nocSocSubTab, setNocSocSubTab] = useState<'noc' | 'soc'>('noc');
+  const [commsAlertsSubTab, setCommsAlertsSubTab] = useState<'comms' | 'alerts'>('comms');
+  const [executiveSubTab, setExecutiveSubTab] = useState<'executive' | 'ceo' | 'performance'>('executive');
+
+  // Initialize sub-tab from old deep-link
+  React.useEffect(() => {
+    if (rawTab === 'soc') setNocSocSubTab('soc');
+    if (rawTab === 'alerts') setCommsAlertsSubTab('alerts');
+    if (rawTab === 'ceo') setExecutiveSubTab('ceo');
+    if (rawTab === 'performance') setExecutiveSubTab('performance');
+  }, [rawTab]);
 
   const handleTabChange = (value: string) => {
     setSearchParams({ tab: value });
@@ -158,7 +196,6 @@ export default function CommandMegaHub() {
   const workflowSteps = useMemo(() => {
     const hasVessels = metrics.totalVessels > 0;
     const hasVoyages = metrics.activeVoyages > 0 || metrics.plannedVoyages > 0;
-    const hasOperational = metrics.operationalVessels > 0;
     
     return [
       { id: 'planning', label: 'Fleet Setup', status: hasVessels ? 'completed' as const : 'current' as const },
@@ -254,7 +291,7 @@ export default function CommandMegaHub() {
                   { label: 'Manutenção', icon: Wrench, color: 'text-warning', bg: 'bg-warning/10', onClick: () => navigate('/maintenance') },
                   { label: 'Documentos', icon: FileText, color: 'text-success', bg: 'bg-success/10', onClick: () => navigate('/workbench?section=docs') },
                   { label: 'Compliance', icon: Shield, color: 'text-accent', bg: 'bg-accent/10', onClick: () => navigate('/compliance') },
-                  { label: 'Alertas', icon: AlertTriangle, color: 'text-destructive', bg: 'bg-destructive/10', onClick: () => setSearchParams({ tab: 'alerts' }) },
+                  { label: 'Alertas', icon: AlertTriangle, color: 'text-destructive', bg: 'bg-destructive/10', onClick: () => { setSearchParams({ tab: 'comms-alerts' }); setCommsAlertsSubTab('alerts'); } },
                 ].map((action) => (
                   <button
                     key={action.label}
@@ -277,7 +314,7 @@ export default function CommandMegaHub() {
                 <FleetUtilizationKPI />
               </Suspense>
 
-              {/* System Health KPIs - Always visible */}
+              {/* System Health KPIs */}
               <SystemHealthKPIs />
 
               {/* Enhanced Action Bar */}
@@ -289,7 +326,7 @@ export default function CommandMegaHub() {
                     id: 'alerts',
                     label: `Alertas${metrics.totalVessels > 0 && metrics.operationalVessels === 0 ? ' ⚠️' : ''}`,
                     icon: <Bell className="h-4 w-4" />,
-                    onClick: () => setSearchParams({ tab: 'alerts' }),
+                    onClick: () => { setSearchParams({ tab: 'comms-alerts' }); setCommsAlertsSubTab('alerts'); },
                     variant: 'default'
                   }
                 ]}
@@ -313,7 +350,7 @@ export default function CommandMegaHub() {
                 ]}
               />
 
-              {/* Workflow Status - Dynamic */}
+              {/* Workflow Status */}
               <WorkflowStatusBar
                 title="Status Operacional da Frota"
                 steps={workflowSteps}
@@ -322,19 +359,16 @@ export default function CommandMegaHub() {
 
               {/* Mission Control Grid */}
               <div className="grid grid-cols-1 lg:grid-cols-3 gap-6">
-                {/* Operational Radar */}
                 <div className="lg:col-span-1">
                   <Suspense fallback={<Skeleton className="h-[400px]" />}>
                     <OperationalRadar />
                   </Suspense>
                 </div>
-                {/* Situation Room */}
                 <div className="lg:col-span-1">
                   <Suspense fallback={<Skeleton className="h-[400px]" />}>
                     <SituationRoom />
                   </Suspense>
                 </div>
-                {/* Activity Feed */}
                 <div className="lg:col-span-1">
                   <PremiumTimeline
                     title="Activity Feed"
@@ -347,126 +381,76 @@ export default function CommandMegaHub() {
 
               {/* Global Intelligence Network */}
               <div className="grid grid-cols-1 lg:grid-cols-2 gap-6">
-                <Suspense fallback={<Skeleton className="h-[500px]" />}>
-                  <FleetDigitalTwinMap />
-                </Suspense>
-                <Suspense fallback={<Skeleton className="h-[500px]" />}>
-                  <AIDecisionEngine />
-                </Suspense>
+                <Suspense fallback={<Skeleton className="h-[500px]" />}><FleetDigitalTwinMap /></Suspense>
+                <Suspense fallback={<Skeleton className="h-[500px]" />}><AIDecisionEngine /></Suspense>
               </div>
 
               {/* Wave 10: Autonomous Fleet Intelligence */}
               <div className="grid grid-cols-1 lg:grid-cols-2 gap-6">
-                <Suspense fallback={<Skeleton className="h-[500px]" />}>
-                  <PredictiveCommandCenter />
-                </Suspense>
-                <Suspense fallback={<Skeleton className="h-[500px]" />}>
-                  <AutonomousFleetOptimizer />
-                </Suspense>
+                <Suspense fallback={<Skeleton className="h-[500px]" />}><PredictiveCommandCenter /></Suspense>
+                <Suspense fallback={<Skeleton className="h-[500px]" />}><AutonomousFleetOptimizer /></Suspense>
               </div>
 
               {/* Wave 11: Fleet Nerve Center */}
               <div className="grid grid-cols-1 lg:grid-cols-2 gap-6">
-                <Suspense fallback={<Skeleton className="h-[500px]" />}>
-                  <FuelIntelligencePanel />
-                </Suspense>
-                <Suspense fallback={<Skeleton className="h-[500px]" />}>
-                  <ComplianceNerveCenter />
-                </Suspense>
+                <Suspense fallback={<Skeleton className="h-[500px]" />}><FuelIntelligencePanel /></Suspense>
+                <Suspense fallback={<Skeleton className="h-[500px]" />}><ComplianceNerveCenter /></Suspense>
               </div>
 
               {/* Wave 12: Crew Wellness & Financial Cockpit */}
               <div className="grid grid-cols-1 lg:grid-cols-2 gap-6">
-                <Suspense fallback={<Skeleton className="h-[500px]" />}>
-                  <CrewWellnessCommand />
-                </Suspense>
-                <Suspense fallback={<Skeleton className="h-[500px]" />}>
-                  <FinancialCockpit />
-                </Suspense>
+                <Suspense fallback={<Skeleton className="h-[500px]" />}><CrewWellnessCommand /></Suspense>
+                <Suspense fallback={<Skeleton className="h-[500px]" />}><FinancialCockpit /></Suspense>
               </div>
 
               {/* Wave 21: Command Intelligence */}
               <div className="grid grid-cols-1 lg:grid-cols-2 gap-6">
-                <Suspense fallback={<Skeleton className="h-[400px]" />}>
-                  <IncidentResponseTimeline />
-                </Suspense>
-                <Suspense fallback={<Skeleton className="h-[400px]" />}>
-                  <SystemUptimeMonitor />
-                </Suspense>
+                <Suspense fallback={<Skeleton className="h-[400px]" />}><IncidentResponseTimeline /></Suspense>
+                <Suspense fallback={<Skeleton className="h-[400px]" />}><SystemUptimeMonitor /></Suspense>
               </div>
 
               {/* Wave 33: Fleet ROI Command */}
               <div className="grid grid-cols-1 lg:grid-cols-2 gap-6">
-                <Suspense fallback={<Skeleton className="h-64" />}>
-                  <FleetROICommand />
-                </Suspense>
-                <Suspense fallback={<Skeleton className="h-64" />}>
-                  <FleetRiskHeatmap />
-                </Suspense>
+                <Suspense fallback={<Skeleton className="h-64" />}><FleetROICommand /></Suspense>
+                <Suspense fallback={<Skeleton className="h-64" />}><FleetRiskHeatmap /></Suspense>
               </div>
 
               {/* Wave 36: Predictive Crew Turnover + Wave 41: Contract Expiry */}
               <div className="grid grid-cols-1 lg:grid-cols-2 gap-6">
-                <Suspense fallback={<Skeleton className="h-64" />}>
-                  <PredictiveCrewTurnover />
-                </Suspense>
-                <Suspense fallback={<Skeleton className="h-64" />}>
-                  <ContractExpiryRadar />
-                </Suspense>
+                <Suspense fallback={<Skeleton className="h-64" />}><PredictiveCrewTurnover /></Suspense>
+                <Suspense fallback={<Skeleton className="h-64" />}><ContractExpiryRadar /></Suspense>
               </div>
 
               {/* Voyage P&L Quick View + Fleet Status Grid */}
               <div className="grid grid-cols-1 lg:grid-cols-2 gap-6">
-                <Suspense fallback={<Skeleton className="h-80" />}>
-                  <VoyagePnLQuickView />
-                </Suspense>
-                <Suspense fallback={<Skeleton className="h-80" />}>
-                  <FleetStatusGrid />
-                </Suspense>
+                <Suspense fallback={<Skeleton className="h-80" />}><VoyagePnLQuickView /></Suspense>
+                <Suspense fallback={<Skeleton className="h-80" />}><FleetStatusGrid /></Suspense>
               </div>
 
               {/* Crew Certification Radar + Live Incident Feed */}
               <div className="grid grid-cols-1 lg:grid-cols-2 gap-6">
-                <Suspense fallback={<Skeleton className="h-64" />}>
-                  <CrewCertificationRadar />
-                </Suspense>
-                <Suspense fallback={<Skeleton className="h-64" />}>
-                  <LiveIncidentFeed />
-                </Suspense>
+                <Suspense fallback={<Skeleton className="h-64" />}><CrewCertificationRadar /></Suspense>
+                <Suspense fallback={<Skeleton className="h-64" />}><LiveIncidentFeed /></Suspense>
               </div>
 
-              {/* Event System - Central Nervous System */}
-              <Suspense fallback={<Skeleton className="h-64" />}>
-                <SystemEventsPanel />
-              </Suspense>
+              {/* Event System */}
+              <Suspense fallback={<Skeleton className="h-64" />}><SystemEventsPanel /></Suspense>
 
               {/* Wave 53: P&I Claims Intelligence */}
-              <Suspense fallback={<Skeleton className="h-80" />}>
-                <PIClaimsIntelligence />
-              </Suspense>
+              <Suspense fallback={<Skeleton className="h-80" />}><PIClaimsIntelligence /></Suspense>
 
               {/* Wave 54: Cross-Module Integration Health */}
               <div className="grid grid-cols-1 lg:grid-cols-2 gap-6">
-                <Suspense fallback={<Skeleton className="h-80" />}>
-                  <IntegrationHealthWidget />
-                </Suspense>
-                <Suspense fallback={<Skeleton className="h-80" />}>
-                  <EventActivityFeed title="Eventos Cross-Module" limit={15} />
-                </Suspense>
+                <Suspense fallback={<Skeleton className="h-80" />}><IntegrationHealthWidget /></Suspense>
+                <Suspense fallback={<Skeleton className="h-80" />}><EventActivityFeed title="Eventos Cross-Module" limit={15} /></Suspense>
               </div>
 
-              {/* Full Dashboard below */}
+              {/* Full Dashboard */}
               <EnhancedUnifiedDashboard />
-
-              {/* Modules Overview - Always visible */}
               <SystemModulesOverview />
 
-              {/* Empty State when no data */}
               {!isLoading && metrics.totalVessels === 0 && metrics.activeVoyages === 0 && (
-                <HubEmptyState 
-                  hub="command" 
-                  onPrimaryAction={() => setSearchParams({ tab: 'operations' })} 
-                />
+                <HubEmptyState hub="command" onPrimaryAction={() => setSearchParams({ tab: 'operations' })} />
               )}
             </TabsContent>
             
@@ -474,47 +458,64 @@ export default function CommandMegaHub() {
               <OperationsOverviewPage />
             </TabsContent>
             
-            <TabsContent value="executive" className="mt-0">
-              <ExecutiveDashboardPage />
+            {/* Executive (merged: executive + CEO + performance) */}
+            <TabsContent value="executive" className="mt-0 space-y-4">
+              <SubTabSelector
+                options={[
+                  { id: 'executive', label: '📊 Executive Dashboard' },
+                  { id: 'ceo', label: '👔 CEO Dashboard' },
+                  { id: 'performance', label: '📈 Performance' },
+                ]}
+                active={executiveSubTab}
+                onChange={(id) => setExecutiveSubTab(id as 'executive' | 'ceo' | 'performance')}
+              />
+              {executiveSubTab === 'executive' && <ExecutiveDashboardPage />}
+              {executiveSubTab === 'ceo' && <CeoCommandDashboard />}
+              {executiveSubTab === 'performance' && <PerformanceMetrics />}
             </TabsContent>
-            
-            <TabsContent value="noc" className="mt-0">
-              <NOC />
+
+            <TabsContent value="digital-twin" className="mt-0 space-y-6">
+              <VesselDigitalTwin />
+              <EnhancedPresence />
             </TabsContent>
-            
-            <TabsContent value="soc" className="mt-0">
-              <SOCPage />
+
+            {/* NOC & SOC (merged) */}
+            <TabsContent value="noc-soc" className="mt-0 space-y-4">
+              <SubTabSelector
+                options={[
+                  { id: 'noc', label: '👁️ NOC 24/7' },
+                  { id: 'soc', label: '🛡️ SOC Security' },
+                ]}
+                active={nocSocSubTab}
+                onChange={(id) => setNocSocSubTab(id as 'noc' | 'soc')}
+              />
+              {nocSocSubTab === 'noc' && <NOC />}
+              {nocSocSubTab === 'soc' && <SOCPage />}
             </TabsContent>
-            
-            <TabsContent value="comms" className="mt-0">
-              <CommunicationCommandCenter />
-            </TabsContent>
-            
-            <TabsContent value="alerts" className="mt-0">
-              <AlertsCommandCenter />
+
+            {/* Comms & Alerts (merged) */}
+            <TabsContent value="comms-alerts" className="mt-0 space-y-4">
+              <SubTabSelector
+                options={[
+                  { id: 'comms', label: '📻 Communications' },
+                  { id: 'alerts', label: '🔔 Alerts Center' },
+                ]}
+                active={commsAlertsSubTab}
+                onChange={(id) => setCommsAlertsSubTab(id as 'comms' | 'alerts')}
+              />
+              {commsAlertsSubTab === 'comms' && <CommunicationCommandCenter />}
+              {commsAlertsSubTab === 'alerts' && <AlertsCommandCenter />}
             </TabsContent>
 
             <TabsContent value="ai-copilot" className="mt-0">
               <CommandAIHub />
             </TabsContent>
 
-            <TabsContent value="ceo" className="mt-0">
-              <CeoCommandDashboard />
-            </TabsContent>
-
             <TabsContent value="my-dashboard" className="mt-0">
               <CustomizableDashboardGrid />
             </TabsContent>
-            <TabsContent value="digital-twin" className="mt-0 space-y-6">
-              <VesselDigitalTwin />
-              <EnhancedPresence />
-            </TabsContent>
 
-            <TabsContent value="performance" className="mt-0 space-y-6">
-              <PerformanceMetrics />
-            </TabsContent>
-
-            {/* Centro Estratégico - Módulos absorvidos renderizados inline */}
+            {/* Centro Estratégico - Módulos absorvidos */}
             <TabsContent value="modules" className="mt-0">
               <HubModulesBrowser
                 modules={COMMAND_ABSORBED}
