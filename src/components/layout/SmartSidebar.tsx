@@ -1,18 +1,10 @@
 /**
- * SmartSidebar Component - PATCH 862
- * Enhanced with: Search, Dynamic Badges, Role-based Filtering
- * 
- * Features:
- * - Command+K search shortcut
- * - Dynamic badge counters (alerts, notifications, tasks)
- * - Role-based route filtering
- * - Responsive mobile menu
- * - PWA Safe Area Support
- * - Body scroll lock when open
- * - GPU-accelerated animations
+ * SmartSidebar Component - v13 Polish
+ * Added: animated section expand/collapse, version badge, improved active states
  */
 import { useState, useEffect, useMemo, useCallback, useRef } from "react";
 import { Link, useLocation, useNavigate } from "react-router-dom";
+import { motion, AnimatePresence } from "framer-motion";
 import { 
   ChevronDown,
   ChevronRight,
@@ -20,7 +12,8 @@ import {
   X,
   Ship,
   Search,
-  Command
+  Command,
+  Zap
 } from "lucide-react";
 import { cn } from "@/lib/utils";
 import { Input } from "@/components/ui/input";
@@ -29,13 +22,13 @@ import {
   SIDEBAR_ROUTES, 
   findGroupByPath, 
   getAllRoutes,
-  ROLE_HIERARCHY,
   type SidebarGroup, 
   type SidebarRoute,
   type UserRole 
 } from "@/config/sidebar-routes";
 import { usePermissions } from "@/hooks/use-permissions";
 import { useSidebarBadges } from "@/hooks/use-sidebar-badges";
+
 
 interface SmartSidebarProps {
   className?: string;
@@ -366,45 +359,62 @@ export function SmartSidebar({ className }: SmartSidebarProps) {
               <div key={group.title}>
                 <button
                   className={cn(
-                    "flex items-center justify-between w-full px-3 py-2.5 text-left text-sm font-medium rounded-md transition-colors text-sidebar-foreground hover:bg-sidebar-accent hover:text-sidebar-accent-foreground",
-                    openSection === group.title && "bg-sidebar-accent text-sidebar-accent-foreground"
+                    "flex items-center justify-between w-full px-3 py-2.5 text-left text-sm font-medium rounded-md transition-all duration-150 text-sidebar-foreground hover:bg-sidebar-accent hover:text-sidebar-accent-foreground",
+                    openSection === group.title && "bg-sidebar-accent/70 text-sidebar-accent-foreground"
                   )}
                   onClick={() => toggleSection(group.title)}
                   aria-expanded={openSection === group.title}
                   aria-controls={`nav-section-${group.title.replace(/\s/g, '-')}`}
                 >
-                  <span>{group.title}</span>
-                  {openSection === group.title ? (
+                  <span className="flex items-center gap-1.5">
+                    {group.title}
+                  </span>
+                  <motion.div
+                    animate={{ rotate: openSection === group.title ? 180 : 0 }}
+                    transition={{ duration: 0.2, ease: [0.22, 1, 0.36, 1] }}
+                  >
                     <ChevronDown className="w-4 h-4" aria-hidden="true" />
-                  ) : (
-                    <ChevronRight className="w-4 h-4" aria-hidden="true" />
-                  )}
+                  </motion.div>
                 </button>
                 
-                {openSection === group.title && (
-                  <div 
-                    id={`nav-section-${group.title.replace(/\s/g, '-')}`}
-                    className="ml-4 mt-1 space-y-0.5 border-l border-sidebar-border pl-2"
-                  >
-                    {group.items.map((item) => (
-                      <Link
-                        to={item.path}
-                        key={`${group.title}-${item.path}`}
-                        onClick={closeMobileMenu}
-                        className={cn(
-                          "flex items-center px-3 py-2 text-sm rounded-md transition-colors",
-                          isActive(item.path)
-                            ? "bg-sidebar-primary text-sidebar-primary-foreground font-medium"
-                            : "text-sidebar-foreground/80 hover:bg-sidebar-accent hover:text-sidebar-accent-foreground"
-                        )}
-                        aria-current={isActive(item.path) ? "page" : undefined}
-                      >
-                        <span className="truncate">{renderLabel(item)}</span>
-                        {renderBadge(item)}
-                      </Link>
-                    ))}
-                  </div>
-                )}
+                <AnimatePresence initial={false}>
+                  {openSection === group.title && (
+                    <motion.div
+                      id={`nav-section-${group.title.replace(/\s/g, '-')}`}
+                      initial={{ height: 0, opacity: 0 }}
+                      animate={{ height: "auto", opacity: 1 }}
+                      exit={{ height: 0, opacity: 0 }}
+                      transition={{ duration: 0.22, ease: [0.22, 1, 0.36, 1] }}
+                      style={{ overflow: "hidden" }}
+                    >
+                      <div className="ml-4 mt-1 space-y-0.5 border-l border-sidebar-border pl-2 pb-1">
+                        {group.items.map((item, idx) => (
+                          <motion.div
+                            key={`${group.title}-${item.path}`}
+                            initial={{ opacity: 0, x: -6 }}
+                            animate={{ opacity: 1, x: 0 }}
+                            transition={{ delay: idx * 0.03, duration: 0.18 }}
+                          >
+                            <Link
+                              to={item.path}
+                              onClick={closeMobileMenu}
+                              className={cn(
+                                "flex items-center px-3 py-2 text-sm rounded-md transition-all duration-150",
+                                isActive(item.path)
+                                  ? "bg-sidebar-primary text-sidebar-primary-foreground font-semibold shadow-sm"
+                                  : "text-sidebar-foreground/80 hover:bg-sidebar-accent hover:text-sidebar-accent-foreground hover:translate-x-0.5"
+                              )}
+                              aria-current={isActive(item.path) ? "page" : undefined}
+                            >
+                              <span className="truncate flex-1">{renderLabel(item)}</span>
+                              {renderBadge(item)}
+                            </Link>
+                          </motion.div>
+                        ))}
+                      </div>
+                    </motion.div>
+                  )}
+                </AnimatePresence>
               </div>
             ))
           )}
@@ -419,10 +429,17 @@ export function SmartSidebar({ className }: SmartSidebarProps) {
           )}
         </nav>
 
-        {/* Footer */}
-        <div className="p-4 border-t border-sidebar-border text-xs text-sidebar-foreground/60 text-center">
-          <p>Nauti One v4.0.0</p>
-          <p className="mt-1">© 2024-2025 Nauti One</p>
+        {/* Footer - polished */}
+        <div className="p-3 border-t border-sidebar-border">
+          <div className="flex items-center justify-between text-xs text-sidebar-foreground/50">
+            <div className="flex items-center gap-1.5">
+              <Zap className="w-3 h-3 text-primary/60" />
+              <span className="font-medium">Nauti One</span>
+            </div>
+            <span className="bg-sidebar-accent/50 px-1.5 py-0.5 rounded text-[10px] font-mono">
+              v4.0
+            </span>
+          </div>
         </div>
       </aside>
     </>

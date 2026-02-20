@@ -1,6 +1,6 @@
 /**
- * Smart Header Component
- * PATCH VOICE-1.0: Voice commands integration with ElevenLabs TTS
+ * Smart Header Component - v13 Polish
+ * Added: NetworkStatusIndicator for real-time connectivity feedback
  */
 
 import React, { useState } from "react";
@@ -9,16 +9,18 @@ import { Button } from "@/components/ui/button";
 import { useTheme } from "@/components/layout/theme-provider";
 import { SimpleGlobalSearch } from "@/components/ui/simple-global-search";
 import { UserMenu } from "@/components/auth/user-menu";
-// Voice commands removed during cleanup
 import { Tooltip, TooltipContent, TooltipTrigger } from "@/components/ui/tooltip";
 import { cn } from "@/lib/utils";
-// Lazy load dialogs para evitar problemas de hooks
+import { NetworkStatusIndicator } from "@/components/ui/NetworkStatusIndicator";
+
+// Lazy load dialogs
 const AlertsDialog = React.lazy(() => 
   import("@/components/layout/AlertsDialog").then(m => ({ default: m.AlertsDialog }))
 );
 const QuickCopilotDialog = React.lazy(() => 
   import("@/components/layout/QuickCopilotDialog").then(m => ({ default: m.QuickCopilotDialog }))
 );
+
 
 export function SmartHeader() {
   const { theme, setTheme } = useTheme();
@@ -48,6 +50,9 @@ export function SmartHeader() {
         </div>
 
         <div className="flex items-center gap-2">
+          {/* Network status - compact indicator */}
+          <NetworkStatusIndicator compact />
+
           {/* Theme Toggle */}
           <Button
             variant="ghost"

@@ -15,6 +15,8 @@ import { useCrossModuleAutomation } from "@/hooks/useCrossModuleAutomation";
 import { useRealtimeAlerts } from "@/hooks/useRealtimeAlerts";
 import { useGlobalShortcuts } from "@/hooks/useGlobalShortcuts";
 import { useAutoTour } from "@/hooks/useGuidedTour";
+import { ModuleErrorBoundary } from "@/components/error/ModuleErrorBoundary";
+import { ModulePageSkeleton } from "@/components/ui/LoadingSkeleton";
 
 // Lazy load heavy layout components
 const GlobalSearch = lazy(() => import("@/components/ui/global-search"));
@@ -33,6 +35,7 @@ const QuickActionFAB = lazy(() =>
 const KeyboardShortcutsHelp = lazy(() => 
   import('@/components/ui/KeyboardShortcutsHelp').then(m => ({ default: m.KeyboardShortcutsHelp }))
 );
+
 
 export const AppLayout: FC = () => {
   const { isSearchOpen, setIsSearchOpen } = useSystemActions();
@@ -65,7 +68,11 @@ export const AppLayout: FC = () => {
               <Header />
               <main className="flex-1 overflow-auto px-3 pb-24 md:px-6 md:pb-6 lg:px-8 xl:px-10 2xl:px-12" data-tour="main-content">
                 <Suspense fallback={null}><SmartBreadcrumbs /></Suspense>
-                <Outlet />
+                <ModuleErrorBoundary moduleName="Módulo">
+                  <Suspense fallback={<ModulePageSkeleton />}>
+                    <Outlet />
+                  </Suspense>
+                </ModuleErrorBoundary>
               </main>
             </div>
             
