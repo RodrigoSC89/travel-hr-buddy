@@ -4,7 +4,7 @@
  */
 
 import { localSync, type OfflineRecord } from "./localSync";
-import { supabase } from "@/integrations/supabase/client";
+import { fromUntyped } from "@/integrations/supabase/untyped-client";
 import { toast } from "sonner";
 import { logger } from '@/lib/logger';
 
@@ -90,18 +90,15 @@ class SyncEngine {
     const { table, action } = record;
     const data = record.data as Record<string, unknown>;
 
-    // Use Function cast for dynamic table access
-    const fromFn = supabase.from as Function;
-
     switch (action) {
     case "create":
-      const { error: createError } = await fromFn(table).insert(data);
+      const { error: createError } = await fromUntyped(table).insert(data);
       if (createError) throw createError;
       break;
 
     case "update": {
       const { id, ...updateData } = data;
-      const { error: updateError } = await fromFn(table)
+      const { error: updateError } = await fromUntyped(table)
         .update(updateData)
         .eq("id", String(id));
       if (updateError) throw updateError;
@@ -109,7 +106,7 @@ class SyncEngine {
     }
 
     case "delete":
-      const { error: deleteError } = await fromFn(table)
+      const { error: deleteError } = await fromUntyped(table)
         .delete()
         .eq("id", String(data.id));
       if (deleteError) throw deleteError;

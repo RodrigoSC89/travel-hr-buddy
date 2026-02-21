@@ -1,6 +1,7 @@
 import { useEffect, useState } from "react";
 import { useNavigate } from "react-router-dom";
 import { supabase } from "@/integrations/supabase/client";
+import { fromUntyped } from "@/integrations/supabase/untyped-client";
 import { Card, CardContent, CardHeader, CardTitle } from "@/components/ui/card";
 import { Button } from "@/components/ui/button";
 import { Textarea } from "@/components/ui/textarea";
@@ -92,7 +93,7 @@ export default function CollaborationPage() {
 
   const fetchComments = async () => {
     try {
-      const { data, error } = await (supabase.from as Function)("colab_comments")
+      const { data, error } = await fromUntyped("colab_comments")
         .select(`
           id,
           author_id,
@@ -165,7 +166,7 @@ export default function CollaborationPage() {
         throw new Error("Usuário não autenticado");
       }
 
-      const { error } = await (supabase.from as Function)("colab_comments")
+      const { error } = await fromUntyped("colab_comments")
         .insert({
           author_id: user.id,
           text: newComment.trim(),
@@ -192,7 +193,7 @@ export default function CollaborationPage() {
 
   const fetchReplies = async (commentId: string) => {
     try {
-      const { data, error } = await (supabase.from as Function)("colab_replies")
+      const { data, error } = await fromUntyped("colab_replies")
         .select(`
           id,
           comment_id,
@@ -240,7 +241,7 @@ export default function CollaborationPage() {
         [emoji]: (currentReactions[emoji] || 0) + 1
       };
 
-      const { error } = await (supabase.from as Function)("colab_comments")
+      const { error } = await fromUntyped("colab_comments")
         .update({ reactions: newReactions })
         .eq("id", commentId);
 
@@ -280,7 +281,7 @@ export default function CollaborationPage() {
         throw new Error("Usuário não autenticado");
       }
 
-      const { error } = await (supabase.from as Function)("colab_replies")
+      const { error } = await fromUntyped("colab_replies")
         .insert({
           comment_id: commentId,
           author_id: user.id,

@@ -4,7 +4,7 @@
  */
 import { useState, useMemo } from 'react';
 import { useQuery, useMutation, useQueryClient } from '@tanstack/react-query';
-import { supabase } from '@/integrations/supabase/client';
+import { fromUntyped } from '@/integrations/supabase/untyped-client';
 import { Card, CardContent, CardHeader, CardTitle } from '@/components/ui/card';
 import { Button } from '@/components/ui/button';
 import { Input } from '@/components/ui/input';
@@ -20,7 +20,7 @@ import {
 } from 'lucide-react';
 import { BarChart, Bar, XAxis, YAxis, CartesianGrid, Tooltip, ResponsiveContainer, Legend } from 'recharts';
 
-const dynamicFrom = supabase.from as Function;
+
 
 interface VoyageForm {
   voyage_id: string;
@@ -64,7 +64,7 @@ export function VoyagePnLManager() {
   const { data: voyages = [], isLoading } = useQuery({
     queryKey: ['voyage-pnl'],
     queryFn: async () => {
-      const { data, error } = await dynamicFrom('voyage_pnl')
+      const { data, error } = await fromUntyped('voyage_pnl')
         .select('*')
         .order('created_at', { ascending: false });
       if (error) throw error;
@@ -81,7 +81,7 @@ export function VoyagePnLManager() {
       const voyageDays = Number(form.voyage_days) || 1;
       const tce = voyageDays > 0 ? (rev - exp) / voyageDays : 0;
 
-      const { error } = await dynamicFrom('voyage_pnl').insert({
+      const { error } = await fromUntyped('voyage_pnl').insert({
         voyage_id: form.voyage_id || `VOY-${Date.now().toString(36).toUpperCase()}`,
         vessel_name: form.vessel_name,
         route_description: form.route_description || null,
