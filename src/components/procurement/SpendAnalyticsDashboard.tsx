@@ -5,6 +5,7 @@
 import React, { useMemo } from 'react';
 import { useQuery } from '@tanstack/react-query';
 import { supabase } from '@/integrations/supabase/client';
+import { fromUntyped } from '@/integrations/supabase/untyped-client';
 import { Card, CardContent, CardHeader, CardTitle } from '@/components/ui/card';
 import { Badge } from '@/components/ui/badge';
 import { Progress } from '@/components/ui/progress';
@@ -57,7 +58,7 @@ export default function SpendAnalyticsDashboard() {
   const { data: rfqs = [] } = useQuery({
     queryKey: ['spend-analytics-rfqs'],
     queryFn: async () => {
-      const { data, error } = await (supabase.from as Function)('rfq_requests')
+      const { data, error } = await fromUntyped('rfq_requests')
         .select('id, budget_estimate, status, category, created_at')
         .order('created_at', { ascending: false })
         .limit(200);

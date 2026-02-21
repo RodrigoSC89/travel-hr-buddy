@@ -5,6 +5,7 @@
  */
 
 import { supabase } from "@/integrations/supabase/client";
+import { fromUntyped } from "@/integrations/supabase/untyped-client";
 import { logger } from "@/lib/logger";
 import type { EntityType } from "@/lib/domain/types";
 
@@ -346,7 +347,7 @@ export async function logAuditEvent(params: {
   metadata?: Record<string, unknown>;
 }): Promise<void> {
   try {
-    const { error } = await (supabase.from as Function)('audit_events').insert({
+    const { error } = await fromUntyped('audit_events').insert({
       entity_type: params.entityType,
       entity_id: params.entityId ?? undefined,
       action: params.action,

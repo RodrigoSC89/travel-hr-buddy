@@ -26,6 +26,7 @@ import {
 import { toast } from "sonner";
 import { useQuery } from "@tanstack/react-query";
 import { supabase } from "@/integrations/supabase/client";
+import { fromUntyped } from "@/integrations/supabase/untyped-client";
 
 export function ESGFuelOptimizationPanel() {
   const [selectedVessel, setSelectedVessel] = useState("all");
@@ -46,7 +47,7 @@ export function ESGFuelOptimizationPanel() {
   const { data: fuelRecords } = useQuery({
     queryKey: ["esg-fuel-records"],
     queryFn: async () => {
-      const { data, error } = await (supabase.from as Function)("fuel_records")
+      const { data, error } = await fromUntyped("fuel_records")
         .select("*")
         .order("record_date", { ascending: false })
         .limit(200);
@@ -58,7 +59,7 @@ export function ESGFuelOptimizationPanel() {
   const { data: emissionsRecords } = useQuery({
     queryKey: ["esg-emissions-records"],
     queryFn: async () => {
-      const { data, error } = await (supabase.from as Function)("emissions_records")
+      const { data, error } = await fromUntyped("emissions_records")
         .select("*")
         .order("report_date", { ascending: false })
         .limit(100);

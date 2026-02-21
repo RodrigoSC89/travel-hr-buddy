@@ -4,6 +4,7 @@
  */
 import { useQuery } from '@tanstack/react-query';
 import { supabase } from '@/integrations/supabase/client';
+import { fromUntyped } from '@/integrations/supabase/untyped-client';
 
 export interface PaginationOptions {
   page: number;
@@ -40,7 +41,7 @@ export function usePaginatedSupabase<T>(
   return useQuery<PaginatedResult<T>>({
     queryKey: [...queryKey, page, pageSize, JSON.stringify(filters)],
     queryFn: async () => {
-      let query = (supabase.from as Function)(tableName)
+      let query = fromUntyped(tableName)
         .select(select, { count: 'exact' })
         .range(from, to);
 

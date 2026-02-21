@@ -151,20 +151,20 @@ class OfflineManagerService {
   }
 
   private async executeSyncAction(action: PendingAction): Promise<void> {
-    const { supabase } = await import('@/integrations/supabase/client');
+    const { fromUntyped } = await import('@/integrations/supabase/untyped-client');
     const tableName = action.table;
 
     switch (action.type) {
       case 'create':
-        await (supabase.from as Function)(tableName).insert(action.data as never);
+        await fromUntyped(tableName).insert(action.data as never);
         break;
       case 'update': {
         const { id, ...updateData } = action.data;
-        await (supabase.from as Function)(tableName).update(updateData as never).eq('id', id);
+        await fromUntyped(tableName).update(updateData as never).eq('id', id);
         break;
       }
       case 'delete':
-        await (supabase.from as Function)(tableName).delete().eq('id', action.data.id);
+        await fromUntyped(tableName).delete().eq('id', action.data.id);
         break;
     }
   }

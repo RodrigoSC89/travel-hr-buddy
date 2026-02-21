@@ -5,6 +5,7 @@
  */
 
 import { supabase } from "@/integrations/supabase/client";
+import { fromUntyped } from "@/integrations/supabase/untyped-client";
 import { logger } from "@/lib/logger";
 
 export interface ComplianceAlert {
@@ -111,7 +112,7 @@ class CompliancePushService {
       // Store subscription in database for server-side push
       const subscriptionData = subscription.toJSON();
       
-      await (supabase.from as Function)('user_push_subscriptions').upsert({
+      await fromUntyped('user_push_subscriptions').upsert({
         user_id: user.id,
         endpoint: subscriptionData.endpoint,
         keys: subscriptionData.keys,

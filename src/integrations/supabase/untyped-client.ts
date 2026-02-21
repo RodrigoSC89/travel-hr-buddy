@@ -178,6 +178,24 @@ const KNOWN_UNTYPED_TABLES = new Set([
   
   // MLC Extended Food
   "mlc_food_inspections",
+  
+  // Fleet & Operations Extended
+  "fuel_records", "crew_assignments", "ovid_evidence_photos",
+  
+  // Procurement & RFQ
+  "rfq_requests",
+  
+  // Safety & Drills
+  "drill_records",
+  
+  // ESG & Emissions
+  "emissions_records",
+  
+  // Reports
+  "report_schedules",
+  
+  // PEOTRAM Extended
+  "peotram_lessons_learned",
 ]);
 
 /**

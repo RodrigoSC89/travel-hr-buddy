@@ -6,6 +6,7 @@
 import React, { useState, useMemo, useCallback } from 'react';
 import { useQuery, useMutation, useQueryClient } from '@tanstack/react-query';
 import { supabase } from '@/integrations/supabase/client';
+import { fromUntyped } from '@/integrations/supabase/untyped-client';
 import { Card, CardContent, CardHeader, CardTitle } from '@/components/ui/card';
 import { Button } from '@/components/ui/button';
 import { Badge } from '@/components/ui/badge';
@@ -116,7 +117,7 @@ export function PurchaseOrdersManager() {
   const { data: orders = [], isLoading } = useQuery({
     queryKey: ['procurement-orders-full'],
     queryFn: async () => {
-      const { data, error } = await (supabase.from as Function)('procurement_orders')
+      const { data, error } = await fromUntyped('procurement_orders')
         .select('*')
         .order('created_at', { ascending: false })
         .limit(200);
@@ -138,7 +139,7 @@ export function PurchaseOrdersManager() {
       const totalAmount = items.length > 0 ? items.reduce((s, i) => s + i.quantity * i.unit_price, 0) : newPO.total_amount;
       const autoApproveThreshold = 5000;
 
-      const { data, error } = await (supabase.from as Function)('procurement_orders')
+      const { data, error } = await fromUntyped('procurement_orders')
         .insert({
           order_number: `PO-${new Date().getFullYear()}-${String(Date.now()).slice(-6)}`,
           order_type: newPO.order_type,
@@ -174,7 +175,7 @@ export function PurchaseOrdersManager() {
     mutationFn: async ({ id, status }: { id: string; status: string }) => {
       const updates: Record<string, unknown> = { status };
       if (status === 'approved') updates.approved_at = new Date().toISOString();
-      const { error } = await (supabase.from as Function)('procurement_orders').update(updates).eq('id', id);
+      const { error } = await fromUntyped('procurement_orders').update(updates).eq('id', id);
       if (error) throw error;
     },
     onSuccess: () => {
@@ -186,7 +187,7 @@ export function PurchaseOrdersManager() {
 
   const deleteMutation = useMutation({
     mutationFn: async (id: string) => {
-      const { error } = await (supabase.from as Function)('procurement_orders').delete().eq('id', id);
+      const { error } = await fromUntyped('procurement_orders').delete().eq('id', id);
       if (error) throw error;
     },
     onSuccess: () => {
@@ -198,7 +199,7 @@ export function PurchaseOrdersManager() {
 
   const duplicateMutation = useMutation({
     mutationFn: async (po: PurchaseOrder) => {
-      const { data, error } = await (supabase.from as Function)('procurement_orders')
+      const { data, error } = await fromUntyped('procurement_orders')
         .insert({
           order_number: `PO-${new Date().getFullYear()}-${String(Date.now()).slice(-6)}`,
           order_type: po.order_type,
