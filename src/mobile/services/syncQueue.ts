@@ -4,7 +4,7 @@
  */
 
 import { sqliteStorage } from "./sqlite-storage";
-import { supabase } from "@/integrations/supabase/client";
+import { fromUntyped } from "@/integrations/supabase/untyped-client";
 import { SyncQueueItem } from "../types";
 import { logger } from '@/lib/logger';
 
@@ -119,12 +119,9 @@ class SyncQueue {
   private async syncRecord(record: SyncRecord): Promise<void> {
     const { table, action, data } = record;
     
-    // eslint-disable-next-line @typescript-eslint/no-explicit-any -- dynamic table name requires runtime assertion
-    const supabaseFrom = supabase.from as Function;
-
     switch (action) {
     case "create":
-      const { error: createError } = await supabaseFrom(table)
+      const { error: createError } = await fromUntyped(table)
         .insert(data);
       if (createError) throw createError;
       break;
@@ -133,7 +130,7 @@ class SyncQueue {
       const { id, ...updateData } = data;
       if (!id) throw new Error("Update requires an ID");
         
-      const { error: updateError } = await supabaseFrom(table)
+      const { error: updateError } = await fromUntyped(table)
         .update(updateData)
         .eq("id", id);
       if (updateError) throw updateError;
@@ -142,7 +139,7 @@ class SyncQueue {
     case "delete":
       if (!data.id) throw new Error("Delete requires an ID");
         
-      const { error: deleteError } = await supabaseFrom(table)
+      const { error: deleteError } = await fromUntyped(table)
         .delete()
         .eq("id", data.id);
       if (deleteError) throw deleteError;

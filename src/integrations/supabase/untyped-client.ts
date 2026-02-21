@@ -169,6 +169,15 @@ const KNOWN_UNTYPED_TABLES = new Set([
   
   // Miscellaneous
   "vessel_restrictions", "ia_performance_log",
+  
+  // SGSO & Collaboration
+  "sgso_audits", "colab_comments", "colab_replies",
+  
+  // PEO-DP Extended
+  "peodp_emergency_drills",
+  
+  // MLC Extended Food
+  "mlc_food_inspections",
 ]);
 
 /**

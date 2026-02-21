@@ -5,7 +5,7 @@
  */
 import { useState, useMemo } from "react";
 import { useQuery } from "@tanstack/react-query";
-import { supabase } from "@/integrations/supabase/client";
+import { fromUntyped } from "@/integrations/supabase/untyped-client";
 import { motion } from "framer-motion";
 import { staggerContainer, fadeUp } from "@/lib/animations/motion-variants";
 import { Card, CardContent, CardHeader, CardTitle } from "@/components/ui/card";
@@ -33,7 +33,7 @@ function useStowagePlans() {
   return useQuery({
     queryKey: ["stowage-plans"],
     queryFn: async () => {
-      const { data, error } = await (supabase.from as Function)("stowage_plans")
+      const { data, error } = await fromUntyped("stowage_plans")
         .select("*, vessels:vessel_id(name, dwt)")
         .order("created_at", { ascending: false });
       if (error) throw error;

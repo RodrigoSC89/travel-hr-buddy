@@ -3,7 +3,7 @@
 import { useEffect, useState } from "react";
 import { Card, CardContent } from "@/components/ui/card";
 import { BarChart, Bar, XAxis, YAxis, Tooltip, ResponsiveContainer } from "recharts";
-import { supabase } from "@/integrations/supabase/client";
+import { fromUntyped } from "@/integrations/supabase/untyped-client";
 import { logger } from "@/lib/logger";
 
 interface MetricData {
@@ -19,7 +19,7 @@ export function PainelMetricasRisco() {
     async function fetchMetrics() {
       try {
         setLoading(true);
-        const { data, error } = await (supabase.from as Function)("sgso_audits")
+        const { data, error } = await fromUntyped("sgso_audits")
           .select("id, score, findings_count")
           .order("created_at", { ascending: false })
           .limit(20);

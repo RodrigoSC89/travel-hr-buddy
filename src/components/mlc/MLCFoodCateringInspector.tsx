@@ -9,7 +9,7 @@ import { Button } from "@/components/ui/button";
 import { Progress } from "@/components/ui/progress";
 import { Textarea } from "@/components/ui/textarea";
 import { useQuery, useMutation, useQueryClient } from "@tanstack/react-query";
-import { supabase } from "@/integrations/supabase/client";
+import { fromUntyped } from "@/integrations/supabase/untyped-client";
 import { toast } from "sonner";
 import {
   UtensilsCrossed, CheckCircle, AlertTriangle, XCircle, ClipboardCheck, Loader2
@@ -64,7 +64,7 @@ export const MLCFoodCateringInspector: React.FC = () => {
   const { data: savedItems = [], isLoading } = useQuery({
     queryKey: ["mlc-food-inspections"],
     queryFn: async () => {
-      const { data, error } = await (supabase.from as Function)("mlc_food_inspections")
+      const { data, error } = await fromUntyped("mlc_food_inspections")
         .select("*")
         .order("item_id");
       if (error) throw error;
@@ -85,7 +85,7 @@ export const MLCFoodCateringInspector: React.FC = () => {
   const saveMutation = useMutation({
     mutationFn: async ({ itemId, status, notes }: { itemId: string; status: string; notes: string }) => {
       const template = TEMPLATE_ITEMS.find(t => t.id === itemId);
-      const { error } = await (supabase.from as Function)("mlc_food_inspections")
+      const { error } = await fromUntyped("mlc_food_inspections")
         .upsert({
           item_id: itemId,
           status,

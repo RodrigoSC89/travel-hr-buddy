@@ -17,6 +17,7 @@ import {
   Clock, ArrowRight, XCircle, Eye
 } from "lucide-react";
 import { supabase } from "@/integrations/supabase/client";
+import { fromUntyped } from "@/integrations/supabase/untyped-client";
 import { toast } from "sonner";
 import ReactMarkdown from "react-markdown";
 import { logger } from "@/lib/logger";
@@ -84,12 +85,12 @@ export function ComplianceGapAnalyzer({
         { data: inspections },
         { data: corrections },
       ] = await Promise.all([
-        (supabase.from as Function)("compliance_items").select("*").limit(100),
-        (supabase.from as Function)("internal_audits").select("*").order("created_at", { ascending: false }).limit(30),
-        (supabase.from as Function)("non_conformities").select("*").order("created_at", { ascending: false }).limit(50),
-        (supabase.from as Function)("crew_certifications").select("*").limit(50),
-        (supabase.from as Function)("psc_inspections").select("*").order("created_at", { ascending: false }).limit(20),
-        (supabase.from as Function)("corrective_actions").select("*").order("created_at", { ascending: false }).limit(30),
+        fromUntyped("compliance_items").select("*").limit(100),
+        fromUntyped("internal_audits").select("*").order("created_at", { ascending: false }).limit(30),
+        fromUntyped("non_conformities").select("*").order("created_at", { ascending: false }).limit(50),
+        fromUntyped("crew_certifications").select("*").limit(50),
+        fromUntyped("psc_inspections").select("*").order("created_at", { ascending: false }).limit(20),
+        fromUntyped("corrective_actions").select("*").order("created_at", { ascending: false }).limit(30),
       ]);
 
       setPhase("Analisando conformidade com IA...");

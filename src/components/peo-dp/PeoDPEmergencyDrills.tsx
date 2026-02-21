@@ -17,7 +17,7 @@ import {
 } from "lucide-react";
 import { toast } from "sonner";
 import { useQuery, useMutation, useQueryClient } from "@tanstack/react-query";
-import { supabase } from "@/integrations/supabase/client";
+import { fromUntyped } from "@/integrations/supabase/untyped-client";
 
 const SCENARIOS = [
   { id: "S01", scenario: "Drive Off / Drive Off", description: "Simulação de evento de Drive-Off: sistema DP ordena propulsão em direção errada", timeMinutes: 90 },
@@ -45,7 +45,7 @@ export function PeoDPEmergencyDrills() {
   const { data: drills = [], isLoading } = useQuery({
     queryKey: ["peodp-emergency-drills"],
     queryFn: async () => {
-      const { data, error } = await (supabase.from as Function)("peodp_emergency_drills")
+      const { data, error } = await fromUntyped("peodp_emergency_drills")
         .select("*")
         .order("scenario_id", { ascending: true });
       if (error) throw error;
@@ -55,7 +55,7 @@ export function PeoDPEmergencyDrills() {
 
   const upsertMutation = useMutation({
     mutationFn: async (drill: Record<string, unknown>) => {
-      const { error } = await (supabase.from as Function)("peodp_emergency_drills").upsert(drill, { onConflict: "id" });
+      const { error } = await fromUntyped("peodp_emergency_drills").upsert(drill, { onConflict: "id" });
       if (error) throw error;
     },
     onSuccess: () => queryClient.invalidateQueries({ queryKey: ["peodp-emergency-drills"] }),
@@ -72,7 +72,7 @@ export function PeoDPEmergencyDrills() {
         evaluation: "pending",
         dp_class: "DP2",
       }));
-      const { error } = await (supabase.from as Function)("peodp_emergency_drills").upsert(rows, { onConflict: "scenario_id", ignoreDuplicates: true });
+      const { error } = await fromUntyped("peodp_emergency_drills").upsert(rows, { onConflict: "scenario_id", ignoreDuplicates: true });
       if (error) throw error;
     },
     onSuccess: () => {
