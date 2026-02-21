@@ -18,6 +18,7 @@ import { Separator } from '@/components/ui/separator';
 import { toast } from 'sonner';
 import { useQuery, useMutation, useQueryClient } from '@tanstack/react-query';
 import { supabase } from '@/integrations/supabase/client';
+import { fromUntyped } from '@/integrations/supabase/untyped-client';
 import { 
   Calendar, Clock, FileText, Mail, Download, Play, Pause,
   Plus, Settings, Trash2, CheckCircle2, AlertTriangle,
@@ -92,7 +93,7 @@ export function AutomaticReportsScheduler() {
   const { data: schedules = [], isLoading } = useQuery({
     queryKey: ['report-schedules-real'],
     queryFn: async () => {
-      const { data, error } = await (supabase.from as Function)('report_schedules')
+      const { data, error } = await fromUntyped('report_schedules')
         .select('*')
         .order('created_at', { ascending: false });
 
@@ -159,7 +160,7 @@ export function AutomaticReportsScheduler() {
         }
       };
 
-      const { error } = await (supabase.from as Function)('report_schedules').insert({
+      const { error } = await fromUntyped('report_schedules').insert({
         name: schedule.name,
         description: schedule.description || null,
         report_type: schedule.report_type,
@@ -187,7 +188,7 @@ export function AutomaticReportsScheduler() {
   // Toggle active mutation
   const toggleMutation = useMutation({
     mutationFn: async ({ id, is_active }: { id: string; is_active: boolean }) => {
-      const { error } = await (supabase.from as Function)('report_schedules').update({ is_active }).eq('id', id);
+      const { error } = await fromUntyped('report_schedules').update({ is_active }).eq('id', id);
       if (error) throw error;
     },
     onSuccess: () => {
@@ -199,7 +200,7 @@ export function AutomaticReportsScheduler() {
   // Delete mutation
   const deleteMutation = useMutation({
     mutationFn: async (id: string) => {
-      const { error } = await (supabase.from as Function)('report_schedules').delete().eq('id', id);
+      const { error } = await fromUntyped('report_schedules').delete().eq('id', id);
       if (error) throw error;
     },
     onSuccess: () => {

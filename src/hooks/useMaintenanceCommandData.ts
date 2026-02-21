@@ -5,6 +5,7 @@
 
 import { useQuery, useMutation, useQueryClient } from "@tanstack/react-query";
 import { supabase } from "@/integrations/supabase/client";
+import { fromUntyped } from "@/integrations/supabase/untyped-client";
 import { toast } from "sonner";
 import { logger } from "@/lib/logger";
 
@@ -243,7 +244,7 @@ export function useMaintenanceCommandData(vesselId?: string) {
         created_by: userData?.user?.id,
       };
 
-      const { data: result, error } = await (supabase.from as Function)("maintenance_tasks")
+      const { data: result, error } = await fromUntyped("maintenance_tasks")
         .insert(insertData)
         .select()
         .single();

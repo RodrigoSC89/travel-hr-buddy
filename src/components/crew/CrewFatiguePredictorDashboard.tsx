@@ -16,6 +16,7 @@ import {
   Minus, Activity, Shield, Eye, Sparkles, BarChart3, Timer, Zap, BedDouble
 } from "lucide-react";
 import { supabase } from "@/integrations/supabase/client";
+import { fromUntyped } from "@/integrations/supabase/untyped-client";
 import { useQuery } from "@tanstack/react-query";
 import { toast } from "sonner";
 import { cn } from "@/lib/utils";
@@ -67,7 +68,7 @@ export function CrewFatiguePredictorDashboard() {
   const { data: workRestData = [] } = useQuery({
     queryKey: ["fatigue-work-rest"],
     queryFn: async () => {
-      const { data } = await (supabase.from as Function)("mlc_work_rest_records")
+      const { data } = await fromUntyped("mlc_work_rest_records")
         .select("crew_member_id, work_hours, rest_hours, date, violations")
         .gte("date", new Date(Date.now() - 7 * 86400000).toISOString().split("T")[0])
         .limit(1000);

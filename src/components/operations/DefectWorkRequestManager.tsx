@@ -5,6 +5,7 @@
 import React, { useState, useMemo } from 'react';
 import { useQuery, useMutation, useQueryClient } from '@tanstack/react-query';
 import { supabase } from '@/integrations/supabase/client';
+import { fromUntyped } from '@/integrations/supabase/untyped-client';
 import { Card, CardContent, CardHeader, CardTitle, CardDescription } from '@/components/ui/card';
 import { Button } from '@/components/ui/button';
 import { Input } from '@/components/ui/input';
@@ -63,7 +64,7 @@ export default function DefectWorkRequestManager() {
   const { data: defects = [], isLoading } = useQuery({
     queryKey: ['defect-work-requests', filterStatus, filterPriority],
     queryFn: async () => {
-      let query = (supabase.from as Function)('defect_work_requests')
+      let query = fromUntyped('defect_work_requests')
         .select('*, vessels:vessel_id(name)')
         .order('created_at', { ascending: false })
         .limit(500);
@@ -78,7 +79,7 @@ export default function DefectWorkRequestManager() {
   const createMutation = useMutation({
     mutationFn: async (f: typeof form) => {
       const defectNum = `DWR-${Date.now().toString(36).toUpperCase()}`;
-      const { error } = await (supabase.from as Function)('defect_work_requests').insert({
+      const { error } = await fromUntyped('defect_work_requests').insert({
         defect_number: defectNum, title: f.title, description: f.description,
         category: f.category, equipment_name: f.equipment_name || null,
         location_onboard: f.location_onboard || null, priority: f.priority,
@@ -105,7 +106,7 @@ export default function DefectWorkRequestManager() {
       const update: any = { status };
       if (status === 'completed') update.completed_date = new Date().toISOString().split('T')[0];
       if (status === 'verified') update.verified_date = new Date().toISOString().split('T')[0];
-      const { error } = await (supabase.from as Function)('defect_work_requests').update(update).eq('id', id);
+      const { error } = await fromUntyped('defect_work_requests').update(update).eq('id', id);
       if (error) throw error;
     },
     onSuccess: () => {

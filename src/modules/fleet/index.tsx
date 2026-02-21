@@ -7,6 +7,7 @@ import { Input } from "@/components/ui/input";
 import { Label } from "@/components/ui/label";
 import { Select, SelectContent, SelectItem, SelectTrigger, SelectValue } from "@/components/ui/select";
 import { supabase } from "@/integrations/supabase/client";
+import { fromUntyped } from "@/integrations/supabase/untyped-client";
 import { useToast } from "@/hooks/use-toast";
 import { Ship, Plus, RefreshCw, Brain, Route, BarChart3 } from "lucide-react";
 import { FleetMetrics } from "./components/FleetMetrics";
@@ -34,12 +35,10 @@ const FleetModule = () => {
       const { data: vesselsData } = await supabase.from("vessels").select("*").order("name").limit(50);
       setVessels(vesselsData || []);
 
-      // eslint-disable-next-line @typescript-eslint/no-explicit-any -- dynamic table not in typed schema
-      const { data: maintenanceData } = await (supabase.from as Function)("maintenance_schedules").select("*").order("scheduled_date", { ascending: false }).limit(50);
+      const { data: maintenanceData } = await fromUntyped("maintenance_schedules").select("*").order("scheduled_date", { ascending: false }).limit(50);
       setMaintenance((maintenanceData as Record<string, unknown>[]) || []);
 
-      // eslint-disable-next-line @typescript-eslint/no-explicit-any -- dynamic table not in typed schema
-      const { data: crewData } = await (supabase.from as Function)("crew_assignments").select("*").limit(100);
+      const { data: crewData } = await fromUntyped("crew_assignments").select("*").limit(100);
       setCrewAssignments((crewData as Record<string, unknown>[]) || []);
     } catch (error) {
       logger.error("Error loading fleet data:", error);

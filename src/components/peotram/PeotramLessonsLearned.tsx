@@ -12,6 +12,7 @@ import { Textarea } from '@/components/ui/textarea';
 import { Select, SelectContent, SelectItem, SelectTrigger, SelectValue } from '@/components/ui/select';
 import { useQuery, useMutation, useQueryClient } from '@tanstack/react-query';
 import { supabase } from '@/integrations/supabase/client';
+import { fromUntyped } from '@/integrations/supabase/untyped-client';
 import { toast } from 'sonner';
 import {
   Lightbulb, BookOpen, AlertTriangle, CheckCircle, TrendingUp,
@@ -65,7 +66,7 @@ export function PeotramLessonsLearned() {
   const { data: lessons = [], isLoading } = useQuery({
     queryKey: ['peotram-lessons-learned'],
     queryFn: async () => {
-      const { data, error } = await (supabase.from as Function)('peotram_lessons_learned')
+      const { data, error } = await fromUntyped('peotram_lessons_learned')
         .select('*')
         .order('created_at', { ascending: false });
       if (error) throw error;
@@ -89,7 +90,7 @@ export function PeotramLessonsLearned() {
 
   const addMutation = useMutation({
     mutationFn: async (lesson: typeof newLesson) => {
-      const { error } = await (supabase.from as Function)('peotram_lessons_learned')
+      const { error } = await fromUntyped('peotram_lessons_learned')
         .insert({
           title: lesson.title,
           description: lesson.description,
@@ -115,7 +116,7 @@ export function PeotramLessonsLearned() {
 
   const shareMutation = useMutation({
     mutationFn: async (id: string) => {
-      const { error } = await (supabase.from as Function)('peotram_lessons_learned')
+      const { error } = await fromUntyped('peotram_lessons_learned')
         .update({ status: 'shared' } as never)
         .eq('id', id);
       if (error) throw error;

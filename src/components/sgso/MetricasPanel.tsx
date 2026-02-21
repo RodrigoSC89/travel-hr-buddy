@@ -6,6 +6,7 @@ import { Tabs, TabsContent, TabsList, TabsTrigger } from "@/components/ui/tabs";
 import { Download, Ship, AlertTriangle, TrendingUp, FileText } from "lucide-react";
 import { LineChart, Line, XAxis, YAxis, CartesianGrid, Tooltip, Legend, ResponsiveContainer, PieChart, Pie, Cell } from "recharts";
 import { supabase } from "@/integrations/supabase/client";
+import { fromUntyped } from "@/integrations/supabase/untyped-client";
 import { logger } from '@/lib/logger';
 
 interface MetricasRiscoData {
@@ -43,21 +44,21 @@ export const MetricasPanel = () => {
   const fetchMetrics = async () => {
     try {
       setLoading(true);
-      const { data: riscoData, error: riscoErr } = await (supabase.from as Function)("sgso_audits")
+      const { data: riscoData, error: riscoErr } = await fromUntyped("sgso_audits")
         .select("id, score, findings_count, vessel_name, created_at, total_auditorias:id")
         .order("created_at", { ascending: false })
         .limit(50);
       if (riscoErr) logger.warn("sgso_audits fetch error:", riscoErr);
       setMetricsRisco(riscoData || []);
 
-      const { data: evolucaoData, error: evolErr } = await (supabase.from as Function)("sgso_audits")
+      const { data: evolucaoData, error: evolErr } = await fromUntyped("sgso_audits")
         .select("created_at, score, findings_count")
         .order("created_at", { ascending: true })
         .limit(100);
       if (evolErr) logger.warn("evolucao fetch error:", evolErr);
       setEvolucaoMensal(evolucaoData || []);
 
-      const vesselQuery = (supabase.from as Function)("sgso_audits")
+      const vesselQuery = fromUntyped("sgso_audits")
         .select("vessel_name, score, findings_count")
         .order("created_at", { ascending: false });
       if (selectedVessel !== "all") {

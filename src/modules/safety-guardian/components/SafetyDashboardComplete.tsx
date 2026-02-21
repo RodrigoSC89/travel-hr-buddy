@@ -24,6 +24,7 @@ import { useSafetyData } from '../hooks/useSafetyData';
 import { useSafetyAI } from '../hooks/useSafetyAI';
 import type { SafetyIncident, SafetySettings, DDSRecord, SafetyTraining, CrewTrainingDashboard } from '../types';
 import { supabase } from "@/integrations/supabase/client";
+import { fromUntyped } from "@/integrations/supabase/untyped-client";
 import { useQuery } from "@tanstack/react-query";
 import { useCreateDDS } from "@/hooks/useModuleHooks";
 
@@ -46,7 +47,7 @@ export const SafetyDashboardComplete: React.FC = () => {
   const { data: ddsRecords = [] } = useQuery({
     queryKey: ["safety-dds-records"],
     queryFn: async () => {
-      const { data, error } = await (supabase.from as Function)("drill_records")
+      const { data, error } = await fromUntyped("drill_records")
         .select("*")
         .order("created_at", { ascending: false })
         .limit(50);

@@ -6,6 +6,7 @@
 import React from "react";
 import { useQuery } from "@tanstack/react-query";
 import { supabase } from "@/integrations/supabase/client";
+import { fromUntyped } from "@/integrations/supabase/untyped-client";
 import { Card, CardContent, CardHeader, CardTitle } from "@/components/ui/card";
 import { Badge } from "@/components/ui/badge";
 import { ScrollArea } from "@/components/ui/scroll-area";
@@ -89,7 +90,7 @@ export function EventActivityFeed({
     queryKey: ['event-feed', entityType, entityId, vesselId, limit],
     queryFn: async () => {
       // Query audit_events table for activity
-      let query = (supabase.from('audit_events') as any)
+      let query = fromUntyped('audit_events')
         .select('*')
         .order('created_at', { ascending: false })
         .limit(limit);

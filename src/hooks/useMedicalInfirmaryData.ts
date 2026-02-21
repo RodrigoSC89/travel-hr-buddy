@@ -5,6 +5,7 @@
 
 import { useQuery, useMutation, useQueryClient } from "@tanstack/react-query";
 import { supabase } from "@/integrations/supabase/client";
+import { fromUntyped } from "@/integrations/supabase/untyped-client";
 import { toast } from "sonner";
 
 export interface MedicalConsultation {
@@ -305,7 +306,7 @@ export function useMedicalInfirmaryData() {
       if (data.crew_member_id) {
         insertData.crew_member_id = data.crew_member_id;
       }
-      const { data: result, error } = await (supabase.from as Function)("crew_certifications")
+      const { data: result, error } = await fromUntyped("crew_certifications")
         .insert(insertData)
         .select()
         .single();

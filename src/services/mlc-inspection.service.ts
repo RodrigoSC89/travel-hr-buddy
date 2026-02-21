@@ -6,9 +6,10 @@
  */
 
 import { supabase } from "@/integrations/supabase/client";
+import { fromUntyped } from "@/integrations/supabase/untyped-client";
 
 // Dynamic table accessor for tables with schema mismatch
-const db = supabase.from as Function;
+const db = (table: string) => fromUntyped(table);
 
 export interface MLCInspection {
   id: string;

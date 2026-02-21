@@ -5,6 +5,7 @@
 import React from "react";
 import { useQuery } from "@tanstack/react-query";
 import { supabase } from "@/integrations/supabase/client";
+import { fromUntyped } from "@/integrations/supabase/untyped-client";
 import { Card, CardContent, CardDescription, CardHeader, CardTitle } from "@/components/ui/card";
 import { Badge } from "@/components/ui/badge";
 import { Skeleton } from "@/components/ui/skeleton";
@@ -38,7 +39,7 @@ const FleetAnalytics: React.FC = () => {
   const { data: fuelRecords = [] } = useQuery({
     queryKey: ['fleet-analytics-fuel'],
     queryFn: async () => {
-      const { data, error } = await (supabase.from as Function)('fuel_records')
+      const { data, error } = await fromUntyped('fuel_records')
         .select('id, vessel_id, quantity_liters, cost_usd, fuel_type, recorded_at')
         .order('recorded_at', { ascending: false })
         .limit(500);

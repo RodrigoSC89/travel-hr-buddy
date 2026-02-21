@@ -203,9 +203,9 @@ async function executeOperation(op: PendingOperation): Promise<{
 }> {
   try {
     const { supabase } = await import("@/integrations/supabase/client");
+    const { fromUntyped } = await import("@/integrations/supabase/untyped-client");
     
-    // eslint-disable-next-line @typescript-eslint/no-explicit-any -- Dynamic table from offline queue
-    const fromTable = (supabase.from as Function)(op.table);
+    const fromTable = fromUntyped(op.table);
     const opData = op.data as Record<string, unknown>;
 
     if (op.type === "insert") {

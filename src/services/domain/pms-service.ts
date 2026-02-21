@@ -4,11 +4,12 @@
  */
 
 import { supabase } from "@/integrations/supabase/client";
+import { fromUntyped } from "@/integrations/supabase/untyped-client";
 import { publishEvent, logAuditEvent } from "@/lib/events/event-bus";
 
 export const PMSService = {
   async createSystem(system: Record<string, unknown>) {
-    const { data, error } = await (supabase.from as Function)('pms_systems').insert(system).select().single();
+    const { data, error } = await fromUntyped('pms_systems').insert(system).select().single();
     if (error) throw error;
 
     await publishEvent({
@@ -23,7 +24,7 @@ export const PMSService = {
 
   async createWorkOrder(wo: Record<string, unknown>) {
     const woNumber = `WO-${Date.now().toString(36).toUpperCase()}`;
-    const { data, error } = await (supabase.from as Function)('pms_work_orders').insert({
+    const { data, error } = await fromUntyped('pms_work_orders').insert({
       ...wo,
       work_order_number: woNumber,
       status: 'draft',
@@ -46,7 +47,7 @@ export const PMSService = {
     if (status === 'in_progress') updates.actual_start = new Date().toISOString();
     if (status === 'completed') updates.actual_end = new Date().toISOString();
 
-    const { data, error } = await (supabase.from as Function)('pms_work_orders')
+    const { data, error } = await fromUntyped('pms_work_orders')
       .update(updates).eq('id', id).select().single();
     if (error) throw error;
 

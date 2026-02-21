@@ -5,6 +5,7 @@
  */
 
 import { supabase } from "@/integrations/supabase/client";
+import { fromUntyped } from "@/integrations/supabase/untyped-client";
 import { toast } from "sonner";
 import { logger } from "@/lib/logger";
 import { spaNavigate } from "@/lib/navigation/spa-navigate";
@@ -108,7 +109,7 @@ class ModuleIntegrationService {
 
     try {
       // Dynamic table access requires targeted type assertion on table name
-      const { data, error } = await (supabase.from as Function)(table)
+      const { data, error } = await fromUntyped(table)
         .select("*")
         .limit(query?.limit || 100);
 

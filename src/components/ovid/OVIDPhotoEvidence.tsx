@@ -7,6 +7,7 @@ import { ScrollArea } from '@/components/ui/scroll-area';
 import { Camera, Upload, X, Image, Loader2, Trash2, ZoomIn } from 'lucide-react';
 import { toast } from 'sonner';
 import { supabase } from '@/integrations/supabase/client';
+import { fromUntyped } from '@/integrations/supabase/untyped-client';
 import { logger } from '@/lib/logger';
 
 interface OVIDPhotoEvidenceProps {
@@ -69,7 +70,7 @@ export const OVIDPhotoEvidence: React.FC<OVIDPhotoEvidenceProps> = ({
 
       // Save to database if inspectionId exists
       if (inspectionId) {
-        await (supabase.from as Function)('ovid_evidence_photos')
+        await fromUntyped('ovid_evidence_photos')
           .insert({
             inspection_id: inspectionId,
             question_id: questionId,

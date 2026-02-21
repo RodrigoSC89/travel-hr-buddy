@@ -7,6 +7,7 @@
 import React, { useMemo } from "react";
 import { useQuery } from "@tanstack/react-query";
 import { supabase } from "@/integrations/supabase/client";
+import { fromUntyped } from "@/integrations/supabase/untyped-client";
 import { RELATED_RECORDS_MAP, type EntityType } from "@/lib/domain/types";
 import { Card, CardContent, CardHeader, CardTitle } from "@/components/ui/card";
 import { Badge } from "@/components/ui/badge";
@@ -170,7 +171,7 @@ function RelatedRecordsList({
     queryKey: ['related-records', tableName, fk, lookupId],
     queryFn: async () => {
       if (!isQueryable(tableName)) return [];
-      const { data, error } = await (supabase.from(tableName) as any)
+      const { data, error } = await fromUntyped(tableName)
         .select('*')
         .eq(fk, lookupId)
         .order('created_at', { ascending: false })
