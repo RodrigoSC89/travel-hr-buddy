@@ -2,16 +2,16 @@
  * PWA Install Page — Dedicated install experience for mobile users
  * Accessible at /install
  */
-import { useState } from "react";
+import { } from "react";
 import { motion } from "framer-motion";
 import { Card, CardContent } from "@/components/ui/card";
 import { Button } from "@/components/ui/button";
 import { Badge } from "@/components/ui/badge";
-import { usePWA } from "@/hooks/use-pwa";
+import { usePWAInstall } from "@/hooks/use-pwa";
 import {
-  Download, Smartphone, Shield, Wifi, WifiOff,
+  Download, Smartphone, Shield, WifiOff,
   Zap, CheckCircle2, Ship, Globe, Bell, HardDrive,
-  ArrowDown, Monitor, Tablet
+  Monitor, Tablet
 } from "lucide-react";
 
 const FEATURES = [
@@ -24,19 +24,8 @@ const FEATURES = [
 ];
 
 export default function PWAInstallPage() {
-  const { isInstallable, isInstalled, install } = usePWA();
-  const [installing, setInstalling] = useState(false);
-
-  const handleInstall = async () => {
-    setInstalling(true);
-    try {
-      await install();
-    } catch {
-      // User cancelled or not supported
-    } finally {
-      setInstalling(false);
-    }
-  };
+  const { canInstall, isInstalled } = usePWAInstall();
+  const isInstallable = canInstall;
 
   const isIOS = /iPad|iPhone|iPod/.test(navigator.userAgent);
   const isAndroid = /Android/.test(navigator.userAgent);
@@ -68,9 +57,9 @@ export default function PWAInstallPage() {
               <span className="text-lg font-medium">App já instalado!</span>
             </div>
           ) : isInstallable ? (
-            <Button size="lg" onClick={handleInstall} disabled={installing} className="gap-2 text-lg px-8 py-6">
+            <Button size="lg" className="gap-2 text-lg px-8 py-6">
               <Download className="h-5 w-5" />
-              {installing ? "Instalando..." : "Instalar Agora"}
+              Instalar Agora
             </Button>
           ) : (
             <div className="space-y-4">
