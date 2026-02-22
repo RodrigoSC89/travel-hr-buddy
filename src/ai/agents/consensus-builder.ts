@@ -10,6 +10,7 @@
  */
 
 import { supabase } from "@/integrations/supabase/client";
+import { fromUntyped } from "@/integrations/supabase/untyped-client";
 import { logger } from "@/lib/logger";
 import type { Strategy } from "@/ai/strategy/predictive-engine";
 
@@ -818,7 +819,7 @@ class StrategicConsensusBuilder {
     });
 
     try {
-      await (supabase.from as Function)("ai_consensus_results").insert({
+      await fromUntyped("ai_consensus_results").insert({
         consensus_id: result.id,
         strategy_id: result.strategyId,
         status: result.status,
@@ -846,7 +847,7 @@ class StrategicConsensusBuilder {
       this.disagreementLog.push(disagreement);
 
       try {
-        await (supabase.from as Function)("ai_agent_disagreements").insert({
+        await fromUntyped("ai_agent_disagreements").insert({
           disagreement_id: disagreement.id,
           consensus_id: disagreement.consensusId,
           agents_involved: disagreement.agentsInvolved,

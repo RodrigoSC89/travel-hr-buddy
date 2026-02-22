@@ -25,6 +25,7 @@ import { toast } from "sonner";
 import { differenceInDays, isPast } from "date-fns";
 import { useQuery, useMutation, useQueryClient } from "@tanstack/react-query";
 import { supabase } from "@/integrations/supabase/client";
+import { fromUntyped } from "@/integrations/supabase/untyped-client";
 
 interface Medication {
   id: string;
@@ -76,7 +77,7 @@ export default function PharmacyManagementPanel() {
 
       if (error || !data || data.length === 0) {
         // Try pharmacy_inventory as fallback
-        const { data: altData } = await (supabase.from as Function)('inventory_items')
+        const { data: altData } = await fromUntyped('inventory_items')
           .select('*')
           .order('name', { ascending: true })
           .limit(50);
@@ -116,7 +117,7 @@ export default function PharmacyManagementPanel() {
   const addMutation = useMutation({
     mutationFn: async () => {
       // eslint-disable-next-line @typescript-eslint/no-explicit-any -- inventory_items schema differs from generated types for medication data
-      const { error } = await (supabase.from as Function)('inventory_items').insert({
+      const { error } = await fromUntyped('inventory_items').insert({
         name: newMed.name,
         description: newMed.genericName,
         category: 'medication',
@@ -142,7 +143,7 @@ export default function PharmacyManagementPanel() {
       const med = medications.find(m => m.id === medId);
       if (!med) throw new Error('Medicamento não encontrado');
       // eslint-disable-next-line @typescript-eslint/no-explicit-any -- dynamic column mapping
-      const { error } = await (supabase.from as Function)('inventory_items').update({
+      const { error } = await fromUntyped('inventory_items').update({
         quantity: Math.max(0, med.currentStock - qty),
       }).eq('id', medId);
       if (error) throw error;

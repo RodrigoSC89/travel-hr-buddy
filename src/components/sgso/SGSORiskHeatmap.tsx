@@ -14,7 +14,7 @@ import { Textarea } from "@/components/ui/textarea";
 import { Select, SelectContent, SelectItem, SelectTrigger, SelectValue } from "@/components/ui/select";
 import { AlertTriangle, Shield, ArrowRight, Zap, Target, Plus, RefreshCw } from "lucide-react";
 import { toast } from "sonner";
-import { supabase } from "@/integrations/supabase/client";
+import { fromUntyped } from "@/integrations/supabase/untyped-client";
 import { useQuery, useMutation, useQueryClient } from "@tanstack/react-query";
 
 interface Risk {
@@ -59,7 +59,7 @@ export function SGSORiskHeatmap() {
   const { data: risks = [], isLoading } = useQuery({
     queryKey: ["sgso-risks"],
     queryFn: async () => {
-      const { data, error } = await (supabase.from as Function)("risk_assessments")
+      const { data, error } = await fromUntyped("risk_assessments")
         .select("*")
         .order("created_at", { ascending: false });
       if (error) throw error;
@@ -80,7 +80,7 @@ export function SGSORiskHeatmap() {
 
   const addMutation = useMutation({
     mutationFn: async () => {
-      const { error } = await (supabase.from as Function)("risk_assessments").insert({
+      const { error } = await fromUntyped("risk_assessments").insert({
         risk_description: form.name,
         practice: form.practice,
         likelihood: parseInt(form.probability),

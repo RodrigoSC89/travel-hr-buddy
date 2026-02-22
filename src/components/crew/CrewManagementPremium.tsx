@@ -7,6 +7,7 @@ import React, { useState, useMemo, useCallback, memo } from 'react';
 import { addCrewFormSchema, type AddCrewFormInput } from '@/lib/validation/schemas';
 import { useQuery, useMutation, useQueryClient } from '@tanstack/react-query';
 import { supabase } from '@/integrations/supabase/client';
+import { fromUntyped } from '@/integrations/supabase/untyped-client';
 import { Card, CardContent, CardHeader, CardTitle } from '@/components/ui/card';
 import { Button } from '@/components/ui/button';
 import { Input } from '@/components/ui/input';
@@ -85,7 +86,7 @@ export default function CrewManagementPremium() {
   const { data: wellnessRecords = [] } = useQuery({
     queryKey: ['crew-wellness'],
     queryFn: async () => {
-      const { data, error } = await (supabase.from as Function)('crew_wellbeing_scores').select('*').order('assessment_date', { ascending: false }).limit(100);
+      const { data, error } = await fromUntyped('crew_wellbeing_scores').select('*').order('assessment_date', { ascending: false }).limit(100);
       if (error) return [];
       return data || [];
     },

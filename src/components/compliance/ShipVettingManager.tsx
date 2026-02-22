@@ -18,7 +18,7 @@ import {
   Shield, Star, AlertTriangle, CheckCircle2, Clock,
   Ship, Download, Plus, Loader2
 } from "lucide-react";
-import { supabase } from "@/integrations/supabase/client";
+import { fromUntyped } from "@/integrations/supabase/untyped-client";
 import { useQuery, useMutation, useQueryClient } from "@tanstack/react-query";
 import { toast } from "sonner";
 import { quickExport } from "@/lib/export-utils";
@@ -39,7 +39,7 @@ export function ShipVettingManager() {
   const { data: records = [], isLoading } = useQuery({
     queryKey: ["ship-vetting-records"],
     queryFn: async () => {
-      const { data, error } = await (supabase.from as Function)("ship_vetting_records")
+      const { data, error } = await fromUntyped("ship_vetting_records")
         .select("*")
         .order("inspection_date", { ascending: false });
       if (error) throw error;
@@ -49,7 +49,7 @@ export function ShipVettingManager() {
 
   const createMutation = useMutation({
     mutationFn: async (form: typeof newForm) => {
-      const { error } = await (supabase.from as Function)("ship_vetting_records").insert({
+      const { error } = await fromUntyped("ship_vetting_records").insert({
         vessel_name: form.vessel_name,
         inspection_type: form.inspection_type,
         port: form.port,
@@ -73,7 +73,7 @@ export function ShipVettingManager() {
 
   const completeInspection = useMutation({
     mutationFn: async ({ id, score, findings }: { id: string; score: number; findings: number }) => {
-      const { error } = await (supabase.from as Function)("ship_vetting_records").update({
+      const { error } = await fromUntyped("ship_vetting_records").update({
         status: "completed",
         overall_score: score,
         observations_count: findings,

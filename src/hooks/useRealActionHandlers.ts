@@ -6,6 +6,7 @@
 import { useCallback } from 'react';
 import { useMutation, useQueryClient } from '@tanstack/react-query';
 import { supabase } from '@/integrations/supabase/client';
+import { fromUntyped } from '@/integrations/supabase/untyped-client';
 import { toast } from 'sonner';
 import { useToast } from '@/hooks/use-toast';
 import { useNavigate } from 'react-router-dom';
@@ -80,7 +81,7 @@ export function useRealActionHandlers() {
           vessel_id: orderData.vessel_id || '',
         };
       
-      const { data, error } = await (supabase.from as Function)('maintenance_records')
+      const { data, error } = await fromUntyped('maintenance_records')
         .insert([insertData])
         .select()
         .single();

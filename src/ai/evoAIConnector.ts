@@ -5,6 +5,7 @@
  */
 
 import { supabase } from "@/integrations/supabase/client";
+import { fromUntyped } from "@/integrations/supabase/untyped-client";
 import { logger } from "@/lib/logger";
 import { predictiveEngine } from "./predictiveEngine";
 import { adaptiveMetricsEngine } from "./adaptiveMetrics";
@@ -450,7 +451,7 @@ class EvoAIConnector {
 
     try {
       // Save fine-tune request
-      await (supabase.from as Function)("fine_tune_requests")
+      await fromUntyped("fine_tune_requests")
         .insert({
           module_name: "evo_ai",
           request_id: crypto.randomUUID(),

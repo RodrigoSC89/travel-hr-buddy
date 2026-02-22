@@ -9,7 +9,7 @@ import { Select, SelectContent, SelectItem, SelectTrigger, SelectValue } from "@
 import { toast } from "sonner";
 import { Activity, AlertTriangle, Thermometer, Wind, Droplets, Plus } from "lucide-react";
 import { useQuery, useMutation, useQueryClient } from "@tanstack/react-query";
-import { supabase } from "@/integrations/supabase/client";
+import { fromUntyped } from "@/integrations/supabase/untyped-client";
 
 const STATUS_CONFIG: Record<string, { label: string; color: string }> = {
   operational: { label: "Operacional", color: "bg-success" },
@@ -27,7 +27,7 @@ export function PeotramSATSystem() {
   const { data: chambers = [], isLoading } = useQuery({
     queryKey: ["peotram-sat-chambers"],
     queryFn: async () => {
-      const { data, error } = await (supabase.from as Function)("peotram_sat_chambers")
+      const { data, error } = await fromUntyped("peotram_sat_chambers")
         .select("*").order("chamber_name");
       if (error) throw error;
       // eslint-disable-next-line @typescript-eslint/no-explicit-any -- Dynamic table not in generated types
@@ -37,7 +37,7 @@ export function PeotramSATSystem() {
 
   const createMutation = useMutation({
     mutationFn: async (chamber: typeof newChamber) => {
-      const { error } = await (supabase.from as Function)("peotram_sat_chambers").insert({
+      const { error } = await fromUntyped("peotram_sat_chambers").insert({
         chamber_name: chamber.chamber_name,
         chamber_type: chamber.chamber_type,
         max_occupants: chamber.max_occupants,

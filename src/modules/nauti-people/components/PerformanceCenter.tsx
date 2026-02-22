@@ -36,6 +36,7 @@ import {
 } from 'lucide-react';
 import { motion } from 'framer-motion';
 import { supabase } from '@/integrations/supabase/client';
+import { fromUntyped } from '@/integrations/supabase/untyped-client';
 import { useQuery } from '@tanstack/react-query';
 import { useNautilusPeopleAI } from '../hooks/useNautilusPeopleAI';
 import type { Avaliacao, OKR, NineBoxPosition } from '../types';
@@ -45,7 +46,7 @@ function useAvaliacoes() {
   return useQuery({
     queryKey: ['performance-avaliacoes'],
     queryFn: async (): Promise<Avaliacao[]> => {
-      const { data } = await (supabase.from as Function)("crew_performance_reviews")
+      const { data } = await fromUntyped("crew_performance_reviews")
         .select("*, crew_members(full_name, rank, department)")
         .order("review_date", { ascending: false })
         .limit(50);

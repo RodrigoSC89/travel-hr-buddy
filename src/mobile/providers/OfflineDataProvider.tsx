@@ -10,6 +10,7 @@ import { enhancedSyncEngine } from "../services/enhanced-sync-engine";
 import { sqliteStorage } from "../services/sqlite-storage";
 import { networkDetector } from "../services/networkDetector";
 import { supabase } from "@/integrations/supabase/client";
+import { fromUntyped } from "@/integrations/supabase/untyped-client";
 import { logger } from '@/lib/logger';
 
 interface OfflineDataContextType {
@@ -80,7 +81,7 @@ export function OfflineDataProvider({ children }: OfflineDataProviderProps) {
     if (isOnline) {
       try {
         // Dynamic table access - type safety handled by caller
-        const { data, error } = await (supabase.from as Function)(table)
+        const { data, error } = await fromUntyped(table)
           .select("*")
           .eq("id", id)
           .single();
@@ -108,7 +109,7 @@ export function OfflineDataProvider({ children }: OfflineDataProviderProps) {
     if (cached.length === 0 && isOnline) {
       try {
         // Dynamic table access - type safety handled by caller
-        const { data, error } = await (supabase.from as Function)(table)
+        const { data, error } = await fromUntyped(table)
           .select("*")
           .limit(500);
 

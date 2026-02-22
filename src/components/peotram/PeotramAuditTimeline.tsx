@@ -9,7 +9,7 @@ import { Button } from "@/components/ui/button";
 import { Progress } from "@/components/ui/progress";
 import { Input } from "@/components/ui/input";
 import { useQuery, useMutation, useQueryClient } from "@tanstack/react-query";
-import { supabase } from "@/integrations/supabase/client";
+import { fromUntyped } from "@/integrations/supabase/untyped-client";
 import { toast } from "sonner";
 import {
   Calendar, CheckCircle, Clock, AlertTriangle, Target,
@@ -53,7 +53,7 @@ export const PeotramAuditTimeline: React.FC = () => {
   const { data: milestones = [], isLoading } = useQuery({
     queryKey: ["peotram-audit-milestones"],
     queryFn: async () => {
-      const { data, error } = await (supabase.from as Function)("peotram_audit_milestones")
+      const { data, error } = await fromUntyped("peotram_audit_milestones")
         .select("*")
         .order("due_date", { ascending: true });
       if (error) throw error;
@@ -79,7 +79,7 @@ export const PeotramAuditTimeline: React.FC = () => {
       const update: Record<string, unknown> = { status: next };
       if (next === "completed") { update.progress = 100; update.completed_date = new Date().toISOString(); }
       else if (next === "in_progress") { update.progress = 50; }
-      const { error } = await (supabase.from as Function)("peotram_audit_milestones")
+      const { error } = await fromUntyped("peotram_audit_milestones")
         .update(update as never).eq("id", id);
       if (error) throw error;
     },

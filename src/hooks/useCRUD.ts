@@ -4,6 +4,7 @@
  */
 import { useQuery, useMutation, useQueryClient } from '@tanstack/react-query';
 import { supabase } from '@/integrations/supabase/client';
+import { fromUntyped } from '@/integrations/supabase/untyped-client';
 import { toast } from 'sonner';
 import { logger } from '@/lib/logger';
 import type { Database } from '@/integrations/supabase/types';
@@ -59,8 +60,7 @@ export function useCRUD<T extends { id: string }>({
 
   const createMutation = useMutation({
     mutationFn: async (payload: Record<string, unknown>) => {
-      // eslint-disable-next-line @typescript-eslint/no-explicit-any
-      const tbl = supabase.from(table) as any;
+      const tbl = fromUntyped(table);
       const { data, error } = await tbl.insert(payload).select().single();
       if (error) throw error;
       return data;
@@ -77,8 +77,7 @@ export function useCRUD<T extends { id: string }>({
 
   const updateMutation = useMutation({
     mutationFn: async ({ id, ...payload }: Record<string, unknown> & { id: string }) => {
-      // eslint-disable-next-line @typescript-eslint/no-explicit-any
-      const tbl = supabase.from(table) as any;
+      const tbl = fromUntyped(table);
       const { data, error } = await tbl.update({ ...payload, updated_at: new Date().toISOString() }).eq('id', id).select().single();
       if (error) throw error;
       return data;
@@ -95,8 +94,7 @@ export function useCRUD<T extends { id: string }>({
 
   const removeMutation = useMutation({
     mutationFn: async (id: string) => {
-      // eslint-disable-next-line @typescript-eslint/no-explicit-any
-      const tbl = supabase.from(table) as any;
+      const tbl = fromUntyped(table);
       const { error } = await tbl.delete().eq('id', id);
       if (error) throw error;
     },
@@ -112,8 +110,7 @@ export function useCRUD<T extends { id: string }>({
 
   const upsertMutation = useMutation({
     mutationFn: async (payload: Record<string, unknown>) => {
-      // eslint-disable-next-line @typescript-eslint/no-explicit-any
-      const tbl = supabase.from(table) as any;
+      const tbl = fromUntyped(table);
       const { data, error } = await tbl.upsert(payload).select().single();
       if (error) throw error;
       return data;

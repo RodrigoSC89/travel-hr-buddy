@@ -27,6 +27,7 @@ import {
 import { useEmployeeStats, usePayrollStats, useHeadcountTrend } from '@/hooks/usePeopleAnalytics';
 import { useQuery, useQueryClient } from '@tanstack/react-query';
 import { supabase } from '@/integrations/supabase/client';
+import { fromUntyped } from '@/integrations/supabase/untyped-client';
 
 export default function PeopleAnalyticsPage() {
   const navigate = useNavigate();
@@ -79,7 +80,7 @@ export default function PeopleAnalyticsPage() {
   const { data: climateData = [] } = useQuery({
     queryKey: ['people-analytics-climate'],
     queryFn: async () => {
-      const { data } = await (supabase.from as Function)("crew_wellbeing_scores")
+      const { data } = await fromUntyped("crew_wellbeing_scores")
         .select("category, score, benchmark_score")
         .order("created_at", { ascending: false })
         .limit(50);

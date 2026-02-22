@@ -4,6 +4,7 @@
  */
 
 import { supabase } from "@/integrations/supabase/client";
+import { fromUntyped } from "@/integrations/supabase/untyped-client";
 import { logger } from "@/lib/logger";
 import type {
   RouteOptimizationInput,
@@ -190,7 +191,7 @@ class EdgeAICore {
           from_cache: result.fromCache,
         },
       };
-      await (supabase.from as Function)("system_observations")
+      await fromUntyped("system_observations")
         .insert(insertData);
     } catch (error) {
       logger.error("[EdgeAI] Failed to log inference:", error);
