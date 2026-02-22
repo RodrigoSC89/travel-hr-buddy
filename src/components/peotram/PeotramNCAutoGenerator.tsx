@@ -17,7 +17,7 @@ import {
   AlertTriangle, Loader2, FileText, Sparkles, Copy, Save,
   Clock, User, CheckCircle, XCircle, ArrowRight, Scale
 } from "lucide-react";
-import { supabase } from "@/integrations/supabase/client";
+import { fromUntyped } from "@/integrations/supabase/untyped-client";
 import { toast } from "sonner";
 import ReactMarkdown from "react-markdown";
 import { logger } from "@/lib/logger";
@@ -154,7 +154,7 @@ Auditor: ${auditorName || "N/A"}`
 
   const saveNCToSupabase = async (nc: GeneratedNC) => {
     try {
-      await (supabase.from as Function)("non_conformities").insert({
+      await fromUntyped("non_conformities").insert({
         title: nc.title,
         description: nc.description,
         nc_type: nc.classification,

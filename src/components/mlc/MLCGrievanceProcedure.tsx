@@ -14,7 +14,7 @@ import { Progress } from "@/components/ui/progress";
 import { AlertTriangle, CheckCircle, Clock, FileText, MessageSquare, Scale, Shield, Users, ArrowRight, Plus } from "lucide-react";
 import { toast } from "sonner";
 import { useQuery, useMutation, useQueryClient } from "@tanstack/react-query";
-import { supabase } from "@/integrations/supabase/client";
+import { fromUntyped } from "@/integrations/supabase/untyped-client";
 
 const ESCALATION_LEVELS = [
   { level: 1, title: "Supervisor Direto", sla: 7, description: "Resolução informal pelo supervisor imediato" },
@@ -54,7 +54,7 @@ export const MLCGrievanceProcedure: React.FC = () => {
   const { data: grievances = [], isLoading } = useQuery({
     queryKey: ["mlc-grievances"],
     queryFn: async () => {
-      const { data, error } = await (supabase.from as Function)("mlc_grievances")
+      const { data, error } = await fromUntyped("mlc_grievances")
         .select("*")
         .order("created_at", { ascending: false });
       if (error) throw error;
@@ -65,7 +65,7 @@ export const MLCGrievanceProcedure: React.FC = () => {
   const createMutation = useMutation({
     mutationFn: async (g: Record<string, unknown>) => {
       const count = grievances.length + 1;
-      const { error } = await (supabase.from as Function)("mlc_grievances").insert({
+      const { error } = await fromUntyped("mlc_grievances").insert({
         ...g,
         grievance_number: `GRV-${String(count).padStart(3, "0")}`,
         filed_date: new Date().toISOString().split("T")[0],
@@ -85,7 +85,7 @@ export const MLCGrievanceProcedure: React.FC = () => {
 
   const updateMutation = useMutation({
     mutationFn: async ({ id, updates }: { id: string; updates: Record<string, unknown> }) => {
-      const { error } = await (supabase.from as Function)("mlc_grievances").update({ ...updates, last_update: new Date().toISOString().split("T")[0] }).eq("id", id);
+      const { error } = await fromUntyped("mlc_grievances").update({ ...updates, last_update: new Date().toISOString().split("T")[0] }).eq("id", id);
       if (error) throw error;
     },
     onSuccess: () => queryClient.invalidateQueries({ queryKey: ["mlc-grievances"] }),

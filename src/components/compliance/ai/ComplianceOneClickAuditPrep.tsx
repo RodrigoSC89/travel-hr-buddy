@@ -18,7 +18,7 @@ import {
   FileCheck, Download, Zap, Clock, Ship, Users, Wrench,
   BookOpen, Target, BarChart3, XCircle, ArrowRight
 } from "lucide-react";
-import { supabase } from "@/integrations/supabase/client";
+import { fromUntyped } from "@/integrations/supabase/untyped-client";
 import { toast } from "sonner";
 import ReactMarkdown from "react-markdown";
 import { logger } from "@/lib/logger";
@@ -101,13 +101,13 @@ export function ComplianceOneClickAuditPrep({
         { data: maintenance },
         { data: drills },
       ] = await Promise.all([
-        (supabase.from as Function)("compliance_items").select("*").limit(100),
-        (supabase.from as Function)("crew_certifications").select("*").limit(50),
-        (supabase.from as Function)("internal_audits").select("*").order("created_at", { ascending: false }).limit(20),
-        (supabase.from as Function)("non_conformities").select("*").order("created_at", { ascending: false }).limit(30),
-        (supabase.from as Function)("crew_members").select("*").limit(50),
-        (supabase.from as Function)("maintenance_records").select("*").order("created_at", { ascending: false }).limit(30),
-        (supabase.from as Function)("corrective_actions").select("*").order("created_at", { ascending: false }).limit(20),
+        fromUntyped("compliance_items").select("*").limit(100),
+        fromUntyped("crew_certifications").select("*").limit(50),
+        fromUntyped("internal_audits").select("*").order("created_at", { ascending: false }).limit(20),
+        fromUntyped("non_conformities").select("*").order("created_at", { ascending: false }).limit(30),
+        fromUntyped("crew_members").select("*").limit(50),
+        fromUntyped("maintenance_records").select("*").order("created_at", { ascending: false }).limit(30),
+        fromUntyped("corrective_actions").select("*").order("created_at", { ascending: false }).limit(20),
       ]);
 
       setPhase("Analisando prontidão...");

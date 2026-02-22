@@ -1231,8 +1231,8 @@ export function useMarkInsightRead() {
 export function useSeedBenchmarkScores() {
   return useIntegratedMutation<Record<string, unknown>[], any>({
     mutationFn: async (rows) => {
-      const { supabase } = await import("@/integrations/supabase/client");
-      const { data, error } = await (supabase.from as Function)('peotram_vessel_scores').upsert(rows).select();
+      const { fromUntyped } = await import("@/integrations/supabase/untyped-client");
+      const { data, error } = await fromUntyped('peotram_vessel_scores').upsert(rows).select();
       if (error) throw error;
       return data;
     },
@@ -1405,8 +1405,8 @@ export function useUpdateRecruitmentStage() {
 export function useCreateDDS() {
   return useIntegratedMutation<Record<string, unknown>, any>({
     mutationFn: async (input) => {
-      const { supabase } = await import("@/integrations/supabase/client");
-      const { data, error } = await (supabase.from as Function)("drill_records").insert(input).select().single();
+      const { fromUntyped } = await import("@/integrations/supabase/untyped-client");
+      const { data, error } = await fromUntyped("drill_records").insert(input).select().single();
       if (error) throw error;
       return data;
     },

@@ -5,7 +5,7 @@
  */
 import React, { useState } from 'react';
 import { useQuery, useMutation, useQueryClient } from '@tanstack/react-query';
-import { supabase } from '@/integrations/supabase/client';
+import { fromUntyped } from '@/integrations/supabase/untyped-client';
 import { Card, CardContent, CardHeader, CardTitle } from '@/components/ui/card';
 import { Button } from '@/components/ui/button';
 import { Badge } from '@/components/ui/badge';
@@ -33,7 +33,7 @@ export function LOTOProceduresManager() {
   const { data: procedures = [], isLoading } = useQuery({
     queryKey: ['loto-procedures'],
     queryFn: async () => {
-      const { data, error } = await (supabase.from as Function)('loto_procedures')
+      const { data, error } = await fromUntyped('loto_procedures')
         .select('*')
         .order('created_at', { ascending: false });
       if (error) throw error;
@@ -43,7 +43,7 @@ export function LOTOProceduresManager() {
 
   const createMutation = useMutation({
     mutationFn: async (form: Record<string, unknown>) => {
-      const { error } = await (supabase.from as Function)('loto_procedures').insert(form);
+      const { error } = await fromUntyped('loto_procedures').insert(form);
       if (error) throw error;
     },
     onSuccess: () => {
@@ -55,7 +55,7 @@ export function LOTOProceduresManager() {
 
   const updateStatusMutation = useMutation({
     mutationFn: async ({ id, status, field }: { id: string; status: string; field?: Record<string, unknown> }) => {
-      const { error } = await (supabase.from as Function)('loto_procedures')
+      const { error } = await fromUntyped('loto_procedures')
         .update({ status, ...field, updated_at: new Date().toISOString() })
         .eq('id', id);
       if (error) throw error;

@@ -21,7 +21,7 @@ import {
   Calendar, MapPin, Ship, ArrowRightLeft, Download, Plus, Loader2,
   DollarSign, FileText, AlertTriangle, ArrowRight, BarChart3, TrendingUp, Globe, Target
 } from "lucide-react";
-import { supabase } from "@/integrations/supabase/client";
+import { fromUntyped } from "@/integrations/supabase/untyped-client";
 import { useQuery, useMutation, useQueryClient } from "@tanstack/react-query";
 import { toast } from "sonner";
 import { quickExport } from "@/lib/export-utils";
@@ -55,7 +55,7 @@ export function CrewChangeManager() {
   const { data: changes = [], isLoading } = useQuery({
     queryKey: ["crew-changes"],
     queryFn: async () => {
-      const { data, error } = await (supabase.from as Function)("crew_changes")
+      const { data, error } = await fromUntyped("crew_changes")
         .select("*")
         .order("planned_date", { ascending: true });
       if (error) throw error;
@@ -66,7 +66,7 @@ export function CrewChangeManager() {
   const { data: tasks = [] } = useQuery({
     queryKey: ["crew-change-tasks"],
     queryFn: async () => {
-      const { data, error } = await (supabase.from as Function)("crew_change_tasks")
+      const { data, error } = await fromUntyped("crew_change_tasks")
         .select("*");
       if (error) throw error;
       return data || [];
@@ -75,7 +75,7 @@ export function CrewChangeManager() {
 
   const createMutation = useMutation({
     mutationFn: async (form: typeof newForm) => {
-      const { data, error } = await (supabase.from as Function)("crew_changes").insert({
+      const { data, error } = await fromUntyped("crew_changes").insert({
         vessel_name: form.vessel_name,
         port: form.port,
         planned_date: form.planned_date,
@@ -91,7 +91,7 @@ export function CrewChangeManager() {
         "Handover notes prepared", "COVID vaccination verified",
         "Drug & alcohol test scheduled", "Travel insurance confirmed"
       ];
-      await (supabase.from as Function)("crew_change_tasks").insert(
+      await fromUntyped("crew_change_tasks").insert(
         defaultTasks.map(name => ({ crew_change_id: data.id, task_name: name, is_done: false }))
       );
       return data;
@@ -108,7 +108,7 @@ export function CrewChangeManager() {
 
   const toggleTask = useMutation({
     mutationFn: async ({ id, is_done }: { id: string; is_done: boolean }) => {
-      const { error } = await (supabase.from as Function)("crew_change_tasks").update({ is_done }).eq("id", id);
+      const { error } = await fromUntyped("crew_change_tasks").update({ is_done }).eq("id", id);
       if (error) throw error;
     },
     onSuccess: () => queryClient.invalidateQueries({ queryKey: ["crew-change-tasks"] }),
@@ -116,7 +116,7 @@ export function CrewChangeManager() {
 
   const updateStatus = useMutation({
     mutationFn: async ({ id, status }: { id: string; status: string }) => {
-      const { error } = await (supabase.from as Function)("crew_changes").update({ status }).eq("id", id);
+      const { error } = await fromUntyped("crew_changes").update({ status }).eq("id", id);
       if (error) throw error;
     },
     onSuccess: () => {

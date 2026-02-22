@@ -10,7 +10,7 @@ import { Button } from "@/components/ui/button";
 import { Progress } from "@/components/ui/progress";
 import { ScrollArea } from "@/components/ui/scroll-area";
 import { Separator } from "@/components/ui/separator";
-import { supabase } from "@/integrations/supabase/client";
+import { fromUntyped } from "@/integrations/supabase/untyped-client";
 import { useQuery } from "@tanstack/react-query";
 import { toast } from "sonner";
 import { logger } from "@/lib/logger";
@@ -62,7 +62,7 @@ export function ComplianceScoreBenchmark({
   const { data: complianceItems = [] } = useQuery({
     queryKey: ["benchmark-compliance", moduleId],
     queryFn: async () => {
-      const { data } = await (supabase.from as Function)("compliance_items")
+      const { data } = await fromUntyped("compliance_items")
         .select("id, status, regulation_reference, last_checked, created_at")
         .limit(200);
       return data || [];
@@ -73,7 +73,7 @@ export function ComplianceScoreBenchmark({
   const { data: audits = [] } = useQuery({
     queryKey: ["benchmark-audits", moduleId],
     queryFn: async () => {
-      const { data } = await (supabase.from as Function)("internal_audits")
+      const { data } = await fromUntyped("internal_audits")
         .select("id, audit_type, status, findings_count, compliance_score, created_at")
         .order("created_at", { ascending: false })
         .limit(50);
@@ -85,7 +85,7 @@ export function ComplianceScoreBenchmark({
   const { data: ncs = [] } = useQuery({
     queryKey: ["benchmark-ncs", moduleId],
     queryFn: async () => {
-      const { data } = await (supabase.from as Function)("non_conformities")
+      const { data } = await fromUntyped("non_conformities")
         .select("id, status, severity, source, created_at")
         .limit(100);
       return data || [];

@@ -10,7 +10,7 @@ import { Badge } from "@/components/ui/badge";
 import { Button } from "@/components/ui/button";
 import { ScrollArea } from "@/components/ui/scroll-area";
 import { Progress } from "@/components/ui/progress";
-import { supabase } from "@/integrations/supabase/client";
+import { fromUntyped } from "@/integrations/supabase/untyped-client";
 import { useNautilusAI } from "@/hooks/useNautilusAI";
 import { useQuery } from "@tanstack/react-query";
 import { toast } from "sonner";
@@ -47,7 +47,7 @@ export function ComplianceDocCrossReference({
   const { data: companyDocs = [] } = useQuery({
     queryKey: ["compliance-docs-crossref", moduleId],
     queryFn: async () => {
-      const { data } = await (supabase.from as Function)("ai_documents")
+      const { data } = await fromUntyped("ai_documents")
         .select("id, file_name, category, file_type, created_at, updated_at")
         .order("created_at", { ascending: false })
         .limit(100);
@@ -59,7 +59,7 @@ export function ComplianceDocCrossReference({
   const { data: templates = [] } = useQuery({
     queryKey: ["compliance-templates-crossref"],
     queryFn: async () => {
-      const { data } = await (supabase.from as Function)("ai_document_templates")
+      const { data } = await fromUntyped("ai_document_templates")
         .select("id, title, template_type, tags, updated_at")
         .limit(50);
       return data || [];
@@ -70,7 +70,7 @@ export function ComplianceDocCrossReference({
   const { data: checklists = [] } = useQuery({
     queryKey: ["compliance-checklists-crossref"],
     queryFn: async () => {
-      const { data } = await (supabase.from as Function)("operational_checklists")
+      const { data } = await fromUntyped("operational_checklists")
         .select("id, title, checklist_type, status, updated_at")
         .limit(50);
       return data || [];

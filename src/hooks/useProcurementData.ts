@@ -4,6 +4,7 @@
  */
 import { useQuery, useMutation, useQueryClient } from "@tanstack/react-query";
 import { supabase } from "@/integrations/supabase/client";
+import { fromUntyped } from "@/integrations/supabase/untyped-client";
 import { toast } from "sonner";
 
 export interface InventoryItem {
@@ -158,7 +159,7 @@ export function useProcurementData() {
 
   const createOrder = useMutation({
     mutationFn: async (order: Partial<ProcurementOrder>) => {
-      const { data, error } = await (supabase.from as Function)("procurement_orders")
+      const { data, error } = await fromUntyped("procurement_orders")
         .insert({
           order_number: `PO-${Date.now().toString().slice(-6)}`,
           order_type: order.order_type || "standard",

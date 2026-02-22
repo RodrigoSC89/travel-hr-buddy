@@ -50,6 +50,7 @@ import { format } from "date-fns";
 import { ptBR } from "date-fns/locale";
 import { ConsultationWizard } from "./ConsultationWizard";
 import { supabase } from "@/integrations/supabase/client";
+import { fromUntyped } from "@/integrations/supabase/untyped-client";
 import { useQuery } from "@tanstack/react-query";
 
 interface Consultation {
@@ -82,7 +83,7 @@ function useMedicalConsultations() {
   return useQuery({
     queryKey: ["medical-consultations"],
     queryFn: async (): Promise<Consultation[]> => {
-      const { data, error } = await (supabase.from as Function)("medical_consultations")
+      const { data, error } = await fromUntyped("medical_consultations")
         .select("*")
         .order("created_at", { ascending: false })
         .limit(100);

@@ -5,6 +5,7 @@
 
 import { useState, useCallback } from "react";
 import { supabase } from "@/integrations/supabase/client";
+import { fromUntyped } from "@/integrations/supabase/untyped-client";
 import { toast } from "sonner";
 
 export interface TelemetrySensorData {
@@ -130,7 +131,7 @@ Responda em JSON com o formato:
       // Store insights in database (table may not be in types yet)
       if (parsedInsights.length > 0) {
         try {
-          await (supabase.from as Function)("telemetry_insights").insert(
+          await fromUntyped("telemetry_insights").insert(
             parsedInsights.slice(0, 5).map(i => ({
               sensor_id: i.sensor_id,
               insight_type: i.type,

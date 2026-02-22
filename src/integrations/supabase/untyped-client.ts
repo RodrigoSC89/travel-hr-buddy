@@ -196,6 +196,22 @@ const KNOWN_UNTYPED_TABLES = new Set([
   
   // PEOTRAM Extended
   "peotram_lessons_learned",
+  "peotram_audit_milestones", "peotram_audit_responses",
+
+  // Crew Wellness
+  "crew_wellbeing_scores",
+
+  // Logbook & Sensors
+  "sensor_logbook_mappings", "operational_checklists",
+
+  // Telemetry AI
+  "telemetry_insights",
+
+  // AI Consensus
+  "ai_consensus_results", "ai_agent_disagreements",
+
+  // Insurance
+  "insurance_policies", "insurance_claims",
 ]);
 
 /**

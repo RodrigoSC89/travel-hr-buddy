@@ -7,6 +7,7 @@
 import React, { useState, useMemo } from 'react';
 import { useQuery, useMutation, useQueryClient } from '@tanstack/react-query';
 import { supabase } from '@/integrations/supabase/client';
+import { fromUntyped } from '@/integrations/supabase/untyped-client';
 import { Card, CardContent, CardHeader, CardTitle } from '@/components/ui/card';
 import { Button } from '@/components/ui/button';
 import { Input } from '@/components/ui/input';
@@ -65,7 +66,7 @@ export default function NoonReportManager() {
   const { data: reports = [], isLoading } = useQuery({
     queryKey: ['noon-reports'],
     queryFn: async () => {
-      const { data, error } = await (supabase.from as Function)('noon_reports')
+      const { data, error } = await fromUntyped('noon_reports')
         .select('*, vessels:vessel_id(name)')
         .order('report_date', { ascending: false })
         .limit(500);
@@ -98,7 +99,7 @@ export default function NoonReportManager() {
       Object.entries(nums).forEach(([k, v]) => { if (v) payload[k] = Number(v); });
       if (payload.draft_fwd && payload.draft_aft) payload.trim = (payload.draft_aft - payload.draft_fwd).toFixed(2);
 
-      const { error } = await (supabase.from as Function)('noon_reports').insert(payload);
+      const { error } = await fromUntyped('noon_reports').insert(payload);
       if (error) throw error;
     },
     onSuccess: () => {

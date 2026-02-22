@@ -5,7 +5,7 @@
  */
 import React, { useState } from 'react';
 import { useQuery, useMutation, useQueryClient } from '@tanstack/react-query';
-import { supabase } from '@/integrations/supabase/client';
+import { fromUntyped } from '@/integrations/supabase/untyped-client';
 import { Card, CardContent, CardHeader, CardTitle } from '@/components/ui/card';
 import { Button } from '@/components/ui/button';
 import { Badge } from '@/components/ui/badge';
@@ -27,7 +27,7 @@ export function SensorLogbookManager() {
   const { data: mappings = [] } = useQuery({
     queryKey: ['sensor-logbook-mappings'],
     queryFn: async () => {
-      const { data, error } = await (supabase.from as Function)('sensor_logbook_mappings')
+      const { data, error } = await fromUntyped('sensor_logbook_mappings')
         .select('*')
         .order('logbook_type');
       if (error) throw error;
@@ -37,7 +37,7 @@ export function SensorLogbookManager() {
 
   const createMutation = useMutation({
     mutationFn: async (form: Record<string, unknown>) => {
-      const { error } = await (supabase.from as Function)('sensor_logbook_mappings').insert(form);
+      const { error } = await fromUntyped('sensor_logbook_mappings').insert(form);
       if (error) throw error;
     },
     onSuccess: () => {
@@ -49,7 +49,7 @@ export function SensorLogbookManager() {
 
   const toggleMutation = useMutation({
     mutationFn: async ({ id, enabled }: { id: string; enabled: boolean }) => {
-      const { error } = await (supabase.from as Function)('sensor_logbook_mappings')
+      const { error } = await fromUntyped('sensor_logbook_mappings')
         .update({ auto_fill_enabled: enabled })
         .eq('id', id);
       if (error) throw error;

@@ -21,7 +21,7 @@ import {
   ShieldAlert, Target, BarChart3, Gauge, ArrowUpDown
 } from "lucide-react";
 import { toast } from "sonner";
-import { supabase } from "@/integrations/supabase/client";
+import { fromUntyped } from "@/integrations/supabase/untyped-client";
 import { useQuery, useMutation, useQueryClient } from "@tanstack/react-query";
 import { differenceInDays, format, addDays } from "date-fns";
 import {
@@ -80,7 +80,7 @@ export function InsurancePIManager() {
   const { data: policies = [], isLoading: policiesLoading } = useQuery({
     queryKey: ["insurance-policies"],
     queryFn: async () => {
-      const { data, error } = await (supabase.from as Function)("insurance_policies")
+      const { data, error } = await fromUntyped("insurance_policies")
         .select("*, vessels:vessel_id(name)")
         .order("end_date", { ascending: true });
       if (error) throw error;
@@ -95,7 +95,7 @@ export function InsurancePIManager() {
   const { data: claims = [], isLoading: claimsLoading } = useQuery({
     queryKey: ["insurance-claims"],
     queryFn: async () => {
-      const { data, error } = await (supabase.from as Function)("insurance_claims")
+      const { data, error } = await fromUntyped("insurance_claims")
         .select("*, vessels:vessel_id(name), insurance_policies:policy_id(type, insurer)")
         .order("created_at", { ascending: false });
       if (error) throw error;
@@ -105,7 +105,7 @@ export function InsurancePIManager() {
 
   const createPolicy = useMutation({
     mutationFn: async (f: typeof emptyPolicy) => {
-      const { error } = await (supabase.from as Function)("insurance_policies").insert({
+      const { error } = await fromUntyped("insurance_policies").insert({
         type: f.type, insurer: f.insurer, vessel_id: f.vessel_id || null,
         premium: f.premium, coverage: f.coverage, deductible: f.deductible,
         start_date: f.start_date, end_date: f.end_date, notes: f.notes || null,
@@ -124,7 +124,7 @@ export function InsurancePIManager() {
 
   const createClaim = useMutation({
     mutationFn: async (f: typeof emptyClaim) => {
-      const { error } = await (supabase.from as Function)("insurance_claims").insert({
+      const { error } = await fromUntyped("insurance_claims").insert({
         policy_id: f.policy_id || null, vessel_id: f.vessel_id || null,
         incident_date: f.incident_date, description: f.description,
         amount_claimed: f.amount_claimed, amount_recovered: f.amount_recovered,
@@ -143,7 +143,7 @@ export function InsurancePIManager() {
 
   const deletePolicy = useMutation({
     mutationFn: async (id: string) => {
-      const { error } = await (supabase.from as Function)("insurance_policies").delete().eq("id", id);
+      const { error } = await fromUntyped("insurance_policies").delete().eq("id", id);
       if (error) throw error;
     },
     onSuccess: () => {
@@ -154,7 +154,7 @@ export function InsurancePIManager() {
 
   const updateClaimStatus = useMutation({
     mutationFn: async ({ id, status }: { id: string; status: string }) => {
-      const { error } = await (supabase.from as Function)("insurance_claims")
+      const { error } = await fromUntyped("insurance_claims")
         .update({ status })
         .eq("id", id);
       if (error) throw error;

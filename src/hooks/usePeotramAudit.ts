@@ -5,6 +5,7 @@
 import { useState, useCallback, useEffect, useRef } from "react";
 import { useQuery, useMutation, useQueryClient } from "@tanstack/react-query";
 import { supabase } from "@/integrations/supabase/client";
+import { fromUntyped } from "@/integrations/supabase/untyped-client";
 import { toast } from "sonner";
 import { logger } from "@/lib/logger";
 import { PEOTRAM_ELEMENTS, SCORE_CRITERIA } from "@/data/peotram-elements-data";
@@ -57,7 +58,7 @@ export function usePeotramAudit() {
   const { data: audits = [], isLoading: auditsLoading } = useQuery({
     queryKey: ["peotram-audits-list"],
     queryFn: async () => {
-      const { data, error } = await (supabase.from as Function)("peotram_audits")
+      const { data, error } = await fromUntyped("peotram_audits")
         .select("*")
         .order("created_at", { ascending: false })
         .limit(50);
@@ -72,7 +73,7 @@ export function usePeotramAudit() {
     queryKey: ["peotram-responses", currentAuditId],
     queryFn: async () => {
       if (!currentAuditId) return [];
-      const { data, error } = await (supabase.from as Function)("peotram_audit_responses")
+      const { data, error } = await fromUntyped("peotram_audit_responses")
         .select("*")
         .eq("audit_id", currentAuditId);
       if (error) throw error;
@@ -108,7 +109,7 @@ export function usePeotramAudit() {
 
       const totalItems = PEOTRAM_ELEMENTS.reduce((acc, el) => acc + el.subelements.reduce((a, s) => a + s.items.length, 0), 0);
 
-      const { data, error } = await (supabase.from as Function)("peotram_audits")
+      const { data, error } = await fromUntyped("peotram_audits")
         .insert({
           vessel_name: params.vesselName,
           auditor_name: params.auditorName,
@@ -222,14 +223,14 @@ export function usePeotramAudit() {
         });
 
       if (responsesToUpsert.length > 0) {
-        const { error: respError } = await (supabase.from as Function)("peotram_audit_responses")
+        const { error: respError } = await fromUntyped("peotram_audit_responses")
           .upsert(responsesToUpsert, { onConflict: "audit_id,item_id" });
         if (respError) throw respError;
       }
 
       // Update audit summary
       const scores = calculateScores();
-      const { error: auditError } = await (supabase.from as Function)("peotram_audits")
+      const { error: auditError } = await fromUntyped("peotram_audits")
         .update({
           element_scores: scores.elementScores,
           scored_items: scores.scoredItems,
@@ -256,7 +257,7 @@ export function usePeotramAudit() {
     if (!currentAuditId) return;
     const scores = calculateScores();
     
-    const { error } = await (supabase.from as Function)("peotram_audits")
+    const { error } = await fromUntyped("peotram_audits")
       .update({
         status: "completed",
         element_scores: scores.elementScores,
@@ -342,8 +343,8 @@ export function usePeotramAudit() {
   const deleteAudit = useMutation({
     mutationFn: async (auditId: string) => {
       // Delete responses first
-      await (supabase.from as Function)("peotram_audit_responses").delete().eq("audit_id", auditId);
-      const { error } = await (supabase.from as Function)("peotram_audits").delete().eq("id", auditId);
+      await fromUntyped("peotram_audit_responses").delete().eq("audit_id", auditId);
+      const { error } = await fromUntyped("peotram_audits").delete().eq("id", auditId);
       if (error) throw error;
     },
     onSuccess: (_, auditId) => {

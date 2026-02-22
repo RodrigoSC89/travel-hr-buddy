@@ -17,6 +17,7 @@ import {
 import { useAIAdvisor } from "@/hooks/useAIAdvisor";
 import { useQuery } from "@tanstack/react-query";
 import { supabase } from "@/integrations/supabase/client";
+import { fromUntyped } from "@/integrations/supabase/untyped-client";
 
 interface EvidenceItem {
   id: string;
@@ -54,7 +55,7 @@ export const AutoEvidenceBuilder: React.FC = () => {
   const { data: checklists } = useQuery({
     queryKey: ["evidence-checklists"],
     queryFn: async () => {
-      const { data, error } = await (supabase.from as Function)("operational_checklists")
+      const { data, error } = await fromUntyped("operational_checklists")
         .select("*")
         .order("created_at", { ascending: false })
         .limit(30);

@@ -15,6 +15,7 @@ import { Select, SelectContent, SelectItem, SelectTrigger, SelectValue } from "@
 import { Tabs, TabsContent, TabsList, TabsTrigger } from "@/components/ui/tabs";
 import { useToast } from "@/hooks/use-toast";
 import { supabase } from "@/integrations/supabase/client";
+import { fromUntyped } from "@/integrations/supabase/untyped-client";
 import { 
   Users, 
   Calendar as CalendarIcon, 
@@ -92,13 +93,13 @@ export default function CrewRotationModule() {
   const loadRotations = async () => {
     setLoading(true);
     try {
-      const { data, error } = await ((supabase.from as Function)("crew_rotations")
+      const { data, error } = await (fromUntyped("crew_rotations")
         .select(`
           *,
           crew_member:crew_members(name),
           vessel:vessels(name)
         `)
-        .order("rotation_start", { ascending: true }) as unknown as Promise<{ data: RotationData[] | null; error: Error | null }>);
+        .order("rotation_start", { ascending: true })) as { data: RotationData[] | null; error: Error | null };
 
       if (error) throw error;
 
@@ -210,7 +211,7 @@ export default function CrewRotationModule() {
     }
 
     try {
-      const { error } = await ((supabase.from as Function)("crew_rotations")
+      const { error } = await (fromUntyped("crew_rotations")
         .insert({
           crew_member_id: newRotation.crew_member_id,
           vessel_id: newRotation.vessel_id || null,
@@ -218,7 +219,7 @@ export default function CrewRotationModule() {
           rotation_end: newRotation.end_date,
           status: "scheduled",
           conflicts: conflicts.map(c => c.message)
-        }) as unknown as Promise<{ error: Error | null }>);
+        })) as { error: Error | null };
 
       if (error) throw error;
 
