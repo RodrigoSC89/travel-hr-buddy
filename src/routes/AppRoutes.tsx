@@ -25,6 +25,7 @@ export const AppRoutes = () => (
     <Route path="/status" element={<Pages.LandingPage />} />
     <Route path="/demo" element={<Pages.DemoLauncher />} />
     <Route path="/home" element={<Pages.LandingPage />} />
+    <Route path="/install" element={<Pages.PWAInstallPage />} />
     
     {/* Fullscreen onboarding (authenticated but no sidebar/header) */}
     <Route path="/welcome" element={<ProtectedRoute><Pages.WorldClassOnboarding /></ProtectedRoute>} />

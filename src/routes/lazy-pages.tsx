@@ -378,6 +378,7 @@ export const SupportPortalPage = lazy(() => import("@/pages/SupportPortalPage"))
 export const APIDeveloperPortalPage = lazy(() => import("@/pages/APIDeveloperPortalPage"));
 export const FlagStateCompliancePage = lazy(() => import("@/pages/FlagStateCompliancePage"));
 export const InfrastructureDashboardPage = lazy(() => import("@/pages/InfrastructureDashboardPage"));
+export const PWAInstallPage = lazy(() => import("@/pages/PWAInstallPage"));
 
 // Module Consolidation Plan
 export const ModuleConsolidationPlan = lazy(() => import("@/pages/ModuleConsolidationPlan"));
