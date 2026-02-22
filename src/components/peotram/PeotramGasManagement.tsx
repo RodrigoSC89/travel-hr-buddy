@@ -9,7 +9,7 @@ import { Select, SelectContent, SelectItem, SelectTrigger, SelectValue } from "@
 import { toast } from "sonner";
 import { AlertTriangle, Plus } from "lucide-react";
 import { useQuery, useMutation, useQueryClient } from "@tanstack/react-query";
-import { supabase } from "@/integrations/supabase/client";
+import { fromUntyped } from "@/integrations/supabase/untyped-client";
 
 const GAS_ICONS: Record<string, string> = { helium: "🫧", oxygen: "💨", nitrogen: "🌬️", heliox: "🔬", trimix: "⚗️", air: "🌀", co2_absorbent: "🧪", other: "⛽" };
 const GAS_LABELS: Record<string, string> = { helium: "Hélio", oxygen: "Oxigênio", nitrogen: "Nitrogênio", heliox: "Heliox", trimix: "Trimix", air: "Ar Comprimido", co2_absorbent: "Absorvente CO₂", other: "Outro" };
@@ -22,7 +22,7 @@ export function PeotramGasManagement() {
   const { data: gases = [], isLoading } = useQuery({
     queryKey: ["peotram-gas-inventory"],
     queryFn: async () => {
-      const { data, error } = await (supabase.from as Function)("peotram_gas_inventory")
+      const { data, error } = await fromUntyped("peotram_gas_inventory")
         .select("*").order("gas_type");
       if (error) throw error;
       // eslint-disable-next-line @typescript-eslint/no-explicit-any -- Supabase dynamic table response
@@ -32,7 +32,7 @@ export function PeotramGasManagement() {
 
   const createMutation = useMutation({
     mutationFn: async (gas: typeof newGas) => {
-      const { error } = await (supabase.from as Function)("peotram_gas_inventory").insert({
+      const { error } = await fromUntyped("peotram_gas_inventory").insert({
         gas_type: gas.gas_type,
         quantity_liters: gas.quantity_liters,
         pressure_bar: gas.pressure_bar,
@@ -132,7 +132,7 @@ export function PeotramGasManagement() {
                     <AlertTriangle className="h-4 w-4 shrink-0" />
                     <span className="font-medium">NÍVEL CRÍTICO — Solicitar reabastecimento!</span>
                     <Button size="sm" variant="destructive" className="ml-auto text-xs h-6" onClick={async () => { 
-                      const { error } = await (supabase.from as Function)("peotram_gas_inventory").update({ status: "reorder_requested" }).eq("id", gas.id);
+                      const { error } = await fromUntyped("peotram_gas_inventory").update({ status: "reorder_requested" }).eq("id", gas.id);
                       if (!error) { queryClient.invalidateQueries({ queryKey: ["peotram-gas-inventory"] }); toast.success("Solicitação de reabastecimento registrada para " + GAS_LABELS[gas.gas_type]); }
                       else toast.error("Erro ao solicitar reabastecimento");
                     }}>Solicitar</Button>

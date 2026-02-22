@@ -8,7 +8,7 @@
 
 import { logger } from "@/lib/logger";
 import { learningCore } from "./learning-core";
-import { supabase } from "@/integrations/supabase/client";
+import { fromUntyped } from "@/integrations/supabase/untyped-client";
 
 export interface Vessel {
   id: string;
@@ -132,7 +132,7 @@ class MissionSimulationCore {
     }
 
     try {
-      const { error } = await (supabase.from as Function)("simulated_missions")
+      const { error } = await fromUntyped("simulated_missions")
         .select("id")
         .limit(1);
 
@@ -172,7 +172,7 @@ class MissionSimulationCore {
       }
 
       // Save to Supabase
-      const { data, error } = await (supabase.from as Function)("simulated_missions")
+      const { data, error } = await fromUntyped("simulated_missions")
         .insert({
           name: blueprint.name,
           description: blueprint.description,
@@ -225,7 +225,7 @@ class MissionSimulationCore {
 
       if (tableExists) {
         // Update status to running
-        await (supabase.from as Function)("simulated_missions")
+        await fromUntyped("simulated_missions")
           .update({ status: "running" })
           .eq("id", simulationId);
       }
@@ -237,7 +237,7 @@ class MissionSimulationCore {
 
       if (tableExists) {
         // Update status and save outcome
-        await (supabase.from as Function)("simulated_missions")
+        await fromUntyped("simulated_missions")
           .update({
             status: outcome.success ? "completed" : "failed",
             outcome: outcome,
@@ -271,7 +271,7 @@ class MissionSimulationCore {
       
       const tableExists = await this.checkTableExists();
       if (tableExists) {
-        await (supabase.from as Function)("simulated_missions")
+        await fromUntyped("simulated_missions")
           .update({ status: "failed" })
           .eq("id", simulationId);
       }
@@ -530,7 +530,7 @@ class MissionSimulationCore {
         return null;
       }
 
-      const { data, error } = await (supabase.from as Function)("simulated_missions")
+      const { data, error } = await fromUntyped("simulated_missions")
         .select("*")
         .eq("id", simulationId)
         .single();
@@ -571,7 +571,7 @@ class MissionSimulationCore {
         return this.getMockSimulations();
       }
 
-      const { data, error } = await (supabase.from as Function)("simulated_missions")
+      const { data, error } = await fromUntyped("simulated_missions")
         .select("*")
         .order("created_at", { ascending: false });
 
@@ -626,7 +626,7 @@ class MissionSimulationCore {
         return;
       }
 
-      const { error } = await (supabase.from as Function)("simulated_missions")
+      const { error } = await fromUntyped("simulated_missions")
         .delete()
         .eq("id", simulationId);
 

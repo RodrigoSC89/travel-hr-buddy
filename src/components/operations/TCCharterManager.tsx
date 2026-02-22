@@ -6,6 +6,7 @@
 import { useState, useMemo, useCallback } from "react";
 import { useQuery, useMutation, useQueryClient } from "@tanstack/react-query";
 import { supabase } from "@/integrations/supabase/client";
+import { fromUntyped } from "@/integrations/supabase/untyped-client";
 import { motion } from "framer-motion";
 import { staggerContainer } from "@/lib/animations/motion-variants";
 import { Card, CardContent, CardHeader, CardTitle } from "@/components/ui/card";
@@ -37,7 +38,7 @@ function useTimeCharters() {
   return useQuery({
     queryKey: ["time-charters"],
     queryFn: async () => {
-      const { data, error } = await (supabase.from as Function)("time_charters")
+      const { data, error } = await fromUntyped("time_charters")
         .select("*, vessels(name)")
         .order("created_at", { ascending: false });
       if (error) throw error;
@@ -61,7 +62,7 @@ export function TCCharterManager() {
 
   const createMutation = useMutation({
     mutationFn: async () => {
-      const { error } = await (supabase.from as Function)("time_charters").insert({
+      const { error } = await fromUntyped("time_charters").insert({
         charter_id: `TC-${form.type === "tc-in" ? "IN" : "OUT"}-${Date.now().toString(36).toUpperCase()}`,
         type: form.type, counterparty: form.counterparty || "TBD",
         hire_rate: Number(form.hireRate) || 0, currency: "USD/day",

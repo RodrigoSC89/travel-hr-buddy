@@ -212,6 +212,18 @@ const KNOWN_UNTYPED_TABLES = new Set([
 
   // Insurance
   "insurance_policies", "insurance_claims",
+
+  // Collective Knowledge
+  "collective_knowledge",
+
+  // Simulation
+  "simulated_missions",
+
+  // PEOTRAM Benchmarking
+  "peotram_vessel_scores",
+
+  // Gas Management
+  "peotram_gas_inventory",
 ]);
 
 /**
