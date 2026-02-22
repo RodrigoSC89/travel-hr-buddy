@@ -9,7 +9,7 @@ import { Card, CardContent } from "@/components/ui/card";
 import { Progress } from "@/components/ui/progress";
 import { Radio, RefreshCw, Brain, Eye, EyeOff, Wifi, Activity, AlertTriangle, TrendingUp } from "lucide-react";
 import { toast } from "sonner";
-import { supabase } from "@/integrations/supabase/client";
+import { fromUntyped } from "@/integrations/supabase/untyped-client";
 import { useTelemetryAI, TelemetrySensorData } from "@/hooks/useTelemetryAI";
 import { format } from "date-fns";
 import { logger } from '@/lib/logger';
@@ -30,8 +30,8 @@ export default function TelemetriaCommand() {
 
   const fetchData = useCallback(async () => {
     try {
-      const sensorsRes = await (supabase.from as Function)("telemetry_logs").select("*").order("timestamp", { ascending: false }).limit(100);
-      const alertsRes = await (supabase.from as Function)("telemetry_alerts").select("*").eq("resolved", false).order("created_at", { ascending: false }).limit(50);
+      const sensorsRes = await fromUntyped("telemetry_logs").select("*").order("timestamp", { ascending: false }).limit(100);
+      const alertsRes = await fromUntyped("telemetry_alerts").select("*").eq("resolved", false).order("created_at", { ascending: false }).limit(50);
       if (sensorsRes.data) {
         setSensors(sensorsRes.data as TelemetryLog[]);
         const grouped = (sensorsRes.data as TelemetryLog[]).reduce((acc: Record<string, Record<string, unknown>>, log: TelemetryLog) => {
@@ -55,12 +55,12 @@ export default function TelemetriaCommand() {
   };
 
   const acknowledgeAlert = async (alertId: string) => {
-    const { error } = await (supabase.from as Function)("telemetry_alerts").update({ acknowledged: true, acknowledged_at: new Date().toISOString() } as never).eq("id", alertId);
+    const { error } = await fromUntyped("telemetry_alerts").update({ acknowledged: true, acknowledged_at: new Date().toISOString() } as never).eq("id", alertId);
     if (!error) { setAlerts(prev => prev.map(a => a.id === alertId ? { ...a, acknowledged: true } : a)); toast.success("Alerta reconhecido"); }
   };
 
   const resolveAlert = async (alertId: string) => {
-    const { error } = await (supabase.from as Function)("telemetry_alerts").update({ resolved: true, resolved_at: new Date().toISOString() } as never).eq("id", alertId);
+    const { error } = await fromUntyped("telemetry_alerts").update({ resolved: true, resolved_at: new Date().toISOString() } as never).eq("id", alertId);
     if (!error) { setAlerts(prev => prev.filter(a => a.id !== alertId)); toast.success("Alerta resolvido"); }
   };
 

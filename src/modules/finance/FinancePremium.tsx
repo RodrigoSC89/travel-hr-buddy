@@ -17,6 +17,7 @@ import { Badge } from "@/components/ui/badge";
 import { Progress } from "@/components/ui/progress";
 import { toast } from "sonner";
 import { supabase } from "@/integrations/supabase/client";
+import { fromUntyped } from "@/integrations/supabase/untyped-client";
 import { useNavigate } from "react-router-dom";
 
 // Finance Dashboard
@@ -49,7 +50,7 @@ function FinanceDashboard() {
     .reduce((acc, t) => acc + (t.amount || 0), 0);
 
   const handleNewTransaction = async () => {
-    const { error } = await (supabase.from as Function)("financial_transactions").insert([{
+    const { error } = await fromUntyped("financial_transactions").insert([{
       description: "Nova Transação",
       amount: 0,
       transaction_type: "expense",

@@ -5,7 +5,7 @@
  */
 import { useState } from 'react';
 import { useQuery, useMutation, useQueryClient } from '@tanstack/react-query';
-import { supabase } from '@/integrations/supabase/client';
+import { fromUntyped } from '@/integrations/supabase/untyped-client';
 import { Card, CardContent, CardHeader, CardTitle, CardDescription } from '@/components/ui/card';
 import { Badge } from '@/components/ui/badge';
 import { Button } from '@/components/ui/button';
@@ -78,7 +78,7 @@ export function MLCWageProtectionTracker() {
   const { data: wageRecords = [] } = useQuery({
     queryKey: ['mlc-wage-records'],
     queryFn: async () => {
-      const { data, error } = await (supabase.from as Function)('mlc_wage_records')
+      const { data, error } = await fromUntyped('mlc_wage_records')
         .select('*')
         .order('pay_date', { ascending: false });
       if (error) throw error;
@@ -90,7 +90,7 @@ export function MLCWageProtectionTracker() {
   const { data: complianceChecks = [] } = useQuery({
     queryKey: ['mlc-wage-compliance'],
     queryFn: async () => {
-      const { data, error } = await (supabase.from as Function)('mlc_wage_compliance')
+      const { data, error } = await fromUntyped('mlc_wage_compliance')
         .select('*')
         .order('regulation');
       if (error) throw error;
@@ -101,7 +101,7 @@ export function MLCWageProtectionTracker() {
   // Seed compliance if empty
   const seedCompliance = useMutation({
     mutationFn: async () => {
-      const { error } = await (supabase.from as Function)('mlc_wage_compliance')
+      const { error } = await fromUntyped('mlc_wage_compliance')
         .insert(DEFAULT_COMPLIANCE);
       if (error) throw error;
     },
@@ -111,7 +111,7 @@ export function MLCWageProtectionTracker() {
   // Add wage record
   const addRecord = useMutation({
     mutationFn: async (record: Partial<WageRecord>) => {
-      const { error } = await (supabase.from as Function)('mlc_wage_records')
+      const { error } = await fromUntyped('mlc_wage_records')
         .insert(record);
       if (error) throw error;
     },
@@ -125,7 +125,7 @@ export function MLCWageProtectionTracker() {
   // Update status
   const updateStatus = useMutation({
     mutationFn: async ({ id, status }: { id: string; status: string }) => {
-      const { error } = await (supabase.from as Function)('mlc_wage_records')
+      const { error } = await fromUntyped('mlc_wage_records')
         .update({ status, paid_on_time: status === 'paid', updated_at: new Date().toISOString() } as never)
         .eq('id', id);
       if (error) throw error;

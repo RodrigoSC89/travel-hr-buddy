@@ -92,7 +92,7 @@ export function ComplianceAutoNCResolver({
   const { data: existingNCs = [] } = useQuery({
     queryKey: ["nc-resolver-history", moduleId],
     queryFn: async () => {
-      const { data } = await (supabase.from as Function)("non_conformities")
+      const { data } = await fromUntyped("non_conformities")
         .select("id, title, description, severity, source, status, root_cause, corrective_action")
         .order("created_at", { ascending: false })
         .limit(20);

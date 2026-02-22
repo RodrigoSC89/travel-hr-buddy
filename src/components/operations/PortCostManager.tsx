@@ -10,7 +10,7 @@ import { Button } from "@/components/ui/button";
 import { Input } from "@/components/ui/input";
 import { Anchor, DollarSign, FileText, TrendingDown, Search, Plus, Download, Globe } from "lucide-react";
 import { useQuery } from "@tanstack/react-query";
-import { supabase } from "@/integrations/supabase/client";
+import { fromUntyped } from "@/integrations/supabase/untyped-client";
 
 interface PortCall {
   id: string;
@@ -47,7 +47,7 @@ export function PortCostManager() {
   const { data: portCalls = [], isLoading } = useQuery({
     queryKey: ["port-costs"],
     queryFn: async () => {
-      const { data, error } = await (supabase.from as Function)("port_calls")
+      const { data, error } = await fromUntyped("port_calls")
         .select("*")
         .order("created_at", { ascending: false })
         .limit(100);

@@ -14,7 +14,7 @@ import { motion } from "framer-motion";
 import { ProfessionalHeader } from "./professional-header";
 import { ProfessionalKPICard } from "./professional-kpi-card";
 import { useQuery } from "@tanstack/react-query";
-import { supabase } from "@/integrations/supabase/client";
+import { fromUntyped } from "@/integrations/supabase/untyped-client";
 
 export function ProfessionalWeatherDashboard() {
   const [activeTab, setActiveTab] = useState("overview");
@@ -23,7 +23,7 @@ export function ProfessionalWeatherDashboard() {
   const { data: trackingData, isLoading } = useQuery({
     queryKey: ["weather-vessel-tracking"],
     queryFn: async () => {
-      const { data, error } = await (supabase.from as Function)("vessel_tracking")
+      const { data, error } = await fromUntyped("vessel_tracking")
         .select("*")
         .order("timestamp", { ascending: false })
         .limit(50);

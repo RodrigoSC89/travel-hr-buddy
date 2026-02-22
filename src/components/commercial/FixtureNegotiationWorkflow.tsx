@@ -5,7 +5,7 @@
  */
 import React, { useState, useMemo } from 'react';
 import { useQuery, useMutation, useQueryClient } from '@tanstack/react-query';
-import { supabase } from '@/integrations/supabase/client';
+import { fromUntyped } from '@/integrations/supabase/untyped-client';
 import { Card, CardContent, CardHeader, CardTitle } from '@/components/ui/card';
 import { Button } from '@/components/ui/button';
 import { Badge } from '@/components/ui/badge';
@@ -37,7 +37,7 @@ export function FixtureNegotiationWorkflow() {
   const { data: negotiations = [], isLoading } = useQuery({
     queryKey: ['fixture-negotiations'],
     queryFn: async () => {
-      const { data, error } = await (supabase.from as Function)('fixture_negotiations')
+      const { data, error } = await fromUntyped('fixture_negotiations')
         .select('*')
         .order('created_at', { ascending: false });
       if (error) throw error;
@@ -49,7 +49,7 @@ export function FixtureNegotiationWorkflow() {
     queryKey: ['fixture-offers', selectedNeg],
     queryFn: async () => {
       if (!selectedNeg) return [];
-      const { data, error } = await (supabase.from as Function)('fixture_offers')
+      const { data, error } = await fromUntyped('fixture_offers')
         .select('*')
         .eq('negotiation_id', selectedNeg)
         .order('round_number', { ascending: true });
@@ -61,7 +61,7 @@ export function FixtureNegotiationWorkflow() {
 
   const createMutation = useMutation({
     mutationFn: async (form: Record<string, unknown>) => {
-      const { error } = await (supabase.from as Function)('fixture_negotiations').insert(form);
+      const { error } = await fromUntyped('fixture_negotiations').insert(form);
       if (error) throw error;
     },
     onSuccess: () => {
@@ -73,11 +73,11 @@ export function FixtureNegotiationWorkflow() {
 
   const addOfferMutation = useMutation({
     mutationFn: async (form: Record<string, unknown>) => {
-      const { error } = await (supabase.from as Function)('fixture_offers').insert(form);
+      const { error } = await fromUntyped('fixture_offers').insert(form);
       if (error) throw error;
       // Update negotiation status
       const nextStatus = form.offer_type === 'acceptance' ? 'fixed' : form.offer_type === 'rejection' ? 'failed' : 'counter_offer';
-      await (supabase.from as Function)('fixture_negotiations')
+      await fromUntyped('fixture_negotiations')
         .update({ status: nextStatus, current_round: (form.round_number as number) })
         .eq('id', form.negotiation_id);
     },

@@ -9,7 +9,7 @@ import { Dialog, DialogContent, DialogHeader, DialogTitle, DialogTrigger } from 
 import { toast } from "sonner";
 import { AlertTriangle, Plus, FileText, Send, Clock } from "lucide-react";
 import { useQuery, useMutation, useQueryClient } from "@tanstack/react-query";
-import { supabase } from "@/integrations/supabase/client";
+import { fromUntyped } from "@/integrations/supabase/untyped-client";
 
 const INCIDENT_TYPES = [
   { value: "drift_off", label: "Drift Off" },
@@ -44,7 +44,7 @@ export function DPIncidentsCIRAS() {
   const { data: incidents = [], isLoading } = useQuery({
     queryKey: ["peodp-incidents"],
     queryFn: async () => {
-      const { data, error } = await (supabase.from as Function)("peodp_incidents")
+      const { data, error } = await fromUntyped("peodp_incidents")
         .select("*")
         .order("incident_date", { ascending: false });
       if (error) throw error;
@@ -55,7 +55,7 @@ export function DPIncidentsCIRAS() {
 
   const createMutation = useMutation({
     mutationFn: async (incident: typeof newIncident) => {
-      const { error } = await (supabase.from as Function)("peodp_incidents")
+      const { error } = await fromUntyped("peodp_incidents")
         .insert({
           incident_type: incident.incident_type,
           severity: incident.severity,
@@ -79,7 +79,7 @@ export function DPIncidentsCIRAS() {
   const reportCIRAS = useMutation({
     mutationFn: async (id: string) => {
       const cirasRef = `CIRAS-${new Date().getFullYear()}-${String(Date.now()).slice(-4)}`;
-      const { error } = await (supabase.from as Function)("peodp_incidents")
+      const { error } = await fromUntyped("peodp_incidents")
         .update({ reported_to_client: true, imca_reference: cirasRef, status: "closed" })
         .eq("id", id);
       if (error) throw error;

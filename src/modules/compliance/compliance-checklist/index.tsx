@@ -21,7 +21,7 @@ import {
   Download,
   AlertCircle
 } from "lucide-react";
-import { supabase } from "@/integrations/supabase/client";
+import { fromUntyped } from "@/integrations/supabase/untyped-client";
 import { useToast } from "@/hooks/use-toast";
 import { runAIContext } from "@/ai/kernel";
 import {
@@ -68,7 +68,7 @@ const ComplianceChecklist = () => {
     try {
       setLoading(true);
       // eslint-disable-next-line @typescript-eslint/no-explicit-any -- compliance_dashboard not in generated types
-      const { data, error } = await (supabase.from as Function)("compliance_dashboard")
+      const { data, error } = await fromUntyped("compliance_dashboard")
         .select("*");
 
       if (error) throw error;
@@ -77,7 +77,7 @@ const ComplianceChecklist = () => {
       const recordsWithDetails = await Promise.all(
         (data || []).map(async (record: Record<string, unknown>) => {
           // eslint-disable-next-line @typescript-eslint/no-explicit-any -- compliance_records not in generated types
-          const { data: fullRecord } = await (supabase.from as Function)("compliance_records")
+          const { data: fullRecord } = await fromUntyped("compliance_records")
             .select("findings, recommendations")
             .eq("id", record.id)
             .single();

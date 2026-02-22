@@ -4,7 +4,7 @@
  */
 
 import React, { useState, useEffect } from "react";
-import { supabase } from "@/integrations/supabase/client";
+import { fromUntyped } from "@/integrations/supabase/untyped-client";
 import { Card, CardContent, CardHeader, CardTitle, CardDescription } from "@/components/ui/card";
 import { Button } from "@/components/ui/button";
 import { Badge } from "@/components/ui/badge";
@@ -111,7 +111,7 @@ export default function FinancialDashboard() {
   const [budget] = useState<BudgetItem[]>(fallbackBudget);
 
   useEffect(() => {
-    (supabase.from as Function)("fuel_records").select("id, total_cost, fuel_date, status").limit(20).then(({ data }: { data: Record<string, unknown>[] | null }) => {
+    fromUntyped("fuel_records").select("id, total_cost, fuel_date, status").limit(20).then(({ data }: { data: Record<string, unknown>[] | null }) => {
       if (data && data.length > 0) {
         setTransactions(data.map((r) => ({
           id: String(r.id), type: "expense" as const, category: "Combustível",

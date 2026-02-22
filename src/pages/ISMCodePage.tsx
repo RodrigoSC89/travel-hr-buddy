@@ -8,7 +8,7 @@
 import React, { useState } from "react";
 import { useNavigate } from "react-router-dom";
 import { useQuery } from "@tanstack/react-query";
-import { supabase } from "@/integrations/supabase/client";
+import { fromUntyped } from "@/integrations/supabase/untyped-client";
 import { Card, CardContent, CardHeader, CardTitle, CardDescription } from "@/components/ui/card";
 import { Badge } from "@/components/ui/badge";
 import { Button } from "@/components/ui/button";
@@ -83,7 +83,7 @@ const ISMCodePage = () => {
   const { data: audits = [], isLoading: auditsLoading } = useQuery({
     queryKey: ["ism-audits"],
     queryFn: async () => {
-      const { data } = await (supabase.from as Function)("internal_audits")
+      const { data } = await fromUntyped("internal_audits")
         .select("*")
         .or("audit_type.ilike.%ism%,audit_type.ilike.%safety%,scope.ilike.%ism%")
         .order("created_at", { ascending: false })
@@ -96,7 +96,7 @@ const ISMCodePage = () => {
   const { data: nonConformities = [] } = useQuery({
     queryKey: ["ism-ncs"],
     queryFn: async () => {
-      const { data } = await (supabase.from as Function)("non_conformities")
+      const { data } = await fromUntyped("non_conformities")
         .select("*")
         .or("source.ilike.%ism%,source.ilike.%safety%")
         .order("created_at", { ascending: false })
@@ -109,7 +109,7 @@ const ISMCodePage = () => {
   const { data: complianceItems = [] } = useQuery({
     queryKey: ["ism-compliance-items"],
     queryFn: async () => {
-      const { data } = await (supabase.from as Function)("compliance_items")
+      const { data } = await fromUntyped("compliance_items")
         .select("*")
         .or("regulation_reference.ilike.%ism%,regulation_reference.ilike.%solas%")
         .order("created_at", { ascending: false })

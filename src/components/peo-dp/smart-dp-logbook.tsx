@@ -9,7 +9,7 @@ import { ScrollArea } from "@/components/ui/scroll-area";
 import { Dialog, DialogContent, DialogHeader, DialogTitle, DialogTrigger } from "@/components/ui/dialog";
 import { toast } from "sonner";
 import { useQuery, useMutation, useQueryClient } from "@tanstack/react-query";
-import { supabase } from "@/integrations/supabase/client";
+import { fromUntyped } from "@/integrations/supabase/untyped-client";
 import {
   BookOpen, Clock, User, AlertTriangle, CheckCircle, Activity, Settings,
   Download, Plus, Filter, Search, RefreshCw, Loader2
@@ -53,7 +53,7 @@ export const SmartDPLogbook: React.FC = () => {
   const { data: entries = [], isLoading } = useQuery({
     queryKey: ["peodp-audit-trail"],
     queryFn: async () => {
-      const { data, error } = await (supabase.from as Function)("peodp_audit_trail")
+      const { data, error } = await fromUntyped("peodp_audit_trail")
         .select("*")
         .order("created_at", { ascending: false })
         .limit(200);
@@ -75,7 +75,7 @@ export const SmartDPLogbook: React.FC = () => {
 
   const addMutation = useMutation({
     mutationFn: async (entry: Partial<LogEntry>) => {
-      const { error } = await (supabase.from as Function)("peodp_audit_trail").insert({
+      const { error } = await fromUntyped("peodp_audit_trail").insert({
         event_type: entry.eventType,
         category: eventTypeConfig[entry.eventType as keyof typeof eventTypeConfig]?.label || "Geral",
         description: entry.description,
@@ -98,7 +98,7 @@ export const SmartDPLogbook: React.FC = () => {
 
   const ackMutation = useMutation({
     mutationFn: async (id: string) => {
-      const { error } = await (supabase.from as Function)("peodp_audit_trail")
+      const { error } = await fromUntyped("peodp_audit_trail")
         .update({ acknowledged: true })
         .eq("id", id);
       if (error) throw error;

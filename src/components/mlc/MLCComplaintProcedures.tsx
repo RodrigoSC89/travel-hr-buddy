@@ -16,7 +16,7 @@ import {
 } from "lucide-react";
 import { toast } from "sonner";
 import { useQuery, useMutation, useQueryClient } from "@tanstack/react-query";
-import { supabase } from "@/integrations/supabase/client";
+import { fromUntyped } from "@/integrations/supabase/untyped-client";
 
 type ComplaintStatus = "received" | "investigating" | "resolved" | "escalated" | "closed";
 type ComplaintCategory = "wages" | "accommodation" | "food" | "hours" | "safety" | "discrimination" | "repatriation" | "other";
@@ -61,7 +61,7 @@ export function MLCComplaintProcedures() {
   const { data: complaints = [], isLoading } = useQuery({
     queryKey: ["mlc-complaints"],
     queryFn: async () => {
-      const { data, error } = await (supabase.from as Function)("mlc_complaints")
+      const { data, error } = await fromUntyped("mlc_complaints")
         .select("*")
         .order("created_at", { ascending: false });
       if (error) throw error;
@@ -84,7 +84,7 @@ export function MLCComplaintProcedures() {
 
   const addMutation = useMutation({
     mutationFn: async (c: typeof newComplaint) => {
-      const { error } = await (supabase.from as Function)("mlc_complaints").insert({
+      const { error } = await fromUntyped("mlc_complaints").insert({
         complainant: c.complainant || "Anônimo",
         rank: c.rank,
         category: c.category,
@@ -106,7 +106,7 @@ export function MLCComplaintProcedures() {
 
   const updateMutation = useMutation({
     mutationFn: async ({ id, updates }: { id: string; updates: Record<string, unknown> }) => {
-      const { error } = await (supabase.from as Function)("mlc_complaints")
+      const { error } = await fromUntyped("mlc_complaints")
         .update(updates).eq("id", id);
       if (error) throw error;
     },

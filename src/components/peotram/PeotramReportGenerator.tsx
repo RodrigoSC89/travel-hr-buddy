@@ -15,7 +15,7 @@ import {
   FileText, Loader2, Download, Copy, Sparkles, BarChart3,
   Shield, Target, AlertTriangle, CheckCircle, Clock, Printer
 } from "lucide-react";
-import { supabase } from "@/integrations/supabase/client";
+import { fromUntyped } from "@/integrations/supabase/untyped-client";
 import { toast } from "sonner";
 import ReactMarkdown from "react-markdown";
 import { logger } from "@/lib/logger";
@@ -52,9 +52,9 @@ export function PeotramReportGenerator({ vesselName: propVessel, auditorName: pr
       // Step 1: Fetch real data
       setGenerationProgress(10);
       const [auditsRes, ncsRes, actionsRes] = await Promise.all([
-        (supabase.from as Function)("internal_audits").select("*").or("audit_type.ilike.%peotram%,scope.ilike.%peotram%").order("created_at", { ascending: false }).limit(20),
-        (supabase.from as Function)("non_conformities").select("*").or("source.ilike.%peotram%,source.ilike.%anp%").order("created_at", { ascending: false }).limit(50),
-        (supabase.from as Function)("action_items").select("*").ilike("source_module", "%peotram%").order("created_at", { ascending: false }).limit(30),
+        fromUntyped("internal_audits").select("*").or("audit_type.ilike.%peotram%,scope.ilike.%peotram%").order("created_at", { ascending: false }).limit(20),
+        fromUntyped("non_conformities").select("*").or("source.ilike.%peotram%,source.ilike.%anp%").order("created_at", { ascending: false }).limit(50),
+        fromUntyped("action_items").select("*").ilike("source_module", "%peotram%").order("created_at", { ascending: false }).limit(30),
       ]);
 
       const audits = auditsRes.data || [];

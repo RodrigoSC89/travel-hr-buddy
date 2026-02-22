@@ -7,7 +7,7 @@ import { Dialog, DialogContent, DialogDescription, DialogHeader, DialogTitle, Di
 import { Select, SelectContent, SelectItem, SelectTrigger, SelectValue } from "@/components/ui/select";
 import { Label } from "@/components/ui/label";
 import { Textarea } from "@/components/ui/textarea";
-import { supabase } from "@/integrations/supabase/client";
+import { fromUntyped } from "@/integrations/supabase/untyped-client";
 import { useToast } from "@/hooks/use-toast";
 import { 
   Wrench, 
@@ -95,7 +95,7 @@ export const MaintenancePanel: React.FC<MaintenancePanelProps> = ({
     }
 
     try {
-      const { error } = await (supabase.from as Function)("maintenance_schedules")
+      const { error } = await fromUntyped("maintenance_schedules")
         .insert([{
           vessel_id: newMaintenance.vessel_id,
           maintenance_type: newMaintenance.type,

@@ -5,6 +5,7 @@
 
 import { useQuery, useMutation, useQueryClient } from '@tanstack/react-query';
 import { supabase } from '@/integrations/supabase/client';
+import { fromUntyped } from '@/integrations/supabase/untyped-client';
 import { useToast } from '@/hooks/use-toast';
 import { logger } from '@/lib/logger';
 
@@ -162,7 +163,7 @@ export function useCreateClassSurvey() {
 
   return useMutation({
     mutationFn: async (input: CreateSurveyInput) => {
-      const { data, error } = await (supabase.from as Function)('class_surveys')
+      const { data, error } = await fromUntyped('class_surveys')
         .insert({
           vessel_id: input.vessel_id,
           survey_type: input.survey_type,
@@ -211,7 +212,7 @@ export function useUpdateSurveyStatus() {
         updates.completed_date = new Date().toISOString().split('T')[0];
       }
 
-      const { error } = await (supabase.from as Function)('class_surveys')
+      const { error } = await fromUntyped('class_surveys')
         .update(updates)
         .eq('id', surveyId);
 

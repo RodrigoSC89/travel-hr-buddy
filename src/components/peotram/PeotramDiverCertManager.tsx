@@ -7,7 +7,7 @@ import { Input } from "@/components/ui/input";
 import { Dialog, DialogContent, DialogHeader, DialogTitle, DialogTrigger } from "@/components/ui/dialog";
 import { toast } from "sonner";
 import { useQuery, useMutation, useQueryClient } from "@tanstack/react-query";
-import { supabase } from "@/integrations/supabase/client";
+import { fromUntyped } from "@/integrations/supabase/untyped-client";
 import { Users, Search, Download, Plus, Loader2 } from "lucide-react";
 
 interface Diver {
@@ -37,7 +37,7 @@ export function PeotramDiverCertManager() {
   const { data: divers = [], isLoading } = useQuery({
     queryKey: ["peotram-divers"],
     queryFn: async () => {
-      const { data, error } = await (supabase.from as Function)("peotram_divers")
+      const { data, error } = await fromUntyped("peotram_divers")
         .select("*")
         .order("name");
       if (error) throw error;
@@ -57,7 +57,7 @@ export function PeotramDiverCertManager() {
 
   const addMutation = useMutation({
     mutationFn: async (d: typeof newDiver) => {
-      const { error } = await (supabase.from as Function)("peotram_divers").insert({
+      const { error } = await fromUntyped("peotram_divers").insert({
         name: d.name,
         role: d.role,
         sat_hours: d.sat_hours,

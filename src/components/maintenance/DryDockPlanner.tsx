@@ -5,7 +5,7 @@
 import React, { useState, useMemo } from "react";
 import { quickExport } from "@/lib/export-utils";
 import { useQuery, useMutation, useQueryClient } from "@tanstack/react-query";
-import { supabase } from "@/integrations/supabase/client";
+import { fromUntyped } from "@/integrations/supabase/untyped-client";
 import { Card, CardContent, CardHeader, CardTitle } from "@/components/ui/card";
 import { Badge } from "@/components/ui/badge";
 import { Button } from "@/components/ui/button";
@@ -82,7 +82,7 @@ export function DryDockPlanner() {
   const { data: projects = [], isLoading } = useQuery({
     queryKey: ['drydock-projects'],
     queryFn: async () => {
-      const { data, error } = await (supabase.from as Function)('drydock_projects')
+      const { data, error } = await fromUntyped('drydock_projects')
         .select('*')
         .order('start_date', { ascending: true });
       if (error) throw error;
@@ -103,7 +103,7 @@ export function DryDockPlanner() {
 
   const createMutation = useMutation({
     mutationFn: async (data: typeof newProject) => {
-      const { error } = await (supabase.from as Function)('drydock_projects').insert({
+      const { error } = await fromUntyped('drydock_projects').insert({
         vessel_name: data.vessel_name, yard_name: data.yard_name, yard_location: data.yard_location,
         start_date: data.start_date, end_date: data.end_date, days_planned: Number(data.days_planned),
         budget_usd: Number(data.budget_usd), notes: data.notes || null, work_items: DEFAULT_WORK_ITEMS, status: 'planned',
@@ -123,7 +123,7 @@ export function DryDockPlanner() {
     mutationFn: async ({ id, status }: { id: string; status: string }) => {
       const updates: Record<string, unknown> = { status, updated_at: new Date().toISOString() };
       if (status === 'in_dock') updates.days_elapsed = 0;
-      const { error } = await (supabase.from as Function)('drydock_projects').update(updates).eq('id', id);
+      const { error } = await fromUntyped('drydock_projects').update(updates).eq('id', id);
       if (error) throw error;
     },
     onSuccess: () => { queryClient.invalidateQueries({ queryKey: ['drydock-projects'] }); toast.success('Status atualizado'); },
@@ -131,7 +131,7 @@ export function DryDockPlanner() {
 
   const deleteMutation = useMutation({
     mutationFn: async (id: string) => {
-      const { error } = await (supabase.from as Function)('drydock_projects').delete().eq('id', id);
+      const { error } = await fromUntyped('drydock_projects').delete().eq('id', id);
       if (error) throw error;
     },
     onSuccess: () => { queryClient.invalidateQueries({ queryKey: ['drydock-projects'] }); toast.success('Projeto removido'); setSelectedProject(null); },

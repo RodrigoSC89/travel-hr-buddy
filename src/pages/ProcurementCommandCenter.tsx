@@ -7,6 +7,7 @@ import { logger } from "@/lib/logger";
 import { Helmet } from "react-helmet-async";
 import { useQuery, useQueryClient } from "@tanstack/react-query";
 import { supabase } from "@/integrations/supabase/client";
+import { fromUntyped } from "@/integrations/supabase/untyped-client";
 import { Card, CardContent } from "@/components/ui/card";
 import { Button } from "@/components/ui/button";
 import { Badge } from "@/components/ui/badge";
@@ -83,7 +84,7 @@ export default function ProcurementCommandCenter() {
   const loadAIProcurementData = useCallback(async () => {
     setIsAnalyzing(true);
     try {
-      const { data: invData, error: invError } = await (supabase.from as Function)("inventory_items").select("*").order("current_stock", { ascending: true });
+      const { data: invData, error: invError } = await fromUntyped("inventory_items").select("*").order("current_stock", { ascending: true });
       if (invError) throw invError;
       const realItems = (invData || []) as Record<string, unknown>[];
       
@@ -132,7 +133,7 @@ export default function ProcurementCommandCenter() {
   const loadInventoryItems = useCallback(async () => {
     try {
       setInventoryLoading(true);
-      const { data, error } = await (supabase.from as Function)("inventory_items").select("*").order("name");
+      const { data, error } = await fromUntyped("inventory_items").select("*").order("name");
       if (error) throw error;
       setInventoryItems((data as unknown as InventoryItem[]) || []);
     } catch (error: unknown) {
@@ -150,7 +151,7 @@ export default function ProcurementCommandCenter() {
 
   const executeAutoPurchase = useCallback(async (rec: PurchaseRecommendation) => {
     try {
-      const { error } = await (supabase.from as Function)("rfq_requests").insert({ title: `Pedido Automático - ${rec.item.name}`, category: rec.item.category.toLowerCase().replace(/ /g, '_'), status: 'sent', budget_estimate: rec.estimatedCost, currency: 'BRL', rfq_number: `RFQ-AUTO-${Date.now()}` });
+      const { error } = await fromUntyped("rfq_requests").insert({ title: `Pedido Automático - ${rec.item.name}`, category: rec.item.category.toLowerCase().replace(/ /g, '_'), status: 'sent', budget_estimate: rec.estimatedCost, currency: 'BRL', rfq_number: `RFQ-AUTO-${Date.now()}` });
       if (error) throw error;
       setRecommendations(prev => prev.filter(r => r.id !== rec.id));
       setAiStats(prev => ({ ...prev, pendingOrders: prev.pendingOrders + 1, autoOrders: prev.autoOrders + 1 }));
@@ -171,7 +172,7 @@ export default function ProcurementCommandCenter() {
 
   const handleCreateRFQ = useCallback(async () => {
     try {
-      const { error } = await (supabase.from as Function)("rfq_requests").insert({ ...newRFQ, rfq_number: `RFQ-${Date.now()}`, status: 'draft', currency: 'BRL' });
+      const { error } = await fromUntyped("rfq_requests").insert({ ...newRFQ, rfq_number: `RFQ-${Date.now()}`, status: 'draft', currency: 'BRL' });
       if (error) throw error;
       queryClient.invalidateQueries({ queryKey: ["rfq-requests"] });
       setShowNewRFQDialog(false);
@@ -182,7 +183,7 @@ export default function ProcurementCommandCenter() {
 
   const handleCreateItem = useCallback(async () => {
     try {
-      const { error } = await (supabase.from as Function)("inventory_items").insert({ ...newItem, status: 'active', total_value: newItem.current_stock * newItem.unit_cost });
+      const { error } = await fromUntyped("inventory_items").insert({ ...newItem, status: 'active', total_value: newItem.current_stock * newItem.unit_cost });
       if (error) throw error;
       loadInventoryItems();
       setShowNewItemDialog(false);
