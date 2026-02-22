@@ -7,10 +7,10 @@
  */
 
 import { logger } from "@/lib/logger";
-import { supabase } from "@/integrations/supabase/client";
+import { fromUntyped } from "@/integrations/supabase/untyped-client";
 
-// Dynamic table accessor for cognitive_feedback (schema columns differ from code interface)
-const db = supabase.from as Function;
+// Dynamic table accessor for cognitive_feedback
+const db = (table: string) => fromUntyped(table);
 
 export interface CognitiveFeedbackEntry {
   id?: string;

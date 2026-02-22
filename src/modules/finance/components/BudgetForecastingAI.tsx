@@ -18,7 +18,7 @@ import {
   RefreshCw, Loader2, PieChart, Target, Wallet
 } from 'lucide-react';
 import { toast } from 'sonner';
-import { supabase } from '@/integrations/supabase/client';
+import { fromUntyped } from '@/integrations/supabase/untyped-client';
 
 interface BudgetCategory {
   id: string;
@@ -55,9 +55,9 @@ export function BudgetForecastingAI() {
       try {
         // Use fuel_records for fuel spending, maintenance_tasks for maintenance costs, etc.
         const [{ data: fuelData }, { data: maintData }, { data: crewData }] = await Promise.all([
-          (supabase.from as Function)("fuel_records").select("quantity, unit_cost").limit(100),
-          supabase.from("maintenance_records").select("total_cost").limit(100),
-          (supabase.from as Function)("payroll_records").select("net_salary").limit(100),
+          fromUntyped("fuel_records").select("quantity, unit_cost").limit(100),
+          fromUntyped("maintenance_records").select("total_cost").limit(100),
+          fromUntyped("payroll_records").select("net_salary").limit(100),
         ]);
 
         const fuelSpent = (fuelData || []).reduce((s: number, r: unknown) => { const rec = r as Record<string, unknown>; return s + ((Number(rec.quantity) || 0) * (Number(rec.unit_cost) || 0)); }, 0);

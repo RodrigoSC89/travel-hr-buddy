@@ -5,7 +5,7 @@
  * functions, generation of alternatives, A/B testing, and replacement.
  */
 
-import { supabase } from "@/integrations/supabase/client";
+import { fromUntyped } from "@/integrations/supabase/untyped-client";
 import { logger } from "@/lib/logger";
 
 export interface BehaviorFunction {
@@ -477,7 +477,7 @@ export class SelfEvolutionModel {
 
     try {
       // behavior_mutation_log table is optional
-      await (supabase.from as Function)("behavior_mutation_log").insert({
+      await fromUntyped("behavior_mutation_log").insert({
         function_id: original.id,
         function_name: original.name,
         mutation_type: alternative.mutationType,

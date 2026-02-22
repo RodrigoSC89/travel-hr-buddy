@@ -5,7 +5,7 @@
  */
 import React, { useState } from "react";
 import { useQuery, useMutation, useQueryClient } from "@tanstack/react-query";
-import { supabase } from "@/integrations/supabase/client";
+import { fromUntyped } from "@/integrations/supabase/untyped-client";
 import { Card, CardContent, CardHeader, CardTitle, CardDescription } from "@/components/ui/card";
 import { Badge } from "@/components/ui/badge";
 import { Button } from "@/components/ui/button";
@@ -73,7 +73,7 @@ export const MLCRecruitmentCompliance: React.FC = () => {
   const { data: agencies = [] } = useQuery({
     queryKey: ['mlc-recruitment-agencies'],
     queryFn: async () => {
-      const { data, error } = await (supabase.from as Function)('mlc_recruitment_agencies')
+      const { data, error } = await fromUntyped('mlc_recruitment_agencies')
         .select('*').order('compliance_score', { ascending: false });
       if (error) throw error;
       return (data || []) as Agency[];
@@ -83,7 +83,7 @@ export const MLCRecruitmentCompliance: React.FC = () => {
   const { data: checklist = [] } = useQuery({
     queryKey: ['mlc-recruitment-checklist'],
     queryFn: async () => {
-      const { data, error } = await (supabase.from as Function)('mlc_recruitment_checklist')
+      const { data, error } = await fromUntyped('mlc_recruitment_checklist')
         .select('*').order('regulation');
       if (error) throw error;
       return (data || []) as ChecklistItem[];
@@ -92,7 +92,7 @@ export const MLCRecruitmentCompliance: React.FC = () => {
 
   const seedChecklist = useMutation({
     mutationFn: async () => {
-      const { error } = await (supabase.from as Function)('mlc_recruitment_checklist').insert(DEFAULT_CHECKLIST);
+      const { error } = await fromUntyped('mlc_recruitment_checklist').insert(DEFAULT_CHECKLIST);
       if (error) throw error;
     },
     onSuccess: () => queryClient.invalidateQueries({ queryKey: ['mlc-recruitment-checklist'] }),
@@ -100,7 +100,7 @@ export const MLCRecruitmentCompliance: React.FC = () => {
 
   const addAgency = useMutation({
     mutationFn: async (agency: Partial<Agency>) => {
-      const { error } = await (supabase.from as Function)('mlc_recruitment_agencies').insert(agency);
+      const { error } = await fromUntyped('mlc_recruitment_agencies').insert(agency);
       if (error) throw error;
     },
     onSuccess: () => {
@@ -112,7 +112,7 @@ export const MLCRecruitmentCompliance: React.FC = () => {
 
   const updateAgencyStatus = useMutation({
     mutationFn: async ({ id, status }: { id: string; status: string }) => {
-      const { error } = await (supabase.from as Function)('mlc_recruitment_agencies')
+      const { error } = await fromUntyped('mlc_recruitment_agencies')
         .update({ status, updated_at: new Date().toISOString() } as never).eq('id', id);
       if (error) throw error;
     },

@@ -7,7 +7,7 @@
  * @module ai/collectiveMemoryHub
  */
 
-import { supabase } from "@/integrations/supabase/client";
+import { fromUntyped } from "@/integrations/supabase/untyped-client";
 import { logger } from "@/lib/logger";
 
 export interface KnowledgeEntry {
@@ -98,8 +98,7 @@ class CollectiveMemoryHub {
     }
 
     try {
-      // eslint-disable-next-line @typescript-eslint/no-explicit-any -- collective_knowledge is an optional dynamic table
-      const { data, error } = await (supabase.from as Function)("collective_knowledge")
+      const { data, error } = await fromUntyped("collective_knowledge")
         .select("*")
         .eq("key", key)
         .order("version", { ascending: false })
@@ -123,8 +122,7 @@ class CollectiveMemoryHub {
 
   private async syncEntryToDB(entry: KnowledgeEntry): Promise<void> {
     try {
-      // eslint-disable-next-line @typescript-eslint/no-explicit-any -- collective_knowledge is an optional dynamic table
-      await (supabase.from as Function)("collective_knowledge").insert({
+      await fromUntyped("collective_knowledge").insert({
         id: entry.id,
         key: entry.key,
         value: entry.value,
@@ -141,8 +139,7 @@ class CollectiveMemoryHub {
 
   private async loadKnowledgeFromDB(): Promise<void> {
     try {
-      // eslint-disable-next-line @typescript-eslint/no-explicit-any -- collective_knowledge is an optional dynamic table
-      const { data, error } = await (supabase.from as Function)("collective_knowledge")
+      const { data, error } = await fromUntyped("collective_knowledge")
         .select("*")
         .order("updated_at", { ascending: false });
 
@@ -182,8 +179,7 @@ class CollectiveMemoryHub {
     let entriesSynced = 0;
 
     try {
-      // eslint-disable-next-line @typescript-eslint/no-explicit-any -- collective_knowledge is an optional dynamic table
-      const { data, error } = await (supabase.from as Function)("collective_knowledge")
+      const { data, error } = await fromUntyped("collective_knowledge")
         .select("*")
         .neq("instance_id", this.instanceId)
         .gte("updated_at", new Date(Date.now() - 60000).toISOString())

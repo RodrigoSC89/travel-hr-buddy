@@ -6,6 +6,7 @@
 import React, { useState, useMemo } from 'react';
 import { useQuery, useQueryClient } from '@tanstack/react-query';
 import { supabase } from '@/integrations/supabase/client';
+import { fromUntyped } from '@/integrations/supabase/untyped-client';
 import { useCreateHullInspection, useCreateHullFinding } from '@/hooks/useModuleHooks';
 import { Card, CardContent, CardHeader, CardTitle } from '@/components/ui/card';
 import { Button } from '@/components/ui/button';
@@ -59,7 +60,7 @@ export default function HullIntegrityManager() {
   const { data: inspections = [], isLoading } = useQuery({
     queryKey: ['hull-inspections'],
     queryFn: async () => {
-      const { data, error } = await (supabase.from as Function)('hull_integrity_records')
+      const { data, error } = await fromUntyped('hull_integrity_records')
         .select('*, vessels:vessel_id(name)')
         .order('inspection_date', { ascending: false }).limit(100);
       if (error) throw error;

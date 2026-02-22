@@ -4,7 +4,7 @@
  * Queries information_schema when available, otherwise documents requirements
  */
 
-import { supabase } from '@/integrations/supabase/client';
+import { fromUntyped } from '@/integrations/supabase/untyped-client';
 
 interface FKRequirement {
   sourceTable: string;
@@ -86,7 +86,7 @@ export async function validateForeignKeysLive(): Promise<{ valid: string[]; miss
   for (const fk of REQUIRED_FKS) {
     try {
       // Simple check: try to query the source table with the FK column
-      const { error } = await (supabase.from as Function)(fk.sourceTable)
+      const { error } = await fromUntyped(fk.sourceTable)
         .select(fk.column)
         .limit(1);
 

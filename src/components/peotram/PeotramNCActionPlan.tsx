@@ -4,7 +4,7 @@
  */
 import React, { useState, useMemo } from "react";
 import { useQuery, useQueryClient } from "@tanstack/react-query";
-import { supabase } from "@/integrations/supabase/client";
+import { fromUntyped } from "@/integrations/supabase/untyped-client";
 import { useCreateNC, useUpdateNCStatus } from "@/hooks/useModuleHooks";
 import { Card, CardContent } from "@/components/ui/card";
 import { Badge } from "@/components/ui/badge";
@@ -70,7 +70,7 @@ export function PeotramNCActionPlan() {
   const { data: ncs = [] } = useQuery({
     queryKey: ['peotram-nc-actions'],
     queryFn: async () => {
-      const { data, error } = await (supabase.from as Function)('peotram_nc_actions')
+      const { data, error } = await fromUntyped('peotram_nc_actions')
         .select('*').order('priority').order('due_date');
       if (error) throw error;
       return (data || []) as NCActionItem[];

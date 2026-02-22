@@ -9,7 +9,7 @@ import { Badge } from "@/components/ui/badge";
 import { Button } from "@/components/ui/button";
 import { Alert, AlertDescription } from "@/components/ui/alert";
 import { Brain, TrendingUp, AlertTriangle, Calendar } from "lucide-react";
-import { supabase } from "@/integrations/supabase/client";
+import { fromUntyped } from "@/integrations/supabase/untyped-client";
 
 import { useToast } from "@/hooks/use-toast";
 import { logger } from '@/lib/logger';
@@ -38,7 +38,7 @@ export const MMIIntegration: React.FC = () => {
     try {
       // Fetch from MMI system (mocked for now, would integrate with real MMI API)
       // eslint-disable-next-line @typescript-eslint/no-explicit-any -- dynamic table not in generated types
-      const { data, error } = await (supabase.from as Function)("mmi_maintenance_jobs")
+      const { data, error } = await fromUntyped("mmi_maintenance_jobs")
         
         .select("*")
         .order("created_at", { ascending: false })
@@ -77,7 +77,7 @@ export const MMIIntegration: React.FC = () => {
   const scheduleMaintenanceFromPrediction = async (prediction: MMIPrediction) => {
     try {
       // eslint-disable-next-line @typescript-eslint/no-explicit-any -- dynamic table
-      const { error } = await (supabase.from as Function)("maintenance_tasks").insert({
+      const { error } = await fromUntyped("maintenance_tasks").insert({
         task_name: `Preventive: ${prediction.equipment_name}`,
         equipment_id: prediction.equipment_id,
         scheduled_date: prediction.predicted_date.split("T")[0],

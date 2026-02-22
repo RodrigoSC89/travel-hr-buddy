@@ -15,7 +15,7 @@ import {
 } from 'lucide-react';
 import { useFinanceProcurementAI, InvoiceProcessingResult } from '@/hooks/useFinanceProcurementAI';
 import { motion } from 'framer-motion';
-import { supabase } from '@/integrations/supabase/client';
+import { fromUntyped } from '@/integrations/supabase/untyped-client';
 import { logger } from '@/lib/logger';
 
 interface ProcessedInvoice {
@@ -42,7 +42,7 @@ export function InvoiceAutomation() {
 
   const loadInvoices = async () => {
     try {
-      const { data, error } = await (supabase.from as Function)("ai_contract_analysis")
+      const { data, error } = await fromUntyped("ai_contract_analysis")
         .select("*")
         .order("created_at", { ascending: false })
         .limit(20);

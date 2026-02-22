@@ -838,8 +838,8 @@ export function useAddSparePart() {
 export function useUpdateRunningHours() {
   return useIntegratedMutation<{ equipmentId: string; hours: number; vesselId?: string }, any>({
     mutationFn: async (input) => {
-      const { supabase } = await import("@/integrations/supabase/client");
-      const { data, error } = await (supabase.from as Function)('pms_running_hours_triggers')
+      const { fromUntyped } = await import("@/integrations/supabase/untyped-client");
+      const { data, error } = await fromUntyped('pms_running_hours_triggers')
         .insert({
           equipment_id: input.equipmentId,
           current_hours: input.hours,
@@ -889,8 +889,8 @@ export function useCreateMaintenancePrediction() {
 export function useCreateClassSurvey() {
   return useIntegratedMutation<Record<string, unknown>, any>({
     mutationFn: async (input) => {
-      const { supabase } = await import("@/integrations/supabase/client");
-      const { data, error } = await (supabase.from as Function)('class_surveys')
+      const { fromUntyped } = await import("@/integrations/supabase/untyped-client");
+      const { data, error } = await fromUntyped('class_surveys')
         .insert(input).select().single();
       if (error) throw error;
       return data;
@@ -908,8 +908,8 @@ export function useCreateClassSurvey() {
 export function useUpdateClassSurvey() {
   return useIntegratedMutation<{ id: string; updates: Record<string, unknown> }, any>({
     mutationFn: async ({ id, updates }) => {
-      const { supabase } = await import("@/integrations/supabase/client");
-      const { data, error } = await (supabase.from as Function)('class_surveys')
+      const { fromUntyped } = await import("@/integrations/supabase/untyped-client");
+      const { data, error } = await fromUntyped('class_surveys')
         .update(updates).eq('id', id).select().single();
       if (error) throw error;
       return data;
@@ -927,8 +927,8 @@ export function useUpdateClassSurvey() {
 export function useDeleteClassSurvey() {
   return useIntegratedMutation<string, any>({
     mutationFn: async (id) => {
-      const { supabase } = await import("@/integrations/supabase/client");
-      const { error } = await (supabase.from as Function)('class_surveys').delete().eq('id', id);
+      const { fromUntyped } = await import("@/integrations/supabase/untyped-client");
+      const { error } = await fromUntyped('class_surveys').delete().eq('id', id);
       if (error) throw error;
       return { id };
     },
@@ -995,8 +995,8 @@ export function useCreatePurchaseRequisition() {
 export function useCreateJSATemplate() {
   return useIntegratedMutation<Record<string, unknown>, any>({
     mutationFn: async (input) => {
-      const { supabase } = await import("@/integrations/supabase/client");
-      const { data, error } = await (supabase.from as Function)('jsa_templates').insert(input).select().single();
+      const { fromUntyped } = await import("@/integrations/supabase/untyped-client");
+      const { data, error } = await fromUntyped('jsa_templates').insert(input).select().single();
       if (error) throw error;
       return data;
     },
@@ -1017,8 +1017,8 @@ export function useCreateJSATemplate() {
 export function useCreateNC() {
   return useIntegratedMutation<Record<string, unknown>, any>({
     mutationFn: async (input) => {
-      const { supabase } = await import("@/integrations/supabase/client");
-      const { data, error } = await (supabase.from as Function)('peotram_nc_actions').insert(input).select().single();
+      const { fromUntyped } = await import("@/integrations/supabase/untyped-client");
+      const { data, error } = await fromUntyped('peotram_nc_actions').insert(input).select().single();
       if (error) throw error;
       return data;
     },
@@ -1035,10 +1035,10 @@ export function useCreateNC() {
 export function useUpdateNCStatus() {
   return useIntegratedMutation<{ id: string; status: string; extraUpdates?: Record<string, unknown> }, any>({
     mutationFn: async ({ id, status, extraUpdates }) => {
-      const { supabase } = await import("@/integrations/supabase/client");
+      const { fromUntyped } = await import("@/integrations/supabase/untyped-client");
       const updates: any = { status, updated_at: new Date().toISOString(), ...extraUpdates };
       if (status === 'closed') { updates.closed_at = new Date().toISOString().split('T')[0]; updates.percent_complete = 100; }
-      const { data, error } = await (supabase.from as Function)('peotram_nc_actions').update(updates).eq('id', id).select().single();
+      const { data, error } = await fromUntyped('peotram_nc_actions').update(updates).eq('id', id).select().single();
       if (error) throw error;
       return data;
     },
@@ -1059,8 +1059,8 @@ export function useUpdateNCStatus() {
 export function useCreateHullInspection() {
   return useIntegratedMutation<Record<string, unknown>, any>({
     mutationFn: async (input) => {
-      const { supabase } = await import("@/integrations/supabase/client");
-      const { data, error } = await (supabase.from as Function)('hull_integrity_records').insert(input).select().single();
+      const { fromUntyped } = await import("@/integrations/supabase/untyped-client");
+      const { data, error } = await fromUntyped('hull_integrity_records').insert(input).select().single();
       if (error) throw error;
       return data;
     },
@@ -1077,8 +1077,8 @@ export function useCreateHullInspection() {
 export function useCreateHullFinding() {
   return useIntegratedMutation<Record<string, unknown>, any>({
     mutationFn: async (input) => {
-      const { supabase } = await import("@/integrations/supabase/client");
-      const { data, error } = await (supabase.from as Function)('hull_integrity_records').insert(input).select().single();
+      const { fromUntyped } = await import("@/integrations/supabase/untyped-client");
+      const { data, error } = await fromUntyped('hull_integrity_records').insert(input).select().single();
       if (error) throw error;
       return data;
     },

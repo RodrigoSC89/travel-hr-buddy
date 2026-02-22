@@ -12,7 +12,7 @@
 import { offlineStorage } from "./offline-storage";
 import { networkDetector } from "./networkDetector";
 import { structuredLogger } from "@/lib/logger/structured-logger";
-import { supabase } from "@/integrations/supabase/client";
+import { fromUntyped } from "@/integrations/supabase/untyped-client";
 
 export interface MissionState {
   missionId: string;
@@ -340,7 +340,7 @@ class MissionRecoveryEngine {
    */
   private async syncMissionState(missionId: string, state: MissionState): Promise<void> {
     try {
-      const { error } = await (supabase.from as Function)("missions")
+      const { error } = await fromUntyped("missions")
         .upsert({
           id: missionId,
           status: state.status,

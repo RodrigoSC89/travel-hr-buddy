@@ -7,7 +7,7 @@
  */
 
 import { logger } from "@/lib/logger";
-import { supabase } from "@/integrations/supabase/client";
+import { fromUntyped } from "@/integrations/supabase/untyped-client";
 import { learningCore } from "./learning-core";
 
 export type DecisionLevel = "auto_execute" | "request_approval" | "forbidden";
@@ -67,7 +67,7 @@ class MissionAutonomyEngine {
     }
 
     try {
-      const { error } = await (supabase.from as Function)("autonomy_actions")
+      const { error } = await fromUntyped("autonomy_actions")
         .select("id")
         .limit(1);
 
@@ -275,7 +275,7 @@ class MissionAutonomyEngine {
         return action;
       }
 
-      const { data, error } = await (supabase.from as Function)("autonomy_actions")
+      const { data, error } = await fromUntyped("autonomy_actions")
         .insert({
           action_type,
           decision_level,
@@ -512,7 +512,7 @@ class MissionAutonomyEngine {
         return null;
       }
 
-      const { data, error } = await (supabase.from as Function)("autonomy_actions")
+      const { data, error } = await fromUntyped("autonomy_actions")
         .select("*")
         .eq("id", actionId)
         .single();
@@ -558,7 +558,7 @@ class MissionAutonomyEngine {
         return;
       }
 
-      const { error } = await (supabase.from as Function)("autonomy_actions")
+      const { error } = await fromUntyped("autonomy_actions")
         .update({
           status: action.status,
           approved_by: action.approved_by,
@@ -628,7 +628,7 @@ class MissionAutonomyEngine {
         return this.getMockAuditLogs();
       }
 
-      const { data, error } = await (supabase.from as Function)("autonomy_actions")
+      const { data, error } = await fromUntyped("autonomy_actions")
         .select("*")
         .order("created_at", { ascending: false })
         .limit(limit);
