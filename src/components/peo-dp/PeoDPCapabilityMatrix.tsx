@@ -14,7 +14,7 @@ import {
   Navigation, Anchor, Activity, Gauge, Zap, RefreshCw
 } from 'lucide-react';
 import { useQuery } from '@tanstack/react-query';
-import { supabase } from '@/integrations/supabase/client';
+import { fromUntyped } from '@/integrations/supabase/untyped-client';
 
 interface EquipmentItem {
   id: string;
@@ -88,7 +88,7 @@ export function PeoDPCapabilityMatrix() {
   const { data: dbEquipment, isLoading } = useQuery({
     queryKey: ['peodp-equipment-matrix'],
     queryFn: async () => {
-      const { data, error } = await (supabase.from as Function)('peodp_equipment')
+      const { data, error } = await fromUntyped('peodp_equipment')
         .select('id, equipment_name, equipment_type, status, specifications')
         .order('equipment_type');
       if (error) throw error;

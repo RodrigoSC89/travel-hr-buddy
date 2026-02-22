@@ -5,7 +5,7 @@
  */
 import React, { useState, useMemo } from 'react';
 import { useQuery, useMutation, useQueryClient } from '@tanstack/react-query';
-import { supabase } from '@/integrations/supabase/client';
+import { fromUntyped } from '@/integrations/supabase/untyped-client';
 import { Card, CardContent, CardHeader, CardTitle } from '@/components/ui/card';
 import { Button } from '@/components/ui/button';
 import { Badge } from '@/components/ui/badge';
@@ -52,7 +52,7 @@ export function DryDockGanttChart({ projectId }: { projectId?: string }) {
   const { data: tasks = [], isLoading } = useQuery({
     queryKey: ['drydock-gantt', projectId],
     queryFn: async () => {
-      let q = (supabase.from as Function)('drydock_gantt_tasks').select('*').order('planned_start');
+      let q = fromUntyped('drydock_gantt_tasks').select('*').order('planned_start');
       if (projectId) q = q.eq('drydock_project_id', projectId);
       const { data, error } = await q;
       if (error) throw error;
@@ -62,7 +62,7 @@ export function DryDockGanttChart({ projectId }: { projectId?: string }) {
 
   const createMutation = useMutation({
     mutationFn: async (form: Record<string, unknown>) => {
-      const { error } = await (supabase.from as Function)('drydock_gantt_tasks').insert(form);
+      const { error } = await fromUntyped('drydock_gantt_tasks').insert(form);
       if (error) throw error;
     },
     onSuccess: () => {

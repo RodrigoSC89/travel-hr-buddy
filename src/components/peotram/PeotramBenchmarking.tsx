@@ -15,6 +15,7 @@ import {
 import { toast } from 'sonner';
 import { useQuery, useQueryClient } from '@tanstack/react-query';
 import { supabase } from '@/integrations/supabase/client';
+import { fromUntyped } from '@/integrations/supabase/untyped-client';
 import { useSeedBenchmarkScores } from '@/hooks/useModuleHooks';
 
 const INDUSTRY_AVG: Record<string, number> = {
@@ -51,7 +52,7 @@ export function PeotramBenchmarking() {
   const { data: scores = [], isLoading } = useQuery({
     queryKey: ['peotram-vessel-scores'],
     queryFn: async () => {
-      const { data, error } = await (supabase.from as Function)('peotram_vessel_scores')
+      const { data, error } = await fromUntyped('peotram_vessel_scores')
         .select('*')
         .order('ranking', { ascending: true });
       if (error) throw error;

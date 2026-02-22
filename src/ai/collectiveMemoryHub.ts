@@ -225,8 +225,7 @@ class CollectiveMemoryHub {
     logger.info("Rolling back knowledge", { key, targetVersion });
 
     try {
-      // eslint-disable-next-line @typescript-eslint/no-explicit-any -- collective_knowledge is an optional dynamic table
-      const { data, error } = await (supabase.from as Function)("collective_knowledge")
+      const { data, error } = await fromUntyped("collective_knowledge")
         .select("*")
         .eq("key", key)
         .eq("version", targetVersion)
@@ -274,8 +273,7 @@ class CollectiveMemoryHub {
 
   async getHistory(key: string, limit: number = 20): Promise<KnowledgeEntry[]> {
     try {
-      // eslint-disable-next-line @typescript-eslint/no-explicit-any -- collective_knowledge is an optional dynamic table
-      const { data, error } = await (supabase.from as Function)("collective_knowledge")
+      const { data, error } = await fromUntyped("collective_knowledge")
         .select("*")
         .eq("key", key)
         .order("version", { ascending: false })
