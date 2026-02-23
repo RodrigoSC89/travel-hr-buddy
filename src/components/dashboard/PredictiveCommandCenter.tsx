@@ -72,7 +72,7 @@ export default function PredictiveCommandCenter() {
       const { count: maintenance } = await supabase.from('maintenance_tasks').select('*', { count: 'exact', head: true }).eq('status', 'pending');
       const { count: crew } = await supabase.from('crew_members').select('*', { count: 'exact', head: true });
       const { count: certs } = await supabase.from('crew_certifications').select('*', { count: 'exact', head: true });
-      const { count: alerts } = await supabase.from('soc_alerts').select('*', { count: 'exact', head: true }).eq('status', 'active');
+      const { count: alerts } = await supabase.from('soc_alerts').select('*', { count: 'exact', head: true }).is('resolved_at', null);
       return { total: total || 0, active: active || 0, maintenance: maintenance || 0, crew: crew || 0, certs: certs || 0, alerts: alerts || 0 };
     },
     staleTime: 60_000,

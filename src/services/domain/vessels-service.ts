@@ -25,7 +25,7 @@ export const VesselsService = {
     const [voyages, workOrders, alerts, crew] = await Promise.all([
       supabase.from('voyages').select('id, voyage_number, status').eq('vessel_id', vesselId).limit(10),
       fromUntyped('pms_work_orders').select('id, work_order_number, status, priority').eq('vessel_id', vesselId).limit(10),
-      fromUntyped('soc_alerts').select('id, title, severity, status, created_at').eq('vessel_id', vesselId).limit(10),
+      fromUntyped('soc_alerts').select('id, title, severity, is_acknowledged, resolved_at, created_at').eq('vessel_id', vesselId).limit(10),
       supabase.from('crew_members').select('id, full_name, rank, status').eq('vessel_id', vesselId).limit(20),
     ]);
 

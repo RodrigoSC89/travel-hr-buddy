@@ -69,7 +69,7 @@ export default function CentralComandoAprimorada() {
   const { data: alertsCount } = useQuery({
     queryKey: ["dashboard-alerts"],
     queryFn: async () => {
-      const { count } = await supabase.from("soc_alerts").select("*", { count: "exact", head: true }).eq("status", "open");
+      const { count } = await supabase.from("soc_alerts").select("*", { count: "exact", head: true }).is("resolved_at", null);
       return count || 0;
     },
     staleTime: 60000,

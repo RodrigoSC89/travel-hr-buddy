@@ -412,13 +412,13 @@ export const expenseService = {
       query = query.eq("vessel_id", options.vesselId);
     }
     if (options?.startDate) {
-      query = query.gte("expense_date", options.startDate);
+      query = query.gte("date", options.startDate);
     }
     if (options?.endDate) {
-      query = query.lte("expense_date", options.endDate);
+      query = query.lte("date", options.endDate);
     }
     
-    const { data, error } = await query.order("expense_date", { ascending: false });
+    const { data, error } = await query.order("date", { ascending: false });
     if (error) throw error;
     return data;
   },
