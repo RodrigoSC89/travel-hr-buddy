@@ -33877,6 +33877,63 @@ export type Database = {
         }
         Relationships: []
       }
+      module_pricing_plans: {
+        Row: {
+          billing_interval: string
+          created_at: string
+          description: string | null
+          features: string[] | null
+          id: string
+          is_active: boolean
+          is_popular: boolean
+          max_users: number | null
+          module_ids: string[]
+          name: string
+          price_brl: number
+          price_usd: number
+          slug: string
+          sort_order: number
+          stripe_price_id: string | null
+          updated_at: string
+        }
+        Insert: {
+          billing_interval?: string
+          created_at?: string
+          description?: string | null
+          features?: string[] | null
+          id?: string
+          is_active?: boolean
+          is_popular?: boolean
+          max_users?: number | null
+          module_ids?: string[]
+          name: string
+          price_brl?: number
+          price_usd?: number
+          slug: string
+          sort_order?: number
+          stripe_price_id?: string | null
+          updated_at?: string
+        }
+        Update: {
+          billing_interval?: string
+          created_at?: string
+          description?: string | null
+          features?: string[] | null
+          id?: string
+          is_active?: boolean
+          is_popular?: boolean
+          max_users?: number | null
+          module_ids?: string[]
+          name?: string
+          price_brl?: number
+          price_usd?: number
+          slug?: string
+          sort_order?: number
+          stripe_price_id?: string | null
+          updated_at?: string
+        }
+        Relationships: []
+      }
       module_usage: {
         Row: {
           action: string
@@ -35964,6 +36021,7 @@ export type Database = {
       }
       organizations: {
         Row: {
+          active_plan_id: string | null
           billing_email: string | null
           created_at: string
           domain: string | null
@@ -35984,6 +36042,7 @@ export type Database = {
           updated_at: string
         }
         Insert: {
+          active_plan_id?: string | null
           billing_email?: string | null
           created_at?: string
           domain?: string | null
@@ -36004,6 +36063,7 @@ export type Database = {
           updated_at?: string
         }
         Update: {
+          active_plan_id?: string | null
           billing_email?: string | null
           created_at?: string
           domain?: string | null
@@ -36023,7 +36083,15 @@ export type Database = {
           trial_ends_at?: string | null
           updated_at?: string
         }
-        Relationships: []
+        Relationships: [
+          {
+            foreignKeyName: "organizations_active_plan_id_fkey"
+            columns: ["active_plan_id"]
+            isOneToOne: false
+            referencedRelation: "module_pricing_plans"
+            referencedColumns: ["id"]
+          },
+        ]
       }
       ovid_answers: {
         Row: {

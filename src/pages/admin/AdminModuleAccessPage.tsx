@@ -1,6 +1,6 @@
 /**
- * Admin Module Access Management Page
- * Allows admins to manage which users have access to which modules
+ * Admin Module Access Management Page v2
+ * Full module access control: Users, Modules, Requests, Pricing Plans
  */
 import { useState } from "react";
 import { useQuery, useMutation, useQueryClient } from "@tanstack/react-query";
@@ -14,7 +14,11 @@ import { Button } from "@/components/ui/button";
 import { Switch } from "@/components/ui/switch";
 import { Tabs, TabsContent, TabsList, TabsTrigger } from "@/components/ui/tabs";
 import { Input } from "@/components/ui/input";
-import { Shield, Users, Package, Search, Check, X, Clock, DollarSign } from "lucide-react";
+import { Textarea } from "@/components/ui/textarea";
+import { Dialog, DialogContent, DialogHeader, DialogTitle, DialogTrigger } from "@/components/ui/dialog";
+import { Shield, Users, Package, Search, Check, X, Clock, DollarSign, Star, Plus, Edit, Sparkles } from "lucide-react";
+import { ModulePageWrapper } from "@/components/ui/module-page-wrapper";
+import { ModuleHeader } from "@/components/ui/module-header";
 
 interface SystemModule {
   id: string;
@@ -35,7 +39,7 @@ interface UserWithAccess {
   email: string;
   full_name: string | null;
   role: string;
-  modules: string[]; // module IDs the user has access to
+  modules: string[];
 }
 
 interface AccessRequest {
@@ -45,9 +49,22 @@ interface AccessRequest {
   status: string;
   reason: string | null;
   created_at: string;
-  user_email?: string;
-  user_name?: string;
-  module_name?: string;
+}
+
+interface PricingPlan {
+  id: string;
+  name: string;
+  slug: string;
+  description: string | null;
+  price_brl: number;
+  price_usd: number;
+  billing_interval: string;
+  module_ids: string[];
+  features: string[];
+  is_active: boolean;
+  is_popular: boolean;
+  max_users: number | null;
+  sort_order: number;
 }
 
 export default function AdminModuleAccessPage() {
@@ -55,6 +72,7 @@ export default function AdminModuleAccessPage() {
   const queryClient = useQueryClient();
   const [searchTerm, setSearchTerm] = useState("");
   const [selectedUserId, setSelectedUserId] = useState<string | null>(null);
+  const [editingPlan, setEditingPlan] = useState<PricingPlan | null>(null);
 
   // Fetch all modules
   const { data: modules = [] } = useQuery({
@@ -118,6 +136,18 @@ export default function AdminModuleAccessPage() {
     },
   });
 
+  // Fetch pricing plans
+  const { data: plans = [] } = useQuery({
+    queryKey: ["admin-pricing-plans"],
+    queryFn: async () => {
+      const { data, error } = await fromUntyped("module_pricing_plans")
+        .select("*")
+        .order("sort_order");
+      if (error) throw error;
+      return data as PricingPlan[];
+    },
+  });
+
   // Toggle module access for a user
   const toggleAccess = useMutation({
     mutationFn: async ({ userId, moduleId, grant }: { userId: string; moduleId: string; grant: boolean }) => {
@@ -141,6 +171,26 @@ export default function AdminModuleAccessPage() {
     onSuccess: () => {
       queryClient.invalidateQueries({ queryKey: ["admin-users-with-access"] });
       toast.success("Acesso atualizado");
+    },
+    onError: (e: any) => toast.error("Erro: " + e.message),
+  });
+
+  // Grant all modules from a plan to a user
+  const grantPlan = useMutation({
+    mutationFn: async ({ userId, plan }: { userId: string; plan: PricingPlan }) => {
+      for (const moduleId of plan.module_ids) {
+        await fromUntyped("user_module_access").upsert({
+          user_id: userId,
+          module_id: moduleId,
+          granted_by: user?.id,
+          is_active: true,
+          granted_at: new Date().toISOString(),
+        }, { onConflict: "user_id,module_id" });
+      }
+    },
+    onSuccess: () => {
+      queryClient.invalidateQueries({ queryKey: ["admin-users-with-access"] });
+      toast.success("Plano aplicado ao usuário");
     },
     onError: (e: any) => toast.error("Erro: " + e.message),
   });
@@ -189,50 +239,48 @@ export default function AdminModuleAccessPage() {
   const getCategoryColor = (cat: string) => {
     const colors: Record<string, string> = {
       core: "bg-primary/10 text-primary",
-      operations: "bg-blue-500/10 text-blue-500",
-      hr: "bg-green-500/10 text-green-500",
-      compliance: "bg-orange-500/10 text-orange-500",
-      technical: "bg-purple-500/10 text-purple-500",
-      finance: "bg-yellow-500/10 text-yellow-500",
-      intelligence: "bg-cyan-500/10 text-cyan-500",
+      operations: "bg-accent/50 text-accent-foreground",
+      hr: "bg-primary/20 text-primary",
+      compliance: "bg-destructive/10 text-destructive",
+      technical: "bg-secondary text-secondary-foreground",
+      finance: "bg-accent text-accent-foreground",
+      intelligence: "bg-primary/15 text-primary",
     };
     return colors[cat] || "bg-muted text-muted-foreground";
   };
 
   return (
-    <div className="space-y-6">
-      <div className="flex items-center justify-between">
-        <div>
-          <h1 className="text-2xl font-bold flex items-center gap-2">
-            <Shield className="h-6 w-6 text-primary" />
-            Controle de Acesso Modular
-          </h1>
-          <p className="text-muted-foreground mt-1">
-            Gerencie quais módulos cada usuário pode acessar
-          </p>
-        </div>
-        {pendingRequests.length > 0 && (
-          <Badge variant="destructive" className="text-sm px-3 py-1">
-            {pendingRequests.length} solicitações pendentes
-          </Badge>
-        )}
-      </div>
+    <ModulePageWrapper gradient="purple">
+      <ModuleHeader
+        icon={Shield}
+        title="Controle de Acesso Modular"
+        description="Gerencie módulos, permissões de usuários, solicitações e planos de preços"
+        gradient="purple"
+        badges={[
+          { icon: Users, label: `${users.length} Usuários` },
+          { icon: Package, label: `${modules.length} Módulos` },
+          { icon: Clock, label: `${pendingRequests.length} Pendentes` },
+        ]}
+      />
 
       <Tabs defaultValue="users" className="space-y-4">
-        <TabsList>
-          <TabsTrigger value="users" className="gap-2">
-            <Users className="h-4 w-4" /> Usuários ({users.length})
+        <TabsList className="grid grid-cols-4 w-full max-w-2xl">
+          <TabsTrigger value="users" className="gap-1.5">
+            <Users className="h-4 w-4" /> Usuários
           </TabsTrigger>
-          <TabsTrigger value="modules" className="gap-2">
-            <Package className="h-4 w-4" /> Módulos ({modules.length})
+          <TabsTrigger value="modules" className="gap-1.5">
+            <Package className="h-4 w-4" /> Módulos
           </TabsTrigger>
-          <TabsTrigger value="requests" className="gap-2">
+          <TabsTrigger value="requests" className="gap-1.5 relative">
             <Clock className="h-4 w-4" /> Solicitações
             {pendingRequests.length > 0 && (
-              <Badge variant="destructive" className="ml-1 h-5 w-5 p-0 flex items-center justify-center text-xs">
+              <Badge variant="destructive" className="ml-1 h-5 min-w-5 p-0 flex items-center justify-center text-xs">
                 {pendingRequests.length}
               </Badge>
             )}
+          </TabsTrigger>
+          <TabsTrigger value="plans" className="gap-1.5">
+            <DollarSign className="h-4 w-4" /> Planos
           </TabsTrigger>
         </TabsList>
 
@@ -249,7 +297,6 @@ export default function AdminModuleAccessPage() {
           </div>
 
           <div className="grid grid-cols-1 lg:grid-cols-3 gap-4">
-            {/* User list */}
             <div className="space-y-2 max-h-[70vh] overflow-y-auto">
               {filteredUsers.map((u) => (
                 <Card
@@ -277,7 +324,6 @@ export default function AdminModuleAccessPage() {
               ))}
             </div>
 
-            {/* Module access matrix */}
             <div className="lg:col-span-2">
               {selectedUser ? (
                 <Card>
@@ -291,11 +337,26 @@ export default function AdminModuleAccessPage() {
                     <CardDescription>
                       {selectedUser.role === "admin"
                         ? "Administradores têm acesso total a todos os módulos"
-                        : "Ative/desative módulos para este usuário"}
+                        : "Ative/desative módulos ou aplique um plano"}
                     </CardDescription>
+                    {selectedUser.role !== "admin" && plans.length > 0 && (
+                      <div className="flex gap-2 flex-wrap pt-2">
+                        {plans.filter(p => p.is_active).map(plan => (
+                          <Button
+                            key={plan.id}
+                            size="sm"
+                            variant="outline"
+                            className="gap-1.5"
+                            onClick={() => grantPlan.mutate({ userId: selectedUser.id, plan })}
+                          >
+                            <Sparkles className="h-3.5 w-3.5" />
+                            Aplicar {plan.name}
+                          </Button>
+                        ))}
+                      </div>
+                    )}
                   </CardHeader>
                   <CardContent className="space-y-4">
-                    {/* Core modules */}
                     <div>
                       <h3 className="text-sm font-semibold text-muted-foreground mb-2">Módulos Core (sempre ativos)</h3>
                       <div className="grid grid-cols-1 sm:grid-cols-2 gap-2">
@@ -305,13 +366,12 @@ export default function AdminModuleAccessPage() {
                               <Badge className={getCategoryColor(m.category)} variant="secondary">{m.category}</Badge>
                               <span className="text-sm font-medium">{m.name}</span>
                             </div>
-                            <Check className="h-4 w-4 text-green-500" />
+                            <Check className="h-4 w-4 text-primary" />
                           </div>
                         ))}
                       </div>
                     </div>
 
-                    {/* Addon modules */}
                     <div>
                       <h3 className="text-sm font-semibold text-muted-foreground mb-2">Módulos Adicionais</h3>
                       <div className="grid grid-cols-1 sm:grid-cols-2 gap-2">
@@ -400,7 +460,7 @@ export default function AdminModuleAccessPage() {
         <TabsContent value="requests" className="space-y-4">
           {pendingRequests.length === 0 ? (
             <Card className="p-8 text-center">
-              <Check className="h-12 w-12 mx-auto mb-3 text-green-500 opacity-50" />
+              <Check className="h-12 w-12 mx-auto mb-3 text-primary opacity-50" />
               <p className="text-muted-foreground">Nenhuma solicitação pendente</p>
             </Card>
           ) : (
@@ -415,13 +475,16 @@ export default function AdminModuleAccessPage() {
                       <p className="text-sm text-muted-foreground">
                         Solicita acesso ao módulo <strong>{reqModule?.name || req.module_id}</strong>
                       </p>
-                      {req.reason && <p className="text-xs text-muted-foreground mt-1">"{req.reason}"</p>}
+                      {req.reason && <p className="text-xs text-muted-foreground mt-1 italic">"{req.reason}"</p>}
+                      <p className="text-xs text-muted-foreground mt-1">
+                        {new Date(req.created_at).toLocaleDateString('pt-BR', { day: '2-digit', month: 'short', year: 'numeric', hour: '2-digit', minute: '2-digit' })}
+                      </p>
                     </div>
                     <div className="flex gap-2">
                       <Button
                         size="sm"
                         variant="outline"
-                        className="text-red-500 border-red-200"
+                        className="text-destructive border-destructive/20"
                         onClick={() => reviewRequest.mutate({ requestId: req.id, approved: false, moduleId: req.module_id, requestUserId: req.user_id })}
                       >
                         <X className="h-4 w-4 mr-1" /> Rejeitar
@@ -439,7 +502,57 @@ export default function AdminModuleAccessPage() {
             })
           )}
         </TabsContent>
+
+        {/* ====== PLANS TAB ====== */}
+        <TabsContent value="plans" className="space-y-4">
+          <div className="grid grid-cols-1 md:grid-cols-3 gap-6">
+            {plans.map((plan) => {
+              const planModules = modules.filter(m => plan.module_ids.includes(m.id));
+              return (
+                <Card key={plan.id} className={`relative ${plan.is_popular ? 'border-primary shadow-lg' : ''}`}>
+                  {plan.is_popular && (
+                    <div className="absolute -top-3 left-1/2 -translate-x-1/2">
+                      <Badge className="bg-primary text-primary-foreground gap-1">
+                        <Star className="h-3 w-3" /> Mais Popular
+                      </Badge>
+                    </div>
+                  )}
+                  <CardHeader className="text-center">
+                    <CardTitle className="text-xl">{plan.name}</CardTitle>
+                    <CardDescription>{plan.description}</CardDescription>
+                    <div className="pt-2">
+                      <span className="text-3xl font-bold">R$ {plan.price_brl}</span>
+                      <span className="text-muted-foreground">/{plan.billing_interval === 'monthly' ? 'mês' : 'ano'}</span>
+                      <p className="text-xs text-muted-foreground mt-1">US$ {plan.price_usd}/{plan.billing_interval === 'monthly' ? 'mo' : 'yr'}</p>
+                    </div>
+                  </CardHeader>
+                  <CardContent className="space-y-3">
+                    <div className="space-y-1.5">
+                      {plan.features.map((f, i) => (
+                        <div key={i} className="flex items-center gap-2 text-sm">
+                          <Check className="h-4 w-4 text-primary shrink-0" />
+                          <span>{f}</span>
+                        </div>
+                      ))}
+                    </div>
+                    <div className="pt-2 border-t">
+                      <p className="text-xs text-muted-foreground mb-1">{planModules.length} módulos inclusos</p>
+                      <div className="flex flex-wrap gap-1">
+                        {planModules.slice(0, 6).map(m => (
+                          <Badge key={m.id} variant="secondary" className="text-xs">{m.name}</Badge>
+                        ))}
+                        {planModules.length > 6 && (
+                          <Badge variant="outline" className="text-xs">+{planModules.length - 6}</Badge>
+                        )}
+                      </div>
+                    </div>
+                  </CardContent>
+                </Card>
+              );
+            })}
+          </div>
+        </TabsContent>
       </Tabs>
-    </div>
+    </ModulePageWrapper>
   );
 }
