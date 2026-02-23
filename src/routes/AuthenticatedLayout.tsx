@@ -10,6 +10,7 @@ import { AppSidebar } from "@/components/layout/app-sidebar";
 import { Header } from "@/components/layout/header";
 import { MobileBottomNav } from "@/components/layout/mobile-bottom-nav";
 import { ModuleErrorBoundary } from "@/components/layout/module-error-boundary";
+import { RouteModuleGuard } from "@/components/modules/RouteModuleGuard";
 import { useRealtimeToasts } from "@/hooks/useRealtimeToasts";
 import { useAutonomousMonitor } from "@/hooks/useAutonomousMonitor";
 import { useSmartPrefetch } from "@/lib/performance/smart-prefetch";
@@ -84,9 +85,11 @@ export const AuthenticatedLayout = () => {
               </div>
             )}
             <ModuleErrorBoundary moduleName="Page">
-              <SmoothPageTransition>
-                <Outlet />
-              </SmoothPageTransition>
+              <RouteModuleGuard>
+                <SmoothPageTransition>
+                  <Outlet />
+                </SmoothPageTransition>
+              </RouteModuleGuard>
             </ModuleErrorBoundary>
           </main>
         </div>
