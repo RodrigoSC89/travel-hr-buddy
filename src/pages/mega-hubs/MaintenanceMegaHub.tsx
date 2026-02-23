@@ -67,6 +67,7 @@ const EquipmentFailurePredictionMap = lazy(() => import('@/components/dashboard/
 const WarrantyClaimsTracker = lazy(() => import('@/components/dashboard/WarrantyClaimsTracker').then(m => ({ default: m.WarrantyClaimsTracker })));
 const SparePartsIntelligence = lazy(() => import('@/components/dashboard/SparePartsIntelligence').then(m => ({ default: m.SparePartsIntelligence })));
 const ConditionBasedMaintenanceTab = lazy(() => import('@/components/maintenance/ConditionBasedMaintenanceTab').then(m => ({ default: m.ConditionBasedMaintenanceTab })));
+const TrimPropulsionPage = lazy(() => import('@/pages/maintenance/TrimPropulsionPage'));
 
 const LoadingSkeleton = () => (
   <div className="space-y-4 p-6">
@@ -97,6 +98,7 @@ const tabConfig = [
   { id: 'spare-parts', label: 'Spare Parts', icon: Wrench },
   { id: 'surveys', label: 'Surveys & Predictive', icon: Shield },
   { id: 'drydock', label: 'Drydock', icon: Anchor },
+  { id: 'trim-propulsion', label: 'Trim & Propulsion', icon: Fuel },
   { id: 'environment', label: 'Fuel & Environment', icon: Leaf },
   { id: 'digital-twin', label: 'Digital Twin', icon: Cpu },
   { id: 'ai-hub', label: '🧠 IA Hub', icon: Sparkles },
@@ -321,6 +323,9 @@ export default function MaintenanceMegaHub() {
             </TabsContent>
 
             <TabsContent value="drydock" className="mt-0"><DrydockManagement /></TabsContent>
+
+            {/* Trim & Propulsion */}
+            <TabsContent value="trim-propulsion" className="mt-0"><TrimPropulsionPage /></TabsContent>
 
             {/* Fuel & Environment (merged: fuel + marpol + esg) */}
             <TabsContent value="environment" className="mt-0 space-y-4">
