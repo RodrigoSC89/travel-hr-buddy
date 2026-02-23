@@ -388,6 +388,18 @@ export const ModuleConsolidationPlan = lazy(() => import("@/pages/ModuleConsolid
 export const RoleManagementPage = lazy(() => import("@/pages/admin/RoleManagementPage"));
 export const AdminModuleAccess = lazy(() => import("@/pages/admin/AdminModuleAccessPage"));
 
+// ============================================
+// COMPETITIVE GAP CLOSERS
+// ============================================
+export const BerthSchedulingPage = lazy(() => import("@/pages/operations/BerthSchedulingPage"));
+export const BargingLighteringPage = lazy(() => import("@/pages/operations/BargingLighteringPage"));
+export const TradingRiskPage = lazy(() => import("@/pages/operations/TradingRiskPage"));
+export const TrimPropulsionPage = lazy(() => import("@/pages/maintenance/TrimPropulsionPage"));
+export const SupplierPortalPage = lazy(() => import("@/pages/procurement/SupplierPortalPage"));
+export const InvoiceAutoMatchingPage = lazy(() => import("@/pages/operations/InvoiceAutoMatchingPage"));
+export const ReturnGoodsPage = lazy(() => import("@/pages/procurement/ReturnGoodsPage"));
+export const ForumKnowledgePage = lazy(() => import("@/pages/operations/ForumKnowledgePage"));
+
 // AdminRoute (lazy-loaded RoleGuard)
 export const AdminRoute = lazy(() => import('@/components/auth/RoleGuard').then(mod => ({
   default: ({ children }: { children: React.ReactNode }) => (
