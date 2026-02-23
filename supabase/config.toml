@@ -1542,3 +1542,20 @@ comment = "NLP-based chartering email parser - extract fixture data from emails"
 [functions.event-dispatcher]
 verify_jwt = false
 comment = "Cron-based event outbox dispatcher - processes pending events and routes to consumers"
+
+# ============================================
+# MARKET PARITY AI FUNCTIONS - Added 2026-02-23
+# Invoice matching, Trim/Propulsion, Trading Risk
+# ============================================
+
+[functions.invoice-auto-match]
+verify_jwt = false
+comment = "AI-powered invoice auto-matching with PO variance detection and savings analysis"
+
+[functions.trim-propulsion-ai]
+verify_jwt = false
+comment = "AI trim/propulsion optimization - fuel economy, hull fouling, RPM recommendations"
+
+[functions.trading-risk-ai]
+verify_jwt = false
+comment = "AI trading risk analysis - FFA/hedging, VaR, stress testing, P&L projections"

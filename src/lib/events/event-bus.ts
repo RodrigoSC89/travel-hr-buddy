@@ -251,6 +251,21 @@ export const EVENT_TYPES = {
   'operations.cargo.completed': 'operations.cargo.completed',
   'compliance.class_survey.completed': 'compliance.class_survey.completed',
   'compliance.class_survey.approved': 'compliance.class_survey.approved',
+  // ═══════ MARKET PARITY MODULES ═══════
+  'operations.berth.created': 'operations.berth.created',
+  'operations.berth.updated': 'operations.berth.updated',
+  'operations.sts.created': 'operations.sts.created',
+  'operations.sts.updated': 'operations.sts.updated',
+  'trading.position.created': 'trading.position.created',
+  'trading.position.updated': 'trading.position.updated',
+  'maintenance.trim.recorded': 'maintenance.trim.recorded',
+  'procurement.supplier_portal.submitted': 'procurement.supplier_portal.submitted',
+  'finance.invoice_match.created': 'finance.invoice_match.created',
+  'finance.invoice_match.updated': 'finance.invoice_match.updated',
+  'procurement.return_goods.created': 'procurement.return_goods.created',
+  'procurement.return_goods.updated': 'procurement.return_goods.updated',
+  'comms.forum.post_created': 'comms.forum.post_created',
+  'comms.forum.reply_created': 'comms.forum.reply_created',
 } as const;
 
 export type EventType = keyof typeof EVENT_TYPES;
