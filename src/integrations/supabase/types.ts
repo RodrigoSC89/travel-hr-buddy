@@ -33887,10 +33887,12 @@ export type Database = {
           is_active: boolean
           is_popular: boolean
           max_users: number | null
+          max_vessels: number | null
           module_ids: string[]
           name: string
           price_brl: number
           price_usd: number
+          pricing_model: string | null
           slug: string
           sort_order: number
           stripe_price_id: string | null
@@ -33905,10 +33907,12 @@ export type Database = {
           is_active?: boolean
           is_popular?: boolean
           max_users?: number | null
+          max_vessels?: number | null
           module_ids?: string[]
           name: string
           price_brl?: number
           price_usd?: number
+          pricing_model?: string | null
           slug: string
           sort_order?: number
           stripe_price_id?: string | null
@@ -33923,10 +33927,12 @@ export type Database = {
           is_active?: boolean
           is_popular?: boolean
           max_users?: number | null
+          max_vessels?: number | null
           module_ids?: string[]
           name?: string
           price_brl?: number
           price_usd?: number
+          pricing_model?: string | null
           slug?: string
           sort_order?: number
           stripe_price_id?: string | null
@@ -50194,6 +50200,7 @@ export type Database = {
           name: string
           price_addon_brl: number | null
           price_addon_usd: number | null
+          pricing_unit: string | null
           routes: Json | null
           slug: string
           sort_order: number | null
@@ -50212,6 +50219,7 @@ export type Database = {
           name: string
           price_addon_brl?: number | null
           price_addon_usd?: number | null
+          pricing_unit?: string | null
           routes?: Json | null
           slug: string
           sort_order?: number | null
@@ -50230,6 +50238,7 @@ export type Database = {
           name?: string
           price_addon_brl?: number | null
           price_addon_usd?: number | null
+          pricing_unit?: string | null
           routes?: Json | null
           slug?: string
           sort_order?: number | null

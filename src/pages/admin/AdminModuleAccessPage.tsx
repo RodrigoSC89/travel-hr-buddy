@@ -239,14 +239,29 @@ export default function AdminModuleAccessPage() {
   const getCategoryColor = (cat: string) => {
     const colors: Record<string, string> = {
       core: "bg-primary/10 text-primary",
-      operations: "bg-accent/50 text-accent-foreground",
-      hr: "bg-primary/20 text-primary",
-      compliance: "bg-destructive/10 text-destructive",
-      technical: "bg-secondary text-secondary-foreground",
-      finance: "bg-accent text-accent-foreground",
+      crewing: "bg-primary/20 text-primary",
+      maintenance: "bg-accent/50 text-accent-foreground",
+      operations: "bg-accent text-accent-foreground",
+      qhse: "bg-destructive/10 text-destructive",
+      finance: "bg-secondary text-secondary-foreground",
       intelligence: "bg-primary/15 text-primary",
+      communications: "bg-muted text-foreground",
     };
     return colors[cat] || "bg-muted text-muted-foreground";
+  };
+
+  const getCategoryLabel = (cat: string) => {
+    const labels: Record<string, string> = {
+      core: "Core",
+      crewing: "Tripulação",
+      maintenance: "Manutenção",
+      operations: "Operações",
+      qhse: "QHSE",
+      finance: "Financeiro",
+      intelligence: "Inteligência",
+      communications: "Comunicações",
+    };
+    return labels[cat] || cat;
   };
 
   return (
@@ -363,7 +378,7 @@ export default function AdminModuleAccessPage() {
                         {coreModules.map((m) => (
                           <div key={m.id} className="flex items-center justify-between p-2 rounded-lg bg-muted/50">
                             <div className="flex items-center gap-2">
-                              <Badge className={getCategoryColor(m.category)} variant="secondary">{m.category}</Badge>
+                               <Badge className={getCategoryColor(m.category)} variant="secondary">{getCategoryLabel(m.category)}</Badge>
                               <span className="text-sm font-medium">{m.name}</span>
                             </div>
                             <Check className="h-4 w-4 text-primary" />
@@ -381,7 +396,7 @@ export default function AdminModuleAccessPage() {
                             <div key={m.id} className="flex items-center justify-between p-2 rounded-lg border">
                               <div className="min-w-0">
                                 <div className="flex items-center gap-2">
-                                  <Badge className={getCategoryColor(m.category)} variant="secondary">{m.category}</Badge>
+                                  <Badge className={getCategoryColor(m.category)} variant="secondary">{getCategoryLabel(m.category)}</Badge>
                                   <span className="text-sm font-medium">{m.name}</span>
                                 </div>
                                 <p className="text-xs text-muted-foreground mt-0.5 truncate">{m.description}</p>
@@ -428,9 +443,9 @@ export default function AdminModuleAccessPage() {
                   <CardHeader className="pb-2">
                     <div className="flex items-center justify-between">
                       <CardTitle className="text-base">{m.name}</CardTitle>
-                      <Badge className={getCategoryColor(m.category)} variant="secondary">
-                        {m.category}
-                      </Badge>
+                       <Badge className={getCategoryColor(m.category)} variant="secondary">
+                        {getCategoryLabel(m.category)}
+                       </Badge>
                     </div>
                     <CardDescription>{m.description}</CardDescription>
                   </CardHeader>
@@ -445,7 +460,7 @@ export default function AdminModuleAccessPage() {
                       ) : (
                         <div className="flex items-center gap-1 text-muted-foreground">
                           <DollarSign className="h-3.5 w-3.5" />
-                          <span>R$ {m.price_addon_brl}/mês</span>
+                          <span>R$ {m.price_addon_brl}/navio/mês</span>
                         </div>
                       )}
                     </div>
@@ -522,8 +537,8 @@ export default function AdminModuleAccessPage() {
                     <CardDescription>{plan.description}</CardDescription>
                     <div className="pt-2">
                       <span className="text-3xl font-bold">R$ {plan.price_brl}</span>
-                      <span className="text-muted-foreground">/{plan.billing_interval === 'monthly' ? 'mês' : 'ano'}</span>
-                      <p className="text-xs text-muted-foreground mt-1">US$ {plan.price_usd}/{plan.billing_interval === 'monthly' ? 'mo' : 'yr'}</p>
+                      <span className="text-muted-foreground">/navio/mês</span>
+                      <p className="text-xs text-muted-foreground mt-1">US$ {plan.price_usd}/vessel/mo</p>
                     </div>
                   </CardHeader>
                   <CardContent className="space-y-3">
