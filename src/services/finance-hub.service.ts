@@ -139,10 +139,10 @@ export class FinanceHubService {
       query = query.eq("category", filters.category_id);
     }
     if (filters?.start_date) {
-      query = query.gte("expense_date", filters.start_date);
+      query = query.gte("date", filters.start_date);
     }
     if (filters?.end_date) {
-      query = query.lte("expense_date", filters.end_date);
+      query = query.lte("date", filters.end_date);
     }
 
     const { data, error } = await query;
@@ -203,7 +203,7 @@ export class FinanceHubService {
         amount: updates.amount,
         category: updates.category_name || updates.category_id,
         description: updates.description,
-        expense_date: updates.date,
+        date: updates.date,
       })
       .eq("id", id)
       .select()

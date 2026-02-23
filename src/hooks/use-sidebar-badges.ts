@@ -23,7 +23,7 @@ export function useSidebarBadges() {
     const fetchBadges = async () => {
       try {
         const [alertsRes, tasksRes] = await Promise.all([
-          supabase.from("soc_alerts").select("id", { count: "exact", head: true }).eq("status", "open"),
+          supabase.from("soc_alerts").select("id", { count: "exact", head: true }).is("resolved_at", null),
           supabase.from("action_items").select("id", { count: "exact", head: true }).eq("status", "pending"),
         ]);
 
