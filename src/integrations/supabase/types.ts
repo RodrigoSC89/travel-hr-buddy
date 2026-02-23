@@ -33749,6 +33749,53 @@ export type Database = {
         }
         Relationships: []
       }
+      module_access_requests: {
+        Row: {
+          created_at: string
+          id: string
+          module_id: string
+          reason: string | null
+          review_notes: string | null
+          reviewed_at: string | null
+          reviewed_by: string | null
+          status: string
+          updated_at: string
+          user_id: string
+        }
+        Insert: {
+          created_at?: string
+          id?: string
+          module_id: string
+          reason?: string | null
+          review_notes?: string | null
+          reviewed_at?: string | null
+          reviewed_by?: string | null
+          status?: string
+          updated_at?: string
+          user_id: string
+        }
+        Update: {
+          created_at?: string
+          id?: string
+          module_id?: string
+          reason?: string | null
+          review_notes?: string | null
+          reviewed_at?: string | null
+          reviewed_by?: string | null
+          status?: string
+          updated_at?: string
+          user_id?: string
+        }
+        Relationships: [
+          {
+            foreignKeyName: "module_access_requests_module_id_fkey"
+            columns: ["module_id"]
+            isOneToOne: false
+            referencedRelation: "system_modules"
+            referencedColumns: ["id"]
+          },
+        ]
+      }
       module_health: {
         Row: {
           cpu_usage: number | null
@@ -53609,6 +53656,53 @@ export type Database = {
         }
         Relationships: []
       }
+      user_module_access: {
+        Row: {
+          created_at: string
+          expires_at: string | null
+          granted_at: string
+          granted_by: string | null
+          id: string
+          is_active: boolean
+          module_id: string
+          notes: string | null
+          updated_at: string
+          user_id: string
+        }
+        Insert: {
+          created_at?: string
+          expires_at?: string | null
+          granted_at?: string
+          granted_by?: string | null
+          id?: string
+          is_active?: boolean
+          module_id: string
+          notes?: string | null
+          updated_at?: string
+          user_id: string
+        }
+        Update: {
+          created_at?: string
+          expires_at?: string | null
+          granted_at?: string
+          granted_by?: string | null
+          id?: string
+          is_active?: boolean
+          module_id?: string
+          notes?: string | null
+          updated_at?: string
+          user_id?: string
+        }
+        Relationships: [
+          {
+            foreignKeyName: "user_module_access_module_id_fkey"
+            columns: ["module_id"]
+            isOneToOne: false
+            referencedRelation: "system_modules"
+            referencedColumns: ["id"]
+          },
+        ]
+      }
       user_notifications: {
         Row: {
           action_label: string | null
@@ -59874,6 +59968,17 @@ export type Database = {
           }
       get_system_stats: { Args: never; Returns: Json }
       get_training_stats: { Args: { p_organization_id: string }; Returns: Json }
+      get_user_accessible_modules: {
+        Args: { _user_id: string }
+        Returns: {
+          category: string
+          granted_at: string
+          is_core: boolean
+          module_id: string
+          name: string
+          slug: string
+        }[]
+      }
       get_user_org: { Args: never; Returns: string }
       get_user_org_ids: { Args: { user_uuid: string }; Returns: string[] }
       get_user_organization:
@@ -60140,6 +60245,10 @@ export type Database = {
       }
       user_belongs_to_tenant: {
         Args: { tenant_uuid: string; user_uuid?: string }
+        Returns: boolean
+      }
+      user_has_module_access: {
+        Args: { _module_slug: string; _user_id: string }
         Returns: boolean
       }
       user_has_role: {

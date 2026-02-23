@@ -386,6 +386,7 @@ export const ModuleConsolidationPlan = lazy(() => import("@/pages/ModuleConsolid
 
 // Role Management (Admin only)
 export const RoleManagementPage = lazy(() => import("@/pages/admin/RoleManagementPage"));
+export const AdminModuleAccess = lazy(() => import("@/pages/admin/AdminModuleAccessPage"));
 
 // AdminRoute (lazy-loaded RoleGuard)
 export const AdminRoute = lazy(() => import('@/components/auth/RoleGuard').then(mod => ({
