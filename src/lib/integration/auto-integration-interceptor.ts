@@ -945,5 +945,62 @@ async function persistEventToOutbox(event: DomainEvent): Promise<void> {
 // EXPORTS
 // ============================================
 
+// ═══════ MARKET PARITY MODULES ═══════
+TABLE_EVENT_MAP.berth_bookings = {
+  insert: 'operations.berth.created',
+  update: 'operations.berth.updated',
+  entityType: 'vessel',
+  getEntityId: (r) => String(r.id ?? ''),
+  buildPayload: (op, r) => ({ booking_id: r.id, vessel_id: r.vessel_id, berth_name: r.berth_name, status: r.status }),
+};
+TABLE_EVENT_MAP.sts_operations = {
+  insert: 'operations.sts.created',
+  update: 'operations.sts.updated',
+  entityType: 'vessel',
+  getEntityId: (r) => String(r.id ?? ''),
+  buildPayload: (op, r) => ({ sts_id: r.id, vessel_id: r.vessel_id, partner_vessel: r.partner_vessel, status: r.status }),
+};
+TABLE_EVENT_MAP.trading_positions = {
+  insert: 'trading.position.created',
+  update: 'trading.position.updated',
+  entityType: 'vessel',
+  getEntityId: (r) => String(r.id ?? ''),
+  buildPayload: (op, r) => ({ position_id: r.id, instrument_type: r.instrument_type, notional_value: r.notional_value, status: r.status }),
+};
+TABLE_EVENT_MAP.trim_propulsion_records = {
+  insert: 'maintenance.trim.recorded',
+  entityType: 'vessel',
+  getEntityId: (r) => String(r.vessel_id ?? r.id ?? ''),
+  buildPayload: (op, r) => ({ record_id: r.id, vessel_id: r.vessel_id, trim_fore: r.trim_fore, trim_aft: r.trim_aft, fuel_saving_percent: r.fuel_saving_percent }),
+};
+TABLE_EVENT_MAP.supplier_portal_entries = {
+  insert: 'procurement.supplier_portal.submitted',
+  entityType: 'purchase_order',
+  getEntityId: (r) => String(r.id ?? ''),
+};
+TABLE_EVENT_MAP.invoice_matches = {
+  insert: 'finance.invoice_match.created',
+  update: 'finance.invoice_match.updated',
+  entityType: 'invoice',
+  getEntityId: (r) => String(r.id ?? ''),
+  buildPayload: (op, r) => ({ match_id: r.id, invoice_id: r.invoice_id, po_id: r.po_id, match_score: r.match_score, status: r.status }),
+};
+TABLE_EVENT_MAP.return_goods = {
+  insert: 'procurement.return_goods.created',
+  update: 'procurement.return_goods.updated',
+  entityType: 'purchase_order',
+  getEntityId: (r) => String(r.id ?? ''),
+};
+TABLE_EVENT_MAP.forum_posts = {
+  insert: 'comms.forum.post_created',
+  entityType: 'document',
+  getEntityId: (r) => String(r.id ?? ''),
+};
+TABLE_EVENT_MAP.forum_replies = {
+  insert: 'comms.forum.reply_created',
+  entityType: 'document',
+  getEntityId: (r) => String(r.post_id ?? r.id ?? ''),
+};
+
 export { TABLE_EVENT_MAP };
 export type { TableEventMapping };

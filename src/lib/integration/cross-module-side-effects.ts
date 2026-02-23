@@ -2098,6 +2098,103 @@ export async function executeSideEffects(event: DomainEvent): Promise<void> {
   );
 }
 
+// ═══════════════════════════════════════════════════════════
+// MARKET PARITY — Cross-Module Side Effects
+// ═══════════════════════════════════════════════════════════
+
+SIDE_EFFECTS['operations.berth.created'] = [
+  async (event) => {
+    const p = event.payload as Record<string, unknown>;
+    await safeInsert('soc_alerts', {
+      vessel_id: p.vessel_id || null, alert_type: 'berth_booking',
+      severity: 'medium', title: `Berth reservado: ${p.berth_name ?? 'N/A'}`,
+      description: `Nova reserva de berço para embarcação. Verificar disponibilidade de rebocadores e prático.`,
+      status: 'active',
+    });
+  },
+];
+
+SIDE_EFFECTS['operations.sts.created'] = [
+  async (event) => {
+    const p = event.payload as Record<string, unknown>;
+    // STS ops are high-risk — auto-create safety checklist
+    await safeInsert('soc_alerts', {
+      vessel_id: p.vessel_id || null, alert_type: 'sts_operation',
+      severity: 'high', title: `Operação STS iniciada com ${p.partner_vessel ?? 'parceiro'}`,
+      description: `Operação Ship-to-Ship criada. Verificar compliance OCIMF, fenders e mangueiras.`,
+      status: 'active',
+    });
+    await safeInsert('action_items', {
+      title: `Checklist STS: ${p.partner_vessel ?? 'Operação'}`,
+      source_module: 'operations', source_reference_id: String(p.sts_id ?? p.id ?? ''),
+      status: 'pending', priority: 'high', vessel_id: p.vessel_id || null,
+      description: `Verificar OCIMF/CDI checklist, posição de fenders, plano de comunicação e condições meteorológicas.`,
+    });
+  },
+];
+
+SIDE_EFFECTS['finance.invoice_match.created'] = [
+  async (event) => {
+    const p = event.payload as Record<string, unknown>;
+    const score = Number(p.match_score ?? 0);
+    if (score < 80) {
+      await safeInsert('soc_alerts', {
+        alert_type: 'invoice_mismatch', severity: score < 50 ? 'critical' : 'high',
+        title: `Fatura com baixo match (${score}%): ${p.invoice_id ?? 'N/A'}`,
+        description: `Match score ${score}% contra PO ${p.po_id ?? 'N/A'}. Revisão manual necessária.`,
+        status: 'active',
+      });
+    }
+  },
+];
+
+SIDE_EFFECTS['procurement.return_goods.created'] = [
+  async (event) => {
+    const p = event.payload as Record<string, unknown>;
+    // Auto-create expense credit for returned goods
+    const amount = Number(p.credit_amount ?? p.total_value ?? 0);
+    if (amount > 0) {
+      await safeInsert('expenses', {
+        description: `Crédito devolução: ${p.reason ?? 'Retorno de mercadoria'}`,
+        amount: -amount, category: 'procurement_return', status: 'approved',
+        vessel_id: p.vessel_id ?? null,
+        reference_id: String(p.id ?? ''), reference_type: 'return_goods',
+      });
+    }
+  },
+];
+
+SIDE_EFFECTS['trading.position.created'] = [
+  async (event) => {
+    const p = event.payload as Record<string, unknown>;
+    const notional = Number(p.notional_value ?? 0);
+    if (notional > 500000) {
+      await safeInsert('soc_alerts', {
+        alert_type: 'trading_large_position', severity: 'high',
+        title: `Posição trading alta: ${p.instrument_type ?? 'FFA'} USD ${(notional / 1000).toFixed(0)}k`,
+        description: `Posição acima de USD 500k. Verificar limites de risco e aprovação gerencial.`,
+        status: 'active',
+      });
+    }
+  },
+];
+
+SIDE_EFFECTS['maintenance.trim.recorded'] = [
+  async (event) => {
+    const p = event.payload as Record<string, unknown>;
+    const saving = Number(p.fuel_saving_percent ?? 0);
+    if (saving > 3) {
+      await safeInsert('ai_insights', {
+        title: `Otimização de trim: ${saving.toFixed(1)}% economia combustível`,
+        description: `Registro de trim mostra ${saving.toFixed(1)}% de economia. Replicar para frota.`,
+        category: 'fuel_optimization', priority: 'medium', status: 'active',
+        confidence: 0.85, actionable: true, related_module: 'maintenance',
+        user_id: '00000000-0000-0000-0000-000000000000',
+      });
+    }
+  },
+];
+
 /** Get count of registered side effect event types */
 export function getSideEffectStats(): { eventTypes: number; totalEffects: number } {
   const eventTypes = Object.keys(SIDE_EFFECTS).length;
