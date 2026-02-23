@@ -93,8 +93,17 @@ serve(async (req) => {
   }
 
   try {
-    const payload: MarineTrafficRequest = await req.json();
-    const { operation, mmsi, imo, portId, bounds, days = 7 } = payload;
+    const payload = await req.json();
+    // Support both 'operation' and 'action' field names for backward compatibility
+    const rawOp = payload.operation || payload.action;
+    const operationMap: Record<string, string> = {
+      "position": "vessel-details",
+      "area": "area-vessels",
+      "track": "voyage-forecast",
+      "health": "vessel-positions",
+    };
+    const operation = (operationMap[rawOp] || rawOp) as MarineTrafficRequest["operation"];
+    const { mmsi, imo, portId, bounds, days = 7 } = payload;
     
     const apiKey = Deno.env.get("MARINE_TRAFFIC_API_KEY");
     

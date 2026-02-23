@@ -667,7 +667,7 @@ verify_jwt = false
 comment = "Sync data with Starfix system"
 
 [functions.weather-integration]
-verify_jwt = true
+verify_jwt = false
 comment = "Weather data integration"
 
 [functions.maritime-weather]
