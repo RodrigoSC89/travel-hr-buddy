@@ -61,6 +61,15 @@ const MODULE_ROUTES: Record<string, string> = {
   "crew-planning": "/crew-planning",
   "vessel-kpi": "/vessel-kpi",
   "cap-assessment": "/cap-assessment",
+  // Market Parity Modules
+  "berth-scheduling": "/berth-scheduling",
+  "barging-lightering": "/barging-lightering",
+  "trading-risk": "/trading-risk",
+  "trim-propulsion": "/trim-propulsion",
+  "supplier-portal": "/supplier-portal",
+  "invoice-auto-matching": "/invoice-auto-matching",
+  "return-goods": "/return-goods",
+  "forum-knowledge": "/forum-knowledge",
 };
 
 /**

@@ -96,6 +96,10 @@ export const SIDEBAR_ROUTES: SidebarGroup[] = [
       { label: "Missions", path: "/ops?tab=missions", icon: Target, emoji: "🎯" },
       { label: "Logistics", path: "/ops?tab=logistics", icon: Package, emoji: "📦" },
       { label: "Contracts", path: "/ops?tab=contracts", icon: FileText, emoji: "📝" },
+      { label: "Berth Scheduling", path: "/berth-scheduling", icon: Calendar, emoji: "🏗️", status: "new" },
+      { label: "Barging/STS", path: "/barging-lightering", icon: Layers, emoji: "🔄", status: "new" },
+      { label: "Trading & Risk", path: "/trading-risk", icon: DollarSign, emoji: "📉", status: "new" },
+      { label: "Forum & Knowledge", path: "/forum-knowledge", icon: MessageSquare, emoji: "💡", status: "new" },
     ],
   },
 
@@ -113,6 +117,7 @@ export const SIDEBAR_ROUTES: SidebarGroup[] = [
       { label: "Digital Twin", path: "/maintenance?tab=digital-twin", icon: Cpu, emoji: "🎮", badge: "3D" },
       { label: "ESG Emissions", path: "/maintenance?tab=esg", icon: Leaf, emoji: "🌱" },
       { label: "MARPOL & Waste", path: "/maintenance?tab=waste-marpol", icon: Leaf, emoji: "♻️" },
+      { label: "Trim & Propulsion", path: "/trim-propulsion", icon: Activity, emoji: "⚙️", status: "new" },
     ],
   },
 
@@ -177,6 +182,9 @@ export const SIDEBAR_ROUTES: SidebarGroup[] = [
       { label: "Documents", path: "/workbench?section=docs", icon: FileText, emoji: "📄", badge: "HUB" },
       { label: "People & Crew", path: "/workbench?section=people", icon: Users, emoji: "👥" },
       { label: "Finance", path: "/workbench?section=finance", icon: DollarSign, emoji: "💰" },
+      { label: "Invoice Matching", path: "/invoice-auto-matching", icon: FileText, emoji: "🔍", status: "new" },
+      { label: "Supplier Portal", path: "/supplier-portal", icon: Globe, emoji: "🏪", status: "new" },
+      { label: "Return Goods", path: "/return-goods", icon: Package, emoji: "📦", status: "new" },
       { label: "Travel", path: "/workbench?section=travel", icon: Globe, emoji: "✈️" },
       { label: "System", path: "/workbench?section=system", icon: Settings, emoji: "⚙️" },
     ],
