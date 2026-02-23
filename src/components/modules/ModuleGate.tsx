@@ -84,10 +84,10 @@ export function ModuleGate({
           {moduleInfo && (moduleInfo.price_addon_brl > 0) && (
             <div className="flex justify-center gap-2">
               <Badge variant="outline" className="text-sm">
-                R$ {moduleInfo.price_addon_brl}/mês
+                R$ {moduleInfo.price_addon_brl}/navio/mês
               </Badge>
               <Badge variant="outline" className="text-sm">
-                US$ {moduleInfo.price_addon_usd}/mês
+                US$ {moduleInfo.price_addon_usd}/vessel/mo
               </Badge>
             </div>
           )}
