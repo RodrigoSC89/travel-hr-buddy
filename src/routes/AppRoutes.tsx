@@ -539,7 +539,14 @@ export const AppRoutes = () => (
       <Route path="/crew-wellbeing" element={<Navigate to="/crew-wellness" replace />} />
       <Route path="/mlc-scheduling" element={<Navigate to="/workbench" replace />} />
       <Route path="/crew-scheduling" element={<Navigate to="/workbench" replace />} />
-      <Route path="/supplier-portal" element={<Navigate to="/workbench" replace />} />
+      <Route path="/supplier-portal" element={<Suspense fallback={<RouteFallback />}><Pages.SupplierPortalPage /></Suspense>} />
+      <Route path="/berth-scheduling" element={<Suspense fallback={<RouteFallback />}><Pages.BerthSchedulingPage /></Suspense>} />
+      <Route path="/barging-lightering" element={<Suspense fallback={<RouteFallback />}><Pages.BargingLighteringPage /></Suspense>} />
+      <Route path="/trading-risk" element={<Suspense fallback={<RouteFallback />}><Pages.TradingRiskPage /></Suspense>} />
+      <Route path="/trim-propulsion" element={<Suspense fallback={<RouteFallback />}><Pages.TrimPropulsionPage /></Suspense>} />
+      <Route path="/invoice-auto-matching" element={<Suspense fallback={<RouteFallback />}><Pages.InvoiceAutoMatchingPage /></Suspense>} />
+      <Route path="/return-goods" element={<Suspense fallback={<RouteFallback />}><Pages.ReturnGoodsPage /></Suspense>} />
+      <Route path="/forum-knowledge" element={<Suspense fallback={<RouteFallback />}><Pages.ForumKnowledgePage /></Suspense>} />
       <Route path="/iot-dashboard" element={<Navigate to="/command" replace />} />
       <Route path="/iot" element={<Navigate to="/command" replace />} />
       <Route path="/gamification" element={<Suspense fallback={<RouteFallback />}><Pages.GamificationHub /></Suspense>} />
