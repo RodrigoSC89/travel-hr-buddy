@@ -13,6 +13,7 @@ import { SkipToContent } from "@/components/ui/SkipToContent";
 import { QueryClientProvider, QueryClient } from "@tanstack/react-query";
 import { Toaster, toast } from "sonner";
 import { AuthProvider } from "./contexts/AuthContext";
+import { DemoProvider } from "./contexts/DemoContext";
 import { TooltipProvider } from "./components/ui/tooltip";
 import { ThemeProvider } from "./components/layout/theme-provider";
 import { LazyLoadErrorBoundary } from "@/components/error/LazyLoadErrorBoundary";
@@ -85,19 +86,21 @@ function App() {
       <ThemeProvider defaultTheme="dark" storageKey="nautilus-ui-theme">
         <PerformanceProvider>
           <AuthProvider>
-            <Router future={{ v7_startTransition: true, v7_relativeSplatPath: true }}>
-              <TooltipProvider>
-                <LazyLoadErrorBoundary>
-                  <SkipToContent />
-                  <main id="main-content" role="main">
-                    <Suspense fallback={<AppLoader />}>
-                      <AppRoutes />
-                    </Suspense>
-                  </main>
-                </LazyLoadErrorBoundary>
-                <Toaster />
-              </TooltipProvider>
-            </Router>
+            <DemoProvider>
+              <Router future={{ v7_startTransition: true, v7_relativeSplatPath: true }}>
+                <TooltipProvider>
+                  <LazyLoadErrorBoundary>
+                    <SkipToContent />
+                    <main id="main-content" role="main">
+                      <Suspense fallback={<AppLoader />}>
+                        <AppRoutes />
+                      </Suspense>
+                    </main>
+                  </LazyLoadErrorBoundary>
+                  <Toaster />
+                </TooltipProvider>
+              </Router>
+            </DemoProvider>
           </AuthProvider>
         </PerformanceProvider>
       </ThemeProvider>
