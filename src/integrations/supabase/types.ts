@@ -5739,6 +5739,78 @@ export type Database = {
           },
         ]
       }
+      berth_bookings: {
+        Row: {
+          arrival_eta: string
+          berth_number: string | null
+          cargo_type: string | null
+          cargo_volume_mt: number | null
+          created_at: string | null
+          created_by: string | null
+          departure_etd: string | null
+          id: string
+          notes: string | null
+          organization_id: string | null
+          port_name: string
+          priority: string | null
+          status: string
+          terminal_name: string | null
+          updated_at: string | null
+          vessel_id: string | null
+        }
+        Insert: {
+          arrival_eta: string
+          berth_number?: string | null
+          cargo_type?: string | null
+          cargo_volume_mt?: number | null
+          created_at?: string | null
+          created_by?: string | null
+          departure_etd?: string | null
+          id?: string
+          notes?: string | null
+          organization_id?: string | null
+          port_name: string
+          priority?: string | null
+          status?: string
+          terminal_name?: string | null
+          updated_at?: string | null
+          vessel_id?: string | null
+        }
+        Update: {
+          arrival_eta?: string
+          berth_number?: string | null
+          cargo_type?: string | null
+          cargo_volume_mt?: number | null
+          created_at?: string | null
+          created_by?: string | null
+          departure_etd?: string | null
+          id?: string
+          notes?: string | null
+          organization_id?: string | null
+          port_name?: string
+          priority?: string | null
+          status?: string
+          terminal_name?: string | null
+          updated_at?: string | null
+          vessel_id?: string | null
+        }
+        Relationships: [
+          {
+            foreignKeyName: "berth_bookings_organization_id_fkey"
+            columns: ["organization_id"]
+            isOneToOne: false
+            referencedRelation: "organizations"
+            referencedColumns: ["id"]
+          },
+          {
+            foreignKeyName: "berth_bookings_vessel_id_fkey"
+            columns: ["vessel_id"]
+            isOneToOne: false
+            referencedRelation: "vessels"
+            referencedColumns: ["id"]
+          },
+        ]
+      }
       beta_email_logs: {
         Row: {
           created_at: string | null
@@ -20553,6 +20625,132 @@ export type Database = {
           },
         ]
       }
+      forum_posts: {
+        Row: {
+          author_id: string
+          author_name: string | null
+          category: string | null
+          content: string
+          created_at: string | null
+          id: string
+          is_pinned: boolean | null
+          is_resolved: boolean | null
+          likes_count: number | null
+          organization_id: string | null
+          replies_count: number | null
+          tags: string[] | null
+          title: string
+          updated_at: string | null
+          vessel_id: string | null
+          views_count: number | null
+        }
+        Insert: {
+          author_id: string
+          author_name?: string | null
+          category?: string | null
+          content: string
+          created_at?: string | null
+          id?: string
+          is_pinned?: boolean | null
+          is_resolved?: boolean | null
+          likes_count?: number | null
+          organization_id?: string | null
+          replies_count?: number | null
+          tags?: string[] | null
+          title: string
+          updated_at?: string | null
+          vessel_id?: string | null
+          views_count?: number | null
+        }
+        Update: {
+          author_id?: string
+          author_name?: string | null
+          category?: string | null
+          content?: string
+          created_at?: string | null
+          id?: string
+          is_pinned?: boolean | null
+          is_resolved?: boolean | null
+          likes_count?: number | null
+          organization_id?: string | null
+          replies_count?: number | null
+          tags?: string[] | null
+          title?: string
+          updated_at?: string | null
+          vessel_id?: string | null
+          views_count?: number | null
+        }
+        Relationships: [
+          {
+            foreignKeyName: "forum_posts_organization_id_fkey"
+            columns: ["organization_id"]
+            isOneToOne: false
+            referencedRelation: "organizations"
+            referencedColumns: ["id"]
+          },
+          {
+            foreignKeyName: "forum_posts_vessel_id_fkey"
+            columns: ["vessel_id"]
+            isOneToOne: false
+            referencedRelation: "vessels"
+            referencedColumns: ["id"]
+          },
+        ]
+      }
+      forum_replies: {
+        Row: {
+          author_id: string
+          author_name: string | null
+          content: string
+          created_at: string | null
+          id: string
+          is_solution: boolean | null
+          likes_count: number | null
+          parent_reply_id: string | null
+          post_id: string
+          updated_at: string | null
+        }
+        Insert: {
+          author_id: string
+          author_name?: string | null
+          content: string
+          created_at?: string | null
+          id?: string
+          is_solution?: boolean | null
+          likes_count?: number | null
+          parent_reply_id?: string | null
+          post_id: string
+          updated_at?: string | null
+        }
+        Update: {
+          author_id?: string
+          author_name?: string | null
+          content?: string
+          created_at?: string | null
+          id?: string
+          is_solution?: boolean | null
+          likes_count?: number | null
+          parent_reply_id?: string | null
+          post_id?: string
+          updated_at?: string | null
+        }
+        Relationships: [
+          {
+            foreignKeyName: "forum_replies_parent_reply_id_fkey"
+            columns: ["parent_reply_id"]
+            isOneToOne: false
+            referencedRelation: "forum_replies"
+            referencedColumns: ["id"]
+          },
+          {
+            foreignKeyName: "forum_replies_post_id_fkey"
+            columns: ["post_id"]
+            isOneToOne: false
+            referencedRelation: "forum_posts"
+            referencedColumns: ["id"]
+          },
+        ]
+      }
       fuel_consumption: {
         Row: {
           avg_speed_knots: number | null
@@ -26324,6 +26522,86 @@ export type Database = {
             columns: ["invoice_id"]
             isOneToOne: false
             referencedRelation: "invoices"
+            referencedColumns: ["id"]
+          },
+        ]
+      }
+      invoice_matches: {
+        Row: {
+          ai_reasoning: string | null
+          created_at: string | null
+          created_by: string | null
+          id: string
+          invoice_amount: number
+          invoice_id: string | null
+          invoice_number: string | null
+          line_items_matched: number | null
+          line_items_total: number | null
+          match_confidence: number | null
+          match_status: string | null
+          organization_id: string | null
+          po_amount: number | null
+          po_id: string | null
+          po_number: string | null
+          reviewed_at: string | null
+          reviewed_by: string | null
+          supplier_name: string | null
+          updated_at: string | null
+          variance_amount: number | null
+          variance_percent: number | null
+        }
+        Insert: {
+          ai_reasoning?: string | null
+          created_at?: string | null
+          created_by?: string | null
+          id?: string
+          invoice_amount: number
+          invoice_id?: string | null
+          invoice_number?: string | null
+          line_items_matched?: number | null
+          line_items_total?: number | null
+          match_confidence?: number | null
+          match_status?: string | null
+          organization_id?: string | null
+          po_amount?: number | null
+          po_id?: string | null
+          po_number?: string | null
+          reviewed_at?: string | null
+          reviewed_by?: string | null
+          supplier_name?: string | null
+          updated_at?: string | null
+          variance_amount?: number | null
+          variance_percent?: number | null
+        }
+        Update: {
+          ai_reasoning?: string | null
+          created_at?: string | null
+          created_by?: string | null
+          id?: string
+          invoice_amount?: number
+          invoice_id?: string | null
+          invoice_number?: string | null
+          line_items_matched?: number | null
+          line_items_total?: number | null
+          match_confidence?: number | null
+          match_status?: string | null
+          organization_id?: string | null
+          po_amount?: number | null
+          po_id?: string | null
+          po_number?: string | null
+          reviewed_at?: string | null
+          reviewed_by?: string | null
+          supplier_name?: string | null
+          updated_at?: string | null
+          variance_amount?: number | null
+          variance_percent?: number | null
+        }
+        Relationships: [
+          {
+            foreignKeyName: "invoice_matches_organization_id_fkey"
+            columns: ["organization_id"]
+            isOneToOne: false
+            referencedRelation: "organizations"
             referencedColumns: ["id"]
           },
         ]
@@ -43287,6 +43565,97 @@ export type Database = {
         }
         Relationships: []
       }
+      return_goods: {
+        Row: {
+          created_at: string | null
+          created_by: string | null
+          credit_amount: number | null
+          credit_received_date: string | null
+          currency: string | null
+          id: string
+          item_description: string
+          organization_id: string | null
+          photos: Json | null
+          po_number: string | null
+          quantity: number
+          reason: string
+          reason_details: string | null
+          return_status: string | null
+          shipped_date: string | null
+          supplier_id: string | null
+          tracking_number: string | null
+          unit: string | null
+          updated_at: string | null
+          vessel_id: string | null
+        }
+        Insert: {
+          created_at?: string | null
+          created_by?: string | null
+          credit_amount?: number | null
+          credit_received_date?: string | null
+          currency?: string | null
+          id?: string
+          item_description: string
+          organization_id?: string | null
+          photos?: Json | null
+          po_number?: string | null
+          quantity: number
+          reason: string
+          reason_details?: string | null
+          return_status?: string | null
+          shipped_date?: string | null
+          supplier_id?: string | null
+          tracking_number?: string | null
+          unit?: string | null
+          updated_at?: string | null
+          vessel_id?: string | null
+        }
+        Update: {
+          created_at?: string | null
+          created_by?: string | null
+          credit_amount?: number | null
+          credit_received_date?: string | null
+          currency?: string | null
+          id?: string
+          item_description?: string
+          organization_id?: string | null
+          photos?: Json | null
+          po_number?: string | null
+          quantity?: number
+          reason?: string
+          reason_details?: string | null
+          return_status?: string | null
+          shipped_date?: string | null
+          supplier_id?: string | null
+          tracking_number?: string | null
+          unit?: string | null
+          updated_at?: string | null
+          vessel_id?: string | null
+        }
+        Relationships: [
+          {
+            foreignKeyName: "return_goods_organization_id_fkey"
+            columns: ["organization_id"]
+            isOneToOne: false
+            referencedRelation: "organizations"
+            referencedColumns: ["id"]
+          },
+          {
+            foreignKeyName: "return_goods_supplier_id_fkey"
+            columns: ["supplier_id"]
+            isOneToOne: false
+            referencedRelation: "suppliers"
+            referencedColumns: ["id"]
+          },
+          {
+            foreignKeyName: "return_goods_vessel_id_fkey"
+            columns: ["vessel_id"]
+            isOneToOne: false
+            referencedRelation: "vessels"
+            referencedColumns: ["id"]
+          },
+        ]
+      }
       rfq_quotations: {
         Row: {
           attachments: string[] | null
@@ -49632,6 +50001,90 @@ export type Database = {
           },
         ]
       }
+      sts_operations: {
+        Row: {
+          cargo_type: string | null
+          created_at: string | null
+          created_by: string | null
+          end_time: string | null
+          id: string
+          location_lat: number | null
+          location_lon: number | null
+          notes: string | null
+          ocimf_checklist_score: number | null
+          operation_type: string
+          organization_id: string | null
+          partner_vessel_name: string | null
+          risk_level: string | null
+          safety_clearance: boolean | null
+          start_time: string | null
+          status: string | null
+          updated_at: string | null
+          vessel_id: string | null
+          volume_transferred_mt: number | null
+          weather_conditions: Json | null
+        }
+        Insert: {
+          cargo_type?: string | null
+          created_at?: string | null
+          created_by?: string | null
+          end_time?: string | null
+          id?: string
+          location_lat?: number | null
+          location_lon?: number | null
+          notes?: string | null
+          ocimf_checklist_score?: number | null
+          operation_type?: string
+          organization_id?: string | null
+          partner_vessel_name?: string | null
+          risk_level?: string | null
+          safety_clearance?: boolean | null
+          start_time?: string | null
+          status?: string | null
+          updated_at?: string | null
+          vessel_id?: string | null
+          volume_transferred_mt?: number | null
+          weather_conditions?: Json | null
+        }
+        Update: {
+          cargo_type?: string | null
+          created_at?: string | null
+          created_by?: string | null
+          end_time?: string | null
+          id?: string
+          location_lat?: number | null
+          location_lon?: number | null
+          notes?: string | null
+          ocimf_checklist_score?: number | null
+          operation_type?: string
+          organization_id?: string | null
+          partner_vessel_name?: string | null
+          risk_level?: string | null
+          safety_clearance?: boolean | null
+          start_time?: string | null
+          status?: string | null
+          updated_at?: string | null
+          vessel_id?: string | null
+          volume_transferred_mt?: number | null
+          weather_conditions?: Json | null
+        }
+        Relationships: [
+          {
+            foreignKeyName: "sts_operations_organization_id_fkey"
+            columns: ["organization_id"]
+            isOneToOne: false
+            referencedRelation: "organizations"
+            referencedColumns: ["id"]
+          },
+          {
+            foreignKeyName: "sts_operations_vessel_id_fkey"
+            columns: ["vessel_id"]
+            isOneToOne: false
+            referencedRelation: "vessels"
+            referencedColumns: ["id"]
+          },
+        ]
+      }
       subscription_plans: {
         Row: {
           created_at: string
@@ -49679,6 +50132,84 @@ export type Database = {
           updated_at?: string
         }
         Relationships: []
+      }
+      supplier_portal_entries: {
+        Row: {
+          category: string | null
+          commercial_score: number | null
+          created_at: string | null
+          created_by: string | null
+          currency: string | null
+          delivery_days: number | null
+          documents: Json | null
+          id: string
+          notes: string | null
+          organization_id: string | null
+          quoted_amount: number | null
+          response_status: string | null
+          rfq_id: string | null
+          rfq_title: string | null
+          submitted_at: string | null
+          supplier_id: string | null
+          technical_score: number | null
+          updated_at: string | null
+        }
+        Insert: {
+          category?: string | null
+          commercial_score?: number | null
+          created_at?: string | null
+          created_by?: string | null
+          currency?: string | null
+          delivery_days?: number | null
+          documents?: Json | null
+          id?: string
+          notes?: string | null
+          organization_id?: string | null
+          quoted_amount?: number | null
+          response_status?: string | null
+          rfq_id?: string | null
+          rfq_title?: string | null
+          submitted_at?: string | null
+          supplier_id?: string | null
+          technical_score?: number | null
+          updated_at?: string | null
+        }
+        Update: {
+          category?: string | null
+          commercial_score?: number | null
+          created_at?: string | null
+          created_by?: string | null
+          currency?: string | null
+          delivery_days?: number | null
+          documents?: Json | null
+          id?: string
+          notes?: string | null
+          organization_id?: string | null
+          quoted_amount?: number | null
+          response_status?: string | null
+          rfq_id?: string | null
+          rfq_title?: string | null
+          submitted_at?: string | null
+          supplier_id?: string | null
+          technical_score?: number | null
+          updated_at?: string | null
+        }
+        Relationships: [
+          {
+            foreignKeyName: "supplier_portal_entries_organization_id_fkey"
+            columns: ["organization_id"]
+            isOneToOne: false
+            referencedRelation: "organizations"
+            referencedColumns: ["id"]
+          },
+          {
+            foreignKeyName: "supplier_portal_entries_supplier_id_fkey"
+            columns: ["supplier_id"]
+            isOneToOne: false
+            referencedRelation: "suppliers"
+            referencedColumns: ["id"]
+          },
+        ]
       }
       suppliers: {
         Row: {
@@ -51935,6 +52466,86 @@ export type Database = {
           },
         ]
       }
+      trading_positions: {
+        Row: {
+          broker: string | null
+          counterparty: string | null
+          created_at: string | null
+          created_by: string | null
+          currency: string | null
+          current_price: number | null
+          direction: string
+          entry_price: number
+          id: string
+          instrument_type: string
+          notes: string | null
+          organization_id: string | null
+          pnl: number | null
+          quantity: number
+          route_code: string | null
+          settlement_date: string | null
+          status: string | null
+          unit: string | null
+          updated_at: string | null
+          var_95: number | null
+          vessel_type: string | null
+        }
+        Insert: {
+          broker?: string | null
+          counterparty?: string | null
+          created_at?: string | null
+          created_by?: string | null
+          currency?: string | null
+          current_price?: number | null
+          direction: string
+          entry_price: number
+          id?: string
+          instrument_type: string
+          notes?: string | null
+          organization_id?: string | null
+          pnl?: number | null
+          quantity: number
+          route_code?: string | null
+          settlement_date?: string | null
+          status?: string | null
+          unit?: string | null
+          updated_at?: string | null
+          var_95?: number | null
+          vessel_type?: string | null
+        }
+        Update: {
+          broker?: string | null
+          counterparty?: string | null
+          created_at?: string | null
+          created_by?: string | null
+          currency?: string | null
+          current_price?: number | null
+          direction?: string
+          entry_price?: number
+          id?: string
+          instrument_type?: string
+          notes?: string | null
+          organization_id?: string | null
+          pnl?: number | null
+          quantity?: number
+          route_code?: string | null
+          settlement_date?: string | null
+          status?: string | null
+          unit?: string | null
+          updated_at?: string | null
+          var_95?: number | null
+          vessel_type?: string | null
+        }
+        Relationships: [
+          {
+            foreignKeyName: "trading_positions_organization_id_fkey"
+            columns: ["organization_id"]
+            isOneToOne: false
+            referencedRelation: "organizations"
+            referencedColumns: ["id"]
+          },
+        ]
+      }
       training_completions: {
         Row: {
           attempts: number | null
@@ -53341,6 +53952,90 @@ export type Database = {
             columns: ["provider_id"]
             isOneToOne: false
             referencedRelation: "travel_transfer_providers"
+            referencedColumns: ["id"]
+          },
+        ]
+      }
+      trim_propulsion_records: {
+        Row: {
+          created_at: string | null
+          created_by: string | null
+          draft_aft_m: number | null
+          draft_forward_m: number | null
+          fuel_consumption_mt: number | null
+          fuel_savings_potential_mt: number | null
+          hull_fouling_index: number | null
+          id: string
+          optimal_trim_m: number | null
+          organization_id: string | null
+          propeller_condition: string | null
+          recommendations: Json | null
+          record_date: string
+          rpm: number | null
+          slip_percent: number | null
+          speed_kts: number | null
+          trim_m: number | null
+          updated_at: string | null
+          vessel_id: string | null
+          weather_factor: number | null
+        }
+        Insert: {
+          created_at?: string | null
+          created_by?: string | null
+          draft_aft_m?: number | null
+          draft_forward_m?: number | null
+          fuel_consumption_mt?: number | null
+          fuel_savings_potential_mt?: number | null
+          hull_fouling_index?: number | null
+          id?: string
+          optimal_trim_m?: number | null
+          organization_id?: string | null
+          propeller_condition?: string | null
+          recommendations?: Json | null
+          record_date?: string
+          rpm?: number | null
+          slip_percent?: number | null
+          speed_kts?: number | null
+          trim_m?: number | null
+          updated_at?: string | null
+          vessel_id?: string | null
+          weather_factor?: number | null
+        }
+        Update: {
+          created_at?: string | null
+          created_by?: string | null
+          draft_aft_m?: number | null
+          draft_forward_m?: number | null
+          fuel_consumption_mt?: number | null
+          fuel_savings_potential_mt?: number | null
+          hull_fouling_index?: number | null
+          id?: string
+          optimal_trim_m?: number | null
+          organization_id?: string | null
+          propeller_condition?: string | null
+          recommendations?: Json | null
+          record_date?: string
+          rpm?: number | null
+          slip_percent?: number | null
+          speed_kts?: number | null
+          trim_m?: number | null
+          updated_at?: string | null
+          vessel_id?: string | null
+          weather_factor?: number | null
+        }
+        Relationships: [
+          {
+            foreignKeyName: "trim_propulsion_records_organization_id_fkey"
+            columns: ["organization_id"]
+            isOneToOne: false
+            referencedRelation: "organizations"
+            referencedColumns: ["id"]
+          },
+          {
+            foreignKeyName: "trim_propulsion_records_vessel_id_fkey"
+            columns: ["vessel_id"]
+            isOneToOne: false
+            referencedRelation: "vessels"
             referencedColumns: ["id"]
           },
         ]
