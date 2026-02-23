@@ -58,6 +58,10 @@ const CrewVisaTracker = lazy(() => import('@/components/crew/CrewVisaTracker').t
 const AllotmentManagementTab = lazy(() => import('@/components/crew/AllotmentManagementTab').then(m => ({ default: m.AllotmentManagementTab })));
 const SupplierScorecard = lazy(() => import('@/components/procurement/SupplierScorecard').then(m => ({ default: m.SupplierScorecard })));
 const CarbonCreditTradingTab = lazy(() => import('@/components/esg/CarbonCreditTradingTab').then(m => ({ default: m.CarbonCreditTradingTab })));
+// Market Parity Modules
+const InvoiceAutoMatchingPage = lazy(() => import('@/pages/operations/InvoiceAutoMatchingPage'));
+const SupplierPortalPage = lazy(() => import('@/pages/procurement/SupplierPortalPage'));
+const ReturnGoodsPage = lazy(() => import('@/pages/procurement/ReturnGoodsPage'));
 
 const LoadingSkeleton = () => (
   <div className="space-y-4 p-6"><Skeleton className="h-8 w-64" /><div className="grid grid-cols-1 md:grid-cols-3 gap-4"><Skeleton className="h-32" /><Skeleton className="h-32" /><Skeleton className="h-32" /></div><Skeleton className="h-64" /></div>
@@ -118,7 +122,7 @@ export default function WorkbenchMegaHub() {
   const [peopleSubTab, setPeopleSubTab] = useState<'people' | 'crew-schedule' | 'crew-pool' | 'visa-tracker'>('people');
   const [financeSubTab, setFinanceSubTab] = useState<'finance' | 'approvals' | 'allotment'>('finance');
   const [travelSubTab, setTravelSubTab] = useState<'travel' | 'itinerary'>('travel');
-  const [procurementSubTab, setProcurementSubTab] = useState<'supplier-score' | 'carbon-trading'>('supplier-score');
+  const [procurementSubTab, setProcurementSubTab] = useState<'supplier-score' | 'carbon-trading' | 'invoice-matching' | 'supplier-portal' | 'return-goods'>('supplier-score');
   const [aiHubSubTab, setAiHubSubTab] = useState<'ai-crew' | 'ai-finance' | 'ai-docs'>('ai-crew');
 
   // Initialize sub-tab from old deep-link
@@ -343,10 +347,19 @@ export default function WorkbenchMegaHub() {
               {travelSubTab === 'itinerary' && <TravelItineraryBuilder />}
             </TabsContent>
 
-            {/* Procurement & ESG (merged: supplier-score + carbon-trading) */}
+            {/* Procurement & ESG (merged: supplier-score + carbon-trading + invoice-matching + supplier-portal + return-goods) */}
             <TabsContent value="procurement" className="mt-0 space-y-4">
-              <SubTabSelector options={[{ id: 'supplier-score', label: '🏢 Supplier Scorecard' }, { id: 'carbon-trading', label: '🌱 Carbon Trading' }]} active={procurementSubTab} onChange={(id) => setProcurementSubTab(id as 'supplier-score' | 'carbon-trading')} />
+              <SubTabSelector options={[
+                { id: 'supplier-score', label: '🏢 Supplier Scorecard' },
+                { id: 'invoice-matching', label: '🔍 Invoice Matching' },
+                { id: 'supplier-portal', label: '🏪 Supplier Portal' },
+                { id: 'return-goods', label: '📦 Return Goods' },
+                { id: 'carbon-trading', label: '🌱 Carbon Trading' },
+              ]} active={procurementSubTab} onChange={(id) => setProcurementSubTab(id as any)} />
               {procurementSubTab === 'supplier-score' && <SupplierScorecard />}
+              {procurementSubTab === 'invoice-matching' && <InvoiceAutoMatchingPage />}
+              {procurementSubTab === 'supplier-portal' && <SupplierPortalPage />}
+              {procurementSubTab === 'return-goods' && <ReturnGoodsPage />}
               {procurementSubTab === 'carbon-trading' && <CarbonCreditTradingTab />}
             </TabsContent>
 

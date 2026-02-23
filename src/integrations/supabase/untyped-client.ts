@@ -224,6 +224,11 @@ const KNOWN_UNTYPED_TABLES = new Set([
 
   // Gas Management
   "peotram_gas_inventory",
+
+  // Market Parity Modules
+  "berth_bookings", "sts_operations", "trading_positions",
+  "trim_propulsion_records", "supplier_portal_entries",
+  "invoice_matches", "return_goods", "forum_posts", "forum_replies",
 ]);
 
 /**

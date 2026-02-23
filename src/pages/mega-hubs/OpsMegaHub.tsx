@@ -68,6 +68,11 @@ const CharterPartyPerformance = lazy(() => import('@/components/dashboard/Charte
 const CrewRotationOverview = lazy(() => import('@/components/dashboard/CrewRotationOverview').then(m => ({ default: m.CrewRotationOverview })));
 const CrewFatigueRiskMonitor = lazy(() => import('@/components/dashboard/CrewFatigueRiskMonitor').then(m => ({ default: m.CrewFatigueRiskMonitor })));
 const VoyageTCEPerformance = lazy(() => import('@/components/dashboard/VoyageTCEPerformance').then(m => ({ default: m.VoyageTCEPerformance })));
+// Market Parity Modules
+const BerthSchedulingPage = lazy(() => import('@/pages/operations/BerthSchedulingPage'));
+const BargingLighteringPage = lazy(() => import('@/pages/operations/BargingLighteringPage'));
+const TradingRiskPage = lazy(() => import('@/pages/operations/TradingRiskPage'));
+const ForumKnowledgePage = lazy(() => import('@/pages/operations/ForumKnowledgePage'));
 
 const LoadingSkeleton = () => (
   <div className="space-y-4 p-6">
@@ -101,7 +106,10 @@ const tabConfig = [
   { id: 'voyage-missions', label: 'Voyage & Missions', icon: Map },
   { id: 'logistics', label: 'Logistics', icon: Package },
   { id: 'contracts', label: 'Contracts', icon: FileText },
+  { id: 'port-ops', label: 'Port & STS', icon: Building2 },
+  { id: 'trading', label: 'Trading & Risk', icon: Droplets },
   { id: 'field-ops', label: 'Field Ops', icon: ClipboardCheck },
+  { id: 'forum', label: 'Forum', icon: BookOpen },
   { id: 'ai-copilot', label: '🧠 IA Copiloto', icon: Brain },
 ];
 
@@ -131,6 +139,7 @@ export default function OpsMegaHub() {
   const [maritimeFleetSubTab, setMaritimeFleetSubTab] = useState<'maritime' | 'fleet'>('maritime');
   const [voyageMissionsSubTab, setVoyageMissionsSubTab] = useState<'voyage' | 'missions'>('voyage');
   const [contractsSubTab, setContractsSubTab] = useState<'contracts' | 'clause-library'>('contracts');
+  const [portOpsSubTab, setPortOpsSubTab] = useState<'berth' | 'sts'>('berth');
   const [fieldOpsSubTab, setFieldOpsSubTab] = useState<'manning' | 'noon-validation' | 'fuel-quality'>('manning');
 
   // Initialize sub-tab from old deep-link
@@ -373,6 +382,30 @@ export default function OpsMegaHub() {
               {fieldOpsSubTab === 'manning' && <ManningAgentPortal />}
               {fieldOpsSubTab === 'noon-validation' && <NoonReportAIValidation />}
               {fieldOpsSubTab === 'fuel-quality' && <FuelQualityTrackerTab />}
+            </TabsContent>
+
+            {/* Port & STS (Berth + Barging) */}
+            <TabsContent value="port-ops" className="mt-0 space-y-4">
+              <SubTabSelector
+                options={[
+                  { id: 'berth', label: '🏗️ Berth Scheduling' },
+                  { id: 'sts', label: '🔄 STS / Barging' },
+                ]}
+                active={portOpsSubTab}
+                onChange={(id) => setPortOpsSubTab(id as 'berth' | 'sts')}
+              />
+              {portOpsSubTab === 'berth' && <BerthSchedulingPage />}
+              {portOpsSubTab === 'sts' && <BargingLighteringPage />}
+            </TabsContent>
+
+            {/* Trading & Risk */}
+            <TabsContent value="trading" className="mt-0">
+              <TradingRiskPage />
+            </TabsContent>
+
+            {/* Forum & Knowledge */}
+            <TabsContent value="forum" className="mt-0">
+              <ForumKnowledgePage />
             </TabsContent>
 
             <TabsContent value="ai-copilot" className="mt-0">
