@@ -13,6 +13,7 @@ export const ResetPassword = lazy(() => import("@/pages/ResetPassword"));
 export const LandingPage = lazy(() => import("@/pages/LandingPage"));
 export const AboutSystem = lazy(() => import("@/pages/AboutSystem"));
 export const DemoLauncher = lazy(() => import("@/pages/DemoLauncher"));
+export const PitchDeckPage = lazy(() => import("@/pages/PitchDeckPage"));
 // CentralComando removed — consolidated into CommandMegaHub at /command
 export const NotFound = lazy(() => import("@/pages/NotFound"));
 export const DevRoutesDashboard = lazy(() => import("@/pages/DevRoutesDashboard"));
