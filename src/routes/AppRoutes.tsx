@@ -24,6 +24,7 @@ export const AppRoutes = () => (
     <Route path="/pricing" element={<Pages.LandingPage />} />
     <Route path="/status" element={<Pages.LandingPage />} />
     <Route path="/demo" element={<Pages.DemoLauncher />} />
+    <Route path="/pitch" element={<Pages.PitchDeckPage />} />
     <Route path="/home" element={<Pages.LandingPage />} />
     <Route path="/install" element={<Pages.PWAInstallPage />} />
     
