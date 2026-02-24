@@ -8,6 +8,7 @@
  */
 
 import React, { Suspense, lazy, useState, useMemo, useCallback } from 'react';
+import { useTranslation } from 'react-i18next';
 import { useSearchParams } from 'react-router-dom';
 import { Tabs, TabsContent, TabsList, TabsTrigger } from '@/components/ui/tabs';
 import { Badge } from '@/components/ui/badge';
@@ -100,18 +101,21 @@ const LoadingSkeleton = () => (
  * 6. field-ops       → Field Ops (manning + noon-validation + fuel-quality subtabs)
  * 7. ai-copilot      → IA Copiloto (unchanged)
  */
-const tabConfig = [
-  { id: 'overview', label: 'Overview', icon: Compass },
-  { id: 'maritime-fleet', label: 'Maritime & Fleet', icon: Anchor },
-  { id: 'voyage-missions', label: 'Voyage & Missions', icon: Map },
-  { id: 'logistics', label: 'Logistics', icon: Package },
-  { id: 'contracts', label: 'Contracts', icon: FileText },
-  { id: 'port-ops', label: 'Port & STS', icon: Building2 },
-  { id: 'trading', label: 'Trading & Risk', icon: Droplets },
-  { id: 'field-ops', label: 'Field Ops', icon: ClipboardCheck },
-  { id: 'forum', label: 'Forum', icon: BookOpen },
-  { id: 'ai-copilot', label: '🧠 IA Copiloto', icon: Brain },
-];
+const useOpsTabConfig = () => {
+  const { t } = useTranslation();
+  return useMemo(() => [
+    { id: 'overview', label: t('megaHubs.ops.tabs.overview'), icon: Compass },
+    { id: 'maritime-fleet', label: t('megaHubs.ops.tabs.maritimeFleet'), icon: Anchor },
+    { id: 'voyage-missions', label: t('megaHubs.ops.tabs.voyageMissions'), icon: Map },
+    { id: 'logistics', label: t('megaHubs.ops.tabs.logistics'), icon: Package },
+    { id: 'contracts', label: t('megaHubs.ops.tabs.contracts'), icon: FileText },
+    { id: 'port-ops', label: t('megaHubs.ops.tabs.portOps'), icon: Building2 },
+    { id: 'trading', label: t('megaHubs.ops.tabs.trading'), icon: Droplets },
+    { id: 'field-ops', label: t('megaHubs.ops.tabs.fieldOps'), icon: ClipboardCheck },
+    { id: 'forum', label: t('megaHubs.ops.tabs.forum'), icon: BookOpen },
+    { id: 'ai-copilot', label: t('megaHubs.ops.tabs.aiCopilot'), icon: Brain },
+  ], [t]);
+};
 
 const TAB_MIGRATION: Record<string, string> = {
   'maritime': 'maritime-fleet',
@@ -125,13 +129,14 @@ const TAB_MIGRATION: Record<string, string> = {
 };
 
 export default function OpsMegaHub() {
+  const { t } = useTranslation();
+  const tabConfig = useOpsTabConfig();
   const [searchParams, setSearchParams] = useSearchParams();
   const rawTab = searchParams.get('tab') || 'overview';
   const activeTab = TAB_MIGRATION[rawTab] || rawTab;
   const activeModuleId = searchParams.get('module');
   const [launcherOpen, setLauncherOpen] = useState(false);
   const [voyageDialogOpen, setVoyageDialogOpen] = useState(false);
-  const queryClient = useQueryClient();
   const { vessels, voyages, metrics, isLoading } = useOperationsCommandData();
   const { exportToCSV } = useRealActionHandlers();
 
@@ -177,12 +182,12 @@ export default function OpsMegaHub() {
   };
 
   const workflowSteps = useMemo(() => [
-    { id: 'request', label: 'Request', status: metrics.totalVessels > 0 ? 'completed' as const : 'current' as const },
-    { id: 'planning', label: 'Planning', status: metrics.plannedVoyages > 0 ? 'current' as const : metrics.totalVessels > 0 ? 'completed' as const : 'pending' as const },
-    { id: 'approval', label: 'Approval', status: metrics.activeVoyages > 0 ? 'completed' as const : 'pending' as const },
-    { id: 'execution', label: 'Execution', status: metrics.activeVoyages > 0 ? 'current' as const : 'pending' as const },
-    { id: 'completion', label: 'Completion', status: metrics.completedVoyages > 0 ? 'completed' as const : 'pending' as const }
-  ], [metrics]);
+    { id: 'request', label: t('megaHubs.ops.workflow.request'), status: metrics.totalVessels > 0 ? 'completed' as const : 'current' as const },
+    { id: 'planning', label: t('megaHubs.ops.workflow.planning'), status: metrics.plannedVoyages > 0 ? 'current' as const : metrics.totalVessels > 0 ? 'completed' as const : 'pending' as const },
+    { id: 'approval', label: t('megaHubs.ops.workflow.approval'), status: metrics.activeVoyages > 0 ? 'completed' as const : 'pending' as const },
+    { id: 'execution', label: t('megaHubs.ops.workflow.execution'), status: metrics.activeVoyages > 0 ? 'current' as const : 'pending' as const },
+    { id: 'completion', label: t('megaHubs.ops.workflow.completion'), status: metrics.completedVoyages > 0 ? 'completed' as const : 'pending' as const }
+  ], [metrics, t]);
 
   return (
     <div className="min-h-screen bg-background">
@@ -195,18 +200,18 @@ export default function OpsMegaHub() {
                 <Compass className="h-6 w-6 text-hub-ops" />
               </div>
               <div>
-                <h1 className="text-2xl font-bold">Hub de Operações</h1>
+                <h1 className="text-2xl font-bold">{t('megaHubs.ops.title')}</h1>
                 <p className="text-sm text-muted-foreground">
-                  Gerencie viagens, frota, contratos e logística — tudo integrado em tempo real
+                  {t('megaHubs.ops.subtitle')}
                 </p>
               </div>
             </div>
             <div className="flex items-center gap-2">
               <Badge variant="outline" className="bg-hub-ops/10 text-hub-ops border-hub-ops/20">
-                {metrics.activeVoyages} viagens ativas
+                {t('megaHubs.ops.activeVoyages', { count: metrics.activeVoyages })}
               </Badge>
               <Badge variant="outline" className="bg-success/10 text-success border-success/20">
-                Operacional
+                {t('megaHubs.ops.operational')}
               </Badge>
             </div>
           </div>
@@ -238,27 +243,27 @@ export default function OpsMegaHub() {
             {/* Overview - unchanged */}
             <TabsContent value="overview" className="mt-0 space-y-6">
               <div className="flex items-center gap-3 text-xs text-muted-foreground px-1">
-                <div className="flex items-center gap-1.5"><Wifi className="h-3.5 w-3.5 text-success" /><span>Online</span></div>
-                <span>•</span><span>{metrics.totalVessels} embarcações</span>
-                <span>•</span><span>{metrics.activeVoyages} viagens ativas</span>
-                <span>•</span><span>{metrics.plannedVoyages} planejadas</span>
+                <div className="flex items-center gap-1.5"><Wifi className="h-3.5 w-3.5 text-success" /><span>{t('common.online')}</span></div>
+                <span>•</span><span>{t('megaHubs.command.vessels', { count: metrics.totalVessels })}</span>
+                <span>•</span><span>{t('megaHubs.ops.activeVoyages', { count: metrics.activeVoyages })}</span>
+                <span>•</span><span>{metrics.plannedVoyages} {t('common.pending').toLowerCase()}</span>
               </div>
 
               <EnhancedActionBar
-                title="Operations Command Center"
-                subtitle={`${metrics.operationalVessels} embarcações operacionais | ${metrics.activeVoyages} viagens ativas`}
+                title={t('megaHubs.ops.opsCommandCenter')}
+                subtitle={`${t('megaHubs.command.operationalVessels', { count: metrics.operationalVessels })} | ${t('megaHubs.ops.activeVoyages', { count: metrics.activeVoyages })}`}
                 actions={[
-                  { id: 'new-voyage', label: 'New Voyage', icon: <Plus className="h-4 w-4" />, onClick: () => handleActionBarAction('new-voyage'), variant: 'default', tooltip: 'Criar nova viagem' },
-                  { id: 'new-contract', label: 'New Contract', icon: <FileText className="h-4 w-4" />, onClick: () => setSearchParams({ tab: 'contracts' }), variant: 'outline', tooltip: 'Ir para contratos' },
-                  { id: 'bulk-approve', label: 'Bulk Approve', icon: <CheckCircle className="h-4 w-4" />, onClick: () => handleActionBarAction('bulk-approve'), variant: 'outline', tooltip: 'Aprovar operações em lote' }
+                  { id: 'new-voyage', label: t('megaHubs.ops.actions.newVoyage'), icon: <Plus className="h-4 w-4" />, onClick: () => handleActionBarAction('new-voyage'), variant: 'default', tooltip: t('megaHubs.ops.actions.newVoyage') },
+                  { id: 'new-contract', label: t('megaHubs.ops.actions.newContract'), icon: <FileText className="h-4 w-4" />, onClick: () => setSearchParams({ tab: 'contracts' }), variant: 'outline', tooltip: t('megaHubs.ops.actions.newContract') },
+                  { id: 'bulk-approve', label: t('megaHubs.ops.actions.bulkApprove'), icon: <CheckCircle className="h-4 w-4" />, onClick: () => handleActionBarAction('bulk-approve'), variant: 'outline', tooltip: t('megaHubs.ops.actions.bulkApprove') }
                 ]}
                 onRefresh={handleRefresh}
                 isRefreshing={isLoading}
-                secondaryActions={[{ id: 'export-fleet', label: 'Exportar Frota (CSV)', icon: <Download className="h-4 w-4" />, onClick: handleExport }]}
-                showSearch searchPlaceholder="Search voyages, vessels, contracts..."
+                secondaryActions={[{ id: 'export-fleet', label: t('common.export') + ' (CSV)', icon: <Download className="h-4 w-4" />, onClick: handleExport }]}
+                showSearch searchPlaceholder={t('megaHubs.ops.searchPlaceholder')}
               />
 
-              <WorkflowStatusBar title="Operations Workflow" steps={workflowSteps} variant="horizontal" />
+              <WorkflowStatusBar title={t('megaHubs.ops.opsWorkflow')} steps={workflowSteps} variant="horizontal" />
 
               {!isLoading && metrics.totalVessels === 0 && (
                 <HubEmptyState hub="ops" onPrimaryAction={() => setVoyageDialogOpen(true)} />

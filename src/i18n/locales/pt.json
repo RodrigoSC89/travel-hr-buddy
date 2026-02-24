@@ -764,5 +764,203 @@
     "prev": "Anterior",
     "skip": "Pular Tour",
     "finish": "Começar"
+  },
+  "megaHubs": {
+    "command": {
+      "title": "Central de Comando",
+      "subtitle": "Visão geral de toda a operação marítima — embarcações, viagens, alertas e KPIs em tempo real",
+      "operational": "Operacional",
+      "vessels": "{{count}} embarcações",
+      "activeVoyages": "{{count}} viagens ativas",
+      "updated": "Atualizado",
+      "executiveCommandPanel": "Painel de Comando Executivo",
+      "operationalVessels": "{{count}} embarcações operacionais",
+      "noRecentEvents": "Nenhum evento recente",
+      "registerVesselsHint": "Cadastre embarcações e viagens para ver atividades aqui.",
+      "tabs": {
+        "overview": "Visão Geral",
+        "operations": "Operações",
+        "executive": "Executivo",
+        "digitalTwin": "🚢 Gêmeo Digital",
+        "nocSoc": "NOC & SOC",
+        "commsAlerts": "Comunicações & Alertas",
+        "aiCopilot": "🧠 IA Copiloto",
+        "myDashboard": "🎯 Meu Dashboard"
+      },
+      "actions": {
+        "newVoyage": "Nova Viagem",
+        "crew": "Tripulação",
+        "maintenance": "Manutenção",
+        "documents": "Documentos",
+        "compliance": "Compliance",
+        "alerts": "Alertas"
+      },
+      "workflow": {
+        "fleetSetup": "Config. da Frota",
+        "voyagePlanning": "Planejamento de Viagem",
+        "inTransit": "Em Trânsito",
+        "arrival": "Chegada",
+        "completed": "Concluída"
+      }
+    },
+    "ops": {
+      "title": "Hub de Operações",
+      "subtitle": "Gerencie viagens, frota, contratos e logística — tudo integrado em tempo real",
+      "activeVoyages": "{{count}} viagens ativas",
+      "operational": "Operacional",
+      "opsCommandCenter": "Centro de Comando Operacional",
+      "tabs": {
+        "overview": "Visão Geral",
+        "maritimeFleet": "Marítimo & Frota",
+        "voyageMissions": "Viagens & Missões",
+        "logistics": "Logística",
+        "contracts": "Contratos",
+        "portOps": "Porto & STS",
+        "trading": "Trading & Risco",
+        "fieldOps": "Operações de Campo",
+        "forum": "Fórum",
+        "aiCopilot": "🧠 IA Copiloto"
+      },
+      "actions": {
+        "newVoyage": "Nova Viagem",
+        "newContract": "Novo Contrato",
+        "bulkApprove": "Aprovar em Lote"
+      },
+      "workflow": {
+        "request": "Solicitação",
+        "planning": "Planejamento",
+        "approval": "Aprovação",
+        "execution": "Execução",
+        "completion": "Conclusão"
+      },
+      "opsWorkflow": "Fluxo Operacional",
+      "searchPlaceholder": "Buscar viagens, embarcações, contratos..."
+    },
+    "maintenance": {
+      "title": "Hub de Manutenção",
+      "subtitle": "Ordens de serviço, vistorias de classe, manutenção preditiva, ESG e gêmeo digital",
+      "pending": "{{count}} pendentes",
+      "completed": "{{count}} concluídas",
+      "maintenanceCenter": "Centro de Manutenção",
+      "tabs": {
+        "overview": "Visão Geral",
+        "planning": "PMS & Planejamento",
+        "equipment": "Equipamentos",
+        "spareParts": "Peças Sobressalentes",
+        "surveys": "Vistorias & Preditiva",
+        "drydock": "Docagem Seca",
+        "trimPropulsion": "Trim & Propulsão",
+        "environment": "Combustível & Meio Ambiente",
+        "digitalTwin": "Gêmeo Digital",
+        "aiHub": "🧠 IA Hub"
+      },
+      "maintenanceFlow": "Fluxo de Manutenção"
+    },
+    "ai": {
+      "title": "Hub de Inteligência Artificial",
+      "subtitle": "Chat IA, agentes autônomos, workflows, voz, OCR e analytics — {{count}} agentes disponíveis",
+      "activeAgents": "{{count}} agentes ativos",
+      "aiOperational": "IA Operacional",
+      "aiControlTower": "Torre de Controle IA",
+      "tabs": {
+        "hub": "Hub de IA",
+        "agents": "Agentes",
+        "chatVoice": "Chat & Voz",
+        "swarm": "Operações Swarm",
+        "workflows": "Workflows",
+        "modules": "11 Módulos",
+        "intelligence": "Inteligência",
+        "analytics": "Analytics",
+        "predictive": "🔮 Preditivo",
+        "allModules": "🧪 Laboratório"
+      },
+      "actions": {
+        "deployAgent": "Implantar Agente",
+        "configure": "Configurar",
+        "agentHealth": "Saúde dos Agentes"
+      },
+      "searchPlaceholder": "Buscar agentes, workflows, logs..."
+    },
+    "tracking": {
+      "title": "Hub de Rastreamento",
+      "subtitle": "Posições AIS, telemetria, SATCOM, previsão meteorológica e alertas de geofencing",
+      "activeAlerts": "{{count}} alertas ativos",
+      "tracked": "{{count}} rastreadas",
+      "aisActive": "AIS Ativo",
+      "fleetTrackingCommand": "Comando de Rastreamento de Frota",
+      "tabs": {
+        "overview": "Visão Geral",
+        "liveMap": "Mapa ao Vivo",
+        "fleetTracking": "Rastreamento de Frota",
+        "satcom": "SATCOM",
+        "weather": "Clima & Preditivo",
+        "geofencing": "Geofencing & Alertas",
+        "aiHub": "🧠 IA Hub"
+      },
+      "actions": {
+        "refreshPositions": "Atualizar Posições",
+        "liveMap": "Mapa ao Vivo",
+        "newAlert": "Novo Alerta",
+        "filters": "Filtros"
+      },
+      "liveFleetMap": "Mapa da Frota ao Vivo",
+      "searchPlaceholder": "Buscar embarcações, rotas, locais..."
+    },
+    "compliance": {
+      "title": "Hub de Compliance",
+      "subtitle": "12 auditorias marítimas (IMO, OCIMF, ILO, ANP) + 10 agentes IA de auditoria",
+      "audits": "{{count}} auditorias",
+      "openNCs": "{{count}} NCs abertas",
+      "standards": "12/12 padrões",
+      "tabs": {
+        "hub": "Hub de Compliance",
+        "audits": "12 Auditorias",
+        "auditWorkflow": "Fluxo de Auditoria",
+        "scorecard": "Scorecard & KPIs",
+        "auditAgents": "10 Agentes IA",
+        "certificates": "Certificados",
+        "riskSafety": "Risco & Segurança",
+        "regulations": "Regulamentos & Segurança",
+        "aiHub": "🧠 IA Compliance"
+      },
+      "complianceCenter": "Centro de Compliance"
+    },
+    "workbench": {
+      "title": "Área de Trabalho",
+      "subtitle": "Documentos, tripulação, finanças, viagens e configurações do sistema",
+      "activeCrew": "{{count}} tripulantes ativos",
+      "vessels": "{{count}} embarcações",
+      "tabs": {
+        "docs": "Documentos",
+        "people": "Pessoas",
+        "finance": "Finanças",
+        "travel": "Viagens",
+        "procurement": "Compras & ESG",
+        "aiHub": "🧠 IA Hub",
+        "system": "Sistema"
+      },
+      "documentCenter": "Centro de Documentos",
+      "docCenterSubtitle": "Gerencie documentos, templates e base de conhecimento",
+      "versionControl": "Controle de Versão de Documentos",
+      "versionControlSubtitle": "Versionamento avançado, metadados e assinaturas digitais",
+      "peopleHub": "Hub de Pessoas",
+      "actions": {
+        "uploadDocument": "Enviar Documento",
+        "newTemplate": "Novo Template",
+        "uploadVersion": "Enviar Nova Versão",
+        "addCrew": "Adicionar Tripulante",
+        "newExpense": "Nova Despesa",
+        "newBooking": "Nova Reserva"
+      },
+      "workflow": {
+        "planning": "Planejamento",
+        "assignment": "Designação",
+        "onboard": "A Bordo",
+        "rotation": "Rotação",
+        "offboard": "Desembarque"
+      },
+      "searchDocs": "Buscar documentos, templates...",
+      "searchPeople": "Buscar tripulação, certificações..."
+    }
   }
 }

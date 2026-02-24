@@ -10,6 +10,7 @@
  */
 
 import React, { Suspense, lazy, useMemo, useCallback, useState } from 'react';
+import { useTranslation } from 'react-i18next';
 import { useSearchParams } from 'react-router-dom';
 import { Tabs, TabsContent, TabsList, TabsTrigger } from '@/components/ui/tabs';
 import { Dialog, DialogContent, DialogHeader, DialogTitle } from '@/components/ui/dialog';
@@ -102,17 +103,20 @@ const LoadingSkeleton = () => (
  * 8. regulations   → Regulations & Security (Regulations + Security + SIRE 2.0 subtabs)
  * 9. ai-hub        → IA Compliance
  */
-const tabConfig: { id: string; label: string; icon: LucideIcon }[] = [
-  { id: 'hub', label: 'Compliance Hub', icon: Shield },
-  { id: 'audits', label: '12 Auditorias', icon: ClipboardCheck },
-  { id: 'audit-workflow', label: 'Audit Workflow', icon: ClipboardList },
-  { id: 'scorecard', label: 'Scorecard & KPIs', icon: BarChart3 },
-  { id: 'audit-agents', label: '10 AI Agents', icon: Bot },
-  { id: 'certificates', label: 'Certificates', icon: Award },
-  { id: 'risk-safety', label: 'Risk & Safety', icon: AlertTriangle },
-  { id: 'regulations', label: 'Regulations & Security', icon: FileText },
-  { id: 'ai-hub', label: '🧠 IA Compliance', icon: Brain },
-];
+const useComplianceTabConfig = () => {
+  const { t } = useTranslation();
+  return useMemo((): { id: string; label: string; icon: LucideIcon }[] => [
+    { id: 'hub', label: t('megaHubs.compliance.tabs.hub'), icon: Shield },
+    { id: 'audits', label: t('megaHubs.compliance.tabs.audits'), icon: ClipboardCheck },
+    { id: 'audit-workflow', label: t('megaHubs.compliance.tabs.auditWorkflow'), icon: ClipboardList },
+    { id: 'scorecard', label: t('megaHubs.compliance.tabs.scorecard'), icon: BarChart3 },
+    { id: 'audit-agents', label: t('megaHubs.compliance.tabs.auditAgents'), icon: Bot },
+    { id: 'certificates', label: t('megaHubs.compliance.tabs.certificates'), icon: Award },
+    { id: 'risk-safety', label: t('megaHubs.compliance.tabs.riskSafety'), icon: AlertTriangle },
+    { id: 'regulations', label: t('megaHubs.compliance.tabs.regulations'), icon: FileText },
+    { id: 'ai-hub', label: t('megaHubs.compliance.tabs.aiHub'), icon: Brain },
+  ], [t]);
+};
 
 const TAB_MIGRATION: Record<string, string> = {
   'risk-matrix': 'risk-safety',
@@ -146,6 +150,8 @@ const auditStandards: Record<string, React.LazyExoticComponent<React.ComponentTy
 };
 
 export default function ComplianceMegaHub() {
+  const { t } = useTranslation();
+  const tabConfig = useComplianceTabConfig();
   const [searchParams, setSearchParams] = useSearchParams();
   const rawTab = searchParams.get('tab') || 'hub';
   const activeTab = TAB_MIGRATION[rawTab] || rawTab;
@@ -243,14 +249,14 @@ export default function ComplianceMegaHub() {
             <div className="flex items-center gap-3">
               <div className="p-2 bg-destructive/10 rounded-lg"><Shield className="h-6 w-6 text-destructive" /></div>
               <div>
-                <h1 className="text-2xl font-bold">Hub de Compliance</h1>
-                <p className="text-sm text-muted-foreground">12 auditorias marítimas (IMO, OCIMF, ILO, ANP) + 10 agentes IA de auditoria</p>
+                <h1 className="text-2xl font-bold">{t('megaHubs.compliance.title')}</h1>
+                <p className="text-sm text-muted-foreground">{t('megaHubs.compliance.subtitle')}</p>
               </div>
             </div>
             <div className="flex gap-2">
-              <Badge variant="outline" className="bg-primary/10 text-primary border-primary/20">{complianceMetrics.totalAudits} auditorias</Badge>
-              {complianceMetrics.openNCs > 0 && <Badge variant="outline" className="bg-destructive/10 text-destructive border-destructive/20">{complianceMetrics.openNCs} NCs abertas</Badge>}
-              <Badge variant="outline" className="bg-success/10 text-success border-success/20">12/12 standards</Badge>
+              <Badge variant="outline" className="bg-primary/10 text-primary border-primary/20">{t('megaHubs.compliance.audits', { count: complianceMetrics.totalAudits })}</Badge>
+              {complianceMetrics.openNCs > 0 && <Badge variant="outline" className="bg-destructive/10 text-destructive border-destructive/20">{t('megaHubs.compliance.openNCs', { count: complianceMetrics.openNCs })}</Badge>}
+              <Badge variant="outline" className="bg-success/10 text-success border-success/20">{t('megaHubs.compliance.standards')}</Badge>
             </div>
           </div>
         </div>
