@@ -816,6 +816,40 @@ const Auth: React.FC = () => {
                           {showPassword ? <EyeOff className="h-4 w-4" /> : <Eye className="h-4 w-4" />}
                         </Button>
                       </div>
+                      {/* Password Strength Indicator */}
+                      {signUpForm.watch("password")?.length > 0 && (() => {
+                        const pwd = signUpForm.watch("password") || "";
+                        const checks = [
+                          pwd.length >= 6,
+                          /[A-Z]/.test(pwd),
+                          /[0-9]/.test(pwd),
+                          /[^A-Za-z0-9]/.test(pwd),
+                        ];
+                        const strength = checks.filter(Boolean).length;
+                        const labels = ["Muito fraca", "Fraca", "Razoável", "Forte"];
+                        const colors = [
+                          "bg-red-500", "bg-amber-500", "bg-blue-500", "bg-emerald-500"
+                        ];
+                        return (
+                          <div className="space-y-1.5">
+                            <div className="flex gap-1">
+                              {[0, 1, 2, 3].map(i => (
+                                <motion.div
+                                  key={i}
+                                  className={`h-1 flex-1 rounded-full transition-colors ${i < strength ? colors[strength - 1] : "bg-white/10"}`}
+                                  initial={{ scaleX: 0 }}
+                                  animate={{ scaleX: 1 }}
+                                  transition={{ delay: i * 0.05 }}
+                                />
+                              ))}
+                            </div>
+                            <p className={`text-[10px] ${strength <= 1 ? "text-red-400" : strength === 2 ? "text-amber-400" : strength === 3 ? "text-blue-400" : "text-emerald-400"}`}>
+                              {labels[strength - 1] || "Muito fraca"}
+                              {strength < 4 && <span className="text-white/30"> — Use maiúsculas, números e símbolos</span>}
+                            </p>
+                          </div>
+                        );
+                      })()}
                       {signUpForm.formState.errors.password && (
                         <p className="text-sm text-destructive">{signUpForm.formState.errors.password.message}</p>
                       )}
