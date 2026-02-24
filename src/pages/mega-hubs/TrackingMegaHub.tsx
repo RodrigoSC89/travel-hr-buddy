@@ -8,6 +8,7 @@
  */
 
 import React, { Suspense, lazy, useMemo, useCallback, useState } from 'react';
+import { useTranslation } from 'react-i18next';
 import { useSearchParams, useNavigate } from 'react-router-dom';
 import { Tabs, TabsContent, TabsList, TabsTrigger } from '@/components/ui/tabs';
 import { Badge } from '@/components/ui/badge';
@@ -63,15 +64,18 @@ const LoadingSkeleton = () => (
  * 6. geofencing     → Geofencing & Alerts (Geofencing + Alerts subtabs)
  * 7. ai-copilot     → IA Hub
  */
-const tabConfig = [
-  { id: 'overview', label: 'Overview', icon: Satellite },
-  { id: 'live-map', label: 'Live Map', icon: Map },
-  { id: 'fleet-tracking', label: 'Fleet Tracking', icon: Ship },
-  { id: 'satcom', label: 'SATCOM', icon: Radio },
-  { id: 'weather', label: 'Weather & Predictive', icon: Cloud },
-  { id: 'geofencing', label: 'Geofencing & Alerts', icon: MapPin },
-  { id: 'ai-copilot', label: '🧠 IA Hub', icon: Brain },
-];
+const useTrackingTabConfig = () => {
+  const { t } = useTranslation();
+  return useMemo(() => [
+    { id: 'overview', label: t('megaHubs.tracking.tabs.overview'), icon: Satellite },
+    { id: 'live-map', label: t('megaHubs.tracking.tabs.liveMap'), icon: Map },
+    { id: 'fleet-tracking', label: t('megaHubs.tracking.tabs.fleetTracking'), icon: Ship },
+    { id: 'satcom', label: t('megaHubs.tracking.tabs.satcom'), icon: Radio },
+    { id: 'weather', label: t('megaHubs.tracking.tabs.weather'), icon: Cloud },
+    { id: 'geofencing', label: t('megaHubs.tracking.tabs.geofencing'), icon: MapPin },
+    { id: 'ai-copilot', label: t('megaHubs.tracking.tabs.aiHub'), icon: Brain },
+  ], [t]);
+};
 
 const TAB_MIGRATION: Record<string, string> = {
   'realtime': 'fleet-tracking',
@@ -81,6 +85,8 @@ const TAB_MIGRATION: Record<string, string> = {
 };
 
 export default function TrackingMegaHub() {
+  const { t } = useTranslation();
+  const tabConfig = useTrackingTabConfig();
   const navigate = useNavigate();
   const [searchParams, setSearchParams] = useSearchParams();
   const rawTab = searchParams.get('tab') || 'overview';
@@ -143,12 +149,12 @@ export default function TrackingMegaHub() {
           <div className="flex items-center justify-between">
             <div className="flex items-center gap-3">
               <div className="p-2 bg-hub-tracking/10 rounded-lg"><Satellite className="h-6 w-6 text-hub-tracking" /></div>
-              <div><h1 className="text-2xl font-bold">Hub de Rastreamento</h1><p className="text-sm text-muted-foreground">Posições AIS, telemetria, SATCOM, previsão meteorológica e alertas de geofencing</p></div>
+              <div><h1 className="text-2xl font-bold">{t('megaHubs.tracking.title')}</h1><p className="text-sm text-muted-foreground">{t('megaHubs.tracking.subtitle')}</p></div>
             </div>
             <div className="flex gap-2">
-              {trackingMetrics.openAlerts > 0 && <Badge variant="outline" className="bg-destructive/10 text-destructive border-destructive/20">{trackingMetrics.openAlerts} alertas ativos</Badge>}
-              <Badge variant="outline" className="bg-success/10 text-success border-success/20">{trackingMetrics.totalVessels} rastreadas</Badge>
-              <Badge variant="outline" className="bg-hub-tracking/10 text-hub-tracking border-hub-tracking/20">AIS Ativo</Badge>
+              {trackingMetrics.openAlerts > 0 && <Badge variant="outline" className="bg-destructive/10 text-destructive border-destructive/20">{t('megaHubs.tracking.activeAlerts', { count: trackingMetrics.openAlerts })}</Badge>}
+              <Badge variant="outline" className="bg-success/10 text-success border-success/20">{t('megaHubs.tracking.tracked', { count: trackingMetrics.totalVessels })}</Badge>
+              <Badge variant="outline" className="bg-hub-tracking/10 text-hub-tracking border-hub-tracking/20">{t('megaHubs.tracking.aisActive')}</Badge>
             </div>
           </div>
         </div>
@@ -170,21 +176,21 @@ export default function TrackingMegaHub() {
             {/* Overview */}
             <TabsContent value="overview" className="mt-0 space-y-6">
               <div className="flex items-center gap-3 text-xs text-muted-foreground px-1">
-                <div className="flex items-center gap-1.5"><Wifi className="h-3.5 w-3.5 text-success" /><span>Online</span></div>
-                <span>•</span><span>{trackingMetrics.totalVessels} embarcações rastreadas</span>
-                <span>•</span><span>{trackingMetrics.activeVessels} ativas</span>
-                <span>•</span><span>{trackingMetrics.openAlerts} alertas abertos</span>
-                <span>•</span><span>Atualizado: {new Date().toLocaleTimeString('pt-BR', { hour: '2-digit', minute: '2-digit' })}</span>
+                <div className="flex items-center gap-1.5"><Wifi className="h-3.5 w-3.5 text-success" /><span>{t('common.online')}</span></div>
+                <span>•</span><span>{t('megaHubs.tracking.tracked', { count: trackingMetrics.totalVessels })}</span>
+                <span>•</span><span>{trackingMetrics.activeVessels} {t('common.active').toLowerCase()}</span>
+                <span>•</span><span>{trackingMetrics.openAlerts} {t('megaHubs.tracking.activeAlerts', { count: trackingMetrics.openAlerts })}</span>
+                <span>•</span><span>{t('megaHubs.command.updated')}: {new Date().toLocaleTimeString('pt-BR', { hour: '2-digit', minute: '2-digit' })}</span>
               </div>
-              <EnhancedActionBar title="Fleet Tracking Command" subtitle={`${trackingMetrics.activeVessels} embarcações ativas | ${trackingMetrics.openAlerts} alertas pendentes`}
+              <EnhancedActionBar title={t('megaHubs.tracking.fleetTrackingCommand')} subtitle={`${trackingMetrics.activeVessels} ${t('common.active').toLowerCase()} | ${trackingMetrics.openAlerts} ${t('common.pending').toLowerCase()}`}
                 actions={[
-                  { id: 'refresh-positions', label: 'Refresh Positions', icon: <RefreshCw className="h-4 w-4" />, onClick: handleRefresh, variant: 'default', tooltip: 'Recarregar posições AIS e alertas' },
-                  { id: 'live-map', label: 'Live Map', icon: <Map className="h-4 w-4" />, onClick: () => setSearchParams({ tab: 'live-map' }), variant: 'outline', tooltip: 'Abrir mapa interativo ao vivo' },
-                  { id: 'new-alert', label: 'Novo Alerta', icon: <Bell className="h-4 w-4" />, onClick: handleCreateAlert, variant: 'outline', tooltip: 'Criar alerta manual de geofencing' }
+                  { id: 'refresh-positions', label: t('megaHubs.tracking.actions.refreshPositions'), icon: <RefreshCw className="h-4 w-4" />, onClick: handleRefresh, variant: 'default', tooltip: t('megaHubs.tracking.actions.refreshPositions') },
+                  { id: 'live-map', label: t('megaHubs.tracking.actions.liveMap'), icon: <Map className="h-4 w-4" />, onClick: () => setSearchParams({ tab: 'live-map' }), variant: 'outline', tooltip: t('megaHubs.tracking.actions.liveMap') },
+                  { id: 'new-alert', label: t('megaHubs.tracking.actions.newAlert'), icon: <Bell className="h-4 w-4" />, onClick: handleCreateAlert, variant: 'outline', tooltip: t('megaHubs.tracking.actions.newAlert') }
                 ]}
                 onRefresh={handleRefresh} isRefreshing={vesselsLoading}
-                secondaryActions={[{ id: 'export-positions', label: 'Exportar Posições (CSV)', icon: <Download className="h-4 w-4" />, onClick: handleExportPositions }]}
-                showSearch searchPlaceholder="Search vessels, routes, locations..."
+                secondaryActions={[{ id: 'export-positions', label: t('common.export') + ' (CSV)', icon: <Download className="h-4 w-4" />, onClick: handleExportPositions }]}
+                showSearch searchPlaceholder={t('megaHubs.tracking.searchPlaceholder')}
               />
               {!vesselsLoading && trackingMetrics.totalVessels === 0 && <HubEmptyState hub="tracking" onPrimaryAction={() => navigate('/ops')} />}
               <Suspense fallback={<Skeleton className="h-24" />}><TrackingKPISummary /></Suspense>
@@ -207,10 +213,10 @@ export default function TrackingMegaHub() {
 
             {/* Live Map */}
             <TabsContent value="live-map" className="mt-0 space-y-6">
-              <EnhancedActionBar title="Live Fleet Map" subtitle={`${trackingMetrics.activeVessels} embarcações ativas no mapa`}
+              <EnhancedActionBar title={t('megaHubs.tracking.liveFleetMap')} subtitle={`${trackingMetrics.activeVessels} ${t('common.active').toLowerCase()}`}
                 actions={[
-                  { id: 'refresh-map', label: 'Refresh', icon: <RefreshCw className="h-4 w-4" />, onClick: handleRefresh, variant: 'default', tooltip: 'Recarregar mapa' },
-                  { id: 'filter', label: 'Filters', icon: <Filter className="h-4 w-4" />, onClick: () => {}, variant: 'outline', tooltip: 'Filtrar embarcações' }
+                  { id: 'refresh-map', label: t('common.refresh'), icon: <RefreshCw className="h-4 w-4" />, onClick: handleRefresh, variant: 'default', tooltip: t('common.refresh') },
+                  { id: 'filter', label: t('megaHubs.tracking.actions.filters'), icon: <Filter className="h-4 w-4" />, onClick: () => {}, variant: 'outline', tooltip: t('megaHubs.tracking.actions.filters') }
                 ]}
                 onRefresh={handleRefresh} isRefreshing={vesselsLoading}
                 secondaryActions={[{ id: 'export-map-data', label: 'Exportar Dados do Mapa', icon: <Download className="h-4 w-4" />, onClick: handleExportPositions }]}

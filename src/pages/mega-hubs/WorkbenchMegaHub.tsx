@@ -8,6 +8,7 @@
  */
 
 import React, { Suspense, lazy, useMemo, useCallback, useState } from 'react';
+import { useTranslation } from 'react-i18next';
 import { useSearchParams, useLocation, useNavigate } from 'react-router-dom';
 import { Tabs, TabsContent, TabsList, TabsTrigger } from '@/components/ui/tabs';
 import { Badge } from '@/components/ui/badge';
@@ -79,15 +80,18 @@ const LoadingSkeleton = () => (
  * 6. ai-hub     → IA Hub (crew AI + finance AI + docs AI subtabs)
  * 7. system     → System (settings)
  */
-const sectionConfig = [
-  { id: 'docs', label: 'Documents', icon: FileText, color: 'blue' },
-  { id: 'people', label: 'People', icon: Users, color: 'green' },
-  { id: 'finance', label: 'Finance', icon: DollarSign, color: 'yellow' },
-  { id: 'travel', label: 'Travel', icon: Plane, color: 'purple' },
-  { id: 'procurement', label: 'Procurement & ESG', icon: ShieldCheck, color: 'orange' },
-  { id: 'ai-hub', label: '🧠 IA Hub', icon: Brain, color: 'indigo' },
-  { id: 'system', label: 'System', icon: Settings, color: 'gray' },
-];
+const useWorkbenchSectionConfig = () => {
+  const { t } = useTranslation();
+  return useMemo(() => [
+    { id: 'docs', label: t('megaHubs.workbench.tabs.docs'), icon: FileText, color: 'blue' },
+    { id: 'people', label: t('megaHubs.workbench.tabs.people'), icon: Users, color: 'green' },
+    { id: 'finance', label: t('megaHubs.workbench.tabs.finance'), icon: DollarSign, color: 'yellow' },
+    { id: 'travel', label: t('megaHubs.workbench.tabs.travel'), icon: Plane, color: 'purple' },
+    { id: 'procurement', label: t('megaHubs.workbench.tabs.procurement'), icon: ShieldCheck, color: 'orange' },
+    { id: 'ai-hub', label: t('megaHubs.workbench.tabs.aiHub'), icon: Brain, color: 'indigo' },
+    { id: 'system', label: t('megaHubs.workbench.tabs.system'), icon: Settings, color: 'gray' },
+  ], [t]);
+};
 
 const SECTION_MIGRATION: Record<string, string> = {
   'docs-control': 'docs',
@@ -105,6 +109,8 @@ const SECTION_MIGRATION: Record<string, string> = {
 };
 
 export default function WorkbenchMegaHub() {
+  const { t } = useTranslation();
+  const sectionConfig = useWorkbenchSectionConfig();
   const [searchParams, setSearchParams] = useSearchParams();
   const location = useLocation();
   const navigate = useNavigate();
@@ -192,11 +198,11 @@ export default function WorkbenchMegaHub() {
           <div className="flex items-center justify-between">
             <div className="flex items-center gap-3">
               <div className="p-2 bg-hub-workbench/10 rounded-lg"><Briefcase className="h-6 w-6 text-hub-workbench" /></div>
-              <div><h1 className="text-2xl font-bold">Área de Trabalho</h1><p className="text-sm text-muted-foreground">Documentos, tripulação, finanças, viagens e configurações do sistema</p></div>
+              <div><h1 className="text-2xl font-bold">{t('megaHubs.workbench.title')}</h1><p className="text-sm text-muted-foreground">{t('megaHubs.workbench.subtitle')}</p></div>
             </div>
             <div className="flex gap-2">
-              <Badge variant="outline" className="bg-success/10 text-success border-success/20">{workbenchMetrics.activeCrew} tripulantes ativos</Badge>
-              <Badge variant="outline" className="bg-hub-workbench/10 text-hub-workbench border-hub-workbench/20">{workbenchMetrics.totalVessels} embarcações</Badge>
+              <Badge variant="outline" className="bg-success/10 text-success border-success/20">{t('megaHubs.workbench.activeCrew', { count: workbenchMetrics.activeCrew })}</Badge>
+              <Badge variant="outline" className="bg-hub-workbench/10 text-hub-workbench border-hub-workbench/20">{t('megaHubs.workbench.vessels', { count: workbenchMetrics.totalVessels })}</Badge>
             </div>
           </div>
         </div>

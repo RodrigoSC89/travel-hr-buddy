@@ -12,6 +12,7 @@
  */
 
 import React, { Suspense, lazy, useMemo, useCallback, useState } from 'react';
+import { useTranslation } from 'react-i18next';
 import { useSearchParams, useNavigate } from 'react-router-dom';
 import { Tabs, TabsContent, TabsList, TabsTrigger } from '@/components/ui/tabs';
 import { Badge } from '@/components/ui/badge';
@@ -91,18 +92,21 @@ const LoadingSkeleton = () => (
  * 7. intelligence → Intelligence (RAG + OCR)
  * 8. analytics   → Analytics (analytics + agent-analytics + observability)
  */
-const tabConfig = [
-  { id: 'hub', label: 'AI Hub', icon: Brain },
-  { id: 'agents', label: 'Agents', icon: Bot },
-  { id: 'chat-voice', label: 'Chat & Voice', icon: MessageSquare },
-  { id: 'swarm', label: 'Swarm Ops', icon: Database },
-  { id: 'workflows', label: 'Workflows', icon: Zap },
-  { id: 'modules', label: '11 Modules', icon: Cpu },
-  { id: 'intelligence', label: 'Intelligence', icon: FileText },
-  { id: 'analytics', label: 'Analytics', icon: BarChart3 },
-  { id: 'predictive', label: '🔮 Predictive', icon: Activity },
-  { id: 'all-modules', label: '🧪 Laboratório', icon: Cpu },
-];
+const useAITabConfig = () => {
+  const { t } = useTranslation();
+  return useMemo(() => [
+    { id: 'hub', label: t('megaHubs.ai.tabs.hub'), icon: Brain },
+    { id: 'agents', label: t('megaHubs.ai.tabs.agents'), icon: Bot },
+    { id: 'chat-voice', label: t('megaHubs.ai.tabs.chatVoice'), icon: MessageSquare },
+    { id: 'swarm', label: t('megaHubs.ai.tabs.swarm'), icon: Database },
+    { id: 'workflows', label: t('megaHubs.ai.tabs.workflows'), icon: Zap },
+    { id: 'modules', label: t('megaHubs.ai.tabs.modules'), icon: Cpu },
+    { id: 'intelligence', label: t('megaHubs.ai.tabs.intelligence'), icon: FileText },
+    { id: 'analytics', label: t('megaHubs.ai.tabs.analytics'), icon: BarChart3 },
+    { id: 'predictive', label: t('megaHubs.ai.tabs.predictive'), icon: Activity },
+    { id: 'all-modules', label: t('megaHubs.ai.tabs.allModules'), icon: Cpu },
+  ], [t]);
+};
 
 // Map old tab IDs to new grouped IDs for backward compatibility
 const TAB_MIGRATION: Record<string, string> = {
@@ -119,6 +123,8 @@ const TAB_MIGRATION: Record<string, string> = {
 };
 
 export default function AIMegaHub() {
+  const { t } = useTranslation();
+  const tabConfig = useAITabConfig();
   const [searchParams, setSearchParams] = useSearchParams();
   const rawTab = searchParams.get('tab') || 'hub';
   // Migrate old tab IDs to new ones
@@ -255,18 +261,18 @@ export default function AIMegaHub() {
                 <Brain className="h-6 w-6 text-hub-ai" />
               </div>
               <div>
-                <h1 className="text-2xl font-bold">Hub de Inteligência Artificial</h1>
+                <h1 className="text-2xl font-bold">{t('megaHubs.ai.title')}</h1>
                 <p className="text-sm text-muted-foreground">
-                  Chat IA, agentes autônomos, workflows, voz, OCR e analytics — {agentMetrics.totalAgents} agentes disponíveis
+                  {t('megaHubs.ai.subtitle', { count: agentMetrics.totalAgents })}
                 </p>
               </div>
             </div>
             <div className="flex gap-2">
               <Badge variant="outline" className="bg-success/10 text-success border-success/20">
-                {agentMetrics.activeAgents} agentes ativos
+                {t('megaHubs.ai.activeAgents', { count: agentMetrics.activeAgents })}
               </Badge>
               <Badge variant="outline" className="bg-hub-ai/10 text-hub-ai border-hub-ai/20">
-                IA Operacional
+                {t('megaHubs.ai.aiOperational')}
               </Badge>
             </div>
           </div>
@@ -301,7 +307,7 @@ export default function AIMegaHub() {
               <div className="flex items-center gap-3 text-xs text-muted-foreground px-1">
                 <div className="flex items-center gap-1.5">
                   <Wifi className="h-3.5 w-3.5 text-success" />
-                  <span>Online</span>
+                  <span>{t('common.online')}</span>
                 </div>
                 <span>•</span>
                 <span>{agentMetrics.totalAgents} agentes registrados</span>
@@ -316,12 +322,12 @@ export default function AIMegaHub() {
               </div>
 
               <EnhancedActionBar
-                title="AI Control Tower"
+                title={t('megaHubs.ai.aiControlTower')}
                 subtitle={`${agentMetrics.activeAgents} agentes ativos | ${agentMetrics.totalAgents} total registrados`}
                 actions={[
                   {
                     id: 'deploy-agent',
-                    label: 'Deploy Agent',
+                    label: t('megaHubs.ai.actions.deployAgent'),
                     icon: <Bot className="h-4 w-4" />,
                     onClick: handleDeployAgent,
                     variant: 'default',
@@ -329,7 +335,7 @@ export default function AIMegaHub() {
                   },
                   {
                     id: 'configure',
-                    label: 'Configure',
+                    label: t('megaHubs.ai.actions.configure'),
                     icon: <Settings className="h-4 w-4" />,
                     onClick: handleConfigure,
                     variant: 'outline',
@@ -337,7 +343,7 @@ export default function AIMegaHub() {
                   },
                   {
                     id: 'health',
-                    label: 'Agent Health',
+                    label: t('megaHubs.ai.actions.agentHealth'),
                     icon: <Activity className="h-4 w-4" />,
                     onClick: () => setSearchParams({ tab: 'agents' }),
                     variant: 'outline',
@@ -355,7 +361,7 @@ export default function AIMegaHub() {
                   }
                 ]}
                 showSearch
-                searchPlaceholder="Search agents, workflows, logs..."
+                searchPlaceholder={t('megaHubs.ai.searchPlaceholder')}
               />
 
               {!agentsLoading && agentMetrics.totalAgents === 0 && (

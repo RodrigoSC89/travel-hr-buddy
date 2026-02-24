@@ -10,6 +10,7 @@
  */
 
 import React, { Suspense, lazy, useMemo, useCallback, useState } from 'react';
+import { useTranslation } from 'react-i18next';
 import { useNavigate } from 'react-router-dom';
 import { useSearchParams } from 'react-router-dom';
 import { Tabs, TabsContent, TabsList, TabsTrigger } from '@/components/ui/tabs';
@@ -102,16 +103,19 @@ const LoadingSkeleton = () => (
  * 7. ai-copilot    → IA Copiloto (unchanged)
  * 8. my-dashboard  → Meu Dashboard (unchanged)
  */
-const tabConfig = [
-  { id: 'overview', label: 'Overview', icon: Compass },
-  { id: 'operations', label: 'Operations', icon: Activity },
-  { id: 'executive', label: 'Executive', icon: BarChart3 },
-  { id: 'digital-twin', label: '🚢 Digital Twin', icon: Ship },
-  { id: 'noc-soc', label: 'NOC & SOC', icon: Eye },
-  { id: 'comms-alerts', label: 'Comms & Alerts', icon: Radio },
-  { id: 'ai-copilot', label: '🧠 IA Copiloto', icon: Brain },
-  { id: 'my-dashboard', label: '🎯 Meu Dashboard', icon: Activity },
-];
+const useCommandTabConfig = () => {
+  const { t } = useTranslation();
+  return useMemo(() => [
+    { id: 'overview', label: t('megaHubs.command.tabs.overview'), icon: Compass },
+    { id: 'operations', label: t('megaHubs.command.tabs.operations'), icon: Activity },
+    { id: 'executive', label: t('megaHubs.command.tabs.executive'), icon: BarChart3 },
+    { id: 'digital-twin', label: t('megaHubs.command.tabs.digitalTwin'), icon: Ship },
+    { id: 'noc-soc', label: t('megaHubs.command.tabs.nocSoc'), icon: Eye },
+    { id: 'comms-alerts', label: t('megaHubs.command.tabs.commsAlerts'), icon: Radio },
+    { id: 'ai-copilot', label: t('megaHubs.command.tabs.aiCopilot'), icon: Brain },
+    { id: 'my-dashboard', label: t('megaHubs.command.tabs.myDashboard'), icon: Activity },
+  ], [t]);
+};
 
 // Backward compatibility: map old tab IDs to new grouped IDs
 const TAB_MIGRATION: Record<string, string> = {
@@ -124,6 +128,8 @@ const TAB_MIGRATION: Record<string, string> = {
 };
 
 export default function CommandMegaHub() {
+  const { t } = useTranslation();
+  const tabConfig = useCommandTabConfig();
   const [searchParams, setSearchParams] = useSearchParams();
   const activeModuleId = searchParams.get('module');
   const navigate = useNavigate();
@@ -181,8 +187,8 @@ export default function CommandMegaHub() {
     if (events.length === 0) {
       events.push({
         id: 'no-events',
-        title: 'Nenhum evento recente',
-        description: 'Cadastre embarcações e viagens para ver atividades aqui.',
+        title: t('megaHubs.command.noRecentEvents'),
+        description: t('megaHubs.command.registerVesselsHint'),
         timestamp: new Date().toISOString(),
         type: 'info' as const,
         metadata: {}
@@ -198,11 +204,11 @@ export default function CommandMegaHub() {
     const hasVoyages = metrics.activeVoyages > 0 || metrics.plannedVoyages > 0;
     
     return [
-      { id: 'planning', label: 'Fleet Setup', status: hasVessels ? 'completed' as const : 'current' as const },
-      { id: 'dispatch', label: 'Voyage Planning', status: hasVoyages ? 'completed' as const : hasVessels ? 'current' as const : 'pending' as const },
-      { id: 'transit', label: 'In Transit', status: metrics.activeVoyages > 0 ? 'current' as const : hasVoyages ? 'pending' as const : 'pending' as const },
-      { id: 'arrival', label: 'Arrival', status: metrics.completedVoyages > 0 ? 'completed' as const : 'pending' as const },
-      { id: 'completed', label: 'Completed', status: metrics.completedVoyages > 2 ? 'completed' as const : 'pending' as const }
+      { id: 'planning', label: t('megaHubs.command.workflow.fleetSetup'), status: hasVessels ? 'completed' as const : 'current' as const },
+      { id: 'dispatch', label: t('megaHubs.command.workflow.voyagePlanning'), status: hasVoyages ? 'completed' as const : hasVessels ? 'current' as const : 'pending' as const },
+      { id: 'transit', label: t('megaHubs.command.workflow.inTransit'), status: metrics.activeVoyages > 0 ? 'current' as const : hasVoyages ? 'pending' as const : 'pending' as const },
+      { id: 'arrival', label: t('megaHubs.command.workflow.arrival'), status: metrics.completedVoyages > 0 ? 'completed' as const : 'pending' as const },
+      { id: 'completed', label: t('megaHubs.command.workflow.completed'), status: metrics.completedVoyages > 2 ? 'completed' as const : 'pending' as const }
     ];
   }, [metrics]);
 
@@ -227,18 +233,18 @@ export default function CommandMegaHub() {
                 <Compass className="h-6 w-6 text-hub-command" />
               </div>
               <div>
-                <h1 className="text-2xl font-bold">Central de Comando</h1>
+                <h1 className="text-2xl font-bold">{t('megaHubs.command.title')}</h1>
                 <p className="text-sm text-muted-foreground">
-                  Visão geral de toda a operação marítima — embarcações, viagens, alertas e KPIs em tempo real
+                  {t('megaHubs.command.subtitle')}
                 </p>
               </div>
             </div>
             <div className="flex items-center gap-2">
               <Badge variant="outline" className="bg-primary/10 text-primary border-primary/20">
-                {metrics.totalVessels} embarcações
+                {t('megaHubs.command.vessels', { count: metrics.totalVessels })}
               </Badge>
               <Badge variant="outline" className="bg-success/10 text-success border-success/20">
-                Operacional
+                {t('megaHubs.command.operational')}
               </Badge>
             </div>
           </div>
@@ -273,25 +279,25 @@ export default function CommandMegaHub() {
               <div className="flex items-center gap-3 text-xs text-muted-foreground px-1">
                 <div className="flex items-center gap-1.5">
                   <Wifi className="h-3.5 w-3.5 text-success" />
-                  <span>Online</span>
+                   <span>{t('common.online')}</span>
                 </div>
                 <span>•</span>
-                <span>{metrics.totalVessels} embarcações</span>
+                <span>{t('megaHubs.command.vessels', { count: metrics.totalVessels })}</span>
                 <span>•</span>
-                <span>{metrics.activeVoyages} viagens ativas</span>
+                <span>{t('megaHubs.command.activeVoyages', { count: metrics.activeVoyages })}</span>
                 <span>•</span>
-                <span>Atualizado: {new Date().toLocaleTimeString('pt-BR', { hour: '2-digit', minute: '2-digit' })}</span>
+                <span>{t('megaHubs.command.updated')}: {new Date().toLocaleTimeString('pt-BR', { hour: '2-digit', minute: '2-digit' })}</span>
               </div>
 
               {/* Quick Action Cards */}
               <div className="grid grid-cols-2 sm:grid-cols-3 lg:grid-cols-6 gap-3">
                 {[
-                  { label: 'Nova Viagem', icon: Plus, color: 'text-primary', bg: 'bg-primary/10', onClick: () => navigate('/ops?tab=voyage') },
-                  { label: 'Tripulação', icon: Users, color: 'text-info', bg: 'bg-info/10', onClick: () => navigate('/workbench?section=people') },
-                  { label: 'Manutenção', icon: Wrench, color: 'text-warning', bg: 'bg-warning/10', onClick: () => navigate('/maintenance') },
-                  { label: 'Documentos', icon: FileText, color: 'text-success', bg: 'bg-success/10', onClick: () => navigate('/workbench?section=docs') },
-                  { label: 'Compliance', icon: Shield, color: 'text-accent', bg: 'bg-accent/10', onClick: () => navigate('/compliance') },
-                  { label: 'Alertas', icon: AlertTriangle, color: 'text-destructive', bg: 'bg-destructive/10', onClick: () => { setSearchParams({ tab: 'comms-alerts' }); setCommsAlertsSubTab('alerts'); } },
+                  { label: t('megaHubs.command.actions.newVoyage'), icon: Plus, color: 'text-primary', bg: 'bg-primary/10', onClick: () => navigate('/ops?tab=voyage') },
+                  { label: t('megaHubs.command.actions.crew'), icon: Users, color: 'text-info', bg: 'bg-info/10', onClick: () => navigate('/workbench?section=people') },
+                  { label: t('megaHubs.command.actions.maintenance'), icon: Wrench, color: 'text-warning', bg: 'bg-warning/10', onClick: () => navigate('/maintenance') },
+                  { label: t('megaHubs.command.actions.documents'), icon: FileText, color: 'text-success', bg: 'bg-success/10', onClick: () => navigate('/workbench?section=docs') },
+                  { label: t('megaHubs.command.actions.compliance'), icon: Shield, color: 'text-accent', bg: 'bg-accent/10', onClick: () => navigate('/compliance') },
+                  { label: t('megaHubs.command.actions.alerts'), icon: AlertTriangle, color: 'text-destructive', bg: 'bg-destructive/10', onClick: () => { setSearchParams({ tab: 'comms-alerts' }); setCommsAlertsSubTab('alerts'); } },
                 ].map((action) => (
                   <button
                     key={action.label}
@@ -319,8 +325,8 @@ export default function CommandMegaHub() {
 
               {/* Enhanced Action Bar */}
               <EnhancedActionBar
-                title="Executive Command Panel"
-                subtitle={`${metrics.operationalVessels} embarcações operacionais | ${metrics.activeVoyages} viagens ativas`}
+                title={t('megaHubs.command.executiveCommandPanel')}
+                subtitle={`${t('megaHubs.command.operationalVessels', { count: metrics.operationalVessels })} | ${t('megaHubs.command.activeVoyages', { count: metrics.activeVoyages })}`}
                 actions={[
                   {
                     id: 'alerts',

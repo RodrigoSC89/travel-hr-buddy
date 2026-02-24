@@ -8,6 +8,7 @@
  */
 
 import React, { Suspense, lazy, useMemo, useCallback, useState } from 'react';
+import { useTranslation } from 'react-i18next';
 import { useSearchParams } from 'react-router-dom';
 import { Tabs, TabsContent, TabsList, TabsTrigger } from '@/components/ui/tabs';
 import { Dialog, DialogContent, DialogHeader, DialogTitle } from '@/components/ui/dialog';
@@ -91,18 +92,21 @@ const LoadingSkeleton = () => (
  * 8. digital-twin → Digital Twin
  * 9. ai-hub       → IA Hub
  */
-const tabConfig = [
-  { id: 'overview', label: 'Overview', icon: Wrench },
-  { id: 'planning', label: 'PMS & Planning', icon: Calendar },
-  { id: 'equipment', label: 'Equipment', icon: Cpu },
-  { id: 'spare-parts', label: 'Spare Parts', icon: Wrench },
-  { id: 'surveys', label: 'Surveys & Predictive', icon: Shield },
-  { id: 'drydock', label: 'Drydock', icon: Anchor },
-  { id: 'trim-propulsion', label: 'Trim & Propulsion', icon: Fuel },
-  { id: 'environment', label: 'Fuel & Environment', icon: Leaf },
-  { id: 'digital-twin', label: 'Digital Twin', icon: Cpu },
-  { id: 'ai-hub', label: '🧠 IA Hub', icon: Sparkles },
-];
+const useMaintenanceTabConfig = () => {
+  const { t } = useTranslation();
+  return useMemo(() => [
+    { id: 'overview', label: t('megaHubs.maintenance.tabs.overview'), icon: Wrench },
+    { id: 'planning', label: t('megaHubs.maintenance.tabs.planning'), icon: Calendar },
+    { id: 'equipment', label: t('megaHubs.maintenance.tabs.equipment'), icon: Cpu },
+    { id: 'spare-parts', label: t('megaHubs.maintenance.tabs.spareParts'), icon: Wrench },
+    { id: 'surveys', label: t('megaHubs.maintenance.tabs.surveys'), icon: Shield },
+    { id: 'drydock', label: t('megaHubs.maintenance.tabs.drydock'), icon: Anchor },
+    { id: 'trim-propulsion', label: t('megaHubs.maintenance.tabs.trimPropulsion'), icon: Fuel },
+    { id: 'environment', label: t('megaHubs.maintenance.tabs.environment'), icon: Leaf },
+    { id: 'digital-twin', label: t('megaHubs.maintenance.tabs.digitalTwin'), icon: Cpu },
+    { id: 'ai-hub', label: t('megaHubs.maintenance.tabs.aiHub'), icon: Sparkles },
+  ], [t]);
+};
 
 const TAB_MIGRATION: Record<string, string> = {
   'gantt': 'planning',
@@ -115,6 +119,8 @@ const TAB_MIGRATION: Record<string, string> = {
 };
 
 export default function MaintenanceMegaHub() {
+  const { t } = useTranslation();
+  const tabConfig = useMaintenanceTabConfig();
   const [searchParams, setSearchParams] = useSearchParams();
   const rawTab = searchParams.get('tab') || 'overview';
   const activeTab = TAB_MIGRATION[rawTab] || rawTab;
@@ -221,13 +227,13 @@ export default function MaintenanceMegaHub() {
             <div className="flex items-center gap-3">
               <div className="p-2 bg-hub-maintenance/10 rounded-lg"><Wrench className="h-6 w-6 text-hub-maintenance" /></div>
               <div>
-                <h1 className="text-2xl font-bold">Hub de Manutenção</h1>
-                <p className="text-sm text-muted-foreground">Ordens de serviço, vistorias de classe, manutenção preditiva, ESG e gêmeo digital</p>
+                <h1 className="text-2xl font-bold">{t('megaHubs.maintenance.title')}</h1>
+                <p className="text-sm text-muted-foreground">{t('megaHubs.maintenance.subtitle')}</p>
               </div>
             </div>
             <div className="flex items-center gap-2">
-              <Badge variant="outline" className="bg-hub-maintenance/10 text-hub-maintenance border-hub-maintenance/20">{maintMetrics.pending} pendentes</Badge>
-              <Badge variant="outline" className="bg-success/10 text-success border-success/20">{maintMetrics.completed} concluídas</Badge>
+              <Badge variant="outline" className="bg-hub-maintenance/10 text-hub-maintenance border-hub-maintenance/20">{t('megaHubs.maintenance.pending', { count: maintMetrics.pending })}</Badge>
+              <Badge variant="outline" className="bg-success/10 text-success border-success/20">{t('megaHubs.maintenance.completed', { count: maintMetrics.completed })}</Badge>
             </div>
           </div>
         </div>
