@@ -304,7 +304,7 @@ export function AppSidebar({ activeItem, onItemChange }: AppSidebarProps) {
               </h1>
               <div className="flex items-center gap-1.5">
                 <span className="text-[10px] text-muted-foreground font-medium truncate">
-                  Maritime Platform
+                  {t('sidebar.maritimePlatform')}
                 </span>
                 <Badge variant="outline" className="text-[8px] px-1 py-0 h-3.5 bg-primary/10 text-primary border-primary/20 font-bold">
                   v11
@@ -343,9 +343,9 @@ export function AppSidebar({ activeItem, onItemChange }: AppSidebarProps) {
             </span>
             <span className="flex items-center gap-1 text-[10px]">
               {isOnline ? (
-                <><Wifi className="h-3 w-3 text-success" /><span className="text-success">Online</span></>
+                <><Wifi className="h-3 w-3 text-success" /><span className="text-success">{t('sidebar.online')}</span></>
               ) : (
-                <><WifiOff className="h-3 w-3 text-warning" /><span className="text-warning">Offline</span></>
+                <><WifiOff className="h-3 w-3 text-warning" /><span className="text-warning">{t('sidebar.offline')}</span></>
               )}
             </span>
           </div>

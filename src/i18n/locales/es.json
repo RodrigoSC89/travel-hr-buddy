@@ -526,7 +526,10 @@
     "noModuleFound": "Ningún módulo encontrado",
     "results": "{{count}} resultado(s)",
     "logout": "Salir",
-    "navigateTo": "Navegar a {{label}}"
+    "navigateTo": "Navegar a {{label}}",
+    "maritimePlatform": "Plataforma Marítima",
+    "online": "En línea",
+    "offline": "Sin conexión"
   },
   "header": {
     "openMenu": "Abrir menú de navegación",

@@ -181,8 +181,8 @@ export const AppLoader = () => {
         </svg>
 
         {/* Text below, seamlessly placed */}
-        <div className="mt-6 text-center space-y-2">
-          <p className="text-base text-muted-foreground tracking-widest animate-pulse font-medium">
+        <div className="mt-6 text-center space-y-3">
+          <p className="text-base text-muted-foreground tracking-widest font-medium al-text-reveal">
             Carregando Nauti One...
           </p>
           {/* Dot indicator */}
@@ -280,9 +280,18 @@ export const AppLoader = () => {
           50% { opacity: 1; transform: scale(1.5); }
         }
 
+        .al-text-reveal {
+          animation: al-textfade 2.5s ease-in-out infinite;
+        }
+        @keyframes al-textfade {
+          0%, 100% { opacity: 0.4; letter-spacing: 0.15em; }
+          50% { opacity: 1; letter-spacing: 0.25em; }
+        }
+
         @media (prefers-reduced-motion: reduce) {
           .al-ship, .al-wave1, .al-wavefill, .al-wave2, .al-wave3,
-          .al-smoke, .al-navlight, .al-porthole, .al-spray, .al-foam {
+          .al-smoke, .al-navlight, .al-porthole, .al-spray, .al-foam,
+          .al-text-reveal {
             animation: none !important;
           }
         }
