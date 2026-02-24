@@ -1,13 +1,12 @@
 /**
- * Financial Authority Matrix
- * Approval thresholds per user/role with US$ limits (Gap: AMOS / SpecTec)
+ * Financial Authority Matrix (Polished UX v2)
+ * Approval thresholds per role with US$ limits
  */
 import React, { useState } from "react";
 import { Card, CardContent, CardHeader, CardTitle, CardDescription } from "@/components/ui/card";
 import { Badge } from "@/components/ui/badge";
 import { Button } from "@/components/ui/button";
 import { Input } from "@/components/ui/input";
-import { Separator } from "@/components/ui/separator";
 import {
   Table, TableBody, TableCell, TableHead, TableHeader, TableRow,
 } from "@/components/ui/table";
@@ -15,15 +14,15 @@ import {
   Dialog, DialogContent, DialogDescription, DialogFooter, DialogHeader, DialogTitle,
 } from "@/components/ui/dialog";
 import {
-  Select, SelectContent, SelectItem, SelectTrigger, SelectValue,
-} from "@/components/ui/select";
+  Tooltip, TooltipContent, TooltipTrigger, TooltipProvider,
+} from "@/components/ui/tooltip";
 import {
   DollarSign, Shield, Edit, Save, RotateCcw, AlertTriangle,
-  TrendingUp, CheckCircle2, Clock, Ban, ArrowUpRight, Wallet,
+  CheckCircle2, Clock, Ban, ArrowUpRight, Wallet,
   Receipt, ShoppingCart,
 } from "lucide-react";
 import { motion } from "framer-motion";
-import { fadeUp } from "@/lib/animations/motion-variants";
+import { toast } from "sonner";
 
 interface AuthorityLevel {
   role: string;
@@ -84,209 +83,243 @@ export const FinancialAuthorityMatrix: React.FC = () => {
     setAuthorities(prev => prev.map(a => a.role === editingRole.role ? editingRole : a));
     setHasChanges(true);
     setShowEditDialog(false);
+    toast.success("Limites atualizados", { description: `${editingRole.roleLabel} — limites financeiros salvos.` });
+  };
+
+  const handleSaveAll = () => {
+    setHasChanges(false);
+    toast.success("Matriz salva", { description: "Todos os limites financeiros foram publicados." });
+  };
+
+  const handleApprove = (item: typeof PENDING_APPROVALS[0]) => {
+    toast.success("Aprovado", { description: `${item.description} — ${formatCurrency(item.amount)}` });
+  };
+
+  const handleReject = (item: typeof PENDING_APPROVALS[0]) => {
+    toast.error("Rejeitado", { description: `${item.description} foi rejeitado.` });
   };
 
   return (
-    <div className="space-y-6">
-      {/* Pending Financial Approvals */}
-      <div className="grid gap-4 md:grid-cols-4">
-        {[
-          { label: "Pendentes", value: PENDING_APPROVALS.filter(p => p.status === "pending").length, icon: Clock, color: "text-amber-600", bg: "bg-amber-500/5 border-amber-500/20" },
-          { label: "Escalados", value: PENDING_APPROVALS.filter(p => p.status === "escalated").length, icon: ArrowUpRight, color: "text-red-600", bg: "bg-red-500/5 border-red-500/20" },
-          { label: "Valor Total Pendente", value: formatCurrency(PENDING_APPROVALS.reduce((s, p) => s + p.amount, 0)), icon: Wallet, color: "text-primary", bg: "bg-primary/5 border-primary/20" },
-          { label: "Aprovados (30d)", value: "47", icon: CheckCircle2, color: "text-emerald-600", bg: "bg-emerald-500/5 border-emerald-500/20" },
-        ].map(stat => (
-          <Card key={stat.label} className={stat.bg}>
-            <CardContent className="pt-6">
-              <div className="flex items-center gap-3">
-                <stat.icon className={`h-5 w-5 ${stat.color}`} />
-                <div>
-                  <p className="text-2xl font-bold">{stat.value}</p>
-                  <p className="text-xs text-muted-foreground">{stat.label}</p>
-                </div>
-              </div>
-            </CardContent>
-          </Card>
-        ))}
-      </div>
-
-      {/* Pending Items */}
-      <Card>
-        <CardHeader>
-          <CardTitle className="flex items-center gap-2">
-            <Clock className="h-5 w-5" />
-            Aprovações Financeiras Pendentes
-          </CardTitle>
-          <CardDescription>Itens aguardando aprovação conforme a matriz de autoridade</CardDescription>
-        </CardHeader>
-        <CardContent>
-          <div className="space-y-2">
-            {PENDING_APPROVALS.map(item => {
-              const config = TYPE_CONFIG[item.type];
-              const TypeIcon = config.icon;
-              return (
-                <div key={item.id} className="flex items-center gap-4 p-4 rounded-xl border hover:bg-muted/30 transition-all">
-                  <div className={`p-2 rounded-lg ${config.color.split(" ").slice(0, 1).join(" ")}`}>
-                    <TypeIcon className={`h-4 w-4 ${config.color.split(" ")[1]}`} />
-                  </div>
-                  <div className="flex-1 min-w-0">
-                    <div className="flex items-center gap-2">
-                      <Badge variant="outline" className={config.color}>{config.label}</Badge>
-                      <span className="text-sm font-medium">{item.description}</span>
-                    </div>
-                    <div className="flex items-center gap-2 mt-0.5 text-xs text-muted-foreground">
-                      <span>{item.requester}</span>
-                      <span>•</span>
-                      <span>{item.vessel}</span>
+    <TooltipProvider>
+      <div className="space-y-6">
+        {/* Stats */}
+        <div className="grid gap-4 grid-cols-2 lg:grid-cols-4">
+          {[
+            { label: "Pendentes", value: PENDING_APPROVALS.filter(p => p.status === "pending").length, icon: Clock, color: "text-amber-600", bg: "bg-amber-500/5 border-amber-500/20" },
+            { label: "Escalados", value: PENDING_APPROVALS.filter(p => p.status === "escalated").length, icon: ArrowUpRight, color: "text-red-600", bg: "bg-red-500/5 border-red-500/20" },
+            { label: "Valor Pendente", value: formatCurrency(PENDING_APPROVALS.reduce((s, p) => s + p.amount, 0)), icon: Wallet, color: "text-primary", bg: "bg-primary/5 border-primary/20" },
+            { label: "Aprovados (30d)", value: "47", icon: CheckCircle2, color: "text-emerald-600", bg: "bg-emerald-500/5 border-emerald-500/20" },
+          ].map((stat, idx) => (
+            <motion.div key={stat.label} initial={{ opacity: 0, y: 12 }} animate={{ opacity: 1, y: 0 }} transition={{ delay: idx * 0.06 }}>
+              <Card className={stat.bg}>
+                <CardContent className="pt-5 pb-4">
+                  <div className="flex items-center gap-3">
+                    <stat.icon className={`h-5 w-5 ${stat.color}`} />
+                    <div>
+                      <p className="text-2xl font-bold">{stat.value}</p>
+                      <p className="text-xs text-muted-foreground">{stat.label}</p>
                     </div>
                   </div>
-                  <div className="text-right">
-                    <p className="text-lg font-bold">{formatCurrency(item.amount)}</p>
-                    <p className="text-[10px] text-muted-foreground">Requer: {AUTHORITY_LEVELS.find(a => a.role === item.requiredLevel)?.roleLabel}</p>
-                  </div>
-                  {item.status === "escalated" && (
-                    <Badge variant="destructive" className="text-xs">
-                      <ArrowUpRight className="h-3 w-3 mr-1" />Escalado
-                    </Badge>
-                  )}
-                  <div className="flex gap-1">
-                    <Button size="sm" variant="outline" className="text-emerald-600 border-emerald-500/20 hover:bg-emerald-500/10">
-                      <CheckCircle2 className="h-4 w-4" />
-                    </Button>
-                    <Button size="sm" variant="outline" className="text-red-600 border-red-500/20 hover:bg-red-500/10">
-                      <Ban className="h-4 w-4" />
-                    </Button>
-                  </div>
-                </div>
-              );
-            })}
-          </div>
-        </CardContent>
-      </Card>
+                </CardContent>
+              </Card>
+            </motion.div>
+          ))}
+        </div>
 
-      {/* Authority Matrix */}
-      <Card>
-        <CardHeader>
-          <div className="flex items-center justify-between">
-            <div>
-              <CardTitle className="flex items-center gap-2">
-                <DollarSign className="h-5 w-5" />
-                Matriz de Autoridade Financeira
-              </CardTitle>
-              <CardDescription>Limites de aprovação (US$) por cargo — modelo AMOS / SpecTec</CardDescription>
+        {/* Pending Items */}
+        <Card>
+          <CardHeader>
+            <CardTitle className="flex items-center gap-2">
+              <Clock className="h-5 w-5" />
+              Aprovações Financeiras Pendentes
+            </CardTitle>
+            <CardDescription>Itens aguardando aprovação conforme a matriz de autoridade</CardDescription>
+          </CardHeader>
+          <CardContent>
+            <div className="space-y-2">
+              {PENDING_APPROVALS.map((item, idx) => {
+                const config = TYPE_CONFIG[item.type];
+                const TypeIcon = config.icon;
+                return (
+                  <motion.div
+                    key={item.id}
+                    initial={{ opacity: 0, x: -8 }}
+                    animate={{ opacity: 1, x: 0 }}
+                    transition={{ delay: idx * 0.05 }}
+                    className="flex items-center gap-3 sm:gap-4 p-3 sm:p-4 rounded-xl border hover:bg-muted/30 transition-all"
+                  >
+                    <div className={`p-2 rounded-lg ${config.color.split(" ").slice(0, 1).join(" ")} shrink-0`}>
+                      <TypeIcon className={`h-4 w-4 ${config.color.split(" ")[1]}`} />
+                    </div>
+                    <div className="flex-1 min-w-0">
+                      <div className="flex items-center gap-2 flex-wrap">
+                        <Badge variant="outline" className={config.color}>{config.label}</Badge>
+                        <span className="text-sm font-medium truncate">{item.description}</span>
+                      </div>
+                      <div className="flex items-center gap-2 mt-0.5 text-xs text-muted-foreground">
+                        <span>{item.requester}</span>
+                        <span>•</span>
+                        <span>{item.vessel}</span>
+                      </div>
+                    </div>
+                    <div className="text-right shrink-0">
+                      <p className="text-lg font-bold">{formatCurrency(item.amount)}</p>
+                      <p className="text-[10px] text-muted-foreground">Requer: {AUTHORITY_LEVELS.find(a => a.role === item.requiredLevel)?.roleLabel}</p>
+                    </div>
+                    {item.status === "escalated" && (
+                      <Badge variant="destructive" className="text-xs shrink-0">
+                        <ArrowUpRight className="h-3 w-3 mr-1" />Escalado
+                      </Badge>
+                    )}
+                    <div className="flex gap-1 shrink-0">
+                      <Tooltip>
+                        <TooltipTrigger asChild>
+                          <Button size="sm" variant="outline" className="text-emerald-600 border-emerald-500/20 hover:bg-emerald-500/10" onClick={() => handleApprove(item)}>
+                            <CheckCircle2 className="h-4 w-4" />
+                          </Button>
+                        </TooltipTrigger>
+                        <TooltipContent>Aprovar</TooltipContent>
+                      </Tooltip>
+                      <Tooltip>
+                        <TooltipTrigger asChild>
+                          <Button size="sm" variant="outline" className="text-red-600 border-red-500/20 hover:bg-red-500/10" onClick={() => handleReject(item)}>
+                            <Ban className="h-4 w-4" />
+                          </Button>
+                        </TooltipTrigger>
+                        <TooltipContent>Rejeitar</TooltipContent>
+                      </Tooltip>
+                    </div>
+                  </motion.div>
+                );
+              })}
             </div>
-            {hasChanges && (
-              <div className="flex gap-2">
-                <Button variant="outline" size="sm" onClick={() => { setAuthorities(AUTHORITY_LEVELS); setHasChanges(false); }}>
-                  <RotateCcw className="h-4 w-4 mr-1" />Reverter
-                </Button>
-                <Button size="sm" onClick={() => setHasChanges(false)}>
-                  <Save className="h-4 w-4 mr-1" />Salvar
-                </Button>
+          </CardContent>
+        </Card>
+
+        {/* Authority Matrix Table */}
+        <Card>
+          <CardHeader>
+            <div className="flex flex-col gap-3 sm:flex-row sm:items-center sm:justify-between">
+              <div>
+                <CardTitle className="flex items-center gap-2">
+                  <DollarSign className="h-5 w-5" />
+                  Matriz de Autoridade Financeira
+                </CardTitle>
+                <CardDescription>Limites de aprovação (US$) por cargo</CardDescription>
+              </div>
+              {hasChanges && (
+                <div className="flex gap-2">
+                  <Button variant="outline" size="sm" onClick={() => { setAuthorities(AUTHORITY_LEVELS); setHasChanges(false); }}>
+                    <RotateCcw className="h-4 w-4 mr-1" />Reverter
+                  </Button>
+                  <Button size="sm" onClick={handleSaveAll}>
+                    <Save className="h-4 w-4 mr-1" />Publicar
+                  </Button>
+                </div>
+              )}
+            </div>
+          </CardHeader>
+          <CardContent>
+            <div className="rounded-md border overflow-x-auto">
+              <Table>
+                <TableHeader>
+                  <TableRow>
+                    <TableHead className="min-w-[140px]">Cargo</TableHead>
+                    <TableHead className="text-center">PO</TableHead>
+                    <TableHead className="text-center">Requisição</TableHead>
+                    <TableHead className="text-center">Invoice</TableHead>
+                    <TableHead className="text-center">Budget</TableHead>
+                    <TableHead className="text-center">Contrato</TableHead>
+                    <TableHead className="text-center">Emergência</TableHead>
+                    <TableHead className="text-center">Contra-Assin.</TableHead>
+                    <TableHead></TableHead>
+                  </TableRow>
+                </TableHeader>
+                <TableBody>
+                  {authorities.map(auth => (
+                    <TableRow key={auth.role} className="group">
+                      <TableCell>
+                        <div className="flex items-center gap-2">
+                          <Shield className="h-4 w-4 text-primary" />
+                          <span className="font-medium text-sm">{auth.roleLabel}</span>
+                        </div>
+                      </TableCell>
+                      {(["purchaseOrder", "requisition", "invoice", "budget", "contractSigning", "emergencySpend"] as const).map(field => (
+                        <TableCell key={field} className="text-center">
+                          <span className={`text-sm font-mono ${auth[field] === 0 ? "text-muted-foreground" : "font-semibold"}`}>
+                            {formatCurrency(auth[field])}
+                          </span>
+                        </TableCell>
+                      ))}
+                      <TableCell className="text-center">
+                        {auth.requiresCountersign ? (
+                          <Badge variant="outline" className="text-[10px] bg-amber-500/10 text-amber-600 border-amber-500/20">
+                            &gt; {formatCurrency(auth.countersignAbove)}
+                          </Badge>
+                        ) : (
+                          <Badge variant="outline" className="text-[10px] bg-emerald-500/10 text-emerald-600 border-emerald-500/20">
+                            Autônomo
+                          </Badge>
+                        )}
+                      </TableCell>
+                      <TableCell>
+                        <Button variant="ghost" size="icon" className="h-8 w-8 opacity-0 group-hover:opacity-100 transition-opacity" onClick={() => openEdit(auth)}>
+                          <Edit className="h-3.5 w-3.5" />
+                        </Button>
+                      </TableCell>
+                    </TableRow>
+                  ))}
+                </TableBody>
+              </Table>
+            </div>
+            <div className="mt-4 p-3 rounded-lg bg-muted/50 flex items-start gap-2">
+              <AlertTriangle className="h-4 w-4 text-amber-600 mt-0.5 shrink-0" />
+              <p className="text-xs text-muted-foreground">
+                <strong>Contra-assinatura:</strong> Transações acima do limite requerem aprovação de nível superior. Emergências seguem limites separados com auditoria automática.
+              </p>
+            </div>
+          </CardContent>
+        </Card>
+
+        {/* Edit Dialog */}
+        <Dialog open={showEditDialog} onOpenChange={setShowEditDialog}>
+          <DialogContent>
+            <DialogHeader>
+              <DialogTitle>Editar Limites — {editingRole?.roleLabel}</DialogTitle>
+              <DialogDescription>Configure os limites de aprovação financeira em US$</DialogDescription>
+            </DialogHeader>
+            {editingRole && (
+              <div className="grid grid-cols-2 gap-4 py-2">
+                {[
+                  { key: "purchaseOrder", label: "Purchase Order" },
+                  { key: "requisition", label: "Requisição" },
+                  { key: "invoice", label: "Invoice" },
+                  { key: "budget", label: "Budget" },
+                  { key: "contractSigning", label: "Contrato" },
+                  { key: "emergencySpend", label: "Emergência" },
+                ].map(field => (
+                  <div key={field.key}>
+                    <label className="text-sm font-medium">{field.label}</label>
+                    <div className="relative mt-1">
+                      <DollarSign className="absolute left-3 top-1/2 -translate-y-1/2 h-4 w-4 text-muted-foreground" />
+                      <Input
+                        type="number"
+                        className="pl-9"
+                        value={editingRole[field.key as keyof AuthorityLevel] as number}
+                        onChange={(e) => setEditingRole({ ...editingRole, [field.key]: parseInt(e.target.value) || 0 })}
+                      />
+                    </div>
+                  </div>
+                ))}
               </div>
             )}
-          </div>
-        </CardHeader>
-        <CardContent>
-          <div className="rounded-md border overflow-x-auto">
-            <Table>
-              <TableHeader>
-                <TableRow>
-                  <TableHead className="min-w-[160px]">Cargo</TableHead>
-                  <TableHead className="text-center">Purchase Order</TableHead>
-                  <TableHead className="text-center">Requisição</TableHead>
-                  <TableHead className="text-center">Invoice</TableHead>
-                  <TableHead className="text-center">Budget</TableHead>
-                  <TableHead className="text-center">Contrato</TableHead>
-                  <TableHead className="text-center">Emergência</TableHead>
-                  <TableHead className="text-center">Contra-Assinatura</TableHead>
-                  <TableHead></TableHead>
-                </TableRow>
-              </TableHeader>
-              <TableBody>
-                {authorities.map(auth => (
-                  <TableRow key={auth.role}>
-                    <TableCell>
-                      <div className="flex items-center gap-2">
-                        <Shield className="h-4 w-4 text-primary" />
-                        <span className="font-medium text-sm">{auth.roleLabel}</span>
-                      </div>
-                    </TableCell>
-                    {["purchaseOrder", "requisition", "invoice", "budget", "contractSigning", "emergencySpend"].map(field => (
-                      <TableCell key={field} className="text-center">
-                        <span className={`text-sm font-mono ${auth[field as keyof AuthorityLevel] === 0 ? "text-muted-foreground" : "font-semibold"}`}>
-                          {formatCurrency(auth[field as keyof AuthorityLevel] as number)}
-                        </span>
-                      </TableCell>
-                    ))}
-                    <TableCell className="text-center">
-                      {auth.requiresCountersign ? (
-                        <Badge variant="outline" className="text-[10px] bg-amber-500/10 text-amber-600 border-amber-500/20">
-                          &gt; {formatCurrency(auth.countersignAbove)}
-                        </Badge>
-                      ) : (
-                        <Badge variant="outline" className="text-[10px] bg-emerald-500/10 text-emerald-600 border-emerald-500/20">
-                          Autônomo
-                        </Badge>
-                      )}
-                    </TableCell>
-                    <TableCell>
-                      <Button variant="ghost" size="icon" className="h-8 w-8" onClick={() => openEdit(auth)}>
-                        <Edit className="h-3.5 w-3.5" />
-                      </Button>
-                    </TableCell>
-                  </TableRow>
-                ))}
-              </TableBody>
-            </Table>
-          </div>
-          <div className="mt-4 p-3 rounded-lg bg-muted/50 flex items-start gap-2">
-            <AlertTriangle className="h-4 w-4 text-amber-600 mt-0.5" />
-            <p className="text-xs text-muted-foreground">
-              <strong>Contra-assinatura:</strong> Transações acima do limite definido requerem aprovação adicional de um nível hierárquico superior. Transações de emergência seguem limites separados com auditoria automática.
-            </p>
-          </div>
-        </CardContent>
-      </Card>
-
-      {/* Edit Dialog */}
-      <Dialog open={showEditDialog} onOpenChange={setShowEditDialog}>
-        <DialogContent>
-          <DialogHeader>
-            <DialogTitle>Editar Limites — {editingRole?.roleLabel}</DialogTitle>
-            <DialogDescription>Configure os limites de aprovação financeira em US$</DialogDescription>
-          </DialogHeader>
-          {editingRole && (
-            <div className="grid grid-cols-2 gap-4 py-2">
-              {[
-                { key: "purchaseOrder", label: "Purchase Order" },
-                { key: "requisition", label: "Requisição" },
-                { key: "invoice", label: "Invoice" },
-                { key: "budget", label: "Budget" },
-                { key: "contractSigning", label: "Contrato" },
-                { key: "emergencySpend", label: "Emergência" },
-              ].map(field => (
-                <div key={field.key}>
-                  <label className="text-sm font-medium">{field.label}</label>
-                  <div className="relative mt-1">
-                    <DollarSign className="absolute left-3 top-1/2 -translate-y-1/2 h-4 w-4 text-muted-foreground" />
-                    <Input
-                      type="number"
-                      className="pl-9"
-                      value={editingRole[field.key as keyof AuthorityLevel] as number}
-                      onChange={(e) => setEditingRole({ ...editingRole, [field.key]: parseInt(e.target.value) || 0 })}
-                    />
-                  </div>
-                </div>
-              ))}
-            </div>
-          )}
-          <DialogFooter>
-            <Button variant="outline" onClick={() => setShowEditDialog(false)}>Cancelar</Button>
-            <Button onClick={saveEdit}><Save className="h-4 w-4 mr-1" />Salvar</Button>
-          </DialogFooter>
-        </DialogContent>
-      </Dialog>
-    </div>
+            <DialogFooter>
+              <Button variant="outline" onClick={() => setShowEditDialog(false)}>Cancelar</Button>
+              <Button onClick={saveEdit}><Save className="h-4 w-4 mr-1" />Salvar</Button>
+            </DialogFooter>
+          </DialogContent>
+        </Dialog>
+      </div>
+    </TooltipProvider>
   );
 };
