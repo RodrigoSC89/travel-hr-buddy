@@ -283,8 +283,8 @@ const Auth: React.FC = () => {
           <Separator className="w-full border-white/10" />
         </div>
         <div className="relative flex justify-center text-xs uppercase">
-          <span className="bg-[hsla(220,40%,8%,0.9)] px-3 text-[hsla(210,30%,60%,0.6)]">
-            ou continue com
+           <span className="bg-[hsla(220,40%,8%,0.9)] px-3 text-[hsla(210,30%,60%,0.6)]">
+            ou entre com
           </span>
         </div>
       </div>
@@ -379,7 +379,7 @@ const Auth: React.FC = () => {
   );
 
   return (
-    <div className="min-h-screen min-h-dvh flex items-center justify-center p-4 sm:p-6 overflow-hidden relative" style={{ background: '#040a18' }}>
+    <div className="min-h-screen min-h-dvh flex items-center justify-center p-3 sm:p-6 overflow-hidden relative" style={{ background: '#040a18' }}>
       {/* === CINEMATIC DEEP OCEAN BACKGROUND === */}
       <div className="absolute inset-0 pointer-events-none overflow-hidden">
         
@@ -429,21 +429,29 @@ const Auth: React.FC = () => {
           transition={{ duration: 8, repeat: Infinity, ease: "linear" }}
         />
 
-      {/* Floating particles - reduced for performance */}
-        {[...Array(8)].map((_, i) => (
+      {/* Floating particles - distributed across full viewport */}
+        {[...Array(12)].map((_, i) => (
           <motion.div
             key={`p-${i}`}
             className="absolute rounded-full"
             style={{
-              left: `${10 + i * 10}%`,
-              top: `${10 + (i % 4) * 22}%`,
-              width: i % 3 === 0 ? 3 : 2,
-              height: i % 3 === 0 ? 3 : 2,
-              background: i % 3 === 0 ? 'hsla(190, 95%, 70%, 0.8)' : i % 2 === 0 ? 'hsla(214, 84%, 65%, 0.5)' : 'hsla(0, 0%, 100%, 0.25)',
-              boxShadow: i % 3 === 0 ? '0 0 10px 2px hsla(190, 95%, 60%, 0.3)' : 'none',
+              left: `${5 + (i * 8) % 90}%`,
+              top: `${15 + ((i * 17) % 70)}%`,
+              width: i % 4 === 0 ? 3 : 2,
+              height: i % 4 === 0 ? 3 : 2,
+              background: i % 4 === 0 
+                ? 'hsla(190, 95%, 70%, 0.6)' 
+                : i % 3 === 0 
+                  ? 'hsla(214, 84%, 65%, 0.4)' 
+                  : 'hsla(190, 80%, 60%, 0.2)',
+              boxShadow: i % 4 === 0 ? '0 0 8px 2px hsla(190, 95%, 60%, 0.2)' : 'none',
             }}
-            animate={{ y: [0, -(30 + i * 5), 0], opacity: [0, 0.7, 0] }}
-            transition={{ duration: 5 + i * 0.6, repeat: Infinity, delay: i * 0.8, ease: "easeInOut" }}
+            animate={{ 
+              y: [0, -(20 + (i % 5) * 8), 0], 
+              x: [0, (i % 2 === 0 ? 10 : -10), 0],
+              opacity: [0, 0.5 + (i % 3) * 0.15, 0] 
+            }}
+            transition={{ duration: 6 + i * 0.5, repeat: Infinity, delay: i * 0.6, ease: "easeInOut" }}
           />
         ))}
         
@@ -632,16 +640,28 @@ const Auth: React.FC = () => {
             
             <CardHeader className="space-y-1.5 text-center pb-4">
               {/* Mobile logo */}
-              <div className="lg:hidden flex justify-center mb-5">
-                <div 
-                  className="relative w-24 h-24 rounded-3xl flex items-center justify-center p-3.5 border border-[hsla(190,95%,50%,0.2)]"
+              <div className="lg:hidden flex flex-col items-center mb-5 gap-2">
+                <motion.div 
+                  className="relative w-20 h-20 sm:w-24 sm:h-24 rounded-3xl flex items-center justify-center p-3 sm:p-3.5 border border-[hsla(190,95%,50%,0.2)]"
                   style={{
                     background: 'linear-gradient(135deg, hsla(220, 40%, 12%, 0.9), hsla(220, 40%, 8%, 0.9))',
                     boxShadow: '0 0 30px hsla(214, 84%, 46%, 0.15), 0 0 60px hsla(190, 95%, 50%, 0.05)',
                   }}
+                  initial={{ scale: 0, rotate: -10 }}
+                  animate={{ scale: 1, rotate: 0 }}
+                  transition={{ type: "spring", stiffness: 200, damping: 15 }}
                 >
                   <img src={nautiLogo} alt="Nauti One" className="w-full h-full object-contain drop-shadow-[0_0_10px_hsla(190,95%,50%,0.25)]" width={72} height={72} />
-                </div>
+                </motion.div>
+                <motion.p 
+                  className="text-[10px] font-medium tracking-[0.25em] uppercase"
+                  style={{ color: 'hsla(190,95%,60%,0.5)' }}
+                  initial={{ opacity: 0 }}
+                  animate={{ opacity: 1 }}
+                  transition={{ delay: 0.3 }}
+                >
+                  Maritime Operations Platform
+                </motion.p>
               </div>
               <CardTitle className="text-2xl font-bold text-white">
                 {activeTab === "signin" ? "Entrar na Conta" : 
@@ -670,31 +690,56 @@ const Auth: React.FC = () => {
                   <form onSubmit={signInForm.handleSubmit(handleSignIn)} className="space-y-4">
                     <div className="space-y-2">
                       <Label htmlFor="signin-email" className="text-white/80">Email</Label>
-                      <div className="relative">
-                        <Mail className="absolute left-3 top-3 h-4 w-4 text-muted-foreground" />
+                      <div className="relative group">
+                        <Mail className={`absolute left-3 top-3 h-4 w-4 transition-colors duration-200 ${
+                          signInForm.formState.errors.email ? 'text-destructive' : 
+                          signInForm.watch("email")?.includes("@") ? 'text-emerald-400' : 'text-muted-foreground'
+                        }`} />
                         <Input
                           id="signin-email"
                           type="email"
                           placeholder="seu@email.com"
-                          className="pl-10 bg-white/[0.04] border-white/[0.1] focus:border-primary/50 focus:ring-primary/20 text-white placeholder:text-white/30"
+                          className={`pl-10 bg-white/[0.04] text-white placeholder:text-white/30 transition-all duration-200 ${
+                            signInForm.formState.errors.email 
+                              ? 'border-destructive/50 focus:border-destructive focus:ring-destructive/20' 
+                              : signInForm.watch("email")?.includes("@")
+                                ? 'border-emerald-500/30 focus:border-emerald-500/50 focus:ring-emerald-500/20'
+                                : 'border-white/[0.1] focus:border-primary/50 focus:ring-primary/20'
+                          }`}
                           autoComplete="email"
                           {...signInForm.register("email")}
                         />
+                        {signInForm.watch("email")?.includes("@") && !signInForm.formState.errors.email && (
+                          <motion.div initial={{ scale: 0 }} animate={{ scale: 1 }} className="absolute right-3 top-3">
+                            <CheckCircle className="h-4 w-4 text-emerald-400" />
+                          </motion.div>
+                        )}
                       </div>
                       {signInForm.formState.errors.email && (
-                        <p className="text-sm text-destructive">{signInForm.formState.errors.email.message}</p>
+                        <motion.p initial={{ opacity: 0, y: -4 }} animate={{ opacity: 1, y: 0 }} className="text-sm text-destructive flex items-center gap-1">
+                          <AlertCircle className="h-3 w-3" />{signInForm.formState.errors.email.message}
+                        </motion.p>
                       )}
                     </div>
 
                     <div className="space-y-2">
                       <Label htmlFor="signin-password" className="text-white/80">Senha</Label>
-                      <div className="relative">
-                        <Lock className="absolute left-3 top-3 h-4 w-4 text-muted-foreground" />
+                      <div className="relative group">
+                        <Lock className={`absolute left-3 top-3 h-4 w-4 transition-colors duration-200 ${
+                          signInForm.formState.errors.password ? 'text-destructive' : 
+                          (signInForm.watch("password")?.length ?? 0) >= 6 ? 'text-emerald-400' : 'text-muted-foreground'
+                        }`} />
                         <Input
                           id="signin-password"
                           type={showPassword ? "text" : "password"}
                           placeholder="Digite sua senha"
-                          className="pl-10 pr-10 bg-white/[0.04] border-white/[0.1] focus:border-primary/50 focus:ring-primary/20 text-white placeholder:text-white/30"
+                          className={`pl-10 pr-10 bg-white/[0.04] text-white placeholder:text-white/30 transition-all duration-200 ${
+                            signInForm.formState.errors.password
+                              ? 'border-destructive/50 focus:border-destructive focus:ring-destructive/20'
+                              : (signInForm.watch("password")?.length ?? 0) >= 6
+                                ? 'border-emerald-500/30 focus:border-emerald-500/50 focus:ring-emerald-500/20'
+                                : 'border-white/[0.1] focus:border-primary/50 focus:ring-primary/20'
+                          }`}
                           autoComplete="current-password"
                           {...signInForm.register("password")}
                         />
@@ -710,7 +755,9 @@ const Auth: React.FC = () => {
                         </Button>
                       </div>
                       {signInForm.formState.errors.password && (
-                        <p className="text-sm text-destructive">{signInForm.formState.errors.password.message}</p>
+                        <motion.p initial={{ opacity: 0, y: -4 }} animate={{ opacity: 1, y: 0 }} className="text-sm text-destructive flex items-center gap-1">
+                          <AlertCircle className="h-3 w-3" />{signInForm.formState.errors.password.message}
+                        </motion.p>
                       )}
                     </div>
 
