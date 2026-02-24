@@ -2,17 +2,22 @@ import React, { useState, useMemo, useCallback } from "react";
 import { motion } from "framer-motion";
 import { staggerContainer, fadeUp } from "@/lib/animations/motion-variants";
 import { Button } from "@/components/ui/button";
+import { Tabs, TabsContent, TabsList, TabsTrigger } from "@/components/ui/tabs";
+import { Badge } from "@/components/ui/badge";
 import {
   DropdownMenu, DropdownMenuContent, DropdownMenuItem,
   DropdownMenuSeparator, DropdownMenuTrigger,
 } from "@/components/ui/dropdown-menu";
-import { Users, UserPlus, Download, RefreshCw, Settings, Bell } from "lucide-react";
+import { Users, UserPlus, Download, RefreshCw, Settings, Bell, Shield, Clock, Activity } from "lucide-react";
 import { useToast } from "@/hooks/use-toast";
 import { useUserManagement, type OrganizationUser, type UserInvite } from "@/hooks/useUserManagement";
 
 import { StatsCards } from "./user-management/StatsCards";
 import { UserTable } from "./user-management/UserTable";
 import { InviteDialog, DeleteDialog, SettingsDialog, EditUserDialog } from "./user-management/Dialogs";
+import { ApprovalQueue } from "./user-management/ApprovalQueue";
+import { ModuleAccessMatrix } from "./user-management/ModuleAccessMatrix";
+import { ActivityTimeline } from "./user-management/ActivityTimeline";
 
 export const UserManagementHub: React.FC = () => {
   const { toast } = useToast();
@@ -21,7 +26,7 @@ export const UserManagementHub: React.FC = () => {
     inviteUser, updateUserRole, updateUserStatus, deleteUser, bulkDelete, exportUsers,
   } = useUserManagement();
 
-  // State
+  const [activeTab, setActiveTab] = useState("users");
   const [searchTerm, setSearchTerm] = useState("");
   const [roleFilter, setRoleFilter] = useState("all");
   const [statusFilter, setStatusFilter] = useState("all");
@@ -127,7 +132,7 @@ export const UserManagementHub: React.FC = () => {
           </div>
           <div>
             <h2 className="text-3xl font-bold tracking-tight">Gestão de Usuários</h2>
-            <p className="text-muted-foreground">Gerencie as configurações e dados da sua organização</p>
+            <p className="text-muted-foreground">Administração completa de acessos, permissões e aprovações</p>
           </div>
         </div>
         <div className="flex items-center gap-2">
@@ -187,27 +192,66 @@ export const UserManagementHub: React.FC = () => {
 
       <StatsCards stats={stats} />
 
-      <UserTable
-        filteredUsers={filteredUsers}
-        isLoading={isLoading}
-        searchTerm={searchTerm}
-        roleFilter={roleFilter}
-        statusFilter={statusFilter}
-        selectedUsers={selectedUsers}
-        hasActiveFilters={hasActiveFilters}
-        onSearchChange={setSearchTerm}
-        onRoleFilterChange={setRoleFilter}
-        onStatusFilterChange={setStatusFilter}
-        onClearFilters={clearFilters}
-        onToggleSelectUser={toggleSelectUser}
-        onToggleSelectAll={toggleSelectAll}
-        onBulkDelete={() => setShowDeleteDialog(true)}
-        onEditUser={handleEditUser}
-        onDeleteUser={(id) => { setUserToDelete(id); setShowDeleteDialog(true); }}
-        onUpdateRole={updateUserRole}
-        onUpdateStatus={updateUserStatus}
-        onInvite={() => setShowInviteDialog(true)}
-      />
+      {/* Tabbed Interface */}
+      <Tabs value={activeTab} onValueChange={setActiveTab} className="space-y-4">
+        <TabsList className="grid w-full grid-cols-4 lg:w-auto lg:inline-grid">
+          <TabsTrigger value="users" className="gap-2">
+            <Users className="h-4 w-4" />
+            <span className="hidden sm:inline">Usuários</span>
+          </TabsTrigger>
+          <TabsTrigger value="approvals" className="gap-2 relative">
+            <Clock className="h-4 w-4" />
+            <span className="hidden sm:inline">Aprovações</span>
+            <Badge variant="destructive" className="h-5 w-5 p-0 flex items-center justify-center text-[10px] absolute -top-1 -right-1 lg:relative lg:top-0 lg:right-0 lg:ml-1">
+              3
+            </Badge>
+          </TabsTrigger>
+          <TabsTrigger value="access" className="gap-2">
+            <Shield className="h-4 w-4" />
+            <span className="hidden sm:inline">Controle de Acesso</span>
+          </TabsTrigger>
+          <TabsTrigger value="activity" className="gap-2">
+            <Activity className="h-4 w-4" />
+            <span className="hidden sm:inline">Atividades</span>
+          </TabsTrigger>
+        </TabsList>
+
+        <TabsContent value="users">
+          <UserTable
+            filteredUsers={filteredUsers}
+            isLoading={isLoading}
+            searchTerm={searchTerm}
+            roleFilter={roleFilter}
+            statusFilter={statusFilter}
+            selectedUsers={selectedUsers}
+            hasActiveFilters={hasActiveFilters}
+            onSearchChange={setSearchTerm}
+            onRoleFilterChange={setRoleFilter}
+            onStatusFilterChange={setStatusFilter}
+            onClearFilters={clearFilters}
+            onToggleSelectUser={toggleSelectUser}
+            onToggleSelectAll={toggleSelectAll}
+            onBulkDelete={() => setShowDeleteDialog(true)}
+            onEditUser={handleEditUser}
+            onDeleteUser={(id) => { setUserToDelete(id); setShowDeleteDialog(true); }}
+            onUpdateRole={updateUserRole}
+            onUpdateStatus={updateUserStatus}
+            onInvite={() => setShowInviteDialog(true)}
+          />
+        </TabsContent>
+
+        <TabsContent value="approvals">
+          <ApprovalQueue />
+        </TabsContent>
+
+        <TabsContent value="access">
+          <ModuleAccessMatrix />
+        </TabsContent>
+
+        <TabsContent value="activity">
+          <ActivityTimeline />
+        </TabsContent>
+      </Tabs>
 
       {/* Dialogs */}
       <InviteDialog open={showInviteDialog} onOpenChange={setShowInviteDialog}
