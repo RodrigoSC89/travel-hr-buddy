@@ -8,7 +8,7 @@ import {
   DropdownMenu, DropdownMenuContent, DropdownMenuItem,
   DropdownMenuSeparator, DropdownMenuTrigger,
 } from "@/components/ui/dropdown-menu";
-import { Users, UserPlus, Download, RefreshCw, Settings, Bell, Shield, Clock, Activity } from "lucide-react";
+import { Users, UserPlus, Download, RefreshCw, Settings, Bell, Shield, Clock, Activity, Ship, GitBranch, DollarSign, Anchor } from "lucide-react";
 import { useToast } from "@/hooks/use-toast";
 import { useUserManagement, type OrganizationUser, type UserInvite } from "@/hooks/useUserManagement";
 
@@ -18,6 +18,10 @@ import { InviteDialog, DeleteDialog, SettingsDialog, EditUserDialog } from "./us
 import { ApprovalQueue } from "./user-management/ApprovalQueue";
 import { ModuleAccessMatrix } from "./user-management/ModuleAccessMatrix";
 import { ActivityTimeline } from "./user-management/ActivityTimeline";
+import { VesselAccessControl } from "./user-management/VesselAccessControl";
+import { HierarchicalGroups } from "./user-management/HierarchicalGroups";
+import { FinancialAuthorityMatrix } from "./user-management/FinancialAuthorityMatrix";
+import { ShipShoreMode } from "./user-management/ShipShoreMode";
 
 export const UserManagementHub: React.FC = () => {
   const { toast } = useToast();
@@ -194,7 +198,7 @@ export const UserManagementHub: React.FC = () => {
 
       {/* Tabbed Interface */}
       <Tabs value={activeTab} onValueChange={setActiveTab} className="space-y-4">
-        <TabsList className="grid w-full grid-cols-4 lg:w-auto lg:inline-grid">
+        <TabsList className="flex flex-wrap w-full gap-1 h-auto p-1 lg:w-auto lg:inline-flex">
           <TabsTrigger value="users" className="gap-2">
             <Users className="h-4 w-4" />
             <span className="hidden sm:inline">Usuários</span>
@@ -208,7 +212,23 @@ export const UserManagementHub: React.FC = () => {
           </TabsTrigger>
           <TabsTrigger value="access" className="gap-2">
             <Shield className="h-4 w-4" />
-            <span className="hidden sm:inline">Controle de Acesso</span>
+            <span className="hidden sm:inline">RBAC</span>
+          </TabsTrigger>
+          <TabsTrigger value="vessels" className="gap-2">
+            <Anchor className="h-4 w-4" />
+            <span className="hidden sm:inline">Embarcações</span>
+          </TabsTrigger>
+          <TabsTrigger value="groups" className="gap-2">
+            <GitBranch className="h-4 w-4" />
+            <span className="hidden sm:inline">Grupos</span>
+          </TabsTrigger>
+          <TabsTrigger value="financial" className="gap-2">
+            <DollarSign className="h-4 w-4" />
+            <span className="hidden sm:inline">Autoridade $</span>
+          </TabsTrigger>
+          <TabsTrigger value="shipshore" className="gap-2">
+            <Ship className="h-4 w-4" />
+            <span className="hidden sm:inline">Ship-Shore</span>
           </TabsTrigger>
           <TabsTrigger value="activity" className="gap-2">
             <Activity className="h-4 w-4" />
@@ -246,6 +266,22 @@ export const UserManagementHub: React.FC = () => {
 
         <TabsContent value="access">
           <ModuleAccessMatrix />
+        </TabsContent>
+
+        <TabsContent value="vessels">
+          <VesselAccessControl />
+        </TabsContent>
+
+        <TabsContent value="groups">
+          <HierarchicalGroups />
+        </TabsContent>
+
+        <TabsContent value="financial">
+          <FinancialAuthorityMatrix />
+        </TabsContent>
+
+        <TabsContent value="shipshore">
+          <ShipShoreMode />
         </TabsContent>
 
         <TabsContent value="activity">
