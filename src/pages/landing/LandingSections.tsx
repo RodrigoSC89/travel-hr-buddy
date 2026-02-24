@@ -99,21 +99,22 @@ export function DifferentiatorsSection() {
 export function PricingSection() {
   const { t } = useTranslation();
   const navigate = useNavigate();
-  const tierIcons = { starter: Zap, pro: Crown, enterprise: Building2 };
+  const tierIcons = { trial: Activity, starter: Zap, pro: Crown, enterprise: Building2 };
   const PRICING_TIERS = [
-    { id: 'starter', name: 'Starter', price: 500, priceLabel: '/vessel/mo', isEnterprise: false, recommended: false, description: t('landing.pricing.starterDesc'), limits: { vessels: 10, crew: 100 }, modules: [t('landing.pricing.starterMod1'), t('landing.pricing.starterMod2'), t('landing.pricing.starterMod3'), t('landing.pricing.starterMod4'), t('landing.pricing.starterMod5'), t('landing.pricing.starterMod6')], extras: [t('landing.pricing.emailSupport'), t('landing.pricing.updatesIncluded')] },
-    { id: 'pro', name: 'Professional', price: 1200, priceLabel: '/vessel/mo', isEnterprise: false, recommended: true, description: t('landing.pricing.proDesc'), limits: { vessels: 50, crew: 600 }, modules: [t('landing.pricing.allFromStarter'), t('landing.pricing.proMod1'), t('landing.pricing.proMod2'), t('landing.pricing.proMod3'), t('landing.pricing.proMod4'), t('landing.pricing.proMod5'), t('landing.pricing.proMod6'), t('landing.pricing.proMod7'), t('landing.pricing.proMod8')], extras: [t('landing.pricing.prioritySupport'), t('landing.pricing.dedicatedOnboarding'), t('landing.pricing.sla995')] },
-    { id: 'enterprise', name: 'Enterprise', price: 0, priceLabel: '', isEnterprise: true, recommended: false, description: t('landing.pricing.enterpriseDesc'), limits: { vessels: 0, crew: 0 }, modules: [t('landing.pricing.allFromPro'), t('landing.pricing.entMod1'), t('landing.pricing.entMod2'), t('landing.pricing.entMod3'), t('landing.pricing.entMod4'), t('landing.pricing.entMod5'), t('landing.pricing.entMod6')], extras: [t('landing.pricing.support247'), t('landing.pricing.sla9999'), t('landing.pricing.dedicatedManager'), t('landing.pricing.onsiteTraining')] },
+    { id: 'trial', name: 'Trial', price: 0, priceLabel: '', isTrial: true, isEnterprise: false, recommended: false, description: 'Teste grátis por 30 dias com 1 navio', limits: { vessels: 1, crew: 20 }, modules: ['Dashboard Command Center', 'Crew Management básico', 'Document Center', 'Compliance básico (ISM)', 'Alertas & Notificações', 'Suporte por email'], extras: ['Sem cartão de crédito', '30 dias grátis'] },
+    { id: 'starter', name: 'Starter', price: 29, priceLabel: '/vessel/mo', isEnterprise: false, isTrial: false, recommended: false, description: t('landing.pricing.starterDesc'), limits: { vessels: 10, crew: 100 }, modules: [t('landing.pricing.starterMod1'), t('landing.pricing.starterMod2'), t('landing.pricing.starterMod3'), t('landing.pricing.starterMod4'), t('landing.pricing.starterMod5'), t('landing.pricing.starterMod6')], extras: [t('landing.pricing.emailSupport'), t('landing.pricing.updatesIncluded')] },
+    { id: 'pro', name: 'Professional', price: 59, priceLabel: '/vessel/mo', isEnterprise: false, isTrial: false, recommended: true, description: t('landing.pricing.proDesc'), limits: { vessels: 50, crew: 600 }, modules: [t('landing.pricing.allFromStarter'), t('landing.pricing.proMod1'), t('landing.pricing.proMod2'), t('landing.pricing.proMod3'), t('landing.pricing.proMod4'), t('landing.pricing.proMod5'), t('landing.pricing.proMod6'), t('landing.pricing.proMod7'), t('landing.pricing.proMod8')], extras: [t('landing.pricing.prioritySupport'), t('landing.pricing.dedicatedOnboarding'), t('landing.pricing.sla995')] },
+    { id: 'enterprise', name: 'Enterprise', price: 149, priceLabel: '/vessel/mo', isEnterprise: true, isTrial: false, recommended: false, description: t('landing.pricing.enterpriseDesc'), limits: { vessels: 0, crew: 0 }, modules: [t('landing.pricing.allFromPro'), t('landing.pricing.entMod1'), t('landing.pricing.entMod2'), t('landing.pricing.entMod3'), t('landing.pricing.entMod4'), t('landing.pricing.entMod5'), t('landing.pricing.entMod6')], extras: [t('landing.pricing.support247'), t('landing.pricing.sla9999'), t('landing.pricing.dedicatedManager'), t('landing.pricing.onsiteTraining')] },
   ];
   return (
     <section id="pricing" className="py-20 px-4">
-      <div className="container mx-auto max-w-6xl">
+      <div className="container mx-auto max-w-7xl">
         <ScrollReveal className="text-center mb-14">
           <Badge className="mb-3">{t('landing.nav.pricing')}</Badge>
           <h2 className="text-3xl md:text-4xl font-bold mb-3">{t('landing.pricing.heading')}</h2>
           <p className="text-muted-foreground text-base max-w-2xl mx-auto">{t('landing.pricing.subheading')}</p>
         </ScrollReveal>
-        <StaggerContainer className="grid md:grid-cols-3 gap-5 max-w-5xl mx-auto" staggerDelay={0.1}>
+        <StaggerContainer className="grid md:grid-cols-4 gap-4 max-w-6xl mx-auto" staggerDelay={0.1}>
           {PRICING_TIERS.map((tier) => {
             const Icon = tierIcons[tier.id as keyof typeof tierIcons] || Zap;
             return (
@@ -127,8 +128,8 @@ export function PricingSection() {
                   </CardHeader>
                   <CardContent className="text-center flex-1">
                     <div className="mb-4">
-                      {tier.isEnterprise ? <span className="text-2xl font-bold">{t('landing.pricing.custom')}</span> : <div><span className="text-3xl font-bold">$ {tier.price.toLocaleString()}</span><span className="text-muted-foreground text-sm">{tier.priceLabel}</span></div>}
-                      <p className="text-xs text-muted-foreground mt-1">{tier.limits.vessels ? t('landing.pricing.upTo', { vessels: tier.limits.vessels, crew: tier.limits.crew }) : t('landing.pricing.unlimited')}</p>
+                      {tier.isTrial ? <span className="text-3xl font-bold text-primary">FREE</span> : <div><span className="text-3xl font-bold">US$ {tier.price}</span><span className="text-muted-foreground text-sm">{tier.priceLabel}</span></div>}
+                      <p className="text-xs text-muted-foreground mt-1">{tier.isTrial ? '1 navio • 30 dias' : tier.limits.vessels ? t('landing.pricing.upTo', { vessels: tier.limits.vessels, crew: tier.limits.crew }) : t('landing.pricing.unlimited')}</p>
                     </div>
                     <Separator className="mb-3" />
                     <ul className="space-y-1.5 text-left mb-3">{tier.modules.map((mod, idx) => <li key={idx} className="flex items-start gap-2"><Check className="h-3.5 w-3.5 text-primary shrink-0 mt-0.5" /><span className="text-xs">{mod}</span></li>)}</ul>
@@ -137,7 +138,7 @@ export function PricingSection() {
                   </CardContent>
                   <CardFooter className="pt-0">
                     <Button className={`w-full ${tier.recommended ? 'shadow-lg shadow-primary/20' : ''}`} variant={tier.recommended ? 'default' : 'outline'} onClick={() => { if (tier.isEnterprise) { window.location.href = 'mailto:comercial@nautione.com.br?subject=Nauti Enterprise'; } else { navigate('/auth?mode=signup'); } }}>
-                      {tier.isEnterprise ? t('landing.pricing.talkToSales') : t('landing.hero.startTrial')}<ChevronRight className="h-4 w-4 ml-1" />
+                      {tier.isEnterprise ? t('landing.pricing.talkToSales') : tier.isTrial ? 'Começar Grátis' : t('landing.hero.startTrial')}<ChevronRight className="h-4 w-4 ml-1" />
                     </Button>
                   </CardFooter>
                 </Card>
