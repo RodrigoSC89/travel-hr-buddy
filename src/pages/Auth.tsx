@@ -29,6 +29,7 @@ import {
   Loader2,
   RefreshCw,
   AlertCircle,
+  ChevronLeft,
   Ship, Users, Shield, FileText, Brain, Wrench,
   Compass, Satellite, Briefcase, Activity, BarChart3
 } from "lucide-react";
@@ -889,6 +890,27 @@ const Auth: React.FC = () => {
 
                 {/* Reset Password Form */}
                 <TabsContent value="reset" className="space-y-4">
+                  <motion.div
+                    initial={{ opacity: 0, y: 12 }}
+                    animate={{ opacity: 1, y: 0 }}
+                    transition={{ duration: 0.3 }}
+                  >
+                  <Button
+                    type="button"
+                    variant="ghost"
+                    size="sm"
+                    className="mb-2 text-white/50 hover:text-white/80 hover:bg-white/[0.04] -ml-2"
+                    onClick={() => setActiveTab("signin")}
+                  >
+                    <ChevronLeft className="h-4 w-4 mr-1" />
+                    Voltar para Login
+                  </Button>
+                  <div className="text-center mb-4">
+                    <div className="mx-auto w-14 h-14 rounded-2xl bg-primary/10 flex items-center justify-center mb-3">
+                      <Mail className="h-6 w-6 text-primary" />
+                    </div>
+                    <p className="text-sm" style={{ color: 'hsla(210, 30%, 55%, 0.6)' }}>Enviaremos um link seguro para redefinir sua senha.</p>
+                  </div>
                   <form onSubmit={resetForm.handleSubmit(handleResetPassword)} className="space-y-4">
                     <div className="space-y-2">
                       <Label htmlFor="reset-email" className="text-white/80">Email</Label>
@@ -909,19 +931,11 @@ const Auth: React.FC = () => {
                     </div>
 
                     <Button type="submit" className="w-full" disabled={isLoading} style={{ boxShadow: '0 0 20px hsla(214, 84%, 46%, 0.3)' }}>
-                      {isLoading ? <Loader2 className="mr-2 h-4 w-4 animate-spin" /> : null}
+                      {isLoading ? <Loader2 className="mr-2 h-4 w-4 animate-spin" /> : <Mail className="mr-2 h-4 w-4" />}
                       Enviar Email de Recuperação
                     </Button>
-
-                    <Button
-                      type="button"
-                      variant="outline"
-                      className="w-full border-white/10 hover:bg-white/[0.06] text-white/70"
-                      onClick={() => setActiveTab("signin")}
-                    >
-                      Voltar para Login
-                    </Button>
                   </form>
+                  </motion.div>
                 </TabsContent>
               </Tabs>
             </CardContent>
