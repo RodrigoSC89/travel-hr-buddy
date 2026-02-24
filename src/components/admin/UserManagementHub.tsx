@@ -1,5 +1,5 @@
 import React, { useState, useMemo, useCallback } from "react";
-import { motion } from "framer-motion";
+import { motion, AnimatePresence } from "framer-motion";
 import { staggerContainer, fadeUp } from "@/lib/animations/motion-variants";
 import { Button } from "@/components/ui/button";
 import { Tabs, TabsContent, TabsList, TabsTrigger } from "@/components/ui/tabs";
@@ -131,12 +131,12 @@ export const UserManagementHub: React.FC = () => {
       {/* Header */}
       <motion.div variants={fadeUp} className="flex flex-col gap-4 md:flex-row md:items-center md:justify-between">
         <div className="flex items-center gap-4">
-          <div className="p-3 rounded-xl bg-gradient-to-br from-primary/20 to-primary/5">
+          <div className="p-3 rounded-xl bg-gradient-to-br from-primary/20 to-primary/5 shadow-lg shadow-primary/10">
             <Users className="h-8 w-8 text-primary" />
           </div>
           <div>
             <h2 className="text-3xl font-bold tracking-tight">Gestão de Usuários</h2>
-            <p className="text-muted-foreground">Administração completa de acessos, permissões e aprovações</p>
+            <p className="text-muted-foreground text-sm">Administração completa de acessos, permissões e aprovações</p>
           </div>
         </div>
         <div className="flex items-center gap-2">
@@ -198,95 +198,107 @@ export const UserManagementHub: React.FC = () => {
 
       {/* Tabbed Interface */}
       <Tabs value={activeTab} onValueChange={setActiveTab} className="space-y-4">
-        <TabsList className="flex flex-wrap w-full gap-1 h-auto p-1 lg:w-auto lg:inline-flex">
-          <TabsTrigger value="users" className="gap-2">
-            <Users className="h-4 w-4" />
-            <span className="hidden sm:inline">Usuários</span>
-          </TabsTrigger>
-          <TabsTrigger value="approvals" className="gap-2 relative">
-            <Clock className="h-4 w-4" />
-            <span className="hidden sm:inline">Aprovações</span>
-            <Badge variant="destructive" className="h-5 w-5 p-0 flex items-center justify-center text-[10px] absolute -top-1 -right-1 lg:relative lg:top-0 lg:right-0 lg:ml-1">
-              3
-            </Badge>
-          </TabsTrigger>
-          <TabsTrigger value="access" className="gap-2">
-            <Shield className="h-4 w-4" />
-            <span className="hidden sm:inline">RBAC</span>
-          </TabsTrigger>
-          <TabsTrigger value="vessels" className="gap-2">
-            <Anchor className="h-4 w-4" />
-            <span className="hidden sm:inline">Embarcações</span>
-          </TabsTrigger>
-          <TabsTrigger value="groups" className="gap-2">
-            <GitBranch className="h-4 w-4" />
-            <span className="hidden sm:inline">Grupos</span>
-          </TabsTrigger>
-          <TabsTrigger value="financial" className="gap-2">
-            <DollarSign className="h-4 w-4" />
-            <span className="hidden sm:inline">Autoridade $</span>
-          </TabsTrigger>
-          <TabsTrigger value="shipshore" className="gap-2">
-            <Ship className="h-4 w-4" />
-            <span className="hidden sm:inline">Ship-Shore</span>
-          </TabsTrigger>
-          <TabsTrigger value="activity" className="gap-2">
-            <Activity className="h-4 w-4" />
-            <span className="hidden sm:inline">Atividades</span>
-          </TabsTrigger>
-        </TabsList>
+        <div className="overflow-x-auto pb-1 -mx-1 px-1 scrollbar-hide">
+          <TabsList className="inline-flex w-auto gap-1 h-auto p-1.5 bg-muted/50 backdrop-blur-sm">
+            <TabsTrigger value="users" className="gap-1.5 text-xs px-3">
+              <Users className="h-3.5 w-3.5" />
+              <span className="hidden sm:inline">Usuários</span>
+            </TabsTrigger>
+            <TabsTrigger value="approvals" className="gap-1.5 text-xs px-3 relative">
+              <Clock className="h-3.5 w-3.5" />
+              <span className="hidden sm:inline">Aprovações</span>
+              <Badge variant="destructive" className="h-4 min-w-4 p-0 flex items-center justify-center text-[9px] ml-1">
+                3
+              </Badge>
+            </TabsTrigger>
+            <TabsTrigger value="access" className="gap-1.5 text-xs px-3">
+              <Shield className="h-3.5 w-3.5" />
+              <span className="hidden sm:inline">RBAC</span>
+            </TabsTrigger>
+            <TabsTrigger value="vessels" className="gap-1.5 text-xs px-3">
+              <Anchor className="h-3.5 w-3.5" />
+              <span className="hidden sm:inline">Embarcações</span>
+            </TabsTrigger>
+            <TabsTrigger value="groups" className="gap-1.5 text-xs px-3">
+              <GitBranch className="h-3.5 w-3.5" />
+              <span className="hidden sm:inline">Grupos</span>
+            </TabsTrigger>
+            <TabsTrigger value="financial" className="gap-1.5 text-xs px-3">
+              <DollarSign className="h-3.5 w-3.5" />
+              <span className="hidden sm:inline">Autoridade $</span>
+            </TabsTrigger>
+            <TabsTrigger value="shipshore" className="gap-1.5 text-xs px-3">
+              <Ship className="h-3.5 w-3.5" />
+              <span className="hidden sm:inline">Ship-Shore</span>
+            </TabsTrigger>
+            <TabsTrigger value="activity" className="gap-1.5 text-xs px-3">
+              <Activity className="h-3.5 w-3.5" />
+              <span className="hidden sm:inline">Atividades</span>
+            </TabsTrigger>
+          </TabsList>
+        </div>
 
-        <TabsContent value="users">
-          <UserTable
-            filteredUsers={filteredUsers}
-            isLoading={isLoading}
-            searchTerm={searchTerm}
-            roleFilter={roleFilter}
-            statusFilter={statusFilter}
-            selectedUsers={selectedUsers}
-            hasActiveFilters={hasActiveFilters}
-            onSearchChange={setSearchTerm}
-            onRoleFilterChange={setRoleFilter}
-            onStatusFilterChange={setStatusFilter}
-            onClearFilters={clearFilters}
-            onToggleSelectUser={toggleSelectUser}
-            onToggleSelectAll={toggleSelectAll}
-            onBulkDelete={() => setShowDeleteDialog(true)}
-            onEditUser={handleEditUser}
-            onDeleteUser={(id) => { setUserToDelete(id); setShowDeleteDialog(true); }}
-            onUpdateRole={updateUserRole}
-            onUpdateStatus={updateUserStatus}
-            onInvite={() => setShowInviteDialog(true)}
-          />
-        </TabsContent>
+        <AnimatePresence mode="wait">
+          <motion.div
+            key={activeTab}
+            initial={{ opacity: 0, y: 8 }}
+            animate={{ opacity: 1, y: 0 }}
+            exit={{ opacity: 0, y: -8 }}
+            transition={{ duration: 0.2, ease: "easeOut" }}
+          >
+            <TabsContent value="users" forceMount={activeTab === "users" ? true : undefined} className={activeTab !== "users" ? "hidden" : ""}>
+              <UserTable
+                filteredUsers={filteredUsers}
+                isLoading={isLoading}
+                searchTerm={searchTerm}
+                roleFilter={roleFilter}
+                statusFilter={statusFilter}
+                selectedUsers={selectedUsers}
+                hasActiveFilters={hasActiveFilters}
+                onSearchChange={setSearchTerm}
+                onRoleFilterChange={setRoleFilter}
+                onStatusFilterChange={setStatusFilter}
+                onClearFilters={clearFilters}
+                onToggleSelectUser={toggleSelectUser}
+                onToggleSelectAll={toggleSelectAll}
+                onBulkDelete={() => setShowDeleteDialog(true)}
+                onEditUser={handleEditUser}
+                onDeleteUser={(id) => { setUserToDelete(id); setShowDeleteDialog(true); }}
+                onUpdateRole={updateUserRole}
+                onUpdateStatus={updateUserStatus}
+                onInvite={() => setShowInviteDialog(true)}
+              />
+            </TabsContent>
 
-        <TabsContent value="approvals">
-          <ApprovalQueue />
-        </TabsContent>
+            <TabsContent value="approvals" forceMount={activeTab === "approvals" ? true : undefined} className={activeTab !== "approvals" ? "hidden" : ""}>
+              <ApprovalQueue />
+            </TabsContent>
 
-        <TabsContent value="access">
-          <ModuleAccessMatrix />
-        </TabsContent>
+            <TabsContent value="access" forceMount={activeTab === "access" ? true : undefined} className={activeTab !== "access" ? "hidden" : ""}>
+              <ModuleAccessMatrix />
+            </TabsContent>
 
-        <TabsContent value="vessels">
-          <VesselAccessControl />
-        </TabsContent>
+            <TabsContent value="vessels" forceMount={activeTab === "vessels" ? true : undefined} className={activeTab !== "vessels" ? "hidden" : ""}>
+              <VesselAccessControl />
+            </TabsContent>
 
-        <TabsContent value="groups">
-          <HierarchicalGroups />
-        </TabsContent>
+            <TabsContent value="groups" forceMount={activeTab === "groups" ? true : undefined} className={activeTab !== "groups" ? "hidden" : ""}>
+              <HierarchicalGroups />
+            </TabsContent>
 
-        <TabsContent value="financial">
-          <FinancialAuthorityMatrix />
-        </TabsContent>
+            <TabsContent value="financial" forceMount={activeTab === "financial" ? true : undefined} className={activeTab !== "financial" ? "hidden" : ""}>
+              <FinancialAuthorityMatrix />
+            </TabsContent>
 
-        <TabsContent value="shipshore">
-          <ShipShoreMode />
-        </TabsContent>
+            <TabsContent value="shipshore" forceMount={activeTab === "shipshore" ? true : undefined} className={activeTab !== "shipshore" ? "hidden" : ""}>
+              <ShipShoreMode />
+            </TabsContent>
 
-        <TabsContent value="activity">
-          <ActivityTimeline />
-        </TabsContent>
+            <TabsContent value="activity" forceMount={activeTab === "activity" ? true : undefined} className={activeTab !== "activity" ? "hidden" : ""}>
+              <ActivityTimeline />
+            </TabsContent>
+          </motion.div>
+        </AnimatePresence>
       </Tabs>
 
       {/* Dialogs */}

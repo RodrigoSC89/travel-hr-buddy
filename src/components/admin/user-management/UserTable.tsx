@@ -139,16 +139,40 @@ export const UserTable: React.FC<UserTableProps> = ({
 
     <CardContent>
       {isLoading ? (
-        <div className="flex items-center justify-center py-12">
-          <div className="h-8 w-8 animate-spin rounded-full border-4 border-primary border-t-transparent" />
+        <div className="space-y-3 py-4">
+          {Array.from({ length: 5 }).map((_, i) => (
+            <div key={i} className="flex items-center gap-4 animate-pulse">
+              <div className="h-9 w-9 rounded-full bg-muted" />
+              <div className="flex-1 space-y-2">
+                <div className="h-4 w-32 bg-muted rounded" />
+                <div className="h-3 w-48 bg-muted rounded" />
+              </div>
+              <div className="h-6 w-20 bg-muted rounded-full" />
+              <div className="h-6 w-16 bg-muted rounded-full" />
+            </div>
+          ))}
         </div>
       ) : filteredUsers.length === 0 ? (
-        <div className="text-center py-12">
-          <Users className="h-12 w-12 mx-auto text-muted-foreground mb-4" />
-          <p className="text-muted-foreground">Nenhum usuário encontrado</p>
-          <Button className="mt-4" onClick={onInvite}>
-            <UserPlus className="h-4 w-4 mr-2" />Convidar Usuário
-          </Button>
+        <div className="text-center py-16">
+          <div className="mx-auto w-16 h-16 rounded-2xl bg-muted/50 flex items-center justify-center mb-4">
+            <Users className="h-8 w-8 text-muted-foreground" />
+          </div>
+          <h3 className="text-lg font-semibold mb-1">Nenhum usuário encontrado</h3>
+          <p className="text-sm text-muted-foreground mb-6 max-w-sm mx-auto">
+            {hasActiveFilters
+              ? "Nenhum resultado para os filtros aplicados. Tente ajustar sua busca."
+              : "Comece convidando membros da sua equipe para a plataforma."
+            }
+          </p>
+          {hasActiveFilters ? (
+            <Button variant="outline" onClick={onClearFilters}>
+              <X className="h-4 w-4 mr-2" />Limpar Filtros
+            </Button>
+          ) : (
+            <Button onClick={onInvite}>
+              <UserPlus className="h-4 w-4 mr-2" />Convidar Primeiro Usuário
+            </Button>
+          )}
         </div>
       ) : (
         <div className="rounded-md border">
