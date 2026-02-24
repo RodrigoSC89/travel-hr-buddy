@@ -485,7 +485,7 @@ const Auth: React.FC = () => {
           initial={{ opacity: 0, x: -50, filter: "blur(8px)" }}
           animate={{ opacity: 1, x: 0, filter: "blur(0px)" }}
           transition={{ duration: 0.9, delay: 0.15, ease: [0.25, 0.46, 0.45, 0.94] }}
-          className="hidden lg:flex flex-col space-y-8"
+          className="hidden lg:flex flex-col space-y-8 justify-center"
         >
           {/* Logo & Title - Cinematic */}
           <div className="flex items-center space-x-6">
@@ -793,10 +793,11 @@ const Auth: React.FC = () => {
                       type="button"
                       variant="ghost"
                       size="sm"
-                      className="w-full text-xs text-white/30 hover:text-white/50 hover:bg-white/[0.03]"
+                      className="w-full text-xs text-white/30 hover:text-white/50 hover:bg-white/[0.03] gap-1.5"
                       onClick={() => setShowTroubleshooting(!showTroubleshooting)}
                     >
-                      {showTroubleshooting ? "Ocultar" : "Problemas para entrar?"}
+                      <AlertCircle className="h-3 w-3" />
+                      {showTroubleshooting ? "Ocultar ajuda" : "Problemas para entrar?"}
                     </Button>
                     {showTroubleshooting && <TroubleshootingSection />}
                   </div>
@@ -807,37 +808,69 @@ const Auth: React.FC = () => {
                   <form onSubmit={signUpForm.handleSubmit(handleSignUp)} className="space-y-4">
                     <div className="space-y-2">
                       <Label htmlFor="signup-name" className="text-white/80">Nome Completo</Label>
-                      <div className="relative">
-                        <User className="absolute left-3 top-3 h-4 w-4 text-muted-foreground" />
+                      <div className="relative group">
+                        <User className={`absolute left-3 top-3 h-4 w-4 transition-colors duration-200 ${
+                          signUpForm.formState.errors.fullName ? 'text-destructive' :
+                          (signUpForm.watch("fullName")?.length ?? 0) >= 2 ? 'text-emerald-400' : 'text-muted-foreground'
+                        }`} />
                         <Input
                           id="signup-name"
                           type="text"
                           placeholder="Seu nome completo"
-                          className="pl-10 bg-white/[0.04] border-white/[0.1] focus:border-primary/50 text-white placeholder:text-white/30"
+                          className={`pl-10 bg-white/[0.04] text-white placeholder:text-white/30 transition-all duration-200 ${
+                            signUpForm.formState.errors.fullName
+                              ? 'border-destructive/50 focus:border-destructive'
+                              : (signUpForm.watch("fullName")?.length ?? 0) >= 2
+                                ? 'border-emerald-500/30 focus:border-emerald-500/50'
+                                : 'border-white/[0.1] focus:border-primary/50'
+                          }`}
                           autoComplete="name"
                           {...signUpForm.register("fullName")}
                         />
+                        {(signUpForm.watch("fullName")?.length ?? 0) >= 2 && !signUpForm.formState.errors.fullName && (
+                          <motion.div initial={{ scale: 0 }} animate={{ scale: 1 }} className="absolute right-3 top-3">
+                            <CheckCircle className="h-4 w-4 text-emerald-400" />
+                          </motion.div>
+                        )}
                       </div>
                       {signUpForm.formState.errors.fullName && (
-                        <p className="text-sm text-destructive">{signUpForm.formState.errors.fullName.message}</p>
+                        <motion.p initial={{ opacity: 0, y: -4 }} animate={{ opacity: 1, y: 0 }} className="text-sm text-destructive flex items-center gap-1">
+                          <AlertCircle className="h-3 w-3" />{signUpForm.formState.errors.fullName.message}
+                        </motion.p>
                       )}
                     </div>
 
                     <div className="space-y-2">
                       <Label htmlFor="signup-email" className="text-white/80">Email</Label>
-                      <div className="relative">
-                        <Mail className="absolute left-3 top-3 h-4 w-4 text-muted-foreground" />
+                      <div className="relative group">
+                        <Mail className={`absolute left-3 top-3 h-4 w-4 transition-colors duration-200 ${
+                          signUpForm.formState.errors.email ? 'text-destructive' :
+                          signUpForm.watch("email")?.includes("@") ? 'text-emerald-400' : 'text-muted-foreground'
+                        }`} />
                         <Input
                           id="signup-email"
                           type="email"
                           placeholder="seu@email.com"
-                          className="pl-10 bg-white/[0.04] border-white/[0.1] focus:border-primary/50 text-white placeholder:text-white/30"
+                          className={`pl-10 bg-white/[0.04] text-white placeholder:text-white/30 transition-all duration-200 ${
+                            signUpForm.formState.errors.email
+                              ? 'border-destructive/50 focus:border-destructive'
+                              : signUpForm.watch("email")?.includes("@")
+                                ? 'border-emerald-500/30 focus:border-emerald-500/50'
+                                : 'border-white/[0.1] focus:border-primary/50'
+                          }`}
                           autoComplete="email"
                           {...signUpForm.register("email")}
                         />
+                        {signUpForm.watch("email")?.includes("@") && !signUpForm.formState.errors.email && (
+                          <motion.div initial={{ scale: 0 }} animate={{ scale: 1 }} className="absolute right-3 top-3">
+                            <CheckCircle className="h-4 w-4 text-emerald-400" />
+                          </motion.div>
+                        )}
                       </div>
                       {signUpForm.formState.errors.email && (
-                        <p className="text-sm text-destructive">{signUpForm.formState.errors.email.message}</p>
+                        <motion.p initial={{ opacity: 0, y: -4 }} animate={{ opacity: 1, y: 0 }} className="text-sm text-destructive flex items-center gap-1">
+                          <AlertCircle className="h-3 w-3" />{signUpForm.formState.errors.email.message}
+                        </motion.p>
                       )}
                     </div>
 
@@ -905,19 +938,35 @@ const Auth: React.FC = () => {
 
                     <div className="space-y-2">
                       <Label htmlFor="signup-confirm" className="text-white/80">Confirmar Senha</Label>
-                      <div className="relative">
-                        <Lock className="absolute left-3 top-3 h-4 w-4 text-muted-foreground" />
+                      <div className="relative group">
+                        <Lock className={`absolute left-3 top-3 h-4 w-4 transition-colors duration-200 ${
+                          signUpForm.formState.errors.confirmPassword ? 'text-destructive' :
+                          (signUpForm.watch("confirmPassword")?.length ?? 0) >= 6 && signUpForm.watch("confirmPassword") === signUpForm.watch("password") ? 'text-emerald-400' : 'text-muted-foreground'
+                        }`} />
                         <Input
                           id="signup-confirm"
                           type={showPassword ? "text" : "password"}
                           placeholder="Repita a senha"
-                          className="pl-10 bg-white/[0.04] border-white/[0.1] focus:border-primary/50 text-white placeholder:text-white/30"
+                          className={`pl-10 bg-white/[0.04] text-white placeholder:text-white/30 transition-all duration-200 ${
+                            signUpForm.formState.errors.confirmPassword
+                              ? 'border-destructive/50 focus:border-destructive'
+                              : (signUpForm.watch("confirmPassword")?.length ?? 0) >= 6 && signUpForm.watch("confirmPassword") === signUpForm.watch("password")
+                                ? 'border-emerald-500/30 focus:border-emerald-500/50'
+                                : 'border-white/[0.1] focus:border-primary/50'
+                          }`}
                           autoComplete="new-password"
                           {...signUpForm.register("confirmPassword")}
                         />
+                        {(signUpForm.watch("confirmPassword")?.length ?? 0) >= 6 && signUpForm.watch("confirmPassword") === signUpForm.watch("password") && (
+                          <motion.div initial={{ scale: 0 }} animate={{ scale: 1 }} className="absolute right-3 top-3">
+                            <CheckCircle className="h-4 w-4 text-emerald-400" />
+                          </motion.div>
+                        )}
                       </div>
                       {signUpForm.formState.errors.confirmPassword && (
-                        <p className="text-sm text-destructive">{signUpForm.formState.errors.confirmPassword.message}</p>
+                        <motion.p initial={{ opacity: 0, y: -4 }} animate={{ opacity: 1, y: 0 }} className="text-sm text-destructive flex items-center gap-1">
+                          <AlertCircle className="h-3 w-3" />{signUpForm.formState.errors.confirmPassword.message}
+                        </motion.p>
                       )}
                     </div>
 
