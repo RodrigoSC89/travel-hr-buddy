@@ -19,7 +19,8 @@ import {
   GraduationCap, Wrench, Stethoscope, Mic, ScanLine, Lock, Star,
   ChevronRight, Sparkles, ArrowRight, Wifi, Database, Cpu, Monitor,
   Globe, Activity, Calculator, X, TrendingDown, Ship, Anchor,
-  BarChart3, Package
+  BarChart3, Package, Play, ShieldCheck, Clock, Award, Minus,
+  HeartHandshake, Landmark, RefreshCw
 } from "lucide-react";
 
 export function FeaturesSection() {
@@ -479,6 +480,243 @@ export function TestimonialsSection() {
   );
 }
 
+// ── Competitor Comparison Section ──
+const COMPETITOR_FEATURES = [
+  { feature: 'Crew Management & HR', nautiOne: true, amos: true, veson: false, seaLogs: 'basic' },
+  { feature: 'PMS (Planned Maintenance)', nautiOne: true, amos: true, veson: false, seaLogs: true },
+  { feature: 'Compliance (MLC/ISM/ISPS)', nautiOne: true, amos: 'partial', veson: false, seaLogs: false },
+  { feature: 'Voyage Estimation (TCE)', nautiOne: true, amos: false, veson: true, seaLogs: false },
+  { feature: 'Trading & Risk (FFA/Hedging)', nautiOne: true, amos: false, veson: true, seaLogs: false },
+  { feature: 'AI-Powered Analytics', nautiOne: true, amos: false, veson: 'basic', seaLogs: false },
+  { feature: 'Multi-currency Payroll', nautiOne: true, amos: false, veson: false, seaLogs: false },
+  { feature: 'CII/EEXI/EU-ETS Carbon', nautiOne: true, amos: false, veson: 'partial', seaLogs: false },
+  { feature: 'Predictive Maintenance AI', nautiOne: true, amos: false, veson: false, seaLogs: false },
+  { feature: 'Weather Routing AI', nautiOne: true, amos: false, veson: 'add-on', seaLogs: false },
+  { feature: 'Offline-First PWA', nautiOne: true, amos: false, veson: false, seaLogs: true },
+  { feature: 'Voice Copilot', nautiOne: true, amos: false, veson: false, seaLogs: false },
+  { feature: 'Computer Vision (defects)', nautiOne: true, amos: false, veson: false, seaLogs: false },
+  { feature: 'Blockchain Audit Trail', nautiOne: true, amos: false, veson: false, seaLogs: false },
+  { feature: 'ERP Connectors (SAP/Oracle)', nautiOne: true, amos: true, veson: true, seaLogs: false },
+  { feature: 'Self-service Trial', nautiOne: true, amos: false, veson: false, seaLogs: false },
+  { feature: 'Starting Price', nautiOne: 'US$ 23/v', amos: '~US$ 500+/v', veson: 'Custom', seaLogs: 'US$ 35/v' },
+];
+
+function CompCell({ value }: { value: boolean | string }) {
+  if (value === true) return <Check className="h-4 w-4 text-primary mx-auto" />;
+  if (value === false) return <X className="h-3.5 w-3.5 text-destructive/40 mx-auto" />;
+  return <span className="text-[10px] font-medium text-muted-foreground mx-auto block text-center">{value}</span>;
+}
+
+export function CompetitorComparisonSection() {
+  return (
+    <section id="comparison" className="py-20 px-4">
+      <div className="container mx-auto max-w-5xl">
+        <ScrollReveal className="text-center mb-10">
+          <Badge className="mb-3" variant="secondary">Benchmark</Badge>
+          <h2 className="text-3xl md:text-4xl font-bold mb-3">Nauti One vs. The Competition</h2>
+          <p className="text-muted-foreground text-base max-w-2xl mx-auto">See how we stack up against global maritime software leaders</p>
+        </ScrollReveal>
+        <ScrollReveal>
+          <div className="overflow-x-auto rounded-xl border border-border/40 bg-card">
+            <table className="w-full text-sm">
+              <thead>
+                <tr className="border-b border-border/40 bg-muted/30">
+                  <th className="text-left p-3 font-medium text-muted-foreground w-[36%]">Capability</th>
+                  <th className="text-center p-3 font-bold text-primary w-[16%]">
+                    <div className="flex flex-col items-center gap-0.5">
+                      <Crown className="h-4 w-4 text-primary" />
+                      Nauti One
+                    </div>
+                  </th>
+                  <th className="text-center p-3 font-medium text-muted-foreground w-[16%]">AMOS</th>
+                  <th className="text-center p-3 font-medium text-muted-foreground w-[16%]">Veson IMOS</th>
+                  <th className="text-center p-3 font-medium text-muted-foreground w-[16%]">SeaLogs</th>
+                </tr>
+              </thead>
+              <tbody>
+                {COMPETITOR_FEATURES.map((row) => (
+                  <tr key={row.feature} className="border-b border-border/10 hover:bg-muted/5 transition-colors">
+                    <td className="p-2.5 px-3 text-xs font-medium">{row.feature}</td>
+                    <td className="p-2.5 bg-primary/[0.03]"><CompCell value={row.nautiOne} /></td>
+                    <td className="p-2.5"><CompCell value={row.amos} /></td>
+                    <td className="p-2.5"><CompCell value={row.veson} /></td>
+                    <td className="p-2.5"><CompCell value={row.seaLogs} /></td>
+                  </tr>
+                ))}
+              </tbody>
+            </table>
+          </div>
+          <p className="text-xs text-muted-foreground text-center mt-3">
+            Comparison based on publicly available data (Q1 2026). Feature availability may vary by plan.
+          </p>
+        </ScrollReveal>
+      </div>
+    </section>
+  );
+}
+
+// ── Live Demo Section ──
+export function LiveDemoSection() {
+  return (
+    <section id="live-demo" className="py-20 px-4 bg-muted/20 border-y border-border/20">
+      <div className="container mx-auto max-w-5xl">
+        <ScrollReveal>
+          <Card className="border-primary/20 overflow-hidden">
+            <div className="grid md:grid-cols-2">
+              <div className="p-8 md:p-12 flex flex-col justify-center">
+                <Badge className="mb-4 w-fit" variant="secondary">Interactive Demo</Badge>
+                <h2 className="text-3xl font-bold mb-3">Experimente Antes de Assinar</h2>
+                <p className="text-muted-foreground mb-6 leading-relaxed">
+                  Acesse o sandbox completo do Nauti One sem cadastro, sem cartão de crédito. 
+                  Veja dashboards, gestão de tripulação, compliance e IA funcionando com dados reais simulados.
+                </p>
+                <div className="space-y-3 mb-8">
+                  {[
+                    { icon: Play, text: 'Tour guiado em português' },
+                    { icon: Clock, text: 'Acesso instantâneo em < 10 segundos' },
+                    { icon: ShieldCheck, text: 'Sem login, sem dados pessoais' },
+                    { icon: Ship, text: 'Dados de frota realistas pré-carregados' },
+                  ].map((item) => (
+                    <div key={item.text} className="flex items-center gap-3">
+                      <div className="p-1.5 rounded-md bg-primary/10">
+                        <item.icon className="h-4 w-4 text-primary" />
+                      </div>
+                      <span className="text-sm">{item.text}</span>
+                    </div>
+                  ))}
+                </div>
+                <div className="flex flex-col sm:flex-row gap-3">
+                  <Link to="/demo">
+                    <Button size="lg" className="gap-2 shadow-lg shadow-primary/20 group">
+                      <Play className="h-4 w-4" />
+                      Acessar Demo Grátis
+                      <ArrowRight className="h-4 w-4 group-hover:translate-x-1 transition-transform" />
+                    </Button>
+                  </Link>
+                  <Link to="/auth?mode=signup">
+                    <Button size="lg" variant="outline" className="gap-2">
+                      <Sparkles className="h-4 w-4" />
+                      Criar Conta Trial
+                    </Button>
+                  </Link>
+                </div>
+              </div>
+              <div className="bg-gradient-to-br from-primary/5 via-primary/10 to-primary/5 p-8 md:p-12 flex items-center justify-center">
+                <div className="w-full max-w-sm space-y-4">
+                  {[
+                    { label: 'Fleet Dashboard', value: '12 navios ativos', icon: Ship },
+                    { label: 'Compliance Score', value: '94.7%', icon: ShieldCheck },
+                    { label: 'AI Insights', value: '23 ações sugeridas', icon: Brain },
+                    { label: 'Crew On Board', value: '847 tripulantes', icon: Users },
+                    { label: 'Carbon Tracking', value: 'CII Rating: B', icon: Globe },
+                  ].map((item) => (
+                    <div key={item.label} className="flex items-center gap-3 p-3 rounded-lg bg-card/80 border border-border/30 backdrop-blur-sm">
+                      <item.icon className="h-5 w-5 text-primary shrink-0" />
+                      <div className="flex-1">
+                        <p className="text-xs text-muted-foreground">{item.label}</p>
+                        <p className="text-sm font-semibold">{item.value}</p>
+                      </div>
+                    </div>
+                  ))}
+                </div>
+              </div>
+            </div>
+          </Card>
+        </ScrollReveal>
+      </div>
+    </section>
+  );
+}
+
+// ── Guarantees & SLA Section ──
+export function GuaranteesSection() {
+  const GUARANTEES = [
+    { icon: ShieldCheck, title: '99.95% Uptime SLA', desc: 'Garantia contratual de disponibilidade com créditos automáticos em caso de violação. Enterprise: 99.99%.', highlight: true },
+    { icon: RefreshCw, title: '30-Day Money Back', desc: 'Não satisfeito? Devolvemos 100% do valor nos primeiros 30 dias, sem perguntas.', highlight: false },
+    { icon: Lock, title: 'SOC 2 Type II Ready', desc: 'Infraestrutura projetada para conformidade SOC 2, com criptografia AES-256 em repouso e TLS 1.3 em trânsito.', highlight: false },
+    { icon: HeartHandshake, title: 'No Lock-in', desc: 'Exporte todos os seus dados a qualquer momento em CSV/JSON. Seus dados são seus, sempre.', highlight: false },
+    { icon: Landmark, title: 'LGPD & GDPR Compliant', desc: 'Processamento de dados em conformidade total com regulamentações brasileiras e europeias de privacidade.', highlight: false },
+    { icon: Award, title: 'ISO 27001 Roadmap', desc: 'Em processo de certificação ISO 27001 para segurança da informação, com auditoria prevista para Q3 2026.', highlight: false },
+  ];
+  return (
+    <section id="guarantees" className="py-20 px-4">
+      <div className="container mx-auto max-w-5xl">
+        <ScrollReveal className="text-center mb-10">
+          <Badge className="mb-3">Trust & Security</Badge>
+          <h2 className="text-3xl md:text-4xl font-bold mb-3">Garantias que Empresas Enterprise Exigem</h2>
+          <p className="text-muted-foreground text-base max-w-2xl mx-auto">Segurança, compliance e garantias contratuais para operações marítimas críticas</p>
+        </ScrollReveal>
+        <StaggerContainer className="grid sm:grid-cols-2 lg:grid-cols-3 gap-4" staggerDelay={0.06}>
+          {GUARANTEES.map((g) => (
+            <StaggerItem key={g.title}>
+              <Card className={`h-full transition-all hover:shadow-md ${g.highlight ? 'border-primary/30 bg-primary/[0.02]' : 'border-border/40 hover:border-primary/20'}`}>
+                <CardContent className="p-5">
+                  <div className={`p-2.5 rounded-lg w-fit mb-3 ${g.highlight ? 'bg-primary/15' : 'bg-muted/50'}`}>
+                    <g.icon className={`h-5 w-5 ${g.highlight ? 'text-primary' : 'text-muted-foreground'}`} />
+                  </div>
+                  <h3 className="font-semibold text-sm mb-1.5">{g.title}</h3>
+                  <p className="text-xs text-muted-foreground leading-relaxed">{g.desc}</p>
+                </CardContent>
+              </Card>
+            </StaggerItem>
+          ))}
+        </StaggerContainer>
+      </div>
+    </section>
+  );
+}
+
+// ── Social Proof / Numbers Section ──
+export function SocialProofSection() {
+  const STATS = [
+    { value: '40+', label: 'Módulos Integrados', icon: Cpu },
+    { value: '821+', label: 'Tabelas de Dados', icon: Database },
+    { value: '10+', label: 'Agentes AI Especializados', icon: Brain },
+    { value: '6', label: 'Frameworks de Compliance', icon: Shield },
+    { value: '15min', label: 'Time to First Value', icon: Clock },
+    { value: '< 3s', label: 'Tempo de Carregamento', icon: Activity },
+  ];
+  const COMPLIANCE_BADGES = [
+    'MLC 2006', 'STCW', 'ISM Code', 'ISPS Code', 'MARPOL', 'SOLAS',
+    'OCIMF/OVID', 'SGSO (ANP)', 'PEO-DP', 'PEOTRAM', 'EU-ETS', 'CII/EEXI',
+  ];
+  return (
+    <section id="social-proof" className="py-20 px-4 bg-muted/20 border-y border-border/20">
+      <div className="container mx-auto max-w-5xl">
+        <ScrollReveal className="text-center mb-10">
+          <Badge className="mb-3" variant="secondary">By the Numbers</Badge>
+          <h2 className="text-3xl md:text-4xl font-bold mb-3">Construído para Escala Global</h2>
+          <p className="text-muted-foreground text-base max-w-2xl mx-auto">A plataforma marítima mais completa do mercado, validada por padrões internacionais</p>
+        </ScrollReveal>
+
+        <StaggerContainer className="grid grid-cols-2 md:grid-cols-3 lg:grid-cols-6 gap-4 mb-12" staggerDelay={0.05}>
+          {STATS.map((s) => (
+            <StaggerItem key={s.label}>
+              <div className="text-center p-4 rounded-xl bg-card border border-border/30">
+                <s.icon className="h-5 w-5 text-primary mx-auto mb-2" />
+                <div className="text-2xl font-bold text-primary">{s.value}</div>
+                <p className="text-[11px] text-muted-foreground mt-0.5">{s.label}</p>
+              </div>
+            </StaggerItem>
+          ))}
+        </StaggerContainer>
+
+        <ScrollReveal className="text-center">
+          <h3 className="text-lg font-semibold mb-4">Frameworks & Regulamentações Suportadas</h3>
+          <div className="flex flex-wrap justify-center gap-2 max-w-3xl mx-auto">
+            {COMPLIANCE_BADGES.map((badge) => (
+              <Badge key={badge} variant="outline" className="text-xs px-3 py-1.5 border-primary/20 bg-primary/5 text-foreground">
+                <ShieldCheck className="h-3 w-3 mr-1.5 text-primary" />
+                {badge}
+              </Badge>
+            ))}
+          </div>
+        </ScrollReveal>
+      </div>
+    </section>
+  );
+}
+
 export function CTASection() {
   const { t } = useTranslation();
   return (
@@ -490,7 +728,7 @@ export function CTASection() {
           <p className="text-lg text-muted-foreground mb-7">{t('landing.cta.subheading')}</p>
           <div className="flex flex-col sm:flex-row gap-3 justify-center">
             <Link to="/auth?mode=signup"><Button size="lg" className="gap-2 text-base px-8 shadow-xl shadow-primary/25 group"><Sparkles className="h-4 w-4" />{t('landing.hero.startTrial')}<ArrowRight className="h-4 w-4 group-hover:translate-x-1 transition-transform" /></Button></Link>
-            <Button size="lg" variant="outline" className="gap-2 text-base px-8" asChild><a href="mailto:comercial@nautione.com.br">{t('landing.cta.talkExpert')}</a></Button>
+            <Link to="/demo"><Button size="lg" variant="outline" className="gap-2 text-base px-8"><Play className="h-4 w-4" />Demo Interativa</Button></Link>
           </div>
         </ScrollReveal>
       </div>

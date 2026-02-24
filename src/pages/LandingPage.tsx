@@ -2,7 +2,7 @@ import React from 'react';
 import { Helmet } from 'react-helmet-async';
 import { useNavigate } from 'react-router-dom';
 import { LandingHeader, LandingHeroSection, TrustBar, LandingFooter } from './landing/LandingHero';
-import { FeaturesSection, DifferentiatorsSection, PricingSection, TestimonialsSection, CTASection } from './landing/LandingSections';
+import { FeaturesSection, DifferentiatorsSection, PricingSection, TestimonialsSection, CTASection, CompetitorComparisonSection, LiveDemoSection, GuaranteesSection, SocialProofSection } from './landing/LandingSections';
 
 const LandingPage = () => {
   const navigate = useNavigate();
@@ -19,9 +19,13 @@ const LandingPage = () => {
         <LandingHeader navigate={navigate} />
         <LandingHeroSection />
         <TrustBar />
+        <SocialProofSection />
         <FeaturesSection />
+        <CompetitorComparisonSection />
         <DifferentiatorsSection />
+        <LiveDemoSection />
         <PricingSection />
+        <GuaranteesSection />
         <TestimonialsSection />
         <CTASection />
         <LandingFooter />
