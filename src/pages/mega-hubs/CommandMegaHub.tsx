@@ -80,6 +80,7 @@ const EventActivityFeed = lazy(() => import('@/components/integration/EventActiv
 const ExpiringCertsWidget = lazy(() => import('@/components/dashboard/ExpiringCertsWidget').then(m => ({ default: m.ExpiringCertsWidget })));
 const FleetRiskIntelligenceWidget = lazy(() => import('@/components/dashboard/FleetRiskIntelligenceWidget').then(m => ({ default: m.FleetRiskIntelligenceWidget })));
 const CrossModuleRiskPanel = lazy(() => import('@/components/dashboard/CrossModuleRiskPanel').then(m => ({ default: m.CrossModuleRiskPanel })));
+const UnifiedKPIStrip = lazy(() => import('@/components/dashboard/UnifiedKPIStrip').then(m => ({ default: m.UnifiedKPIStrip })));
 
 const LoadingSkeleton = () => (
   <div className="space-y-4 p-6">
@@ -326,6 +327,11 @@ export default function CommandMegaHub() {
                   </button>
                 ))}
               </div>
+
+              {/* Unified KPIs from RPC */}
+              <Suspense fallback={<Skeleton className="h-14" />}>
+                <UnifiedKPIStrip />
+              </Suspense>
 
               {/* Fleet KPI Summary Cards */}
               <Suspense fallback={<Skeleton className="h-24" />}>
