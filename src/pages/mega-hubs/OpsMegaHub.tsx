@@ -139,6 +139,7 @@ export default function OpsMegaHub() {
   const [voyageDialogOpen, setVoyageDialogOpen] = useState(false);
   const { vessels, voyages, metrics, isLoading } = useOperationsCommandData();
   const { exportToCSV } = useRealActionHandlers();
+  const queryClient = useQueryClient();
 
   // Sub-tab state
   const [maritimeFleetSubTab, setMaritimeFleetSubTab] = useState<'maritime' | 'fleet'>('maritime');
