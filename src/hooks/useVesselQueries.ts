@@ -1,12 +1,13 @@
 /**
  * Vessel Management Query Hooks
- * Standardized TanStack Query hooks for vessel operations
+ * Standardized TanStack Query hooks with Realtime auto-invalidation
  */
 
 import { useQuery, useMutation, useQueryClient } from "@tanstack/react-query";
 import { supabase } from "@/integrations/supabase/client";
 import { VesselsService } from "@/services/domain/vessels-service";
 import { toast } from "sonner";
+import { useRealtimeInvalidation } from "./useRealtimeQuery";
 
 export const VESSEL_QUERY_KEYS = {
   all: ["vessels"] as const,
@@ -17,6 +18,12 @@ export const VESSEL_QUERY_KEYS = {
 };
 
 export function useVesselsList(filters?: { status?: string; type?: string }) {
+  // Auto-invalidate on realtime changes
+  useRealtimeInvalidation({
+    table: "vessels",
+    queryKeys: [VESSEL_QUERY_KEYS.all, VESSEL_QUERY_KEYS.stats],
+  });
+
   return useQuery({
     queryKey: VESSEL_QUERY_KEYS.list(filters),
     queryFn: async () => {

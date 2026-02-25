@@ -1,12 +1,13 @@
 /**
  * Crew Management Query Hooks
- * Standardized TanStack Query hooks for crew CRUD operations
+ * Standardized TanStack Query hooks with Realtime auto-invalidation
  */
 
 import { useQuery, useMutation, useQueryClient } from "@tanstack/react-query";
 import { supabase } from "@/integrations/supabase/client";
 import { CrewService } from "@/services/domain/crew-service";
 import { toast } from "sonner";
+import { useRealtimeInvalidation } from "./useRealtimeQuery";
 
 export const CREW_QUERY_KEYS = {
   all: ["crew-members"] as const,
@@ -17,6 +18,12 @@ export const CREW_QUERY_KEYS = {
 };
 
 export function useCrewMembers(filters?: { status?: string; vessel_id?: string; search?: string }) {
+  // Auto-invalidate on realtime changes
+  useRealtimeInvalidation({
+    table: "crew_members",
+    queryKeys: [CREW_QUERY_KEYS.all, CREW_QUERY_KEYS.stats],
+  });
+
   return useQuery({
     queryKey: CREW_QUERY_KEYS.list(filters),
     queryFn: async () => {
