@@ -16,6 +16,9 @@ const CrewFatigueHeatmap = lazy(() =>
 const TrendAnalyticsCards = lazy(() =>
   import("./TrendAnalyticsCards").then(m => ({ default: m.TrendAnalyticsCards }))
 );
+const FleetBenchmarkDashboard = lazy(() =>
+  import("@/components/analytics/FleetBenchmarkDashboard")
+);
 
 export function DashboardIntelligencePanel() {
   return (
@@ -26,6 +29,7 @@ export function DashboardIntelligencePanel() {
         <Suspense fallback={null}><FuelConsumptionTrends /></Suspense>
         <Suspense fallback={null}><CrewFatigueHeatmap /></Suspense>
       </div>
+      <Suspense fallback={null}><FleetBenchmarkDashboard /></Suspense>
     </div>
   );
 }

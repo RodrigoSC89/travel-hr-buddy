@@ -1,4 +1,4 @@
-import { useState, Suspense, lazy } from "react";
+import { useState, Suspense, lazy, useMemo } from "react";
 import type { FC } from "react";
 import { Outlet } from "react-router-dom";
 import { SidebarProvider } from "@/components/ui/sidebar";
@@ -35,6 +35,7 @@ const QuickActionFAB = lazy(() =>
 const KeyboardShortcutsHelp = lazy(() => 
   import('@/components/ui/KeyboardShortcutsHelp').then(m => ({ default: m.KeyboardShortcutsHelp }))
 );
+const PageTransition = lazy(() => import('@/components/ui/PageTransition'));
 
 
 export const AppLayout: FC = () => {
@@ -70,7 +71,11 @@ export const AppLayout: FC = () => {
                 <Suspense fallback={null}><SmartBreadcrumbs /></Suspense>
                 <ModuleErrorBoundary moduleName="Módulo">
                   <Suspense fallback={<ModulePageSkeleton />}>
-                    <Outlet />
+                    <Suspense fallback={null}>
+                      <PageTransition>
+                        <Outlet />
+                      </PageTransition>
+                    </Suspense>
                   </Suspense>
                 </ModuleErrorBoundary>
               </main>
