@@ -31,26 +31,31 @@ import type { EntityType } from "@/lib/domain/types";
 // ════════════════════════════════════════════
 
 export function useCreateVessel() {
-  return useIntegratedMutation<Record<string, unknown>, any>({
+  return useAuditedMutation<Record<string, unknown>, any>({
     mutationFn: (input) => VesselsService.create(input),
     eventType: "vessel.created",
     entityType: "vessel",
+    module: "fleet",
+    actionType: "create",
     getEntityId: (out) => out.id,
     buildPayload: (_in, out) => ({ vessel_id: out.id, name: out.name, vessel_type: out.vessel_type }),
-    invalidateKeys: [["vessels"], ["fleet"]],
+    invalidateKeys: [["vessels"], ["fleet"], ["dashboard-kpis"]],
     successMessage: "Embarcação criada com sucesso",
     errorMessage: "Erro ao criar embarcação",
   });
 }
 
 export function useUpdateVessel() {
-  return useIntegratedMutation<{ id: string; updates: Record<string, unknown> }, any>({
+  return useAuditedMutation<{ id: string; updates: Record<string, unknown> }, any>({
     mutationFn: ({ id, updates }) => VesselsService.update(id, updates),
     eventType: "vessel.updated",
     entityType: "vessel",
+    module: "fleet",
+    actionType: "update",
     getEntityId: (out) => out.id,
+    getChanges: (input) => Object.fromEntries(Object.entries(input.updates).map(([k, v]) => [k, { old: undefined, new: v }])),
     buildPayload: (input, out) => ({ vessel_id: out.id, changes: input.updates }),
-    invalidateKeys: [["vessels"], ["fleet"]],
+    invalidateKeys: [["vessels"], ["fleet"], ["dashboard-kpis"]],
     successMessage: "Embarcação atualizada",
     errorMessage: "Erro ao atualizar embarcação",
   });
@@ -61,26 +66,31 @@ export function useUpdateVessel() {
 // ════════════════════════════════════════════
 
 export function useCreateVoyage() {
-  return useIntegratedMutation<Record<string, unknown>, any>({
+  return useAuditedMutation<Record<string, unknown>, any>({
     mutationFn: (input) => VoyagesService.create(input),
     eventType: "voyage.created",
     entityType: "voyage",
+    module: "operations",
+    actionType: "create",
     getEntityId: (out) => out.id,
     buildPayload: (_in, out) => ({ voyage_id: out.id, vessel_id: out.vessel_id, voyage_number: out.voyage_number }),
-    invalidateKeys: [["voyages"]],
+    invalidateKeys: [["voyages"], ["dashboard-kpis"]],
     successMessage: "Viagem criada com sucesso",
     errorMessage: "Erro ao criar viagem",
   });
 }
 
 export function useCompleteVoyage() {
-  return useIntegratedMutation<{ id: string; data: Record<string, unknown> }, any>({
+  return useAuditedMutation<{ id: string; data: Record<string, unknown> }, any>({
     mutationFn: ({ id, data }) => VoyagesService.complete(id, data),
     eventType: "voyage.completed",
     entityType: "voyage",
+    module: "operations",
+    actionType: "update",
     getEntityId: (out) => out.id,
+    getDescription: (_in, out) => `Viagem ${out.voyage_number || out.id} concluída`,
     buildPayload: (_in, out) => ({ voyage_id: out.id, vessel_id: out.vessel_id }),
-    invalidateKeys: [["voyages"], ["voyage-pnl"]],
+    invalidateKeys: [["voyages"], ["voyage-pnl"], ["dashboard-kpis"]],
     successMessage: "Viagem concluída — P&L calculado",
     errorMessage: "Erro ao concluir viagem",
   });
@@ -91,26 +101,31 @@ export function useCompleteVoyage() {
 // ════════════════════════════════════════════
 
 export function useCreateWorkOrder() {
-  return useIntegratedMutation<Record<string, unknown>, any>({
+  return useAuditedMutation<Record<string, unknown>, any>({
     mutationFn: (input) => MaintenanceService.createWorkOrder(input),
     eventType: "maintenance.work_order.created",
     entityType: "work_order",
+    module: "maintenance",
+    actionType: "create",
     getEntityId: (out) => out.id,
     buildPayload: (_in, out) => ({ work_order_id: out.id, vessel_id: out.vessel_id, priority: out.priority }),
-    invalidateKeys: [["maintenance"], ["work-orders"]],
+    invalidateKeys: [["maintenance"], ["work-orders"], ["dashboard-kpis"]],
     successMessage: "Ordem de serviço criada",
     errorMessage: "Erro ao criar OS",
   });
 }
 
 export function useCompleteWorkOrder() {
-  return useIntegratedMutation<{ id: string; data: Record<string, unknown> }, any>({
+  return useAuditedMutation<{ id: string; data: Record<string, unknown> }, any>({
     mutationFn: ({ id, data }) => MaintenanceService.completeWorkOrder(id, data),
     eventType: "maintenance.work_order.completed",
     entityType: "work_order",
+    module: "maintenance",
+    actionType: "update",
     getEntityId: (out) => out.id,
+    getDescription: (_in, out) => `Work Order ${out.work_order_number || out.id} concluída`,
     buildPayload: (_in, out) => ({ work_order_id: out.id, vessel_id: out.vessel_id, actual_cost: out.actual_cost }),
-    invalidateKeys: [["maintenance"], ["work-orders"], ["compliance"]],
+    invalidateKeys: [["maintenance"], ["work-orders"], ["compliance"], ["dashboard-kpis"]],
     successMessage: "OS concluída — Compliance notificado",
     errorMessage: "Erro ao concluir OS",
   });
@@ -121,26 +136,32 @@ export function useCompleteWorkOrder() {
 // ════════════════════════════════════════════
 
 export function useCreateFinding() {
-  return useIntegratedMutation<Record<string, unknown>, any>({
+  return useAuditedMutation<Record<string, unknown>, any>({
     mutationFn: (input) => ComplianceService.createFinding(input),
     eventType: "compliance.finding.created",
     entityType: "finding",
+    module: "compliance",
+    actionType: "create",
     getEntityId: (out) => out.id,
+    getDescription: (_in, out) => `Finding ${out.severity || ''}: ${out.category || 'N/A'}`,
     buildPayload: (_in, out) => ({ finding_id: out.id, severity: out.severity, category: out.category }),
-    invalidateKeys: [["findings"], ["compliance"], ["risk"]],
+    invalidateKeys: [["findings"], ["compliance"], ["risk"], ["dashboard-kpis"]],
     successMessage: "Não-conformidade registrada → Risk Matrix atualizada",
     errorMessage: "Erro ao registrar finding",
   });
 }
 
 export function useCloseFinding() {
-  return useIntegratedMutation<{ id: string; resolution: Record<string, unknown> }, any>({
+  return useAuditedMutation<{ id: string; resolution: Record<string, unknown> }, any>({
     mutationFn: ({ id, resolution }) => ComplianceService.closeFinding(id, resolution),
     eventType: "compliance.finding.closed",
     entityType: "finding",
+    module: "compliance",
+    actionType: "update",
     getEntityId: (out) => out.id,
+    getDescription: (input) => `Finding ${input.id} encerrado`,
     buildPayload: (input) => ({ finding_id: input.id }),
-    invalidateKeys: [["findings"], ["compliance"], ["risk"]],
+    invalidateKeys: [["findings"], ["compliance"], ["risk"], ["dashboard-kpis"]],
     successMessage: "Finding encerrado",
     errorMessage: "Erro ao encerrar finding",
   });
@@ -151,26 +172,32 @@ export function useCloseFinding() {
 // ════════════════════════════════════════════
 
 export function useApproveInvoice() {
-  return useIntegratedMutation<string, any>({
+  return useAuditedMutation<string, any>({
     mutationFn: (invoiceId) => FinanceService.approveInvoice(invoiceId),
     eventType: "finance.invoice.approved",
     entityType: "invoice",
+    module: "finance",
+    actionType: "approve",
     getEntityId: (out) => out.id,
+    getDescription: (_in, out) => `Fatura ${out.invoice_number || out.id} aprovada — ${out.currency || 'USD'} ${out.amount || 0}`,
     buildPayload: (_in, out) => ({ invoice_id: out.id, amount: out.amount, currency: out.currency }),
-    invalidateKeys: [["invoices"], ["finance"], ["voyage-pnl"]],
+    invalidateKeys: [["invoices"], ["finance"], ["voyage-pnl"], ["dashboard-kpis"]],
     successMessage: "Fatura aprovada → Financeiro atualizado",
     errorMessage: "Erro ao aprovar fatura",
   });
 }
 
 export function useApprovePO() {
-  return useIntegratedMutation<string, any>({
+  return useAuditedMutation<string, any>({
     mutationFn: (poId) => FinanceService.approvePO(poId),
     eventType: "finance.po.approved",
     entityType: "purchase_order",
+    module: "finance",
+    actionType: "approve",
     getEntityId: (out) => out.id,
+    getDescription: (_in, out) => `PO ${out.po_number || out.id} aprovada — total ${out.estimated_total || 0}`,
     buildPayload: (_in, out) => ({ po_id: out.id, total_amount: out.estimated_total }),
-    invalidateKeys: [["procurement"], ["finance"], ["expenses"]],
+    invalidateKeys: [["procurement"], ["finance"], ["expenses"], ["dashboard-kpis"]],
     successMessage: "PO aprovada → Lançamento financeiro criado",
     errorMessage: "Erro ao aprovar PO",
   });
@@ -181,14 +208,17 @@ export function useApprovePO() {
 // ════════════════════════════════════════════
 
 export function useLinkDocument() {
-  return useIntegratedMutation<
+  return useAuditedMutation<
     { documentId: string; entityType: EntityType; entityId: string; purpose?: string; organizationId?: string },
     any
   >({
     mutationFn: (input) => DocumentsService.linkDocument(input),
     eventType: "document.linked",
     entityType: "document",
+    module: "documents",
+    actionType: "update",
     getEntityId: (out) => out.id,
+    getDescription: (input) => `Documento ${input.documentId} vinculado a ${input.entityType}:${input.entityId}`,
     buildPayload: (input) => ({ document_id: input.documentId, entity_type: input.entityType, entity_id: input.entityId }),
     invalidateKeys: [["documents"], ["entity-documents"], ["related-records"]],
     successMessage: "Documento vinculado",
@@ -381,13 +411,16 @@ export function useUpdateISMCAPAStatus() {
 // ════════════════════════════════════════════
 
 export function useCreateCrewMember() {
-  return useIntegratedMutation<Record<string, unknown>, any>({
+  return useAuditedMutation<Record<string, unknown>, any>({
     mutationFn: (input) => CrewService.createCrewMember(input),
     eventType: "people.crew.created",
     entityType: "crew_member",
+    module: "crew",
+    actionType: "create",
     getEntityId: (out) => out.id,
+    getDescription: (_in, out) => `Tripulante ${out.full_name || 'N/A'} (${out.rank || ''}) adicionado`,
     buildPayload: (_in, out) => ({ crew_id: out.id, name: out.full_name, rank: out.rank }),
-    invalidateKeys: [["crew"], ["crew-scheduler"], ["rotations"]],
+    invalidateKeys: [["crew"], ["crew-scheduler"], ["rotations"], ["dashboard-kpis"]],
     successMessage: "Tripulante adicionado com sucesso",
     errorMessage: "Erro ao adicionar tripulante",
   });

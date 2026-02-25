@@ -65,6 +65,9 @@ const SpotlightSearch = lazy(() =>
 const SmartContextActionsBar = lazy(() => 
   import("@/components/layout/SmartContextActionsBar").then(mod => ({ default: mod.SmartContextActionsBar }))
 );
+const OperationalPulseStrip = lazy(() => 
+  import("@/components/dashboard/OperationalPulseStrip").then(mod => ({ default: mod.OperationalPulseStrip }))
+);
 
 export const AuthenticatedLayout = () => {
   useRealtimeToasts();
@@ -86,6 +89,8 @@ export const AuthenticatedLayout = () => {
           </div>
           {/* Smart context actions strip */}
           <Suspense fallback={null}><SmartContextActionsBar /></Suspense>
+          {/* Operational Pulse Strip - live KPI indicators */}
+          <Suspense fallback={null}><OperationalPulseStrip /></Suspense>
           <main className="flex-1 overflow-auto px-3 pb-24 md:px-6 md:pb-6 lg:px-8 xl:px-10 2xl:px-12">
             {alerts.length > 0 && (
               <div className="mt-3 mb-1">
