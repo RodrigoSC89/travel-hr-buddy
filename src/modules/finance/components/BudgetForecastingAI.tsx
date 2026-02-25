@@ -62,7 +62,7 @@ export function BudgetForecastingAI() {
         ]);
 
         const fuelSpent = (fuelData || []).reduce((s: number, r: unknown) => { const rec = r as Record<string, unknown>; return s + ((Number(rec.quantity) || 0) * (Number(rec.unit_cost) || 0)); }, 0);
-        const maintSpent = (maintData || []).reduce((s, r) => s + (Number((r as unknown as Record<string, unknown>).total_cost) || 0), 0);
+        const maintSpent = (maintData || []).reduce((s: number, r: unknown) => s + (Number((r as Record<string, unknown>).total_cost) || 0), 0);
         const crewSpent = (crewData || []).reduce((s: number, r: unknown) => s + (Number((r as Record<string, unknown>).net_salary) || 0), 0);
 
         const cats: BudgetCategory[] = [

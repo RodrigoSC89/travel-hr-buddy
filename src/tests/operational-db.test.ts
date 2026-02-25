@@ -22,7 +22,8 @@ describe("OperationalDatabase", () => {
   });
 
   it("has correct table definitions", () => {
-    expect(operationalDb).toHaveProperty("vesselContexts");
-    expect(operationalDb).toHaveProperty("offlineCache");
+    expect(operationalDb).toHaveProperty("getCache");
+    expect(operationalDb).toHaveProperty("setCache");
+    expect(operationalDb).toHaveProperty("clearExpiredCache");
   });
 });
