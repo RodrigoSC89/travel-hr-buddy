@@ -7,6 +7,7 @@
  */
 
 import { useIntegratedMutation } from "./useIntegratedMutation";
+import { useAuditedMutation } from "./useAuditedMutation";
 import {
   VesselsService,
   VoyagesService,
@@ -1162,7 +1163,7 @@ export function useDeleteCrewCertification() {
 // ════════════════════════════════════════════
 
 export function useCreateMaintenanceTask() {
-  return useIntegratedMutation<Record<string, unknown>, any>({
+  return useAuditedMutation<Record<string, unknown>, any>({
     mutationFn: async (input) => {
       const { supabase } = await import("@/integrations/supabase/client");
       const { data, error } = await supabase.from('maintenance_tasks')
@@ -1172,16 +1173,19 @@ export function useCreateMaintenanceTask() {
     },
     eventType: "maintenance.task.created",
     entityType: "work_order",
+    module: "maintenance",
+    actionType: "create",
     getEntityId: (out) => out.id,
+    getDescription: (_in, out) => `OS criada: ${out.title || out.id}`,
     buildPayload: (_in, out) => ({ task_id: out.id, title: out.title, priority: out.priority }),
-    invalidateKeys: [["pms-job-cards"]],
+    invalidateKeys: [["pms-job-cards"], ["maintenance"], ["dashboard-kpis"]],
     successMessage: "Ordem de serviço criada",
     errorMessage: "Erro ao criar OS",
   });
 }
 
 export function useUpdateMaintenanceTaskStatus() {
-  return useIntegratedMutation<{ id: string; status: string }, any>({
+  return useAuditedMutation<{ id: string; status: string }, any>({
     mutationFn: async ({ id, status }) => {
       const { supabase } = await import("@/integrations/supabase/client");
       const updates: any = { status };
@@ -1193,9 +1197,13 @@ export function useUpdateMaintenanceTaskStatus() {
     },
     eventType: "maintenance.task.status_changed",
     entityType: "work_order",
+    module: "maintenance",
+    actionType: "update",
     getEntityId: (out) => out.id,
+    getDescription: (input) => `Status OS alterado para: ${input.status}`,
+    getChanges: (input) => ({ status: { old: undefined, new: input.status } }),
     buildPayload: (input) => ({ task_id: input.id, status: input.status }),
-    invalidateKeys: [["pms-job-cards"]],
+    invalidateKeys: [["pms-job-cards"], ["maintenance"], ["dashboard-kpis"]],
     successMessage: "Status atualizado",
     errorMessage: "Erro ao atualizar status",
   });

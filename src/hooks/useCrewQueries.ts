@@ -1,13 +1,13 @@
 /**
  * Crew Management Query Hooks
- * Standardized TanStack Query hooks with Realtime auto-invalidation
+ * v2: Create/Update use useAuditedMutation for automatic audit trail
  */
 
-import { useQuery, useMutation, useQueryClient } from "@tanstack/react-query";
+import { useQuery } from "@tanstack/react-query";
 import { supabase } from "@/integrations/supabase/client";
 import { CrewService } from "@/services/domain/crew-service";
-import { toast } from "sonner";
 import { useRealtimeInvalidation } from "./useRealtimeQuery";
+import { useAuditedMutation } from "./useAuditedMutation";
 
 export const CREW_QUERY_KEYS = {
   all: ["crew-members"] as const,
@@ -18,7 +18,6 @@ export const CREW_QUERY_KEYS = {
 };
 
 export function useCrewMembers(filters?: { status?: string; vessel_id?: string; search?: string }) {
-  // Auto-invalidate on realtime changes
   useRealtimeInvalidation({
     table: "crew_members",
     queryKeys: [CREW_QUERY_KEYS.all, CREW_QUERY_KEYS.stats],
@@ -104,28 +103,23 @@ export function useCrewStats() {
 }
 
 export function useCreateCrewMember() {
-  const queryClient = useQueryClient();
-
-  return useMutation({
-    mutationFn: (crew: Record<string, unknown>) => CrewService.createCrewMember(crew),
-    onSuccess: (data) => {
-      toast.success("Tripulante adicionado com sucesso", {
-        description: `${data.full_name} foi registrado no sistema.`,
-      });
-      queryClient.invalidateQueries({ queryKey: CREW_QUERY_KEYS.all });
-      queryClient.invalidateQueries({ queryKey: CREW_QUERY_KEYS.stats });
-    },
-    onError: (error: Error) => {
-      toast.error("Erro ao adicionar tripulante", { description: error.message });
-    },
+  return useAuditedMutation<Record<string, unknown>, any>({
+    mutationFn: (crew) => CrewService.createCrewMember(crew),
+    eventType: "people.crew.created",
+    entityType: "crew_member",
+    module: "crew",
+    actionType: "create",
+    getEntityId: (data) => data.id,
+    getDescription: (_input, output) => `Tripulante registrado: ${output.full_name}`,
+    invalidateKeys: [["crew-members"], ["crew-stats"], ["crew"], ["dashboard-kpis"]],
+    successMessage: "Tripulante adicionado com sucesso",
+    errorMessage: "Erro ao adicionar tripulante",
   });
 }
 
 export function useUpdateCrewMember() {
-  const queryClient = useQueryClient();
-
-  return useMutation({
-    mutationFn: async ({ id, updates }: { id: string; updates: Record<string, unknown> }) => {
+  return useAuditedMutation<{ id: string; updates: Record<string, unknown> }, any>({
+    mutationFn: async ({ id, updates }) => {
       const { data, error } = await supabase
         .from("crew_members")
         .update(updates as any)
@@ -135,13 +129,21 @@ export function useUpdateCrewMember() {
       if (error) throw error;
       return data;
     },
-    onSuccess: (data) => {
-      toast.success("Tripulante atualizado", { description: data.full_name });
-      queryClient.invalidateQueries({ queryKey: CREW_QUERY_KEYS.all });
-      queryClient.invalidateQueries({ queryKey: CREW_QUERY_KEYS.detail(data.id) });
+    eventType: "people.crew.created",
+    entityType: "crew_member",
+    module: "crew",
+    actionType: "update",
+    getEntityId: (data) => data.id,
+    getDescription: (_input, output) => `Tripulante atualizado: ${output.full_name}`,
+    getChanges: (input) => {
+      const changes: Record<string, { old: unknown; new: unknown }> = {};
+      for (const [key, val] of Object.entries(input.updates)) {
+        changes[key] = { old: undefined, new: val };
+      }
+      return changes;
     },
-    onError: (error: Error) => {
-      toast.error("Erro ao atualizar tripulante", { description: error.message });
-    },
+    invalidateKeys: [["crew-members"], ["crew-stats"], ["crew"], ["dashboard-kpis"]],
+    successMessage: "Tripulante atualizado",
+    errorMessage: "Erro ao atualizar tripulante",
   });
 }
