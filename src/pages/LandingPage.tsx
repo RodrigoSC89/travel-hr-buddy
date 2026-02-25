@@ -1,7 +1,9 @@
 import React from 'react';
 import { Helmet } from 'react-helmet-async';
 import { useNavigate } from 'react-router-dom';
-import { LandingHeader, LandingHeroSection, TrustBar, LandingFooter } from './landing/LandingHero';
+import { LandingFooter } from './landing/LandingHero';
+import { CinematicHero } from '@/components/landing/CinematicHero';
+import { CinematicHeader } from '@/components/landing/CinematicHeader';
 import { FeaturesSection, DifferentiatorsSection, PricingSection, TestimonialsSection, CTASection, CompetitorComparisonSection, LiveDemoSection, GuaranteesSection, SocialProofSection } from './landing/LandingSections';
 
 const LandingPage = () => {
@@ -16,9 +18,8 @@ const LandingPage = () => {
         <script type="application/ld+json">{JSON.stringify({ "@context": "https://schema.org", "@type": "SoftwareApplication", "name": "Nauti One", "applicationCategory": "BusinessApplication", "operatingSystem": "Web", "description": "Maritime HR & Operations Platform with AI", "offers": { "@type": "AggregateOffer", "lowPrice": "500", "highPrice": "2000", "priceCurrency": "USD", "offerCount": "3" } })}</script>
       </Helmet>
       <div className="min-h-screen bg-background overflow-hidden">
-        <LandingHeader navigate={navigate} />
-        <LandingHeroSection />
-        <TrustBar />
+        <CinematicHeader navigate={navigate} />
+        <CinematicHero />
         <SocialProofSection />
         <FeaturesSection />
         <CompetitorComparisonSection />
