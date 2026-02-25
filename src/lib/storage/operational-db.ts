@@ -21,7 +21,7 @@ interface OfflineCacheEntry {
 }
 
 const DB_NAME = 'nauti-operational';
-const DB_VERSION = 1;
+const DB_VERSION = 2; // Bumped to avoid VersionError on existing browsers
 
 let dbInstance: IDBPDatabase | null = null;
 
