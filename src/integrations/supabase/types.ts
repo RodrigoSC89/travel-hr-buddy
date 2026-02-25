@@ -50354,6 +50354,48 @@ export type Database = {
         }
         Relationships: []
       }
+      system_audit_trail: {
+        Row: {
+          action_type: string
+          changes: Json | null
+          created_at: string | null
+          description: string | null
+          id: string
+          metadata: Json | null
+          module: string
+          resource_id: string | null
+          resource_type: string | null
+          severity: string | null
+          user_id: string | null
+        }
+        Insert: {
+          action_type: string
+          changes?: Json | null
+          created_at?: string | null
+          description?: string | null
+          id?: string
+          metadata?: Json | null
+          module: string
+          resource_id?: string | null
+          resource_type?: string | null
+          severity?: string | null
+          user_id?: string | null
+        }
+        Update: {
+          action_type?: string
+          changes?: Json | null
+          created_at?: string | null
+          description?: string | null
+          id?: string
+          metadata?: Json | null
+          module?: string
+          resource_id?: string | null
+          resource_type?: string | null
+          severity?: string | null
+          user_id?: string | null
+        }
+        Relationships: []
+      }
       system_backups: {
         Row: {
           backup_status: string
@@ -56629,6 +56671,44 @@ export type Database = {
         Relationships: [
           {
             foreignKeyName: "vessel_qr_codes_vessel_id_fkey"
+            columns: ["vessel_id"]
+            isOneToOne: false
+            referencedRelation: "vessels"
+            referencedColumns: ["id"]
+          },
+        ]
+      }
+      vessel_risk_scores: {
+        Row: {
+          calculated_at: string | null
+          id: string
+          risk_category: string
+          risk_factors: Json | null
+          risk_score: number | null
+          valid_until: string | null
+          vessel_id: string | null
+        }
+        Insert: {
+          calculated_at?: string | null
+          id?: string
+          risk_category: string
+          risk_factors?: Json | null
+          risk_score?: number | null
+          valid_until?: string | null
+          vessel_id?: string | null
+        }
+        Update: {
+          calculated_at?: string | null
+          id?: string
+          risk_category?: string
+          risk_factors?: Json | null
+          risk_score?: number | null
+          valid_until?: string | null
+          vessel_id?: string | null
+        }
+        Relationships: [
+          {
+            foreignKeyName: "vessel_risk_scores_vessel_id_fkey"
             columns: ["vessel_id"]
             isOneToOne: false
             referencedRelation: "vessels"

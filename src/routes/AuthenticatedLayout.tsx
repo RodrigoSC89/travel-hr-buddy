@@ -34,6 +34,9 @@ const OfflineStatusBar = lazy(() =>
   import("@/components/offline/OfflineStatusBar").then(mod => ({ default: mod.OfflineStatusBar }))
 );
 const CommandPalette = lazy(() => import("@/components/shared/CommandPalette"));
+const CommandPaletteDialogLazy = lazy(() => 
+  import("@/components/ui/CommandPaletteDialog").then(mod => ({ default: mod.CommandPaletteDialog }))
+);
 const GlobalAIAssistant = lazy(() => 
   import("@/components/ai/GlobalAIAssistant").then(mod => ({ default: mod.GlobalAIAssistant }))
 );
@@ -97,6 +100,7 @@ export const AuthenticatedLayout = () => {
         <Suspense fallback={null}><ProductOnboardingTour /></Suspense>
         <Suspense fallback={null}><OfflineStatusBar position="bottom" showDetails={true} /></Suspense>
         <Suspense fallback={null}><CommandPalette /></Suspense>
+        <Suspense fallback={null}><CommandPaletteDialogLazy /></Suspense>
         <Suspense fallback={null}><GlobalAIAssistant /></Suspense>
         <Suspense fallback={null}><InstallPrompt /></Suspense>
         <Suspense fallback={null}><UpdatePrompt /></Suspense>
