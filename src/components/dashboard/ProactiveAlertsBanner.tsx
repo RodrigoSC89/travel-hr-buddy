@@ -15,12 +15,14 @@ interface ProactiveAlertsBannerProps {
   maxVisible?: number;
 }
 
-const alertIcons = {
+const alertIcons: Record<string, typeof Bell> = {
   certificate_expiry: Shield,
   maintenance_due: Wrench,
   compliance_gap: FileWarning,
   crew_fatigue: AlertTriangle,
   system_anomaly: Bell,
+  cascading_risk: AlertTriangle,
+  vessel_risk: Shield,
 };
 
 const severityStyles = {
