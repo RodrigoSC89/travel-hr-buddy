@@ -18,6 +18,7 @@ import { Card, CardContent, CardHeader, CardTitle } from '@/components/ui/card';
 import { Badge } from '@/components/ui/badge';
 import { Compass, Activity, BarChart3, Eye, Shield, Bell, Radio, RefreshCw, Wifi, WifiOff, Brain, Ship, Users, FileText, Wrench, Plus, AlertTriangle, Gauge } from 'lucide-react';
 import { Skeleton } from '@/components/ui/skeleton';
+import { QuickSeedBanner } from '@/components/dashboard/QuickSeedBanner';
 import { EnhancedActionBar } from '@/components/ui/world-class/EnhancedActionBar';
 import { PremiumTimeline } from '@/components/ui/world-class/PremiumTimeline';
 import { WorkflowStatusBar } from '@/components/ui/world-class/WorkflowStatusBar';
@@ -275,6 +276,8 @@ export default function CommandMegaHub() {
         <div className="container py-6">
           <Suspense fallback={<LoadingSkeleton />}>
             <TabsContent value="overview" className="mt-0 space-y-6">
+              {/* Quick Seed Banner for new users */}
+              <QuickSeedBanner />
               {/* System Status Bar */}
               <div className="flex items-center gap-3 text-xs text-muted-foreground px-1">
                 <div className="flex items-center gap-1.5">

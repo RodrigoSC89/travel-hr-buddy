@@ -22,75 +22,57 @@ const TOUR_STORAGE_KEY = "nautilus_guided_tour_completed";
 // Tour steps for the Command Center
 const COMMAND_CENTER_STEPS: DriveStep[] = [
   {
+    popover: {
+      title: "🚀 Bem-vindo ao Nauti One!",
+      description: "Vamos explorar a plataforma marítima mais completa do mundo. Este tour leva ~2 minutos.",
+    },
+  },
+  {
     element: '[data-tour="sidebar"]',
     popover: {
       title: "🧭 Menu de Navegação",
-      description: "Acesse todos os módulos do sistema aqui. São mais de 50 funcionalidades organizadas por categoria.",
+      description: "Acesse todos os 7 Mega-Hubs e 75+ módulos organizados por categoria. Use o ícone ⊞ para sub-módulos.",
       side: "right",
       align: "start",
     },
   },
   {
-    element: '[data-tour="search"]',
+    element: '[data-tour="header-search"]',
     popover: {
-      title: "🔍 Busca Universal",
-      description: "Encontre qualquer módulo, tripulante, embarcação ou documento rapidamente. Use Cmd+K para abrir.",
+      title: "🔍 Busca Universal (Cmd+K)",
+      description: "Encontre qualquer módulo, tripulante, embarcação ou documento instantaneamente.",
       side: "bottom",
       align: "center",
     },
   },
   {
-    element: '[data-tour="tabs"]',
+    element: '[data-tour="main-content"]',
     popover: {
-      title: "📊 Abas do Command Center",
-      description: "Navegue entre Visão Geral, Operações, Executivo, IA, Resiliência, Alertas e Configurações.",
+      title: "📊 Área Principal",
+      description: "Aqui são exibidos dashboards, formulários e análises. Cada hub tem abas especializadas.",
       side: "bottom",
       align: "center",
     },
   },
   {
-    element: '[data-tour="metrics"]',
+    element: '[data-tour="header-notifications"]',
     popover: {
-      title: "📈 Métricas em Tempo Real",
-      description: "Acompanhe KPIs críticos: frota ativa, receita, alertas e eficiência da IA.",
-      side: "bottom",
-      align: "center",
-    },
-  },
-  {
-    element: '[data-tour="chart"]',
-    popover: {
-      title: "📉 Operações ao Vivo",
-      description: "Visualize a atividade operacional das últimas 24 horas em tempo real.",
-      side: "top",
-      align: "center",
-    },
-  },
-  {
-    element: '[data-tour="status"]',
-    popover: {
-      title: "🚦 Status dos Sistemas",
-      description: "Monitore o status de Frota, Tripulação, Manutenção e Compliance em um só lugar.",
-      side: "top",
-      align: "center",
-    },
-  },
-  {
-    element: '[data-tour="activities"]',
-    popover: {
-      title: "📋 Atividades Recentes",
-      description: "Veja as últimas ações do sistema: viagens, manutenções e atualizações de documentos.",
-      side: "left",
-      align: "start",
-    },
-  },
-  {
-    element: '[data-tour="ia-button"]',
-    popover: {
-      title: "🤖 IA Ativa",
-      description: "O assistente de IA está sempre disponível para análises, previsões e recomendações.",
+      title: "🔔 Central de Notificações",
+      description: "Alertas em tempo real: certificados expirando, manutenções atrasadas, eventos críticos de segurança.",
       side: "bottom",
       align: "end",
+    },
+  },
+  {
+    popover: {
+      title: "🎯 7 Mega-Hubs Estratégicos",
+      description: "1️⃣ Command • 2️⃣ Ops • 3️⃣ Maintenance • 4️⃣ AI Lab • 5️⃣ Tracking • 6️⃣ Compliance • 7️⃣ Workbench — Explore cada um pelo menu lateral!",
+    },
+  },
+  {
+    popover: {
+      title: "✅ Pronto para Navegar!",
+      description: "Use o botão ❓ no topo para repetir este tour a qualquer momento. Boas operações! ⚓",
     },
   },
 ];
