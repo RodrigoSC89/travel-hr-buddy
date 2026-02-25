@@ -15,6 +15,7 @@ import { useRealtimeToasts } from "@/hooks/useRealtimeToasts";
 import { useAutonomousMonitor } from "@/hooks/useAutonomousMonitor";
 import { useSmartPrefetch } from "@/lib/performance/smart-prefetch";
 import { useEventReactor } from "@/hooks/useEventReactor";
+import { useTacticalMonitor } from "@/hooks/useTacticalMonitor";
 
 // Lazy load non-critical layout components
 const PresenceAvatars = lazy(() => 
@@ -65,7 +66,8 @@ const SpotlightSearch = lazy(() =>
 export const AuthenticatedLayout = () => {
   useRealtimeToasts();
   useSmartPrefetch();
-  useEventReactor(); // Cross-module event reactor — listens to all domain events
+  useEventReactor();
+  useTacticalMonitor({ enabled: true, autoResolveThreshold: 0.80 });
   const { alerts, dismissAlert } = useAutonomousMonitor({ enabled: true });
 
   return (
