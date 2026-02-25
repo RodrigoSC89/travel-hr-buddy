@@ -7,8 +7,8 @@ describe('operationalDb', () => {
   it('should export operationalDb with expected tables', async () => {
     const { operationalDb } = await import('@/lib/storage/operational-db');
     expect(operationalDb).toBeDefined();
-    expect(operationalDb.vesselContexts).toBeDefined();
-    expect(operationalDb.offlineCache).toBeDefined();
+    expect(typeof operationalDb.getCache).toBe('function');
+    expect(typeof operationalDb.setCache).toBe('function');
   });
 });
 

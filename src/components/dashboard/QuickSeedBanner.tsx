@@ -39,10 +39,11 @@ export function QuickSeedBanner() {
       if (!user?.id) return null;
       const { data } = await supabase
         .from("profiles")
-        .select("organization_id")
+        .select("*")
         .eq("id", user.id)
         .maybeSingle();
-      return data?.organization_id || null;
+      const profile = data as Record<string, unknown> | null;
+      return (profile?.organization_id as string) || null;
     },
     enabled: !!user?.id,
   });
