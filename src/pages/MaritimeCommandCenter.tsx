@@ -166,7 +166,11 @@ export default function MaritimeCommandCenter() {
           vessels={vessels}
           userId={userId}
           onTabChange={setActiveTab}
-          handleCreate={handleCreate}
+          handleCreate={(type: string) => {
+            handleCreate(type);
+            // Reload data after CRUD operations
+            setTimeout(() => loadData(), 500);
+          }}
           handleExport={handleExport}
           showInfo={showInfo}
         />

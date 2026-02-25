@@ -76,6 +76,7 @@ const CrewCertificationRadar = lazy(() => import('@/components/dashboard/CrewCer
 const PIClaimsIntelligence = lazy(() => import('@/components/dashboard/PIClaimsIntelligence').then(m => ({ default: m.PIClaimsIntelligence })));
 const IntegrationHealthWidget = lazy(() => import('@/components/integration/IntegrationHealthWidget').then(m => ({ default: m.IntegrationHealthWidget })));
 const EventActivityFeed = lazy(() => import('@/components/integration/EventActivityFeed').then(m => ({ default: m.EventActivityFeed })));
+const ExpiringCertsWidget = lazy(() => import('@/components/dashboard/ExpiringCertsWidget').then(m => ({ default: m.ExpiringCertsWidget })));
 
 const LoadingSkeleton = () => (
   <div className="space-y-4 p-6">
@@ -366,8 +367,8 @@ export default function CommandMegaHub() {
                 variant="horizontal"
               />
 
-              {/* Mission Control Grid */}
-              <div className="grid grid-cols-1 lg:grid-cols-3 gap-6">
+              {/* Mission Control Grid + Expiring Certs */}
+              <div className="grid grid-cols-1 lg:grid-cols-4 gap-6">
                 <div className="lg:col-span-1">
                   <Suspense fallback={<Skeleton className="h-[400px]" />}>
                     <OperationalRadar />
@@ -376,6 +377,11 @@ export default function CommandMegaHub() {
                 <div className="lg:col-span-1">
                   <Suspense fallback={<Skeleton className="h-[400px]" />}>
                     <SituationRoom />
+                  </Suspense>
+                </div>
+                <div className="lg:col-span-1">
+                  <Suspense fallback={<Skeleton className="h-[400px]" />}>
+                    <ExpiringCertsWidget />
                   </Suspense>
                 </div>
                 <div className="lg:col-span-1">
