@@ -173,7 +173,7 @@ export interface OfflineSettings {
 }
 
 const DB_NAME = 'NautiOneDB';
-const DB_VERSION = 1;
+const DB_VERSION = 11; // Must be > existing Dexie version (was 10)
 
 let dbInstance: IDBPDatabase | null = null;
 
