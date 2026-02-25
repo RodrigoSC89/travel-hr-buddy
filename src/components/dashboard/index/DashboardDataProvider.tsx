@@ -1,6 +1,5 @@
 /**
- * Dashboard Data Provider - Fetches real data from Supabase
- * Provides live metrics and stats for the dashboard
+ * Dashboard Data Provider - Uses get_dashboard_kpis RPC for single-call metrics
  */
 
 import { useEffect, useState, useCallback } from "react";
@@ -19,6 +18,11 @@ export interface DashboardMetrics {
   complianceRate: number;
   revenueThisMonth: number;
   revenueGrowth: number;
+  certsExpiring30: number;
+  certsExpiring90: number;
+  certsExpired: number;
+  safetyScore: number;
+  voyagesActive: number;
   lastUpdated: Date;
   isLoading: boolean;
 }
@@ -43,6 +47,11 @@ const defaultMetrics: DashboardMetrics = {
   complianceRate: 0,
   revenueThisMonth: 0,
   revenueGrowth: 0,
+  certsExpiring30: 0,
+  certsExpiring90: 0,
+  certsExpired: 0,
+  safetyScore: 100,
+  voyagesActive: 0,
   lastUpdated: new Date(),
   isLoading: true
 };
@@ -55,74 +64,48 @@ export function useDashboardData() {
 
   const fetchMetrics = useCallback(async () => {
     try {
-      // Fetch vessels
-      const { data: vessels, count: vesselCount } = await supabase
-        .from("vessels")
-        .select("*", { count: "exact" });
-      
-      const activeVessels = vessels?.filter((v) => v.status === "active" || v.status === "operational")?.length || 0;
+      // Single RPC call replaces 7+ sequential queries
+      const { data: kpis, error: kpiError } = await supabase.rpc('get_dashboard_kpis');
 
-      // Fetch crew members
-      const { count: crewCount } = await supabase
-        .from("crew_members")
-        .select("*", { count: "exact", head: true });
-      
-      const { count: activeCrewCount } = await supabase
-        .from("crew_members")
-        .select("*", { count: "exact", head: true })
-        .eq("status", "active");
-
-      // Fetch operational checklists as pending items
-      const { count: pendingMaintenanceCount } = await supabase
-        .from("operational_checklists")
-        .select("*", { count: "exact", head: true })
-        .neq("status", "completed");
-
-      // Fetch critical alerts
-      const { count: criticalAlertsCount } = await supabase
-        .from("price_alerts")
-        .select("*", { count: "exact", head: true })
-        .eq("is_active", true);
-
-      // Fetch AI insights for notifications
+      // Fetch notifications separately (lightweight)
       const { data: aiInsights } = await supabase
         .from("ai_insights")
-        .select("*")
+        .select("id, title, description, priority, status, created_at")
         .order("created_at", { ascending: false })
         .limit(10);
 
-      // Calculate compliance from audit data
-      const { data: audits } = await supabase
-        .from("audit_center_logs")
-        .select("compliance_score")
-        .not("compliance_score", "is", null)
-        .limit(50);
-      
-      const avgCompliance = audits?.length 
-        ? audits.reduce((sum, a) => sum + (a.compliance_score || 0), 0) / audits.length 
-        : 95;
+      if (kpiError) {
+        logger.error("RPC get_dashboard_kpis error:", kpiError);
+        throw kpiError;
+      }
 
-      // Map AI insights to notifications
+      const k = kpis as Record<string, number>;
+
       const mappedNotifications: RealtimeNotification[] = (aiInsights || []).map((insight) => ({
         id: insight.id,
         title: insight.title || "Insight",
         message: insight.description || "",
-        type: insight.priority === "high" ? "warning" : "info",
+        type: insight.priority === "high" ? "warning" as const : "info" as const,
         createdAt: new Date(insight.created_at),
         isRead: insight.status === "read"
       }));
 
       setMetrics({
-        totalVessels: vesselCount || 0,
-        activeVessels: activeVessels,
-        totalCrew: crewCount || 0,
-        activeCrew: activeCrewCount || 0,
-        pendingMaintenance: pendingMaintenanceCount || 0,
-        criticalAlerts: criticalAlertsCount || 0,
+        totalVessels: k.vessels_total || 0,
+        activeVessels: k.vessels_active || 0,
+        totalCrew: k.crew_total || 0,
+        activeCrew: k.crew_onboard || 0,
+        pendingMaintenance: k.maint_pending || 0,
+        criticalAlerts: k.incidents_open || 0,
         completedTasks: 0,
-        complianceRate: Math.round(avgCompliance * 10) / 10,
-        revenueThisMonth: 0,
+        complianceRate: k.compliance_score || 0,
+        revenueThisMonth: k.expenses_30d || 0,
         revenueGrowth: 0,
+        certsExpiring30: k.certs_expiring_30 || 0,
+        certsExpiring90: k.certs_expiring_90 || 0,
+        certsExpired: k.certs_expired || 0,
+        safetyScore: k.safety_score || 100,
+        voyagesActive: k.voyages_active || 0,
         lastUpdated: new Date(),
         isLoading: false
       });
@@ -131,7 +114,6 @@ export function useDashboardData() {
 
     } catch (error) {
       logger.error("Error fetching dashboard metrics:", error);
-      // Set default values on error
       setMetrics(prev => ({
         ...prev,
         isLoading: false,
@@ -151,11 +133,9 @@ export function useDashboardData() {
   }, [fetchMetrics, toast]);
 
   const markNotificationAsRead = useCallback(async (id: string) => {
-    setNotifications(prev => 
+    setNotifications(prev =>
       prev.map(n => n.id === id ? { ...n, isRead: true } : n)
     );
-
-    // Update in database
     await supabase
       .from("ai_insights")
       .update({ status: "read" })
@@ -164,7 +144,6 @@ export function useDashboardData() {
 
   const markAllNotificationsAsRead = useCallback(async () => {
     const unreadIds = notifications.filter(n => !n.isRead).map(n => n.id);
-    
     setNotifications(prev => prev.map(n => ({ ...n, isRead: true })));
 
     if (unreadIds.length > 0) {
@@ -190,6 +169,27 @@ export function useDashboardData() {
     const interval = setInterval(fetchMetrics, 60000);
     return () => clearInterval(interval);
   }, [fetchMetrics]);
+
+  // Realtime subscriptions for critical tables
+  useEffect(() => {
+    const channel = supabase
+      .channel('dashboard-realtime')
+      .on('postgres_changes', { event: '*', schema: 'public', table: 'vessels' }, () => fetchMetrics())
+      .on('postgres_changes', { event: '*', schema: 'public', table: 'crew_members' }, () => fetchMetrics())
+      .on('postgres_changes', { event: 'INSERT', schema: 'public', table: 'soc_alerts' }, (payload) => {
+        const alert = payload.new as Record<string, unknown>;
+        toast({
+          title: `⚠️ ${alert.title || 'Novo Alerta'}`,
+          description: String(alert.message || 'Um novo alerta foi registrado'),
+        });
+        fetchMetrics();
+      })
+      .subscribe();
+
+    return () => {
+      supabase.removeChannel(channel);
+    };
+  }, [fetchMetrics, toast]);
 
   return {
     metrics,
