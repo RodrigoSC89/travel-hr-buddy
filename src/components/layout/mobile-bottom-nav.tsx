@@ -23,7 +23,7 @@ const navItems: NavItem[] = [
   { label: "Frota", icon: Ship, path: "/ops?tab=fleet" },
   { label: "IA", icon: Brain, path: "/ai" },
   { label: "Compliance", icon: Shield, path: "/compliance" },
-  { label: "Alertas", icon: Bell, path: "/tracking?tab=alerts" },
+  { label: "Alertas", icon: Bell, path: "/command?tab=comms-alerts" },
 ];
 
 interface MobileBottomNavProps {

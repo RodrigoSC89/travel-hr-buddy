@@ -1048,7 +1048,7 @@ const Auth: React.FC = () => {
 
           {/* About System CTA */}
           <motion.div 
-            className="text-center mt-4"
+            className="text-center mt-4 space-y-3"
             initial={{ opacity: 0 }}
             animate={{ opacity: 1 }}
             transition={{ delay: 1.2 }}
@@ -1062,11 +1062,31 @@ const Auth: React.FC = () => {
               <Compass className="mr-2 h-4 w-4" />
               Conheça o Sistema Nauti One
             </Button>
+
+            {/* Live System Stats */}
+            <motion.div
+              initial={{ opacity: 0, y: 8 }}
+              animate={{ opacity: 1, y: 0 }}
+              transition={{ delay: 1.6 }}
+              className="flex items-center justify-center gap-4 text-[10px]"
+              style={{ color: 'hsla(210,30%,50%,0.5)' }}
+            >
+              <span className="flex items-center gap-1">
+                <span className="h-1.5 w-1.5 rounded-full bg-emerald-500 animate-pulse" />
+                Sistema Online
+              </span>
+              <span>•</span>
+              <span>720+ tabelas</span>
+              <span>•</span>
+              <span>100% RLS</span>
+              <span>•</span>
+              <span>Enterprise Grade</span>
+            </motion.div>
           </motion.div>
 
           {/* Footer */}
           <p className="text-center text-xs mt-4 pb-safe" style={{ color: 'hsla(210,30%,50%,0.4)' }}>
-            © {new Date().getFullYear()} Nauti One • Maritime Operations Platform
+            © {new Date().getFullYear()} Nauti One • Maritime Operations Platform • v3.0
           </p>
         </motion.div>
       </motion.div>

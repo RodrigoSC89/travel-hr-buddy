@@ -295,39 +295,48 @@ export function useRejectAISuggestion() {
 // ════════════════════════════════════════════
 
 export function useCreatePMSSystem() {
-  return useIntegratedMutation<Record<string, unknown>, any>({
+  return useAuditedMutation<Record<string, unknown>, any>({
     mutationFn: (input) => PMSService.createSystem(input),
     eventType: "maintenance.system.created",
     entityType: "work_order",
+    module: "maintenance",
+    actionType: "create",
     getEntityId: (out) => out.id,
+    getDescription: (_in, out) => `Sistema PMS "${out.name || ''}" (${out.code || ''}) adicionado`,
     buildPayload: (_in, out) => ({ system_id: out.id, name: out.name, code: out.code }),
-    invalidateKeys: [["pms_systems"], ["maintenance"]],
+    invalidateKeys: [["pms_systems"], ["maintenance"], ["dashboard-kpis"]],
     successMessage: "Sistema PMS adicionado",
     errorMessage: "Erro ao adicionar sistema",
   });
 }
 
 export function useCreatePMSWorkOrder() {
-  return useIntegratedMutation<Record<string, unknown>, any>({
+  return useAuditedMutation<Record<string, unknown>, any>({
     mutationFn: (input) => PMSService.createWorkOrder(input),
     eventType: "maintenance.work_order.created",
     entityType: "work_order",
+    module: "maintenance",
+    actionType: "create",
     getEntityId: (out) => out.id,
+    getDescription: (_in, out) => `WO ${out.work_order_number || out.id} criada — prioridade ${out.priority || 'normal'}`,
     buildPayload: (_in, out) => ({ work_order_id: out.id, wo_number: out.work_order_number, priority: out.priority }),
-    invalidateKeys: [["pms_work_orders"], ["maintenance"], ["work-orders"]],
+    invalidateKeys: [["pms_work_orders"], ["maintenance"], ["work-orders"], ["dashboard-kpis"]],
     successMessage: "Work Order criada",
     errorMessage: "Erro ao criar Work Order",
   });
 }
 
 export function useUpdatePMSWorkOrderStatus() {
-  return useIntegratedMutation<{ id: string; status: string }, any>({
+  return useAuditedMutation<{ id: string; status: string }, any>({
     mutationFn: ({ id, status }) => PMSService.updateWorkOrderStatus(id, status),
     eventType: "maintenance.work_order.status_changed",
     entityType: "work_order",
+    module: "maintenance",
+    actionType: "update",
     getEntityId: (out) => out.id,
+    getDescription: (input) => `WO ${input.id} → status: ${input.status}`,
     buildPayload: (input) => ({ work_order_id: input.id, status: input.status }),
-    invalidateKeys: [["pms_work_orders"], ["maintenance"], ["work-orders"], ["compliance"]],
+    invalidateKeys: [["pms_work_orders"], ["maintenance"], ["work-orders"], ["compliance"], ["dashboard-kpis"]],
     successMessage: "Status atualizado",
     errorMessage: "Erro ao atualizar status",
   });
@@ -338,26 +347,32 @@ export function useUpdatePMSWorkOrderStatus() {
 // ════════════════════════════════════════════
 
 export function useCreateCharterParty() {
-  return useIntegratedMutation<Record<string, unknown>, any>({
+  return useAuditedMutation<Record<string, unknown>, any>({
     mutationFn: (input) => CharteringService.createCharterParty(input),
     eventType: "finance.charter.created",
     entityType: "charter_party",
+    module: "chartering",
+    actionType: "create",
     getEntityId: (out) => out.id,
+    getDescription: (_in, out) => `Charter Party ${out.charter_type || ''} — ${out.charterer_name || 'N/A'}`,
     buildPayload: (_in, out) => ({ charter_id: out.id, charter_type: out.charter_type, charterer: out.charterer_name }),
-    invalidateKeys: [["charter_parties"], ["finance"], ["voyages"]],
+    invalidateKeys: [["charter_parties"], ["finance"], ["voyages"], ["dashboard-kpis"]],
     successMessage: "Charter Party criada",
     errorMessage: "Erro ao criar Charter Party",
   });
 }
 
 export function useUpdateCharterStatus() {
-  return useIntegratedMutation<{ id: string; status: string }, any>({
+  return useAuditedMutation<{ id: string; status: string }, any>({
     mutationFn: ({ id, status }) => CharteringService.updateStatus(id, status),
     eventType: "finance.charter.status_changed",
     entityType: "charter_party",
+    module: "chartering",
+    actionType: "update",
     getEntityId: (out) => out.id,
+    getDescription: (input) => `Charter ${input.id} → ${input.status}`,
     buildPayload: (input) => ({ charter_id: input.id, status: input.status }),
-    invalidateKeys: [["charter_parties"], ["finance"]],
+    invalidateKeys: [["charter_parties"], ["finance"], ["dashboard-kpis"]],
     successMessage: "Status do charter atualizado",
     errorMessage: "Erro ao atualizar status",
   });
@@ -368,39 +383,48 @@ export function useUpdateCharterStatus() {
 // ════════════════════════════════════════════
 
 export function useRunISMGapAnalysis() {
-  return useIntegratedMutation<{ elementId: string; data: Record<string, unknown> }, any>({
+  return useAuditedMutation<{ elementId: string; data: Record<string, unknown> }, any>({
     mutationFn: ({ elementId, data }) => ISMService.runGapAnalysis(elementId, data),
     eventType: "compliance.gap_analysis.completed",
     entityType: "audit",
+    module: "compliance",
+    actionType: "create",
     getEntityId: (out) => out.id,
+    getDescription: (_in, out) => `Gap Analysis ISM — Score: ${out.compliance_score || 'N/A'}%`,
     buildPayload: (_in, out) => ({ gap_id: out.id, score: out.compliance_score, status: out.status }),
-    invalidateKeys: [["ism_gap_analysis"], ["compliance"]],
+    invalidateKeys: [["ism_gap_analysis"], ["compliance"], ["dashboard-kpis"]],
     successMessage: "Avaliação ISM concluída",
     errorMessage: "Erro na avaliação",
   });
 }
 
 export function useCreateISMCAPA() {
-  return useIntegratedMutation<Record<string, unknown>, any>({
+  return useAuditedMutation<Record<string, unknown>, any>({
     mutationFn: (input) => ISMService.createCAPA(input),
     eventType: "compliance.capa.created",
     entityType: "capa",
+    module: "compliance",
+    actionType: "create",
     getEntityId: (out) => out.id,
+    getDescription: (_in, out) => `CAPA ${out.id} criada para finding de compliance`,
     buildPayload: (_in, out) => ({ capa_id: out.id }),
-    invalidateKeys: [["ism_capa"], ["compliance"], ["findings"]],
+    invalidateKeys: [["ism_capa"], ["compliance"], ["findings"], ["dashboard-kpis"]],
     successMessage: "CAPA criada",
     errorMessage: "Erro ao criar CAPA",
   });
 }
 
 export function useUpdateISMCAPAStatus() {
-  return useIntegratedMutation<{ id: string; status: string }, any>({
+  return useAuditedMutation<{ id: string; status: string }, any>({
     mutationFn: ({ id, status }) => ISMService.updateCAPAStatus(id, status),
     eventType: "compliance.capa.closed",
     entityType: "capa",
+    module: "compliance",
+    actionType: "update",
     getEntityId: (out) => out.id,
+    getDescription: (input) => `CAPA ${input.id} → ${input.status}`,
     buildPayload: (input) => ({ capa_id: input.id, status: input.status }),
-    invalidateKeys: [["ism_capa"], ["compliance"]],
+    invalidateKeys: [["ism_capa"], ["compliance"], ["dashboard-kpis"]],
     successMessage: "Status CAPA atualizado",
     errorMessage: "Erro ao atualizar CAPA",
   });
@@ -431,13 +455,16 @@ export function useCreateCrewMember() {
 // ════════════════════════════════════════════
 
 export function useCreateETSRecord() {
-  return useIntegratedMutation<Record<string, unknown>, any>({
+  return useAuditedMutation<Record<string, unknown>, any>({
     mutationFn: (input) => ETSService.createRecord(input),
     eventType: "finance.ets.record_created",
     entityType: "expense",
+    module: "emissions",
+    actionType: "create",
     getEntityId: (out) => out.id,
+    getDescription: (_in, out) => `ETS Record — CO₂: ${out.total_co2_mt || 0}mt, Custo: €${out.total_cost_eur || 0}`,
     buildPayload: (_in, out) => ({ record_id: out.id, co2: out.total_co2_mt, cost: out.total_cost_eur }),
-    invalidateKeys: [["eu_ets_tracking"], ["finance"], ["compliance"]],
+    invalidateKeys: [["eu_ets_tracking"], ["finance"], ["compliance"], ["dashboard-kpis"]],
     successMessage: "Registro ETS criado",
     errorMessage: "Erro ao criar registro ETS",
   });
