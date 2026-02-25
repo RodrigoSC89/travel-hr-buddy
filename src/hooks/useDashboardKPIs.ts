@@ -148,7 +148,7 @@ async function fallbackDirectQueries(): Promise<DashboardKPIs> {
     supabase.from("crew_members").select("id, status", { count: "exact" }),
     supabase.from("maintenance_tasks").select("id, status, due_date").in("status", ["pending", "in_progress", "overdue"]),
     supabase.from("crew_certifications").select("id, expiry_date").gte("expiry_date", new Date().toISOString()).lte("expiry_date", new Date(Date.now() + 90 * 86400000).toISOString()),
-    supabase.from("incidents").select("id", { count: "exact" }).neq("status", "closed"),
+    supabase.from("incidents").select("id", { count: "exact" }).is("resolved_at", null),
     supabase.from("non_conformities").select("id", { count: "exact" }).neq("status", "closed"),
   ]);
 
