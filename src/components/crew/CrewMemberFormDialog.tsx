@@ -120,11 +120,11 @@ export function CrewMemberFormDialog({ open, onOpenChange, editId, vessels, onSu
       };
 
       if (isEdit) {
-        const { error } = await supabase.from('crew_members').update(payload).eq('id', editId);
+        const { error } = await supabase.from('crew_members').update(payload as any).eq('id', editId);
         if (error) throw error;
         toast.success('Tripulante atualizado com sucesso!');
       } else {
-        const { error } = await supabase.from('crew_members').insert(payload);
+        const { error } = await supabase.from('crew_members').insert(payload as any);
         if (error) throw error;
         toast.success('Tripulante cadastrado com sucesso!');
       }
@@ -138,13 +138,13 @@ export function CrewMemberFormDialog({ open, onOpenChange, editId, vessels, onSu
         if (newCrew) {
           await supabase.from('crew_certifications').insert({
             crew_member_id: newCrew.id,
-            certificate_name: 'STCW Certificate of Competency',
+            certification_name: 'STCW Certificate of Competency',
+            certification_type: 'STCW',
             certificate_number: form.stcw_certificate_number,
             issue_date: form.stcw_issue_date || null,
             expiry_date: form.stcw_expiry_date || null,
             status: 'valid',
-            issuing_authority: 'Maritime Authority',
-          });
+          } as any);
         }
       }
 

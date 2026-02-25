@@ -15,6 +15,7 @@ import { ProfessionalHeader } from "./professional-header";
 import { ProfessionalKPICard } from "./professional-kpi-card";
 import { useQuery } from "@tanstack/react-query";
 import { fromUntyped } from "@/integrations/supabase/untyped-client";
+import { supabase } from "@/integrations/supabase/client";
 
 export function ProfessionalWeatherDashboard() {
   const [activeTab, setActiveTab] = useState("overview");

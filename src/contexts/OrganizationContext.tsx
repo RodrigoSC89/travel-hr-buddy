@@ -76,7 +76,7 @@ export const OrganizationProvider = ({ children }: { children: ReactNode }) => {
       setError(null);
 
       // Usar organização demo - cast to Organization with required fields
-      const demoOrg = {
+      const demoOrg = ({
         id: "550e8400-e29b-41d4-a716-446655440000",
         name: "Nautilus Demo",
         slug: "nautilus-demo",
@@ -96,7 +96,7 @@ export const OrganizationProvider = ({ children }: { children: ReactNode }) => {
         owner_id: null,
         stripe_customer_id: null,
         stripe_subscription_id: null,
-      } as Organization;
+      }) as unknown as Organization;
       
       setCurrentOrganization(demoOrg);
       setUserRole("admin");

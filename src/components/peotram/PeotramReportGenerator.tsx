@@ -16,6 +16,7 @@ import {
   Shield, Target, AlertTriangle, CheckCircle, Clock, Printer
 } from "lucide-react";
 import { fromUntyped } from "@/integrations/supabase/untyped-client";
+import { supabase } from "@/integrations/supabase/client";
 import { toast } from "sonner";
 import ReactMarkdown from "react-markdown";
 import { logger } from "@/lib/logger";

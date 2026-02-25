@@ -1,10 +1,11 @@
 /**
  * NAUTI ONE - IndexedDB Database
- * Persistência local com Dexie.js para funcionamento offline
+ * Persistência local com idb para funcionamento offline
  * Otimizado para sincronização em conexões de 0.5-2 Mbps
+ * Migrated from Dexie to idb to resolve TS1540 build errors
  */
 
-import Dexie, { Table } from 'dexie';
+import { openDB, type IDBPDatabase } from 'idb';
 
 // ===================================================================
 // INTERFACES DE DADOS COM METADADOS DE SINCRONIZAÇÃO
@@ -144,7 +145,6 @@ export interface OfflineAlert extends SyncMetadata {
   updated_at?: string;
 }
 
-// Operações pendentes de sincronização
 export interface PendingOperation {
   id?: number;
   operation: 'create' | 'update' | 'delete';
@@ -157,7 +157,6 @@ export interface PendingOperation {
   priority: 'low' | 'normal' | 'high' | 'critical';
 }
 
-// Cache de dados para acesso rápido
 export interface CacheEntry {
   id?: number;
   key: string;
@@ -166,7 +165,6 @@ export interface CacheEntry {
   ttl: number;
 }
 
-// Configurações do usuário offline
 export interface OfflineSettings {
   id?: number;
   key: string;
@@ -174,71 +172,251 @@ export interface OfflineSettings {
   updatedAt: number;
 }
 
-// ===================================================================
-// CLASSE DO BANCO DE DADOS
-// ===================================================================
+const DB_NAME = 'NautiOneDB';
+const DB_VERSION = 1;
 
-export class NautiOneDB extends Dexie {
-  // Tabelas de dados
-  vessels!: Table<OfflineVessel, string>;
-  crew_members!: Table<OfflineCrewMember, string>;
-  certificates!: Table<OfflineCertificate, string>;
-  maintenance_orders!: Table<OfflineMaintenanceOrder, string>;
-  documents!: Table<OfflineDocument, string>;
-  invoices!: Table<OfflineInvoice, string>;
-  alerts!: Table<OfflineAlert, string>;
+let dbInstance: IDBPDatabase | null = null;
+
+async function getDB(): Promise<IDBPDatabase> {
+  if (dbInstance) return dbInstance;
   
-  // Tabelas de controle
-  pending_operations!: Table<PendingOperation, number>;
-  cache!: Table<CacheEntry, number>;
-  settings!: Table<OfflineSettings, number>;
+  dbInstance = await openDB(DB_NAME, DB_VERSION, {
+    upgrade(db) {
+      // Data stores
+      if (!db.objectStoreNames.contains('vessels')) {
+        const store = db.createObjectStore('vessels', { keyPath: 'id' });
+        store.createIndex('status', 'status');
+        store.createIndex('_synced', '_synced');
+      }
+      if (!db.objectStoreNames.contains('crew_members')) {
+        const store = db.createObjectStore('crew_members', { keyPath: 'id' });
+        store.createIndex('vessel_id', 'vessel_id');
+        store.createIndex('status', 'status');
+        store.createIndex('_synced', '_synced');
+      }
+      if (!db.objectStoreNames.contains('certificates')) {
+        const store = db.createObjectStore('certificates', { keyPath: 'id' });
+        store.createIndex('crew_member_id', 'crew_member_id');
+        store.createIndex('_synced', '_synced');
+      }
+      if (!db.objectStoreNames.contains('maintenance_orders')) {
+        const store = db.createObjectStore('maintenance_orders', { keyPath: 'id' });
+        store.createIndex('vessel_id', 'vessel_id');
+        store.createIndex('status', 'status');
+        store.createIndex('_synced', '_synced');
+      }
+      if (!db.objectStoreNames.contains('documents')) {
+        const store = db.createObjectStore('documents', { keyPath: 'id' });
+        store.createIndex('vessel_id', 'vessel_id');
+        store.createIndex('_synced', '_synced');
+      }
+      if (!db.objectStoreNames.contains('invoices')) {
+        const store = db.createObjectStore('invoices', { keyPath: 'id' });
+        store.createIndex('vessel_id', 'vessel_id');
+        store.createIndex('_synced', '_synced');
+      }
+      if (!db.objectStoreNames.contains('alerts')) {
+        const store = db.createObjectStore('alerts', { keyPath: 'id' });
+        store.createIndex('vessel_id', 'vessel_id');
+        store.createIndex('_synced', '_synced');
+      }
+      if (!db.objectStoreNames.contains('pending_operations')) {
+        const store = db.createObjectStore('pending_operations', { keyPath: 'id', autoIncrement: true });
+        store.createIndex('table', 'table');
+        store.createIndex('recordId', 'recordId');
+      }
+      if (!db.objectStoreNames.contains('cache')) {
+        const store = db.createObjectStore('cache', { keyPath: 'id', autoIncrement: true });
+        store.createIndex('key', 'key');
+      }
+      if (!db.objectStoreNames.contains('settings')) {
+        const store = db.createObjectStore('settings', { keyPath: 'id', autoIncrement: true });
+        store.createIndex('key', 'key');
+      }
+    },
+  });
 
-  constructor() {
-    super('NautiOneDB');
-    
-    // Schema versão 1
-    this.version(1).stores({
-      // Dados principais
-      vessels: 'id, name, imo_number, status, organization_id, _synced, _lastModified, _deleted',
-      crew_members: 'id, vessel_id, [first_name+last_name], status, organization_id, _synced, _lastModified, _deleted',
-      certificates: 'id, crew_member_id, certificate_number, expiry_date, status, _synced, _lastModified, _deleted',
-      maintenance_orders: 'id, vessel_id, status, priority, due_date, organization_id, _synced, _lastModified, _deleted',
-      documents: 'id, vessel_id, crew_member_id, document_type, expiry_date, _synced, _lastModified, _deleted',
-      invoices: 'id, vessel_id, status, due_at, organization_id, _synced, _lastModified, _deleted',
-      alerts: 'id, vessel_id, alert_type, severity, is_resolved, _synced, _lastModified, _deleted',
-      
-      // Controle
-      pending_operations: '++id, table, recordId, timestamp, operation, priority',
-      cache: '++id, key, timestamp',
-      settings: '++id, key',
-    });
-  }
+  return dbInstance;
 }
 
-// Instância global do banco
-export const db = new NautiOneDB();
+// ===================================================================
+// COMPATIBILITY LAYER - Mimics old Dexie API surface
+// ===================================================================
+
+/** The db proxy object that provides store access */
+export const db = {
+  async getStore(storeName: string) {
+    const database = await getDB();
+    return database;
+  },
+  vessels: createStoreProxy<OfflineVessel>('vessels'),
+  crew_members: createStoreProxy<OfflineCrewMember>('crew_members'),
+  certificates: createStoreProxy<OfflineCertificate>('certificates'),
+  maintenance_orders: createStoreProxy<OfflineMaintenanceOrder>('maintenance_orders'),
+  documents: createStoreProxy<OfflineDocument>('documents'),
+  invoices: createStoreProxy<OfflineInvoice>('invoices'),
+  alerts: createStoreProxy<OfflineAlert>('alerts'),
+  pending_operations: createStoreProxy<PendingOperation>('pending_operations'),
+  cache: createStoreProxy<CacheEntry>('cache'),
+  settings: createStoreProxy<OfflineSettings>('settings'),
+  isOpen: () => dbInstance !== null,
+  open: async () => { await getDB(); },
+};
+
+function createStoreProxy<T>(storeName: string) {
+  return {
+    async get(id: string | number): Promise<T | undefined> {
+      const database = await getDB();
+      return database.get(storeName, id) as Promise<T | undefined>;
+    },
+    async put(record: T): Promise<void> {
+      const database = await getDB();
+      await database.put(storeName, record as any);
+    },
+    async add(record: T): Promise<number> {
+      const database = await getDB();
+      const result = await database.add(storeName, record as any);
+      return result as number;
+    },
+    async delete(id: string | number): Promise<void> {
+      const database = await getDB();
+      await database.delete(storeName, id);
+    },
+    async clear(): Promise<void> {
+      const database = await getDB();
+      await database.clear(storeName);
+    },
+    async count(): Promise<number> {
+      const database = await getDB();
+      return database.count(storeName);
+    },
+    async toArray(): Promise<T[]> {
+      const database = await getDB();
+      return database.getAll(storeName) as Promise<T[]>;
+    },
+    filter(predicate: (item: T) => boolean) {
+      return {
+        async toArray(): Promise<T[]> {
+          const database = await getDB();
+          const all = await database.getAll(storeName) as T[];
+          return all.filter(predicate);
+        },
+        async count(): Promise<number> {
+          const database = await getDB();
+          const all = await database.getAll(storeName) as T[];
+          return all.filter(predicate).length;
+        },
+      };
+    },
+    async update(id: string | number, changes: Partial<T>): Promise<void> {
+      const database = await getDB();
+      const existing = await database.get(storeName, id) as T | undefined;
+      if (existing) {
+        await database.put(storeName, { ...existing, ...changes } as any);
+      }
+    },
+    where(indexOrObj: string | Record<string, unknown>) {
+      const self = this;
+      if (typeof indexOrObj === 'string') {
+        return {
+          equals(value: unknown) {
+            return {
+              async first(): Promise<T | undefined> {
+                const database = await getDB();
+                const all = await database.getAllFromIndex(storeName, indexOrObj, value as any) as T[];
+                return all[0];
+              },
+              async toArray(): Promise<T[]> {
+                const database = await getDB();
+                return database.getAllFromIndex(storeName, indexOrObj, value as any) as Promise<T[]>;
+              },
+              async delete(): Promise<void> {
+                const database = await getDB();
+                const all = await database.getAllFromIndex(storeName, indexOrObj, value as any) as any[];
+                const tx = database.transaction(storeName, 'readwrite');
+                for (const item of all) {
+                  await tx.store.delete(item.id);
+                }
+                await tx.done;
+              },
+            };
+          },
+          below(value: unknown) {
+            return {
+              async delete(): Promise<void> {
+                const database = await getDB();
+                const all = await database.getAll(storeName) as any[];
+                const tx = database.transaction(storeName, 'readwrite');
+                for (const item of all) {
+                  if (item[indexOrObj as string] < (value as any)) {
+                    await tx.store.delete(item.id);
+                  }
+                }
+                await tx.done;
+              },
+            };
+          },
+        };
+      }
+      // Object-based where (e.g., { table: 'vessels', recordId: id })
+      return {
+        async first(): Promise<T | undefined> {
+          const database = await getDB();
+          const all = await database.getAll(storeName) as any[];
+          return all.find((item) =>
+            Object.entries(indexOrObj).every(([k, v]) => item[k] === v)
+          ) as T | undefined;
+        },
+        async delete(): Promise<void> {
+          const database = await getDB();
+          const all = await database.getAll(storeName) as any[];
+          const tx = database.transaction(storeName, 'readwrite');
+          for (const item of all) {
+            if (Object.entries(indexOrObj).every(([k, v]) => item[k] === v)) {
+              await tx.store.delete(item.id);
+            }
+          }
+          await tx.done;
+        },
+      };
+    },
+  };
+}
+
+// ===================================================================
+// NautiOneDB class for backward compat
+// ===================================================================
+
+export class NautiOneDB {
+  vessels = db.vessels;
+  crew_members = db.crew_members;
+  certificates = db.certificates;
+  maintenance_orders = db.maintenance_orders;
+  documents = db.documents;
+  invoices = db.invoices;
+  alerts = db.alerts;
+  pending_operations = db.pending_operations;
+  cache = db.cache;
+  settings = db.settings;
+
+  isOpen() { return db.isOpen(); }
+  async open() { await db.open(); }
+}
 
 /**
- * Inicializar o banco de dados (criar se não existir)
+ * Inicializar o banco de dados
  */
 export async function initNautiOneDB(): Promise<NautiOneDB> {
-  // Dexie abre automaticamente, mas podemos forçar
-  if (!db.isOpen()) {
-    await db.open();
-  }
-  // DB initialized successfully - no console output needed
-  return db;
+  await getDB();
+  return new NautiOneDB();
 }
 
 // ===================================================================
 // HELPERS DE PERSISTÊNCIA
 // ===================================================================
 
-/**
- * Salvar registro localmente com metadados de sync
- */
 export async function saveToLocal<T extends { id: string }>(
-  table: Table<T, string>,
+  store: ReturnType<typeof createStoreProxy>,
   data: T,
   synced: boolean = false
 ): Promise<void> {
@@ -247,68 +425,47 @@ export async function saveToLocal<T extends { id: string }>(
     _synced: synced,
     _lastModified: Date.now(),
     _version: ((data as unknown as SyncMetadata)._version || 0) + 1,
-  } as T;
-  
-  await table.put(record);
+  };
+  await store.put(record as any);
 }
 
-/**
- * Deletar registro localmente (soft delete)
- */
 export async function deleteFromLocal<T extends { id: string }>(
-  table: Table<T, string>,
+  store: ReturnType<typeof createStoreProxy>,
   id: string
 ): Promise<void> {
-  const record = await table.get(id);
-  
+  const record = await store.get(id);
   if (record) {
-    await (table as unknown as { update: (id: string, changes: Record<string, unknown>) => Promise<void> }).update(id, {
+    await store.update(id, {
       _deleted: true,
       _synced: false,
       _lastModified: Date.now(),
-    });
+    } as any);
   }
 }
 
-/**
- * Obter registros não sincronizados
- */
 export async function getUnsyncedRecords<T>(
-  table: Table<T, string>
+  store: ReturnType<typeof createStoreProxy>
 ): Promise<T[]> {
-  return await table
-    .filter((record) => !(record as unknown as SyncMetadata)._synced)
-    .toArray();
+  return store.filter((record: any) => !record._synced).toArray() as Promise<T[]>;
 }
 
-/**
- * Marcar registro como sincronizado
- */
 export async function markAsSynced<T>(
-  table: Table<T, string>,
+  store: ReturnType<typeof createStoreProxy>,
   id: string
 ): Promise<void> {
-  await (table as unknown as { update: (id: string, changes: Record<string, unknown>) => Promise<void> }).update(id, { _synced: true });
+  await store.update(id, { _synced: true } as any);
 }
 
-/**
- * Obter registros ativos (não deletados)
- */
 export async function getActiveRecords<T>(
-  table: Table<T, string>
+  store: ReturnType<typeof createStoreProxy>
 ): Promise<T[]> {
-  return await table
-    .filter((record) => !(record as unknown as SyncMetadata)._deleted)
-    .toArray();
+  return store.filter((record: any) => !record._deleted).toArray() as Promise<T[]>;
 }
 
 // ===================================================================
 // QUEUE DE OPERAÇÕES PENDENTES
 // ===================================================================
 
-/**
- * Adicionar operação à fila de sincronização
- */
 export async function queueOperation(
   operation: 'create' | 'update' | 'delete',
   table: string,
@@ -316,23 +473,18 @@ export async function queueOperation(
   data: Record<string, unknown>,
   priority: PendingOperation['priority'] = 'normal'
 ): Promise<number> {
-  // Verificar se já existe operação para este registro
-  const existing = await db.pending_operations
-    .where({ table, recordId })
-    .first();
+  const existing = await db.pending_operations.where({ table, recordId }).first?.() as PendingOperation | undefined;
   
-  if (existing) {
-    // Atualizar operação existente
-    await db.pending_operations.update(existing.id!, {
+  if (existing && existing.id) {
+    await db.pending_operations.update(existing.id, {
       operation,
       data,
       timestamp: Date.now(),
       priority,
-    });
-    return existing.id!;
+    } as any);
+    return existing.id;
   }
   
-  // Criar nova operação
   return await db.pending_operations.add({
     operation,
     table,
@@ -341,48 +493,34 @@ export async function queueOperation(
     timestamp: Date.now(),
     retries: 0,
     priority,
-  });
+  } as any);
 }
 
-/**
- * Obter operações pendentes ordenadas por prioridade e timestamp
- */
 export async function getPendingOperations(): Promise<PendingOperation[]> {
   const priorityOrder = { critical: 0, high: 1, normal: 2, low: 3 };
-  
-  const operations = await db.pending_operations.toArray();
+  const operations = await db.pending_operations.toArray() as PendingOperation[];
   
   return operations.sort((a, b) => {
-    const priorityDiff = priorityOrder[a.priority] - priorityOrder[b.priority];
+    const priorityDiff = (priorityOrder[a.priority] || 2) - (priorityOrder[b.priority] || 2);
     if (priorityDiff !== 0) return priorityDiff;
     return a.timestamp - b.timestamp;
   });
 }
 
-/**
- * Remover operação da fila
- */
 export async function removePendingOperation(id: number): Promise<void> {
   await db.pending_operations.delete(id);
 }
 
-/**
- * Incrementar contador de tentativas
- */
 export async function incrementRetry(id: number, error: string): Promise<void> {
-  const op = await db.pending_operations.get(id);
-  
+  const op = await db.pending_operations.get(id) as PendingOperation | undefined;
   if (op) {
     await db.pending_operations.update(id, {
       retries: op.retries + 1,
       lastError: error,
-    });
+    } as any);
   }
 }
 
-/**
- * Contar operações pendentes
- */
 export async function countPendingOperations(): Promise<number> {
   return await db.pending_operations.count();
 }
@@ -391,65 +529,38 @@ export async function countPendingOperations(): Promise<number> {
 // CACHE HELPERS
 // ===================================================================
 
-/**
- * Salvar no cache com TTL
- */
-export async function setCache(
-  key: string,
-  data: unknown,
-  ttlMs: number = 5 * 60 * 1000
-): Promise<void> {
-  const existing = await db.cache.where('key').equals(key).first();
+export async function setCache(key: string, data: unknown, ttlMs: number = 5 * 60 * 1000): Promise<void> {
+  const all = await db.cache.toArray() as CacheEntry[];
+  const existing = all.find(e => e.key === key);
   
-  if (existing) {
-    await db.cache.update(existing.id!, {
-      data,
-      timestamp: Date.now(),
-      ttl: ttlMs,
-    });
+  if (existing && existing.id) {
+    await db.cache.update(existing.id, { data, timestamp: Date.now(), ttl: ttlMs } as any);
   } else {
-    await db.cache.add({
-      key,
-      data,
-      timestamp: Date.now(),
-      ttl: ttlMs,
-    });
+    await db.cache.add({ key, data, timestamp: Date.now(), ttl: ttlMs } as any);
   }
 }
 
-/**
- * Obter do cache se não expirado
- */
 export async function getCache<T>(key: string): Promise<T | null> {
-  const entry = await db.cache.where('key').equals(key).first();
-  
+  const all = await db.cache.toArray() as CacheEntry[];
+  const entry = all.find(e => e.key === key);
   if (!entry) return null;
-  
-  const isExpired = Date.now() - entry.timestamp > entry.ttl;
-  
-  if (isExpired) {
-    await db.cache.delete(entry.id!);
+  if (Date.now() - entry.timestamp > entry.ttl) {
+    if (entry.id) await db.cache.delete(entry.id);
     return null;
   }
-  
   return entry.data as T;
 }
 
-/**
- * Limpar cache expirado
- */
 export async function clearExpiredCache(): Promise<number> {
   const now = Date.now();
-  const entries = await db.cache.toArray();
-  
+  const entries = await db.cache.toArray() as CacheEntry[];
   let deleted = 0;
   for (const entry of entries) {
-    if (now - entry.timestamp > entry.ttl) {
-      await db.cache.delete(entry.id!);
+    if (now - entry.timestamp > entry.ttl && entry.id) {
+      await db.cache.delete(entry.id);
       deleted++;
     }
   }
-  
   return deleted;
 }
 
@@ -457,31 +568,20 @@ export async function clearExpiredCache(): Promise<number> {
 // SETTINGS HELPERS
 // ===================================================================
 
-/**
- * Salvar configuração
- */
 export async function setSetting(key: string, value: unknown): Promise<void> {
-  const existing = await db.settings.where('key').equals(key).first();
+  const all = await db.settings.toArray() as OfflineSettings[];
+  const existing = all.find(e => e.key === key);
   
-  if (existing) {
-    await db.settings.update(existing.id!, {
-      value,
-      updatedAt: Date.now(),
-    });
+  if (existing && existing.id) {
+    await db.settings.update(existing.id, { value, updatedAt: Date.now() } as any);
   } else {
-    await db.settings.add({
-      key,
-      value,
-      updatedAt: Date.now(),
-    });
+    await db.settings.add({ key, value, updatedAt: Date.now() } as any);
   }
 }
 
-/**
- * Obter configuração
- */
 export async function getSetting<T>(key: string, defaultValue: T): Promise<T> {
-  const entry = await db.settings.where('key').equals(key).first();
+  const all = await db.settings.toArray() as OfflineSettings[];
+  const entry = all.find(e => e.key === key);
   return entry ? (entry.value as T) : defaultValue;
 }
 
@@ -489,9 +589,6 @@ export async function getSetting<T>(key: string, defaultValue: T): Promise<T> {
 // UTILITÁRIOS
 // ===================================================================
 
-/**
- * Limpar todos os dados do banco
- */
 export async function clearAllData(): Promise<void> {
   await Promise.all([
     db.vessels.clear(),
@@ -506,30 +603,8 @@ export async function clearAllData(): Promise<void> {
   ]);
 }
 
-/**
- * Obter estatísticas do banco
- */
-export async function getDatabaseStats(): Promise<{
-  vessels: number;
-  crewMembers: number;
-  certificates: number;
-  maintenanceOrders: number;
-  documents: number;
-  invoices: number;
-  alerts: number;
-  pendingOperations: number;
-  unsynced: number;
-}> {
-  const [
-    vessels,
-    crewMembers,
-    certificates,
-    maintenanceOrders,
-    documents,
-    invoices,
-    alerts,
-    pendingOperations,
-  ] = await Promise.all([
+export async function getDatabaseStats() {
+  const [vessels, crewMembers, certificates, maintenanceOrders, documents, invoices, alerts, pendingOperations] = await Promise.all([
     db.vessels.count(),
     db.crew_members.count(),
     db.certificates.count(),
@@ -540,30 +615,20 @@ export async function getDatabaseStats(): Promise<{
     db.pending_operations.count(),
   ]);
   
-  // Contar não sincronizados
-  const unsyncedPromises = [
-    db.vessels.filter((r) => !r._synced).count(),
-    db.crew_members.filter((r) => !r._synced).count(),
-    db.certificates.filter((r) => !r._synced).count(),
-    db.maintenance_orders.filter((r) => !r._synced).count(),
-    db.documents.filter((r) => !r._synced).count(),
-    db.invoices.filter((r) => !r._synced).count(),
-    db.alerts.filter((r) => !r._synced).count(),
-  ];
-  
-  const unsyncedCounts = await Promise.all(unsyncedPromises);
-  const unsynced = unsyncedCounts.reduce((a, b) => a + b, 0);
+  const unsyncedCounts = await Promise.all([
+    db.vessels.filter((r: any) => !r._synced).count(),
+    db.crew_members.filter((r: any) => !r._synced).count(),
+    db.certificates.filter((r: any) => !r._synced).count(),
+    db.maintenance_orders.filter((r: any) => !r._synced).count(),
+    db.documents.filter((r: any) => !r._synced).count(),
+    db.invoices.filter((r: any) => !r._synced).count(),
+    db.alerts.filter((r: any) => !r._synced).count(),
+  ]);
   
   return {
-    vessels,
-    crewMembers,
-    certificates,
-    maintenanceOrders,
-    documents,
-    invoices,
-    alerts,
-    pendingOperations,
-    unsynced,
+    vessels, crewMembers, certificates, maintenanceOrders,
+    documents, invoices, alerts, pendingOperations,
+    unsynced: unsyncedCounts.reduce((a, b) => a + b, 0),
   };
 }
 
