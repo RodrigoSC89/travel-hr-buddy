@@ -128,7 +128,7 @@ export function AuthProvider({ children }: AuthProviderProps): JSX.Element {
     // 2s is enough for getSession() even on slow maritime networks
     const safetyTimeout = setTimeout(() => {
       if (mounted && isLoading) {
-        logger.warn("[AuthContext] Safety timeout (2s) - resolving loading state");
+        // Silent timeout - expected on slow maritime networks (2G/VSAT)
         setIsLoading(false);
       }
     }, 2000);

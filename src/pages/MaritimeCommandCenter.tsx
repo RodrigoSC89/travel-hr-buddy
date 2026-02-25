@@ -38,24 +38,52 @@ export default function MaritimeCommandCenter() {
   const loadData = useCallback(async () => {
     try {
       setLoading(true);
-      const { data: vesselsData } = await supabase.from("vessels").select("id, name, status").limit(50);
-      if (vesselsData) setVessels(vesselsData);
+      
+      // Fetch real data in parallel
+      const [vesselsRes, crewRes, checklistsRes, certsRes] = await Promise.all([
+        supabase.from("vessels").select("id, name, status").limit(50),
+        supabase.from("crew_members").select("id, full_name, position, rank, nationality, passport_number, phone, email, employee_id, status, vessel_id, contract_start, contract_end, experience_years").order("full_name").limit(200),
+        supabase.from("operational_checklists").select("status, compliance_score"),
+        supabase.from("crew_certifications").select("id, status, expiry_date").limit(500),
+      ]);
 
-      const { data: checklists } = await supabase.from("operational_checklists").select("status, compliance_score");
-      const fallbackCrewMembers = FALLBACK_CREW_MEMBERS([vesselsData?.[0]?.id, vesselsData?.[1]?.id]);
-      setCrewMembers(fallbackCrewMembers);
+      if (vesselsRes.data) setVessels(vesselsRes.data);
+      
+      // Use real crew data, fallback only if empty
+      const realCrew = crewRes.data || [];
+      if (realCrew.length > 0) {
+        setCrewMembers(realCrew.map(c => ({
+          ...c,
+          employee_id: c.employee_id || c.id.slice(0, 8).toUpperCase(),
+          position: c.position || c.rank || 'Tripulante',
+          nationality: c.nationality || 'N/A',
+        })));
+      } else {
+        const fallback = FALLBACK_CREW_MEMBERS([vesselsRes.data?.[0]?.id, vesselsRes.data?.[1]?.id]);
+        setCrewMembers(fallback);
+      }
 
-      const total = checklists?.length || 12;
-      const completed = checklists?.filter(c => c.status === "completed").length || 8;
-      const pending = checklists?.filter(c => c.status === "in_progress" || c.status === "draft").length || 4;
-      const avgCompliance = checklists?.length
-        ? checklists.reduce((sum, c) => sum + (c.compliance_score || 85), 0) / checklists.length : 87;
+      const checklists = checklistsRes.data || [];
+      const total = checklists.length || 0;
+      const completed = checklists.filter(c => c.status === "completed").length;
+      const pending = checklists.filter(c => c.status === "in_progress" || c.status === "draft").length;
+      const avgCompliance = checklists.length
+        ? checklists.reduce((sum, c) => sum + (c.compliance_score || 85), 0) / checklists.length : 0;
+
+      // Count real certification stats
+      const certs = certsRes.data || [];
+      const now = new Date();
+      const thirtyDays = new Date(now.getTime() + 30 * 24 * 60 * 60 * 1000);
+      const certValid = certs.filter(c => c.status === 'valid' || (c.expiry_date && new Date(c.expiry_date) > now)).length;
+      const certExpiring = certs.filter(c => c.expiry_date && new Date(c.expiry_date) > now && new Date(c.expiry_date) <= thirtyDays).length;
+
+      const crewData = realCrew.length > 0 ? realCrew : FALLBACK_CREW_MEMBERS([vesselsRes.data?.[0]?.id, vesselsRes.data?.[1]?.id]);
 
       setStats({
         totalChecklists: total, completedChecklists: completed, pendingChecklists: pending,
-        activeVessels: vesselsData?.length || 5, averageCompliance: Math.round(avgCompliance), criticalIssues: 2,
-        totalCrew: fallbackCrewMembers.length, activeCrew: fallbackCrewMembers.filter((m: CrewMember) => m.status === "active").length,
-        certExpiring: 3, certValid: 12
+        activeVessels: vesselsRes.data?.length || 0, averageCompliance: Math.round(avgCompliance), criticalIssues: certExpiring > 3 ? certExpiring : 0,
+        totalCrew: crewData.length, activeCrew: crewData.filter((m: CrewMember) => m.status === "active").length,
+        certExpiring, certValid
       });
     } catch {
       toast.error("Erro ao carregar dados marítimos");

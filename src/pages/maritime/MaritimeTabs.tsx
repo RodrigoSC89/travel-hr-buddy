@@ -1,6 +1,6 @@
-import React, { useState } from "react";
+import React, { useState, useCallback } from "react";
+import { supabase } from "@/integrations/supabase/client";
 import { Card, CardContent, CardDescription, CardHeader, CardTitle } from "@/components/ui/card";
-import { Badge } from "@/components/ui/badge";
 import { Button } from "@/components/ui/button";
 import { Input } from "@/components/ui/input";
 import { Label } from "@/components/ui/label";
@@ -11,7 +11,7 @@ import { Dialog, DialogContent, DialogDescription, DialogHeader, DialogTitle, Di
 import { toast } from "sonner";
 import {
   Users, Shield, FileText, CheckCircle, AlertTriangle, Clock, Search, Download,
-  Award, Activity, Brain, Sparkles, ClipboardList, UserPlus, XCircle, Bell, TrendingUp
+  Award, Activity, Brain, Sparkles, ClipboardList, UserPlus, XCircle, Bell, TrendingUp, Loader2
 } from "lucide-react";
 import { CrewIntelligenceAI } from "@/components/crew/CrewIntelligenceAI";
 import { CrewCertificationsManager } from "@/components/crew/crew-certifications-manager";
@@ -37,6 +37,8 @@ export function MaritimeTabs({ stats, crewMembers, vessels, userId, onTabChange,
   const [searchTerm, setSearchTerm] = useState("");
   const [statusFilter, setStatusFilter] = useState("all");
   const [isAddDialogOpen, setIsAddDialogOpen] = useState(false);
+  const [isSaving, setIsSaving] = useState(false);
+  const [newCrew, setNewCrew] = useState({ full_name: '', position: '', nationality: '', passport_number: '', phone: '', email: '', vessel_id: '' });
 
   const getVesselName = (vesselId: string) => {
     const vessel = vessels.find(v => v.id === vesselId);
@@ -238,28 +240,67 @@ export function MaritimeTabs({ stats, crewMembers, vessels, userId, onTabChange,
                       <DialogDescription>Preencha as informações do novo membro da tripulação</DialogDescription>
                     </DialogHeader>
                     <div className="grid grid-cols-2 gap-4">
-                      <div className="space-y-2"><Label htmlFor="name">Nome Completo</Label><Input id="name" placeholder="Nome do tripulante" /></div>
+                      <div className="space-y-2"><Label htmlFor="name">Nome Completo</Label><Input id="name" placeholder="Nome do tripulante" value={newCrew.full_name} onChange={e => setNewCrew(p => ({ ...p, full_name: e.target.value }))} /></div>
                       <div className="space-y-2">
                         <Label htmlFor="position">Posição</Label>
-                        <Select>
+                        <Select value={newCrew.position} onValueChange={v => setNewCrew(p => ({ ...p, position: v }))}>
                           <SelectTrigger><SelectValue placeholder="Selecione a posição" /></SelectTrigger>
                           <SelectContent>
-                            <SelectItem value="commander">Comandante</SelectItem>
-                            <SelectItem value="chief_engineer">Chefe de Máquinas</SelectItem>
-                            <SelectItem value="deck_officer">Oficial de Convés</SelectItem>
-                            <SelectItem value="engineer">Engenheiro</SelectItem>
-                            <SelectItem value="sailor">Marinheiro</SelectItem>
+                            <SelectItem value="Comandante">Comandante</SelectItem>
+                            <SelectItem value="Chefe de Máquinas">Chefe de Máquinas</SelectItem>
+                            <SelectItem value="Oficial de Convés">Oficial de Convés</SelectItem>
+                            <SelectItem value="Engenheiro">Engenheiro</SelectItem>
+                            <SelectItem value="Marinheiro">Marinheiro</SelectItem>
+                            <SelectItem value="Cozinheiro">Cozinheiro</SelectItem>
+                            <SelectItem value="Enfermeiro">Enfermeiro(a)</SelectItem>
                           </SelectContent>
                         </Select>
                       </div>
-                      <div className="space-y-2"><Label htmlFor="nationality">Nacionalidade</Label><Input id="nationality" placeholder="Nacionalidade" /></div>
-                      <div className="space-y-2"><Label htmlFor="passport">Número do Passaporte</Label><Input id="passport" placeholder="Número do passaporte" /></div>
-                      <div className="space-y-2"><Label htmlFor="phone">Telefone</Label><Input id="phone" placeholder="Telefone de contato" /></div>
-                      <div className="space-y-2"><Label htmlFor="email">Email</Label><Input id="email" type="email" placeholder="Email" /></div>
+                      <div className="space-y-2"><Label htmlFor="nationality">Nacionalidade</Label><Input id="nationality" placeholder="Nacionalidade" value={newCrew.nationality} onChange={e => setNewCrew(p => ({ ...p, nationality: e.target.value }))} /></div>
+                      <div className="space-y-2"><Label htmlFor="passport">Número do Passaporte</Label><Input id="passport" placeholder="Número do passaporte" value={newCrew.passport_number} onChange={e => setNewCrew(p => ({ ...p, passport_number: e.target.value }))} /></div>
+                      <div className="space-y-2"><Label htmlFor="phone">Telefone</Label><Input id="phone" placeholder="Telefone de contato" value={newCrew.phone} onChange={e => setNewCrew(p => ({ ...p, phone: e.target.value }))} /></div>
+                      <div className="space-y-2"><Label htmlFor="email">Email</Label><Input id="email" type="email" placeholder="Email" value={newCrew.email} onChange={e => setNewCrew(p => ({ ...p, email: e.target.value }))} /></div>
+                      <div className="space-y-2 col-span-2">
+                        <Label>Embarcação</Label>
+                        <Select value={newCrew.vessel_id} onValueChange={v => setNewCrew(p => ({ ...p, vessel_id: v }))}>
+                          <SelectTrigger><SelectValue placeholder="Selecione a embarcação" /></SelectTrigger>
+                          <SelectContent>
+                            <SelectItem value="">Não atribuído</SelectItem>
+                            {vessels.map(v => <SelectItem key={v.id} value={v.id}>{v.name}</SelectItem>)}
+                          </SelectContent>
+                        </Select>
+                      </div>
                     </div>
                     <div className="flex justify-end gap-2">
                       <Button variant="outline" onClick={() => setIsAddDialogOpen(false)}>Cancelar</Button>
-                      <Button onClick={() => { handleCreate("Tripulante"); setIsAddDialogOpen(false); }}>Adicionar Tripulante</Button>
+                      <Button disabled={isSaving || !newCrew.full_name || !newCrew.position} onClick={async () => {
+                        setIsSaving(true);
+                        try {
+                          const { error } = await supabase.from('crew_members').insert({
+                            full_name: newCrew.full_name,
+                            position: newCrew.position,
+                            rank: newCrew.position,
+                            nationality: newCrew.nationality || null,
+                            passport_number: newCrew.passport_number || null,
+                            phone: newCrew.phone || null,
+                            email: newCrew.email || null,
+                            vessel_id: newCrew.vessel_id || null,
+                            status: 'active',
+                          });
+                          if (error) throw error;
+                          toast.success('Tripulante adicionado com sucesso!');
+                          setIsAddDialogOpen(false);
+                          setNewCrew({ full_name: '', position: '', nationality: '', passport_number: '', phone: '', email: '', vessel_id: '' });
+                          // Trigger reload via parent
+                          handleCreate("Tripulante");
+                        } catch (err: any) {
+                          toast.error('Erro ao adicionar tripulante', { description: err.message });
+                        } finally {
+                          setIsSaving(false);
+                        }
+                      }}>
+                        {isSaving ? <><Loader2 className="h-4 w-4 mr-2 animate-spin" />Salvando...</> : 'Adicionar Tripulante'}
+                      </Button>
                     </div>
                   </DialogContent>
                 </Dialog>
