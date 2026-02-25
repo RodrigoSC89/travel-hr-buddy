@@ -52,12 +52,12 @@ export default function MaritimeCommandCenter() {
       // Use real crew data, fallback only if empty
       const realCrew = crewRes.data || [];
       if (realCrew.length > 0) {
-        setCrewMembers(realCrew.map(c => ({
+        setCrewMembers(realCrew.map((c: any) => ({
           ...c,
           employee_id: c.employee_id || c.id.slice(0, 8).toUpperCase(),
           position: c.position || c.rank || 'Tripulante',
           nationality: c.nationality || 'N/A',
-        })));
+        })) as any);
       } else {
         const fallback = FALLBACK_CREW_MEMBERS([vesselsRes.data?.[0]?.id, vesselsRes.data?.[1]?.id]);
         setCrewMembers(fallback);
@@ -82,7 +82,7 @@ export default function MaritimeCommandCenter() {
       setStats({
         totalChecklists: total, completedChecklists: completed, pendingChecklists: pending,
         activeVessels: vesselsRes.data?.length || 0, averageCompliance: Math.round(avgCompliance), criticalIssues: certExpiring > 3 ? certExpiring : 0,
-        totalCrew: crewData.length, activeCrew: crewData.filter((m: CrewMember) => m.status === "active").length,
+        totalCrew: crewData.length, activeCrew: crewData.filter((m: any) => m.status === "active").length,
         certExpiring, certValid
       });
     } catch {

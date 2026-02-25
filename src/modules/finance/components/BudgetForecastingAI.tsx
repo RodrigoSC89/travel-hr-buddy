@@ -19,6 +19,7 @@ import {
 } from 'lucide-react';
 import { toast } from 'sonner';
 import { fromUntyped } from '@/integrations/supabase/untyped-client';
+import { supabase } from '@/integrations/supabase/client';
 
 interface BudgetCategory {
   id: string;

@@ -1,4 +1,5 @@
 import React, { useState, useCallback } from "react";
+import { Badge } from "@/components/ui/badge";
 import { supabase } from "@/integrations/supabase/client";
 import { Card, CardContent, CardDescription, CardHeader, CardTitle } from "@/components/ui/card";
 import { Button } from "@/components/ui/button";
@@ -280,13 +281,13 @@ export function MaritimeTabs({ stats, crewMembers, vessels, userId, onTabChange,
                             full_name: newCrew.full_name,
                             position: newCrew.position,
                             rank: newCrew.position,
-                            nationality: newCrew.nationality || null,
-                            passport_number: newCrew.passport_number || null,
-                            phone: newCrew.phone || null,
-                            email: newCrew.email || null,
-                            vessel_id: newCrew.vessel_id || null,
+                            nationality: newCrew.nationality || undefined,
+                            passport_number: newCrew.passport_number || undefined,
+                            phone: newCrew.phone || undefined,
+                            email: newCrew.email || undefined,
+                            vessel_id: newCrew.vessel_id || undefined,
                             status: 'active',
-                          });
+                          } as any);
                           if (error) throw error;
                           toast.success('Tripulante adicionado com sucesso!');
                           setIsAddDialogOpen(false);

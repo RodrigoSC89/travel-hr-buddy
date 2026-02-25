@@ -8,6 +8,7 @@
 
 import { logger } from "@/lib/logger";
 import { fromUntyped } from "@/integrations/supabase/untyped-client";
+import { supabase } from "@/integrations/supabase/client";
 
 // Dynamic table accessor for cognitive_feedback
 const db = (table: string) => fromUntyped(table);

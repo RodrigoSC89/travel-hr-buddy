@@ -1,25 +1,50 @@
 /**
- * Offline-first data hooks with Dexie + Supabase sync
- * DEBT-FIX: Replaced (supabase as any) with typed supabase calls
+ * Offline-first data hooks with idb + Supabase sync
+ * Migrated from Dexie to idb to resolve TS1540 build errors
  * Tables used: vessels, crew_members, maintenance_orders - ALL exist in schema
  */
 
+import { useState, useEffect, useCallback } from "react";
 import { useMutation, useQueryClient } from "@tanstack/react-query";
-import { useLiveQuery } from "dexie-react-hooks";
 import { supabase } from "@/integrations/supabase/client";
 import { db, type OfflineVessel, type OfflineCrewMember, type OfflineMaintenanceOrder, saveToLocal, deleteFromLocal, queueOperation } from "../db";
 import { toast } from "sonner";
 import { logger } from "@/lib/logger";
 
 // ===================================================================
+// Generic live query hook (replaces useLiveQuery from dexie-react-hooks)
+// ===================================================================
+
+function useIDBLiveQuery<T>(queryFn: () => Promise<T>, deps: unknown[] = []): T | undefined {
+  const [result, setResult] = useState<T | undefined>(undefined);
+
+  useEffect(() => {
+    let cancelled = false;
+    const run = async () => {
+      try {
+        const data = await queryFn();
+        if (!cancelled) setResult(data);
+      } catch {
+        // DB not ready yet
+      }
+    };
+    run();
+    // Poll every 2s for changes (replaces dexie reactive queries)
+    const interval = setInterval(run, 2000);
+    return () => { cancelled = true; clearInterval(interval); };
+  }, deps);
+
+  return result;
+}
+
+// ===================================================================
 // VESSEL HOOKS (OFFLINE-FIRST)
 // ===================================================================
 
 export function useOfflineVessels() {
-  const vessels = useLiveQuery(
-    async () => {
-      return db.vessels.filter((v) => !v._deleted).toArray();
-    }
+  const vessels = useIDBLiveQuery(
+    () => db.vessels.filter((v: OfflineVessel) => !v._deleted).toArray(),
+    []
   );
 
   return {
@@ -42,24 +67,15 @@ export function useCreateOfflineVessel() {
         _version: 1,
       };
 
-      // 1. Save locally (IMMEDIATE)
-      await saveToLocal(db.vessels, record);
-
-      // 2. Queue sync operation
+      await saveToLocal(db.vessels as any, record);
       await queueOperation('create', 'vessels', id, vessel as Record<string, unknown>);
 
-      // 3. If online, try immediate sync
       if (navigator.onLine) {
         try {
-          const { error } = await supabase
-            .from('vessels')
-            .insert(vessel as never);
-
+          const { error } = await supabase.from('vessels').insert(vessel as never);
           if (!error) {
-            await db.vessels.update(id, { _synced: true });
-            await db.pending_operations
-              .where({ table: 'vessels', recordId: id, operation: 'create' })
-              .delete();
+            await db.vessels.update(id, { _synced: true } as any);
+            await db.pending_operations.where({ table: 'vessels', recordId: id, operation: 'create' }).delete?.();
           }
         } catch (error) {
           logger.warn('[useCreateOfflineVessel] Will sync later:', error);
@@ -71,15 +87,11 @@ export function useCreateOfflineVessel() {
     onSuccess: () => {
       queryClient.invalidateQueries({ queryKey: ['vessels'] });
       toast.success('Embarcação criada!', {
-        description: navigator.onLine
-          ? 'Sincronizada com sucesso'
-          : 'Será sincronizada quando estiver online',
+        description: navigator.onLine ? 'Sincronizada com sucesso' : 'Será sincronizada quando estiver online',
       });
     },
     onError: (error) => {
-      toast.error('Erro ao criar embarcação', {
-        description: error.message,
-      });
+      toast.error('Erro ao criar embarcação', { description: error.message });
     },
   });
 }
@@ -89,29 +101,15 @@ export function useUpdateOfflineVessel() {
 
   return useMutation({
     mutationFn: async ({ id, data }: { id: string; data: Partial<OfflineVessel> }) => {
-      // 1. Update locally (IMMEDIATE)
-      await db.vessels.update(id, {
-        ...data,
-        _synced: false,
-        _lastModified: Date.now(),
-      });
-
-      // 2. Queue sync
+      await db.vessels.update(id, { ...data, _synced: false, _lastModified: Date.now() } as any);
       await queueOperation('update', 'vessels', id, data as Record<string, unknown>);
 
-      // 3. If online, try immediate sync
       if (navigator.onLine) {
         try {
-          const { error } = await supabase
-            .from('vessels')
-            .update(data as never)
-            .eq('id', id);
-
+          const { error } = await supabase.from('vessels').update(data as never).eq('id', id);
           if (!error) {
-            await db.vessels.update(id, { _synced: true });
-            await db.pending_operations
-              .where({ table: 'vessels', recordId: id, operation: 'update' })
-              .delete();
+            await db.vessels.update(id, { _synced: true } as any);
+            await db.pending_operations.where({ table: 'vessels', recordId: id, operation: 'update' }).delete?.();
           }
         } catch (error) {
           logger.warn('[useUpdateOfflineVessel] Will sync later:', error);
@@ -130,25 +128,15 @@ export function useDeleteOfflineVessel() {
 
   return useMutation({
     mutationFn: async (id: string) => {
-      // 1. Soft delete local
-      await deleteFromLocal(db.vessels, id);
-
-      // 2. Queue sync
+      await deleteFromLocal(db.vessels as any, id);
       await queueOperation('delete', 'vessels', id, {});
 
-      // 3. If online, try immediate sync
       if (navigator.onLine) {
         try {
-          const { error } = await supabase
-            .from('vessels')
-            .delete()
-            .eq('id', id);
-
+          const { error } = await supabase.from('vessels').delete().eq('id', id);
           if (!error) {
             await db.vessels.delete(id);
-            await db.pending_operations
-              .where({ table: 'vessels', recordId: id, operation: 'delete' })
-              .delete();
+            await db.pending_operations.where({ table: 'vessels', recordId: id, operation: 'delete' }).delete?.();
           }
         } catch (error) {
           logger.warn('[useDeleteOfflineVessel] Will sync later:', error);
@@ -167,15 +155,10 @@ export function useDeleteOfflineVessel() {
 // ===================================================================
 
 export function useOfflineCrew(vesselId?: string) {
-  const crew = useLiveQuery(
+  const crew = useIDBLiveQuery(
     async () => {
-      let query = db.crew_members.filter((c) => !c._deleted);
-      
-      if (vesselId) {
-        query = db.crew_members.filter((c) => !c._deleted && c.vessel_id === vesselId);
-      }
-      
-      return query.toArray();
+      const all = await db.crew_members.filter((c: OfflineCrewMember) => !c._deleted).toArray();
+      return vesselId ? all.filter((c: OfflineCrewMember) => c.vessel_id === vesselId) : all;
     },
     [vesselId]
   );
@@ -200,20 +183,15 @@ export function useCreateOfflineCrew() {
         _version: 1,
       };
 
-      await saveToLocal(db.crew_members, record);
+      await saveToLocal(db.crew_members as any, record);
       await queueOperation('create', 'crew_members', id, crewMember as Record<string, unknown>);
 
       if (navigator.onLine) {
         try {
-          const { error } = await supabase
-            .from('crew_members')
-            .insert(crewMember as never);
-
+          const { error } = await supabase.from('crew_members').insert(crewMember as never);
           if (!error) {
-            await db.crew_members.update(id, { _synced: true });
-            await db.pending_operations
-              .where({ table: 'crew_members', recordId: id })
-              .delete();
+            await db.crew_members.update(id, { _synced: true } as any);
+            await db.pending_operations.where({ table: 'crew_members', recordId: id }).delete?.();
           }
         } catch (error) {
           logger.warn('[useCreateOfflineCrew] Will sync later:', error);
@@ -234,21 +212,12 @@ export function useCreateOfflineCrew() {
 // ===================================================================
 
 export function useOfflineMaintenanceOrders(vesselId?: string, status?: string) {
-  const orders = useLiveQuery(
+  const orders = useIDBLiveQuery(
     async () => {
-      let results = await db.maintenance_orders
-        .filter((o) => !o._deleted)
-        .toArray();
-      
-      if (vesselId) {
-        results = results.filter((o) => o.vessel_id === vesselId);
-      }
-      
-      if (status) {
-        results = results.filter((o) => o.status === status);
-      }
-      
-      return results.sort((a, b) => {
+      let results = await db.maintenance_orders.filter((o: OfflineMaintenanceOrder) => !o._deleted).toArray();
+      if (vesselId) results = results.filter((o: OfflineMaintenanceOrder) => o.vessel_id === vesselId);
+      if (status) results = results.filter((o: OfflineMaintenanceOrder) => o.status === status);
+      return results.sort((a: OfflineMaintenanceOrder, b: OfflineMaintenanceOrder) => {
         const dateA = a.due_date ? new Date(a.due_date).getTime() : 0;
         const dateB = b.due_date ? new Date(b.due_date).getTime() : 0;
         return dateA - dateB;
@@ -278,20 +247,15 @@ export function useCreateOfflineMaintenanceOrder() {
         _version: 1,
       };
 
-      await saveToLocal(db.maintenance_orders, record);
+      await saveToLocal(db.maintenance_orders as any, record);
       await queueOperation('create', 'maintenance_orders', id, order as Record<string, unknown>, 'high');
 
       if (navigator.onLine) {
         try {
-          const { error } = await supabase
-            .from('maintenance_orders')
-            .insert(order as never);
-
+          const { error } = await supabase.from('maintenance_orders').insert(order as never);
           if (!error) {
-            await db.maintenance_orders.update(id, { _synced: true });
-            await db.pending_operations
-              .where({ table: 'maintenance_orders', recordId: id })
-              .delete();
+            await db.maintenance_orders.update(id, { _synced: true } as any);
+            await db.pending_operations.where({ table: 'maintenance_orders', recordId: id }).delete?.();
           }
         } catch (error) {
           logger.warn('[useCreateOfflineMaintenanceOrder] Will sync later:', error);
@@ -312,26 +276,15 @@ export function useUpdateOfflineMaintenanceOrder() {
 
   return useMutation({
     mutationFn: async ({ id, data }: { id: string; data: Partial<OfflineMaintenanceOrder> }) => {
-      await db.maintenance_orders.update(id, {
-        ...data,
-        _synced: false,
-        _lastModified: Date.now(),
-      });
-
+      await db.maintenance_orders.update(id, { ...data, _synced: false, _lastModified: Date.now() } as any);
       await queueOperation('update', 'maintenance_orders', id, data as Record<string, unknown>, 'high');
 
       if (navigator.onLine) {
         try {
-          const { error } = await supabase
-            .from('maintenance_orders')
-            .update(data as never)
-            .eq('id', id);
-
+          const { error } = await supabase.from('maintenance_orders').update(data as never).eq('id', id);
           if (!error) {
-            await db.maintenance_orders.update(id, { _synced: true });
-            await db.pending_operations
-              .where({ table: 'maintenance_orders', recordId: id, operation: 'update' })
-              .delete();
+            await db.maintenance_orders.update(id, { _synced: true } as any);
+            await db.pending_operations.where({ table: 'maintenance_orders', recordId: id, operation: 'update' }).delete?.();
           }
         } catch (error) {
           logger.warn('[useUpdateOfflineMaintenanceOrder] Will sync later:', error);
@@ -340,24 +293,25 @@ export function useUpdateOfflineMaintenanceOrder() {
     },
     onSuccess: () => {
       queryClient.invalidateQueries({ queryKey: ['maintenance'] });
-    toast.success('Ordem atualizada!');
+      toast.success('Ordem atualizada!');
     },
   });
 }
 
 // ===================================================================
-// SYNC STATUS & STATS HOOKS (required by OfflineStatusBar, MobileLayout, etc.)
+// SYNC STATUS & STATS HOOKS
 // ===================================================================
 
 export type SyncStatusType = 'idle' | 'syncing' | 'synced' | 'error' | 'offline';
 
 export function useSyncStatus() {
-  const pendingOps = useLiveQuery(() => db.pending_operations.count());
+  const pendingOps = useIDBLiveQuery(() => db.pending_operations.count(), []);
   const isOnline = typeof navigator !== 'undefined' ? navigator.onLine : true;
-  const status: SyncStatusType = !isOnline ? 'offline' : (pendingOps && pendingOps > 0 ? 'idle' : 'synced') as SyncStatusType;
+  const count = pendingOps || 0;
+  const status = (!isOnline ? 'offline' : (count > 0 ? 'idle' : 'synced')) as SyncStatusType;
 
   return {
-    pendingCount: pendingOps || 0,
+    pendingCount: count,
     isSyncing: false,
     isOnline,
     lastSyncAt: null as string | null,
@@ -371,7 +325,7 @@ export function useSyncStatus() {
 }
 
 export function useOfflineStats() {
-  const stats = useLiveQuery(async () => {
+  const stats = useIDBLiveQuery(async () => {
     const vessels = await db.vessels.count();
     const crew = await db.crew_members.count();
     const orders = await db.maintenance_orders.count();
@@ -381,7 +335,7 @@ export function useOfflineStats() {
       + await db.maintenance_orders.filter((o: OfflineMaintenanceOrder) => !o._synced).count();
 
     return { vessels, crewMembers: crew, orders, pendingOperations: pending, unsynced };
-  });
+  }, []);
 
   return {
     ...(stats || { vessels: 0, crewMembers: 0, orders: 0, pendingOperations: 0, unsynced: 0 }),

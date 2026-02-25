@@ -6,6 +6,7 @@
  */
 
 import { fromUntyped } from "@/integrations/supabase/untyped-client";
+const supabase = { from: fromUntyped };
 import { logger } from "@/lib/logger";
 
 export interface BehaviorFunction {
