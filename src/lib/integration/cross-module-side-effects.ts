@@ -2195,6 +2195,111 @@ SIDE_EFFECTS['maintenance.trim.recorded'] = [
   },
 ];
 
+// ═══════════════════════════════════════════════════════════
+// COMPLIANCE → EMBARKATION GATE (cert expiry blocks boarding)
+// ═══════════════════════════════════════════════════════════
+
+SIDE_EFFECTS['crew.embarkation.requested'] = [
+  async (event) => {
+    const p = event.payload as Record<string, unknown>;
+    const crewId = String(p.crew_id ?? p.crew_member_id ?? '');
+    if (!crewId) return;
+    // Check for expired certificates
+    const { data: expiredCerts } = await fromUntyped('crew_certifications')
+      .select('id, certificate_type, expiry_date')
+      .eq('crew_member_id', crewId)
+      .lt('expiry_date', new Date().toISOString())
+      .limit(5);
+    if (expiredCerts && expiredCerts.length > 0) {
+      const certNames = expiredCerts.map((c: any) => c.certificate_type).join(', ');
+      await safeInsert('soc_alerts', {
+        vessel_id: p.vessel_id || null, alert_type: 'embarkation_blocked',
+        severity: 'critical',
+        title: `🚫 Embarque BLOQUEADO: Certificados expirados`,
+        description: `Tripulante ${p.crew_name ?? crewId} possui ${expiredCerts.length} certificado(s) expirado(s): ${certNames}. Embarque não autorizado até renovação.`,
+        status: 'active',
+      });
+      await safeInsert('action_items', {
+        title: `Renovar certificados para embarque: ${p.crew_name ?? crewId}`,
+        source_module: 'crew', source_reference_id: crewId,
+        status: 'pending', priority: 'critical',
+        vessel_id: p.vessel_id || null,
+        description: `Certificados expirados: ${certNames}. Embarque bloqueado automaticamente.`,
+      });
+    }
+  },
+];
+
+// MAINTENANCE COMPLETED → AUTO-UPDATE COMPLIANCE SCORE
+SIDE_EFFECTS['maintenance.work_order.completed'].push(
+  async (event) => {
+    const p = event.payload as Record<string, unknown>;
+    if (!p.vessel_id) return;
+    // Auto-close related non-conformities when maintenance is completed
+    const { data: openNCs } = await fromUntyped('non_conformities')
+      .select('id')
+      .eq('vessel_id', String(p.vessel_id))
+      .eq('category', 'maintenance_delay')
+      .eq('status', 'open')
+      .limit(5);
+    if (openNCs && openNCs.length > 0) {
+      for (const nc of openNCs) {
+        await safeUpdate('non_conformities', {
+          status: 'closed',
+          resolution_notes: `Auto-fechada: OS ${p.work_order_number ?? p.id} concluída.`,
+        }, { id: nc.id });
+      }
+      logger.info(`[SideEffects] Auto-closed ${openNCs.length} maintenance NCs for vessel ${p.vessel_id}`);
+    }
+  },
+);
+
+// VOYAGE COMPLETED → AUTO-GENERATE P&L
+SIDE_EFFECTS['voyage.completed'] = [
+  async (event) => {
+    const p = event.payload as Record<string, unknown>;
+    const voyageId = String(p.voyage_id ?? p.id ?? '');
+    if (!voyageId) return;
+    // Create P&L record
+    await safeInsert('voyage_pnl', {
+      voyage_id: voyageId, vessel_id: p.vessel_id ?? null,
+      status: 'draft',
+      total_revenue: p.total_revenue ?? 0,
+      total_cost: p.total_cost ?? 0,
+      net_profit: Number(p.total_revenue ?? 0) - Number(p.total_cost ?? 0),
+      notes: 'P&L gerado automaticamente na conclusão da viagem.',
+    });
+    // Create action item for review
+    await safeInsert('action_items', {
+      title: `Revisar P&L da viagem ${p.voyage_number ?? voyageId}`,
+      source_module: 'voyage', source_reference_id: voyageId,
+      status: 'pending', priority: 'high', vessel_id: p.vessel_id || null,
+      description: `P&L draft gerado automaticamente. Revisar custos e receitas antes de aprovar.`,
+    });
+  },
+];
+
+// CERTIFICATE RENEWED → UNBLOCK EMBARKATION
+SIDE_EFFECTS['crew.certificate.renewed'] = [
+  async (event) => {
+    const p = event.payload as Record<string, unknown>;
+    // Close embarkation block alerts
+    const crewId = String(p.crew_id ?? p.crew_member_id ?? '');
+    if (!crewId) return;
+    const { data: blockAlerts } = await fromUntyped('soc_alerts')
+      .select('id')
+      .eq('alert_type', 'embarkation_blocked')
+      .eq('status', 'active')
+      .ilike('description', `%${crewId}%`)
+      .limit(5);
+    if (blockAlerts && blockAlerts.length > 0) {
+      for (const alert of blockAlerts) {
+        await safeUpdate('soc_alerts', { status: 'resolved' }, { id: alert.id });
+      }
+    }
+  },
+];
+
 /** Get count of registered side effect event types */
 export function getSideEffectStats(): { eventTypes: number; totalEffects: number } {
   const eventTypes = Object.keys(SIDE_EFFECTS).length;

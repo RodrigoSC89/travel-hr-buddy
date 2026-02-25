@@ -48,6 +48,7 @@ const AlertsCommandCenter = lazy(() => import('@/components/fleet/intelligent-al
 const CommandAIHub = lazy(() => import('@/components/command/ai/CommandAIHub'));
 const CeoCommandDashboard = lazy(() => import('@/components/dashboard/RevolutionaryCEODashboard'));
 const CustomizableDashboardGrid = lazy(() => import('@/components/dashboard/CustomizableDashboardGrid'));
+const DashboardIntelligencePanel = lazy(() => import('@/components/dashboard/DashboardIntelligencePanel').then(m => ({ default: m.DashboardIntelligencePanel })));
 const VesselDigitalTwin = lazy(() => import('@/components/three/VesselDigitalTwin').then(m => ({ default: m.VesselDigitalTwin })));
 const PerformanceMetrics = lazy(() => import('@/components/performance/PerformanceMetrics').then(m => ({ default: m.PerformanceMetrics })));
 const EnhancedPresence = lazy(() => import('@/components/collaboration/EnhancedPresence').then(m => ({ default: m.EnhancedPresence })));
@@ -486,6 +487,11 @@ export default function CommandMegaHub() {
                 <Suspense fallback={<Skeleton className="h-80" />}><IntegrationHealthWidget /></Suspense>
                 <Suspense fallback={<Skeleton className="h-80" />}><EventActivityFeed title="Eventos Cross-Module" limit={15} /></Suspense>
               </div>
+
+              {/* Intelligence Panel: Weather, Fuel Trends, Crew Fatigue */}
+              <Suspense fallback={<Skeleton className="h-80" />}>
+                <DashboardIntelligencePanel />
+              </Suspense>
 
               {/* Full Dashboard */}
               <EnhancedUnifiedDashboard />
