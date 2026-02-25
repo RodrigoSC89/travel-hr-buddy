@@ -2,9 +2,13 @@
  * Auth Page - PATCH v29 Cinematic Deep Ocean Login
  * Login, Signup, Password Recovery + OAuth + System Overview
  */
-import React, { useState, useEffect, useCallback } from "react";
+import React, { useState, useEffect, useCallback, lazy, Suspense } from "react";
 import { Navigate, useNavigate } from "react-router-dom";
 import { motion, AnimatePresence } from "framer-motion";
+
+const OceanScene = lazy(() =>
+  import("@/components/3d/OceanScene").then(m => ({ default: m.OceanScene }))
+);
 
 import { Card, CardContent, CardDescription, CardHeader, CardTitle } from "@/components/ui/card";
 import { Button } from "@/components/ui/button";
@@ -380,11 +384,16 @@ const Auth: React.FC = () => {
 
   return (
     <div className="min-h-screen min-h-dvh flex items-center justify-center p-3 sm:p-6 overflow-hidden relative" style={{ background: '#040a18' }}>
-      {/* === CINEMATIC DEEP OCEAN BACKGROUND === */}
+      {/* === 3D OCEAN SCENE BACKGROUND === */}
+      <Suspense fallback={null}>
+        <OceanScene className="opacity-40" />
+      </Suspense>
+
+      {/* === CINEMATIC DEEP OCEAN OVERLAYS === */}
       <div className="absolute inset-0 pointer-events-none overflow-hidden">
         
         {/* Deep space gradient base */}
-        <div className="absolute inset-0" style={{ background: 'linear-gradient(180deg, #040a18 0%, #0a1628 40%, #061224 100%)' }} />
+        <div className="absolute inset-0" style={{ background: 'linear-gradient(180deg, #040a18 0%, hsla(220,40%,8%,0.7) 40%, hsla(220,40%,8%,0.8) 100%)' }} />
         
         {/* Aurora borealis ribbon */}
         <motion.div
