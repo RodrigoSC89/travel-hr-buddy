@@ -10,6 +10,7 @@
  */
 
 import React, { Suspense, lazy, useMemo, useCallback, useState } from 'react';
+import { motion } from 'framer-motion';
 import { useTranslation } from 'react-i18next';
 import { useNavigate } from 'react-router-dom';
 import { useSearchParams } from 'react-router-dom';
@@ -77,6 +78,8 @@ const PIClaimsIntelligence = lazy(() => import('@/components/dashboard/PIClaimsI
 const IntegrationHealthWidget = lazy(() => import('@/components/integration/IntegrationHealthWidget').then(m => ({ default: m.IntegrationHealthWidget })));
 const EventActivityFeed = lazy(() => import('@/components/integration/EventActivityFeed').then(m => ({ default: m.EventActivityFeed })));
 const ExpiringCertsWidget = lazy(() => import('@/components/dashboard/ExpiringCertsWidget').then(m => ({ default: m.ExpiringCertsWidget })));
+const FleetRiskIntelligenceWidget = lazy(() => import('@/components/dashboard/FleetRiskIntelligenceWidget').then(m => ({ default: m.FleetRiskIntelligenceWidget })));
+const CrossModuleRiskPanel = lazy(() => import('@/components/dashboard/CrossModuleRiskPanel').then(m => ({ default: m.CrossModuleRiskPanel })));
 
 const LoadingSkeleton = () => (
   <div className="space-y-4 p-6">
@@ -227,15 +230,25 @@ export default function CommandMegaHub() {
   return (
     <div className="min-h-screen bg-background">
       {/* Header */}
-      <div className="border-b bg-card/50 backdrop-blur-sm sticky top-0 z-10">
+      <motion.div
+        initial={{ opacity: 0, y: -8 }}
+        animate={{ opacity: 1, y: 0 }}
+        transition={{ duration: 0.4, ease: "easeOut" }}
+        className="border-b bg-card/50 backdrop-blur-sm sticky top-0 z-10"
+      >
         <div className="container py-4">
           <div className="flex items-center justify-between">
             <div className="flex items-center gap-3">
-              <div className="p-2 bg-hub-command/10 rounded-lg">
+              <motion.div
+                initial={{ scale: 0.8, rotate: -10 }}
+                animate={{ scale: 1, rotate: 0 }}
+                transition={{ duration: 0.5, delay: 0.1 }}
+                className="p-2.5 bg-hub-command/10 rounded-xl border border-hub-command/20 shadow-sm"
+              >
                 <Compass className="h-6 w-6 text-hub-command" />
-              </div>
+              </motion.div>
               <div>
-                <h1 className="text-2xl font-bold">{t('megaHubs.command.title')}</h1>
+                <h1 className="text-2xl font-bold tracking-tight">{t('megaHubs.command.title')}</h1>
                 <p className="text-sm text-muted-foreground">
                   {t('megaHubs.command.subtitle')}
                 </p>
@@ -251,7 +264,7 @@ export default function CommandMegaHub() {
             </div>
           </div>
         </div>
-      </div>
+      </motion.div>
 
       {/* Tabs Navigation */}
       <Tabs value={activeTab} onValueChange={handleTabChange} className="w-full">
@@ -391,6 +404,14 @@ export default function CommandMegaHub() {
                     maxItems={10}
                     showFilters
                   />
+                </div>
+              </div>
+
+              {/* Wave 14: Fleet Risk Intelligence + Cross-Module Risk */}
+              <div className="grid grid-cols-1 lg:grid-cols-3 gap-6">
+                <Suspense fallback={<Skeleton className="h-[400px]" />}><FleetRiskIntelligenceWidget /></Suspense>
+                <div className="lg:col-span-2">
+                  <Suspense fallback={<Skeleton className="h-[400px]" />}><CrossModuleRiskPanel /></Suspense>
                 </div>
               </div>
 

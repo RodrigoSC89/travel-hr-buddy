@@ -1,13 +1,14 @@
 /**
  * Vessel Management Query Hooks
  * Standardized TanStack Query hooks with Realtime auto-invalidation
+ * v2: Create/Update use useAuditedMutation for automatic audit trail
  */
 
-import { useQuery, useMutation, useQueryClient } from "@tanstack/react-query";
+import { useQuery } from "@tanstack/react-query";
 import { supabase } from "@/integrations/supabase/client";
 import { VesselsService } from "@/services/domain/vessels-service";
-import { toast } from "sonner";
 import { useRealtimeInvalidation } from "./useRealtimeQuery";
+import { useAuditedMutation } from "./useAuditedMutation";
 
 export const VESSEL_QUERY_KEYS = {
   all: ["vessels"] as const,
@@ -18,7 +19,6 @@ export const VESSEL_QUERY_KEYS = {
 };
 
 export function useVesselsList(filters?: { status?: string; type?: string }) {
-  // Auto-invalidate on realtime changes
   useRealtimeInvalidation({
     table: "vessels",
     queryKeys: [VESSEL_QUERY_KEYS.all, VESSEL_QUERY_KEYS.stats],
@@ -83,34 +83,38 @@ export function useVesselStats() {
 }
 
 export function useCreateVessel() {
-  const queryClient = useQueryClient();
-
-  return useMutation({
-    mutationFn: (vessel: Record<string, unknown>) => VesselsService.create(vessel),
-    onSuccess: (data) => {
-      toast.success("Embarcação registrada", { description: data.name });
-      queryClient.invalidateQueries({ queryKey: VESSEL_QUERY_KEYS.all });
-      queryClient.invalidateQueries({ queryKey: VESSEL_QUERY_KEYS.stats });
-    },
-    onError: (error: Error) => {
-      toast.error("Erro ao registrar embarcação", { description: error.message });
-    },
+  return useAuditedMutation<Record<string, unknown>, any>({
+    mutationFn: (vessel) => VesselsService.create(vessel),
+    eventType: "vessel.created",
+    entityType: "vessel",
+    module: "fleet",
+    actionType: "create",
+    getEntityId: (data) => data.id,
+    getDescription: (_input, output) => `Embarcação registrada: ${output.name}`,
+    invalidateKeys: [["vessels"], ["vessel-stats"], ["fleet"], ["dashboard-kpis"]],
+    successMessage: "Embarcação registrada com sucesso",
+    errorMessage: "Erro ao registrar embarcação",
   });
 }
 
 export function useUpdateVessel() {
-  const queryClient = useQueryClient();
-
-  return useMutation({
-    mutationFn: ({ id, updates }: { id: string; updates: Record<string, unknown> }) =>
-      VesselsService.update(id, updates),
-    onSuccess: (data) => {
-      toast.success("Embarcação atualizada", { description: data.name });
-      queryClient.invalidateQueries({ queryKey: VESSEL_QUERY_KEYS.all });
-      queryClient.invalidateQueries({ queryKey: VESSEL_QUERY_KEYS.detail(data.id) });
+  return useAuditedMutation<{ id: string; updates: Record<string, unknown> }, any>({
+    mutationFn: ({ id, updates }) => VesselsService.update(id, updates),
+    eventType: "vessel.updated",
+    entityType: "vessel",
+    module: "fleet",
+    actionType: "update",
+    getEntityId: (data) => data.id,
+    getDescription: (_input, output) => `Embarcação atualizada: ${output.name}`,
+    getChanges: (input) => {
+      const changes: Record<string, { old: unknown; new: unknown }> = {};
+      for (const [key, val] of Object.entries(input.updates)) {
+        changes[key] = { old: undefined, new: val };
+      }
+      return changes;
     },
-    onError: (error: Error) => {
-      toast.error("Erro ao atualizar embarcação", { description: error.message });
-    },
+    invalidateKeys: [["vessels"], ["vessel-stats"], ["fleet"], ["dashboard-kpis"]],
+    successMessage: "Embarcação atualizada com sucesso",
+    errorMessage: "Erro ao atualizar embarcação",
   });
 }
