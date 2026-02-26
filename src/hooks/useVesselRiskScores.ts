@@ -7,6 +7,7 @@
 import { useCallback } from "react";
 import { useQuery, useMutation, useQueryClient } from "@tanstack/react-query";
 import { supabase } from "@/integrations/supabase/client";
+import { fromUntyped } from "@/integrations/supabase/untyped-client";
 import { logger } from "@/lib/logger";
 
 export interface VesselRisk {
@@ -136,7 +137,7 @@ export function useVesselRiskScores() {
       // Upsert in batches
       for (let i = 0; i < rows.length; i += 20) {
         const batch = rows.slice(i, i + 20);
-        await (supabase.from("vessel_risk_scores") as any).upsert(batch, {
+        await fromUntyped("vessel_risk_scores").upsert(batch, {
           onConflict: "vessel_id,risk_category",
         });
       }

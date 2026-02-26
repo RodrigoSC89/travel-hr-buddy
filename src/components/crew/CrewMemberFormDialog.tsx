@@ -14,6 +14,21 @@ import { Badge } from '@/components/ui/badge';
 import { supabase } from '@/integrations/supabase/client';
 import { toast } from 'sonner';
 import { Loader2, User, Ship, Award, FileText } from 'lucide-react';
+import { z } from 'zod/v4';
+
+const crewFormSchema = z.object({
+  full_name: z.string().min(2, 'Nome deve ter pelo menos 2 caracteres'),
+  position: z.string().min(1, 'Posição é obrigatória'),
+  rank: z.string().optional(),
+  nationality: z.string().optional(),
+  passport_number: z.string().optional(),
+  phone: z.string().optional(),
+  email: z.email('Email inválido').optional().or(z.literal('')),
+  vessel_id: z.string().optional(),
+  contract_start: z.string().optional(),
+  contract_end: z.string().optional(),
+  experience_years: z.string().optional(),
+});
 
 interface CrewMemberFormData {
   full_name: string;
@@ -102,13 +117,22 @@ export function CrewMemberFormDialog({ open, onOpenChange, editId, vessels, onSu
       toast.error('Nome e posição são obrigatórios');
       return;
     }
+
+    // Zod validation
+    const validation = crewFormSchema.safeParse(form);
+    if (!validation.success) {
+      const firstError = validation.error.issues[0];
+      toast.error('Dados inválidos', { description: firstError.message });
+      return;
+    }
     setIsSaving(true);
     try {
+      const employeeId = `NTL-${Date.now().toString(36).toUpperCase()}`;
       const payload = {
         full_name: form.full_name.trim(),
         position: form.position,
         rank: form.rank || form.position,
-        nationality: form.nationality || null,
+        nationality: form.nationality || 'N/A',
         passport_number: form.passport_number || null,
         phone: form.phone || null,
         email: form.email || null,
@@ -117,14 +141,15 @@ export function CrewMemberFormDialog({ open, onOpenChange, editId, vessels, onSu
         contract_end: form.contract_end || null,
         experience_years: form.experience_years ? parseInt(form.experience_years) : null,
         status: 'active',
+        employee_id: employeeId,
       };
 
       if (isEdit) {
-        const { error } = await supabase.from('crew_members').update(payload as any).eq('id', editId);
+        const { error } = await supabase.from('crew_members').update(payload).eq('id', editId);
         if (error) throw error;
         toast.success('Tripulante atualizado com sucesso!');
       } else {
-        const { error } = await supabase.from('crew_members').insert(payload as any);
+        const { error } = await supabase.from('crew_members').insert([payload]);
         if (error) throw error;
         toast.success('Tripulante cadastrado com sucesso!');
       }
@@ -141,18 +166,19 @@ export function CrewMemberFormDialog({ open, onOpenChange, editId, vessels, onSu
             certification_name: 'STCW Certificate of Competency',
             certification_type: 'STCW',
             certificate_number: form.stcw_certificate_number,
-            issue_date: form.stcw_issue_date || null,
+            issue_date: form.stcw_issue_date || new Date().toISOString().slice(0, 10),
+            issuing_authority: 'Maritime Authority',
             expiry_date: form.stcw_expiry_date || null,
             status: 'valid',
-          } as any);
+          });
         }
       }
 
       onOpenChange(false);
       setForm(EMPTY_FORM);
       onSuccess?.();
-    } catch (err: any) {
-      toast.error('Erro ao salvar', { description: err.message });
+    } catch (err: unknown) {
+      toast.error('Erro ao salvar', { description: err instanceof Error ? err.message : 'Erro desconhecido' });
     } finally {
       setIsSaving(false);
     }

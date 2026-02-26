@@ -103,14 +103,14 @@ export function useCrewStats() {
 }
 
 export function useCreateCrewMember() {
-  return useAuditedMutation<Record<string, unknown>, any>({
+  return useAuditedMutation<Record<string, unknown>, Record<string, unknown>>({
     mutationFn: (crew) => CrewService.createCrewMember(crew),
     eventType: "people.crew.created",
     entityType: "crew_member",
     module: "crew",
     actionType: "create",
-    getEntityId: (data) => data.id,
-    getDescription: (_input, output) => `Tripulante registrado: ${output.full_name}`,
+    getEntityId: (data) => String(data.id),
+    getDescription: (_input, output) => `Tripulante registrado: ${String(output.full_name)}`,
     invalidateKeys: [["crew-members"], ["crew-stats"], ["crew"], ["dashboard-kpis"]],
     successMessage: "Tripulante adicionado com sucesso",
     errorMessage: "Erro ao adicionar tripulante",
@@ -118,11 +118,11 @@ export function useCreateCrewMember() {
 }
 
 export function useUpdateCrewMember() {
-  return useAuditedMutation<{ id: string; updates: Record<string, unknown> }, any>({
+  return useAuditedMutation<{ id: string; updates: Record<string, unknown> }, Record<string, unknown>>({
     mutationFn: async ({ id, updates }) => {
       const { data, error } = await supabase
         .from("crew_members")
-        .update(updates as any)
+        .update(updates as Record<string, unknown>)
         .eq("id", id)
         .select()
         .single();
@@ -133,8 +133,8 @@ export function useUpdateCrewMember() {
     entityType: "crew_member",
     module: "crew",
     actionType: "update",
-    getEntityId: (data) => data.id,
-    getDescription: (_input, output) => `Tripulante atualizado: ${output.full_name}`,
+    getEntityId: (data) => String(data.id),
+    getDescription: (_input, output) => `Tripulante atualizado: ${String(output.full_name)}`,
     getChanges: (input) => {
       const changes: Record<string, { old: unknown; new: unknown }> = {};
       for (const [key, val] of Object.entries(input.updates)) {

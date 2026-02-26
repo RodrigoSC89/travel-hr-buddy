@@ -5,6 +5,7 @@
 
 import { useCallback } from "react";
 import { supabase } from "@/integrations/supabase/client";
+import { fromUntyped } from "@/integrations/supabase/untyped-client";
 import { logger } from "@/lib/logger";
 
 interface AuditEntry {
@@ -23,7 +24,7 @@ export function useAuditTrail() {
     try {
       const { data: { user } } = await supabase.auth.getUser();
       
-      await (supabase.from("system_audit_trail") as any).insert({
+      await fromUntyped("system_audit_trail").insert({
         user_id: user?.id,
         action_type: entry.action_type,
         module: entry.module,
