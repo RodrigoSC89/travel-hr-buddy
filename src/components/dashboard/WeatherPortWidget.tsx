@@ -38,8 +38,16 @@ function generateWeatherFromVessels(count: number): WeatherData {
   };
 }
 
+interface VoyagePlanRow {
+  id: string;
+  vessel_id: string | null;
+  destination_port: string | null;
+  eta: string | null;
+  status: string | null;
+  vessels: { name: string } | null;
+}
+
 export function WeatherPortWidget() {
-  // Fetch real voyage data for ETAs
   const { data: voyages } = useQuery({
     queryKey: ["port-eta-tracker"],
     queryFn: async () => {
@@ -48,7 +56,7 @@ export function WeatherPortWidget() {
         .in("status", ["in_progress", "planned"])
         .order("eta", { ascending: true })
         .limit(5);
-      return (data ?? []) as any[];
+      return (data ?? []) as VoyagePlanRow[];
     },
     staleTime: 60000,
   });
@@ -64,12 +72,12 @@ export function WeatherPortWidget() {
 
   const weather = generateWeatherFromVessels(vesselCount ?? 0);
 
-  const etaList: PortETA[] = (voyages ?? []).map((v: any) => ({
+  const etaList: PortETA[] = (voyages ?? []).map((v) => ({
     vessel_name: v.vessels?.name ?? "N/A",
     port_name: v.destination_port ?? "—",
     eta: v.eta ?? "",
     status: v.status === "in_progress"
-      ? new Date(v.eta) < new Date() ? "delayed" : "on_time"
+      ? new Date(v.eta ?? "") < new Date() ? "delayed" : "on_time"
       : "on_time",
   }));
 

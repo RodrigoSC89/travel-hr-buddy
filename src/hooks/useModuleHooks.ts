@@ -7,6 +7,7 @@
  */
 
 import { useIntegratedMutation } from "./useIntegratedMutation";
+import type { Database } from "@/integrations/supabase/types";
 import { useAuditedMutation } from "./useAuditedMutation";
 import {
   VesselsService,
@@ -877,17 +878,17 @@ export function useDeleteVesselHistoryEvent() {
 // ════════════════════════════════════════════
 
 export function useAddSparePart() {
-  return useIntegratedMutation<Record<string, unknown>, any>({
+  return useIntegratedMutation<Record<string, unknown>, Record<string, unknown>>({
     mutationFn: async (input) => {
       const { supabase } = await import("@/integrations/supabase/client");
       const { data, error } = await supabase.from('inventory_items')
-        .insert(input as any).select().single();
+        .insert(input as Database['public']['Tables']['inventory_items']['Insert']).select().single();
       if (error) throw error;
       return data;
     },
     eventType: "maintenance.spare_part.added",
-    entityType: "inventory_item" as any,
-    getEntityId: (out) => out.id,
+    entityType: "inventory_item",
+    getEntityId: (out) => out.id as string,
     buildPayload: (_in, out) => ({ item_id: out.id, name: out.name, quantity: out.quantity }),
     invalidateKeys: [["inventory"], ["spare-parts"]],
     successMessage: "Peça adicionada ao inventário",
@@ -900,7 +901,7 @@ export function useAddSparePart() {
 // ════════════════════════════════════════════
 
 export function useUpdateRunningHours() {
-  return useIntegratedMutation<{ equipmentId: string; hours: number; vesselId?: string }, any>({
+  return useIntegratedMutation<{ equipmentId: string; hours: number; vesselId?: string }, Record<string, unknown>>({
     mutationFn: async (input) => {
       const { fromUntyped } = await import("@/integrations/supabase/untyped-client");
       const { data, error } = await fromUntyped('pms_running_hours_triggers')
@@ -914,8 +915,8 @@ export function useUpdateRunningHours() {
       return data;
     },
     eventType: "maintenance.running_hours.updated",
-    entityType: "equipment" as any,
-    getEntityId: (out) => out.id,
+    entityType: "equipment",
+    getEntityId: (out) => out.id as string,
     buildPayload: (input) => ({ equipment_id: input.equipmentId, hours: input.hours }),
     invalidateKeys: [["running-hours"], ["maintenance"]],
     successMessage: "Horas de funcionamento atualizadas",
@@ -928,17 +929,17 @@ export function useUpdateRunningHours() {
 // ════════════════════════════════════════════
 
 export function useCreateMaintenancePrediction() {
-  return useIntegratedMutation<Record<string, unknown>, any>({
+  return useIntegratedMutation<Record<string, unknown>, Record<string, unknown>>({
     mutationFn: async (input) => {
       const { supabase } = await import("@/integrations/supabase/client");
       const { data, error } = await supabase.from('ai_maintenance_predictions')
-        .insert(input as any).select().single();
+        .insert(input as Database['public']['Tables']['ai_maintenance_predictions']['Insert']).select().single();
       if (error) throw error;
       return data;
     },
     eventType: "maintenance.prediction.created",
-    entityType: "prediction" as any,
-    getEntityId: (out) => out.id,
+    entityType: "prediction",
+    getEntityId: (out) => out.id as string,
     buildPayload: (_in, out) => ({ prediction_id: out.id, equipment: out.equipment_name, probability: out.failure_probability }),
     invalidateKeys: [["ai-predictions"], ["maintenance"]],
     successMessage: "Predição de manutenção criada",
@@ -951,7 +952,7 @@ export function useCreateMaintenancePrediction() {
 // ════════════════════════════════════════════
 
 export function useCreateClassSurvey() {
-  return useIntegratedMutation<Record<string, unknown>, any>({
+  return useIntegratedMutation<Record<string, unknown>, Record<string, unknown>>({
     mutationFn: async (input) => {
       const { fromUntyped } = await import("@/integrations/supabase/untyped-client");
       const { data, error } = await fromUntyped('class_surveys')
@@ -960,8 +961,8 @@ export function useCreateClassSurvey() {
       return data;
     },
     eventType: "compliance.class_survey.created",
-    entityType: "survey" as any,
-    getEntityId: (out) => out.id,
+    entityType: "survey",
+    getEntityId: (out) => out.id as string,
     buildPayload: (_in, out) => ({ survey_id: out.id, survey_type: out.survey_type, status: out.status }),
     invalidateKeys: [["class-surveys"], ["compliance"]],
     successMessage: "Vistoria de classe criada",
@@ -970,7 +971,7 @@ export function useCreateClassSurvey() {
 }
 
 export function useUpdateClassSurvey() {
-  return useIntegratedMutation<{ id: string; updates: Record<string, unknown> }, any>({
+  return useIntegratedMutation<{ id: string; updates: Record<string, unknown> }, Record<string, unknown>>({
     mutationFn: async ({ id, updates }) => {
       const { fromUntyped } = await import("@/integrations/supabase/untyped-client");
       const { data, error } = await fromUntyped('class_surveys')
@@ -979,8 +980,8 @@ export function useUpdateClassSurvey() {
       return data;
     },
     eventType: "compliance.class_survey.updated",
-    entityType: "survey" as any,
-    getEntityId: (out) => out.id,
+    entityType: "survey",
+    getEntityId: (out) => out.id as string,
     buildPayload: (input) => ({ survey_id: input.id }),
     invalidateKeys: [["class-surveys"], ["compliance"]],
     successMessage: "Vistoria atualizada",
@@ -989,7 +990,7 @@ export function useUpdateClassSurvey() {
 }
 
 export function useDeleteClassSurvey() {
-  return useIntegratedMutation<string, any>({
+  return useIntegratedMutation<string, Record<string, unknown>>({
     mutationFn: async (id) => {
       const { fromUntyped } = await import("@/integrations/supabase/untyped-client");
       const { error } = await fromUntyped('class_surveys').delete().eq('id', id);
@@ -997,8 +998,8 @@ export function useDeleteClassSurvey() {
       return { id };
     },
     eventType: "compliance.class_survey.deleted",
-    entityType: "survey" as any,
-    getEntityId: (out) => out.id,
+    entityType: "survey",
+    getEntityId: (out) => out.id as string,
     buildPayload: (_in, out) => ({ survey_id: out.id }),
     invalidateKeys: [["class-surveys"], ["compliance"]],
     successMessage: "Vistoria removida",
@@ -1011,17 +1012,17 @@ export function useDeleteClassSurvey() {
 // ════════════════════════════════════════════
 
 export function useCreateMARPOLEntry() {
-  return useIntegratedMutation<Record<string, unknown>, any>({
+  return useIntegratedMutation<Record<string, unknown>, Record<string, unknown>>({
     mutationFn: async (input) => {
       const { supabase } = await import("@/integrations/supabase/client");
       const { data, error } = await supabase.from('logs')
-        .insert(input as any).select().single();
+        .insert(input as Database['public']['Tables']['logs']['Insert']).select().single();
       if (error) throw error;
       return data;
     },
     eventType: "compliance.marpol.entry_created",
-    entityType: "marpol_entry" as any,
-    getEntityId: (out) => out.id,
+    entityType: "marpol_entry",
+    getEntityId: (out) => out.id as string,
     buildPayload: (_in, out) => ({ entry_id: out.id, module: out.module }),
     invalidateKeys: [["marpol-logs"], ["compliance"]],
     successMessage: "Registro MARPOL salvo",
@@ -1034,17 +1035,17 @@ export function useCreateMARPOLEntry() {
 // ════════════════════════════════════════════
 
 export function useCreatePurchaseRequisition() {
-  return useIntegratedMutation<Record<string, unknown>, any>({
+  return useIntegratedMutation<Record<string, unknown>, Record<string, unknown>>({
     mutationFn: async (input) => {
       const { supabase } = await import("@/integrations/supabase/client");
       const { data, error } = await supabase.from('purchase_requisitions')
-        .insert(input as any).select().single();
+        .insert(input as Database['public']['Tables']['purchase_requisitions']['Insert']).select().single();
       if (error) throw error;
       return data;
     },
     eventType: "procurement.requisition.created",
-    entityType: "purchase_requisition" as any,
-    getEntityId: (out) => out.id,
+    entityType: "purchase_requisition",
+    getEntityId: (out) => out.id as string,
     buildPayload: (_in, out) => ({ pr_id: out.id, pr_number: out.pr_number, status: out.status }),
     invalidateKeys: [["purchase-requisitions"], ["procurement"]],
     successMessage: "Requisição de compra criada",
@@ -1057,7 +1058,7 @@ export function useCreatePurchaseRequisition() {
 // ════════════════════════════════════════════
 
 export function useCreateJSATemplate() {
-  return useIntegratedMutation<Record<string, unknown>, any>({
+  return useIntegratedMutation<Record<string, unknown>, Record<string, unknown>>({
     mutationFn: async (input) => {
       const { fromUntyped } = await import("@/integrations/supabase/untyped-client");
       const { data, error } = await fromUntyped('jsa_templates').insert(input).select().single();
@@ -1065,8 +1066,8 @@ export function useCreateJSATemplate() {
       return data;
     },
     eventType: "safety.jsa.template_created",
-    entityType: "document" as any,
-    getEntityId: (out) => out.id,
+    entityType: "document",
+    getEntityId: (out) => out.id as string,
     buildPayload: (_in, out) => ({ template_id: out.id, title: out.title, job_type: out.job_type, risk_level: out.risk_level }),
     invalidateKeys: [["jsa-templates"]],
     successMessage: "JSA template criado",
@@ -1079,7 +1080,7 @@ export function useCreateJSATemplate() {
 // ════════════════════════════════════════════
 
 export function useCreateNC() {
-  return useIntegratedMutation<Record<string, unknown>, any>({
+  return useIntegratedMutation<Record<string, unknown>, Record<string, unknown>>({
     mutationFn: async (input) => {
       const { fromUntyped } = await import("@/integrations/supabase/untyped-client");
       const { data, error } = await fromUntyped('peotram_nc_actions').insert(input).select().single();
@@ -1087,8 +1088,8 @@ export function useCreateNC() {
       return data;
     },
     eventType: "safety.nc.created",
-    entityType: "finding" as any,
-    getEntityId: (out) => out.id,
+    entityType: "finding",
+    getEntityId: (out) => out.id as string,
     buildPayload: (_in, out) => ({ nc_id: out.id, nc_number: out.nc_number, priority: out.priority }),
     invalidateKeys: [["peotram-nc-actions"]],
     successMessage: "NC registrada com sucesso",
@@ -1097,18 +1098,18 @@ export function useCreateNC() {
 }
 
 export function useUpdateNCStatus() {
-  return useIntegratedMutation<{ id: string; status: string; extraUpdates?: Record<string, unknown> }, any>({
+  return useIntegratedMutation<{ id: string; status: string; extraUpdates?: Record<string, unknown> }, Record<string, unknown>>({
     mutationFn: async ({ id, status, extraUpdates }) => {
       const { fromUntyped } = await import("@/integrations/supabase/untyped-client");
-      const updates: any = { status, updated_at: new Date().toISOString(), ...extraUpdates };
+      const updates: Record<string, unknown> = { status, updated_at: new Date().toISOString(), ...extraUpdates };
       if (status === 'closed') { updates.closed_at = new Date().toISOString().split('T')[0]; updates.percent_complete = 100; }
       const { data, error } = await fromUntyped('peotram_nc_actions').update(updates).eq('id', id).select().single();
       if (error) throw error;
       return data;
     },
     eventType: "safety.nc.status_changed",
-    entityType: "finding" as any,
-    getEntityId: (out) => out.id,
+    entityType: "finding",
+    getEntityId: (out) => out.id as string,
     buildPayload: (input, out) => ({ nc_id: input.id, status: input.status, nc_number: out.nc_number }),
     invalidateKeys: [["peotram-nc-actions"]],
     successMessage: "Status da NC atualizado",
@@ -1121,7 +1122,7 @@ export function useUpdateNCStatus() {
 // ════════════════════════════════════════════
 
 export function useCreateHullInspection() {
-  return useIntegratedMutation<Record<string, unknown>, any>({
+  return useIntegratedMutation<Record<string, unknown>, Record<string, unknown>>({
     mutationFn: async (input) => {
       const { fromUntyped } = await import("@/integrations/supabase/untyped-client");
       const { data, error } = await fromUntyped('hull_integrity_records').insert(input).select().single();
@@ -1129,8 +1130,8 @@ export function useCreateHullInspection() {
       return data;
     },
     eventType: "maintenance.hull.inspection_created",
-    entityType: "inspection" as any,
-    getEntityId: (out) => out.id,
+    entityType: "inspection",
+    getEntityId: (out) => out.id as string,
     buildPayload: (_in, out) => ({ inspection_id: out.id, zone: out.zone, type: out.inspection_type }),
     invalidateKeys: [["hull-inspections"]],
     successMessage: "Inspeção registrada!",
@@ -1139,7 +1140,7 @@ export function useCreateHullInspection() {
 }
 
 export function useCreateHullFinding() {
-  return useIntegratedMutation<Record<string, unknown>, any>({
+  return useIntegratedMutation<Record<string, unknown>, Record<string, unknown>>({
     mutationFn: async (input) => {
       const { fromUntyped } = await import("@/integrations/supabase/untyped-client");
       const { data, error } = await fromUntyped('hull_integrity_records').insert(input).select().single();
@@ -1147,8 +1148,8 @@ export function useCreateHullFinding() {
       return data;
     },
     eventType: "maintenance.hull.finding_created",
-    entityType: "finding" as any,
-    getEntityId: (out) => out.id,
+    entityType: "finding",
+    getEntityId: (out) => out.id as string,
     buildPayload: (_in, out) => ({ finding_id: out.id, type: out.corrosion_type, severity: out.severity }),
     invalidateKeys: [["hull-inspections"]],
     successMessage: "Achado registrado!",
@@ -1161,18 +1162,18 @@ export function useCreateHullFinding() {
 // ════════════════════════════════════════════
 
 export function useAssignCrewToVessel() {
-  return useIntegratedMutation<{ crewId: string; vesselId: string }, any>({
+  return useIntegratedMutation<{ crewId: string; vesselId: string }, Record<string, unknown>>({
     mutationFn: async ({ crewId, vesselId }) => {
       const { supabase } = await import("@/integrations/supabase/client");
       const { data, error } = await supabase.from('crew_members')
-        .update({ vessel_id: vesselId, status: 'active', contract_start: new Date().toISOString() } as any)
+        .update({ vessel_id: vesselId, status: 'active', contract_start: new Date().toISOString() } as Database['public']['Tables']['crew_members']['Update'])
         .eq('id', crewId).select().single();
       if (error) throw error;
       return data;
     },
     eventType: "people.crew.assigned",
     entityType: "crew_member",
-    getEntityId: (out) => out.id,
+    getEntityId: (out) => out.id as string,
     buildPayload: (input, out) => ({ crew_id: input.crewId, vessel_id: input.vesselId, name: out.full_name }),
     invalidateKeys: [["crew-pool-planner"], ["crew"]],
     successMessage: "Tripulante designado com sucesso",
@@ -1185,17 +1186,17 @@ export function useAssignCrewToVessel() {
 // ════════════════════════════════════════════
 
 export function useCreateCrewCertification() {
-  return useIntegratedMutation<Record<string, unknown>, any>({
+  return useIntegratedMutation<Record<string, unknown>, Record<string, unknown>>({
     mutationFn: async (input) => {
       const { supabase } = await import("@/integrations/supabase/client");
       const { data, error } = await supabase.from('maritime_certificates')
-        .insert(input as any).select().single();
+        .insert(input as Database['public']['Tables']['maritime_certificates']['Insert']).select().single();
       if (error) throw error;
       return data;
     },
     eventType: "people.certification.created",
-    entityType: "certificate" as any,
-    getEntityId: (out) => out.id,
+    entityType: "certification",
+    getEntityId: (out) => out.id as string,
     buildPayload: (_in, out) => ({ cert_id: out.id, type: out.certificate_type, crew_id: out.crew_member_id }),
     invalidateKeys: [["crew-certifications-panel"]],
     successMessage: "Certificação adicionada",
@@ -1204,7 +1205,7 @@ export function useCreateCrewCertification() {
 }
 
 export function useDeleteCrewCertification() {
-  return useIntegratedMutation<string, any>({
+  return useIntegratedMutation<string, Record<string, unknown>>({
     mutationFn: async (id) => {
       const { supabase } = await import("@/integrations/supabase/client");
       const { error } = await supabase.from('maritime_certificates').delete().eq('id', id);
@@ -1212,8 +1213,8 @@ export function useDeleteCrewCertification() {
       return { id };
     },
     eventType: "people.certification.deleted",
-    entityType: "certificate" as any,
-    getEntityId: (out) => out.id,
+    entityType: "certification",
+    getEntityId: (out) => out.id as string,
     buildPayload: (_in, out) => ({ cert_id: out.id }),
     invalidateKeys: [["crew-certifications-panel"]],
     successMessage: "Certificação removida",
@@ -1226,11 +1227,11 @@ export function useDeleteCrewCertification() {
 // ════════════════════════════════════════════
 
 export function useCreateMaintenanceTask() {
-  return useAuditedMutation<Record<string, unknown>, any>({
+  return useAuditedMutation<Record<string, unknown>, Record<string, unknown>>({
     mutationFn: async (input) => {
       const { supabase } = await import("@/integrations/supabase/client");
       const { data, error } = await supabase.from('maintenance_tasks')
-        .insert(input as any).select().single();
+        .insert(input as Database['public']['Tables']['maintenance_tasks']['Insert']).select().single();
       if (error) throw error;
       return data;
     },
@@ -1238,7 +1239,7 @@ export function useCreateMaintenanceTask() {
     entityType: "work_order",
     module: "maintenance",
     actionType: "create",
-    getEntityId: (out) => out.id,
+    getEntityId: (out) => out.id as string,
     getDescription: (_in, out) => `OS criada: ${out.title || out.id}`,
     buildPayload: (_in, out) => ({ task_id: out.id, title: out.title, priority: out.priority }),
     invalidateKeys: [["pms-job-cards"], ["maintenance"], ["dashboard-kpis"]],
@@ -1248,13 +1249,13 @@ export function useCreateMaintenanceTask() {
 }
 
 export function useUpdateMaintenanceTaskStatus() {
-  return useAuditedMutation<{ id: string; status: string }, any>({
+  return useAuditedMutation<{ id: string; status: string }, Record<string, unknown>>({
     mutationFn: async ({ id, status }) => {
       const { supabase } = await import("@/integrations/supabase/client");
-      const updates: any = { status };
+      const updates: Record<string, unknown> = { status };
       if (status === 'completed') updates.completed_date = new Date().toISOString();
       const { data, error } = await supabase.from('maintenance_tasks')
-        .update(updates).eq('id', id).select().single();
+        .update(updates as Database['public']['Tables']['maintenance_tasks']['Update']).eq('id', id).select().single();
       if (error) throw error;
       return data;
     },
@@ -1262,7 +1263,7 @@ export function useUpdateMaintenanceTaskStatus() {
     entityType: "work_order",
     module: "maintenance",
     actionType: "update",
-    getEntityId: (out) => out.id,
+    getEntityId: (out) => out.id as string,
     getDescription: (input) => `Status OS alterado para: ${input.status}`,
     getChanges: (input) => ({ status: { old: undefined, new: input.status } }),
     buildPayload: (input) => ({ task_id: input.id, status: input.status }),
@@ -1277,7 +1278,7 @@ export function useUpdateMaintenanceTaskStatus() {
 // ════════════════════════════════════════════
 
 export function useMarkInsightRead() {
-  return useIntegratedMutation<string, any>({
+  return useIntegratedMutation<string, Record<string, unknown>>({
     mutationFn: async (id) => {
       const { supabase } = await import("@/integrations/supabase/client");
       const { data, error } = await supabase.from('ai_insights')
@@ -1286,8 +1287,8 @@ export function useMarkInsightRead() {
       return data;
     },
     eventType: "ai.insight.read",
-    entityType: "ai_decision" as any,
-    getEntityId: (out) => out.id,
+    entityType: "ai_decision",
+    getEntityId: (out) => out.id as string,
     buildPayload: (_in, out) => ({ insight_id: out.id, title: out.title }),
     invalidateKeys: [["advanced-ai-insights"]],
     successMessage: undefined,
@@ -1300,7 +1301,7 @@ export function useMarkInsightRead() {
 // ════════════════════════════════════════════
 
 export function useSeedBenchmarkScores() {
-  return useIntegratedMutation<Record<string, unknown>[], any>({
+  return useIntegratedMutation<Record<string, unknown>[], Record<string, unknown>>({
     mutationFn: async (rows) => {
       const { fromUntyped } = await import("@/integrations/supabase/untyped-client");
       const { data, error } = await fromUntyped('peotram_vessel_scores').upsert(rows).select();
@@ -1308,8 +1309,8 @@ export function useSeedBenchmarkScores() {
       return data;
     },
     eventType: "peotram.benchmarking.seeded",
-    entityType: "vessel" as any,
-    buildPayload: (_in, out) => ({ count: out?.length ?? 0 }),
+    entityType: "vessel",
+    buildPayload: (_in, out) => ({ count: Array.isArray(out) ? out.length : 0 }),
     invalidateKeys: [["peotram-vessel-scores"]],
     successMessage: "Scores de benchmarking inicializados",
     errorMessage: "Erro ao inicializar scores",
@@ -1321,15 +1322,13 @@ export function useSeedBenchmarkScores() {
 // ════════════════════════════════════════════
 
 export function useAcknowledgeAlertIntegrated() {
-  return useIntegratedMutation<string, any>({
+  return useIntegratedMutation<string, Record<string, unknown>>({
     mutationFn: async (alertId) => {
       const { supabase } = await import("@/integrations/supabase/client");
-      // Try telemetry_alerts first
       const { error } = await supabase.from('telemetry_alerts')
         .update({ acknowledged: true, acknowledged_at: new Date().toISOString() })
         .eq('id', alertId);
       if (error) {
-        // Fallback: soc_alerts
         const { error: socErr } = await supabase.from('soc_alerts')
           .update({ acknowledged_at: new Date().toISOString(), acknowledged_by: (await supabase.auth.getUser()).data.user?.id })
           .eq('id', alertId);
@@ -1339,7 +1338,7 @@ export function useAcknowledgeAlertIntegrated() {
     },
     eventType: "alert.acknowledged",
     entityType: "alert",
-    getEntityId: (out) => out.id,
+    getEntityId: (out) => out.id as string,
     buildPayload: (_in, out) => ({ alert_id: out.id }),
     invalidateKeys: [["smart-alerts"], ["tracking-alerts"]],
     successMessage: "Alerta reconhecido",
@@ -1348,7 +1347,7 @@ export function useAcknowledgeAlertIntegrated() {
 }
 
 export function useResolveAlertIntegrated() {
-  return useIntegratedMutation<string, any>({
+  return useIntegratedMutation<string, Record<string, unknown>>({
     mutationFn: async (alertId) => {
       const { supabase } = await import("@/integrations/supabase/client");
       const { error } = await supabase.from('telemetry_alerts')
@@ -1364,7 +1363,7 @@ export function useResolveAlertIntegrated() {
     },
     eventType: "alert.resolved",
     entityType: "alert",
-    getEntityId: (out) => out.id,
+    getEntityId: (out) => out.id as string,
     buildPayload: (_in, out) => ({ alert_id: out.id }),
     invalidateKeys: [["smart-alerts"], ["tracking-alerts"]],
     successMessage: "Alerta resolvido",
@@ -1377,7 +1376,7 @@ export function useResolveAlertIntegrated() {
 // ════════════════════════════════════════════
 
 export function useMarkNotificationRead() {
-  return useIntegratedMutation<string, any>({
+  return useIntegratedMutation<string, Record<string, unknown>>({
     mutationFn: async (notificationId) => {
       const { supabase } = await import("@/integrations/supabase/client");
       const { error } = await supabase.from("intelligent_notifications")
@@ -1392,15 +1391,15 @@ export function useMarkNotificationRead() {
       return { id: notificationId };
     },
     eventType: "notification.read",
-    entityType: "notification" as any,
-    getEntityId: (out) => out.id,
+    entityType: "notification",
+    getEntityId: (out) => out.id as string,
     buildPayload: (_in, out) => ({ notification_id: out.id }),
     invalidateKeys: [["system-notifications"]],
   });
 }
 
 export function useMarkAllNotificationsRead() {
-  return useIntegratedMutation<void, any>({
+  return useIntegratedMutation<void, Record<string, unknown>>({
     mutationFn: async () => {
       const { supabase } = await import("@/integrations/supabase/client");
       const userId = (await supabase.auth.getUser()).data.user?.id;
@@ -1413,7 +1412,7 @@ export function useMarkAllNotificationsRead() {
       return { success: true };
     },
     eventType: "notification.all_read",
-    entityType: "notification" as any,
+    entityType: "notification",
     buildPayload: () => ({ all: true }),
     invalidateKeys: [["system-notifications"]],
     successMessage: "Todas notificações lidas",
@@ -1425,7 +1424,7 @@ export function useMarkAllNotificationsRead() {
 // ════════════════════════════════════════════
 
 export function useFixSecurityFinding() {
-  return useIntegratedMutation<string, any>({
+  return useIntegratedMutation<string, Record<string, unknown>>({
     mutationFn: async (findingId) => {
       const { supabase } = await import("@/integrations/supabase/client");
       const { error } = await supabase.from("telemetry_alerts")
@@ -1435,8 +1434,8 @@ export function useFixSecurityFinding() {
       return { id: findingId };
     },
     eventType: "security.finding.fixed",
-    entityType: "finding" as any,
-    getEntityId: (out) => out.id,
+    entityType: "finding",
+    getEntityId: (out) => out.id as string,
     buildPayload: (_in, out) => ({ finding_id: out.id }),
     invalidateKeys: [["security-findings"]],
     successMessage: "Finding marcado como corrigido",
@@ -1449,7 +1448,7 @@ export function useFixSecurityFinding() {
 // ════════════════════════════════════════════
 
 export function useUpdateRecruitmentStage() {
-  return useIntegratedMutation<{ candidatoId: string; novaEtapa: string }, any>({
+  return useIntegratedMutation<{ candidatoId: string; novaEtapa: string }, Record<string, unknown>>({
     mutationFn: async ({ candidatoId, novaEtapa }) => {
       const { supabase } = await import("@/integrations/supabase/client");
       await supabase.from("logs").insert({
@@ -1457,11 +1456,11 @@ export function useUpdateRecruitmentStage() {
         level: "info",
         message: `Candidato ${candidatoId} movido para ${novaEtapa}`,
         metadata: { candidato_id: candidatoId, nova_etapa: novaEtapa },
-      } as any);
+      } as Database['public']['Tables']['logs']['Insert']);
       return { candidatoId, novaEtapa };
     },
     eventType: "recruitment.stage.changed",
-    entityType: "crew_member" as any,
+    entityType: "crew_member",
     buildPayload: (input) => ({ candidato_id: input.candidatoId, nova_etapa: input.novaEtapa }),
     invalidateKeys: [["recruitment-candidatos"]],
     successMessage: "Etapa atualizada",
@@ -1474,7 +1473,7 @@ export function useUpdateRecruitmentStage() {
 // ════════════════════════════════════════════
 
 export function useCreateDDS() {
-  return useIntegratedMutation<Record<string, unknown>, any>({
+  return useIntegratedMutation<Record<string, unknown>, Record<string, unknown>>({
     mutationFn: async (input) => {
       const { fromUntyped } = await import("@/integrations/supabase/untyped-client");
       const { data, error } = await fromUntyped("drill_records").insert(input).select().single();
@@ -1482,8 +1481,8 @@ export function useCreateDDS() {
       return data;
     },
     eventType: "safety.dds.created",
-    entityType: "drill" as any,
-    getEntityId: (out) => out.id,
+    entityType: "drill",
+    getEntityId: (out) => out.id as string,
     buildPayload: (_in, out) => ({ drill_id: out.id, drill_type: out.drill_type }),
     invalidateKeys: [["safety-dds-records"]],
     successMessage: "DDS registrado com sucesso",
@@ -1496,7 +1495,7 @@ export function useCreateDDS() {
 // ════════════════════════════════════════════
 
 export function useSelectVoyageRoute() {
-  return useIntegratedMutation<{ voyageId: string; distance: number; fuel: number; notes: string }, any>({
+  return useIntegratedMutation<{ voyageId: string; distance: number; fuel: number; notes: string }, Record<string, unknown>>({
     mutationFn: async (input) => {
       const { supabase } = await import("@/integrations/supabase/client");
       const { data, error } = await supabase.from('voyage_plans').update({
@@ -1509,7 +1508,7 @@ export function useSelectVoyageRoute() {
     },
     eventType: "voyage.route.selected",
     entityType: "voyage",
-    getEntityId: (out) => out.id,
+    getEntityId: (out) => out.id as string,
     buildPayload: (input) => ({ voyage_id: input.voyageId, distance: input.distance }),
     invalidateKeys: [["voyage-plans-intelligence"], ["voyages"]],
     successMessage: "Rota selecionada e salva no plano de viagem",
@@ -1522,7 +1521,7 @@ export function useSelectVoyageRoute() {
 // ════════════════════════════════════════════
 
 export function useUpdateSensorReading() {
-  return useIntegratedMutation<{ sensorId: string; value: number }, any>({
+  return useIntegratedMutation<{ sensorId: string; value: number }, Record<string, unknown>>({
     mutationFn: async (input) => {
       const { supabase } = await import("@/integrations/supabase/client");
       const { data, error } = await supabase.from('iot_sensors')
@@ -1532,8 +1531,8 @@ export function useUpdateSensorReading() {
       return data;
     },
     eventType: "maintenance.sensor_reading.updated",
-    entityType: "equipment" as any,
-    getEntityId: (out) => out.id,
+    entityType: "equipment",
+    getEntityId: (out) => out.id as string,
     buildPayload: (input) => ({ sensor_id: input.sensorId, value: input.value }),
     invalidateKeys: [["running-hours"], ["tracking-sensors"]],
     successMessage: "Leitura atualizada",
@@ -1546,17 +1545,17 @@ export function useUpdateSensorReading() {
 // ════════════════════════════════════════════
 
 export function useCreateTelemetryAlert() {
-  return useIntegratedMutation<Record<string, unknown>, any>({
+  return useIntegratedMutation<Record<string, unknown>, Record<string, unknown>>({
     mutationFn: async (input) => {
       const { supabase } = await import("@/integrations/supabase/client");
       const { data, error } = await supabase.from('telemetry_alerts')
-        .insert(input as any).select().single();
+        .insert(input as Database['public']['Tables']['telemetry_alerts']['Insert']).select().single();
       if (error) throw error;
       return data;
     },
     eventType: "tracking.telemetry_alert.created",
     entityType: "alert",
-    getEntityId: (out) => out.id,
+    getEntityId: (out) => out.id as string,
     buildPayload: (_in, out) => ({ alert_id: out.id, severity: out.severity }),
     invalidateKeys: [["tracking-alerts"]],
     successMessage: "Alerta criado",
