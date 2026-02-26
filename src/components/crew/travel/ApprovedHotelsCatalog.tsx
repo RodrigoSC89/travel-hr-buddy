@@ -39,7 +39,7 @@ export function ApprovedHotelsCatalog() {
       airport_distance_km: Number(form.airport_distance_km) || null,
       contract_valid_until: form.contract_valid_until || null,
       is_active: true, internal_rating: 0, total_reviews: 0, rank_policy: {},
-    } as any, {
+    }, {
       onSuccess: () => {
         setOpen(false);
         setForm({ hotel_name: "", city: "", country: "", port_name: "", address: "", phone: "", email: "", star_rating: "3", daily_rate_usd: "", max_daily_rate_usd: "", breakfast_included: false, airport_shuttle: false, port_distance_km: "", airport_distance_km: "", contract_valid_until: "" });

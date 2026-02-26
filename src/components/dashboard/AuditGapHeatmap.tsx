@@ -57,7 +57,7 @@ const AuditGapHeatmap: React.FC = () => {
         (a.audit_type || '').toUpperCase().includes(framework.replace('-', ''))
       );
       const frameworkNCs = ncs.filter(nc => 
-        ((nc as any).source || (nc as any).category || '').toUpperCase().includes(framework.replace('-', ''))
+        (nc.source || nc.category || '').toUpperCase().includes(framework.replace('-', ''))
       );
 
       DIMENSIONS.forEach((dimension, dimIdx) => {

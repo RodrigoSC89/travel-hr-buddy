@@ -12,6 +12,7 @@ import { Download, Fuel, AlertTriangle, CheckCircle2, FlaskConical, Ship, Star, 
 import { ResponsiveContainer, BarChart, Bar, XAxis, YAxis, CartesianGrid, Tooltip, Cell } from "recharts";
 import { useQuery } from "@tanstack/react-query";
 import { supabase } from "@/integrations/supabase/client";
+import { fromUntyped } from "@/integrations/supabase/untyped-client";
 
 interface FuelSample {
   id: string;
@@ -43,13 +44,16 @@ export function FuelQualityTrackerTab() {
   const { data: bunkerOps = [], isLoading } = useQuery({
     queryKey: ["bunker-ops-fuel-quality"],
     queryFn: async () => {
-      const { data, error } = await supabase
-        .from("bunker_operations")
+      const { data, error } = await fromUntyped("bunker_operations")
         .select("id, vessel_id, port, supplier, fuel_type, quantity_mt, sulfur_content, bdn_number, delivery_date, metadata")
         .order("delivery_date", { ascending: false })
         .limit(50);
       if (error) return [];
-      return data || [];
+      return (data || []) as Array<{
+        id: string; vessel_id: string; port: string; supplier: string;
+        fuel_type: string; quantity_mt: number; sulfur_content: number;
+        bdn_number: string; delivery_date: string; metadata: Record<string, number> | null;
+      }>;
     },
     staleTime: 60000,
   });
@@ -67,17 +71,17 @@ export function FuelQualityTrackerTab() {
 
   const vesselMap = useMemo(() => {
     const map = new Map<string, string>();
-    vessels.forEach((v: any) => map.set(v.id, v.name));
+    vessels.forEach((v) => map.set(v.id, v.name));
     return map;
   }, [vessels]);
 
   // Map bunker_operations to FuelSample
   const samples: FuelSample[] = useMemo(() => {
-    return bunkerOps.map((op: any) => {
+    return bunkerOps.map((op) => {
       const sulfurContent = op.sulfur_content || 0;
       const fuelType = op.fuel_type || "VLSFO";
       const sulfurLimit = getSulfurLimit(fuelType);
-      const meta = (op.metadata as any) || {};
+      const meta = (op.metadata && typeof op.metadata === 'object' && !Array.isArray(op.metadata) ? op.metadata : {}) as Record<string, number>;
 
       let labResult: "pass" | "fail" | "pending" = "pending";
       if (sulfurContent > 0) {

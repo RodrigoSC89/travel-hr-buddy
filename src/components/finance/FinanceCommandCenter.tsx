@@ -29,6 +29,7 @@ import {
   DropdownMenu, DropdownMenuContent, DropdownMenuItem, DropdownMenuTrigger,
 } from "@/components/ui/dropdown-menu";
 import { supabase } from "@/integrations/supabase/client";
+import { fromUntyped } from "@/integrations/supabase/untyped-client";
 import { useQuery, useMutation, useQueryClient } from "@tanstack/react-query";
 
 interface Invoice {
@@ -100,58 +101,56 @@ export function FinanceCommandCenter() {
   });
 
   // ====== FETCH INVOICES ======
-  const { data: invoices = [], isLoading: loadingInvoices } = useQuery({
+  const { data: invoices = [], isLoading: loadingInvoices } = useQuery<Invoice[]>({
     queryKey: ["finance-invoices"],
     queryFn: async () => {
-      const { data, error } = await supabase
-        .from("invoices")
+      const { data, error } = await fromUntyped("invoices")
         .select("*")
         .order("created_at", { ascending: false });
       if (error) throw error;
-      return (data || []).map((inv: any) => ({
-        id: inv.id,
-        invoiceNumber: inv.invoice_number || "",
+      return (data || []).map((inv: Record<string, unknown>) => ({
+        id: String(inv.id || ""),
+        invoiceNumber: String(inv.invoice_number || ""),
         type: (inv.invoice_type === "receivable" ? "receivable" : "payable") as "receivable" | "payable",
-        description: inv.description || "",
-        vendor: inv.vendor_name || inv.client_name || "",
-        vesselName: inv.vessel_name || "",
+        description: String(inv.description || ""),
+        vendor: String(inv.vendor_name || inv.client_name || ""),
+        vesselName: String(inv.vessel_name || ""),
         amount: Number(inv.total_amount || inv.amount || 0),
-        currency: inv.currency || "USD",
-        issueDate: inv.issue_date || inv.created_at?.split("T")[0] || "",
-        dueDate: inv.due_date || "",
-        status: (["draft","sent","paid","overdue","cancelled"].includes(inv.status) ? inv.status : "draft") as Invoice["status"],
-        category: inv.category || "",
-        notes: inv.notes || "",
-        createdAt: inv.created_at || "",
-        updatedAt: inv.updated_at || inv.created_at || "",
+        currency: String(inv.currency || "USD"),
+        issueDate: String(inv.issue_date || (typeof inv.created_at === 'string' ? inv.created_at.split("T")[0] : "")),
+        dueDate: String(inv.due_date || ""),
+        status: (["draft","sent","paid","overdue","cancelled"].includes(String(inv.status)) ? inv.status : "draft") as Invoice["status"],
+        category: String(inv.category || ""),
+        notes: String(inv.notes || ""),
+        createdAt: String(inv.created_at || ""),
+        updatedAt: String(inv.updated_at || inv.created_at || ""),
       }));
     },
     staleTime: 30_000,
   });
 
   // ====== FETCH EXPENSES ======
-  const { data: expenses = [], isLoading: loadingExpenses } = useQuery({
+  const { data: expenses = [], isLoading: loadingExpenses } = useQuery<Expense[]>({
     queryKey: ["finance-expenses"],
     queryFn: async () => {
-      const { data, error } = await supabase
-        .from("expenses")
+      const { data, error } = await fromUntyped("expenses")
         .select("*")
         .order("created_at", { ascending: false });
       if (error) throw error;
-      return (data || []).map((exp: any) => ({
-        id: exp.id,
-        description: exp.description || "",
-        category: exp.category || "",
-        vesselName: exp.vessel_name || "",
+      return (data || []).map((exp: Record<string, unknown>) => ({
+        id: String(exp.id || ""),
+        description: String(exp.description || ""),
+        category: String(exp.category || ""),
+        vesselName: String(exp.vessel_name || ""),
         amount: Number(exp.amount || 0),
-        currency: exp.currency || "USD",
-        date: exp.date || exp.created_at?.split("T")[0] || "",
-        paymentMethod: exp.payment_method || "",
-        status: (exp.status || "pending") as Expense["status"],
-        submittedBy: exp.submitted_by || "Current User",
-        approvedBy: exp.approved_by,
-        notes: exp.notes || "",
-        createdAt: exp.created_at || "",
+        currency: String(exp.currency || "USD"),
+        date: String(exp.date || (typeof exp.created_at === 'string' ? exp.created_at.split("T")[0] : "")),
+        paymentMethod: String(exp.payment_method || ""),
+        status: (String(exp.status || "pending")) as Expense["status"],
+        submittedBy: String(exp.submitted_by || "Current User"),
+        approvedBy: exp.approved_by ? String(exp.approved_by) : undefined,
+        notes: String(exp.notes || ""),
+        createdAt: String(exp.created_at || ""),
       }));
     },
     staleTime: 30_000,
@@ -174,10 +173,10 @@ export function FinanceCommandCenter() {
         status: "draft",
       };
       if (form.id) {
-        const { error } = await supabase.from("invoices").update(payload).eq("id", form.id);
+        const { error } = await fromUntyped("invoices").update(payload).eq("id", form.id);
         if (error) throw error;
       } else {
-        const { error } = await supabase.from("invoices").insert(payload);
+        const { error } = await fromUntyped("invoices").insert(payload);
         if (error) throw error;
       }
     },
@@ -187,12 +186,12 @@ export function FinanceCommandCenter() {
       setIsInvoiceFormOpen(false);
       resetInvoiceForm();
     },
-    onError: (e: any) => toast.error("Erro: " + e.message),
+    onError: (e: Error) => toast.error("Erro: " + e.message),
   });
 
   const saveExpenseMutation = useMutation({
     mutationFn: async (form: typeof expenseForm & { id?: string }) => {
-      const payload: any = {
+      const payload: Record<string, unknown> = {
         description: form.description,
         category: form.category,
         vessel_name: form.vesselName,
@@ -204,10 +203,10 @@ export function FinanceCommandCenter() {
         status: "pending",
       };
       if (form.id) {
-        const { error } = await supabase.from("expenses").update(payload).eq("id", form.id);
+        const { error } = await fromUntyped("expenses").update(payload).eq("id", form.id);
         if (error) throw error;
       } else {
-        const { error } = await supabase.from("expenses").insert(payload);
+        const { error } = await fromUntyped("expenses").insert(payload);
         if (error) throw error;
       }
     },
@@ -217,7 +216,7 @@ export function FinanceCommandCenter() {
       setIsExpenseFormOpen(false);
       resetExpenseForm();
     },
-    onError: (e: any) => toast.error("Erro: " + e.message),
+    onError: (e: Error) => toast.error("Erro: " + e.message),
   });
 
   const deleteInvoiceMutation = useMutation({
@@ -244,8 +243,7 @@ export function FinanceCommandCenter() {
 
   const updateInvoiceStatusMutation = useMutation({
     mutationFn: async ({ id, status }: { id: string; status: string }) => {
-      // eslint-disable-next-line @typescript-eslint/no-explicit-any -- invoice status is dynamic string from DB enum
-      const { error } = await supabase.from("invoices").update({ status: status as any }).eq("id", id);
+      const { error } = await fromUntyped("invoices").update({ status }).eq("id", id);
       if (error) throw error;
     },
     onSuccess: () => {
@@ -256,7 +254,7 @@ export function FinanceCommandCenter() {
 
   const updateExpenseStatusMutation = useMutation({
     mutationFn: async ({ id, status }: { id: string; status: string }) => {
-      const { error } = await supabase.from("expenses").update({ status }).eq("id", id);
+      const { error } = await fromUntyped("expenses").update({ status }).eq("id", id);
       if (error) throw error;
     },
     onSuccess: () => {
@@ -460,7 +458,7 @@ export function FinanceCommandCenter() {
           <DialogHeader><DialogTitle>{editingInvoice ? "Editar Fatura" : "Nova Fatura"}</DialogTitle></DialogHeader>
           <div className="grid gap-4 py-4">
             <div className="grid grid-cols-2 gap-4">
-              <div><Label>Tipo</Label><Select value={invoiceForm.type} onValueChange={(v) => setInvoiceForm({ ...invoiceForm, type: v as any })}><SelectTrigger><SelectValue /></SelectTrigger><SelectContent><SelectItem value="receivable">A Receber</SelectItem><SelectItem value="payable">A Pagar</SelectItem></SelectContent></Select></div>
+              <div><Label>Tipo</Label><Select value={invoiceForm.type} onValueChange={(v) => setInvoiceForm({ ...invoiceForm, type: v as "receivable" | "payable" })}><SelectTrigger><SelectValue /></SelectTrigger><SelectContent><SelectItem value="receivable">A Receber</SelectItem><SelectItem value="payable">A Pagar</SelectItem></SelectContent></Select></div>
               <div><Label>Categoria</Label><Select value={invoiceForm.category} onValueChange={(v) => setInvoiceForm({ ...invoiceForm, category: v })}><SelectTrigger><SelectValue placeholder="Selecione" /></SelectTrigger><SelectContent>{INVOICE_CATEGORIES.map((c) => <SelectItem key={c} value={c}>{c}</SelectItem>)}</SelectContent></Select></div>
             </div>
             <div><Label>Descrição *</Label><Input value={invoiceForm.description} onChange={(e) => setInvoiceForm({ ...invoiceForm, description: e.target.value })} /></div>

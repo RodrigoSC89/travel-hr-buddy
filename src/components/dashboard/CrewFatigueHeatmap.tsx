@@ -11,6 +11,17 @@ import { useQuery } from "@tanstack/react-query";
 import { supabase } from "@/integrations/supabase/client";
 import { fromUntyped } from "@/integrations/supabase/untyped-client";
 
+interface VesselRow {
+  id: string;
+  name: string | null;
+  crew_count: number | null;
+}
+
+interface WorkRestRow {
+  vessel_id: string;
+  has_violation: boolean | null;
+}
+
 interface VesselFatigue {
   vessel_name: string;
   crew_count: number;
@@ -22,12 +33,11 @@ export function CrewFatigueHeatmap() {
   const { data: vessels } = useQuery({
     queryKey: ["fatigue-heatmap"],
     queryFn: async () => {
-      const { data } = await supabase
-        .from("vessels")
+      const { data } = await fromUntyped("vessels")
         .select("id, name, crew_count")
         .eq("status", "active")
         .limit(12);
-      return (data ?? []) as any[];
+      return (data ?? []) as VesselRow[];
     },
     staleTime: 120000,
   });
@@ -39,20 +49,20 @@ export function CrewFatigueHeatmap() {
         .select("vessel_id, has_violation")
         .gte("record_date", new Date(Date.now() - 7 * 86400000).toISOString().split("T")[0])
         .limit(500);
-      return (data ?? []) as any[];
+      return (data ?? []) as WorkRestRow[];
     },
     staleTime: 120000,
   });
 
   // Build violation map per vessel
   const violationMap = new Map<string, number>();
-  (workRestRecords ?? []).forEach((r: any) => {
+  (workRestRecords ?? []).forEach((r) => {
     if (r.has_violation) {
       violationMap.set(r.vessel_id, (violationMap.get(r.vessel_id) ?? 0) + 1);
     }
   });
 
-  const heatmapData: VesselFatigue[] = (vessels ?? []).map((v: any) => {
+  const heatmapData: VesselFatigue[] = (vessels ?? []).map((v) => {
     const violations = violationMap.get(v.id) ?? 0;
     const risk: VesselFatigue["risk_level"] =
       violations >= 5 ? "critical" : violations >= 3 ? "high" : violations >= 1 ? "medium" : "low";
