@@ -74,14 +74,18 @@ export function auditIntegration(): { results: AuditResult[]; passed: boolean } 
 if (typeof window !== 'undefined') {
   const { results, passed } = auditIntegration();
   
+  // eslint-disable-next-line no-console -- audit script output
   console.group('🔍 Integration Audit Report');
   for (const r of results) {
     const status = r.issues.length === 0 ? '✅' : '⚠️';
+    // eslint-disable-next-line no-console -- audit script output
     console.log(`${status} ${r.entity}: ${r.eventCount} events, Related Records: ${r.hasRelatedRecords ? 'YES' : 'NO'}`);
     for (const issue of r.issues) {
       console.warn(`   └─ ${issue}`);
     }
   }
+  // eslint-disable-next-line no-console -- audit script output
   console.log(`\nOverall: ${passed ? '✅ PASSED' : '❌ FAILED'}`);
+  // eslint-disable-next-line no-console -- audit script output
   console.groupEnd();
 }

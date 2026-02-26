@@ -51,22 +51,22 @@ export function KPIAlertsEngine() {
         fromUntyped('non_conformities').select('id, severity').eq('status', 'open'),
         fromUntyped('noon_reports').select('id').gte('report_date', subDays(new Date(), 7).toISOString()),
       ]);
-      const expenses = (expensesRes.data || []) as any[];
-      const certs = (certsRes.data || []) as any[];
-      const maintenance = (maintenanceRes.data || []) as any[];
-      const ncs = (ncsRes.data || []) as any[];
-      const crewHours = (crewHoursRes.data || []) as any[];
+      const expenses = (expensesRes.data || []) as Array<Record<string, unknown>>;
+      const certs = (certsRes.data || []) as Array<Record<string, unknown>>;
+      const maintenance = (maintenanceRes.data || []) as Array<Record<string, unknown>>;
+      const ncs = (ncsRes.data || []) as Array<Record<string, unknown>>;
+      const crewHours = (crewHoursRes.data || []) as Array<Record<string, unknown>>;
 
-      const totalOpex = (expenses as any[]).reduce((s, e) => s + Number(e.amount || 0), 0);
-      const criticalNCs = (ncs as any[]).filter(n => n.severity === 'critical').length;
+      const totalOpex = expenses.reduce((s, e) => s + Number(e.amount || 0), 0);
+      const criticalNCs = ncs.filter(n => n.severity === 'critical').length;
 
       return {
         opex_30d: totalOpex,
-        certs_expiring: (certs as any[]).length,
-        overdue_maintenance: (maintenance as any[]).length,
-        open_ncs: (ncs as any[]).length,
+        certs_expiring: certs.length,
+        overdue_maintenance: maintenance.length,
+        open_ncs: ncs.length,
         critical_ncs: criticalNCs,
-        noon_reports_7d: (crewHours as any[]).length,
+        noon_reports_7d: crewHours.length,
       };
     },
     staleTime: 1000 * 60 * 5,

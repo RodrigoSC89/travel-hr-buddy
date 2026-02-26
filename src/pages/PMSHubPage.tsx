@@ -48,6 +48,12 @@ interface PMSComponent {
   description: string | null; part_number: string | null; manufacturer: string | null;
   running_hours_current: number; condition_rating: number | null;
   is_critical: boolean; impa_code: string | null;
+  running_hours_at_last_maintenance?: number | null;
+}
+
+interface PMSRunningHoursTrigger {
+  id: string; component_id: string; threshold_hours: number;
+  auto_create_work_order: boolean;
 }
 
 interface PMSJob {
@@ -541,7 +547,7 @@ function RunningHoursTab() {
       const { data, error } = await fromUntyped("pms_running_hours_triggers")
         .select("*");
       if (error) throw error;
-      return (data || []) as unknown as any[];
+      return (data || []) as unknown as PMSRunningHoursTrigger[];
     },
   });
 
@@ -563,8 +569,8 @@ function RunningHoursTab() {
       ) : (
         <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-3">
           {components.map(c => {
-            const compTriggers = triggers.filter((t: any) => t.component_id === c.id);
-            const hoursSinceMaint = c.running_hours_current - (c as any).running_hours_at_last_maintenance;
+            const compTriggers = triggers.filter(t => t.component_id === c.id);
+            const hoursSinceMaint = c.running_hours_current - (c.running_hours_at_last_maintenance ?? 0);
             return (
               <Card key={c.id}>
                 <CardContent className="p-4 space-y-2">
@@ -595,7 +601,7 @@ function RunningHoursTab() {
                   {compTriggers.length > 0 && (
                     <div className="border-t pt-2">
                       <p className="text-xs font-medium">Triggers ativos:</p>
-                      {compTriggers.map((t: any) => (
+                      {compTriggers.map(t => (
                         <Badge key={t.id} variant="outline" className="text-[10px] mr-1">
                           ⚡ {t.threshold_hours}h {t.auto_create_work_order ? "→ Auto WO" : ""}
                         </Badge>
