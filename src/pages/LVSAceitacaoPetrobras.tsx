@@ -136,7 +136,7 @@ const LVSAceitacaoPetrobras = () => {
         </TabsContent>
 
         <TabsContent value="evidence-organizer">
-          <SmartEvidenceOrganizer framework={"lvs_petrobras" as any} />
+          <SmartEvidenceOrganizer framework={"ism_isps"} />
         </TabsContent>
       </Tabs>
     </ModulePageWrapper>

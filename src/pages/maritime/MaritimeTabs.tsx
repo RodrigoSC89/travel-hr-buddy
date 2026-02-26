@@ -1,6 +1,7 @@
 import React, { useState, useCallback } from "react";
 import { Badge } from "@/components/ui/badge";
 import { supabase } from "@/integrations/supabase/client";
+import type { Database } from "@/integrations/supabase/types";
 import { Card, CardContent, CardDescription, CardHeader, CardTitle } from "@/components/ui/card";
 import { Button } from "@/components/ui/button";
 import { Input } from "@/components/ui/input";
@@ -287,15 +288,16 @@ export function MaritimeTabs({ stats, crewMembers, vessels, userId, onTabChange,
                             email: newCrew.email || undefined,
                             vessel_id: newCrew.vessel_id || undefined,
                             status: 'active',
-                          } as any);
+                          } as Database['public']['Tables']['crew_members']['Insert']);
                           if (error) throw error;
                           toast.success('Tripulante adicionado com sucesso!');
                           setIsAddDialogOpen(false);
                           setNewCrew({ full_name: '', position: '', nationality: '', passport_number: '', phone: '', email: '', vessel_id: '' });
                           // Trigger reload via parent
                           handleCreate("Tripulante");
-                        } catch (err: any) {
-                          toast.error('Erro ao adicionar tripulante', { description: err.message });
+                        } catch (err: unknown) {
+                          const message = err instanceof Error ? err.message : 'Erro desconhecido';
+                          toast.error('Erro ao adicionar tripulante', { description: message });
                         } finally {
                           setIsSaving(false);
                         }

@@ -114,7 +114,7 @@ export default function SparePartsInventory() {
       min_quantity: Number(data.minimum_stock),
       unit_cost: Number(data.unit_cost),
       location: data.location,
-    } as any, {
+    } as Record<string, unknown>, {
       onSuccess: () => {
         setAddDialog(false);
         setNewPart({ part_number: '', description: '', category: 'Motor', quantity: '10', minimum_stock: '5', unit_cost: '0', location: 'Paiol Principal' });
