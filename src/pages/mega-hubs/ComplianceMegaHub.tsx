@@ -358,7 +358,7 @@ export default function ComplianceMegaHub() {
 
             {/* Risk & Safety (merged: risk-matrix + ncs-capas + loto + jsa) */}
             <TabsContent value="risk-safety" className="mt-0 space-y-4">
-              <SubTabSelector options={[{ id: 'risk-matrix', label: '🎯 Risk Matrix' }, { id: 'ncs-capas', label: '⚠️ NCs & CAPAs' }, { id: 'loto', label: '🔒 LOTO' }, { id: 'jsa', label: '📋 JSA' }]} active={riskSafetySubTab} onChange={(id) => setRiskSafetySubTab(id as any)} />
+              <SubTabSelector options={[{ id: 'risk-matrix', label: '🎯 Risk Matrix' }, { id: 'ncs-capas', label: '⚠️ NCs & CAPAs' }, { id: 'loto', label: '🔒 LOTO' }, { id: 'jsa', label: '📋 JSA' }]} active={riskSafetySubTab} onChange={(id) => setRiskSafetySubTab(id as typeof riskSafetySubTab)} />
               {riskSafetySubTab === 'risk-matrix' && <RiskMatrixV2 />}
               {riskSafetySubTab === 'ncs-capas' && <DiagnosticNCsPage />}
               {riskSafetySubTab === 'loto' && <LOTOProceduresManager />}

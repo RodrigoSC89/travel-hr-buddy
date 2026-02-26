@@ -222,7 +222,7 @@ export default function VoyageCommandCenter() {
           <QuickActions
             entityType="voyage"
             entityId={selectedVoyage.id}
-            vesselId={(selectedVoyage as any).vessel_id}
+            vesselId={undefined}
             compact
           />
         </motion.div>

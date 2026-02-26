@@ -93,7 +93,7 @@ const Templates = () => {
           downloads: 0,
           icon: ICON_MAP[category] || ICON_MAP[t.template_type] || ICON_MAP.default,
           content: t.content,
-          variables: Array.isArray(t.variables) ? (t.variables as any[]).map(String) : [],
+          variables: Array.isArray(t.variables) ? (t.variables as unknown[]).map(String) : [],
         };
       });
     },

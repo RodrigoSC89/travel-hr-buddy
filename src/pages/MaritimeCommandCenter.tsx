@@ -52,12 +52,12 @@ export default function MaritimeCommandCenter() {
       // Use real crew data, fallback only if empty
       const realCrew = crewRes.data || [];
       if (realCrew.length > 0) {
-        setCrewMembers(realCrew.map((c: any) => ({
+        setCrewMembers(realCrew.map((c) => ({
           ...c,
           employee_id: c.employee_id || c.id.slice(0, 8).toUpperCase(),
           position: c.position || c.rank || 'Tripulante',
           nationality: c.nationality || 'N/A',
-        })) as any);
+        })) as CrewMember[]);
       } else {
         const fallback = FALLBACK_CREW_MEMBERS([vesselsRes.data?.[0]?.id, vesselsRes.data?.[1]?.id]);
         setCrewMembers(fallback);
