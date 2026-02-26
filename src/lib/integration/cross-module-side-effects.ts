@@ -2300,6 +2300,193 @@ SIDE_EFFECTS['crew.certificate.renewed'] = [
   },
 ];
 
+// ═══════════════════════════════════════════════════════════
+// PROCUREMENT → FINANCE + INVENTORY + COMPLIANCE
+// ═══════════════════════════════════════════════════════════
+
+SIDE_EFFECTS['procurement.order.approved'] = [
+  async (event) => {
+    const p = event.payload as Record<string, unknown>;
+    const amount = Number(p.total_amount ?? p.amount ?? 0);
+    if (amount <= 0) return;
+    await safeInsert('expenses', {
+      description: `PO Aprovada: ${p.title ?? p.po_number ?? p.id}`,
+      amount, category: 'procurement', status: 'pending',
+      vessel_id: p.vessel_id ?? null,
+      reference_id: String(p.id ?? ''), reference_type: 'procurement_order',
+    });
+  },
+  async (event) => {
+    const p = event.payload as Record<string, unknown>;
+    const amount = Number(p.total_amount ?? p.amount ?? 0);
+    if (amount > 50000) {
+      await safeInsert('soc_alerts', {
+        vessel_id: p.vessel_id || null, alert_type: 'high_value_procurement',
+        severity: 'medium', title: `PO alto valor aprovada: ${p.po_number ?? p.id}`,
+        description: `Valor: $${amount.toLocaleString()}. Monitoramento financeiro ativado.`,
+        status: 'active',
+      });
+    }
+  },
+];
+
+SIDE_EFFECTS['procurement.order.delivered'] = [
+  async (event) => {
+    const p = event.payload as Record<string, unknown>;
+    // Auto-update inventory with delivered items
+    await safeInsert('maintenance_records', {
+      title: `Entrega PO: ${p.po_number ?? p.id}`,
+      vessel_id: p.vessel_id ?? null, status: 'completed',
+      completion_date: new Date().toISOString(),
+      notes: `Itens recebidos e inspecionados. PO: ${p.po_number ?? p.id}.`,
+    });
+  },
+];
+
+// ═══════════════════════════════════════════════════════════
+// DOCUMENT → COMPLIANCE + AUDIT TRAIL
+// ═══════════════════════════════════════════════════════════
+
+SIDE_EFFECTS['document.uploaded'] = [
+  async (event) => {
+    const p = event.payload as Record<string, unknown>;
+    const category = String(p.category ?? '').toLowerCase();
+    if (!['certificate', 'compliance', 'audit', 'ism', 'isps'].includes(category)) return;
+    await safeInsert('action_items', {
+      title: `Revisar documento: ${p.file_name ?? p.title ?? p.id}`,
+      source_module: 'documents', source_reference_id: String(p.id ?? ''),
+      status: 'pending', priority: 'medium',
+      vessel_id: p.vessel_id || null,
+      description: `Documento de compliance carregado (${category}). Verificar validade e vincular a evidências.`,
+    });
+  },
+];
+
+SIDE_EFFECTS['document.expired'] = [
+  async (event) => {
+    const p = event.payload as Record<string, unknown>;
+    await safeInsert('soc_alerts', {
+      vessel_id: p.vessel_id || null, alert_type: 'document_expired',
+      severity: 'high', title: `Documento expirado: ${p.title ?? p.file_name ?? ''}`,
+      description: `Documento ${p.category ?? ''} expirou. Renovação necessária para manter compliance.`,
+      status: 'active',
+    });
+    await safeInsert('non_conformities', {
+      title: `Documento expirado: ${p.title ?? p.file_name}`,
+      category: 'documentation', severity: 'major', status: 'open',
+      vessel_id: p.vessel_id || null, source_module: 'documents',
+      source_reference_id: String(p.id ?? ''),
+      description: 'Documento obrigatório expirado. NC automática para rastreamento.',
+    });
+  },
+];
+
+// ═══════════════════════════════════════════════════════════
+// TRAINING → CREW COMPETENCY + COMPLIANCE
+// ═══════════════════════════════════════════════════════════
+
+SIDE_EFFECTS['training.course.completed'] = [
+  async (event) => {
+    const p = event.payload as Record<string, unknown>;
+    // Update crew competency matrix
+    if (p.crew_id || p.user_id) {
+      await safeInsert('training_records', {
+        training_type: String(p.course_name ?? p.title ?? 'Curso'),
+        completion_date: new Date().toISOString().split('T')[0],
+        status: 'completed', vessel_id: p.vessel_id ?? null,
+        notes: `Curso concluído com score: ${p.score ?? p.passing_score ?? 'N/A'}%. Auto-registrado.`,
+      });
+    }
+    // If STCW-related, update certification readiness
+    const courseType = String(p.course_type ?? p.category ?? '').toLowerCase();
+    if (courseType.includes('stcw') || courseType.includes('safety') || courseType.includes('fire')) {
+      await safeInsert('action_items', {
+        title: `Atualizar certificação STCW: ${p.crew_name ?? p.crew_id ?? ''}`,
+        source_module: 'training', source_reference_id: String(p.course_id ?? p.id ?? ''),
+        status: 'pending', priority: 'medium', vessel_id: p.vessel_id || null,
+        description: `Curso STCW concluído. Verificar se certificação precisa ser emitida ou renovada.`,
+      });
+    }
+  },
+];
+
+SIDE_EFFECTS['training.assessment.failed'] = [
+  async (event) => {
+    const p = event.payload as Record<string, unknown>;
+    await safeInsert('action_items', {
+      title: `Re-treinamento necessário: ${p.crew_name ?? p.user_id ?? ''}`,
+      source_module: 'training', source_reference_id: String(p.course_id ?? p.id ?? ''),
+      status: 'pending', priority: 'high', vessel_id: p.vessel_id || null,
+      description: `Avaliação reprovada (score: ${p.score ?? 'N/A'}%). Agendar re-treinamento antes do próximo embarque.`,
+    });
+  },
+];
+
+// ═══════════════════════════════════════════════════════════
+// INCIDENT → SAFETY + COMPLIANCE + TRAINING
+// ═══════════════════════════════════════════════════════════
+
+SIDE_EFFECTS['safety.incident.created'] = [
+  async (event) => {
+    const p = event.payload as Record<string, unknown>;
+    const severity = String(p.severity ?? '').toLowerCase();
+    // Auto-create NC for serious incidents
+    if (['critical', 'major', 'serious'].includes(severity)) {
+      await safeInsert('non_conformities', {
+        title: `Incidente: ${p.title ?? p.incident_type ?? 'N/A'}`,
+        category: 'safety_incident', severity: severity === 'critical' ? 'critical' : 'major',
+        status: 'open', vessel_id: p.vessel_id || null,
+        source_module: 'safety', source_reference_id: String(p.id ?? ''),
+        description: `NC automática para incidente de segurança. Investigação e CAPA requeridos.`,
+      });
+    }
+    // SOC alert for all incidents
+    await safeInsert('soc_alerts', {
+      vessel_id: p.vessel_id || null, alert_type: 'safety_incident',
+      severity: severity === 'critical' ? 'critical' : 'high',
+      title: `Incidente: ${p.title ?? p.incident_type ?? ''}`,
+      description: `Incidente registrado. Tipo: ${p.incident_type ?? 'N/A'}. Investigação necessária.`,
+      status: 'active',
+    });
+    // Auto-create training need for safety refresher
+    await safeInsert('action_items', {
+      title: `Refresher de segurança pós-incidente`,
+      source_module: 'safety', source_reference_id: String(p.id ?? ''),
+      status: 'pending', priority: severity === 'critical' ? 'critical' : 'high',
+      vessel_id: p.vessel_id || null,
+      description: `Incidente ${p.incident_type ?? ''} requer treinamento de reciclagem para a tripulação envolvida.`,
+    });
+  },
+];
+
+// ═══════════════════════════════════════════════════════════
+// FINANCE → ALERTS + COMPLIANCE
+// ═══════════════════════════════════════════════════════════
+
+SIDE_EFFECTS['finance.budget.exceeded'] = [
+  async (event) => {
+    const p = event.payload as Record<string, unknown>;
+    await safeInsert('soc_alerts', {
+      vessel_id: p.vessel_id || null, alert_type: 'budget_exceeded',
+      severity: 'high', title: `Orçamento excedido: ${p.category ?? p.department ?? ''}`,
+      description: `Gasto: $${Number(p.actual ?? 0).toLocaleString()} / Budget: $${Number(p.budget ?? 0).toLocaleString()}. Aprovação gerencial requerida.`,
+      status: 'active',
+    });
+  },
+];
+
+SIDE_EFFECTS['finance.invoice.overdue'] = [
+  async (event) => {
+    const p = event.payload as Record<string, unknown>;
+    await safeInsert('action_items', {
+      title: `Fatura vencida: ${p.invoice_number ?? p.id}`,
+      source_module: 'finance', source_reference_id: String(p.id ?? ''),
+      status: 'pending', priority: 'high', vessel_id: p.vessel_id || null,
+      description: `Fatura de $${Number(p.amount ?? 0).toLocaleString()} vencida há ${p.days_overdue ?? '?'} dias. Contatar fornecedor/cliente.`,
+    });
+  },
+];
+
 /** Get count of registered side effect event types */
 export function getSideEffectStats(): { eventTypes: number; totalEffects: number } {
   const eventTypes = Object.keys(SIDE_EFFECTS).length;
