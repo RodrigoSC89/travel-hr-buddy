@@ -1,6 +1,8 @@
 /**
  * Firebase Cloud Messaging (FCM) Push Notifications
  * Handles push notification registration and messaging
+ * NOTE: This module is heavy (~200KB). Import dynamically:
+ *   const { firebasePushService } = await import("@/lib/mobile/firebase-push");
  */
 
 import { initializeApp, getApps, FirebaseApp } from "firebase/app";
