@@ -26,6 +26,7 @@ import { initNautiOneDB } from "@/lib/offline/db";
 import { initAutoSync } from "@/lib/offline/sync-queue";
 import { PerformanceProvider } from "@/components/ui/PerformanceProvider";
 import { installAutoIntegration } from "@/lib/integration/install-auto-integration";
+import { ExpirationMonitorProvider } from "@/components/monitors/ExpirationMonitorProvider";
 
 // ============================================
 // GLOBAL ERROR HANDLERS - Prevent white screens
@@ -87,6 +88,7 @@ function App() {
         <PerformanceProvider>
           <AuthProvider>
             <DemoProvider>
+              <ExpirationMonitorProvider />
               <Router future={{ v7_startTransition: true, v7_relativeSplatPath: true }}>
                 <TooltipProvider>
                   <LazyLoadErrorBoundary>
