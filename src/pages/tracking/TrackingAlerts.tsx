@@ -95,7 +95,7 @@ export default function TrackingAlerts() {
   };
 
   // eslint-disable-next-line @typescript-eslint/no-explicit-any -- dynamic Supabase join rows
-  const typedAlerts = alerts as any[];
+  const typedAlerts = alerts as Array<Record<string, unknown>>;
   const filtered = typedAlerts.filter((a) =>
     (filterType === "all" || a.alert_type === filterType) &&
     (searchTerm === "" || String(a.title || "").toLowerCase().includes(searchTerm.toLowerCase()))

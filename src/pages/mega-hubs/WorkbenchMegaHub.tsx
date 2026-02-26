@@ -258,7 +258,7 @@ export default function WorkbenchMegaHub() {
 
             {/* People (merged: people + crew-schedule + crew-pool + visa-tracker) */}
             <TabsContent value="people" className="mt-0 space-y-6">
-              <SubTabSelector options={[{ id: 'people', label: '👥 Crew Management' }, { id: 'crew-schedule', label: '📅 Schedule' }, { id: 'crew-pool', label: '🏊 Crew Pool' }, { id: 'visa-tracker', label: '🛂 Visa Tracker' }]} active={peopleSubTab} onChange={(id) => setPeopleSubTab(id as any)} />
+              <SubTabSelector options={[{ id: 'people', label: '👥 Crew Management' }, { id: 'crew-schedule', label: '📅 Schedule' }, { id: 'crew-pool', label: '🏊 Crew Pool' }, { id: 'visa-tracker', label: '🛂 Visa Tracker' }]} active={peopleSubTab} onChange={(id) => setPeopleSubTab(id as typeof peopleSubTab)} />
               {peopleSubTab === 'people' && (
                 <>
                   <div className="flex items-center gap-3 text-xs text-muted-foreground px-1">
@@ -361,7 +361,7 @@ export default function WorkbenchMegaHub() {
                 { id: 'supplier-portal', label: '🏪 Supplier Portal' },
                 { id: 'return-goods', label: '📦 Return Goods' },
                 { id: 'carbon-trading', label: '🌱 Carbon Trading' },
-              ]} active={procurementSubTab} onChange={(id) => setProcurementSubTab(id as any)} />
+              ]} active={procurementSubTab} onChange={(id) => setProcurementSubTab(id as typeof procurementSubTab)} />
               {procurementSubTab === 'supplier-score' && <SupplierScorecard />}
               {procurementSubTab === 'invoice-matching' && <InvoiceAutoMatchingPage />}
               {procurementSubTab === 'supplier-portal' && <SupplierPortalPage />}
