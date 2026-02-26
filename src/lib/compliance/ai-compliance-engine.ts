@@ -2,14 +2,22 @@
  * AI Compliance Engine
  * ONNX-based compliance scoring for maritime regulations (IMCA, ISM, ISPS, NORMAM)
  * Typed queries against compliance_audit_logs
+ * All heavy dependencies loaded dynamically for bundle optimization
  */
-import * as ort from "onnxruntime-web";
+import type * as ORT from "onnxruntime-web";
 import { logger } from "@/lib/logger";
 import { supabase } from "@/integrations/supabase/client";
-import mqtt from "mqtt";
 
 const modelPath = "/models/nautilus_compliance.onnx";
-let session: ort.InferenceSession | null = null;
+let session: ORT.InferenceSession | null = null;
+let ortModule: typeof ORT | null = null;
+
+const loadORT = async (): Promise<typeof ORT> => {
+  if (!ortModule) {
+    ortModule = await import("onnxruntime-web");
+  }
+  return ortModule;
+};
 
 const RULES = [
   { id: "IMCA_M103", weight: 0.08 },
@@ -31,6 +39,7 @@ const RULES = [
 
 export async function initComplianceEngine() {
   try {
+    const ort = await loadORT();
     session = await ort.InferenceSession.create(modelPath);
     logger.info("✅ AI Compliance Engine iniciado");
   } catch (err) {
@@ -43,6 +52,7 @@ export async function initComplianceEngine() {
  * Supports: DP Loss, Sensor Misalignment, ISM/ISPS Non-Compliance, ASOG/FMEA Deviations
  */
 export async function runComplianceAudit(data: IncidentData | number[]) {
+  const ort = await loadORT();
   if (!session) await initComplianceEngine();
   
   // Handle both array and object inputs
@@ -50,7 +60,7 @@ export async function runComplianceAudit(data: IncidentData | number[]) {
   
   const input = new ort.Tensor("float32", Float32Array.from(inputArray), [1, inputArray.length]);
   const results = await session!.run({ input });
-  const score = (Object.values(results)[0] as ort.Tensor).data[0] as number;
+  const score = (Object.values(results)[0] as ORT.Tensor).data[0] as number;
 
   const weightedScore = RULES.reduce((acc, rule) => acc + (score * rule.weight), 0);
   const complianceLevel = weightedScore > 0.85 ? "Conforme" : weightedScore > 0.65 ? "Risco" : "Não Conforme";
@@ -63,10 +73,11 @@ export async function runComplianceAudit(data: IncidentData | number[]) {
     rules_evaluated: RULES.map(r => r.id),
   });
 
-  // Optional MQTT publishing
+  // Optional MQTT publishing (dynamic import)
   try {
     const mqttUrl = typeof window !== 'undefined' ? (window as unknown as Record<string, unknown>).__MQTT_URL__ as string : undefined;
     if (mqttUrl) {
+      const { default: mqtt } = await import("mqtt");
       const client = mqtt.connect(mqttUrl);
       client.publish("nautilus/compliance/alerts", JSON.stringify({ level: complianceLevel, score: weightedScore }));
     }
