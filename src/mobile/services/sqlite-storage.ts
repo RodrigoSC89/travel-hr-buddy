@@ -157,7 +157,8 @@ class SQLiteStorage {
       const store = transaction.objectStore("sync_queue");
       const index = store.index("by-synced");
       
-      const request = index.getAll(IDBKeyRange.only(false));
+      const keyRange = typeof IDBKeyRange !== 'undefined' ? IDBKeyRange.only(false) : undefined;
+      const request = keyRange ? index.getAll(keyRange) : index.getAll();
       
       request.onsuccess = () => {
         const records = request.result || [];
