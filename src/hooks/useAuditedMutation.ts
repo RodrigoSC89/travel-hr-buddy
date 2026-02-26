@@ -5,6 +5,7 @@
 
 import { useIntegratedMutation } from "./useIntegratedMutation";
 import { supabase } from "@/integrations/supabase/client";
+import { fromUntyped } from "@/integrations/supabase/untyped-client";
 import { logger } from "@/lib/logger";
 import type { EventType } from "@/lib/events/event-bus";
 import type { EntityType } from "@/lib/domain/types";
@@ -34,7 +35,7 @@ export function useAuditedMutation<TInput, TOutput>(
       // Fire-and-forget audit trail entry
       try {
         const { data: { user } } = await supabase.auth.getUser();
-        await (supabase.from("system_audit_trail") as any).insert({
+        await fromUntyped("system_audit_trail").insert({
           user_id: user?.id,
           action_type: config.actionType,
           module: config.module,

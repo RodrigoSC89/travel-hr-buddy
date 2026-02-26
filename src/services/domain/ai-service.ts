@@ -6,6 +6,7 @@
 import { supabase } from "@/integrations/supabase/client";
 import { publishEvent, logAuditEvent } from "@/lib/events/event-bus";
 import type { EntityType } from "@/lib/domain/types";
+import type { Database } from "@/integrations/supabase/types";
 
 export const AIService = {
   async logDecision(params: {
@@ -25,8 +26,8 @@ export const AIService = {
       confidence_level: params.confidence >= 0.8 ? 'high' : params.confidence >= 0.5 ? 'medium' : 'low',
       impact: 'medium',
       justification_reasoning: params.reasoning,
-      justification_evidence: params.inputs as any,
-      action_payload: params.outputs as any,
+      justification_evidence: params.inputs as Database['public']['Tables']['ai_decisions']['Insert']['justification_evidence'],
+      action_payload: params.outputs as Database['public']['Tables']['ai_decisions']['Insert']['action_payload'],
       status: 'pending',
     };
 

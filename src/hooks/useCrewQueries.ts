@@ -104,7 +104,7 @@ export function useCrewStats() {
 
 export function useCreateCrewMember() {
   return useAuditedMutation<Record<string, unknown>, Record<string, unknown>>({
-    mutationFn: (crew) => CrewService.createCrewMember(crew),
+    mutationFn: (crew) => CrewService.createCrewMember(crew) as Promise<Record<string, unknown>>,
     eventType: "people.crew.created",
     entityType: "crew_member",
     module: "crew",

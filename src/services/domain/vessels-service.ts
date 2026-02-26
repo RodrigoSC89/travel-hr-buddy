@@ -5,6 +5,10 @@
 import { supabase } from "@/integrations/supabase/client";
 import { fromUntyped } from "@/integrations/supabase/untyped-client";
 import { publishEvent, logAuditEvent } from "@/lib/events/event-bus";
+import type { Database } from "@/integrations/supabase/types";
+
+type VesselInsert = Database['public']['Tables']['vessels']['Insert'];
+type VesselUpdate = Database['public']['Tables']['vessels']['Update'];
 
 export const VesselsService = {
   async getById(id: string) {
@@ -39,7 +43,7 @@ export const VesselsService = {
 
   async create(vessel: Record<string, unknown>) {
     const { data, error } = await supabase.from('vessels')
-      .insert(vessel as any)
+      .insert(vessel as VesselInsert)
       .select()
       .single();
     if (error) throw error;
@@ -56,7 +60,7 @@ export const VesselsService = {
 
   async update(id: string, updates: Record<string, unknown>) {
     const { data, error } = await supabase.from('vessels')
-      .update(updates as any)
+      .update(updates as VesselUpdate)
       .eq('id', id)
       .select()
       .single();

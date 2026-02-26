@@ -4,6 +4,9 @@
 
 import { supabase } from "@/integrations/supabase/client";
 import { publishEvent } from "@/lib/events/event-bus";
+import type { Database } from "@/integrations/supabase/types";
+
+type CrewInsert = Database['public']['Tables']['crew_members']['Insert'];
 
 export const CrewService = {
   async createCrewMember(crew: Record<string, unknown>) {
@@ -11,7 +14,7 @@ export const CrewService = {
     const { data, error } = await supabase.from('crew_members').insert({
       ...crew,
       employee_id: employeeId,
-    } as any).select().single();
+    } as CrewInsert).select().single();
     if (error) throw error;
 
     await publishEvent({
