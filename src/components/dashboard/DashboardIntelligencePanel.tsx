@@ -28,12 +28,19 @@ const FinancialIntegrationDashboard = lazy(() =>
 const SyncQueueMonitor = lazy(() =>
   import("@/components/offline/SyncQueueMonitor")
 );
+const KPIAlertsEngine = lazy(() =>
+  import("@/components/alerts/KPIAlertsEngine")
+);
+const AdvancedPDFReportBuilder = lazy(() =>
+  import("@/components/reports/AdvancedPDFReportBuilder")
+);
 
 export function DashboardIntelligencePanel() {
   return (
     <div className="space-y-4 mt-4">
       <Suspense fallback={null}><TrendAnalyticsCards /></Suspense>
       <Suspense fallback={null}><OperationalAutomationEngine /></Suspense>
+      <Suspense fallback={null}><KPIAlertsEngine /></Suspense>
       <Suspense fallback={null}><WeatherPortWidget /></Suspense>
       <div className="grid grid-cols-1 lg:grid-cols-2 gap-4">
         <Suspense fallback={null}><FuelConsumptionTrends /></Suspense>
@@ -42,8 +49,9 @@ export function DashboardIntelligencePanel() {
       <Suspense fallback={null}><FinancialIntegrationDashboard /></Suspense>
       <div className="grid grid-cols-1 lg:grid-cols-2 gap-4">
         <Suspense fallback={null}><FleetBenchmarkDashboard /></Suspense>
-        <Suspense fallback={null}><SyncQueueMonitor /></Suspense>
+        <Suspense fallback={null}><AdvancedPDFReportBuilder /></Suspense>
       </div>
+      <Suspense fallback={null}><SyncQueueMonitor /></Suspense>
     </div>
   );
 }
