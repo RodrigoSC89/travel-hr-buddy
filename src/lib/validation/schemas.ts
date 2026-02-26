@@ -196,6 +196,63 @@ export const resetPasswordSchema = z.object({
   path: ["confirmPassword"],
 });
 
+// ============= Voyage Schemas =============
+export const voyagePlanSchema = z.object({
+  vessel_id: z.string().uuid("Embarcação inválida"),
+  voyage_number: z.string().trim().min(1, "Número da viagem é obrigatório").max(50),
+  departure_port: z.string().trim().min(2, "Porto de partida é obrigatório"),
+  arrival_port: z.string().trim().min(2, "Porto de destino é obrigatório"),
+  departure_date: z.string().refine((v) => !isNaN(Date.parse(v)), "Data inválida"),
+  arrival_date: z.string().refine((v) => !isNaN(Date.parse(v)), "Data inválida"),
+  cargo_type: z.string().optional(),
+  cargo_quantity: z.coerce.number().min(0).optional(),
+  status: z.enum(["planned", "in_progress", "completed", "cancelled"]).default("planned"),
+  notes: z.string().max(2000).optional(),
+});
+
+// ============= Noon Report Schemas =============
+export const noonReportSchema = z.object({
+  vessel_id: z.string().uuid("Embarcação inválida"),
+  voyage_id: z.string().uuid().optional(),
+  report_date: z.string().refine((v) => !isNaN(Date.parse(v)), "Data inválida"),
+  latitude: z.coerce.number().min(-90).max(90, "Latitude inválida"),
+  longitude: z.coerce.number().min(-180).max(180, "Longitude inválida"),
+  speed: z.coerce.number().min(0).max(40, "Velocidade inválida").optional(),
+  course: z.coerce.number().min(0).max(360, "Curso inválido").optional(),
+  wind_force: z.coerce.number().min(0).max(12, "Beaufort 0-12").optional(),
+  sea_state: z.coerce.number().min(0).max(9, "Douglas 0-9").optional(),
+  fuel_consumed_mt: z.coerce.number().min(0, "Deve ser positivo").optional(),
+  distance_nm: z.coerce.number().min(0, "Deve ser positivo").optional(),
+  remarks: z.string().max(2000).optional(),
+});
+
+// ============= Incident Report Schemas =============
+export const incidentReportSchema = z.object({
+  title: z.string().trim().min(5, "Título mínimo 5 caracteres").max(200),
+  description: z.string().trim().min(10, "Descreva o incidente com pelo menos 10 caracteres").max(5000),
+  incident_type: z.enum(["near_miss", "injury", "environmental", "property_damage", "security", "other"]),
+  severity: z.enum(["low", "medium", "high", "critical"]),
+  vessel_id: z.string().uuid("Embarcação inválida"),
+  location: z.string().max(200).optional(),
+  incident_date: z.string().refine((v) => !isNaN(Date.parse(v)), "Data inválida"),
+  witnesses: z.string().max(500).optional(),
+  immediate_actions: z.string().max(2000).optional(),
+  root_cause: z.string().max(2000).optional(),
+});
+
+// ============= Work/Rest Record Schemas (MLC Reg. 2.3) =============
+export const workRestRecordSchema = z.object({
+  crew_member_id: z.string().uuid("Tripulante inválido"),
+  record_date: z.string().refine((v) => !isNaN(Date.parse(v)), "Data inválida"),
+  work_hours: z.coerce.number().min(0).max(24, "Máximo 24h"),
+  rest_hours: z.coerce.number().min(0).max(24, "Máximo 24h"),
+  overtime_hours: z.coerce.number().min(0).max(12).optional(),
+  notes: z.string().max(500).optional(),
+}).refine((data) => data.work_hours + data.rest_hours <= 24, {
+  message: "Trabalho + Descanso não pode exceder 24h",
+  path: ["work_hours"],
+});
+
 // ============= Type Exports =============
 export type LoginInput = z.infer<typeof loginSchema>;
 export type SignupInput = z.infer<typeof signupSchema>;
@@ -210,3 +267,7 @@ export type MaintenanceOrderInput = z.infer<typeof maintenanceOrderSchema>;
 export type CertificateInput = z.infer<typeof certificateSchema>;
 export type PurchaseOrderInput = z.infer<typeof purchaseOrderSchema>;
 export type ResetPasswordInput = z.infer<typeof resetPasswordSchema>;
+export type VoyagePlanInput = z.infer<typeof voyagePlanSchema>;
+export type NoonReportInput = z.infer<typeof noonReportSchema>;
+export type IncidentReportInput = z.infer<typeof incidentReportSchema>;
+export type WorkRestRecordInput = z.infer<typeof workRestRecordSchema>;
