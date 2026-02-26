@@ -34,7 +34,7 @@ export function TransferProvidersCatalog() {
       airport_to_port_rate_usd: Number(form.airport_to_port_rate_usd) || null,
       hotel_to_port_rate_usd: Number(form.hotel_to_port_rate_usd) || null,
       is_active: true, internal_rating: 0, total_trips: 0,
-    } as any, {
+    }, {
       onSuccess: () => {
         setOpen(false);
         setForm({ company_name: "", city: "", country: "", port_name: "", contact_name: "", phone: "", email: "", vehicle_types: "", base_rate_usd: "", airport_to_port_rate_usd: "", hotel_to_port_rate_usd: "" });

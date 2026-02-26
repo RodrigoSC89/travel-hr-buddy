@@ -16,6 +16,14 @@ import { supabase } from "@/integrations/supabase/client";
 import { useMutation, useQuery } from "@tanstack/react-query";
 import jsPDF from "jspdf";
 import autoTable from "jspdf-autotable";
+
+/** Get last autoTable Y position safely */
+function getLastTableY(doc: jsPDF): number {
+  return (doc as jsPDF & { lastAutoTable?: { finalY: number } }).lastAutoTable?.finalY ?? 0;
+}
+
+type DataRow = Record<string, unknown>;
+
 import {
   FileText, Download, Ship, Shield, BarChart3,
   Loader2, Calendar, Anchor
@@ -186,13 +194,13 @@ async function generateFleetMonthly(doc: jsPDF, now: Date) {
       .gte('created_at', subMonths(now, 1).toISOString()).limit(200),
   ]);
 
-  const vessels = (vesselsRes.data || []) as any[];
-  const maint = (maintenanceRes.data || []) as any[];
-  const certs = (certsRes.data || []) as any[];
-  const ncs = (ncsRes.data || []) as any[];
-  const expenses = (expensesRes.data || []) as any[];
+  const vessels = (vesselsRes.data || []) as Array<Record<string, unknown>>;
+  const maint = (maintenanceRes.data || []) as Array<Record<string, unknown>>;
+  const certs = (certsRes.data || []) as Array<Record<string, unknown>>;
+  const ncs = (ncsRes.data || []) as Array<Record<string, unknown>>;
+  const expenses = (expensesRes.data || []) as Array<Record<string, unknown>>;
 
-  const totalOpex = expenses.reduce((s: number, e: any) => s + Number(e.amount || 0), 0);
+  const totalOpex = expenses.reduce((s: number, e) => s + Number(e.amount || 0), 0);
 
   // Summary KPIs
   let y = 45;
@@ -221,7 +229,7 @@ async function generateFleetMonthly(doc: jsPDF, now: Date) {
     margin: { left: 15, right: 15 },
   });
 
-  y = (doc as any).lastAutoTable.finalY + 10;
+  y = getLastTableY(doc) + 10;
 
   // Fleet table
   if (vessels.length > 0) {
@@ -249,7 +257,8 @@ async function generateVoyageReport(doc: jsPDF, now: Date, vesselId: string) {
     .eq('id', vesselId)
     .single();
 
-  const vesselName = (vessel as any)?.name || 'Embarcação';
+  const vesselRec = (vessel || {}) as DataRow;
+  const vesselName = String(vesselRec.name || 'Embarcação');
   addHeader(doc, `Voyage Report — ${vesselName}`, format(now, 'dd/MM/yyyy'));
 
   // Fetch voyage & noon reports
@@ -260,15 +269,15 @@ async function generateVoyageReport(doc: jsPDF, now: Date, vesselId: string) {
       .eq('vessel_id', vesselId).order('report_date', { ascending: false }).limit(20),
   ]);
 
-  const voyages = (voyagesRes.data || []) as any[];
-  const noons = (noonRes.data || []) as any[];
+  const voyages = (voyagesRes.data || []) as DataRow[];
+  const noons = (noonRes.data || []) as DataRow[];
 
   let y = 45;
 
   // Vessel info
   doc.setFontSize(9);
   doc.setFont('helvetica', 'normal');
-  doc.text(`IMO: ${(vessel as any)?.imo_number || 'N/A'} | Tipo: ${(vessel as any)?.vessel_type || 'N/A'} | Bandeira: ${(vessel as any)?.flag_state || 'N/A'}`, 15, y);
+  doc.text(`IMO: ${vesselRec.imo_number || 'N/A'} | Tipo: ${vesselRec.vessel_type || 'N/A'} | Bandeira: ${vesselRec.flag_state || 'N/A'}`, 15, y);
   y += 10;
 
   // Voyages table
@@ -281,9 +290,9 @@ async function generateVoyageReport(doc: jsPDF, now: Date, vesselId: string) {
     autoTable(doc, {
       startY: y,
       head: [['Nº', 'Origem', 'Destino', 'Status', 'Partida']],
-      body: voyages.map((v: any) => [
-        v.voyage_number || '-', v.origin_port || '-', v.destination_port || '-',
-        v.status || '-', v.departure_date ? format(new Date(v.departure_date), 'dd/MM/yy') : '-',
+      body: voyages.map((v) => [
+        String(v.voyage_number || '-'), String(v.origin_port || '-'), String(v.destination_port || '-'),
+        String(v.status || '-'), v.departure_date ? format(new Date(String(v.departure_date)), 'dd/MM/yy') : '-',
       ]),
       theme: 'grid',
       headStyles: { fillColor: [15, 23, 42], fontSize: 8 },
@@ -291,7 +300,7 @@ async function generateVoyageReport(doc: jsPDF, now: Date, vesselId: string) {
       margin: { left: 15, right: 15 },
     });
 
-    y = (doc as any).lastAutoTable.finalY + 10;
+    y = getLastTableY(doc) + 10;
   }
 
   // Noon reports
@@ -304,10 +313,11 @@ async function generateVoyageReport(doc: jsPDF, now: Date, vesselId: string) {
     autoTable(doc, {
       startY: y,
       head: [['Data', 'Lat', 'Lon', 'Velocidade (kn)', 'Consumo (MT)', 'Distância (NM)']],
-      body: noons.map((n: any) => [
-        n.report_date ? format(new Date(n.report_date), 'dd/MM HH:mm') : '-',
-        n.latitude?.toFixed(4) || '-', n.longitude?.toFixed(4) || '-',
-        n.speed || '-', n.fuel_consumed || '-', n.distance_sailed || '-',
+      body: noons.map((n) => [
+        n.report_date ? format(new Date(String(n.report_date)), 'dd/MM HH:mm') : '-',
+        typeof n.latitude === 'number' ? n.latitude.toFixed(4) : '-',
+        typeof n.longitude === 'number' ? n.longitude.toFixed(4) : '-',
+        String(n.speed || '-'), String(n.fuel_consumed || '-'), String(n.distance_sailed || '-'),
       ]),
       theme: 'striped',
       headStyles: { fillColor: [30, 58, 138], fontSize: 7 },
@@ -331,10 +341,10 @@ async function generateCompliancePack(doc: jsPDF, now: Date) {
       .order('created_at', { ascending: false }).limit(10),
   ]);
 
-  const certs = (certsRes.data || []) as any[];
-  const ncs = (ncsRes.data || []) as any[];
-  const capas = (capasRes.data || []) as any[];
-  const audits = (auditsRes.data || []) as any[];
+  const certs = (certsRes.data || []) as DataRow[];
+  const ncs = (ncsRes.data || []) as DataRow[];
+  const capas = (capasRes.data || []) as DataRow[];
+  const audits = (auditsRes.data || []) as DataRow[];
 
   let y = 45;
 
@@ -359,7 +369,7 @@ async function generateCompliancePack(doc: jsPDF, now: Date) {
     margin: { left: 15, right: 15 },
   });
 
-  y = (doc as any).lastAutoTable.finalY + 10;
+  y = getLastTableY(doc) + 10;
 
   // NCs detail
   if (ncs.length > 0) {
@@ -371,8 +381,8 @@ async function generateCompliancePack(doc: jsPDF, now: Date) {
     autoTable(doc, {
       startY: y,
       head: [['Título', 'Severidade', 'Categoria', 'Status']],
-      body: ncs.slice(0, 15).map((n: any) => [
-        (n.title || '-').substring(0, 40), n.severity || '-', n.category || '-', n.status || '-',
+      body: ncs.slice(0, 15).map((n) => [
+        String(n.title || '-').substring(0, 40), String(n.severity || '-'), String(n.category || '-'), String(n.status || '-'),
       ]),
       theme: 'striped',
       headStyles: { fillColor: [153, 27, 27], fontSize: 7 },
