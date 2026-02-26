@@ -34,6 +34,15 @@ const KPIAlertsEngine = lazy(() =>
 const AdvancedPDFReportBuilder = lazy(() =>
   import("@/components/reports/AdvancedPDFReportBuilder")
 );
+const FleetMapIntelligence = lazy(() =>
+  import("@/components/fleet/FleetMapIntelligence")
+);
+const CrewCompetencyMatrix = lazy(() =>
+  import("@/components/crew/CrewCompetencyMatrix")
+);
+const PredictiveMaintenanceEngine = lazy(() =>
+  import("@/components/maintenance/PredictiveMaintenanceEngine")
+);
 
 export function DashboardIntelligencePanel() {
   return (
@@ -46,6 +55,9 @@ export function DashboardIntelligencePanel() {
         <Suspense fallback={null}><FuelConsumptionTrends /></Suspense>
         <Suspense fallback={null}><CrewFatigueHeatmap /></Suspense>
       </div>
+      <Suspense fallback={null}><FleetMapIntelligence /></Suspense>
+      <Suspense fallback={null}><CrewCompetencyMatrix /></Suspense>
+      <Suspense fallback={null}><PredictiveMaintenanceEngine /></Suspense>
       <Suspense fallback={null}><FinancialIntegrationDashboard /></Suspense>
       <div className="grid grid-cols-1 lg:grid-cols-2 gap-4">
         <Suspense fallback={null}><FleetBenchmarkDashboard /></Suspense>
