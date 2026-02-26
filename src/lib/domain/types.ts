@@ -73,6 +73,13 @@ export const ENTITY_TYPES = {
   // AI
   AI_DECISION: 'ai_decision',
   AI_TASK: 'ai_task',
+  // People extended
+  FEEDBACK: 'feedback',
+  COMMUNICATION: 'communication',
+  USER: 'user',
+  // PEO-DP
+  LOGBOOK_ENTRY: 'logbook_entry',
+  FMEA_ITEM: 'fmea_item',
   // System
   INTEGRATION: 'integration',
   WEBHOOK: 'webhook',
@@ -116,6 +123,11 @@ export const ENTITY_DOMAIN_MAP: Record<EntityType, Domain> = {
   certification: 'people',
   ai_decision: 'ai',
   ai_task: 'ai',
+  feedback: 'people',
+  communication: 'system',
+  user: 'system',
+  logbook_entry: 'ops',
+  fmea_item: 'maintenance',
   integration: 'system',
   webhook: 'system',
 };

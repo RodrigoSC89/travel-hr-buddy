@@ -493,7 +493,7 @@ export function useSubmitFeedback() {
       return data;
     },
     eventType: "feedback.submitted",
-    entityType: "feedback" as any,
+    entityType: "feedback",
     getEntityId: (out) => out.id,
     buildPayload: (input) => ({ type: input.type, score: input.score }),
     invalidateKeys: [["app-metrics"]],
@@ -510,16 +510,16 @@ export function useCreateTrainingSession() {
   return useIntegratedMutation<Record<string, unknown>, any>({
     mutationFn: async (input) => {
       const { supabase } = await import("@/integrations/supabase/client");
-      const { data, error } = await supabase
-        .from('ai_training_sessions')
-        .insert(input as any)
+      const { fromUntyped } = await import("@/integrations/supabase/untyped-client");
+      const { data, error } = await fromUntyped('ai_training_sessions')
+        .insert(input)
         .select()
         .single();
       if (error) throw error;
       return data;
     },
     eventType: "training.session.created",
-    entityType: "training" as any,
+    entityType: "training",
     getEntityId: (out) => out.id,
     buildPayload: (_in, out) => ({ session_id: out.id, topic: out.topic, module: out.session_type }),
     invalidateKeys: [["ai-training-sessions"], ["training"]],
@@ -546,7 +546,7 @@ export function useCompleteTrainingSession() {
       return data;
     },
     eventType: "training.session.completed",
-    entityType: "training" as any,
+    entityType: "training",
     getEntityId: (out) => out.id,
     buildPayload: (_in, out) => ({ session_id: out.id, score: out.final_score, status: out.status }),
     invalidateKeys: [["ai-training-sessions"], ["training"], ["compliance"]],
@@ -568,7 +568,7 @@ export function useSendWhatsApp() {
       return data;
     },
     eventType: "comms.whatsapp.sent",
-    entityType: "communication" as any,
+    entityType: "communication",
     buildPayload: (input) => ({ recipient: input.to }),
     invalidateKeys: [["whatsapp-logs"]],
     successMessage: "Mensagem WhatsApp enviada!",
@@ -588,7 +588,7 @@ export function useSendWhatsAppBatch() {
       return { sent: input.recipients.length - failed, failed };
     },
     eventType: "comms.whatsapp.batch_sent",
-    entityType: "communication" as any,
+    entityType: "communication",
     buildPayload: (input) => ({ count: input.recipients.length }),
     invalidateKeys: [["whatsapp-logs"]],
     successMessage: "Mensagens enviadas!",
@@ -668,7 +668,7 @@ export function useUpdateUserRole() {
       const { supabase } = await import("@/integrations/supabase/client");
       const { data, error } = await supabase
         .from("user_roles")
-        .update({ role: input.newRole } as any)
+        .update({ role: input.newRole } as Record<string, unknown>)
         .eq("user_id", input.userId)
         .select()
         .single();
@@ -676,7 +676,7 @@ export function useUpdateUserRole() {
       return data;
     },
     eventType: "access.role.changed",
-    entityType: "user" as any,
+    entityType: "user",
     getEntityId: (out) => out.user_id,
     buildPayload: (input) => ({ user_id: input.userId, new_role: input.newRole }),
     invalidateKeys: [["admin-user-roles"]],
@@ -735,13 +735,14 @@ export function useCreateLogbookEntry() {
   return useIntegratedMutation<Record<string, unknown>, any>({
     mutationFn: async (input) => {
       const { supabase } = await import("@/integrations/supabase/client");
-      const { data, error } = await supabase.from('peodp_logbook_entries')
-        .insert(input as any).select().single();
+      const { fromUntyped } = await import("@/integrations/supabase/untyped-client");
+      const { data, error } = await fromUntyped('peodp_logbook_entries')
+        .insert(input).select().single();
       if (error) throw error;
       return data;
     },
     eventType: "peodp.logbook.entry_created",
-    entityType: "logbook_entry" as any,
+    entityType: "logbook_entry",
     getEntityId: (out) => out.id,
     buildPayload: (_in, out) => ({ entry_id: out.id, event_type: out.event_type, severity: out.severity }),
     invalidateKeys: [["peodp-logbook"]],
@@ -759,7 +760,7 @@ export function useDeleteLogbookEntry() {
       return { id };
     },
     eventType: "peodp.logbook.entry_deleted",
-    entityType: "logbook_entry" as any,
+    entityType: "logbook_entry",
     getEntityId: (out) => out.id,
     buildPayload: (_in, out) => ({ entry_id: out.id }),
     invalidateKeys: [["peodp-logbook"]],
@@ -776,13 +777,14 @@ export function useCreateFMEAItem() {
   return useIntegratedMutation<Record<string, unknown>, any>({
     mutationFn: async (input) => {
       const { supabase } = await import("@/integrations/supabase/client");
-      const { data, error } = await supabase.from('peodp_fmea_items')
-        .insert(input as any).select().single();
+      const { fromUntyped } = await import("@/integrations/supabase/untyped-client");
+      const { data, error } = await fromUntyped('peodp_fmea_items')
+        .insert(input).select().single();
       if (error) throw error;
       return data;
     },
     eventType: "peodp.fmea.item_created",
-    entityType: "fmea_item" as any,
+    entityType: "fmea_item",
     getEntityId: (out) => out.id,
     buildPayload: (_in, out) => ({ item_id: out.id, component: out.component_name, rpn: out.rpn }),
     invalidateKeys: [["peodp-fmea"]],
@@ -795,13 +797,14 @@ export function useUpdateFMEAItem() {
   return useIntegratedMutation<{ id: string; updates: Record<string, unknown> }, any>({
     mutationFn: async ({ id, updates }) => {
       const { supabase } = await import("@/integrations/supabase/client");
-      const { data, error } = await supabase.from('peodp_fmea_items')
-        .update(updates as any).eq('id', id).select().single();
+      const { fromUntyped } = await import("@/integrations/supabase/untyped-client");
+      const { data, error } = await fromUntyped('peodp_fmea_items')
+        .update(updates).eq('id', id).select().single();
       if (error) throw error;
       return data;
     },
     eventType: "peodp.fmea.item_updated",
-    entityType: "fmea_item" as any,
+    entityType: "fmea_item",
     getEntityId: (out) => out.id,
     buildPayload: (input) => ({ item_id: input.id }),
     invalidateKeys: [["peodp-fmea"]],
@@ -819,7 +822,7 @@ export function useDeleteFMEAItem() {
       return { id };
     },
     eventType: "peodp.fmea.item_deleted",
-    entityType: "fmea_item" as any,
+    entityType: "fmea_item",
     getEntityId: (out) => out.id,
     buildPayload: (_in, out) => ({ item_id: out.id }),
     invalidateKeys: [["peodp-fmea"]],
@@ -835,9 +838,9 @@ export function useDeleteFMEAItem() {
 export function useCreateVesselHistoryEvent() {
   return useIntegratedMutation<Record<string, unknown>, any>({
     mutationFn: async (input) => {
-      const { supabase } = await import("@/integrations/supabase/client");
-      const { data, error } = await supabase.from('navigation_history')
-        .insert(input as any).select().single();
+      const { fromUntyped } = await import("@/integrations/supabase/untyped-client");
+      const { data, error } = await fromUntyped('navigation_history')
+        .insert(input).select().single();
       if (error) throw error;
       return data;
     },

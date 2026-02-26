@@ -4,7 +4,7 @@
  */
 import { useEffect, useCallback, useRef, useState } from "react";
 import { supabase } from "@/integrations/supabase/client";
-import { localEventBus, type DomainEvent } from "@/lib/events/event-bus";
+import { localEventBus, type DomainEvent, type EventType } from "@/lib/events/event-bus";
 import { useQueryClient } from "@tanstack/react-query";
 import { toast } from "sonner";
 import { logger } from "@/lib/logger";
@@ -166,14 +166,16 @@ export function useTacticalMonitor(config: TacticalConfig = {}) {
           }
 
           // Log to audit trail (fire-and-forget)
-          (supabase.from("system_audit_trail") as any).insert({
-            action_type: insight.type === "escalated" ? "escalate" : "auto_resolve",
-            module: insight.module,
-            resource_type: "tactical_insight",
-            description: insight.title,
-            severity: insight.type === "escalated" ? "warning" : "info",
-            metadata: { confidence: insight.confidence, resolution: insight.resolution },
-          }).then(() => {}).catch(() => {});
+          import("@/integrations/supabase/untyped-client").then(({ fromUntyped }) => {
+            fromUntyped("system_audit_trail").insert({
+              action_type: insight.type === "escalated" ? "escalate" : "auto_resolve",
+              module: insight.module,
+              resource_type: "tactical_insight",
+              description: insight.title,
+              severity: insight.type === "escalated" ? "warning" : "info",
+              metadata: { confidence: insight.confidence, resolution: insight.resolution },
+            }).then(() => {}).catch(() => {});
+          });
 
           break; // Only first matching rule
         }
@@ -186,7 +188,7 @@ export function useTacticalMonitor(config: TacticalConfig = {}) {
     mountedRef.current = true;
 
     // Subscribe to ALL domain events via wildcard
-    const unsub = localEventBus.on("*" as any, processEvent);
+    const unsub = localEventBus.on("*" as EventType, processEvent);
 
     return () => {
       mountedRef.current = false;
