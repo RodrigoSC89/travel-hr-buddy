@@ -184,6 +184,6 @@ export function useNotificationsData() {
     stats,
     isLoading,
     markAsRead: (id: string) => markReadMutation.mutate(id),
-    markAllAsRead: () => markAllReadMutation.mutate(undefined as any, { onSuccess: () => setRealtimeNotifications([]) }),
+    markAllAsRead: () => markAllReadMutation.mutate(undefined as never, { onSuccess: () => setRealtimeNotifications([]) }),
   };
 }

@@ -4,6 +4,10 @@
 
 import { supabase } from "@/integrations/supabase/client";
 import { fromUntyped } from "@/integrations/supabase/untyped-client";
+import type { Database } from "@/integrations/supabase/types";
+
+type VoyageInsert = Database['public']['Tables']['voyages']['Insert'];
+type VoyageUpdate = Database['public']['Tables']['voyages']['Update'];
 import { publishEvent } from "@/lib/events/event-bus";
 
 export const VoyagesService = {
@@ -25,7 +29,7 @@ export const VoyagesService = {
 
   async create(voyage: Record<string, unknown>) {
     const { data, error } = await supabase.from('voyages')
-      .insert(voyage as any)
+      .insert(voyage as VoyageInsert)
       .select()
       .single();
     if (error) throw error;
@@ -46,7 +50,7 @@ export const VoyagesService = {
 
   async complete(id: string, completionData: Record<string, unknown>) {
     const { data, error } = await supabase.from('voyages')
-      .update({ ...completionData, status: 'completed' } as any)
+      .update({ ...completionData, status: 'completed' } as VoyageUpdate)
       .eq('id', id)
       .select()
       .single();

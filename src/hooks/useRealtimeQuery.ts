@@ -31,7 +31,7 @@ export function useRealtimeInvalidation({
 
     const channel = supabase
       .channel(channelName)
-      .on('postgres_changes' as any, { event: '*', schema: 'public', table }, invalidateAll)
+      .on('postgres_changes', { event: '*', schema: 'public', table }, invalidateAll)
       .subscribe();
 
     return () => {
