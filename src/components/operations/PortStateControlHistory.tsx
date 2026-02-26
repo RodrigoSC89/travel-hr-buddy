@@ -32,6 +32,18 @@ function getRiskProfile(deficiencies: number, detained: boolean): string {
   return "low";
 }
 
+interface PSCInspectionRow {
+  id: string;
+  inspection_date: string | null;
+  port_name: string | null;
+  port_country: string | null;
+  port_state_authority: string | null;
+  inspection_type: string | null;
+  deficiencies_count: number | null;
+  detention: boolean | null;
+  vessels: { name: string } | null;
+}
+
 function usePSCInspections() {
   return useQuery({
     queryKey: ["psc-inspections"],
@@ -41,7 +53,7 @@ function usePSCInspections() {
         .select("*, vessels(name)")
         .order("inspection_date", { ascending: false });
       if (error) throw error;
-      return (data || []) as any[];
+      return (data || []) as PSCInspectionRow[];
     },
   });
 }
@@ -51,13 +63,13 @@ export function PortStateControlHistory() {
   const [tab, setTab] = useState("history");
 
   const totalInspections = records.length;
-  const totalDeficiencies = useMemo(() => records.reduce((s: number, r: any) => s + (r.deficiencies_count || 0), 0), [records]);
-  const detentions = useMemo(() => records.filter((r: any) => r.detention).length, [records]);
+  const totalDeficiencies = useMemo(() => records.reduce((s, r) => s + (r.deficiencies_count || 0), 0), [records]);
+  const detentions = useMemo(() => records.filter((r) => r.detention).length, [records]);
   const detentionRate = totalInspections > 0 ? ((detentions / totalInspections) * 100).toFixed(1) : "0.0";
   const avgDefPerInspection = totalInspections > 0 ? (totalDeficiencies / totalInspections).toFixed(1) : "0.0";
 
   const handleExport = useCallback(() => {
-    const exportData = records.map((r: any) => ({
+    const exportData = records.map((r) => ({
       Vessel: r.vessels?.name || "—",
       Port: `${r.port_name}, ${r.port_country}`,
       Date: r.inspection_date,
@@ -65,7 +77,7 @@ export function PortStateControlHistory() {
       Type: r.inspection_type || "initial",
       Deficiencies: r.deficiencies_count || 0,
       Detained: r.detention ? "Yes" : "No",
-      Risk: getRiskProfile(r.deficiencies_count || 0, r.detention),
+      Risk: getRiskProfile(r.deficiencies_count || 0, !!r.detention),
     }));
     quickExport(exportData, "PSC_History");
     toast.success("PSC history exported");
@@ -123,8 +135,8 @@ export function PortStateControlHistory() {
         <TabsContent value="history" className="space-y-3 mt-4">
           {records.length === 0 ? (
             <Card className="border-border/50 bg-card/80"><CardContent className="p-8 text-center text-muted-foreground">Nenhuma inspeção PSC registrada.</CardContent></Card>
-          ) : records.map((rec: any) => {
-            const risk = getRiskProfile(rec.deficiencies_count || 0, rec.detention);
+          ) : records.map((rec) => {
+            const risk = getRiskProfile(rec.deficiencies_count || 0, !!rec.detention);
             return (
               <Card key={rec.id} className="border-border/50 bg-card/80">
                 <CardContent className="p-4">
@@ -158,7 +170,7 @@ export function PortStateControlHistory() {
             {(() => {
               // Group by vessel
               const vesselMap = new Map<string, { name: string; inspections: number; deficiencies: number; detained: boolean }>();
-              records.forEach((r: any) => {
+              records.forEach((r) => {
                 const vName = r.vessels?.name || "Unknown";
                 const existing = vesselMap.get(vName) || { name: vName, inspections: 0, deficiencies: 0, detained: false };
                 existing.inspections++;

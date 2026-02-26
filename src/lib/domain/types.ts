@@ -83,6 +83,15 @@ export const ENTITY_TYPES = {
   // System
   INTEGRATION: 'integration',
   WEBHOOK: 'webhook',
+  // Extended domain types (used in module hooks)
+  SURVEY: 'survey',
+  PREDICTION: 'prediction',
+  EQUIPMENT: 'equipment',
+  INSPECTION: 'inspection',
+  NOTIFICATION: 'notification',
+  DRILL: 'drill',
+  MARPOL_ENTRY: 'marpol_entry',
+  PURCHASE_REQUISITION: 'purchase_requisition',
 } as const;
 
 export type EntityType = typeof ENTITY_TYPES[keyof typeof ENTITY_TYPES];
@@ -130,6 +139,14 @@ export const ENTITY_DOMAIN_MAP: Record<EntityType, Domain> = {
   fmea_item: 'maintenance',
   integration: 'system',
   webhook: 'system',
+  survey: 'compliance',
+  prediction: 'maintenance',
+  equipment: 'maintenance',
+  inspection: 'maintenance',
+  notification: 'system',
+  drill: 'compliance',
+  marpol_entry: 'compliance',
+  purchase_requisition: 'finance',
 };
 
 // ============================================

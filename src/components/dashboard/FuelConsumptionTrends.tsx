@@ -10,6 +10,14 @@ import { useQuery } from "@tanstack/react-query";
 import { fromUntyped } from "@/integrations/supabase/untyped-client";
 import { AreaChart, Area, XAxis, YAxis, Tooltip, ResponsiveContainer } from "recharts";
 
+interface NoonReportRow {
+  id: string;
+  report_date: string | null;
+  fuel_consumed_mt: number | null;
+  average_speed: number | null;
+  vessel_id: string | null;
+}
+
 export function FuelConsumptionTrends() {
   const { data: noonReports } = useQuery({
     queryKey: ["fuel-trends-noon"],
@@ -18,14 +26,14 @@ export function FuelConsumptionTrends() {
         .select("id, report_date, fuel_consumed_mt, average_speed, vessel_id")
         .order("report_date", { ascending: false })
         .limit(30);
-      return (data ?? []) as any[];
+      return (data ?? []) as NoonReportRow[];
     },
     staleTime: 120000,
   });
 
   // Aggregate by date
   const dateMap = new Map<string, { total: number; count: number }>();
-  (noonReports ?? []).forEach((r: any) => {
+  (noonReports ?? []).forEach((r) => {
     const day = r.report_date?.split("T")[0] ?? "";
     if (!day) return;
     const existing = dateMap.get(day) ?? { total: 0, count: 0 };
