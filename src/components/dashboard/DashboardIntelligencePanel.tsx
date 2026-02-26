@@ -3,6 +3,7 @@
  * Weather, Port ETA, Fuel Trends, Crew Fatigue, Automation, Finance, Offline
  */
 import { Suspense, lazy } from "react";
+import { WidgetSkeleton, GridSkeleton } from "./IntelligencePanelSkeleton";
 
 const WeatherPortWidget = lazy(() =>
   import("./WeatherPortWidget").then(m => ({ default: m.WeatherPortWidget }))
@@ -47,23 +48,27 @@ const PredictiveMaintenanceEngine = lazy(() =>
 export function DashboardIntelligencePanel() {
   return (
     <div className="space-y-4 mt-4">
-      <Suspense fallback={null}><TrendAnalyticsCards /></Suspense>
-      <Suspense fallback={null}><OperationalAutomationEngine /></Suspense>
-      <Suspense fallback={null}><KPIAlertsEngine /></Suspense>
-      <Suspense fallback={null}><WeatherPortWidget /></Suspense>
-      <div className="grid grid-cols-1 lg:grid-cols-2 gap-4">
-        <Suspense fallback={null}><FuelConsumptionTrends /></Suspense>
-        <Suspense fallback={null}><CrewFatigueHeatmap /></Suspense>
-      </div>
-      <Suspense fallback={null}><FleetMapIntelligence /></Suspense>
-      <Suspense fallback={null}><CrewCompetencyMatrix /></Suspense>
-      <Suspense fallback={null}><PredictiveMaintenanceEngine /></Suspense>
-      <Suspense fallback={null}><FinancialIntegrationDashboard /></Suspense>
-      <div className="grid grid-cols-1 lg:grid-cols-2 gap-4">
-        <Suspense fallback={null}><FleetBenchmarkDashboard /></Suspense>
-        <Suspense fallback={null}><AdvancedPDFReportBuilder /></Suspense>
-      </div>
-      <Suspense fallback={null}><SyncQueueMonitor /></Suspense>
+      <Suspense fallback={<WidgetSkeleton />}><TrendAnalyticsCards /></Suspense>
+      <Suspense fallback={<WidgetSkeleton />}><OperationalAutomationEngine /></Suspense>
+      <Suspense fallback={<WidgetSkeleton />}><KPIAlertsEngine /></Suspense>
+      <Suspense fallback={<WidgetSkeleton />}><WeatherPortWidget /></Suspense>
+      <Suspense fallback={<GridSkeleton />}>
+        <div className="grid grid-cols-1 lg:grid-cols-2 gap-4">
+          <FuelConsumptionTrends />
+          <CrewFatigueHeatmap />
+        </div>
+      </Suspense>
+      <Suspense fallback={<WidgetSkeleton />}><FleetMapIntelligence /></Suspense>
+      <Suspense fallback={<WidgetSkeleton />}><CrewCompetencyMatrix /></Suspense>
+      <Suspense fallback={<WidgetSkeleton />}><PredictiveMaintenanceEngine /></Suspense>
+      <Suspense fallback={<WidgetSkeleton />}><FinancialIntegrationDashboard /></Suspense>
+      <Suspense fallback={<GridSkeleton />}>
+        <div className="grid grid-cols-1 lg:grid-cols-2 gap-4">
+          <FleetBenchmarkDashboard />
+          <AdvancedPDFReportBuilder />
+        </div>
+      </Suspense>
+      <Suspense fallback={<WidgetSkeleton />}><SyncQueueMonitor /></Suspense>
     </div>
   );
 }
