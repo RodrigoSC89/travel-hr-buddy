@@ -85,15 +85,23 @@ export function PeoDPCapabilityMatrix() {
   const [tab, setTab] = useState('equipment');
 
   // Fetch equipment from Supabase
-  const { data: dbEquipment, isLoading } = useQuery({
+  const { data: dbEquipment, isLoading } = useQuery<Array<{
+    id: string;
+    equipment_name: string;
+    equipment_type: string;
+    status: string;
+    specifications: { power?: number; max_power?: number } | null;
+  }>>({
     queryKey: ['peodp-equipment-matrix'],
     queryFn: async () => {
       const { data, error } = await fromUntyped('peodp_equipment')
         .select('id, equipment_name, equipment_type, status, specifications')
         .order('equipment_type');
       if (error) throw error;
-      // eslint-disable-next-line @typescript-eslint/no-explicit-any -- Supabase dynamic table response
-      return data as any[];
+      return (data || []) as Array<{
+        id: string; equipment_name: string; equipment_type: string;
+        status: string; specifications: { power?: number; max_power?: number } | null;
+      }>;
     },
     staleTime: 30000,
   });
@@ -101,8 +109,7 @@ export function PeoDPCapabilityMatrix() {
   // Map DB data or use defaults
   const equipment: EquipmentItem[] = useMemo(() => {
     if (!dbEquipment || dbEquipment.length === 0) return DEFAULT_EQUIPMENT;
-    // eslint-disable-next-line @typescript-eslint/no-explicit-any -- Supabase dynamic response mapping
-    return dbEquipment.map((eq: any) => ({
+    return dbEquipment.map((eq) => ({
       id: eq.id.substring(0, 6),
       name: eq.equipment_name,
       status: (eq.status || 'online') as EquipmentItem['status'],

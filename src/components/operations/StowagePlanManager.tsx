@@ -29,15 +29,26 @@ const CHART_COLORS = [
   'hsl(var(--destructive))', 'hsl(var(--info))', 'hsl(var(--accent))',
 ];
 
+interface StowagePlanRow {
+  id: string;
+  vessel_id: string;
+  plan_name: string;
+  status: string;
+  cargo_details: Record<string, unknown> | null;
+  stability_data: Record<string, unknown> | null;
+  created_at: string;
+  vessels: { name: string; dwt: number } | null;
+}
+
 function useStowagePlans() {
-  return useQuery({
+  return useQuery<StowagePlanRow[]>({
     queryKey: ["stowage-plans"],
     queryFn: async () => {
       const { data, error } = await fromUntyped("stowage_plans")
         .select("*, vessels:vessel_id(name, dwt)")
         .order("created_at", { ascending: false });
       if (error) throw error;
-      return (data || []) as any[];
+      return (data || []) as StowagePlanRow[];
     },
   });
 }

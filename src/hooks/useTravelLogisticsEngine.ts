@@ -252,13 +252,13 @@ export function useQuotationResponses(requestId?: string) {
 }
 
 export function useTravelBookings() {
-  return useQuery({
+  return useQuery<Array<Record<string, unknown>>>({
     queryKey: ["travel-bookings"],
     queryFn: async () => {
       const { data, error } = await fromUntyped("travel_bookings")
         .select("*").order("created_at", { ascending: false }).limit(200);
       if (error) throw error;
-      return (data || []) as any[];
+      return (data || []) as Array<Record<string, unknown>>;
     },
   });
 }

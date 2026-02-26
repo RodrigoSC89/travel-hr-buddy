@@ -61,6 +61,37 @@ const INDUSTRY_BENCHMARKS: Record<string, { avg: number; low: number; high: numb
   "Cargo": { avg: 30000, low: 15000, high: 65000 },
 };
 
+interface PolicyRow {
+  id: string;
+  type: string;
+  insurer: string;
+  vessel_id: string | null;
+  premium: number;
+  coverage: number;
+  deductible: number;
+  start_date: string;
+  end_date: string;
+  notes: string | null;
+  status: string | null;
+  vessels: { name: string } | null;
+  computed_status: string;
+  days_until_expiry: number;
+}
+
+interface ClaimRow {
+  id: string;
+  policy_id: string;
+  vessel_id: string | null;
+  incident_date: string | null;
+  description: string;
+  amount_claimed: number;
+  amount_recovered: number;
+  status: string;
+  created_at: string;
+  vessels: { name: string } | null;
+  insurance_policies: { type: string; insurer: string } | null;
+}
+
 export function InsurancePIManager() {
   const [activeTab, setActiveTab] = useState("policies");
   const [showNewPolicy, setShowNewPolicy] = useState(false);
@@ -78,29 +109,30 @@ export function InsurancePIManager() {
     },
   });
 
-  const { data: policies = [], isLoading: policiesLoading } = useQuery({
+  const { data: policies = [], isLoading: policiesLoading } = useQuery<PolicyRow[]>({
     queryKey: ["insurance-policies"],
     queryFn: async () => {
       const { data, error } = await fromUntyped("insurance_policies")
         .select("*, vessels:vessel_id(name)")
         .order("end_date", { ascending: true });
       if (error) throw error;
-      return (data || []).map((p: any) => {
-        const daysUntilExpiry = p.end_date ? differenceInDays(new Date(p.end_date), new Date()) : 999;
+      return (data || []).map((p: Record<string, unknown>) => {
+        const endDate = p.end_date as string | null;
+        const daysUntilExpiry = endDate ? differenceInDays(new Date(endDate), new Date()) : 999;
         const computedStatus = daysUntilExpiry < 0 ? "expired" : daysUntilExpiry < 60 ? "expiring" : "active";
-        return { ...p, computed_status: p.status || computedStatus, days_until_expiry: daysUntilExpiry };
+        return { ...p, computed_status: (p.status as string) || computedStatus, days_until_expiry: daysUntilExpiry } as PolicyRow;
       });
     },
   });
 
-  const { data: claims = [], isLoading: claimsLoading } = useQuery({
+  const { data: claims = [], isLoading: claimsLoading } = useQuery<ClaimRow[]>({
     queryKey: ["insurance-claims"],
     queryFn: async () => {
       const { data, error } = await fromUntyped("insurance_claims")
         .select("*, vessels:vessel_id(name), insurance_policies:policy_id(type, insurer)")
         .order("created_at", { ascending: false });
       if (error) throw error;
-      return data || [];
+      return (data || []) as ClaimRow[];
     },
   });
 
@@ -236,8 +268,8 @@ export function InsurancePIManager() {
   const handleExport = () => {
     const csv = [
       ["Type", "Insurer", "Vessel", "Premium", "Coverage", "Expiry", "Status"].join(","),
-      ...policies.map((p: any) => [
-        p.type, `"${p.insurer}"`, `"${(p.vessels as any)?.name || ""}"`,
+      ...policies.map((p) => [
+        p.type, `"${p.insurer}"`, `"${p.vessels?.name || ""}"`,
         p.premium, p.coverage, p.end_date, p.computed_status
       ].join(","))
     ].join("\n");
@@ -371,13 +403,13 @@ export function InsurancePIManager() {
                           return (
                             p.type?.toLowerCase().includes(q) ||
                             p.insurer?.toLowerCase().includes(q) ||
-                            (p.vessels as any)?.name?.toLowerCase().includes(q)
+                            p.vessels?.name?.toLowerCase().includes(q)
                           );
                         })
                         .map((p: any) => (
                       <tr key={p.id} className="border-b hover:bg-muted/30">
                         <td className="p-2"><Badge variant="outline">{p.type}</Badge></td>
-                        <td className="p-2 text-xs">{(p.vessels as any)?.name || "—"}</td>
+                        <td className="p-2 text-xs">{p.vessels?.name || "—"}</td>
                         <td className="p-2 text-xs">{p.insurer}</td>
                         <td className="p-2 text-right font-mono text-xs">${Number(p.premium || 0).toLocaleString()}</td>
                         <td className="p-2 text-right font-mono text-xs">${(Number(p.coverage || 0) / 1e6).toFixed(1)}M</td>
@@ -422,14 +454,14 @@ export function InsurancePIManager() {
                 <div className="flex justify-between items-start">
                   <div>
                     <div className="flex items-center gap-2 mb-1">
-                      <Badge variant="outline">{(c.insurance_policies as any)?.type || "—"}</Badge>
+                      <Badge variant="outline">{c.insurance_policies?.type || "—"}</Badge>
                       <Badge className={c.status === "paid" || c.status === "approved" ? "bg-success/20 text-success" : c.status === "rejected" ? "bg-destructive/20 text-destructive" : "bg-warning/20 text-warning"}>
                         {c.status}
                       </Badge>
-                      {(c.vessels as any)?.name && <span className="text-xs text-muted-foreground">🚢 {(c.vessels as any).name}</span>}
+                      {c.vessels?.name && <span className="text-xs text-muted-foreground">🚢 {c.vessels.name}</span>}
                     </div>
                     <p className="text-sm">{c.description}</p>
-                    <p className="text-xs text-muted-foreground mt-1">Incident: {c.incident_date || "—"} • Insurer: {(c.insurance_policies as any)?.insurer || "—"}</p>
+                    <p className="text-xs text-muted-foreground mt-1">Incident: {c.incident_date || "—"} • Insurer: {c.insurance_policies?.insurer || "—"}</p>
                   </div>
                   <div className="text-right space-y-1">
                     <p className="text-sm font-mono">Claimed: <span className="text-warning">${Number(c.amount_claimed || 0).toLocaleString()}</span></p>
@@ -479,7 +511,7 @@ export function InsurancePIManager() {
                                 <Badge variant="outline" className="text-[10px]">{p.type}</Badge>
                                 <span className="font-medium text-sm">{p.insurer}</span>
                               </div>
-                              <p className="text-xs text-muted-foreground">{(p.vessels as any)?.name} • Expires {format(new Date(p.end_date), "dd MMM yyyy")}</p>
+                              <p className="text-xs text-muted-foreground">{p.vessels?.name} • Expires {format(new Date(p.end_date), "dd MMM yyyy")}</p>
                             </div>
                           </div>
                           <div className="flex items-center gap-3">
@@ -525,7 +557,7 @@ export function InsurancePIManager() {
                             <td key={type} className="p-2 text-center">
                               {policy ? (
                                 <Badge className="bg-success/20 text-success text-[10px]">
-                                  {(policy as any).days_until_expiry}d
+                                  {policy.days_until_expiry}d
                                 </Badge>
                               ) : (
                                 <Badge variant="outline" className="text-[10px] text-muted-foreground/50">—</Badge>
@@ -617,8 +649,8 @@ export function InsurancePIManager() {
                     insurerMap[key].policies++;
                     insurerMap[key].totalPremium += Number(p.premium || 0);
                   });
-                  claims.forEach((c: any) => {
-                    const insurer = (c.insurance_policies as any)?.insurer || "Unknown";
+                  claims.forEach((c) => {
+                    const insurer = c.insurance_policies?.insurer || "Unknown";
                     if (!insurerMap[insurer]) insurerMap[insurer] = { policies: 0, totalPremium: 0, totalClaimed: 0, totalRecovered: 0, avgDaysToSettle: 0, claimCount: 0 };
                     insurerMap[insurer].totalClaimed += Number(c.amount_claimed || 0);
                     insurerMap[insurer].totalRecovered += Number(c.amount_recovered || 0);
