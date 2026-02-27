@@ -48,7 +48,8 @@ export default function VoiceCopilotPage() {
   const [textInput, setTextInput] = useState("");
   const [liveTranscript, setLiveTranscript] = useState("");
   const scrollRef = useRef<HTMLDivElement>(null);
-  const recognitionRef = useRef<any>(null);
+  // eslint-disable-next-line @typescript-eslint/no-explicit-any -- Web Speech API lacks standard TypeScript types
+  const recognitionRef = useRef<ReturnType<typeof Object.create> | null>(null);
 
   useEffect(() => {
     if (scrollRef.current) {
