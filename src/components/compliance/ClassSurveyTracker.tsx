@@ -63,13 +63,15 @@ export default function ClassSurveyTracker() {
     },
   });
 
-  const { data: surveys = [], isLoading, refetch } = useQuery({
+  // eslint-disable-next-line @typescript-eslint/no-explicit-any -- dynamic Supabase table with computed fields
+  const { data: surveys = [], isLoading, refetch } = useQuery<any[]>({
     queryKey: ['class-surveys'],
     queryFn: async () => {
       const { data, error } = await fromUntyped('class_surveys')
         .select('*, vessels:vessel_id(name)')
         .order('due_date', { ascending: true });
       if (error) throw error;
+      // eslint-disable-next-line @typescript-eslint/no-explicit-any -- dynamic Supabase join with computed fields
       return (data || []).map((s: any) => {
         const daysUntil = s.due_date ? differenceInDays(new Date(s.due_date), new Date()) : 999;
         const computedStatus = s.status === 'completed' ? 'completed' :
@@ -96,6 +98,7 @@ export default function ClassSurveyTracker() {
       const { data } = await supabase.from('maritime_certificates')
         .select('*, vessels:vessel_id(name)')
         .order('expiry_date', { ascending: true });
+      // eslint-disable-next-line @typescript-eslint/no-explicit-any -- dynamic computed status field
       return (data || []).map((c: any) => {
         const daysUntil = c.expiry_date ? differenceInDays(new Date(c.expiry_date), new Date()) : 999;
         return { ...c, computed_status: daysUntil < 0 ? 'expired' : daysUntil < 60 ? 'expiring' : 'valid', days_until: daysUntil };
@@ -147,25 +150,25 @@ export default function ClassSurveyTracker() {
   });
 
   const stats = useMemo(() => ({
-    overdue: surveys.filter((s: any) => s.computed_status === 'overdue').length,
-    dueSoon: surveys.filter((s: any) => s.computed_status === 'due_soon').length,
-    planned: surveys.filter((s: any) => s.computed_status === 'planned').length,
-    completed: surveys.filter((s: any) => s.computed_status === 'completed').length,
-    openConditions: conditions.filter((c: any) => c.status !== 'closed').length,
-    expiredCerts: certs.filter((c: any) => c.computed_status === 'expired').length,
+    overdue: surveys.filter((s) => s.computed_status === 'overdue').length,
+    dueSoon: surveys.filter((s) => s.computed_status === 'due_soon').length,
+    planned: surveys.filter((s) => s.computed_status === 'planned').length,
+    completed: surveys.filter((s) => s.computed_status === 'completed').length,
+    openConditions: conditions.filter((c: Record<string, unknown>) => c.status !== 'closed').length,
+    expiredCerts: certs.filter((c) => c.computed_status === 'expired').length,
   }), [surveys, conditions, certs]);
 
-  const filtered = useMemo(() => surveys.filter((s: any) =>
+  const filtered = useMemo(() => surveys.filter((s) =>
     !searchTerm ||
-    (s.vessels as any)?.name?.toLowerCase().includes(searchTerm.toLowerCase()) ||
-    s.survey_type?.toLowerCase().includes(searchTerm.toLowerCase())
+    (s.vessels as Record<string, unknown> | null)?.name?.toString().toLowerCase().includes(searchTerm.toLowerCase()) ||
+    String(s.survey_type || '').toLowerCase().includes(searchTerm.toLowerCase())
   ), [surveys, searchTerm]);
 
   const handleExport = () => {
     const csv = [
       ["Vessel", "Survey Type", "Class", "Due Date", "Status", "Findings", "Cost"].join(","),
-      ...surveys.map((s: any) => [
-        `"${(s.vessels as any)?.name || ""}"`, s.survey_type, s.class_society,
+      ...surveys.map((s) => [
+        `"${(s.vessels as Record<string, unknown> | null)?.name || ""}"`, s.survey_type, s.class_society,
         s.due_date || "", s.computed_status, s.findings, s.cost || 0
       ].join(","))
     ].join("\n");
@@ -319,9 +322,9 @@ export default function ClassSurveyTracker() {
                       <th className="text-center py-2 px-2">Actions</th>
                     </tr></thead>
                     <tbody>
-                      {filtered.map((s: any) => (
-                        <tr key={s.id} className="border-b hover:bg-muted/30">
-                          <td className="py-2 px-2 font-medium text-xs">{(s.vessels as any)?.name || "—"}</td>
+                      {filtered.map((s) => (
+                        <tr key={s.id as string} className="border-b hover:bg-muted/30">
+                          <td className="py-2 px-2 font-medium text-xs">{(s.vessels as Record<string, unknown> | null)?.name?.toString() || "—"}</td>
                           <td className="py-2 px-2 text-xs">{s.survey_type}</td>
                           <td className="py-2 px-2"><Badge variant="outline" className="text-xs">{s.class_society}</Badge></td>
                           <td className="py-2 px-2 text-center font-mono text-xs">{s.due_date ? format(new Date(s.due_date), 'dd MMM yyyy') : "—"}</td>

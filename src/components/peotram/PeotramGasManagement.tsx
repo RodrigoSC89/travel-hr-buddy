@@ -25,8 +25,8 @@ export function PeotramGasManagement() {
       const { data, error } = await fromUntyped("peotram_gas_inventory")
         .select("*").order("gas_type");
       if (error) throw error;
-      // eslint-disable-next-line @typescript-eslint/no-explicit-any -- Supabase dynamic table response
-      return data as any[];
+      // eslint-disable-next-line @typescript-eslint/no-explicit-any -- Supabase dynamic table with untyped columns
+      return data as Array<Record<string, any>>;
     },
   });
 
