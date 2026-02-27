@@ -26,7 +26,7 @@ export function ISMKPIDashboard() {
     queryFn: async () => {
       const { data, error } = await fromUntyped("ism_elements").select("*").order("element_number");
       if (error) throw error;
-      return (data || []) as any[];
+      return (data || []) as Array<Record<string, unknown>>;
     },
   });
 
@@ -35,7 +35,7 @@ export function ISMKPIDashboard() {
     queryFn: async () => {
       const { data, error } = await fromUntyped("ism_gap_analysis").select("*");
       if (error) throw error;
-      return (data || []) as any[];
+      return (data || []) as Array<Record<string, unknown>>;
     },
   });
 
@@ -44,21 +44,21 @@ export function ISMKPIDashboard() {
     queryFn: async () => {
       const { data, error } = await fromUntyped("ism_capa").select("*");
       if (error) throw error;
-      return (data || []) as any[];
+      return (data || []) as Array<Record<string, unknown>>;
     },
   });
 
   // Bar chart data: score per element
   const barData = useMemo(() => {
     return elements.map(el => {
-      const elGaps = gaps.filter((g: any) => g.element_id === el.id);
+      const elGaps = gaps.filter(g => g.element_id === el.id);
       const avgScore = elGaps.length > 0
-        ? Math.round(elGaps.reduce((s: number, g: any) => s + g.compliance_score, 0) / elGaps.length)
+        ? Math.round(elGaps.reduce((s: number, g) => s + Number(g.compliance_score || 0), 0) / elGaps.length)
         : 0;
-      const openCapas = capas.filter((c: any) => c.element_id === el.id && ["open", "in_progress"].includes(c.status)).length;
+      const openCapas = capas.filter(c => c.element_id === el.id && ["open", "in_progress"].includes(String(c.status))).length;
       return {
         name: `E${el.element_number}`,
-        fullName: el.title,
+        fullName: String(el.title || ''),
         score: avgScore,
         capas: openCapas,
       };
@@ -94,7 +94,7 @@ export function ISMKPIDashboard() {
     const avg = scores.length > 0 ? Math.round(scores.reduce((a, b) => a + b, 0) / scores.length) : 0;
     const critical = barData.filter(b => b.score > 0 && b.score < 50).length;
     const auditReady = barData.filter(b => b.score >= 80).length;
-    const totalCapas = capas.filter((c: any) => ["open", "in_progress"].includes(c.status)).length;
+    const totalCapas = capas.filter(c => ["open", "in_progress"].includes(String(c.status))).length;
     return { avg, critical, auditReady, totalCapas, assessed: scores.length, total: elements.length };
   }, [barData, capas, elements]);
 

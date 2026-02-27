@@ -4,6 +4,7 @@
  * Full CRUD + Performance Analytics + Weather Impact + Fuel Efficiency
  * V3: Vessel Performance Ranking, Good/Bad Weather Analysis, Voyage Comparison, EEOI Calculator
  */
+/* eslint-disable @typescript-eslint/no-explicit-any -- dynamic Supabase untyped table data */
 import React, { useState, useMemo } from 'react';
 import { useQuery, useMutation, useQueryClient } from '@tanstack/react-query';
 import { supabase } from '@/integrations/supabase/client';

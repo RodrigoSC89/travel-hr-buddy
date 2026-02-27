@@ -2,6 +2,7 @@
  * Defect & Work Request Manager v3 — MTBF/MTTR, Trend Lines, Vessel Heatmap
  * Benchmarks: BASSnet, DNV ShipManager, TM Master
  */
+/* eslint-disable @typescript-eslint/no-explicit-any -- dynamic Supabase untyped table data */
 import React, { useState, useMemo } from 'react';
 import { useQuery, useMutation, useQueryClient } from '@tanstack/react-query';
 import { supabase } from '@/integrations/supabase/client';
@@ -335,7 +336,7 @@ export default function DefectWorkRequestManager() {
                           </div>
                         </div>
                         <div className="flex items-center gap-2">
-                          <Badge variant={(priorityColor[d.priority] || 'secondary') as any}>{d.priority}</Badge>
+                          <Badge variant={(priorityColor[d.priority] || 'secondary') as "default" | "secondary" | "destructive" | "outline"}>{d.priority}</Badge>
                           <Badge variant="outline">{d.status}</Badge>
                           {d.capa_status !== 'pending' && <Badge variant="secondary" className="text-[10px]">CAPA: {d.capa_status}</Badge>}
                         </div>
@@ -547,7 +548,7 @@ export default function DefectWorkRequestManager() {
           {detailOpen && (
             <div className="space-y-4">
               <div className="flex gap-2 mb-2">
-                <Badge variant={(priorityColor[detailOpen.priority] || 'secondary') as any}>{detailOpen.priority}</Badge>
+                <Badge variant={(priorityColor[detailOpen.priority] || 'secondary') as "default" | "secondary" | "destructive" | "outline"}>{detailOpen.priority}</Badge>
                 <Badge variant="outline">{detailOpen.status}</Badge>
                 {detailOpen.capa_status && <Badge variant="secondary">CAPA: {detailOpen.capa_status}</Badge>}
                 {detailOpen.target_date && new Date(detailOpen.target_date) < new Date() && !['closed', 'completed', 'verified'].includes(detailOpen.status) && (
