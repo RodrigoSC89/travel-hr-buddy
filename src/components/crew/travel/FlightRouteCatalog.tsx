@@ -45,6 +45,7 @@ export function FlightRouteCatalog() {
       frequency: form.frequency,
       notes: form.notes || null,
       is_active: true,
+    // eslint-disable-next-line @typescript-eslint/no-explicit-any -- flight_routes columns not in generated types
     } as any, {
       onSuccess: () => {
         setOpen(false);

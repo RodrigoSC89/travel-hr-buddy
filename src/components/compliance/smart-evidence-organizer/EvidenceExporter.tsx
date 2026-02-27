@@ -8,6 +8,11 @@ import { toast } from "sonner";
 import JSZip from "jszip";
 import { saveAs } from "file-saver";
 import jsPDF from "jspdf";
+
+/** Helper to safely access lastAutoTable.finalY from jspdf-autotable */
+function getLastTableY(doc: jsPDF): number {
+  return (doc as jsPDF & { lastAutoTable?: { finalY: number } }).lastAutoTable?.finalY ?? 0;
+}
 import autoTable from "jspdf-autotable";
 import type { EvidencePack, EvidenceElement, EvidenceItem, EvidenceMatch } from "./types";
 
@@ -112,7 +117,7 @@ export const EvidenceExporter = memo(({ pack, elements, items, matches }: Props)
         margin: { left: 14, right: 14 },
       });
 
-      y = (doc as any).lastAutoTable.finalY + 12;
+      y = getLastTableY(doc) + 12;
 
       // Elements detail
       doc.setFontSize(14);
@@ -159,7 +164,7 @@ export const EvidenceExporter = memo(({ pack, elements, items, matches }: Props)
             },
             margin: { left: 14, right: 14 },
           });
-          y = (doc as any).lastAutoTable.finalY + 8;
+          y = getLastTableY(doc) + 8;
         }
       }
 
@@ -243,7 +248,7 @@ export const EvidenceExporter = memo(({ pack, elements, items, matches }: Props)
           styles: { fontSize: 7, cellPadding: 2 },
           margin: { left: 14, right: 14 },
         });
-        y = (doc as any).lastAutoTable.finalY + 6;
+        y = getLastTableY(doc) + 6;
       }
 
       zip.file("relatorio-evidencias.pdf", doc.output("blob"));

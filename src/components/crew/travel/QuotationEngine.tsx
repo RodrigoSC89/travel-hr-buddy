@@ -65,6 +65,7 @@ export function QuotationEngine() {
       cabin_class: form.cabin_class,
       notes: form.notes || null,
       status: "open",
+    // eslint-disable-next-line @typescript-eslint/no-explicit-any -- travel_quotation_requests columns not in generated types
     } as any, {
       onSuccess: () => {
         setOpenNew(false);
@@ -310,6 +311,7 @@ function ResponsesDialog({ request, onClose }: { request: QuotationRequest; onCl
       transfer_company: respForm.transfer_company || null,
       valid_until: respForm.valid_until || null,
       request: request,
+    // eslint-disable-next-line @typescript-eslint/no-explicit-any -- travel_quotation_responses columns not in generated types
     } as any, {
       onSuccess: () => {
         setOpenAdd(false);

@@ -320,6 +320,7 @@ export async function publishEvent<T = Record<string, unknown>>(
     // Publish to outbox via RPC
     const { data, error } = await supabase.rpc('publish_event', {
       p_event_type: event.type,
+      // eslint-disable-next-line @typescript-eslint/no-explicit-any -- RPC payload accepts Json type
       p_payload: event.payload as any,
       p_source_entity_type: (event.sourceEntityType ?? undefined) as string | undefined,
       p_source_entity_id: (event.sourceEntityId ?? undefined) as string | undefined,
