@@ -384,7 +384,7 @@ export default function ClassSurveyTracker() {
                     {certs.slice(0, 30).map((c: any) => (
                       <tr key={c.id} className="border-b hover:bg-muted/30">
                         <td className="py-2 px-2 font-medium text-xs">{c.certificate_name || c.certificate_type}</td>
-                        <td className="py-2 px-2 text-xs">{(c.vessels as any)?.name || "—"}</td>
+                        <td className="py-2 px-2 text-xs">{(c.vessels as Record<string, unknown> | null)?.name?.toString() || "—"}</td>
                         <td className="py-2 px-2 text-xs">{c.issuing_authority || "—"}</td>
                         <td className="py-2 px-2 text-center font-mono text-xs">{c.expiry_date ? format(new Date(c.expiry_date), 'dd MMM yyyy') : "—"}</td>
                         <td className="py-2 px-2 text-center">
@@ -422,7 +422,7 @@ export default function ClassSurveyTracker() {
                     {conditions.map((c: any) => (
                       <tr key={c.id} className="border-b hover:bg-muted/30">
                         <td className="py-2 px-2 font-mono font-medium text-xs">{c.condition_number || "—"}</td>
-                        <td className="py-2 px-2 text-xs">{(c.vessels as any)?.name || "—"}</td>
+                        <td className="py-2 px-2 text-xs">{(c.vessels as Record<string, unknown> | null)?.name?.toString() || "—"}</td>
                         <td className="py-2 px-2 text-xs max-w-[300px] truncate">{c.description}</td>
                         <td className="py-2 px-2 text-center font-mono text-xs">{c.due_date ? format(new Date(c.due_date), 'dd MMM yyyy') : "—"}</td>
                         <td className="py-2 px-2 text-center">

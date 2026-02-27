@@ -25,12 +25,13 @@ export function installAutoIntegration(): void {
 
   const originalFrom = (supabase.from as Function).bind(supabase);
 
-  // Override supabase.from() to return an intercepted query builder
+  // eslint-disable-next-line @typescript-eslint/no-explicit-any -- monkey-patching supabase.from() for auto-integration
   (supabase as any).from = function interceptedFrom(table: string) {
     const builder = originalFrom(table);
 
     // Patch insert
     const origInsert = builder.insert.bind(builder);
+    // eslint-disable-next-line @typescript-eslint/no-explicit-any -- interceptor needs flexible typing
     builder.insert = function (values: any, options?: any) {
       const chain = origInsert(values, options);
       return wrapChainWithInterceptor(chain, table, 'insert');
