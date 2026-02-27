@@ -49,8 +49,8 @@ export function MLCWorkRestCalculator() {
         .gte("record_date", startDate)
         .order("record_date", { ascending: false });
       if (error) throw error;
-      // eslint-disable-next-line @typescript-eslint/no-explicit-any -- Supabase dynamic table response
-      return data as any[];
+      // eslint-disable-next-line @typescript-eslint/no-explicit-any -- Supabase dynamic table response with joined relations
+      return data as Array<Record<string, any>>;
     },
   });
 
@@ -64,8 +64,8 @@ export function MLCWorkRestCalculator() {
     existing.totalRest += r.total_rest_hours || 0;
     existing.records += 1;
     if (r.violations && Array.isArray(r.violations)) {
-      // eslint-disable-next-line @typescript-eslint/no-explicit-any -- violations array has mixed types
-      const mapped = (r.violations as any[]).map((v: any) => typeof v === "string" ? v : v.description || "Violation");
+      // eslint-disable-next-line @typescript-eslint/no-explicit-any -- violations array contains mixed string/object types
+      const mapped = (r.violations as Array<unknown>).map((v) => typeof v === "string" ? v : (v as Record<string, string>).description || "Violation");
       for (const m of mapped) existing.violations.push(m);
     }
     if (!r.is_compliant) existing.violations.push(`Non-compliant on ${r.record_date}`);

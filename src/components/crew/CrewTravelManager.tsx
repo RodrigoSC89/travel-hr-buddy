@@ -89,6 +89,7 @@ export function CrewTravelManager() {
         due_date: form.arrival_date || null,
         status: 'pending',
         priority: form.travel_type === 'repatriation' ? 'critical' : form.travel_type === 'medical' ? 'high' : 'medium',
+        // eslint-disable-next-line @typescript-eslint/no-explicit-any -- travel metadata stored as JSON in comments column
         comments: [{ type: form.travel_type, cost: totalCost, airline: form.airline, flight: form.flight_number, hotel: form.hotel_name, hotelNights: form.hotel_nights }] as any,
       });
       if (error) throw error;
@@ -119,7 +120,8 @@ export function CrewTravelManager() {
     // Extract costs from comments
     const withCost = travels.map(t => {
       const meta = Array.isArray(t.comments) ? t.comments[0] : null;
-      return { ...t, cost: (meta as any)?.cost || 0, type: (meta as any)?.type || 'embarkation' };
+      const typedMeta = meta as Record<string, unknown> | null;
+      return { ...t, cost: (typedMeta?.cost as number) || 0, type: (typedMeta?.type as string) || 'embarkation' };
     });
     const totalCost = withCost.reduce((s, t) => s + t.cost, 0);
 
@@ -232,7 +234,7 @@ export function CrewTravelManager() {
               {filtered.map(travel => {
                 const status = travel.status || 'pending';
                 const cfg = STATUS_CONFIG[status] || STATUS_CONFIG.pending;
-                const meta = Array.isArray(travel.comments) ? travel.comments[0] as any : null;
+                const meta = Array.isArray(travel.comments) ? travel.comments[0] as Record<string, unknown> | null : null;
                 const isUrgent = travel.start_date && new Date(travel.start_date) <= new Date(Date.now() + 3 * 86400000) && status === 'pending';
                 return (
                   <Card key={travel.id} className={`hover:border-primary/30 transition-colors ${isUrgent ? 'border-warning/50' : ''}`}>
@@ -250,7 +252,7 @@ export function CrewTravelManager() {
                           </p>
                           <div className="flex items-center gap-4 text-xs text-muted-foreground">
                             <span><Calendar className="h-3 w-3 inline mr-1" />{travel.start_date ? new Date(travel.start_date).toLocaleDateString('pt-BR') : '—'} → {travel.due_date ? new Date(travel.due_date).toLocaleDateString('pt-BR') : '—'}</span>
-                            {meta?.cost > 0 && <span><DollarSign className="h-3 w-3 inline" />${meta.cost}</span>}
+                            {meta && (meta.cost as number) > 0 && <span><DollarSign className="h-3 w-3 inline" />${String(meta.cost)}</span>}
                           </div>
                         </div>
                       </div>

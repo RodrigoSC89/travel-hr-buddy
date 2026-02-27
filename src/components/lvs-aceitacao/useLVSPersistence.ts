@@ -102,8 +102,8 @@ export function useLVSPersistence() {
       }
 
       if (itemsResult.data) {
-        const itemMap = new Map<string, any>();
-        (itemsResult.data as any[]).forEach(item => itemMap.set(item.item_ref, item));
+        const itemMap = new Map<string, Record<string, unknown>>();
+        (itemsResult.data as Array<Record<string, unknown>>).forEach(item => itemMap.set(item.item_ref as string, item));
 
         const updatedSections = ALL_LVS_SECTIONS.map(sec => ({
           ...sec,
@@ -114,11 +114,11 @@ export function useLVSPersistence() {
               if (dbItem) {
                 return {
                   ...item,
-                  status: dbItem.status as ItemStatus,
-                  observations: dbItem.observations || "",
-                  pendency: dbItem.pendency || "",
-                  deadline: dbItem.deadline || "",
-                  hasPhoto: dbItem.has_photo || false,
+                  status: (dbItem.status as string) as ItemStatus,
+                  observations: (dbItem.observations as string) || "",
+                  pendency: (dbItem.pendency as string) || "",
+                  deadline: (dbItem.deadline as string) || "",
+                  hasPhoto: (dbItem.has_photo as boolean) || false,
                 };
               }
               return item;
@@ -137,7 +137,7 @@ export function useLVSPersistence() {
   const saveItemStatus = useCallback(async (itemRef: string, status: ItemStatus, fields?: { observations?: string; pendency?: string; deadline?: string }) => {
     if (!activeSession) return;
 
-    const updateData: any = { status, updated_at: new Date().toISOString() };
+    const updateData: Record<string, unknown> = { status, updated_at: new Date().toISOString() };
     if (fields?.observations !== undefined) updateData.observations = fields.observations;
     if (fields?.pendency !== undefined) updateData.pendency = fields.pendency;
     if (fields?.deadline !== undefined) updateData.deadline = fields.deadline || null;
@@ -173,7 +173,7 @@ export function useLVSPersistence() {
       .eq("session_id", activeSession.id);
 
     if (data) {
-      const items = data as any[];
+      const items = data as Array<{ status: string }>;
       const total = items.length;
       const approved = items.filter(i => i.status === "approved").length;
       const pending = items.filter(i => i.status === "pending").length;

@@ -42,7 +42,7 @@ function useTimeCharters() {
         .select("*, vessels(name)")
         .order("created_at", { ascending: false });
       if (error) throw error;
-      return (data || []) as any[];
+      return (data || []) as Array<Record<string, unknown>>;
     },
   });
 }
