@@ -93,26 +93,27 @@ export function ConditionBasedMaintenanceTab() {
 
     // If we have IoT sensors, use them
     if (sensors.length > 0) {
+      // eslint-disable-next-line @typescript-eslint/no-explicit-any -- IoT sensor rows have dynamic columns
       return sensors.map((sensor: any) => {
-        const thresholds = sensor.thresholds as any || {};
+        const thresholds = (sensor.thresholds as Record<string, number>) || {};
         const threshold = thresholds.max || thresholds.warning || 100;
-        const currentVal = sensor.current_value || 0;
+        const currentVal = Number(sensor.current_value) || 0;
         const type = mapSensorType(sensor.sensor_type);
         const unit = sensor.unit || (type === "vibration" ? "mm/s RMS" : type === "oil" ? "ppm Fe" : "°C");
 
         return {
-          id: sensor.id,
-          equipmentName: sensor.location || sensor.sensor_id || "Sensor",
-          equipmentCode: sensor.sensor_id || sensor.id.slice(0, 8),
+          id: String(sensor.id),
+          equipmentName: String(sensor.location || sensor.sensor_id || "Sensor"),
+          equipmentCode: String(sensor.sensor_id || String(sensor.id).slice(0, 8)),
           type,
           status: computeStatus(currentVal, threshold),
           currentValue: currentVal,
           unit,
           threshold,
           trend: "stable" as const,
-          lastReading: sensor.last_reading_at ? new Date(sensor.last_reading_at).toISOString().split("T")[0] : "N/A",
+          lastReading: sensor.last_reading_at ? new Date(String(sensor.last_reading_at)).toISOString().split("T")[0] : "N/A",
           nextDue: sensor.last_reading_at
-            ? new Date(new Date(sensor.last_reading_at).getTime() + 30 * 86400000).toISOString().split("T")[0]
+            ? new Date(new Date(String(sensor.last_reading_at)).getTime() + 30 * 86400000).toISOString().split("T")[0]
             : "N/A",
           history: generateHistoryFromCurrent(currentVal, 5),
           recommendation: currentVal >= threshold

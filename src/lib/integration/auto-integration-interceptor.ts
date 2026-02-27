@@ -931,6 +931,7 @@ async function persistEventToOutbox(event: DomainEvent): Promise<void> {
     
     await supabase.rpc('publish_event', {
       p_event_type: event.type,
+      // eslint-disable-next-line @typescript-eslint/no-explicit-any -- RPC payload accepts Json type
       p_payload: event.payload as any,
       p_source_entity_type: event.sourceEntityType as string,
       p_source_entity_id: event.sourceEntityId,

@@ -271,11 +271,13 @@ function createStoreProxy<T>(storeName: string) {
     },
     async put(record: T): Promise<void> {
       const database = await getDB();
-      await database.put(storeName, record as any);
+      // eslint-disable-next-line @typescript-eslint/no-explicit-any -- IDB generic store accepts unknown shapes
+      await database.put(storeName, record as unknown as Record<string, unknown>);
     },
     async add(record: T): Promise<number> {
       const database = await getDB();
-      const result = await database.add(storeName, record as any);
+      // eslint-disable-next-line @typescript-eslint/no-explicit-any -- IDB generic store accepts unknown shapes
+      const result = await database.add(storeName, record as unknown as Record<string, unknown>);
       return result as number;
     },
     async delete(id: string | number): Promise<void> {
@@ -312,7 +314,8 @@ function createStoreProxy<T>(storeName: string) {
       const database = await getDB();
       const existing = await database.get(storeName, id) as T | undefined;
       if (existing) {
-        await database.put(storeName, { ...existing, ...changes } as any);
+        // eslint-disable-next-line @typescript-eslint/no-explicit-any -- IDB merge requires flexible typing
+        await database.put(storeName, { ...existing, ...changes } as unknown as Record<string, unknown>);
       }
     },
     where(indexOrObj: string | Record<string, unknown>) {
