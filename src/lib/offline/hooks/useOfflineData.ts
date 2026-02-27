@@ -1,3 +1,4 @@
+/* eslint-disable @typescript-eslint/no-explicit-any -- IDB store proxy + partial updates require flexible typing */
 /**
  * Offline-first data hooks with idb + Supabase sync
  * Migrated from Dexie to idb to resolve TS1540 build errors

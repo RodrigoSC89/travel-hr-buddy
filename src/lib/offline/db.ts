@@ -1,3 +1,4 @@
+/* eslint-disable @typescript-eslint/no-explicit-any -- IDB generic store proxy requires flexible typing for put/add/update operations */
 /**
  * NAUTI ONE - IndexedDB Database
  * Persistência local com idb para funcionamento offline
