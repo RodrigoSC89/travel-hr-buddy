@@ -13,25 +13,25 @@ const isSlowConnection = (): boolean => {
   return false;
 };
 
-// Default stale times based on data freshness requirements
+// Default stale times based on data freshness requirements - maritime optimized
 const STALE_TIMES = {
-  // Static data - rarely changes
-  static: 1000 * 60 * 60, // 1 hour
+  // Static data - rarely changes (vessel specs, ports, etc)
+  static: 1000 * 60 * 120, // 2 hours
   
-  // Reference data - changes occasionally
-  reference: 1000 * 60 * 15, // 15 minutes
+  // Reference data - changes occasionally (crew lists, certificates)
+  reference: 1000 * 60 * 30, // 30 minutes
   
   // Dynamic data - changes frequently but can be stale briefly
-  dynamic: 1000 * 60 * 2, // 2 minutes
+  dynamic: 1000 * 60 * 10, // 10 minutes
   
-  // Real-time data - needs to be fresh
-  realtime: 1000 * 30, // 30 seconds
+  // Real-time data - needs to be fresh (but still cache on satellite)
+  realtime: 1000 * 60 * 2, // 2 minutes
 };
 
-// Increase stale times on slow connections
+// Aggressively increase stale times on slow connections (satellite/VSAT)
 const getAdjustedStaleTime = (baseTime: number): number => {
   if (isSlowConnection()) {
-    return baseTime * 2; // Double stale time on slow connections
+    return baseTime * 3; // Triple stale time on slow connections
   }
   return baseTime;
 };
@@ -43,8 +43,8 @@ const createQueryClientConfig = (): QueryClientConfig => ({
       // Aggressive caching for slow connections
       staleTime: getAdjustedStaleTime(STALE_TIMES.dynamic),
       
-      // Keep data in cache longer
-      gcTime: 1000 * 60 * 30, // 30 minutes (was cacheTime)
+      // Keep data in cache much longer for maritime environments
+      gcTime: 1000 * 60 * 60, // 60 minutes
       
       // Retry with exponential backoff
       retry: (failureCount, error) => {
@@ -56,10 +56,10 @@ const createQueryClientConfig = (): QueryClientConfig => ({
       },
       retryDelay: (attemptIndex) => Math.min(1000 * 2 ** attemptIndex, 30000),
       
-      // Reduce background refetches on slow connections
-      refetchOnWindowFocus: !isSlowConnection(),
+      // Minimize background refetches - every request costs on satellite
+      refetchOnWindowFocus: false,
       refetchOnReconnect: true,
-      refetchOnMount: true,
+      refetchOnMount: false, // Use cached data, don't refetch on every mount
       
       // Network mode - always fetch but use cache while loading
       networkMode: 'offlineFirst',

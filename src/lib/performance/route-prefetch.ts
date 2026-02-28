@@ -1,7 +1,8 @@
 /**
- * Route Prefetching - Preload critical routes on idle
- * Improves navigation speed by loading likely next pages
+ * Route Prefetching - Adaptive for maritime low-bandwidth
+ * Only prefetch on good connections; on slow/satellite, skip entirely
  */
+import { connectionAdaptive } from '@/lib/performance/connection-adaptive';
 
 const CRITICAL_ROUTES = [
   () => import("@/pages/mega-hubs/CommandMegaHub"),
@@ -22,25 +23,35 @@ export function prefetchCriticalRoutes() {
   if (prefetched) return;
   prefetched = true;
 
-  // Prefetch critical routes immediately on idle
-  const loadCritical = () => {
-    CRITICAL_ROUTES.forEach(loader => {
-      loader().catch(() => { /* silent */ });
-    });
-  };
+  const quality = connectionAdaptive.getQuality();
 
-  // Prefetch secondary routes after a longer delay
-  const loadSecondary = () => {
-    SECONDARY_ROUTES.forEach(loader => {
-      loader().catch(() => { /* silent */ });
-    });
+  // On slow/offline connections, don't prefetch anything - save bandwidth
+  if (quality === 'slow' || quality === 'offline') {
+    return;
+  }
+
+  // On moderate connections, only prefetch critical routes after long delay
+  const criticalDelay = quality === 'moderate' ? 10000 : 3000;
+  const loadCritical = () => {
+    // Load one at a time to avoid bandwidth spikes
+    CRITICAL_ROUTES.reduce<Promise<void>>((chain, loader) => 
+      chain.then(() => { loader().catch(() => {}); }), 
+      Promise.resolve()
+    );
   };
 
   if ('requestIdleCallback' in window) {
-    requestIdleCallback(() => loadCritical(), { timeout: 3000 });
-    requestIdleCallback(() => loadSecondary(), { timeout: 8000 });
+    requestIdleCallback(() => loadCritical(), { timeout: criticalDelay });
+    // Only prefetch secondary on fast connections
+    if (quality === 'fast') {
+      requestIdleCallback(() => {
+        SECONDARY_ROUTES.reduce<Promise<void>>((chain, loader) => 
+          chain.then(() => { loader().catch(() => {}); }), 
+          Promise.resolve()
+        );
+      }, { timeout: 15000 });
+    }
   } else {
-    setTimeout(loadCritical, 2000);
-    setTimeout(loadSecondary, 5000);
+    setTimeout(loadCritical, criticalDelay);
   }
 }
