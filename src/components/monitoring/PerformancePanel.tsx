@@ -6,7 +6,7 @@
 import React from "react";
 import { Card, CardContent, CardHeader, CardTitle } from "@/components/ui/card";
 import { usePerformanceMonitor } from "@/lib/telemetry/performance-monitor";
-import { MqttClient } from "mqtt";
+import type { MqttClient } from "mqtt";
 import { Activity, Cpu, Database } from "lucide-react";
 
 interface PerformancePanelProps {

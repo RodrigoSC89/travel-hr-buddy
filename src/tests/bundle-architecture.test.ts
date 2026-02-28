@@ -63,6 +63,29 @@ describe("Bundle Optimization - Heavy Dependencies", () => {
     expect(violations).toEqual([]);
   });
 
+  it("should dynamically import mqtt", () => {
+    const violations: string[] = [];
+    for (const file of allFiles) {
+      if (file.includes("MQTTClient.ts")) continue; // Singleton manager is OK
+      const content = readFileSync(file, "utf-8");
+      if (/^import\s+(?!type).*from\s+["']mqtt["']/m.test(content)) {
+        violations.push(file);
+      }
+    }
+    expect(violations).toEqual([]);
+  });
+
+  it("should dynamically import posthog-js", () => {
+    const violations: string[] = [];
+    for (const file of allFiles) {
+      const content = readFileSync(file, "utf-8");
+      if (/^import\s+posthog\s+from\s+["']posthog-js["']/m.test(content)) {
+        violations.push(file);
+      }
+    }
+    expect(violations).toEqual([]);
+  });
+
   it("should dynamically import tensorflow", () => {
     const violations: string[] = [];
     for (const file of allFiles) {

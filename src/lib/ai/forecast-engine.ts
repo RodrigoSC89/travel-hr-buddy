@@ -11,7 +11,9 @@ const loadORT = async () => {
 };
 import { logger } from "@/lib/logger";
 import { supabase } from "@/integrations/supabase/client";
-import mqtt from "mqtt";
+
+// Dynamic MQTT import for bundle optimization
+const loadMqtt = async () => (await import("mqtt")).default;
 
 export interface ForecastResult {
   status: string;
@@ -75,18 +77,19 @@ function classifyRisk(value: number): RiskClassification {
   return { level: "Crítico", value, message: "Risco crítico - ativar protocolo DP" };
 }
 
-function publishForecastAlert(risk: RiskClassification): void {
+async function publishForecastAlert(risk: RiskClassification): Promise<void> {
   try {
-    const client = mqtt.connect(import.meta.env.VITE_MQTT_URL || "ws://localhost:1883");
+    const mqttLib = await loadMqtt();
+    const client = mqttLib.connect(import.meta.env.VITE_MQTT_URL || "ws://localhost:1883");
     client.on("connect", () => {
       const alertData = { level: risk.level, value: risk.value, message: risk.message, timestamp: new Date().toISOString() };
-      client.publish("nautilus/forecast/alert", JSON.stringify(alertData), { qos: 1 }, (err) => {
-        if (err) logger.error("Failed to publish forecast alert", err as Error);
+      client.publish("nautilus/forecast/alert", JSON.stringify(alertData), { qos: 1 }, (err: Error | undefined) => {
+        if (err) logger.error("Failed to publish forecast alert", err);
         else logger.info("Published forecast alert", { alertData });
         client.end();
       });
     });
-    client.on("error", (err) => { logger.error("MQTT connection error", err as Error); client.end(); });
+    client.on("error", (err: Error) => { logger.error("MQTT connection error", err); client.end(); });
   } catch (error) {
     logger.error("Error publishing forecast alert", error as Error);
   }

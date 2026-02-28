@@ -4,7 +4,7 @@
  */
 
 import { useState, useEffect, useRef } from "react";
-import { MqttClient } from "mqtt";
+import type { MqttClient } from "mqtt";
 import { logger } from '@/lib/logger';
 
 export interface PerformanceMetrics {

@@ -3,8 +3,17 @@
  * Centralized telemetry tracking with PostHog
  */
 
-import posthog from "posthog-js";
 import { logger } from '@/lib/logger';
+
+// Dynamic PostHog import for bundle optimization
+let posthogInstance: typeof import("posthog-js").default | null = null;
+const getPostHog = async () => {
+  if (!posthogInstance) {
+    const mod = await import("posthog-js");
+    posthogInstance = mod.default;
+  }
+  return posthogInstance;
+};
 
 const POSTHOG_KEY = import.meta.env.VITE_POSTHOG_KEY || "";
 const POSTHOG_HOST = import.meta.env.VITE_POSTHOG_HOST || "https://app.posthog.com";
@@ -30,10 +39,11 @@ class TelemetryService {
     window.addEventListener("offline", () => { /* keep trying */ });
   }
 
-  init(): void {
+  async init(): Promise<void> {
     if (this.initialized || !TELEMETRY_ENABLED) return;
 
     try {
+      const posthog = await getPostHog();
       posthog.init(POSTHOG_KEY, {
         api_host: POSTHOG_HOST,
         autocapture: false,
@@ -53,7 +63,7 @@ class TelemetryService {
     }
   }
 
-  trackEvent(name: TelemetryEventName, properties?: Record<string, unknown>): void {
+  async trackEvent(name: TelemetryEventName, properties?: Record<string, unknown>): Promise<void> {
     if (!TELEMETRY_ENABLED) return;
 
     const event: TelemetryEvent = {
@@ -67,20 +77,21 @@ class TelemetryService {
     }
 
     try {
+      const posthog = await getPostHog();
       posthog.capture(name, event.properties);
     } catch {
       this.offlineQueue.push(event);
     }
   }
 
-  identify(userId: string, properties?: Record<string, unknown>): void {
+  async identify(userId: string, properties?: Record<string, unknown>): Promise<void> {
     if (!TELEMETRY_ENABLED) return;
-    try { posthog.identify(userId, properties); } catch { /* noop */ }
+    try { const posthog = await getPostHog(); posthog.identify(userId, properties); } catch { /* noop */ }
   }
 
-  reset(): void {
+  async reset(): Promise<void> {
     if (!TELEMETRY_ENABLED) return;
-    try { posthog.reset(); } catch { /* noop */ }
+    try { const posthog = await getPostHog(); posthog.reset(); } catch { /* noop */ }
   }
 
   private async syncOfflineEvents(): Promise<void> {
@@ -88,7 +99,7 @@ class TelemetryService {
     const events = [...this.offlineQueue];
     this.offlineQueue = [];
     for (const event of events) {
-      try { posthog.capture(event.name, event.properties); } catch { /* noop */ }
+      try { const posthog = await getPostHog(); posthog.capture(event.name, event.properties); } catch { /* noop */ }
     }
   }
 
