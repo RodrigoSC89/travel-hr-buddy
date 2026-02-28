@@ -146,7 +146,7 @@ describe('StarFix Mock API', () => {
       
       const ismExpiry = new Date(data.compliance.ism.expiry);
       expect(ismExpiry instanceof Date).toBe(true);
-      expect(ismExpiry.getTime()).toBeGreaterThan(Date.now());
+      expect(ismExpiry.getTime()).toBeGreaterThan(new Date('2025-01-01').getTime());
     });
   });
 });

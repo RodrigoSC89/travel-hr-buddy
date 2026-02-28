@@ -176,7 +176,7 @@ describe('Heavy Dependencies', () => {
               lines.forEach((line, idx) => {
                 // Check for static import (not lazy/dynamic)
                 if (line.includes(`from '${lib}`) || line.includes(`from "${lib}`)) {
-                  if (!line.includes('lazy') && !line.includes('dynamic') && line.startsWith('import ')) {
+                  if (!line.includes('lazy') && !line.includes('dynamic') && line.startsWith('import ') && !line.startsWith('import type')) {
                     results.push(`${fullPath}:${idx + 1}`);
                   }
                 }

@@ -152,10 +152,10 @@ export function ClauseLibraryTab() {
                   </div>
                 </div>
                 <div className="flex items-center gap-1 ml-2" onClick={e => e.stopPropagation()}>
-                  <Button variant="ghost" size="icon" className="h-7 w-7" onClick={() => toggleFavorite(clause.id)}>
+                  <Button variant="ghost" size="icon" className="h-7 w-7" onClick={() => toggleFavorite(clause.id)} aria-label={clause.isFavorite ? "Remover favorito" : "Adicionar favorito"}>
                     <Star className={`h-3.5 w-3.5 ${clause.isFavorite ? "fill-warning text-warning" : "text-muted-foreground"}`} />
                   </Button>
-                  <Button variant="ghost" size="icon" className="h-7 w-7" onClick={() => copyClause(clause)}>
+                  <Button variant="ghost" size="icon" className="h-7 w-7" onClick={() => copyClause(clause)} aria-label="Copiar cláusula">
                     <Copy className="h-3.5 w-3.5" />
                   </Button>
                 </div>

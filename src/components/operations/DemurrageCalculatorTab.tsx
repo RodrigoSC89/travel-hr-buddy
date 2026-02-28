@@ -156,7 +156,7 @@ export function DemurrageCalculatorTab() {
                       <input type="checkbox" checked={entry.excluded} onChange={e => updateEntry(entry.id, "excluded", e.target.checked)} />
                     </td>
                     <td className="p-2"><Input className="h-7 text-xs" placeholder="Motivo..." value={entry.reason} onChange={e => updateEntry(entry.id, "reason", e.target.value)} disabled={!entry.excluded} /></td>
-                    <td className="p-2"><Button variant="ghost" size="icon" className="h-6 w-6" onClick={() => removeEntry(entry.id)}><Trash2 className="h-3 w-3" /></Button></td>
+                    <td className="p-2"><Button variant="ghost" size="icon" className="h-6 w-6" onClick={() => removeEntry(entry.id)} aria-label="Remover entrada"><Trash2 className="h-3 w-3" /></Button></td>
                   </tr>
                 ))}
               </tbody>

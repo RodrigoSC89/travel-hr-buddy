@@ -167,7 +167,7 @@ export function VesselKPIDashboard() {
               {vessels.map(v => <SelectItem key={v.id} value={v.vessel}>{v.vessel}</SelectItem>)}
             </SelectContent>
           </Select>
-          <Button variant="outline" size="icon" onClick={() => refetch()}><RefreshCw className="h-4 w-4" /></Button>
+          <Button variant="outline" size="icon" onClick={() => refetch()} aria-label="Atualizar dados"><RefreshCw className="h-4 w-4" /></Button>
           <Button variant="outline" size="sm" onClick={handleExport}><Download className="h-4 w-4 mr-1" /> Export</Button>
         </div>
       </div>
