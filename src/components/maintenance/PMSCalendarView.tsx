@@ -151,11 +151,11 @@ export function PMSCalendarView() {
               <AlertTriangle className="h-3 w-3 mr-1" />{conflicts.length} conflicts
             </Badge>
           )}
-          <Button variant="outline" size="icon" onClick={() => setCurrentMonth(new Date(currentMonth.getFullYear(), currentMonth.getMonth() - 1, 1))}>
+          <Button variant="outline" size="icon" onClick={() => setCurrentMonth(new Date(currentMonth.getFullYear(), currentMonth.getMonth() - 1, 1))} aria-label="Mês anterior">
             <ChevronLeft className="h-4 w-4" />
           </Button>
           <span className="font-medium text-sm capitalize min-w-[160px] text-center">{monthLabel}</span>
-          <Button variant="outline" size="icon" onClick={() => setCurrentMonth(new Date(currentMonth.getFullYear(), currentMonth.getMonth() + 1, 1))}>
+          <Button variant="outline" size="icon" onClick={() => setCurrentMonth(new Date(currentMonth.getFullYear(), currentMonth.getMonth() + 1, 1))} aria-label="Próximo mês">
             <ChevronRight className="h-4 w-4" />
           </Button>
         </div>

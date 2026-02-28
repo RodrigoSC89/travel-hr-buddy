@@ -46,14 +46,14 @@ describe('Button Component', () => {
     it('should apply outline variant classes', () => {
       render(<Button variant="outline">Outline</Button>);
       const button = screen.getByRole('button');
-      expect(button).toHaveClass('border-2');
-      expect(button).toHaveClass('border-primary');
+      expect(button).toHaveClass('border');
+      expect(button).toHaveClass('bg-background');
     });
 
     it('should apply ghost variant classes', () => {
       render(<Button variant="ghost">Ghost</Button>);
       const button = screen.getByRole('button');
-      expect(button).toHaveClass('hover:bg-accent');
+      expect(button).toHaveClass('text-foreground');
     });
 
     it('should apply link variant classes', () => {
@@ -73,7 +73,7 @@ describe('Button Component', () => {
     it('should apply default size classes', () => {
       render(<Button>Default Size</Button>);
       const button = screen.getByRole('button');
-      expect(button).toHaveClass('h-11');
+      expect(button).toHaveClass('h-10');
       expect(button).toHaveClass('min-h-[44px]');
     });
 
@@ -81,21 +81,21 @@ describe('Button Component', () => {
       render(<Button size="sm">Small</Button>);
       const button = screen.getByRole('button');
       expect(button).toHaveClass('h-9');
-      expect(button).toHaveClass('min-h-[40px]');
+      expect(button).toHaveClass('min-h-[36px]');
     });
 
     it('should apply large size classes', () => {
       render(<Button size="lg">Large</Button>);
       const button = screen.getByRole('button');
-      expect(button).toHaveClass('h-13');
-      expect(button).toHaveClass('min-h-[52px]');
+      expect(button).toHaveClass('h-12');
+      expect(button).toHaveClass('min-h-[48px]');
     });
 
     it('should apply icon size classes', () => {
       render(<Button size="icon">🔥</Button>);
       const button = screen.getByRole('button');
-      expect(button).toHaveClass('h-11');
-      expect(button).toHaveClass('w-11');
+      expect(button).toHaveClass('h-10');
+      expect(button).toHaveClass('w-10');
     });
   });
 

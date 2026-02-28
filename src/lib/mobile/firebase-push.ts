@@ -5,8 +5,18 @@
  *   const { firebasePushService } = await import("@/lib/mobile/firebase-push");
  */
 
-import { initializeApp, getApps, FirebaseApp } from "firebase/app";
-import { getMessaging, getToken, onMessage, Messaging, MessagePayload } from "firebase/messaging";
+import type { FirebaseApp } from "firebase/app";
+import type { Messaging, MessagePayload } from "firebase/messaging";
+
+// Dynamic imports to keep Firebase (~200KB) out of the initial bundle
+const loadFirebaseApp = async () => {
+  const mod = await import("firebase/app");
+  return mod;
+};
+const loadFirebaseMessaging = async () => {
+  const mod = await import("firebase/messaging");
+  return mod;
+};
 import { Capacitor } from "@capacitor/core";
 import { PushNotifications, Token, ActionPerformed, PushNotificationSchema } from "@capacitor/push-notifications";
 import { logger } from "@/lib/logger";
@@ -169,7 +179,10 @@ class FirebasePushService {
         return null;
       }
 
-      // Initialize Firebase
+      // Initialize Firebase (dynamic import)
+      const { initializeApp, getApps } = await loadFirebaseApp();
+      const { getMessaging, getToken: fbGetToken, onMessage: fbOnMessage } = await loadFirebaseMessaging();
+      
       if (getApps().length === 0) {
         this.app = initializeApp(config);
       } else {
@@ -180,13 +193,13 @@ class FirebasePushService {
 
       // Get FCM token
       const vapidKey = import.meta.env.VITE_FIREBASE_VAPID_KEY;
-      this.fcmToken = await getToken(this.messaging, { vapidKey });
+      this.fcmToken = await fbGetToken(this.messaging, { vapidKey });
 
       if (this.fcmToken) {
         logger.info("[FCM] Web token received:", this.fcmToken.substring(0, 20) + "...");
         
         // Set up foreground message handler
-        onMessage(this.messaging, (payload: MessagePayload) => {
+        fbOnMessage(this.messaging, (payload: MessagePayload) => {
           logger.info("[FCM] Web foreground message:", payload);
           
           if (this.foregroundHandler && payload.notification) {
