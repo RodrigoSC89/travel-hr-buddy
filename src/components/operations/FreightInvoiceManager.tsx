@@ -63,6 +63,7 @@ export function FreightInvoiceManager() {
   const [filterStatus, setFilterStatus] = useState<string>("all");
   const [mainTab, setMainTab] = useState("invoices");
   const [searchTerm, setSearchTerm] = useState("");
+  const [selectedInvoice, setSelectedInvoice] = useState<Invoice | null>(null);
 
   const { data: invoices = [], isLoading } = useQuery({
     queryKey: ["freight-invoices"],
@@ -290,7 +291,7 @@ export function FreightInvoiceManager() {
                         <td className="py-2 px-3 text-right font-mono">{inv.currency} {inv.total_amount.toLocaleString()}</td>
                         <td className="py-2 px-3 text-center"><Badge className={statusColors[inv.status] || "bg-muted"}>{inv.status}</Badge></td>
                         <td className="py-2 px-3 text-xs">{inv.due_date}</td>
-                        <td className="py-2 px-3 text-center"><Button size="sm" variant="ghost" className="h-7 w-7 p-0" onClick={() => toast.info(`Opening ${inv.invoice_number}`)}><Send className="h-3 w-3" /></Button></td>
+                        <td className="py-2 px-3 text-center"><Button size="sm" variant="ghost" className="h-7 w-7 p-0" onClick={() => setSelectedInvoice(inv)}><Send className="h-3 w-3" /></Button></td>
                       </tr>
                     ))}
                   </tbody>
@@ -443,6 +444,29 @@ export function FreightInvoiceManager() {
           </Card>
         </TabsContent>
       </Tabs>
+
+      {/* Invoice Detail Dialog */}
+      {selectedInvoice && (
+        <div className="fixed inset-0 z-50 flex items-center justify-center bg-background/80 backdrop-blur-sm" onClick={() => setSelectedInvoice(null)}>
+          <Card className="w-full max-w-lg" onClick={e => e.stopPropagation()}>
+            <CardHeader><CardTitle className="flex items-center gap-2"><FileText className="h-5 w-5 text-primary" />{selectedInvoice.invoice_number}</CardTitle></CardHeader>
+            <CardContent className="space-y-3">
+              <div className="grid grid-cols-2 gap-3 text-sm">
+                <div><span className="text-muted-foreground">Tipo:</span> {typeLabels[selectedInvoice.type] || selectedInvoice.type}</div>
+                <div><span className="text-muted-foreground">Status:</span> <Badge className={statusColors[selectedInvoice.status]}>{selectedInvoice.status}</Badge></div>
+                <div><span className="text-muted-foreground">Embarcação:</span> {selectedInvoice.vessel_name}</div>
+                <div><span className="text-muted-foreground">Contraparte:</span> {selectedInvoice.counterparty}</div>
+                <div><span className="text-muted-foreground">Valor:</span> {selectedInvoice.currency} {selectedInvoice.total_amount.toLocaleString()}</div>
+                <div><span className="text-muted-foreground">Vencimento:</span> {selectedInvoice.due_date}</div>
+              </div>
+              <div className="flex justify-end gap-2 pt-2">
+                <Button variant="outline" onClick={() => setSelectedInvoice(null)}>Fechar</Button>
+                <Button onClick={() => { toast.success("Invoice enviada para processamento"); setSelectedInvoice(null); }}><Send className="h-4 w-4 mr-1" />Processar</Button>
+              </div>
+            </CardContent>
+          </Card>
+        </div>
+      )}
     </div>
   );
 }

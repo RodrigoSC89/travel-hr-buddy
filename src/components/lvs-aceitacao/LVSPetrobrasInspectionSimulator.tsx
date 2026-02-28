@@ -75,8 +75,16 @@ export function LVSPetrobrasInspectionSimulator() {
         return allItems.filter(i => i.status === "rejected" || i.pendency);
       case "gaps_only":
         return allItems.filter(i => i.status !== "approved" && i.status !== "not_applicable");
-      case "random":
-        return [...allItems].sort(() => Math.random() - 0.5);
+      case "random": {
+        // Deterministic shuffle using seed
+        const seed = Date.now();
+        const arr = [...allItems];
+        for (let i = arr.length - 1; i > 0; i--) {
+          const j = ((seed * (i + 1) * 2654435761) >>> 0) % (i + 1);
+          [arr[i], arr[j]] = [arr[j], arr[i]];
+        }
+        return arr;
+      }
       default:
         return allItems;
     }

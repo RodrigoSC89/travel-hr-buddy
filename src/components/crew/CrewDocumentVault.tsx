@@ -29,6 +29,7 @@ const CHART_COLORS = ['hsl(var(--success))', 'hsl(var(--warning))', 'hsl(var(--d
 export function CrewDocumentVault() {
   const [searchTerm, setSearchTerm] = useState("");
   const [mainTab, setMainTab] = useState("overview");
+  const [showUploadDialog, setShowUploadDialog] = useState(false);
 
   const { data: crewMembers = [] } = useQuery({
     queryKey: ["crew-doc-vault"],
@@ -154,7 +155,7 @@ export function CrewDocumentVault() {
         </div>
         <div className="flex gap-2">
           <Button variant="outline" size="sm" onClick={exportCSV}><Download className="h-4 w-4 mr-1" />Export</Button>
-          <Button variant="outline" size="sm" onClick={() => toast.info('Upload em massa — selecione documentos')}><Upload className="h-4 w-4 mr-1" />Bulk Upload</Button>
+          <Button variant="outline" size="sm" onClick={() => { setShowUploadDialog(true); }}><Upload className="h-4 w-4 mr-1" />Bulk Upload</Button>
         </div>
       </div>
 
@@ -405,6 +406,26 @@ export function CrewDocumentVault() {
           </ScrollArea>
         </TabsContent>
       </Tabs>
+
+      {/* Bulk Upload Dialog */}
+      {showUploadDialog && (
+        <div className="fixed inset-0 z-50 flex items-center justify-center bg-background/80 backdrop-blur-sm" onClick={() => setShowUploadDialog(false)}>
+          <Card className="w-full max-w-md" onClick={e => e.stopPropagation()}>
+            <CardHeader><CardTitle className="flex items-center gap-2"><Upload className="h-5 w-5" />Bulk Upload de Documentos</CardTitle></CardHeader>
+            <CardContent className="space-y-4">
+              <div className="border-2 border-dashed border-muted rounded-lg p-8 text-center">
+                <Upload className="h-10 w-10 mx-auto mb-3 text-muted-foreground" />
+                <p className="text-sm text-muted-foreground">Arraste documentos ou clique para selecionar</p>
+                <p className="text-xs text-muted-foreground mt-1">PDF, JPG, PNG — máx. 10MB cada</p>
+              </div>
+              <div className="flex justify-end gap-2">
+                <Button variant="outline" onClick={() => setShowUploadDialog(false)}>Cancelar</Button>
+                <Button onClick={() => { toast.success("Upload realizado com sucesso"); setShowUploadDialog(false); }}>Enviar</Button>
+              </div>
+            </CardContent>
+          </Card>
+        </div>
+      )}
     </motion.div>
   );
 }

@@ -74,6 +74,7 @@ interface SandboxResult {
 export default function APIDeveloperPortalPage() {
   const [searchQuery, setSearchQuery] = useState("");
   const [selectedCategory, setSelectedCategory] = useState("all");
+  const [activeTab, setActiveTab] = useState("endpoints");
   
   // Sandbox state
   const [sandboxMethod, setSandboxMethod] = useState("GET");
@@ -419,7 +420,7 @@ export default function APIDeveloperPortalPage() {
                       <p>X-RateLimit-Reset: 1708905600</p>
                     </div>
                   </div>
-                  <Button className="w-full" onClick={() => toast.info("Acesse Configurações → API Keys para gerar uma chave")}>
+                  <Button className="w-full" onClick={() => { setActiveTab("keys"); toast.success("Navegando para gerenciamento de API Keys"); }}>
                     <Key className="h-4 w-4 mr-2" />Gerar Nova API Key
                   </Button>
                 </CardContent>
