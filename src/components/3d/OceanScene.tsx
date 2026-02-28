@@ -5,15 +5,15 @@
 import { useRef, useMemo } from "react";
 import { Canvas, useFrame } from "@react-three/fiber";
 import { Float, Environment } from "@react-three/drei";
-import * as THREE from "three";
+import { DoubleSide, PlaneGeometry, type Mesh as ThreeMesh, type Group as ThreeGroup, type Points as ThreePoints } from "three";
 
 function Ocean() {
-  const meshRef = useRef<THREE.Mesh>(null);
-  const geo = useMemo(() => new THREE.PlaneGeometry(60, 60, 128, 128), []);
+  const meshRef = useRef<ThreeMesh>(null);
+  const geo = useMemo(() => new PlaneGeometry(60, 60, 128, 128), []);
 
   useFrame(({ clock }) => {
     if (!meshRef.current) return;
-    const pos = (meshRef.current.geometry as THREE.PlaneGeometry).attributes.position;
+    const pos = (meshRef.current.geometry as PlaneGeometry).attributes.position;
     const t = clock.getElapsedTime();
     for (let i = 0; i < pos.count; i++) {
       const x = pos.getX(i);
@@ -37,14 +37,14 @@ function Ocean() {
         wireframe={false}
         metalness={0.8}
         roughness={0.2}
-        side={THREE.DoubleSide}
+        side={DoubleSide}
       />
     </mesh>
   );
 }
 
 function VesselSilhouette() {
-  const groupRef = useRef<THREE.Group>(null);
+  const groupRef = useRef<ThreeGroup>(null);
 
   useFrame(({ clock }) => {
     if (!groupRef.current) return;
@@ -93,7 +93,7 @@ function VesselSilhouette() {
 }
 
 function Particles() {
-  const ref = useRef<THREE.Points>(null);
+  const ref = useRef<ThreePoints>(null);
   const count = 200;
 
   const positions = useMemo(() => {

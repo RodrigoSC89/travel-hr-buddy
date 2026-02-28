@@ -6,7 +6,7 @@ function bootLog(step: string, status: 'ok' | 'fail' = 'ok') {
   try {
     const msg = `[Boot] ${step}: ${status}`;
     if (status === 'fail') console.error(msg);
-    else console.log(msg);
+    else console.info(msg);
   } catch { /* ignore */ }
 }
 

@@ -5,7 +5,7 @@
 import React, { Suspense, useRef, useState, useMemo, useCallback } from "react";
 import { Canvas, useFrame } from "@react-three/fiber";
 import { OrbitControls, Environment, Float } from "@react-three/drei";
-import * as THREE from "three";
+import { MathUtils, type Group as ThreeGroup, type Mesh as ThreeMesh, type MeshStandardMaterial } from "three";
 import { motion, AnimatePresence } from "framer-motion";
 import { Badge } from "@/components/ui/badge";
 import { Card, CardContent, CardHeader, CardTitle } from "@/components/ui/card";
@@ -33,7 +33,7 @@ interface VesselTwinProps {
 
 // ============ 3D Hull Component ============
 function VesselHull({ status, heading }: { status: string; heading: number }) {
-  const meshRef = useRef<THREE.Group>(null);
+  const meshRef = useRef<ThreeGroup>(null);
   
   const hullColor = useMemo(() => {
     switch (status) {
@@ -54,7 +54,7 @@ function VesselHull({ status, heading }: { status: string; heading: number }) {
   });
 
   return (
-    <group ref={meshRef} rotation={[0, THREE.MathUtils.degToRad(heading), 0]}>
+    <group ref={meshRef} rotation={[0, MathUtils.degToRad(heading), 0]}>
       {/* Main Hull */}
       <mesh position={[0, 0, 0]} castShadow>
         <boxGeometry args={[1.2, 0.4, 4]} />
@@ -108,7 +108,7 @@ function VesselHull({ status, heading }: { status: string; heading: number }) {
 
 // ============ Sensor Marker 3D ============
 function SensorMarker({ sensor, onClick }: { sensor: VesselSensor; onClick: (s: VesselSensor) => void }) {
-  const markerRef = useRef<THREE.Mesh>(null);
+  const markerRef = useRef<ThreeMesh>(null);
   const color = sensor.status === "normal" ? "#22c55e" : sensor.status === "warning" ? "#eab308" : "#ef4444";
   
   useFrame((state) => {
@@ -133,11 +133,11 @@ function SensorMarker({ sensor, onClick }: { sensor: VesselSensor; onClick: (s: 
 
 // ============ Water Plane ============
 function WaterPlane() {
-  const waterRef = useRef<THREE.Mesh>(null);
+  const waterRef = useRef<ThreeMesh>(null);
   
   useFrame((state) => {
     if (waterRef.current) {
-      (waterRef.current.material as THREE.MeshStandardMaterial).opacity = 0.4 + Math.sin(state.clock.elapsedTime) * 0.05;
+      (waterRef.current.material as MeshStandardMaterial).opacity = 0.4 + Math.sin(state.clock.elapsedTime) * 0.05;
     }
   });
 
