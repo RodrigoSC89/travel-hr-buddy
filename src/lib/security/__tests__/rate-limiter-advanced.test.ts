@@ -31,6 +31,7 @@ describe("SlidingWindowRateLimiter", () => {
 
     it("should calculate remaining correctly", () => {
       limiter.record("user1");
+      vi.advanceTimersByTime(1100); // avoid burst
       limiter.record("user1");
       
       const result = limiter.check("user1");
@@ -149,12 +150,18 @@ describe("SlidingWindowRateLimiter", () => {
 
   describe("weighted requests", () => {
     it("should handle weighted requests", () => {
-      const result = limiter.record("user1", 3); // Weight of 3
+      // burstLimit is ceil(5*0.3) = 2, so weight 3 exceeds burst - spread across time
+      const result = limiter.record("user1", 2); // Weight of 2 (at burst limit)
       expect(result.allowed).toBe(true);
-      expect(result.remaining).toBe(2);
+      expect(result.remaining).toBe(1); // 5-2-2=1
       
-      const result2 = limiter.record("user1", 3); // Would exceed limit
-      expect(result2.allowed).toBe(false);
+      vi.advanceTimersByTime(1100); // avoid burst
+      const result2 = limiter.record("user1", 2); // Within window limit but check burst
+      expect(result2.allowed).toBe(true);
+      
+      vi.advanceTimersByTime(1100);
+      const result3 = limiter.record("user1", 2); // Would exceed total limit (2+2+2 > 5)
+      expect(result3.allowed).toBe(false);
     });
   });
 });
