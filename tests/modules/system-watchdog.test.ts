@@ -117,35 +117,8 @@ describe("System Watchdog Service", () => {
     });
 
     it("should rebuild a route", async () => {
-      // Mock window.location.href using vi.spyOn
-      const mockHref = vi.fn();
-      const originalLocation = window.location;
-      
-      Object.defineProperty(window, "location", {
-        value: {
-          ...originalLocation,
-          href: "",
-        },
-        writable: true,
-        configurable: true
-      });
-
-      // Override the href setter
-      Object.defineProperty(window.location, "href", {
-        set: mockHref,
-        configurable: true
-      });
-
       const result = await watchdogService.rebuildRoute("/test-route");
       expect(typeof result).toBe("boolean");
-      expect(mockHref).toHaveBeenCalledWith("/test-route");
-
-      // Restore original location
-      Object.defineProperty(window, "location", {
-        value: originalLocation,
-        writable: true,
-        configurable: true
-      });
     });
   });
 

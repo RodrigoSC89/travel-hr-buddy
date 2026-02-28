@@ -87,9 +87,9 @@ describe("Crew AI Integration", () => {
 
   it("deve processar certificações em lote", () => {
     const certifications = [
-      { id: "C-001", type: "Navigation", expiryDate: "2025-12-31" },
-      { id: "C-002", type: "Safety", expiryDate: "2025-06-30" },
-      { id: "C-003", type: "Medical", expiryDate: "2025-03-15" }
+      { id: "C-001", type: "Navigation", expiryDate: "2027-12-31" },
+      { id: "C-002", type: "Safety", expiryDate: "2027-06-30" },
+      { id: "C-003", type: "Medical", expiryDate: "2027-03-15" }
     ];
 
     const validCerts = certifications.filter(c => {
