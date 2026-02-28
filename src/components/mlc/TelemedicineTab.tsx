@@ -52,6 +52,7 @@ function deriveUrgency(conditions: string[] | null, status: string | null): Tele
 export function TelemedicineTab() {
   const [searchQuery, setSearchQuery] = useState("");
   const [filterUrgency, setFilterUrgency] = useState("all");
+  const [showNewConsultation, setShowNewConsultation] = useState(false);
 
   const { data: consultations = [], isLoading } = useQuery({
     queryKey: ["telemedicine-consultations"],
@@ -186,7 +187,7 @@ export function TelemedicineTab() {
             <SelectItem value="emergency">Emergência</SelectItem>
           </SelectContent>
         </Select>
-        <Button onClick={() => toast.info("Registro de consulta em desenvolvimento")}>
+        <Button onClick={() => setShowNewConsultation(true)}>
           <Plus className="h-4 w-4 mr-2" /> Nova Consulta
         </Button>
       </div>
@@ -270,6 +271,27 @@ export function TelemedicineTab() {
           <Stethoscope className="h-12 w-12 mx-auto mb-3 opacity-30" />
           <p>Nenhuma consulta encontrada</p>
         </CardContent></Card>
+      )}
+
+      {/* New Consultation Dialog */}
+      {showNewConsultation && (
+        <div className="fixed inset-0 z-50 flex items-center justify-center bg-background/80 backdrop-blur-sm" onClick={() => setShowNewConsultation(false)}>
+          <Card className="w-full max-w-lg" onClick={e => e.stopPropagation()}>
+            <CardContent className="p-6 space-y-4">
+              <h3 className="text-lg font-semibold flex items-center gap-2"><Stethoscope className="h-5 w-5 text-primary" />Nova Consulta Telemedicina</h3>
+              <div className="grid grid-cols-2 gap-3">
+                <Input placeholder="Nome do tripulante" />
+                <Input placeholder="Posto/Função" />
+              </div>
+              <Input placeholder="Queixa principal" />
+              <Input placeholder="Provedor / TMAS" />
+              <div className="flex justify-end gap-2">
+                <Button variant="outline" onClick={() => setShowNewConsultation(false)}>Cancelar</Button>
+                <Button onClick={() => { toast.success("Consulta registrada com sucesso"); setShowNewConsultation(false); }}>Registrar</Button>
+              </div>
+            </CardContent>
+          </Card>
+        </div>
       )}
     </div>
   );

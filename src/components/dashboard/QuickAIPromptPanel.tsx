@@ -96,6 +96,7 @@ export function QuickAIPromptPanel() {
           />
           <Button
             size="icon"
+            aria-label="Enviar prompt para IA"
             onClick={() => handleSubmit(prompt)}
             disabled={isLoading || !prompt.trim()}
             className="shrink-0 h-[60px] w-10"

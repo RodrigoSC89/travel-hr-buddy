@@ -100,6 +100,8 @@ export default function SparePartsMarketplacePage() {
   const [categoryFilter, setCategoryFilter] = useState("all");
   const [conditionFilter, setConditionFilter] = useState("all");
   const [sortBy, setSortBy] = useState<"price" | "rating" | "lead_time">("price");
+  const [selectedSupplier, setSelectedSupplier] = useState<SparePartListing | null>(null);
+  const [showPublishForm, setShowPublishForm] = useState(false);
 
   const listings = generateListings();
 
@@ -265,7 +267,7 @@ export default function SparePartsMarketplacePage() {
                       <Button size="sm" className="flex-1" onClick={() => toast.success(`Cotação solicitada para ${item.name}`)}>
                         <ShoppingCart className="h-3 w-3 mr-1" /> Solicitar Cotação
                       </Button>
-                      <Button size="sm" variant="outline" onClick={() => toast.info("Detalhes do fornecedor")}>
+                      <Button size="sm" variant="outline" onClick={() => setSelectedSupplier(item)}>
                         <Filter className="h-3 w-3" />
                       </Button>
                     </div>
@@ -281,7 +283,7 @@ export default function SparePartsMarketplacePage() {
             <CardContent className="p-12 text-center space-y-4">
               <Plus className="h-12 w-12 mx-auto text-muted-foreground" />
               <p className="text-muted-foreground">Publique peças excedentes para venda no marketplace</p>
-              <Button onClick={() => toast.info("Formulário de publicação em breve")}>
+              <Button onClick={() => setShowPublishForm(true)}>
                 <Plus className="h-4 w-4 mr-2" /> Publicar Peça
               </Button>
             </CardContent>
@@ -297,6 +299,41 @@ export default function SparePartsMarketplacePage() {
           </Card>
         </TabsContent>
       </Tabs>
+
+      {/* Supplier Detail Dialog */}
+      {selectedSupplier && (
+        <Dialog open={!!selectedSupplier} onOpenChange={() => setSelectedSupplier(null)}>
+          <DialogContent>
+            <DialogHeader><DialogTitle>{selectedSupplier.name}</DialogTitle></DialogHeader>
+            <div className="space-y-2 text-sm">
+              <p><span className="text-muted-foreground">IMPA:</span> {selectedSupplier.impa_code}</p>
+              <p><span className="text-muted-foreground">Fornecedor:</span> {selectedSupplier.seller_company}</p>
+              <p><span className="text-muted-foreground">Localização:</span> {selectedSupplier.location}</p>
+              <p><span className="text-muted-foreground">Preço:</span> USD {selectedSupplier.price_usd.toLocaleString()}</p>
+              <p><span className="text-muted-foreground">Lead Time:</span> {selectedSupplier.lead_time_days} dias</p>
+              <p><span className="text-muted-foreground">Condição:</span> <Badge>{selectedSupplier.condition}</Badge></p>
+            </div>
+          </DialogContent>
+        </Dialog>
+      )}
+
+      {/* Publish Form Dialog */}
+      {showPublishForm && (
+        <Dialog open={showPublishForm} onOpenChange={setShowPublishForm}>
+          <DialogContent>
+            <DialogHeader><DialogTitle>Publicar Peça no Marketplace</DialogTitle></DialogHeader>
+            <div className="space-y-3">
+              <div><Label>Código IMPA</Label><Input placeholder="Ex: 370101" /></div>
+              <div><Label>Nome da Peça</Label><Input placeholder="Nome descritivo" /></div>
+              <div><Label>Preço (USD)</Label><Input type="number" placeholder="0.00" /></div>
+              <div><Label>Descrição</Label><Textarea placeholder="Detalhes da peça, condição, fotos..." /></div>
+              <Button className="w-full" onClick={() => { toast.success("Peça publicada no marketplace!"); setShowPublishForm(false); }}>
+                <Plus className="h-4 w-4 mr-2" />Publicar
+              </Button>
+            </div>
+          </DialogContent>
+        </Dialog>
+      )}
     </motion.div>
   );
 }

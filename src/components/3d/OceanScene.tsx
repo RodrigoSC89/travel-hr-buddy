@@ -98,10 +98,13 @@ function Particles() {
 
   const positions = useMemo(() => {
     const pos = new Float32Array(count * 3);
+    // Deterministic particle positions using golden ratio distribution
+    const PHI = 1.618033988749895;
     for (let i = 0; i < count; i++) {
-      pos[i * 3] = (Math.random() - 0.5) * 40;
-      pos[i * 3 + 1] = Math.random() * 15 - 2;
-      pos[i * 3 + 2] = (Math.random() - 0.5) * 30 - 5;
+      const t = i / count;
+      pos[i * 3] = ((t * PHI * 40) % 40) - 20;
+      pos[i * 3 + 1] = ((t * PHI * 17 + i * 0.37) % 17) - 2;
+      pos[i * 3 + 2] = ((t * PHI * 30 + i * 0.53) % 30) - 20;
     }
     return pos;
   }, []);

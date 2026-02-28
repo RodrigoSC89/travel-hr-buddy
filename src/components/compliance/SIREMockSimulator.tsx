@@ -55,8 +55,14 @@ export function SIREMockSimulator() {
   const startSimulation = useCallback(() => {
     let pool = focusChapter === "all" ? [...SIRE2_QUESTIONS] : SIRE2_QUESTIONS.filter(q => q.chapter === parseInt(focusChapter));
     const count = Math.min(parseInt(questionCount), pool.length);
-    const shuffled = pool.sort(() => Math.random() - 0.5).slice(0, count);
-    setQuestions(shuffled);
+    // Deterministic shuffle using Fisher-Yates with seed based on timestamp
+    const seed = Date.now();
+    const shuffled = [...pool];
+    for (let i = shuffled.length - 1; i > 0; i--) {
+      const j = ((seed * (i + 1) * 2654435761) >>> 0) % (i + 1);
+      [shuffled[i], shuffled[j]] = [shuffled[j], shuffled[i]];
+    }
+    setQuestions(shuffled.slice(0, count));
     setAnswers([]);
     setCurrentIdx(0);
     setNotes("");

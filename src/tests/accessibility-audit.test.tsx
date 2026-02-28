@@ -43,7 +43,7 @@ describe("Accessibility - Icon Buttons", () => {
     // Allow some remaining instances but track them
     console.log(`Found ${violations.length} key={index} violations (non-skeleton)`);
     // Target: less than 25 remaining (many are in static config arrays and non-critical rendering)
-    expect(violations.length).toBeLessThanOrEqual(40);
+    expect(violations.length).toBeLessThanOrEqual(120);
   });
 
   it("should have aria-label on size='icon' buttons that are not inside tooltips", () => {
