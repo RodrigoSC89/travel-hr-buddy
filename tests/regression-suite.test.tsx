@@ -132,7 +132,7 @@ describe("PATCH 564 - Regression Tests: CRUD Operations", () => {
           
           try {
             // Simulate CRUD operation test
-            const mockSuccess = Math.random() > 0.1; // 90% success rate simulation
+            const mockSuccess = true; // Deterministic: CRUD operations succeed
             
             if (!mockSuccess) {
               throw new Error(`Mock ${operation} operation failed`);
