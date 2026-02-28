@@ -35,7 +35,7 @@ export const SafetyKPICards: FC<SafetyKPICardsProps> = ({ metrics, loading, inci
     const currentMonth = new Date().getMonth();
     return months.slice(0, currentMonth + 1).map((m, i) => ({
       month: m,
-      trir: Math.max(0.1, metrics.trir + (Math.random() - 0.5) * 0.3),
+      trir: Math.max(0.1, metrics.trir + ((i % 3 === 0 ? -0.12 : i % 3 === 1 ? 0.08 : -0.05) * (i + 1) / (currentMonth + 1))),
       target: metrics.trirTarget,
     }));
   }, [metrics.trir, metrics.trirTarget]);

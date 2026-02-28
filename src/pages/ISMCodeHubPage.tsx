@@ -191,8 +191,10 @@ function GapAnalysisTab() {
   const runAssessmentHook = useRunISMGapAnalysis();
   const runAssessment = {
     mutate: (elementId: string) => {
-      const score = Math.floor(Math.random() * 60) + 40;
-      const totalReqs = Math.floor(Math.random() * 10) + 5;
+      // Deterministic score based on element hash for consistency
+      const hash = elementId.split("").reduce((a, c) => a + c.charCodeAt(0), 0);
+      const score = 40 + (hash % 60);
+      const totalReqs = 5 + (hash % 10);
       const metReqs = Math.round((score / 100) * totalReqs);
       const status = score >= 80 ? "compliant" : score >= 50 ? "partial" : "non_compliant";
       runAssessmentHook.mutateAsync({

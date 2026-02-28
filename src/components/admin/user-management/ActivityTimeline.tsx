@@ -1,7 +1,7 @@
 /**
- * Activity Timeline - Log de atividades de usuários
+ * Activity Timeline - Real data from access_logs table
  */
-import React, { useState } from "react";
+import React, { useState, useMemo } from "react";
 import { Card, CardContent, CardHeader, CardTitle, CardDescription } from "@/components/ui/card";
 import { Badge } from "@/components/ui/badge";
 import { Button } from "@/components/ui/button";
@@ -12,34 +12,22 @@ import {
 } from "@/components/ui/select";
 import {
   UserPlus, Shield, Edit, Trash2, LogIn, LogOut, Key, Lock,
-  Search, Download, Clock, Filter, AlertTriangle,
+  Search, Download, Clock, AlertTriangle, Loader2,
 } from "lucide-react";
 import { motion } from "framer-motion";
+import { useQuery } from "@tanstack/react-query";
+import { supabase } from "@/integrations/supabase/client";
 
 interface ActivityEvent {
   id: string;
-  type: "login" | "logout" | "role_change" | "invite" | "delete" | "edit" | "mfa" | "permission" | "suspend";
+  type: string;
   actor: string;
-  actorAvatar?: string;
   target?: string;
   description: string;
   timestamp: string;
   details?: string;
   severity: "info" | "warning" | "critical";
 }
-
-const MOCK_ACTIVITIES: ActivityEvent[] = [
-  { id: "1", type: "login", actor: "Rodrigo Silva", description: "Login realizado com sucesso", timestamp: "2026-02-24T10:30:00Z", severity: "info" },
-  { id: "2", type: "role_change", actor: "Rodrigo Silva", target: "Ana Costa", description: "Alterou role de 'Colaborador' para 'Gerente de RH'", timestamp: "2026-02-24T09:15:00Z", severity: "warning" },
-  { id: "3", type: "invite", actor: "Marcelo Borba", target: "pedro.henrique@mbmaritime.com.br", description: "Convite enviado para novo membro", timestamp: "2026-02-23T16:45:00Z", severity: "info" },
-  { id: "4", type: "mfa", actor: "Carlos Mendes", description: "Ativou autenticação de dois fatores", timestamp: "2026-02-23T14:20:00Z", severity: "info" },
-  { id: "5", type: "permission", actor: "Rodrigo Silva", target: "Marina Oliveira", description: "Concedeu acesso ao módulo 'Compliance'", timestamp: "2026-02-23T11:30:00Z", severity: "warning" },
-  { id: "6", type: "suspend", actor: "Sistema", target: "João Silva", description: "Conta suspensa por inatividade (90 dias)", timestamp: "2026-02-22T08:00:00Z", severity: "critical", details: "Política de segurança automática" },
-  { id: "7", type: "delete", actor: "Rodrigo Silva", target: "Conta Teste", description: "Usuário removido permanentemente", timestamp: "2026-02-21T17:00:00Z", severity: "critical" },
-  { id: "8", type: "edit", actor: "Ana Costa", target: "Próprio Perfil", description: "Atualizou departamento para 'Operações'", timestamp: "2026-02-21T15:30:00Z", severity: "info" },
-  { id: "9", type: "login", actor: "Marcelo Borba", description: "Login com MFA verificado", timestamp: "2026-02-21T09:00:00Z", severity: "info" },
-  { id: "10", type: "role_change", actor: "Sistema", target: "3 usuários", description: "Rebaixamento automático por expiração de contrato", timestamp: "2026-02-20T00:00:00Z", severity: "critical", details: "Regra de compliance MLC 2006" },
-];
 
 const EVENT_CONFIG: Record<string, { icon: React.ElementType; color: string }> = {
   login: { icon: LogIn, color: "text-emerald-600 bg-emerald-500/10" },
@@ -69,12 +57,54 @@ const formatTimeAgo = (ts: string) => {
   return `${days}d atrás`;
 };
 
+function mapSeverity(sev: string | null): "info" | "warning" | "critical" {
+  if (sev === "critical" || sev === "high") return "critical";
+  if (sev === "warning" || sev === "medium") return "warning";
+  return "info";
+}
+
+function mapActionToType(action: string): string {
+  const lower = (action || "").toLowerCase();
+  if (lower.includes("login") || lower.includes("sign_in")) return "login";
+  if (lower.includes("logout") || lower.includes("sign_out")) return "logout";
+  if (lower.includes("role") || lower.includes("permission")) return "role_change";
+  if (lower.includes("invite")) return "invite";
+  if (lower.includes("delete") || lower.includes("remove")) return "delete";
+  if (lower.includes("mfa") || lower.includes("2fa")) return "mfa";
+  if (lower.includes("suspend") || lower.includes("block")) return "suspend";
+  return "edit";
+}
+
 export const ActivityTimeline: React.FC = () => {
   const [search, setSearch] = useState("");
   const [typeFilter, setTypeFilter] = useState("all");
   const [severityFilter, setSeverityFilter] = useState("all");
 
-  const filtered = MOCK_ACTIVITIES.filter(e => {
+  const { data: activities = [], isLoading } = useQuery({
+    queryKey: ["activity-timeline"],
+    queryFn: async (): Promise<ActivityEvent[]> => {
+      const { data, error } = await supabase
+        .from("access_logs")
+        .select("*")
+        .order("timestamp", { ascending: false })
+        .limit(50);
+
+      if (error || !data || data.length === 0) return [];
+
+      return data.map((log) => ({
+        id: log.id,
+        type: mapActionToType(log.action),
+        actor: String(log.user_id || "Sistema"),
+        description: `${log.action} - ${log.module_accessed}`,
+        timestamp: log.timestamp,
+        severity: mapSeverity(log.severity),
+        details: log.result !== "success" ? `Resultado: ${log.result}` : undefined,
+      }));
+    },
+    staleTime: 60 * 1000,
+  });
+
+  const filtered = useMemo(() => activities.filter(e => {
     const matchSearch = !search ||
       e.actor.toLowerCase().includes(search.toLowerCase()) ||
       e.description.toLowerCase().includes(search.toLowerCase()) ||
@@ -82,24 +112,31 @@ export const ActivityTimeline: React.FC = () => {
     const matchType = typeFilter === "all" || e.type === typeFilter;
     const matchSev = severityFilter === "all" || e.severity === severityFilter;
     return matchSearch && matchType && matchSev;
-  });
+  }), [activities, search, typeFilter, severityFilter]);
+
+  const stats = useMemo(() => ({
+    total: activities.length,
+    logins: activities.filter(a => a.type === "login").length,
+    accessChanges: activities.filter(a => ["role_change", "permission"].includes(a.type)).length,
+    critical: activities.filter(a => a.severity === "critical").length,
+  }), [activities]);
 
   return (
     <div className="space-y-6">
       {/* Stats */}
       <div className="grid gap-4 md:grid-cols-4">
         {[
-          { label: "Eventos Hoje", value: "47", icon: Clock, color: "text-blue-600" },
-          { label: "Logins (24h)", value: "23", icon: LogIn, color: "text-emerald-600" },
-          { label: "Alterações de Acesso", value: "8", icon: Shield, color: "text-violet-600" },
-          { label: "Alertas Críticos", value: "2", icon: AlertTriangle, color: "text-red-600" },
+          { label: "Eventos Recentes", value: String(stats.total), icon: Clock, color: "text-blue-600" },
+          { label: "Logins", value: String(stats.logins), icon: LogIn, color: "text-emerald-600" },
+          { label: "Alterações de Acesso", value: String(stats.accessChanges), icon: Shield, color: "text-violet-600" },
+          { label: "Alertas Críticos", value: String(stats.critical), icon: AlertTriangle, color: "text-red-600" },
         ].map(stat => (
           <Card key={stat.label}>
             <CardContent className="pt-6">
               <div className="flex items-center gap-3">
                 <stat.icon className={`h-5 w-5 ${stat.color}`} />
                 <div>
-                  <p className="text-2xl font-bold">{stat.value}</p>
+                  <p className="text-2xl font-bold">{isLoading ? "..." : stat.value}</p>
                   <p className="text-xs text-muted-foreground">{stat.label}</p>
                 </div>
               </div>
@@ -151,55 +188,57 @@ export const ActivityTimeline: React.FC = () => {
           </div>
         </CardHeader>
         <CardContent>
-          <div className="relative">
-            {/* Vertical Line */}
-            <div className="absolute left-[21px] top-0 bottom-0 w-px bg-border" />
-
-            <div className="space-y-1">
-              {filtered.map((event, idx) => {
-                const config = EVENT_CONFIG[event.type] || EVENT_CONFIG.edit;
-                const EventIcon = config.icon;
-                return (
-                  <motion.div
-                    key={event.id}
-                    initial={{ opacity: 0, x: -10 }}
-                    animate={{ opacity: 1, x: 0 }}
-                    transition={{ delay: idx * 0.03 }}
-                    className="relative pl-12 py-3 group"
-                  >
-                    {/* Icon Dot */}
-                    <div className={`absolute left-2 top-4 p-1.5 rounded-full ${config.color} ring-4 ring-background z-10`}>
-                      <EventIcon className="h-3.5 w-3.5" />
-                    </div>
-
-                    <div className="flex items-start justify-between gap-4">
-                      <div className="flex-1 min-w-0">
-                        <div className="flex items-center gap-2 flex-wrap">
-                          <span className="font-medium text-sm">{event.actor}</span>
-                          {event.target && (
-                            <>
-                              <span className="text-xs text-muted-foreground">→</span>
-                              <span className="text-sm text-muted-foreground">{event.target}</span>
-                            </>
-                          )}
-                          <Badge variant="outline" className={`text-[10px] ${SEVERITY_BADGE[event.severity]}`}>
-                            {event.severity}
-                          </Badge>
-                        </div>
-                        <p className="text-sm text-muted-foreground mt-0.5">{event.description}</p>
-                        {event.details && (
-                          <p className="text-xs text-muted-foreground/70 mt-0.5 italic">{event.details}</p>
-                        )}
+          {isLoading ? (
+            <div className="flex items-center justify-center py-8"><Loader2 className="h-6 w-6 animate-spin text-muted-foreground" /></div>
+          ) : filtered.length === 0 ? (
+            <p className="text-sm text-muted-foreground text-center py-8">Nenhuma atividade registrada. O sistema rastreia automaticamente ações de usuários.</p>
+          ) : (
+            <div className="relative">
+              <div className="absolute left-[21px] top-0 bottom-0 w-px bg-border" />
+              <div className="space-y-1">
+                {filtered.map((event, idx) => {
+                  const config = EVENT_CONFIG[event.type] || EVENT_CONFIG.edit;
+                  const EventIcon = config.icon;
+                  return (
+                    <motion.div
+                      key={event.id}
+                      initial={{ opacity: 0, x: -10 }}
+                      animate={{ opacity: 1, x: 0 }}
+                      transition={{ delay: idx * 0.03 }}
+                      className="relative pl-12 py-3 group"
+                    >
+                      <div className={`absolute left-2 top-4 p-1.5 rounded-full ${config.color} ring-4 ring-background z-10`}>
+                        <EventIcon className="h-3.5 w-3.5" />
                       </div>
-                      <span className="text-xs text-muted-foreground whitespace-nowrap shrink-0">
-                        {formatTimeAgo(event.timestamp)}
-                      </span>
-                    </div>
-                  </motion.div>
-                );
-              })}
+                      <div className="flex items-start justify-between gap-4">
+                        <div className="flex-1 min-w-0">
+                          <div className="flex items-center gap-2 flex-wrap">
+                            <span className="font-medium text-sm">{event.actor}</span>
+                            {event.target && (
+                              <>
+                                <span className="text-xs text-muted-foreground">→</span>
+                                <span className="text-sm text-muted-foreground">{event.target}</span>
+                              </>
+                            )}
+                            <Badge variant="outline" className={`text-[10px] ${SEVERITY_BADGE[event.severity]}`}>
+                              {event.severity}
+                            </Badge>
+                          </div>
+                          <p className="text-sm text-muted-foreground mt-0.5">{event.description}</p>
+                          {event.details && (
+                            <p className="text-xs text-muted-foreground/70 mt-0.5 italic">{event.details}</p>
+                          )}
+                        </div>
+                        <span className="text-xs text-muted-foreground whitespace-nowrap shrink-0">
+                          {formatTimeAgo(event.timestamp)}
+                        </span>
+                      </div>
+                    </motion.div>
+                  );
+                })}
+              </div>
             </div>
-          </div>
+          )}
         </CardContent>
       </Card>
     </div>
