@@ -88,8 +88,7 @@ describe("Logger Service", () => {
     it("should handle string errors", () => {
       logger.error("Error message", "string error");
       expect(consoleErrorSpy).toHaveBeenCalledWith(
-        "❌ Error message: string error",
-        {}
+        "❌ Error message: string error"
       );
     });
   });
@@ -107,8 +106,7 @@ describe("Logger Service", () => {
     it("should handle non-Error objects", () => {
       logger.logCaughtError("Caught error", "string error");
       expect(consoleErrorSpy).toHaveBeenCalledWith(
-        "❌ Caught error: string error",
-        {}
+        "❌ Caught error: string error"
       );
     });
 
