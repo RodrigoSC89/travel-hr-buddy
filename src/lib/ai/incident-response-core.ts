@@ -5,8 +5,10 @@
  */
 
 import { supabase } from "@/integrations/supabase/client";
-import mqtt from "mqtt";
 import { logger } from "@/lib/logger";
+
+// Dynamic MQTT import for bundle optimization
+const loadMqtt = async () => (await import("mqtt")).default;
 
 interface IncidentReport {
   type: string;
@@ -112,7 +114,8 @@ export async function handleIncidentReport(
   try {
     const mqttUrl = import.meta.env.VITE_MQTT_URL;
     if (mqttUrl) {
-      const client = mqtt.connect(mqttUrl);
+      const mqttLib = await loadMqtt();
+      const client = mqttLib.connect(mqttUrl);
       client.on("connect", () => {
         client.publish(
           "nautilus/incidents/alert",

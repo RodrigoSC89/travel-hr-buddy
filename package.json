@@ -87,7 +87,6 @@
     "npm": ">=8.0.0"
   },
   "dependencies": {
-    "@11labs/react": "^0.2.0",
     "@axe-core/react": "^4.11.0",
     "@capacitor/android": "^7.4.3",
     "@capacitor/app": "^8.0.0",
