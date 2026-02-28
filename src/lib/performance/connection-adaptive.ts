@@ -122,15 +122,24 @@ class ConnectionAdaptiveService {
 
   getRecommendations() {
     const { quality, saveData } = this.currentInfo;
+    const isSlow = quality === 'slow' || saveData;
 
     return {
-      imageQuality: quality === 'slow' || saveData ? 60 : quality === 'moderate' ? 75 : 90,
-      maxImageWidth: quality === 'slow' ? 640 : quality === 'moderate' ? 1024 : 1920,
-      enableAnimations: quality !== 'slow' && !saveData,
-      enablePrefetch: quality === 'fast',
-      lazyLoadThreshold: quality === 'slow' ? '200px' : quality === 'moderate' ? '100px' : '50px',
-      debounceMs: quality === 'slow' ? 500 : quality === 'moderate' ? 300 : 150,
-      cacheTTL: quality === 'slow' ? 60 : quality === 'moderate' ? 30 : 15,
+      imageQuality: isSlow ? 40 : quality === 'moderate' ? 60 : 90,
+      maxImageWidth: isSlow ? 480 : quality === 'moderate' ? 800 : 1920,
+      enableAnimations: quality === 'fast',
+      enablePrefetch: quality === 'fast' && !saveData,
+      lazyLoadThreshold: isSlow ? '400px' : quality === 'moderate' ? '200px' : '50px',
+      debounceMs: isSlow ? 800 : quality === 'moderate' ? 400 : 150,
+      cacheTTL: isSlow ? 120 : quality === 'moderate' ? 60 : 15, // minutes
+      /** Max concurrent Supabase requests */
+      maxConcurrentRequests: isSlow ? 2 : quality === 'moderate' ? 4 : 10,
+      /** Suggested page size for paginated queries */
+      pageSize: isSlow ? 10 : quality === 'moderate' ? 25 : 50,
+      /** Whether to load 3D, maps, heavy charts */
+      loadHeavyModules: quality === 'fast' && !saveData,
+      /** Suggested refetch interval (ms) - longer on slow */
+      refetchInterval: isSlow ? 300000 : quality === 'moderate' ? 120000 : 60000, // 5m/2m/1m
     };
   }
 

@@ -2,9 +2,11 @@
 // ESTRATÉGIA: Push notifications + App Shell caching para offline
 // Cache de navegação com fallback offline para uso marítimo
 
-const SW_VERSION = 'v21-aggressive-fix';
-const APP_SHELL_CACHE = 'nauti-app-shell-v21';
-const RUNTIME_CACHE = 'nauti-runtime-v21';
+const SW_VERSION = 'v22-maritime-optimized';
+const APP_SHELL_CACHE = 'nauti-app-shell-v22';
+const RUNTIME_CACHE = 'nauti-runtime-v22';
+const API_CACHE = 'nauti-api-cache-v22';
+const MAX_API_CACHE_AGE = 1000 * 60 * 30; // 30 min for API responses
 
 // App shell resources to precache for offline
 const APP_SHELL_RESOURCES = [
@@ -38,7 +40,7 @@ self.addEventListener('activate', (event) => {
       const keys = await caches.keys();
       await Promise.all(
         keys
-          .filter(k => k !== APP_SHELL_CACHE && k !== RUNTIME_CACHE)
+          .filter(k => k !== APP_SHELL_CACHE && k !== RUNTIME_CACHE && k !== API_CACHE)
           .map(k => {
             console.log(`[SW ${SW_VERSION}] Deleting old cache: ${k}`);
             return caches.delete(k);
@@ -58,14 +60,47 @@ self.addEventListener('activate', (event) => {
 self.addEventListener('fetch', (event) => {
   const { request } = event;
   
-  // Skip non-GET, chrome-extension, and Supabase API calls
+  // Skip non-GET, chrome-extension, auth calls
   if (
     request.method !== 'GET' ||
     request.url.includes('chrome-extension') ||
-    request.url.includes('supabase.co') ||
-    request.url.includes('/rest/') ||
     request.url.includes('/auth/')
   ) return;
+
+  // Supabase API calls: stale-while-revalidate for maritime bandwidth savings
+  if (request.url.includes('supabase.co') && request.url.includes('/rest/')) {
+    event.respondWith(
+      caches.open(API_CACHE).then(async (cache) => {
+        const cached = await cache.match(request);
+        const fetchPromise = fetch(request).then((response) => {
+          if (response.ok) {
+            cache.put(request, response.clone());
+          }
+          return response;
+        }).catch(() => {
+          // Network failed, return cached if available
+          if (cached) return cached;
+          return new Response(JSON.stringify([]), { 
+            status: 200, 
+            headers: { 'Content-Type': 'application/json', 'X-From-SW-Cache': 'true' } 
+          });
+        });
+        // Return cached immediately, revalidate in background
+        if (cached) {
+          // Check age - if too old, wait for network
+          const cachedDate = cached.headers.get('date');
+          const age = cachedDate ? Date.now() - new Date(cachedDate).getTime() : MAX_API_CACHE_AGE + 1;
+          if (age < MAX_API_CACHE_AGE) {
+            // Fresh enough - return cached, revalidate in background
+            fetchPromise.catch(() => {}); // fire and forget
+            return cached;
+          }
+        }
+        return fetchPromise;
+      })
+    );
+    return;
+  }
 
   // Navigation requests: network-first with offline.html fallback
   if (request.mode === 'navigate') {

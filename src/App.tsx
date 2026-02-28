@@ -51,18 +51,24 @@ if (typeof window !== 'undefined') {
   });
 }
 
-// Query client
+// Query client - Optimized for maritime low-bandwidth (satellite/VSAT ~256kbps-2Mbps)
 const queryClient = new QueryClient({
   defaultOptions: {
     queries: {
-      staleTime: 1000 * 60 * 5,      // 5 min - reduce refetches
-      retry: 1,
-      refetchOnWindowFocus: false,
-      gcTime: 1000 * 60 * 15,         // 15 min - keep cache longer
+      staleTime: 1000 * 60 * 10,      // 10 min - minimize refetches on slow satellite
+      retry: 2,
+      retryDelay: (attempt) => Math.min(1000 * Math.pow(2, attempt), 30000),
+      refetchOnWindowFocus: false,     // Never refetch on focus - saves bandwidth
+      refetchOnMount: false,           // Use cached data when revisiting pages
+      gcTime: 1000 * 60 * 60,         // 60 min - keep cache much longer
       refetchOnReconnect: 'always',    // Refetch on network recovery (maritime)
+      networkMode: 'offlineFirst',     // Use cache first, then network
+      placeholderData: (prev: unknown) => prev, // Show stale data while revalidating
     },
     mutations: {
-      retry: 1,
+      retry: 2,
+      retryDelay: 2000,
+      networkMode: 'offlineFirst',
     },
   },
 });
