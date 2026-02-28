@@ -484,12 +484,7 @@ export default function RestoreReportLogsPage() {
           </CardHeader>
           <CardContent className="p-0">
             {loading ? (
-              <div className="flex items-center justify-center p-12">
-                <div className="text-center">
-                  <div className="animate-spin rounded-full h-8 w-8 border-b-2 border-primary mx-auto"></div>
-                  <p className="mt-4 text-muted-foreground">Carregando logs...</p>
-                </div>
-              </div>
+              <div className="space-y-0">{Array.from({length:8}).map((_,i)=><div key={i} className="flex gap-4 px-4 py-3 border-b border-border/20"><div className="h-4 w-20 bg-muted/40 rounded animate-pulse" style={{opacity:1-i*0.1}}/><div className="h-4 flex-1 bg-muted/40 rounded animate-pulse" style={{opacity:1-i*0.1}}/><div className="h-4 w-16 bg-muted/30 rounded animate-pulse"/></div>)}</div>
             ) : logs.length === 0 ? (
               <div className="flex items-center justify-center p-12">
                 <div className="text-center">

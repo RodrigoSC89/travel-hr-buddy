@@ -215,8 +215,9 @@ export default function SGSOAudits() {
 
   if (loading) {
     return (
-      <div className="flex items-center justify-center h-96">
-        <div className="animate-pulse">Carregando auditorias...</div>
+      <div className="container mx-auto p-4 space-y-6">
+        <div className="flex items-center justify-between"><div className="h-7 w-48 bg-muted/40 rounded animate-pulse"/><div className="h-9 w-32 bg-muted/40 rounded animate-pulse"/></div>
+        <div className="grid grid-cols-1 md:grid-cols-3 gap-4">{Array.from({length:3}).map((_,i)=><div key={i} className="rounded-xl border border-border/40 p-4 space-y-3 bg-card"><div className="h-5 w-3/4 bg-muted/40 rounded animate-pulse"/><div className="h-3 w-1/2 bg-muted/30 rounded animate-pulse"/><div className="h-2 w-full bg-muted/20 rounded animate-pulse"/></div>)}</div>
       </div>
     );
   }
