@@ -67,10 +67,10 @@ function generateMockPositions(vessels: Array<{ id: string; name: string; imo_nu
     lat: positions[i % positions.length].lat,
     lng: positions[i % positions.length].lng,
     heading: positions[i % positions.length].heading,
-    speed: 10 + Math.random() * 8,
+    speed: 10 + (i * 1.3) % 8,
     destination: positions[i % positions.length].dest,
-    eta: new Date(Date.now() + (1 + Math.random() * 10) * 86400000).toLocaleDateString("pt-BR"),
-    lastUpdate: new Date(Date.now() - Math.random() * 3600000).toLocaleTimeString("pt-BR"),
+    eta: new Date(Date.now() + (1 + (i * 2.7) % 10) * 86400000).toLocaleDateString("pt-BR"),
+    lastUpdate: new Date(Date.now() - (i * 720000) % 3600000).toLocaleTimeString("pt-BR"),
   }));
 }
 
