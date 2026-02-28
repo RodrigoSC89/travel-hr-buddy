@@ -250,7 +250,7 @@ function HierarchyBrowser() {
             <CardDescription className="text-xs">Nível 1</CardDescription>
           </CardHeader>
           <CardContent className="space-y-1 max-h-[400px] overflow-y-auto">
-            {loadingSystems ? <p className="text-xs text-muted-foreground">Carregando...</p> :
+            {loadingSystems ? <>{Array.from({length:4}).map((_,i)=><div key={i} className="h-9 rounded-md bg-muted/40 animate-pulse mb-1" style={{opacity:1-i*0.15}}/>)}</> :
               systems.length === 0 ? <p className="text-xs text-muted-foreground">Nenhum sistema cadastrado</p> :
               systems.map(s => (
                 <button key={s.id} onClick={() => { setSelectedSystem(s.id); setSelectedSubsystem(undefined); setSelectedComponent(undefined); }}
@@ -483,7 +483,7 @@ function WorkOrdersPanel() {
 
       {/* Work Orders List */}
       {isLoading ? (
-        <div className="text-center py-8 text-muted-foreground">Carregando work orders...</div>
+        <div className="space-y-2">{Array.from({length:4}).map((_,i)=><div key={i} className="rounded-xl border border-border/40 p-4 space-y-2 bg-card"><div className="flex gap-4"><div className="h-4 w-24 bg-muted/40 rounded animate-pulse"/><div className="h-4 flex-1 bg-muted/40 rounded animate-pulse"/><div className="h-4 w-16 bg-muted/40 rounded animate-pulse"/></div><div className="h-3 w-2/3 bg-muted/30 rounded animate-pulse"/></div>)}</div>
       ) : filtered.length === 0 ? (
         <Card><CardContent className="py-8 text-center text-muted-foreground">Nenhuma work order encontrada</CardContent></Card>
       ) : (
@@ -561,7 +561,7 @@ function RunningHoursTab() {
       </div>
 
       {isLoading ? (
-        <div className="text-center py-8 text-muted-foreground">Carregando...</div>
+        <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-3">{Array.from({length:3}).map((_,i)=><div key={i} className="rounded-xl border border-border/40 p-4 space-y-3 bg-card animate-pulse"><div className="h-5 w-3/4 bg-muted/40 rounded"/><div className="h-3 w-1/2 bg-muted/30 rounded"/><div className="h-2 w-full bg-muted/20 rounded"/></div>)}</div>
       ) : components.length === 0 ? (
         <Card><CardContent className="py-8 text-center text-muted-foreground">
           Adicione componentes na aba Hierarquia para monitorar running hours
