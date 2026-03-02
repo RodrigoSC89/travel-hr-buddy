@@ -13,10 +13,10 @@ jobs:
     
     steps:
       - name: Checkout code
-        uses: actions/checkout@v4
+        uses: actions/checkout@v6
 
       - name: Setup Node.js
-        uses: actions/setup-node@v4
+        uses: actions/setup-node@v6
         with:
           node-version: 20
           cache: 'npm'
@@ -30,7 +30,7 @@ jobs:
         continue-on-error: true
 
       - name: Upload scan report
-        uses: actions/upload-artifact@v4
+        uses: actions/upload-artifact@v7
         with:
           name: interactivity-scan-report
           path: qa/out/interactivity-scan.json
@@ -55,7 +55,7 @@ jobs:
     
     steps:
       - name: Checkout code
-        uses: actions/checkout@v4
+        uses: actions/checkout@v6
 
       - name: Check module scores
         run: |
@@ -67,7 +67,7 @@ jobs:
           fi
 
       - name: Upload module scores
-        uses: actions/upload-artifact@v4
+        uses: actions/upload-artifact@v7
         with:
           name: module-scores
           path: qa/out/module-scores.json

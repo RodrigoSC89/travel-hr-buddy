@@ -29,7 +29,7 @@ jobs:
     
     steps:
       - name: Checkout code
-        uses: actions/checkout@v4
+        uses: actions/checkout@v6
         with:
           fetch-depth: 0
 
@@ -62,13 +62,13 @@ jobs:
     
     steps:
       - name: Checkout develop
-        uses: actions/checkout@v4
+        uses: actions/checkout@v6
         with:
           ref: ${{ env.SOURCE_BRANCH }}
           fetch-depth: 0
 
       - name: Setup Node.js
-        uses: actions/setup-node@v4
+        uses: actions/setup-node@v6
         with:
           node-version: ${{ env.NODE_VERSION }}
           cache: 'npm'
@@ -110,7 +110,7 @@ jobs:
     
     steps:
       - name: Checkout code
-        uses: actions/checkout@v4
+        uses: actions/checkout@v6
         with:
           fetch-depth: 0
           token: ${{ secrets.GITHUB_TOKEN }}
@@ -191,7 +191,7 @@ jobs:
 
       - name: Create Pull Request
         id: create-pr
-        uses: peter-evans/create-pull-request@v5
+        uses: peter-evans/create-pull-request@v8
         with:
           token: ${{ secrets.GITHUB_TOKEN }}
           branch: ${{ steps.create-branch.outputs.merge_branch }}
@@ -231,7 +231,7 @@ jobs:
 
       - name: Send Slack notification
         if: env.SLACK_WEBHOOK_URL != ''
-        uses: slackapi/slack-github-action@v1
+        uses: slackapi/slack-github-action@v2
         env:
           SLACK_WEBHOOK_URL: ${{ secrets.SLACK_WEBHOOK_URL }}
         with:
@@ -306,7 +306,7 @@ jobs:
     
     steps:
       - name: Checkout code
-        uses: actions/checkout@v4
+        uses: actions/checkout@v6
         with:
           fetch-depth: 0
 
