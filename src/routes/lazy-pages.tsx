@@ -15,8 +15,6 @@ export const AboutSystem = lazy(() => import("@/pages/AboutSystem"));
 export const DemoLauncher = lazy(() => import("@/pages/DemoLauncher"));
 export const PitchDeckPage = lazy(() => import("@/pages/PitchDeckPage"));
 // CentralComando removed — consolidated into CommandMegaHub at /command
-// MB Maritime · Operations Control Tower (standalone layout)
-export const ControlTower = lazy(() => import("@/modules/control-tower/ControlTowerApp"));
 export const NotFound = lazy(() => import("@/pages/NotFound"));
 export const DevRoutesDashboard = lazy(() => import("@/pages/DevRoutesDashboard"));
 // Billing routes intentionally map to Settings page (billing tab is within Settings)

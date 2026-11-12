@@ -27,10 +27,6 @@ export const AppRoutes = () => (
     <Route path="/pitch" element={<Pages.PitchDeckPage />} />
     <Route path="/home" element={<Pages.LandingPage />} />
     <Route path="/install" element={<Pages.PWAInstallPage />} />
-
-    {/* MB Maritime · Operations Control Tower (own layout + own auth/membership gate) */}
-    <Route path="/control-tower/*" element={<Pages.ControlTower />} />
-    <Route path="/ct" element={<Navigate to="/control-tower" replace />} />
     
     {/* Fullscreen onboarding (authenticated but no sidebar/header) */}
     <Route path="/welcome" element={<ProtectedRoute><Pages.WorldClassOnboarding /></ProtectedRoute>} />
