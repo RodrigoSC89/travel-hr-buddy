@@ -119,7 +119,10 @@ const Auth: React.FC = () => {
   }, []);
 
   if (user) {
-    return <Navigate to="/" replace />;
+    // Optional same-origin redirect, e.g. /auth?redirect=/control-tower
+    const redirect = new URLSearchParams(window.location.search).get("redirect");
+    const safeRedirect = redirect && redirect.startsWith("/") && !redirect.startsWith("//") ? redirect : "/";
+    return <Navigate to={safeRedirect} replace />;
   }
 
   const handleClearSession = async () => {

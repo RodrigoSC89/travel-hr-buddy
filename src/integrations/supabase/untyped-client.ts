@@ -229,6 +229,10 @@ const KNOWN_UNTYPED_TABLES = new Set([
   "berth_bookings", "sts_operations", "trading_positions",
   "trim_propulsion_records", "supplier_portal_entries",
   "invoice_matches", "return_goods", "forum_posts", "forum_replies",
+
+  // MB Maritime · Control Tower
+  "ct_members", "ct_contracts", "ct_deliverables", "ct_deliverable_lots", "ct_deliverable_progress",
+  "ct_tasks", "ct_task_history", "ct_evidences", "ct_events", "ct_opportunities",
 ]);
 
 /**
